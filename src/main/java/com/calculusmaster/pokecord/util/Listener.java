@@ -137,7 +137,7 @@ public class Listener extends ListenerAdapter
 
     private static void spawnEvent(MessageReceivedEvent event)
     {
-        String spawnPokemon = Global.POKEMON.get(new Random().nextInt(Global.POKEMON.size()));
+        String spawnPokemon = PokemonRarity.getSpawn();
         ServerDataQuery data = new ServerDataQuery(event.getGuild().getId());
         data.setSpawn(Global.normalCase(spawnPokemon));
 

@@ -30,8 +30,8 @@ public class Pokemon
     private int level;
     private int exp;
 
-    private Map<Stat, Integer> IV = new HashMap<>();
-    private Map<Stat, Integer> EV = new HashMap<>();
+    private Map<Stat, Integer> IV = new TreeMap<>();
+    private Map<Stat, Integer> EV = new TreeMap<>();
 
     private List<String> learnedMoves = new ArrayList<>();
     private int heldTM;
@@ -412,8 +412,8 @@ public class Pokemon
     public String getVCondensed(Map<Stat, Integer> v)
     {
         StringBuilder cond = new StringBuilder();
-        for(Stat s : v.keySet()) cond.append(v.get(s)).append("-");
-        return cond.substring(0, cond.length() - 1);
+        for(int i = 0; i < Stat.values().length; i++) cond.append(v.get(Stat.values()[i])).append("-");
+        return cond.substring(0, cond.length() - 1).trim();
     }
 
     public void setIVs(String cond)
