@@ -56,6 +56,16 @@ public abstract class Move extends MongoQuery
         return user.getName() + " used **" + this.getName() + "**!";
     }
 
+    public String getMoveResultsFail(Pokemon user)
+    {
+        return user.getName() + " missed using " + this.getName() + "!";
+    }
+
+    public boolean getIsAccurate()
+    {
+        return (new Random().nextInt(100) + 1) <= this.getAccuracy();
+    }
+
     public int getDamage(Pokemon user, Pokemon opponent)
     {
         Random r = new Random();

@@ -79,8 +79,8 @@ public class Duel
         this.setDuelStatus(DuelStatus.DUELING);
         String moveString = this.playerPokemon[this.turn].getLearnedMoves().get(moveIndex - 1);
         Move move = Move.asMove(moveString);
-
-        return move.logic(this.playerPokemon[this.turn], this.playerPokemon[this.getOtherTurn()]);
+        boolean accurate = move.getIsAccurate();
+        return !accurate ? move.getMoveResultsFail(this.playerPokemon[this.turn]) : move.logic(this.playerPokemon[this.turn], this.playerPokemon[this.getOtherTurn()]);
     }
 
     public void onWin()
