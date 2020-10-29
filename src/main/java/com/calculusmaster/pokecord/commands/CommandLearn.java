@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands;
 
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -31,6 +32,10 @@ public class CommandLearn extends Command
         if(!selected.getAvailableMoves().contains(move))
         {
             this.embed.setDescription(selected.getName() + " does not know `" + move + "`");
+        }
+        else if(!Move.isMove(move) || Move.asMove(move).isWIP())
+        {
+            this.embed.setDescription(move + " has not been implemented yet! It is a WIP");
         }
         else
         {
