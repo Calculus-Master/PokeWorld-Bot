@@ -27,10 +27,10 @@ public class CommandDuel extends Command
             boolean accept = this.msg[1].toLowerCase().equals("accept");
             if(accept)
             {
-                Duel.getInstance(this.player.getId()).start();
-                Duel.getInstance(this.player.getId()).sendInitialTurnEmbed(this.event);
+                Duel d = Duel.getInstance(this.player.getId());
+                d.start();
+                d.sendInitialTurnEmbed(this.event);
                 this.embed = null;
-                System.out.println(Duel.getInstance(this.player.getId()).getTurnID());
             }
             else
             {
@@ -38,7 +38,7 @@ public class CommandDuel extends Command
                 this.embed.setDescription(this.player.getName() + " denied the duel!");
             }
 
-            Duel.printAllDuels();
+            //Duel.printAllDuels();
             return this;
         }
         else if(Duel.isInDuel(this.player.getId()))
@@ -66,7 +66,7 @@ public class CommandDuel extends Command
 
             this.embed = Duel.getInstance(this.player.getId()).getRequestEmbed();
             Duel.getInstance(this.player.getId()).setDuelImage();
-            Duel.printAllDuels();
+            //Duel.printAllDuels();
             return this;
         }
         //TODO: Test this command

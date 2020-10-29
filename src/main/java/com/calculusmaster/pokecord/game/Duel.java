@@ -69,13 +69,13 @@ public class Duel
         int p2Speed = this.playerPokemon[1].getStat(Stat.SPD);
         this.turn = p1Speed == p2Speed ? new Random().nextInt(2) : (p1Speed > p2Speed ? 0 : 1);
 
-        System.out.println(this.turn);
+        //System.out.println(this.turn);
         this.setDuelStatus(DuelStatus.DUELING);
     }
 
     public String doTurn(int moveIndex)
     {
-        System.out.println(this.turn);
+        //System.out.println(this.turn);
         this.setDuelStatus(DuelStatus.DUELING);
         String moveString = this.playerPokemon[this.turn].getLearnedMoves().get(moveIndex - 1);
         Move move = Move.asMove(moveString);
@@ -85,10 +85,10 @@ public class Duel
 
     public void onWin()
     {
-        System.out.println(this.turn);
+        //System.out.println(this.turn);
         this.setDuelStatus(DuelStatus.COMPLETE);
         this.turn = this.playerPokemon[0].isFainted() ? 1 : 0;
-        System.out.println(this.turn);
+        //System.out.println(this.turn);
     }
 
     public String getWinner()
