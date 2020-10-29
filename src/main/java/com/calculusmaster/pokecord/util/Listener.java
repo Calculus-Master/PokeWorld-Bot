@@ -152,6 +152,7 @@ public class Listener extends ListenerAdapter
 
     public static class SpawnEvent extends TimerTask
     {
+        //TODO: SpawnEvent with TimerTask
         private static final Timer timer = new Timer();
         @Override
         public void run()
@@ -180,6 +181,16 @@ public class Listener extends ListenerAdapter
             EmbedBuilder embed = new EmbedBuilder();
             embed.setTitle(event.getAuthor().getName());
             embed.setDescription("Your " + p.getName() + " leveled up to Level " + p.getLevel() + "!");
+            event.getChannel().sendMessage(embed.build()).queue();
+        }
+
+        if(p.canEvolve())
+        {
+            String old = p.getName();
+            p.evolve();
+            EmbedBuilder embed = new EmbedBuilder();
+            embed.setTitle(event.getAuthor().getName());
+            embed.setDescription("Your " + old + " evolved into a " + p.getName() + "!");
             event.getChannel().sendMessage(embed.build()).queue();
         }
 

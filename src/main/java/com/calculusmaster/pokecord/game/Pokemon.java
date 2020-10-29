@@ -145,6 +145,11 @@ public class Pokemon
         Mongo.PokemonData.updateOne(Filters.eq("UUID", p.getUUID()), Updates.set("evs", p.getVCondensed(p.getEVs())));
     }
 
+    public static void updateName(Pokemon p, String evolved)
+    {
+        Mongo.PokemonData.updateOne(Filters.eq("UUID", p.getUUID()), Updates.set("name", Global.normalCase(evolved)));
+    }
+
     public static void deletePokemon(Pokemon p)
     {
         Mongo.PokemonData.deleteOne(Filters.eq("UUID", p.getUUID()));
@@ -350,6 +355,25 @@ public class Pokemon
         int t = 1;
 
         return (int)(t * e * p * (1 + (a * b * L / (5.0 * s)) * (Math.pow(2 * L + 10, 2.5) / Math.pow(L + Lp + 10, 2.5))));
+    }
+
+    //Evolution
+    public boolean canEvolve()
+    {
+        //TODO: Special evolutions, like through trade, item, etc
+        return this.genericJSON.getJSONArray("evolutionsLVL").length() != 0 || this.genericJSON.getJSONArray("evolutionsLVL").getInt(0) <= this.getLevel() || this.genericJSON.getJSONArray("evolutionsLVL").getInt(1) <= this.getLevel();
+    }
+
+    public void evolve()
+    {
+        if(!this.canEvolve()) return;
+
+        String newEvolution;
+        if(this.genericJSON.getJSONArray("evolutionsLVL").length() == 1) newEvolution = this.genericJSON.getJSONArray("evolutions").getString(0);
+        else newEvolution = this.genericJSON.getJSONArray("evolutions").getString(1);
+
+        this.linkGenericJSON(Global.normalCase(newEvolution));
+        Pokemon.updateName(this, newEvolution);
     }
 
     //IVs and EVs
