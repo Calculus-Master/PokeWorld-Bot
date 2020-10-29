@@ -360,17 +360,15 @@ public class Pokemon
     //Evolution
     public boolean canEvolve()
     {
-        //TODO: Special evolutions, like through trade, item, etc
-        return this.genericJSON.getJSONArray("evolutionsLVL").length() != 0 || this.genericJSON.getJSONArray("evolutionsLVL").getInt(0) <= this.getLevel() || this.genericJSON.getJSONArray("evolutionsLVL").getInt(1) <= this.getLevel();
+        //TODO: Special evolutions, like through trade or items
+        return this.genericJSON.getJSONArray("evolutionsLVL").length() != 0 && this.genericJSON.getJSONArray("evolutionsLVL").getInt(0) <= this.getLevel();
     }
 
     public void evolve()
     {
         if(!this.canEvolve()) return;
 
-        String newEvolution;
-        if(this.genericJSON.getJSONArray("evolutionsLVL").length() == 1) newEvolution = this.genericJSON.getJSONArray("evolutions").getString(0);
-        else newEvolution = this.genericJSON.getJSONArray("evolutions").getString(1);
+        String newEvolution = this.genericJSON.getJSONArray("evolutions").getString(0);
 
         this.linkGenericJSON(Global.normalCase(newEvolution));
         Pokemon.updateName(this, newEvolution);
