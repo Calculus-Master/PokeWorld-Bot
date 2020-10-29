@@ -194,8 +194,11 @@ public class Duel
     public void giveWinExp()
     {
         Pokemon win = this.getWinner().equals(this.playerIDs[0]) ? this.playerPokemon[0] : this.playerPokemon[1];
-        win.addExp(win.getDuelExp(this.getWinner().equals(this.getNameFromID(this.playerIDs[0])) ? this.playerPokemon[0] : this.playerPokemon[1]));
+        win.addExp(win.getDuelExp(this.getWinner().equals(this.playerIDs[0]) ? this.playerPokemon[0] : this.playerPokemon[1]));
+        win.gainEVs(this.getWinner().equals(this.playerIDs[0]) ? this.playerPokemon[1] : this.playerPokemon[0]);
+
         Pokemon.updateExperience(win);
+        Pokemon.updateEVs(win);
     }
 
     public void giveWinCredits()

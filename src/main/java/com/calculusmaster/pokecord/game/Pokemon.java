@@ -140,6 +140,11 @@ public class Pokemon
         Mongo.PokemonData.updateOne(Filters.eq("UUID", p.getUUID()), Updates.set("moves", p.getMovesCondensed()));
     }
 
+    public static void updateEVs(Pokemon p)
+    {
+        Mongo.PokemonData.updateOne(Filters.eq("UUID", p.getUUID()), Updates.set("evs", p.getVCondensed(p.getEVs())));
+    }
+
     public static void deletePokemon(Pokemon p)
     {
         Mongo.PokemonData.deleteOne(Filters.eq("UUID", p.getUUID()));
@@ -338,13 +343,11 @@ public class Pokemon
         int a = 1;
         int b = this.genericJSON.getInt("exp");
         int e = 1;
-        int f = 1;
         int L = opponent.getLevel();
         int Lp = this.getLevel();
         int p = 1;
         int s = 1;
         int t = 1;
-        int v = 1; //TODO: Add this
 
         return (int)(t * e * p * (1 + (a * b * L / (5.0 * s)) * (Math.pow(2 * L + 10, 2.5) / Math.pow(L + Lp + 10, 2.5))));
     }
@@ -358,6 +361,30 @@ public class Pokemon
     public Map<Stat, Integer> getEVs()
     {
         return this.EV;
+    }
+
+    public void changeIV(Stat s, int amount)
+    {
+        this.IV.put(s, this.IV.get(s) + amount);
+    }
+
+    public void addEV(Stat s, int amount)
+    {
+        this.EV.put(s, this.EV.get(s) + amount);
+    }
+
+    public Map<Stat, Integer> getEVYield()
+    {
+        JSONArray yield = this.genericJSON.getJSONArray("ev");
+        Map<Stat, Integer> EVYield = new HashMap<>();
+
+        for(int i = 0; i < yield.length(); i++) if(yield.getInt(i) != 0) EVYield.put(Stat.values()[i], yield.getInt(i));
+        return EVYield;
+    }
+
+    public void gainEVs(Pokemon defeated)
+    {
+        for(Stat s : defeated.getEVYield().keySet()) this.addEV(s, defeated.getEVYield().get(s));
     }
 
     public String getVCondensed(Map<Stat, Integer> v)

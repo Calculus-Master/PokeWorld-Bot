@@ -1,6 +1,7 @@
-package com.calculusmaster.pokecord.game.moves;
+package com.calculusmaster.pokecord.game.moves.normal;
 
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.moves.Move;
 
 public class Tackle extends Move
 {
@@ -15,6 +16,6 @@ public class Tackle extends Move
         int damage = this.getDamage(user, opponent);
         opponent.changeHealth(damage * -1);
 
-        return this.getMoveResults(user, opponent, this.getName(), damage);
+        return this.getMoveResults(user, opponent, damage);
     }
 }

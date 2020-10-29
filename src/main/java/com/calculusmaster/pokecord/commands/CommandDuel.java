@@ -8,7 +8,6 @@ import java.io.IOException;
 
 public class CommandDuel extends Command
 {
-    //TODO: CommandDuel
     public CommandDuel(MessageReceivedEvent event, String[] msg)
     {
         super(event, msg, "duel <player:accept>");
@@ -69,8 +68,5 @@ public class CommandDuel extends Command
             //Duel.printAllDuels();
             return this;
         }
-        //TODO: Test this command
-        //TODO: Create CommandCancel (cancel duel if the status is DuelStatus.WAITING)
-        //TODO: Create CommandUse (use a move during a duel)
     }
 }

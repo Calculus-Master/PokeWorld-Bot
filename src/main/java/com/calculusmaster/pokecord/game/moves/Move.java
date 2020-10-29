@@ -17,21 +17,43 @@ import java.util.stream.Collectors;
 public abstract class Move extends MongoQuery
 {
     private String name;
+    private boolean isWIP;
+
+    //When a move request to lower or raise a stat by a stage, how many IVs does that lower or raise
+    protected int stageIV = 2;
+
     public static final List<Move> MOVES = new ArrayList<>();
 
     public Move(String name)
     {
         super("name", name, Mongo.MoveInfo);
         this.name = name;
+        this.isWIP = false;
 
         Move.MOVES.add(this);
     }
 
+    public Move setWIP()
+    {
+        this.isWIP = true;
+        return this;
+    }
+
+    public boolean isWIP()
+    {
+        return this.isWIP;
+    }
+
     public abstract String logic(Pokemon user, Pokemon opponent);
 
-    protected String getMoveResults(Pokemon user, Pokemon opponent, String name, int damage)
+    protected String getMoveResults(Pokemon user, Pokemon opponent, int damage)
     {
-        return user.getName() + " used **" + name + "**! It dealt **" + damage + "** damage to " + opponent.getName() + "!";
+        return this.getMoveUseResults(user) + " It dealt **" + damage + "** damage to " + opponent.getName() + "!";
+    }
+
+    protected String getMoveUseResults(Pokemon user)
+    {
+        return user.getName() + " used **" + this.getName() + "**!";
     }
 
     public int getDamage(Pokemon user, Pokemon opponent)
