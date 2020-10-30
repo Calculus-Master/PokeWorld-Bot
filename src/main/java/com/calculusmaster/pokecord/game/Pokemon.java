@@ -70,7 +70,7 @@ public class Pokemon
         Pokemon p = new Pokemon();
         p.setUUID();
 
-        p.linkGenericJSON(name);
+        p.linkGenericJSON(Global.normalCase(name));
 
         p.setLevel(1);
         p.setExp(0);

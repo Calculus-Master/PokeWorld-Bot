@@ -14,8 +14,6 @@ public class Global
     public static final List<String> POKEMON = new ArrayList<>();
     private static final Logger LOGGER = LoggerFactory.getLogger(Global.class);
 
-    //TODO: Set rarities for each Pokemon
-
     public static void logInfo(Class<?> clazz, String method, String msg)
     {
         LOGGER.info(clazz.getName().substring(clazz.getName().lastIndexOf(".") + 1) + "#" + method + ": " + msg);
