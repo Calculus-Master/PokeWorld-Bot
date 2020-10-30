@@ -35,8 +35,8 @@ public class Global
     public static String normalCase(String s)
     {
         StringBuilder sb = new StringBuilder();
-        for(String str : s.split("\\s+")) sb.append(str.substring(0, 1).toUpperCase()).append(str.substring(1).toLowerCase()).append(" ");
-        return sb.toString().trim();
+        for(String str : s.replaceAll("-", " ").split("\\s+")) sb.append(str.substring(0, 1).toUpperCase()).append(str.substring(1).toLowerCase()).append(" ");
+        return s.contains("-") ? sb.toString().replaceAll("\\s", "-").trim() : sb.toString().trim();
     }
 
     public static void buildPokemonList()

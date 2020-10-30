@@ -374,6 +374,13 @@ public class Pokemon
         Pokemon.updateName(this, newEvolution);
     }
 
+    //Megas and Forms
+    public void changeForm(String form)
+    {
+        this.linkGenericJSON(Global.normalCase(form));
+        Pokemon.updateName(this, Global.normalCase(form));
+    }
+
     //IVs and EVs
     public Map<Stat, Integer> getIVs()
     {
