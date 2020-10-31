@@ -2,7 +2,6 @@ package com.calculusmaster.pokecord.commands;
 
 import com.calculusmaster.pokecord.game.enums.Nature;
 import com.calculusmaster.pokecord.game.enums.Stat;
-import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -65,12 +64,12 @@ public class CommandShop extends Command
         Mongo.NatureInfo.find(Filters.exists("name")).forEach(d -> natures.add(new JSONObject(d.toJson())));
 
         this.page.append("Natures: \n");
-        for(JSONObject j : natures) this.page.append("`" + j.getString("name") + "` | " + this.natureIncreaseDecrease(j) + "\n");
+        for(JSONObject j : natures) this.page.append("`" + j.getString("name") + "`: " + this.getNatureEntry(j) + "\n");
 
         this.embed.setFooter("All natures cost 100c. Buy a nature with p!buy nature <nature>, where <nature> is the name of the nature.");
     }
 
-    private String natureIncreaseDecrease(JSONObject j)
+    private String getNatureEntry(JSONObject j)
     {
         String statIncr = "ERROR";
         String statDecr = "ERROR";
@@ -83,25 +82,20 @@ public class CommandShop extends Command
 
         if(statIncr.equals(statDecr) && statDecr.equals("ERROR"))
         {
-            statIncr = getUnchangedNatureStats(Nature.cast(j.getString("name"))).toString();
+            statIncr = switch(Nature.cast(j.getString("name")))
+                        {
+                            case BASHFUL -> Stat.SPATK.toString();
+                            case DOCILE -> Stat.DEF.toString();
+                            case HARDY ->  Stat.ATK.toString();
+                            case QUIRKY -> Stat.SPDEF.toString();
+                            case SERIOUS -> Stat.SPD.toString();
+                            default -> null;
+                        };
             statDecr = statIncr;
-            statDecr += " *";
+            statDecr += "  *";
         }
 
-        return " +10% " + statIncr + " | -10% " + statDecr;
-    }
-
-    private Stat getUnchangedNatureStats(Nature n)
-    {
-        return switch(n)
-        {
-            case BASHFUL -> Stat.SPATK;
-            case DOCILE -> Stat.DEF;
-            case HARDY ->  Stat.ATK;
-            case QUIRKY -> Stat.SPDEF;
-            case SERIOUS -> Stat.SPD;
-            default -> null;
-        };
+        return " +10% **" + statIncr + "** | -10% **" + statDecr + "**";
     }
 
     private void page_items()
