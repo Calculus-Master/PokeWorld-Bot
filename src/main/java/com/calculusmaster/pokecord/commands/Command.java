@@ -43,6 +43,7 @@ public abstract class Command
     public static final List<String> CMD_REPLACE = Arrays.asList("replace");
     public static final List<String> CMD_DUEL = Arrays.asList("duel");
     public static final List<String> CMD_USE = Arrays.asList("use", "u");
+    public static final List<String> CMD_SHOP = Arrays.asList("shop", "store");
 
     public Command(MessageReceivedEvent event, String[] msg, String format)
     {
