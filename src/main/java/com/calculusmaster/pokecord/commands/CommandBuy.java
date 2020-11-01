@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands;
 
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.enums.Nature;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -31,7 +32,7 @@ public class CommandBuy extends Command
         if(this.msg[1].equals("nature") && this.msg.length == 3)
         {
             //TODO: Validate nature
-            if(this.playerData.getCredits() >= CommandBuy.COST_NATURE)
+            if(this.playerData.getCredits() >= CommandBuy.COST_NATURE && Nature.cast(this.msg[2]) != null)
             {
                 this.embed.setDescription(selected.getName() + "'s Nature was changed from " + Global.normalCase(selected.getNature().toString()) + " to " + Global.normalCase(this.msg[2]));
                 selected.setNature(this.msg[2]);
@@ -78,6 +79,11 @@ public class CommandBuy extends Command
                 }
                 else this.embed.setDescription("Use p!buy mega to mega evolve!");
             }
+        }
+        else
+        {
+            this.embed.setDescription(CommandInvalid.getShort());
+            return this;
         }
 
         Pokemon.uploadPokemon(selected);
