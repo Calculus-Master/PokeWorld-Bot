@@ -385,6 +385,23 @@ public class Pokemon
         return this.genericJSON.getJSONArray("forms").length() > 0;
     }
 
+    private List<String> getListStringFromJSONArray(String key)
+    {
+        List<String> list = new ArrayList<>();
+        for(int i = 0; i < this.genericJSON.getJSONArray(key).length(); i++) list.add(this.genericJSON.getJSONArray("mega").getString(i));
+        return list;
+    }
+
+    public List<String> getMegaList()
+    {
+        return this.getListStringFromJSONArray("mega");
+    }
+
+    public List<String> getFormsList()
+    {
+        return this.getListStringFromJSONArray("forms");
+    }
+
     public void changeForm(String form)
     {
         form = Global.normalCase(form);

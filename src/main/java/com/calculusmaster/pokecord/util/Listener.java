@@ -131,6 +131,10 @@ public class Listener extends ListenerAdapter
             {
                 c = new CommandShop(event, msg).runCommand();
             }
+            else if(Command.CMD_BUY.contains(msg[0]))
+            {
+                c = new CommandBuy(event, msg).runCommand();
+            }
             else c = new CommandInvalid(event, msg).runCommand();
 
             if(c.getResponseEmbed() != null) event.getChannel().sendMessage(c.getResponseEmbed()).queue();

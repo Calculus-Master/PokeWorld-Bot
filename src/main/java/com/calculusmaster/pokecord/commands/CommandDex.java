@@ -36,7 +36,7 @@ public class CommandDex extends Command
 
         String title = "**" + info.getString("name") + " #" + info.getInt("dex") + "**";
         String filler = "*" + fillerINFO[0] + "*\nHeight: " + fillerINFO[1] + "m     Weight: " + fillerINFO[2] + "kg";
-        String type = "*Type:* " + this.getJSONArrayFormatted(info.getJSONArray("type"));
+        String type = "*Type:* " + (info.getJSONArray("type").getString(0).equals(info.getJSONArray("type").getString(1)) ? info.getJSONArray("type").getString(0) : this.getJSONArrayFormatted(info.getJSONArray("type")));
         String abilities = "*Abilities:* " + this.getJSONArrayFormatted(info.getJSONArray("abilities"));
         String growth = "*Growth Rate:* " + info.getString("growthrate").replaceAll("_", " ") + "     *Base Yield:* " + info.getInt("exp") + " XP";
         String evYield = "*EV Yield:* " + this.getEVYieldFormatted(info.getJSONArray("ev"));

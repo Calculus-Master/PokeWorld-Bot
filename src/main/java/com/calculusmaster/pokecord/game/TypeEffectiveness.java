@@ -78,7 +78,7 @@ public class TypeEffectiveness
         Map<Type, Double> mapT2 = EffectType.getEffectForType(t2).getMap();
 
         Map<Type, Double> out = new HashMap<>();
-        for(Type t : Type.values()) out.put(t, mapT1.get(t) * mapT2.get(t));
+        for(Type t : Type.values()) out.put(t, mapT1.get(t) * (t1.equals(t2) ? 1 : mapT2.get(t)));
         return out;
     }
 }
