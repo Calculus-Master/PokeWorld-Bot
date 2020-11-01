@@ -375,10 +375,22 @@ public class Pokemon
     }
 
     //Megas and Forms
+    public boolean hasMega()
+    {
+        return this.genericJSON.getJSONArray("mega").length() > 0;
+    }
+
+    public boolean hasForms()
+    {
+        return this.genericJSON.getJSONArray("forms").length() > 0;
+    }
+
     public void changeForm(String form)
     {
-        this.linkGenericJSON(Global.normalCase(form));
-        Pokemon.updateName(this, Global.normalCase(form));
+        form = Global.normalCase(form);
+        System.out.println(this.getName() + " is being transformed into " + form);
+        this.linkGenericJSON(form);
+        Pokemon.updateName(this, form);
     }
 
     //IVs and EVs

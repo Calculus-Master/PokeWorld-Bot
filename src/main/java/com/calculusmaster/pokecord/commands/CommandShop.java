@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.commands;
 
+import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.Nature;
 import com.calculusmaster.pokecord.game.enums.Stat;
 import com.calculusmaster.pokecord.util.Mongo;
@@ -14,7 +15,6 @@ public class CommandShop extends Command
 {
     private StringBuilder page;
 
-    //TODO: WIP (shop)
     public CommandShop(MessageReceivedEvent event, String[] msg)
     {
         super(event, msg, "shop <page>");
@@ -48,14 +48,31 @@ public class CommandShop extends Command
         return this;
     }
 
+    private void page_items()
+    {
+        //TODO: Items page
+    }
+
     private void page_mega()
     {
-
+        this.page.append("Megas: \n\n")
+                .append("`p!buy mega`" + " – Buy the mega of a pokemon (if it doesn't have X or Y megas).")
+                .append("\n`p!buy mega x`" + " – Buy the x mega evolution of a pokemon.")
+                .append("\n`p!buy mega y`" + " – Buy the y mega evolution of a pokemon.");
+        this.embed.setFooter("All mega evolutions cost " + CommandBuy.COST_MEGA + "c each. Primal Groudon and Primal Kyogre both count as megas.");
     }
 
     private void page_forms()
     {
+        Pokemon selected = this.playerData.getSelectedPokemon();
 
+        this.page.append("Forms: \n\n").append("Selected Pokemon: ").append(selected.getName()).append("\n\n");
+
+        for(int i = 0; i < selected.getGenericJSON().getJSONArray("forms").length(); i++) this.page.append(selected.getGenericJSON().getJSONArray("forms").getString(i)).append("\n");
+        if(!selected.hasForms()) this.page.append(selected.getName()).append(" has no forms.");
+
+        this.page.append("\nBuy forms with p!buy form <form> where <form> is the name of the form. All forms cost " + CommandBuy.COST_FORM + "c.");
+        this.embed.setFooter("This page is dynamically updated based on your selected Pokemon.");
     }
 
     private void page_nature()
@@ -63,10 +80,10 @@ public class CommandShop extends Command
         List<JSONObject> natures = new ArrayList<>();
         Mongo.NatureInfo.find(Filters.exists("name")).forEach(d -> natures.add(new JSONObject(d.toJson())));
 
-        this.page.append("Natures: \n");
+        this.page.append("Natures: \n\n");
         for(JSONObject j : natures) this.page.append("`" + j.getString("name") + "`: " + this.getNatureEntry(j) + "\n");
 
-        this.embed.setFooter("All natures cost 100c. Buy a nature with p!buy nature <nature>, where <nature> is the name of the nature.");
+        this.embed.setFooter("All natures cost " + CommandBuy.COST_NATURE + "c. Buy a nature with p!buy nature <nature>, where <nature> is the name of the nature.");
     }
 
     private String getNatureEntry(JSONObject j)
@@ -96,10 +113,5 @@ public class CommandShop extends Command
         }
 
         return " +10% **" + statIncr + "** | -10% **" + statDecr + "**";
-    }
-
-    private void page_items()
-    {
-
     }
 }
