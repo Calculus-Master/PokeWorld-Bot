@@ -25,7 +25,8 @@ public class CommandShop extends Command
     {
         if(this.msg.length == 1)
         {
-            this.embed.setDescription(CommandInvalid.getShort());
+            this.embed.setDescription("`p!shop mega` – Mega Evolutions\n`p!shop forms` – Pokemon Forms\n`p!shop nature` – Change your Pokemon's Nature\n`p!shop items` – Misc. Items");
+            this.embed.setTitle("Pokecord Shop");
             return this;
         }
 
