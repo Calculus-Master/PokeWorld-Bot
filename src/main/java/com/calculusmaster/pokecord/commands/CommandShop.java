@@ -1,8 +1,10 @@
 package com.calculusmaster.pokecord.commands;
 
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.TM;
 import com.calculusmaster.pokecord.game.enums.Nature;
 import com.calculusmaster.pokecord.game.enums.Stat;
+import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -10,6 +12,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class CommandShop extends Command
 {
@@ -38,6 +41,8 @@ public class CommandShop extends Command
             case "forms" -> page_forms();
             case "nature" -> page_nature();
             case "items" -> page_items();
+            case "tm" -> page_tm_tr();
+            case "tr" -> page_tm_tr();
             default -> this.embed.setDescription(CommandInvalid.getShort());
         }
 
@@ -52,6 +57,45 @@ public class CommandShop extends Command
     private void page_items()
     {
         //TODO: Items page
+    }
+
+    //TODO: Convert to an actual time system rather than just an int
+    private static int day = 0;
+    public static final List<String> entriesTM = new ArrayList<>();
+    public static final List<String> entriesTR = new ArrayList<>();
+
+    //TODO: TM and TR page, plus buying TM and TR, plus giving TM and TR to Pokemon
+    private void page_tm_tr()
+    {
+        this.page.append("TMs and TRs: \n\n");
+
+        if(day < this.event.getMessage().getTimeCreated().getDayOfYear())
+        {
+            day = this.event.getMessage().getTimeCreated().getDayOfYear();
+            entriesTM.clear();
+            entriesTR.clear();
+
+            for(int i = 0; i < 3; i++) entriesTM.add(newTMEntry());
+            for(int i = 0; i < 3; i++) entriesTR.add(newTREntry());
+        }
+
+        this.page.append("\nTechnical Machines for Sale: \n");
+        for(String s : entriesTM) this.page.append(s).append("\n");
+        this.page.append("\nTechnical Records for Sale: \n");
+        for(String s : entriesTR) this.page.append(s).append("\n");
+    }
+
+
+    //TODO: This whole thing
+    private String newTMEntry()
+    {
+        TM tm = TM.values()[new Random().nextInt(TM.values().length)];
+        return tm.toString() + " - " + tm.getMoveName();
+    }
+
+    private String newTREntry()
+    {
+        return "NYI";
     }
 
     private void page_mega()
