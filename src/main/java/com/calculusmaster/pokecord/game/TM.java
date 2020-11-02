@@ -121,7 +121,7 @@ public enum TM
         return Move.isMove(this.move) ? Move.asMove(this.move) : MoveList.Tackle;
     }
 
-    public TM getTM(int number)
+    public static TM getTM(int number)
     {
         for(TM t : values()) if(t.toString().contains(number + "")) return t;
         return null;

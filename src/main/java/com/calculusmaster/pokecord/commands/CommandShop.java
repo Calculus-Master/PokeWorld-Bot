@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands;
 
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.TM;
+import com.calculusmaster.pokecord.game.TR;
 import com.calculusmaster.pokecord.game.enums.Nature;
 import com.calculusmaster.pokecord.game.enums.Stat;
 import com.calculusmaster.pokecord.util.Global;
@@ -67,21 +68,27 @@ public class CommandShop extends Command
     //TODO: TM and TR page, plus buying TM and TR, plus giving TM and TR to Pokemon
     private void page_tm_tr()
     {
-        this.page.append("TMs and TRs: \n\n");
-
         if(day < this.event.getMessage().getTimeCreated().getDayOfYear())
         {
             day = this.event.getMessage().getTimeCreated().getDayOfYear();
             entriesTM.clear();
             entriesTR.clear();
 
-            for(int i = 0; i < 3; i++) entriesTM.add(newTMEntry());
-            for(int i = 0; i < 3; i++) entriesTR.add(newTREntry());
+            for(int i = 0; i < 3; i++)
+            {
+                if(entriesTM.contains(newTMEntry())) i--;
+                else entriesTM.add(newTMEntry());
+            }
+            for(int i = 0; i < 3; i++)
+            {
+                if(entriesTR.contains(newTREntry())) i--;
+                else entriesTR.add(newTREntry());
+            }
         }
 
-        this.page.append("\nTechnical Machines for Sale: \n");
+        this.page.append("\nTechnical Machines (TMs) for Sale: \n");
         for(String s : entriesTM) this.page.append(s).append("\n");
-        this.page.append("\nTechnical Records for Sale: \n");
+        this.page.append("\nTechnical Records (TRs) for Sale: \n");
         for(String s : entriesTR) this.page.append(s).append("\n");
     }
 
@@ -95,7 +102,8 @@ public class CommandShop extends Command
 
     private String newTREntry()
     {
-        return "NYI";
+        TR tr = TR.values()[new Random().nextInt(TR.values().length)];
+        return tr.toString() + " - " + tr.getMoveName();
     }
 
     private void page_mega()
