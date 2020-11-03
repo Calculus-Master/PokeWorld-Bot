@@ -87,6 +87,24 @@ public class Pokemon
         return p;
     }
 
+    //Builder for minimal access
+    public static Pokemon buildInterface(String UUID)
+    {
+        Pokemon p = new Pokemon();
+        p.setUUID(UUID);
+
+        p.linkSpecificJSON(UUID);
+        p.linkGenericJSON(p.getSpecificJSON().getString("name"));
+
+        JSONObject specific = p.getSpecificJSON();
+
+        p.setLevel(specific.getInt("level"));
+        p.setIVs(specific.getString("ivs"));
+        p.setNature(specific.getString("nature"));
+
+        return p;
+    }
+
     //JSONs
     public void linkGenericJSON(String name)
     {

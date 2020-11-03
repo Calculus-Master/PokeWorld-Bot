@@ -4,6 +4,9 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.json.JSONArray;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CommandPokemon extends Command
 {
     public CommandPokemon(MessageReceivedEvent event, String[] msg)
@@ -26,22 +29,31 @@ public class CommandPokemon extends Command
         return this;
     }
 
+    private List<String> getPlayerPokemon()
+    {
+        List<String> pokemon = new ArrayList<>();
+        for(int i = 0; i < this.playerData.getPokemonList().length(); i++) pokemon.add(this.playerData.getPokemonList().getString(i));
+        return pokemon;
+    }
+
     private void runCommand_NoFlags()
     {
+        System.out.println("STARTING P!POKEMON: " + System.currentTimeMillis());
         StringBuilder sb = new StringBuilder();
         boolean hasPage = this.msg.length == 2;
         Pokemon p;
-        JSONArray list = this.playerData.getPokemonList();
-        int startIndex = hasPage ? (Integer.parseInt(this.msg[1]) > list.length() ? 0 : Integer.parseInt(this.msg[1])) : 0;
+        List<String> list = this.getPlayerPokemon();
+        int startIndex = hasPage ? (Integer.parseInt(this.msg[1]) > list.size() ? 0 : Integer.parseInt(this.msg[1])) : 0;
 
         for(int i = 0; i < startIndex + 20; i++)
         {
-            if(i > list.length() - 1) break;
-            p = Pokemon.build(list.getString(i));
+            if(i > list.size() - 1) break;
+            p = Pokemon.buildInterface(list.get(i));
             sb.append("**" + p.getName() + "** | Number: " + (i + 1) + " | Level " + p.getLevel() + " | Total IV: " + p.getTotalIV() + "\n");
         }
 
         this.embed.setDescription(sb.toString());
         this.embed.setTitle(this.player.getName() + "'s Pokemon");
+        System.out.println("FINISHED P!POKEMON: " + System.currentTimeMillis());
     }
 }
