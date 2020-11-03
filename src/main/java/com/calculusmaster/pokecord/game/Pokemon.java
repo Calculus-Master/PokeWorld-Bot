@@ -88,19 +88,30 @@ public class Pokemon
     }
 
     //Builder for minimal access
+    //WILL CRASH IF ANY OTHER GETTERS ARE USED
     public static Pokemon buildInterface(String UUID)
     {
-        Pokemon p = new Pokemon();
-        p.setUUID(UUID);
+        JSONObject specific = Pokemon.specificJSON(UUID);
 
-        p.linkSpecificJSON(UUID);
-        p.linkGenericJSON(p.getSpecificJSON().getString("name"));
+        Pokemon p = new Pokemon()
+        {
+            @Override
+            public String getUUID() {
+                return UUID;
+            }
 
-        JSONObject specific = p.getSpecificJSON();
+            @Override
+            public int getLevel() {
+                return specific.getInt("level");
+            }
 
-        p.setLevel(specific.getInt("level"));
+            @Override
+            public String getName() {
+                return specific.getString("name");
+            }
+        };
+
         p.setIVs(specific.getString("ivs"));
-        p.setNature(specific.getString("nature"));
 
         return p;
     }
@@ -273,6 +284,18 @@ public class Pokemon
     public int getTR()
     {
         return this.heldTR;
+    }
+
+    public boolean canLearnTM(int tm)
+    {
+        for(int i = 0; i < this.genericJSON.getJSONArray("movesTM").length(); i++) if(this.genericJSON.getJSONArray("movesTM").getInt(i) == tm) return true;
+        return false;
+    }
+
+    public boolean canLearnTR(int tr)
+    {
+        for(int i = 0; i < this.genericJSON.getJSONArray("movesTR").length(); i++) if(this.genericJSON.getJSONArray("movesTR").getInt(i) == tr) return true;
+        return false;
     }
 
     //UUID

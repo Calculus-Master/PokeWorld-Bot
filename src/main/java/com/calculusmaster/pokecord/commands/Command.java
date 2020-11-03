@@ -46,6 +46,8 @@ public abstract class Command
     public static final List<String> CMD_SHOP = Arrays.asList("shop", "store");
     public static final List<String> CMD_BUY = Arrays.asList("buy");
     public static final List<String> CMD_RELEASE = Arrays.asList("release", "ditch");
+    public static final List<String> CMD_REPORT = Arrays.asList("bugreport", "bug", "problem", "issue");
+    public static final List<String> CMD_TEACH = Arrays.asList("teach");
 
     public Command(MessageReceivedEvent event, String[] msg, String format)
     {

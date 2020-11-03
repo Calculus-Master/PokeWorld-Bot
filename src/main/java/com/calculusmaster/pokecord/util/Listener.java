@@ -139,6 +139,10 @@ public class Listener extends ListenerAdapter
             {
                 c = new CommandRelease(event, msg).runCommand();
             }
+            else if(Command.CMD_REPORT.contains(msg[0]))
+            {
+                c = new CommandReport(event, msg).runCommand();
+            }
             else c = new CommandInvalid(event, msg).runCommand();
 
             if(c.getResponseEmbed() != null) event.getChannel().sendMessage(c.getResponseEmbed()).queue();

@@ -26,4 +26,5 @@ public class Mongo
     public static final MongoCollection<Document> PlayerData = MutableDB.getCollection("PlayerData");
     public static final MongoCollection<Document> ServerData = MutableDB.getCollection("ServerData");
     public static final MongoCollection<Document> PokemonData = MutableDB.getCollection("PokemonData");
+    public static final MongoCollection<Document> ReportData = MutableDB.getCollection("ReportData");
 }
