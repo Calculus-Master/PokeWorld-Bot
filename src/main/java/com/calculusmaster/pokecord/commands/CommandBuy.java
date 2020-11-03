@@ -31,7 +31,6 @@ public class CommandBuy extends Command
 
         if(this.msg[1].equals("nature") && this.msg.length == 3)
         {
-            //TODO: Validate nature
             if(this.playerData.getCredits() >= CommandBuy.COST_NATURE && Nature.cast(this.msg[2]) != null)
             {
                 this.embed.setDescription(selected.getName() + "'s Nature was changed from " + Global.normalCase(selected.getNature().toString()) + " to " + Global.normalCase(this.msg[2]));
@@ -79,6 +78,38 @@ public class CommandBuy extends Command
                 }
                 else this.embed.setDescription("Use p!buy mega to mega evolve!");
             }
+        }
+        else if(this.msg[1].equals("tm"))
+        {
+            boolean isInTMList = CommandShop.entriesTM.stream().anyMatch(tm -> tm.toUpperCase().contains(this.msg[2].toUpperCase()));
+            System.out.println(CommandShop.entriesTM + ", checking for " + this.msg[2]);
+            if(isInTMList && this.playerData.getCredits() >= CommandShop.currentTMPrice)
+            {
+                this.playerData.addTM(this.msg[2].toUpperCase());
+                this.playerData.changeCredits(-1 * CommandShop.currentTMPrice);
+                this.embed.setDescription("Successfully bought " + this.msg[2].toUpperCase());
+            }
+            else if(!isInTMList)
+            {
+                this.embed.setDescription("Invalid TM!");
+            }
+            else this.embed.setDescription("You don't have enough money!");
+        }
+        else if(this.msg[1].equals("tr"))
+        {
+            boolean isInTRList = CommandShop.entriesTR.stream().anyMatch(tr -> tr.toUpperCase().contains(this.msg[2].toUpperCase()));
+            System.out.println(CommandShop.entriesTR + ", checking for " + this.msg[2]);
+            if(isInTRList && this.playerData.getCredits() >= CommandShop.currentTRPrice)
+            {
+                this.playerData.addTR(this.msg[2].toUpperCase());
+                this.playerData.changeCredits(-1 * CommandShop.currentTRPrice);
+                this.embed.setDescription("Successfully bought " + this.msg[2].toUpperCase());
+            }
+            else if(!isInTRList)
+            {
+                this.embed.setDescription("Invalid TR!");
+            }
+            else this.embed.setDescription("You don't have enough money!");
         }
         else
         {

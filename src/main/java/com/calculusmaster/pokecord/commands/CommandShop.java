@@ -42,8 +42,7 @@ public class CommandShop extends Command
             case "forms" -> page_forms();
             case "nature" -> page_nature();
             case "items" -> page_items();
-            case "tm" -> page_tm_tr();
-            case "tr" -> page_tm_tr();
+            case "tm", "tr" -> page_tm_tr();
             default -> this.embed.setDescription(CommandInvalid.getShort());
         }
 
@@ -62,6 +61,9 @@ public class CommandShop extends Command
 
     //TODO: Convert to an actual time system rather than just an int
     private static int day = 0;
+    public static int currentTMPrice = 2000;
+    public static int currentTRPrice = 2500;
+
     public static final List<String> entriesTM = new ArrayList<>();
     public static final List<String> entriesTR = new ArrayList<>();
 
@@ -84,11 +86,14 @@ public class CommandShop extends Command
                 if(entriesTR.contains(newTREntry())) i--;
                 else entriesTR.add(newTREntry());
             }
+
+            currentTMPrice = 2000 + (new Random().nextInt(1000) - 500);
+            currentTRPrice = 2500 + (new Random().nextInt(1500) - 750);
         }
 
-        this.page.append("\nTechnical Machines (TMs) for Sale: \n");
+        this.page.append("\n**Technical Machines (TMs) for " + currentTMPrice + "c each: **\n");
         for(String s : entriesTM) this.page.append(s).append("\n");
-        this.page.append("\nTechnical Records (TRs) for Sale: \n");
+        this.page.append("\n**Technical Records (TRs) for " + currentTRPrice + "c each: **\n");
         for(String s : entriesTR) this.page.append(s).append("\n");
     }
 
@@ -97,13 +102,13 @@ public class CommandShop extends Command
     private String newTMEntry()
     {
         TM tm = TM.values()[new Random().nextInt(TM.values().length)];
-        return tm.toString() + " - " + tm.getMoveName();
+        return "`" + tm.toString() + "` - " + tm.getMoveName();
     }
 
     private String newTREntry()
     {
         TR tr = TR.values()[new Random().nextInt(TR.values().length)];
-        return tr.toString() + " - " + tr.getMoveName();
+        return "`" + tr.toString() + "` - " + tr.getMoveName();
     }
 
     private void page_mega()

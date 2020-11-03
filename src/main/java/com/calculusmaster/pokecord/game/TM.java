@@ -123,7 +123,6 @@ public enum TM
 
     public static TM getTM(int number)
     {
-        for(TM t : values()) if(t.toString().contains(number + "")) return t;
-        return null;
+        return values()[number - 1];
     }
 }

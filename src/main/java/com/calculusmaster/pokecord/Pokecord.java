@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord;
 
 import com.calculusmaster.pokecord.game.MoveList;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Listener;
 import com.calculusmaster.pokecord.util.PokemonRarity;
@@ -24,7 +25,7 @@ public class Pokecord
         System.out.println(Move.MOVES.toString());
 
         //SpawnEvent Timer
-        new Listener.SpawnEvent().run();
+        //TODO: new Listener.SpawnEvent().run();
 
         //Create Bot
         JDABuilder bot = JDABuilder.createDefault(PrivateInfo.TOKEN);

@@ -19,8 +19,9 @@ public abstract class Move extends MongoQuery
     private String name;
     private boolean isWIP;
 
+    //TODO: Change this is the stat multipler used in moves
     //When a move request to lower or raise a stat by a stage, how many IVs does that lower or raise
-    protected int stageIV = 2;
+    protected int stageIV = 8;
 
     public static final List<Move> MOVES = new ArrayList<>();
 

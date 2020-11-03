@@ -1,11 +1,15 @@
 package com.calculusmaster.pokecord.mongo;
 
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.TM;
+import com.calculusmaster.pokecord.game.TR;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.User;
 import org.bson.Document;
 import org.json.JSONArray;
+
+import java.util.Random;
 
 public class PlayerDataQuery extends MongoQuery
 {
@@ -32,7 +36,9 @@ public class PlayerDataQuery extends MongoQuery
                 .append("playerID", player.getId())
                 .append("username", player.getName())
                 .append("credits", 1000)
-                .append("selected", 1);
+                .append("selected", 1)
+                .append("tms", TM.values()[new Random().nextInt(TM.values().length)])
+                .append("trs", TR.values()[new Random().nextInt(TR.values().length)]);
 
         Mongo.PlayerData.insertOne(playerData);
     }
@@ -67,6 +73,16 @@ public class PlayerDataQuery extends MongoQuery
     public Pokemon getSelectedPokemon()
     {
         return Pokemon.build(this.getPokemonList().getString(this.getSelected()));
+    }
+
+    public JSONArray getOwnedTMs()
+    {
+        return !this.json().has("tms") ? null : this.json().getJSONArray("tms");
+    }
+
+    public JSONArray getOwnedTRs()
+    {
+        return !this.json().has("trs") ? null : this.json().getJSONArray("trs");
     }
 
     //Updates - run this.update() after each method so the query is up to date
@@ -114,6 +130,48 @@ public class PlayerDataQuery extends MongoQuery
     public void updateSelected()
     {
         if(this.getSelected() >= this.getPokemonList().length()) this.setSelected(this.getPokemonList().length());
+    }
+
+    //Adds a TM to the player's owned TMs
+    public void addTM(String TM)
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.push("tms", TM));
+
+        this.update();
+    }
+
+    //Removes a TM from the player's owned TMs
+    public void removeTM(String TM)
+    {
+        int counts = 0;
+        for (int i = 0; i < this.getOwnedTMs().length(); i++) if(this.getOwnedTMs().getString(i).equals(TM)) counts++;
+
+        Mongo.PlayerData.updateOne(this.query, Updates.pull("tms", TM));
+
+        for(int i = 0; i < counts - 1; i++) this.addTM(TM);
+
+        this.update();
+    }
+
+    //Adds a TR to the player's owned TRs
+    public void addTR(String TR)
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.push("trs", TR));
+
+        this.update();
+    }
+
+    //Removes a TR from the player's owned TRs
+    public void removeTR(String TR)
+    {
+        int counts = 0;
+        for (int i = 0; i < this.getOwnedTRs().length(); i++) if(this.getOwnedTRs().getString(i).equals(TR)) counts++;
+
+        Mongo.PlayerData.updateOne(this.query, Updates.pull("trs", TR));
+
+        for(int i = 0; i < counts - 1; i++) this.addTR(TR);
+
+        this.update();
     }
 
 }
