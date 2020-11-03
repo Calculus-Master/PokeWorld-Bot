@@ -39,7 +39,7 @@ public abstract class Command
     public static final List<String> CMD_POKEMON = Arrays.asList("pokemon", "pkmn");
     public static final List<String> CMD_MOVES = Arrays.asList("moves", "m");
     public static final List<String> CMD_MOVEINFO = Arrays.asList("moveinfo", "mi");
-    public static final List<String> CMD_LEARN = Arrays.asList("learn", "teach");
+    public static final List<String> CMD_LEARN = Arrays.asList("learn");
     public static final List<String> CMD_REPLACE = Arrays.asList("replace");
     public static final List<String> CMD_DUEL = Arrays.asList("duel");
     public static final List<String> CMD_USE = Arrays.asList("use", "u");
@@ -48,6 +48,7 @@ public abstract class Command
     public static final List<String> CMD_RELEASE = Arrays.asList("release", "ditch");
     public static final List<String> CMD_REPORT = Arrays.asList("bugreport", "bug", "problem", "issue");
     public static final List<String> CMD_TEACH = Arrays.asList("teach");
+    public static final List<String> CMD_INVENTORY = Arrays.asList("inventory", "items");
 
     public Command(MessageReceivedEvent event, String[] msg, String format)
     {

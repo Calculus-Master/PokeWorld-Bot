@@ -179,6 +179,12 @@ public class Pokemon
         Mongo.PokemonData.updateOne(Filters.eq("UUID", p.getUUID()), Updates.set("name", Global.normalCase(evolved)));
     }
 
+    public static void updateTMTR(Pokemon p)
+    {
+        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("tm", p.getTM()));
+        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("tr", p.getTR()));
+    }
+
     public static void deletePokemon(Pokemon p)
     {
         Mongo.PokemonData.deleteOne(Filters.eq("UUID", p.getUUID()));
@@ -320,6 +326,11 @@ public class Pokemon
     public String getUUID()
     {
         return this.UUID;
+    }
+
+    public Bson getQuery()
+    {
+        return Filters.eq("UUID", this.getUUID());
     }
 
     //Shiny

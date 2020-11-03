@@ -8,7 +8,6 @@ import org.json.JSONArray;
 
 public class CommandTeach extends Command
 {
-    //TODO: p!teach <tm:tr> <number>
     public CommandTeach(MessageReceivedEvent event, String[] msg)
     {
         super(event, msg, "p!teach <tm:tr> <number>");
@@ -17,7 +16,7 @@ public class CommandTeach extends Command
     @Override
     public Command runCommand()
     {
-        if(this.msg.length < 3 || (!this.msg[1].equals("tr") && !this.msg[1].equals("tm")) || !this.msg[3].chars().allMatch(Character::isDigit))
+        if(this.msg.length < 3 || (!this.msg[1].equals("tr") && !this.msg[1].equals("tm")) || !this.msg[2].chars().allMatch(Character::isDigit))
         {
             this.embed.setDescription(CommandInvalid.getShort());
             return this;
@@ -30,12 +29,14 @@ public class CommandTeach extends Command
         {
             Pokemon selected = this.playerData.getSelectedPokemon();
             int held;
+
             if(tm && selected.canLearnTM(number))
             {
                 held = selected.getTM();
                 selected.setTM(number);
+                Pokemon.updateTMTR(selected);
 
-                this.embed.setDescription("Taught " + TM.getTM(held).toString() + " - " + TM.getTM(held).getMoveName() + " to " + selected.getName());
+                this.embed.setDescription("Taught " + TM.getTM(number).toString() + " - " + TM.getTM(number).getMoveName() + " to " + selected.getName());
 
                 this.playerData.removeTM(TM.getTM(number).toString());
                 if(held != -1) this.playerData.addTM(TM.getTM(held).toString());
@@ -44,6 +45,7 @@ public class CommandTeach extends Command
             {
                 held = selected.getTR();
                 selected.setTR(number);
+                Pokemon.updateTMTR(selected);
 
                 this.embed.setDescription("Taught " + TR.getTR(held).toString() + " - " + TR.getTR(held).getMoveName() + " to " + selected.getName());
 
