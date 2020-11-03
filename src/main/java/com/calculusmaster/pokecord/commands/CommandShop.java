@@ -88,7 +88,7 @@ public class CommandShop extends Command
             }
 
             currentTMPrice = 2000 + (new Random().nextInt(1000) - 500);
-            currentTRPrice = 2500 + (new Random().nextInt(1500) - 750);
+            currentTRPrice = 2500 + (new Random().nextInt(1500) - 500);
         }
 
         this.page.append("\n**Technical Machines (TMs) for " + currentTMPrice + "c each: **\n");
