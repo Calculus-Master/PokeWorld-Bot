@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.game;
 
-import com.calculusmaster.pokecord.game.enums.Type;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 
 import java.util.HashMap;
 import java.util.Map;

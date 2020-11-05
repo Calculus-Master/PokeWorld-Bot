@@ -1,5 +1,6 @@
-package com.calculusmaster.pokecord.game;
+package com.calculusmaster.pokecord.game.enums.items;
 
+import com.calculusmaster.pokecord.game.MoveList;
 import com.calculusmaster.pokecord.game.moves.Move;
 
 public enum TM

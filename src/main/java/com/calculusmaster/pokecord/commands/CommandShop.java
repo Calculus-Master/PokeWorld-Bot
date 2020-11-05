@@ -1,11 +1,11 @@
 package com.calculusmaster.pokecord.commands;
 
 import com.calculusmaster.pokecord.game.Pokemon;
-import com.calculusmaster.pokecord.game.TM;
-import com.calculusmaster.pokecord.game.TR;
-import com.calculusmaster.pokecord.game.enums.Nature;
-import com.calculusmaster.pokecord.game.enums.Stat;
-import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.game.enums.items.TM;
+import com.calculusmaster.pokecord.game.enums.items.TR;
+import com.calculusmaster.pokecord.game.enums.elements.Nature;
+import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.items.XPBooster;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -43,6 +43,7 @@ public class CommandShop extends Command
             case "nature" -> page_nature();
             case "items" -> page_items();
             case "tm", "tr" -> page_tm_tr();
+            case "xp" -> page_xp();
             default -> this.embed.setDescription(CommandInvalid.getShort());
         }
 
@@ -57,6 +58,12 @@ public class CommandShop extends Command
     private void page_items()
     {
         //TODO: Items page
+    }
+
+    private void page_xp()
+    {
+        this.page.append("**XP Boosters:**\n");
+        for(XPBooster xp : XPBooster.values()) this.page.append("`" + xp.timeForShop() + ":` (" + xp.boost + "x) " + xp.price + "c\n");
     }
 
     //TODO: Convert to an actual time system rather than just an int
@@ -97,8 +104,6 @@ public class CommandShop extends Command
         for(String s : entriesTR) this.page.append(s).append("\n");
     }
 
-
-    //TODO: This whole thing
     private String newTMEntry()
     {
         TM tm = TM.values()[new Random().nextInt(TM.values().length)];

@@ -1,14 +1,17 @@
 package com.calculusmaster.pokecord.mongo;
 
 import com.calculusmaster.pokecord.game.Pokemon;
-import com.calculusmaster.pokecord.game.TM;
-import com.calculusmaster.pokecord.game.TR;
+import com.calculusmaster.pokecord.game.enums.items.TM;
+import com.calculusmaster.pokecord.game.enums.items.TR;
+import com.calculusmaster.pokecord.game.enums.items.XPBooster;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.bson.Document;
 import org.json.JSONArray;
 
+import java.time.OffsetDateTime;
 import java.util.Random;
 
 public class PlayerDataQuery extends MongoQuery
@@ -83,6 +86,21 @@ public class PlayerDataQuery extends MongoQuery
     public JSONArray getOwnedTRs()
     {
         return !this.json().has("trs") ? null : this.json().getJSONArray("trs");
+    }
+
+    public boolean hasXPBooster()
+    {
+        return this.json().has("xp");
+    }
+
+    public int getXPBoosterLength()
+    {
+        return this.json().getJSONObject("xp").getInt("length");
+    }
+
+    public String getXPBoosterTimeStamp()
+    {
+        return this.json().getJSONObject("xp").getString("timestamp");
     }
 
     //Updates - run this.update() after each method so the query is up to date
@@ -170,6 +188,25 @@ public class PlayerDataQuery extends MongoQuery
         Mongo.PlayerData.updateOne(this.query, Updates.pull("trs", TR));
 
         for(int i = 0; i < counts - 1; i++) this.addTR(TR);
+
+        this.update();
+    }
+
+    public void addXPBooster(XPBooster booster, MessageReceivedEvent event)
+    {
+        if(this.hasXPBooster()) this.removeXPBooster();
+
+        OffsetDateTime t = event.getMessage().getTimeCreated();
+        String msgTime = t.getDayOfYear() + "-" + t.getHour() + "-" + t.getMinute();
+        Document xpBooster = new Document("length", booster.time()).append("timestamp", msgTime);
+        Mongo.PlayerData.updateOne(this.query, Updates.set("xp", xpBooster));
+
+        this.update();
+    }
+
+    public void removeXPBooster()
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.unset("xp"));
 
         this.update();
     }

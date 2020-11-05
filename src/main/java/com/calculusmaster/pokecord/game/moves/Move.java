@@ -2,9 +2,9 @@ package com.calculusmaster.pokecord.game.moves;
 
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.TypeEffectiveness;
-import com.calculusmaster.pokecord.game.enums.Category;
-import com.calculusmaster.pokecord.game.enums.Stat;
-import com.calculusmaster.pokecord.game.enums.Type;
+import com.calculusmaster.pokecord.game.enums.elements.Category;
+import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.mongo.MongoQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;

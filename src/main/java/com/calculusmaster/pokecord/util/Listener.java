@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.util;
 
 import com.calculusmaster.pokecord.commands.*;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.enums.items.XPBooster;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -58,6 +59,9 @@ public class Listener extends ListenerAdapter
         if(msg[0].startsWith(serverQuery.getPrefix()))
         {
             event.getChannel().sendTyping().queue();
+
+            //Check the xp booster timestamp of the player who sent the message
+            Listener.checkXPTimeStamp(event);
 
             //Remove prefix from the message array, msg[0] is the raw command name
             msg[0] = msg[0].substring(serverQuery.getPrefix().length());
@@ -191,14 +195,28 @@ public class Listener extends ListenerAdapter
         }
     }
 
+    private static void checkXPTimeStamp(MessageReceivedEvent event)
+    {
+        PlayerDataQuery data = new PlayerDataQuery(event.getAuthor().getId());
+        String[] ts = data.getXPBoosterTimeStamp().split("-");
+        int timestamp = Integer.parseInt(ts[0]) * 24 * 60 + Integer.parseInt(ts[1]) * 60 + Integer.parseInt(ts[2]);
+        int length = XPBooster.getInstance(data.getXPBoosterLength()).time();
+
+        OffsetDateTime t = event.getMessage().getTimeCreated();
+        int timeNow = t.getDayOfYear() * 24 * 60 + t.getHour() * 60 + t.getMinute();
+
+        if(timeNow - timestamp >= length) data.removeXPBooster();
+    }
+
     private static void expEvent(MessageReceivedEvent event)
     {
         PlayerDataQuery data = new PlayerDataQuery(event.getAuthor().getId());
         Pokemon p = data.getSelectedPokemon();
 
         int initL = p.getLevel();
+        double booster = data.hasXPBooster() ? XPBooster.getInstance(data.getXPBoosterLength()).boost : 1.0;
 
-        p.addExp(new Random().nextInt(100));
+        p.addExp((int)(booster * new Random().nextInt(100)));
 
         if(p.getLevel() != initL)
         {

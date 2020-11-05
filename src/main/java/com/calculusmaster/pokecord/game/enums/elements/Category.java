@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game.enums;
+package com.calculusmaster.pokecord.game.enums.elements;
 
 import com.calculusmaster.pokecord.util.Global;
 

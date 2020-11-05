@@ -1,9 +1,9 @@
 package com.calculusmaster.pokecord.game;
 
-import com.calculusmaster.pokecord.game.enums.GrowthRate;
-import com.calculusmaster.pokecord.game.enums.Nature;
-import com.calculusmaster.pokecord.game.enums.Stat;
-import com.calculusmaster.pokecord.game.enums.Type;
+import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
+import com.calculusmaster.pokecord.game.enums.elements.Nature;
+import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;

@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game;
 
-import com.calculusmaster.pokecord.game.enums.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.items.XPBooster;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -193,9 +194,11 @@ public class Duel
 
     public void giveWinExp()
     {
-        Pokemon win = this.getWinner().equals(this.playerIDs[0]) ? this.playerPokemon[0] : this.playerPokemon[1];
-        win.addExp(win.getDuelExp(this.getWinner().equals(this.playerIDs[0]) ? this.playerPokemon[0] : this.playerPokemon[1]));
-        win.gainEVs(this.getWinner().equals(this.playerIDs[0]) ? this.playerPokemon[1] : this.playerPokemon[0]);
+        int winner = this.getWinner().equals(this.playerIDs[0]) ? 0 : 1;
+        Pokemon win = this.playerPokemon[winner];
+        double booster = this.playerData[winner].hasXPBooster() ? XPBooster.getInstance(this.playerData[winner].getXPBoosterLength()).boost : 1.0;
+        win.addExp((int)(booster * win.getDuelExp(this.playerPokemon[winner == 0 ? 1 : 0])));
+        win.gainEVs(this.playerPokemon[winner == 0 ? 1 : 0]);
 
         Pokemon.updateExperience(win);
         Pokemon.updateEVs(win);
