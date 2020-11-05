@@ -1,8 +1,8 @@
 package com.calculusmaster.pokecord;
 
 import com.calculusmaster.pokecord.game.MoveList;
+import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.moves.Move;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Listener;
 import com.calculusmaster.pokecord.util.PokemonRarity;
@@ -17,7 +17,7 @@ public class Pokecord
     public static void main(String[] args) throws LoginException
     {
         //Initializations
-        Global.buildPokemonList();
+        Pokemon.init();
         MoveList.init();
         PokemonRarity.init();
 

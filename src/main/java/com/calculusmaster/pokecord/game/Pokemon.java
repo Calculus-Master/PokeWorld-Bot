@@ -39,6 +39,12 @@ public class Pokemon
 
     private int health;
 
+    //Init Global List
+    public static void init()
+    {
+        Mongo.PokemonInfo.find(Filters.exists("name")).forEach(d -> Global.POKEMON.add(d.getString("name")));
+    }
+
     //Constructors
     public static Pokemon build(String UUID)
     {
