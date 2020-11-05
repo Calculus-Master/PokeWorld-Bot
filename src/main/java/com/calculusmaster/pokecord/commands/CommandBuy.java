@@ -114,7 +114,7 @@ public class CommandBuy extends Command
         }
         else if(this.msg[1].equals("xp") && this.msg.length == 3 && this.msg[2].chars().allMatch(Character::isDigit))
         {
-            int val = Integer.parseInt(this.msg[2]);
+            int val = Integer.parseInt(this.msg[2]) - 1;
             if(val >= 0 && val < XPBooster.values().length)
             {
                 XPBooster xp = XPBooster.values()[val];

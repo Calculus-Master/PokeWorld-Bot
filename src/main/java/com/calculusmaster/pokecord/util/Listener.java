@@ -55,13 +55,13 @@ public class Listener extends ListenerAdapter
         //If the 'selected' field is out of bounds, force it into bounds to avoid errors
         if(isPlayerRegistered) new PlayerDataQuery(player.getId()).updateSelected();
 
+        //Check the xp booster timestamp of the player who sent the message
+        if(isPlayerRegistered) Listener.checkXPTimeStamp(event);
+
         //If the message starts with the right prefix, continue, otherwise skip the listener
         if(msg[0].startsWith(serverQuery.getPrefix()))
         {
             event.getChannel().sendTyping().queue();
-
-            //Check the xp booster timestamp of the player who sent the message
-            Listener.checkXPTimeStamp(event);
 
             //Remove prefix from the message array, msg[0] is the raw command name
             msg[0] = msg[0].substring(serverQuery.getPrefix().length());
@@ -198,6 +198,8 @@ public class Listener extends ListenerAdapter
     private static void checkXPTimeStamp(MessageReceivedEvent event)
     {
         PlayerDataQuery data = new PlayerDataQuery(event.getAuthor().getId());
+        if(!data.hasXPBooster()) return;
+
         String[] ts = data.getXPBoosterTimeStamp().split("-");
         int timestamp = Integer.parseInt(ts[0]) * 24 * 60 + Integer.parseInt(ts[1]) * 60 + Integer.parseInt(ts[2]);
         int length = XPBooster.getInstance(data.getXPBoosterLength()).time();
@@ -205,6 +207,8 @@ public class Listener extends ListenerAdapter
         OffsetDateTime t = event.getMessage().getTimeCreated();
         int timeNow = t.getDayOfYear() * 24 * 60 + t.getHour() * 60 + t.getMinute();
 
+        //System.out.println(timeNow - timestamp);
+        //System.out.println(length);
         if(timeNow - timestamp >= length) data.removeXPBooster();
     }
 
