@@ -1,19 +1,21 @@
 package com.calculusmaster.pokecord.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 public class PokemonRarity
 {
-    public static final List<PokemonRarity> RARITIES = new ArrayList<>();
     public static final List<String> SPAWNS = new ArrayList<>();
 
     public static void init()
     {
-        PokemonRarity Bulbasaur = new PokemonRarity("Bulbasaur", Rarity.COPPER);
-        PokemonRarity Ivysaur = new PokemonRarity("Ivysaur", Rarity.SILVER);
-        PokemonRarity Venusaur = new PokemonRarity("Venusaur", Rarity.GOLD);
+        PokemonRarity.add("Bulbasaur", Rarity.COPPER);
+        PokemonRarity.add("Ivysaur", Rarity.SILVER);
+        PokemonRarity.add("Venusaur", Rarity.GOLD);
+
+        shuffleSpawns();
     }
 
     public static String getSpawn()
@@ -21,10 +23,23 @@ public class PokemonRarity
         return SPAWNS.get(new Random().nextInt(SPAWNS.size()));
     }
 
-    public PokemonRarity(String name, Rarity rarity)
+    public static void add(String name, Rarity r)
     {
-        RARITIES.add(this);
-        for(int i = 0; i < rarity.num; i++) SPAWNS.add(name);
+        for(int i = 0; i < r.num; i++) SPAWNS.add(name);
+    }
+
+    private static void shuffleSpawns()
+    {
+        List<String> spawnsOld = new ArrayList<>(List.copyOf(SPAWNS));
+        SPAWNS.clear();
+        Random r = new Random();
+
+        while(spawnsOld.size() > 0)
+        {
+            String s = spawnsOld.get(r.nextInt(spawnsOld.size()));
+            SPAWNS.add(s);
+            spawnsOld.remove(s);
+        }
     }
 
     public enum Rarity
