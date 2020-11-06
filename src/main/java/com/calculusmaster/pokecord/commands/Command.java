@@ -54,8 +54,6 @@ public abstract class Command
     public static final CommandHelp.HelpEntry INVENTORY = new CommandHelp.HelpEntry("inventory");
     public static final CommandHelp.HelpEntry HELP = new CommandHelp.HelpEntry("help");
 
-
-
     public static void init()
     {
         START.setCategory(MISC)
@@ -196,6 +194,7 @@ public abstract class Command
                 .addArgDesc("command", "Optional. Specify the command you want help on.");
     }
 
+    @Deprecated
     public Command(MessageReceivedEvent event, String[] msg, String format)
     {
         this.event = event;
@@ -210,6 +209,11 @@ public abstract class Command
 
         this.embed = new EmbedBuilder();
         this.color = null;
+    }
+
+    public Command(MessageReceivedEvent event, String[] msg)
+    {
+        this(event, msg, null);
     }
 
     public abstract Command runCommand() throws IOException;
