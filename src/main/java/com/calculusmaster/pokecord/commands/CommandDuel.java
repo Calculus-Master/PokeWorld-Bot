@@ -58,6 +58,11 @@ public class CommandDuel extends Command
             this.embed.setDescription(this.event.getGuild().getMemberById(opponentID).getEffectiveName() + " is already in a Duel!");
             return this;
         }
+        else if(this.player.getId().equals(opponentID))
+        {
+            this.embed.setDescription("You cannot duel yourself!");
+            return this;
+        }
         else
         {
             System.out.println(opponentID);
