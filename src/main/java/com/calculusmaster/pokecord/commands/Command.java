@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.commands;
 
+import com.calculusmaster.pokecord.commands.misc.CommandHelp;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -14,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static com.calculusmaster.pokecord.commands.CommandHelp.CommandCategory.*;
+import static com.calculusmaster.pokecord.commands.misc.CommandHelp.CommandCategory.*;
 
 public abstract class Command
 {
@@ -63,7 +64,7 @@ public abstract class Command
             .addArgs("starter")
             .addArgDesc("starter", "The starter Pokemon you want to begin with.");
 
-        SPAWNCHANNEL.setCategory(MISC)
+        SPAWNCHANNEL.setCategory(CONFIG)
                 .addShortDescription("Set a channel where Pokemon will spawn.")
                 .addAliases()
                 .addArgs("channelID")

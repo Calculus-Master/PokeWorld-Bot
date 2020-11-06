@@ -1,5 +1,7 @@
-package com.calculusmaster.pokecord.commands;
+package com.calculusmaster.pokecord.commands.economy;
 
+import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Nature;
 import com.calculusmaster.pokecord.game.enums.items.XPBooster;

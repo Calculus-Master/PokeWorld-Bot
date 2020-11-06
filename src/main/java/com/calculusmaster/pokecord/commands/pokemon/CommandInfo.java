@@ -1,5 +1,6 @@
-package com.calculusmaster.pokecord.commands;
+package com.calculusmaster.pokecord.commands.pokemon;
 
+import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;

@@ -1,6 +1,18 @@
 package com.calculusmaster.pokecord.util;
 
 import com.calculusmaster.pokecord.commands.*;
+import com.calculusmaster.pokecord.commands.config.CommandSpawnChannel;
+import com.calculusmaster.pokecord.commands.duel.CommandDuel;
+import com.calculusmaster.pokecord.commands.duel.CommandUse;
+import com.calculusmaster.pokecord.commands.economy.CommandBalance;
+import com.calculusmaster.pokecord.commands.economy.CommandBuy;
+import com.calculusmaster.pokecord.commands.economy.CommandInventory;
+import com.calculusmaster.pokecord.commands.economy.CommandShop;
+import com.calculusmaster.pokecord.commands.misc.CommandHelp;
+import com.calculusmaster.pokecord.commands.misc.CommandReport;
+import com.calculusmaster.pokecord.commands.misc.CommandStart;
+import com.calculusmaster.pokecord.commands.moves.*;
+import com.calculusmaster.pokecord.commands.pokemon.*;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.items.XPBooster;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;

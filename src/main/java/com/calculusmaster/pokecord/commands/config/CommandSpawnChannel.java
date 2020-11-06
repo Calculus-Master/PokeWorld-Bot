@@ -1,5 +1,6 @@
-package com.calculusmaster.pokecord.commands;
+package com.calculusmaster.pokecord.commands.config;
 
+import com.calculusmaster.pokecord.commands.Command;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandSpawnChannel extends Command

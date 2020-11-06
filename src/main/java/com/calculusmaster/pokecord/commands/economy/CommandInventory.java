@@ -1,5 +1,6 @@
-package com.calculusmaster.pokecord.commands;
+package com.calculusmaster.pokecord.commands.economy;
 
+import com.calculusmaster.pokecord.commands.Command;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandInventory extends Command

@@ -1,5 +1,7 @@
-package com.calculusmaster.pokecord.commands;
+package com.calculusmaster.pokecord.commands.moves;
 
+import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;

@@ -1,5 +1,6 @@
-package com.calculusmaster.pokecord.commands;
+package com.calculusmaster.pokecord.commands.misc;
 
+import com.calculusmaster.pokecord.commands.Command;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.*;
@@ -60,7 +61,7 @@ public class CommandHelp extends Command
         private CommandCategory category;
         private int index;
 
-        HelpEntry(String command)
+        public HelpEntry(String command)
         {
             this.command.add(command);
             this.commandArgs = new HashMap<>();
