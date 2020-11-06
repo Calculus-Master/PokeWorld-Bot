@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord;
 
+import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.MoveList;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.moves.Move;
@@ -20,6 +21,7 @@ public class Pokecord
         Pokemon.init();
         MoveList.init();
         PokemonRarity.init();
+        Command.init();
 
         System.out.println(Global.POKEMON.toString());
         System.out.println(Move.MOVES.toString());

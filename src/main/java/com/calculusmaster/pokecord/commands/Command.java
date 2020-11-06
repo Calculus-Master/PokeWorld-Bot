@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import static com.calculusmaster.pokecord.commands.CommandHelp.CommandCategory.*;
+
 public abstract class Command
 {
     protected MessageReceivedEvent event;
@@ -49,6 +51,17 @@ public abstract class Command
     public static final List<String> CMD_REPORT = Arrays.asList("bugreport", "bug", "problem", "issue");
     public static final List<String> CMD_TEACH = Arrays.asList("teach");
     public static final List<String> CMD_INVENTORY = Arrays.asList("inventory", "items");
+    public static final List<String> CMD_HELP = Arrays.asList("help");
+
+    public static final CommandHelp.HelpEntry START = new CommandHelp.HelpEntry("start", "Start your journey!");
+
+    public static void init()
+    {
+        START.setCategory(MISC)
+            .addAliases()
+            .addArgs("starter")
+            .addArgDesc("starter", "The starter Pokemon you want to begin with.");
+    }
 
     public Command(MessageReceivedEvent event, String[] msg, String format)
     {
