@@ -67,55 +67,55 @@ public class Listener extends ListenerAdapter
             msg[0] = msg[0].substring(serverQuery.getPrefix().length());
 
             //Check for a valid command, and if there is none reply with the invalid message
-            if(Command.CMD_START.contains(msg[0]) || !isPlayerRegistered)
+            if(Command.START.contains(msg[0]) || !isPlayerRegistered)
             {
                 c = new CommandStart(event, msg).runCommand();
             }
-            else if(Command.CMD_SPAWNCHANNEL.contains(msg[0]))
+            else if(Command.SPAWNCHANNEL.contains(msg[0]))
             {
                 c = new CommandSpawnChannel(event, msg).runCommand();
             }
-            else if(Command.CMD_BALANCE.contains(msg[0]))
+            else if(Command.BALANCE.contains(msg[0]))
             {
                 c = new CommandBalance(event, msg).runCommand();
             }
-            else if(Command.CMD_SELECT.contains(msg[0]))
+            else if(Command.SELECT.contains(msg[0]))
             {
                 c = new CommandSelect(event, msg).runCommand();
             }
-            else if(Command.CMD_DEX.contains(msg[0]))
+            else if(Command.DEX.contains(msg[0]))
             {
                 c = new CommandDex(event, msg).runCommand();
             }
-            else if(Command.CMD_INFO.contains(msg[0]))
+            else if(Command.INFO.contains(msg[0]))
             {
                 c = new CommandInfo(event, msg).runCommand();
             }
-            else if(Command.CMD_CATCH.contains(msg[0]))
+            else if(Command.CATCH.contains(msg[0]))
             {
                 c = new CommandCatch(event, msg).runCommand();
             }
-            else if(Command.CMD_POKEMON.contains(msg[0]))
+            else if(Command.POKEMON.contains(msg[0]))
             {
                 c = new CommandPokemon(event, msg).runCommand();
             }
-            else if(Command.CMD_MOVES.contains(msg[0]))
+            else if(Command.MOVES.contains(msg[0]))
             {
                 c = new CommandMoves(event, msg).runCommand();
             }
-            else if(Command.CMD_LEARN.contains(msg[0]))
+            else if(Command.LEARN.contains(msg[0]))
             {
                 c = new CommandLearn(event, msg).runCommand();
             }
-            else if(Command.CMD_REPLACE.contains(msg[0]))
+            else if(Command.REPLACE.contains(msg[0]))
             {
                 c = new CommandReplace(event, msg).runCommand();
             }
-            else if(Command.CMD_MOVEINFO.contains(msg[0]))
+            else if(Command.MOVEINFO.contains(msg[0]))
             {
                 c = new CommandMoveInfo(event, msg).runCommand();
             }
-            else if(Command.CMD_DUEL.contains(msg[0]))
+            else if(Command.DUEL.contains(msg[0]))
             {
                 try {
                     c = new CommandDuel(event, msg).runCommand();
@@ -123,7 +123,7 @@ public class Listener extends ListenerAdapter
                     c = new CommandInvalid(event, msg).runCommand();
                 }
             }
-            else if(Command.CMD_USE.contains(msg[0]))
+            else if(Command.USE.contains(msg[0]))
             {
                 try {
                     c = new CommandUse(event, msg).runCommand();
@@ -131,31 +131,31 @@ public class Listener extends ListenerAdapter
                     c = new CommandInvalid(event, msg).runCommand();
                 }
             }
-            else if(Command.CMD_SHOP.contains(msg[0]))
+            else if(Command.SHOP.contains(msg[0]))
             {
                 c = new CommandShop(event, msg).runCommand();
             }
-            else if(Command.CMD_BUY.contains(msg[0]))
+            else if(Command.BUY.contains(msg[0]))
             {
                 c = new CommandBuy(event, msg).runCommand();
             }
-            else if(Command.CMD_RELEASE.contains(msg[0]))
+            else if(Command.RELEASE.contains(msg[0]))
             {
                 c = new CommandRelease(event, msg).runCommand();
             }
-            else if(Command.CMD_REPORT.contains(msg[0]))
+            else if(Command.REPORT.contains(msg[0]))
             {
                 c = new CommandReport(event, msg).runCommand();
             }
-            else if(Command.CMD_TEACH.contains(msg[0]))
+            else if(Command.TEACH.contains(msg[0]))
             {
                 c = new CommandTeach(event, msg).runCommand();
             }
-            else if(Command.CMD_INVENTORY.contains(msg[0]))
+            else if(Command.INVENTORY.contains(msg[0]))
             {
                 c = new CommandInventory(event, msg).runCommand();
             }
-            else if(Command.CMD_HELP.contains(msg[0]))
+            else if(Command.HELP.contains(msg[0]))
             {
                 c = new CommandHelp(event, msg).runCommand();
             }

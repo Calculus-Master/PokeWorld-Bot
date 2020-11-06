@@ -31,7 +31,7 @@ public abstract class Command
     protected EmbedBuilder embed;
     protected Color color;
 
-    public static final List<String> CMD_START = Arrays.asList("start");
+    /*public static final List<String> CMD_START = Arrays.asList("start");
     public static final List<String> CMD_SPAWNCHANNEL = Arrays.asList("setspawnchannel");
     public static final List<String> CMD_BALANCE = Arrays.asList("bal", "credits", "c");
     public static final List<String> CMD_SELECT = Arrays.asList("select", "pick");
@@ -51,16 +51,170 @@ public abstract class Command
     public static final List<String> CMD_REPORT = Arrays.asList("bugreport", "bug", "problem", "issue");
     public static final List<String> CMD_TEACH = Arrays.asList("teach");
     public static final List<String> CMD_INVENTORY = Arrays.asList("inventory", "items");
-    public static final List<String> CMD_HELP = Arrays.asList("help");
+    public static final List<String> CMD_HELP = Arrays.asList("help");*/
 
-    public static final CommandHelp.HelpEntry START = new CommandHelp.HelpEntry("start", "Start your journey!");
+    public static final CommandHelp.HelpEntry START = new CommandHelp.HelpEntry("start");
+    public static final CommandHelp.HelpEntry SPAWNCHANNEL = new CommandHelp.HelpEntry("setspawn");
+    public static final CommandHelp.HelpEntry BALANCE = new CommandHelp.HelpEntry("balance");
+    public static final CommandHelp.HelpEntry SELECT = new CommandHelp.HelpEntry("select");
+    public static final CommandHelp.HelpEntry DEX = new CommandHelp.HelpEntry("dex");
+    public static final CommandHelp.HelpEntry INFO = new CommandHelp.HelpEntry("info");
+    public static final CommandHelp.HelpEntry CATCH = new CommandHelp.HelpEntry("catch");
+    public static final CommandHelp.HelpEntry POKEMON = new CommandHelp.HelpEntry("pokemon");
+    public static final CommandHelp.HelpEntry MOVES = new CommandHelp.HelpEntry("moves");
+    public static final CommandHelp.HelpEntry MOVEINFO = new CommandHelp.HelpEntry("moveinfo");
+    public static final CommandHelp.HelpEntry LEARN = new CommandHelp.HelpEntry("learn");
+    public static final CommandHelp.HelpEntry REPLACE = new CommandHelp.HelpEntry("replace");
+    public static final CommandHelp.HelpEntry DUEL = new CommandHelp.HelpEntry("duel");
+    public static final CommandHelp.HelpEntry USE = new CommandHelp.HelpEntry("use");
+    public static final CommandHelp.HelpEntry SHOP = new CommandHelp.HelpEntry("shop");
+    public static final CommandHelp.HelpEntry BUY = new CommandHelp.HelpEntry("buy");
+    public static final CommandHelp.HelpEntry RELEASE = new CommandHelp.HelpEntry("release");
+    public static final CommandHelp.HelpEntry REPORT = new CommandHelp.HelpEntry("bugreport");
+    public static final CommandHelp.HelpEntry TEACH = new CommandHelp.HelpEntry("teach");
+    public static final CommandHelp.HelpEntry INVENTORY = new CommandHelp.HelpEntry("inventory");
+    public static final CommandHelp.HelpEntry HELP = new CommandHelp.HelpEntry("help");
+
+
 
     public static void init()
     {
         START.setCategory(MISC)
+            .addShortDescription("Start your journey!")
             .addAliases()
             .addArgs("starter")
             .addArgDesc("starter", "The starter Pokemon you want to begin with.");
+
+        SPAWNCHANNEL.setCategory(MISC)
+                .addShortDescription("Set a channel where Pokemon will spawn.")
+                .addAliases()
+                .addArgs("channelID")
+                .addArgDesc("channelID", "The ID of the channel where you want to redirect spawns to.");
+
+        BALANCE.setCategory(ECONOMY)
+                .addShortDescription("Check how much credits you have.")
+                .addAliases("credits", "bal", "c");
+
+        SELECT.setCategory(CommandHelp.CommandCategory.POKEMON)
+                .addShortDescription("Select a pokemon to be your main one!")
+                .addAliases()
+                .addArgs("index")
+                .addArgDesc("index", "The number of the Pokemon you want to select.");
+
+        DEX.setCategory(CommandHelp.CommandCategory.POKEMON)
+                .addShortDescription("View generic info about a Pokemon by name.")
+                .addAliases()
+                .addArgs("name")
+                .addArgDesc("name", "The name of the Pokemon you want info about.");
+
+        INFO.setCategory(CommandHelp.CommandCategory.POKEMON)
+                .addShortDescription("View specific info about a Pokemon you have.")
+                .addAliases()
+                .addArgs(" ", "number")
+                .addArgDesc(" ", "If you don't specify an argument, you will view info about your selected Pokemon.")
+                .addArgDesc("number", "Number of the Pokemon you want to see info about.");
+
+        CATCH.setCategory(CommandHelp.CommandCategory.POKEMON)
+                .addShortDescription("Catch a spawned Pokemon!")
+                .addAliases()
+                .addArgs("name")
+                .addArgDesc("name", "Your guess for the name of the spawned Pokemon.");
+
+        POKEMON.setCategory(CommandHelp.CommandCategory.POKEMON)
+                .addShortDescription("View your Pokemon!")
+                .addAliases()
+                .addArgs("page")
+                .addArgDesc("page", "The page of Pokemon you want to view (if you have more than 20).");
+
+        MOVES.setCategory(CommandHelp.CommandCategory.MOVES)
+                .addShortDescription("View your Pokemon's moves.")
+                .addAliases("m");
+
+        MOVEINFO.setCategory(CommandHelp.CommandCategory.MOVES)
+                .addShortDescription("View info about a specific move.")
+                .addAliases("mi")
+                .addArgs("name")
+                .addArgDesc("name", "The name of the move you want to view info about.");
+
+        LEARN.setCategory(CommandHelp.CommandCategory.MOVES)
+                .addShortDescription("Teach your Pokemon a move!")
+                .addAliases()
+                .addArgs("name")
+                .addArgDesc("name", "The move you want your Pokemon to learn.");
+
+        REPLACE.setCategory(CommandHelp.CommandCategory.MOVES)
+                .addShortDescription("Replace a learned move with another move!")
+                .addAliases()
+                .addArgs("index")
+                .addArgDesc("index", "The move number you want to replace with the new move.");
+
+        DUEL.setCategory(CommandHelp.CommandCategory.DUEL)
+                .addShortDescription("Duel another player!")
+                .addAliases()
+                .addArgs("player", "accept", "deny")
+                .addArgDesc("player", "Replace this with the mention of the user you want to duel.")
+                .addArgDesc("accept", "If someone has requested to duel you, accept their challenge.")
+                .addArgDesc("deny", "If someone has requested to due you, deny their challenge like a coward.");
+
+        USE.setCategory(CommandHelp.CommandCategory.DUEL)
+                .addShortDescription("Use a move during a duel!")
+                .addAliases()
+                .addArgs("index")
+                .addArgDesc("index", "The number of the move you want to use (can be found by using the move command).");
+
+        SHOP.setCategory(ECONOMY)
+                .addShortDescription("Shop!")
+                .addAliases("store")
+                .addArgs("page")
+                .addArgDesc("page", "The page you want to view. To see available pages, use this command without arguments.");
+
+        BUY.setCategory(ECONOMY)
+                .addShortDescription("Buy something from the shop!")
+                .addAliases()
+                .addArgs("item")
+                .addArgs("natureName", "formName", "x", "y", "tmNum", "trNum")
+                .addArgDesc("item", "The item type you want to buy. Item types are listed on the shop page (Ex. 'nature' or 'form')")
+                .addArgDesc("natureName", "The name of the nature you want to replace your selected Pokemon's nature with.")
+                .addArgDesc("formName", "The name of the form you want to transform your selected Pokemon into.")
+                .addArgDesc("x", "If your selected Pokemon has an X evolution, type 'x' to buy it.")
+                .addArgDesc("y", "If your selected Pokemon has a Y evolution, type 'y' to buy it.")
+                .addArgDesc("tmName", "The name of the TM you want to give your selected Pokemon (between 1 and 100, including the letters 'TM').")
+                .addArgDesc("trName", "The name of the TR you want to give your selected Pokemon (between 0 and 99, including the letters 'TR').");
+
+        RELEASE.setCategory(CommandHelp.CommandCategory.POKEMON)
+                .addShortDescription("Release a caught Pokemon into the wild.")
+                .addAliases()
+                .addArgs("index", "confirm", "deny")
+                .addArgDesc("index", "The number of the Pokemon you want to release.")
+                .addArgDesc("confirm", "If you want to release a Pokemon, confirm the release of it.")
+                .addArgDesc("deny", "If you want to release a Pokemon, deny the release of it.");
+
+        REPORT.setCategory(MISC)
+                .addShortDescription("Report a bug or problem, or suggest a feature or change!")
+                .addAliases("suggest", "report")
+                .addArgs("command")
+                .addArgs("report")
+                .addArgDesc("command", "The command you were using or the command you want to suggest something for")
+                .addArgDesc("report", "Description of the problem or suggestion");
+
+        TEACH.setCategory(CommandHelp.CommandCategory.MOVES)
+                .addShortDescription("Teach your Pokemon a TM or TR!")
+                .addAliases()
+                .addArgs("tm", "tr")
+                .addArgs("number")
+                .addArgDesc("tm", "If you are teaching your selected Pokemon a TM.")
+                .addArgDesc("tr", "If you are teaching your selected Pokemon a TR.")
+                .addArgDesc("number", "The number of the TM or TR (TM between 1 and 100, TR between 0 and 99).");
+
+        INVENTORY.setCategory(ECONOMY)
+                .addShortDescription("View your inventory!")
+                .addAliases("items", "tms", "trs");
+
+        HELP.setCategory(MISC)
+                .addShortDescription("View all possible commands and what they do!")
+                .addAliases()
+                .addArgs("command")
+                .addArgDesc("command", "Optional. Specify the command you want help on.");
     }
 
     public Command(MessageReceivedEvent event, String[] msg, String format)

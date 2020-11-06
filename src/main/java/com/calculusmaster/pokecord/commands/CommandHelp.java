@@ -10,6 +10,7 @@ public class CommandHelp extends Command
     public static final List<HelpEntry> MISC = new ArrayList<>();
     public static final List<HelpEntry> CONFIG = new ArrayList<>();
     public static final List<HelpEntry> POKEMON = new ArrayList<>();
+    public static final List<HelpEntry> MOVES = new ArrayList<>();
     public static final List<HelpEntry> DUEL = new ArrayList<>();
     public static final List<HelpEntry> TRADE = new ArrayList<>();
     public static final List<HelpEntry> ECONOMY = new ArrayList<>();
@@ -22,24 +23,46 @@ public class CommandHelp extends Command
     @Override
     public Command runCommand()
     {
-        this.embed.setDescription(MISC.get(0).getHeadingFormat(this.serverData.getPrefix()) + "\n\n" + MISC.get(0).getBodyFormat());
+        if(this.msg.length == 2)
+        {
+            HelpEntry help = this.allEntries().stream().filter(h -> h.command.contains(this.msg[1])).collect(Collectors.toList()).get(0);
+            this.embed.setDescription(help.getHeadingFormat(this.serverData.getPrefix()) + "\n\n" + help.getBodyFormat());
+        }
+        else
+        {
+            StringBuilder sb = new StringBuilder("Enter the command name to see info about it.\nAvailable Commands:\n\n");
+            for(HelpEntry h : this.allEntries()) sb.append("`").append(h.command.get(0)).append("`\n");
+            this.embed.setDescription(sb.toString());
+        }
         return this;
+    }
+
+    private List<HelpEntry> allEntries()
+    {
+        List<HelpEntry> entries = new ArrayList<>();
+        entries.addAll(MISC);
+        entries.addAll(CONFIG);
+        entries.addAll(POKEMON);
+        entries.addAll(MOVES);
+        entries.addAll(DUEL);
+        entries.addAll(TRADE);
+        entries.addAll(ECONOMY);
+        return entries;
     }
 
     public static class HelpEntry
     {
         private final List<String> command = new ArrayList<>();
-        private final String shortDesc;
+        private String shortDesc;
         private final Map<Integer, List<String>> commandArgs;
         private final Map<String, String> argsDesc;
 
         private CommandCategory category;
         private int index;
 
-        HelpEntry(String command, String shortDesc)
+        HelpEntry(String command)
         {
             this.command.add(command);
-            this.shortDesc = shortDesc;
             this.commandArgs = new HashMap<>();
             this.argsDesc = new HashMap<>();
             this.index = 1;
@@ -52,10 +75,17 @@ public class CommandHelp extends Command
                 case MISC -> CommandHelp.MISC.add(this);
                 case CONFIG -> CommandHelp.CONFIG.add(this);
                 case POKEMON -> CommandHelp.POKEMON.add(this);
+                case MOVES -> CommandHelp.MOVES.add(this);
                 case DUEL -> CommandHelp.DUEL.add(this);
                 case TRADE -> CommandHelp.TRADE.add(this);
                 case ECONOMY -> CommandHelp.ECONOMY.add(this);
             }
+        }
+
+        public HelpEntry addShortDescription(String desc)
+        {
+            this.shortDesc = desc;
+            return this;
         }
 
         public HelpEntry setCategory(CommandCategory c)
@@ -123,6 +153,6 @@ public class CommandHelp extends Command
 
     public enum CommandCategory
     {
-        MISC, CONFIG, POKEMON, DUEL, TRADE, ECONOMY
+        MISC, CONFIG, POKEMON, MOVES, DUEL, TRADE, ECONOMY
     }
 }
