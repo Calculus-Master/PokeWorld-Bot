@@ -13,7 +13,6 @@ public class CommandBuy extends Command
     public static final int COST_FORM = 1500;
     public static final int COST_NATURE = 200;
 
-    //TODO: WIP (buy)
     public CommandBuy(MessageReceivedEvent event, String[] msg)
     {
         super(event, msg, "buy <item>");

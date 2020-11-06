@@ -74,7 +74,6 @@ public class CommandShop extends Command
     public static final List<String> entriesTM = new ArrayList<>();
     public static final List<String> entriesTR = new ArrayList<>();
 
-    //TODO: TM and TR page, plus buying TM and TR, plus giving TM and TR to Pokemon
     private void page_tm_tr()
     {
         if(day < this.event.getMessage().getTimeCreated().getDayOfYear())

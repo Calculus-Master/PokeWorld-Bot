@@ -4,7 +4,6 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandInventory extends Command
 {
-    //TODO: Command Inventory
     public CommandInventory(MessageReceivedEvent event, String[] msg)
     {
         super(event, msg, "inventory <page>");
@@ -14,7 +13,8 @@ public class CommandInventory extends Command
     public Command runCommand()
     {
         StringBuilder s = new StringBuilder();
-        
+
+        //TODO: Items like Magmarizer, etc
         s.append("`Items (NYI)`: \n");
         
         s.append("`TMs`: \n");
