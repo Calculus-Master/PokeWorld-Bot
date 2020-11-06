@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.util;
 
 import com.calculusmaster.pokecord.commands.*;
+import com.calculusmaster.pokecord.commands.config.CommandPrefix;
 import com.calculusmaster.pokecord.commands.config.CommandSpawnChannel;
 import com.calculusmaster.pokecord.commands.duel.CommandDuel;
 import com.calculusmaster.pokecord.commands.duel.CommandUse;
@@ -170,6 +171,10 @@ public class Listener extends ListenerAdapter
             else if(Command.HELP.contains(msg[0]))
             {
                 c = new CommandHelp(event, msg).runCommand();
+            }
+            else if(Command.PREFIX.contains(msg[0]))
+            {
+                c = new CommandPrefix(event, msg).runCommand();
             }
             else c = new CommandInvalid(event, msg).runCommand();
 

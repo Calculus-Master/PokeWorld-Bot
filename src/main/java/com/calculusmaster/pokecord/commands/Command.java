@@ -53,6 +53,7 @@ public abstract class Command
     public static final CommandHelp.HelpEntry TEACH = new CommandHelp.HelpEntry("teach");
     public static final CommandHelp.HelpEntry INVENTORY = new CommandHelp.HelpEntry("inventory");
     public static final CommandHelp.HelpEntry HELP = new CommandHelp.HelpEntry("help");
+    public static final CommandHelp.HelpEntry PREFIX = new CommandHelp.HelpEntry("prefix");
 
     public static void init()
     {
@@ -192,6 +193,12 @@ public abstract class Command
                 .addAliases()
                 .addArgs("command")
                 .addArgDesc("command", "Optional. Specify the command you want help on.");
+
+        PREFIX.setCategory(CONFIG)
+                .addShortDescription("Change the bot prefix!")
+                .addAliases()
+                .addArgs("prefix")
+                .addArgDesc("prefix", "The prefix you want to use instead of the current one.");
     }
 
     @Deprecated
