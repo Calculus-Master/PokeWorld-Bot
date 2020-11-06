@@ -31,28 +31,6 @@ public abstract class Command
     protected EmbedBuilder embed;
     protected Color color;
 
-    /*public static final List<String> CMD_START = Arrays.asList("start");
-    public static final List<String> CMD_SPAWNCHANNEL = Arrays.asList("setspawnchannel");
-    public static final List<String> CMD_BALANCE = Arrays.asList("bal", "credits", "c");
-    public static final List<String> CMD_SELECT = Arrays.asList("select", "pick");
-    public static final List<String> CMD_DEX = Arrays.asList("dex", "pokedex");
-    public static final List<String> CMD_INFO = Arrays.asList("info");
-    public static final List<String> CMD_CATCH = Arrays.asList("catch");
-    public static final List<String> CMD_POKEMON = Arrays.asList("pokemon", "pkmn");
-    public static final List<String> CMD_MOVES = Arrays.asList("moves", "m");
-    public static final List<String> CMD_MOVEINFO = Arrays.asList("moveinfo", "mi");
-    public static final List<String> CMD_LEARN = Arrays.asList("learn");
-    public static final List<String> CMD_REPLACE = Arrays.asList("replace");
-    public static final List<String> CMD_DUEL = Arrays.asList("duel");
-    public static final List<String> CMD_USE = Arrays.asList("use", "u");
-    public static final List<String> CMD_SHOP = Arrays.asList("shop", "store");
-    public static final List<String> CMD_BUY = Arrays.asList("buy");
-    public static final List<String> CMD_RELEASE = Arrays.asList("release", "ditch");
-    public static final List<String> CMD_REPORT = Arrays.asList("bugreport", "bug", "problem", "issue");
-    public static final List<String> CMD_TEACH = Arrays.asList("teach");
-    public static final List<String> CMD_INVENTORY = Arrays.asList("inventory", "items");
-    public static final List<String> CMD_HELP = Arrays.asList("help");*/
-
     public static final CommandHelp.HelpEntry START = new CommandHelp.HelpEntry("start");
     public static final CommandHelp.HelpEntry SPAWNCHANNEL = new CommandHelp.HelpEntry("setspawn");
     public static final CommandHelp.HelpEntry BALANCE = new CommandHelp.HelpEntry("balance");
