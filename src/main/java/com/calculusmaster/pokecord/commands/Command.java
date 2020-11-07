@@ -54,7 +54,8 @@ public abstract class Command
     public static final CommandHelp.HelpEntry INVENTORY = new CommandHelp.HelpEntry("inventory");
     public static final CommandHelp.HelpEntry HELP = new CommandHelp.HelpEntry("help");
     public static final CommandHelp.HelpEntry PREFIX = new CommandHelp.HelpEntry("prefix");
-
+    public static final CommandHelp.HelpEntry TRADE = new CommandHelp.HelpEntry("trade");
+    
     public static void init()
     {
         START.setCategory(MISC)
@@ -199,6 +200,25 @@ public abstract class Command
                 .addAliases()
                 .addArgs("prefix")
                 .addArgDesc("prefix", "The prefix you want to use instead of the current one.");
+
+        //TODO: Implement TRADE COMMAND
+        TRADE.setCategory(MISC)
+                .addShortDescription("Trade with other players!")
+                .addAliases()
+                .addArgs("player", "accept", "deny", "confirm", "credits", "pokemon")
+                .addArgs("add", "remove")
+                .addArgs("creditAmount", "pokemonNumber")
+                .addArgDesc("player", "Mention the player you want to start a trade with.")
+                .addArgDesc("accept", "Accept a trade request.")
+                .addArgDesc("deny", "Deny a trade request.")
+                .addArgDesc("confirm", "Confirm a trade. After both players confirm, the trade will be complete.")
+                .addArgDesc("credits", "Alias: c. Offer credits to a trade.")
+                .addArgDesc("pokemon", "Alias: p. Offer pokemon to a trade.")
+                .addArgDesc("add", "Add credits or pokemon to a trade offer")
+                .addArgDesc("remove", "Remove credits or pokemon from a trade offer")A
+                .addArgDesc("creditAmount", "Number of credits you offer")
+                .addArgDesc("pokemonNumber", "Number of the Pokemon you want to offer");
+
     }
 
     @Deprecated

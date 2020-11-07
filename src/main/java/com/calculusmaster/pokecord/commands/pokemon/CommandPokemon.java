@@ -4,7 +4,6 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.Pokemon;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +49,7 @@ public class CommandPokemon extends Command
         for(int i = 0; i < startIndex + 20; i++)
         {
             if(i > list.size() - 1) break;
-            p = Pokemon.buildInterface(list.get(i));
+            p = Pokemon.buildCore(list.get(i));
             sb.append("**" + p.getName() + "** | Number: " + (i + 1) + " | Level " + p.getLevel() + " | Total IV: " + p.getTotalIV() + "\n");
         }
 

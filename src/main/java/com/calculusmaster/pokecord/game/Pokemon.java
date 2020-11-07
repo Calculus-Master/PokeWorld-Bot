@@ -95,7 +95,7 @@ public class Pokemon
 
     //Builder for minimal access
     //WILL CRASH IF ANY OTHER GETTERS ARE USED
-    public static Pokemon buildInterface(String UUID)
+    public static Pokemon buildCore(String UUID)
     {
         JSONObject specific = Pokemon.specificJSON(UUID);
 
