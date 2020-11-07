@@ -215,7 +215,7 @@ public abstract class Command
                 .addArgDesc("credits", "Alias: c. Offer credits to a trade.")
                 .addArgDesc("pokemon", "Alias: p. Offer pokemon to a trade.")
                 .addArgDesc("add", "Add credits or pokemon to a trade offer")
-                .addArgDesc("remove", "Remove credits or pokemon from a trade offer")A
+                .addArgDesc("remove", "Remove credits or pokemon from a trade offer")
                 .addArgDesc("creditAmount", "Number of credits you offer")
                 .addArgDesc("pokemonNumber", "Number of the Pokemon you want to offer");
 
