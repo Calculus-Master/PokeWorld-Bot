@@ -20,18 +20,15 @@ public class CommandDex extends Command
     @Override
     public Command runCommand()
     {
-        boolean requestPokemon = this.msg.length == 2 && Global.POKEMON.contains(Global.normalCase(this.msg[1]));
-        boolean requestForm = this.msg.length == 3 && Global.POKEMON.contains(Global.normalCase(this.msg[1] + " " + this.msg[2]));
-        boolean requestShinyPokemon = this.msg.length == 3 && this.msg[1].toLowerCase().equals("shiny") && Global.POKEMON.contains(Global.normalCase(this.msg[2]));
-        boolean requestShinyForm =  this.msg.length == 4 && this.msg[1].toLowerCase().equals("shiny") && Global.POKEMON.contains(Global.normalCase(this.msg[2] + " " + this.msg[3]));
+        boolean isShiny = this.msg[1].toLowerCase().equals("shiny");
 
-        if(!requestPokemon && !requestForm && !requestShinyPokemon && !requestShinyForm)
+        if(!Global.POKEMON.contains(Global.normalCase(this.getPokemonName())))
         {
             this.embed.setDescription(CommandInvalid.getShort());
             return this;
         }
 
-        String pokemon = requestPokemon ? this.msg[1] : (requestShinyPokemon ? this.msg[2] : (requestForm ? this.msg[1] + " " + this.msg[2] : (requestShinyForm ? this.msg[2] + " " + this.msg[3] : null)));
+        String pokemon = this.getPokemonName();
 
         JSONObject info = Pokemon.genericJSON(Global.normalCase(pokemon));
         String[] fillerINFO = info.getString("fillerinfo").split("-");
@@ -51,9 +48,16 @@ public class CommandDex extends Command
         this.embed.setDescription(filler + "\n" + type + "\n" + abilities + "\n" + growth + "" +
                 "\n" + evYield + "\n" + evolutions + "\n" + forms + "       " + megas + "\n" + "\n" + baseStats);
         this.color = Type.cast(info.getJSONArray("type").getString(0)).getColor();
-        this.embed.setImage(info.getString((requestShinyForm || requestShinyPokemon ? "shiny" : "normal") + "URL"));
+        this.embed.setImage(info.getString((isShiny ? "shiny" : "normal") + "URL"));
 
         return this;
+    }
+
+    private String getPokemonName()
+    {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 1; i < this.msg.length; i++) sb.append(this.msg[i] + " ");
+        return sb.toString().replaceAll("shiny", "").trim();
     }
 
     private String getJSONArrayFormatted(JSONArray arr)
