@@ -12,6 +12,7 @@ import com.calculusmaster.pokecord.commands.economy.CommandShop;
 import com.calculusmaster.pokecord.commands.misc.CommandHelp;
 import com.calculusmaster.pokecord.commands.misc.CommandReport;
 import com.calculusmaster.pokecord.commands.misc.CommandStart;
+import com.calculusmaster.pokecord.commands.misc.CommandTrade;
 import com.calculusmaster.pokecord.commands.moves.*;
 import com.calculusmaster.pokecord.commands.pokemon.*;
 import com.calculusmaster.pokecord.game.Pokemon;
@@ -175,6 +176,10 @@ public class Listener extends ListenerAdapter
             else if(Command.PREFIX.contains(msg[0]))
             {
                 c = new CommandPrefix(event, msg).runCommand();
+            }
+            else if(Command.TRADE.contains(msg[0]))
+            {
+                c = new CommandTrade(event, msg).runCommand();
             }
             else c = new CommandInvalid(event, msg).runCommand();
 
