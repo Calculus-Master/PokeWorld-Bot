@@ -18,6 +18,7 @@ public class CommandTrade extends Command
     @Override
     public Command runCommand()
     {
+        System.out.println("TRADE: " + Arrays.toString(this.msg));
         if(this.msg.length == 1)
         {
             this.embed.setDescription(CommandInvalid.getShort());
@@ -43,7 +44,7 @@ public class CommandTrade extends Command
 
                 if(t.isComplete()) t.onComplete();
             }
-            else if(this.msg[1].contains("<!@"))
+            else if(this.msg[1].contains("<@!") && this.msg[1].contains(">"))
             {
                 String otherID = this.msg[1].substring("<@!".length(), this.msg[1].lastIndexOf(">"));
                 if(!Trade.isInTrade(otherID))
