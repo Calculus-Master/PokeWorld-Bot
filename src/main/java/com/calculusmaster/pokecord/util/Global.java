@@ -11,11 +11,10 @@ public class Global
 {
     public static final List<String> STARTERS = Arrays.asList("bulbasaur"); //TODO: Add the remaining starters and update this list
     public static final List<String> POKEMON = new ArrayList<>();
-    private static final Logger LOGGER = LoggerFactory.getLogger(Global.class);
 
     public static void logInfo(Class<?> clazz, String method, String msg)
     {
-        LOGGER.info(clazz.getName().substring(clazz.getName().lastIndexOf(".") + 1) + "#" + method + ": " + msg);
+        LoggerFactory.getLogger(clazz).info("#" + method + ": " + msg);
     }
 
     public static boolean isStarter(String s)

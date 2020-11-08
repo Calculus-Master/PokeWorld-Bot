@@ -18,7 +18,6 @@ public class CommandTrade extends Command
     @Override
     public Command runCommand()
     {
-        System.out.println("TRADE: " + Arrays.toString(this.msg));
         if(this.msg.length == 1)
         {
             this.embed.setDescription(CommandInvalid.getShort());

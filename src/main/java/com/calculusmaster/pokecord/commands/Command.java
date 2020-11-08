@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands;
 import com.calculusmaster.pokecord.commands.misc.CommandHelp;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
+import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -259,6 +260,8 @@ public abstract class Command
 
     public MessageEmbed getResponseEmbed()
     {
+        Global.logInfo(this.getClass(), "getResponseEmbed", "Parsing: " + Arrays.toString(this.msg));
+
         if(this.embed == null) return null;
         this.setAuthor();
         this.setColor();
