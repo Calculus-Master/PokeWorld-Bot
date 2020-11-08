@@ -1,9 +1,7 @@
 package com.calculusmaster.pokecord.game;
 
-import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,9 +18,9 @@ public class Trade
     private PlayerDataQuery[] playerData;
     private TradeOffer[] offers;
     private boolean[] confirms;
-    private String channelID;
+    private String messageID;
 
-    public static Trade initiate(String p1ID, String p2ID)
+    public static Trade initiate(String p1ID, String p2ID, String msgID)
     {
         Trade t = new Trade();
 
@@ -31,16 +29,30 @@ public class Trade
         t.setTrades();
         t.setConfirms();
         t.setStatus(TradeStatus.WAITING);
+        //t.setMessageID(msgID);
 
         TRADES.add(t);
+        System.out.println("Added new trade " + t.toString());
         return t;
+    }
+
+    @Override
+    public String toString() {
+        return "Trade{" +
+                "status=" + status +
+                ", players=" + Arrays.toString(players) +
+                ", playerData=" + Arrays.toString(playerData) +
+                ", offers=" + Arrays.toString(offers) +
+                ", confirms=" + Arrays.toString(confirms) +
+                ", channelID='" + messageID + '\'' +
+                '}';
     }
 
     //Events
     public void onComplete()
     {
         this.offers[0].giveToPlayer(this.playerData[0], this.playerData[1]);
-        this.offers[0].giveToPlayer(this.playerData[1], this.playerData[0]);
+        this.offers[1].giveToPlayer(this.playerData[1], this.playerData[0]);
         this.setStatus(TradeStatus.COMPLETE);
         TRADES.remove(this);
     }
@@ -50,7 +62,7 @@ public class Trade
         EmbedBuilder trade = new EmbedBuilder();
 
         trade.setTitle("Trade between " + this.playerData[0].getUsername() + " and " + this.playerData[1].getUsername());
-        trade.setDescription(this.playerData[0].getUsername() + "'s " + (this.confirms[0] ? ":check:" : "") + " Offer:\n" + this.getPlayerOffer(0) + "\n" + this.playerData[1].getUsername() + "'s " + (this.confirms[1] ? ":check:" : "") + " Offer:\n" + this.getPlayerOffer(1));
+        trade.setDescription(this.playerData[0].getUsername() + "'s " + (this.confirms[0] ? ":white_check_mark:" : "") + " Offer:\n" + this.getPlayerOffer(0) + "\n" + this.playerData[1].getUsername() + "'s " + (this.confirms[1] ? ":white_check_mark:" : "") + " Offer:\n" + this.getPlayerOffer(1));
 
         return trade;
     }
@@ -66,7 +78,7 @@ public class Trade
             sb.append("Level " + p.getLevel() + " " + p.getName() + "\n");
         }
         sb.append("```");
-        if(sb.length() == 6) sb = new StringBuilder("```\n```");
+        if(sb.length() == 6) sb = new StringBuilder("``` \n```");
         return sb.toString();
     }
 
@@ -100,6 +112,7 @@ public class Trade
 
     public void addPokemon(String id, int... ints)
     {
+        System.out.println(Arrays.toString(ints));
         for(int n : ints) this.offers[this.p(id)].addPokemon(this.playerData[this.p(id)].getPokemonList().getString(n - 1));
         this.unconfirmTrade(id);
     }
@@ -121,9 +134,10 @@ public class Trade
         return Arrays.asList(this.players);
     }
 
-    public String getChannelID()
+    public String getMessageID()
     {
-        return this.channelID;
+        System.out.println("MESSAGE ID: " + this.messageID);
+        return this.messageID;
     }
 
     public TradeStatus getStatus()
@@ -150,10 +164,9 @@ public class Trade
     }
 
     //Setters
-    public Trade setChannel(String channelID)
+    public void setMessageID(String msgID)
     {
-        this.channelID = channelID;
-        return this;
+        this.messageID = msgID;
     }
 
     public void setPlayers(String p1ID, String p2ID)
@@ -184,11 +197,15 @@ public class Trade
     private static class TradeOffer
     {
         public int credits;
-        public List<String> pokemon;
+        public List<String> pokemon = new ArrayList<>();
 
         void giveToPlayer(PlayerDataQuery giver, PlayerDataQuery receiver)
         {
-            if(this.credits > 0) receiver.changeCredits(this.credits);
+            if(this.credits > 0)
+            {
+                giver.changeCredits(-1 * this.credits);
+                receiver.changeCredits(this.credits);
+            }
             if(!this.pokemon.isEmpty())
             {
                 for(String s : pokemon)

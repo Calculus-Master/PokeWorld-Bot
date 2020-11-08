@@ -13,6 +13,9 @@ public class PokemonRarity
         PokemonRarity.add("Bulbasaur", Rarity.COPPER);
         PokemonRarity.add("Ivysaur", Rarity.SILVER);
         PokemonRarity.add("Venusaur", Rarity.GOLD);
+        PokemonRarity.add("Charmander", Rarity.COPPER);
+        PokemonRarity.add("Charmeleon", Rarity.SILVER);
+        PokemonRarity.add("Charizard", Rarity.GOLD);
 
         shuffleSpawns();
     }

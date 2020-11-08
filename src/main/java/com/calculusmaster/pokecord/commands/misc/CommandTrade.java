@@ -28,6 +28,7 @@ public class CommandTrade extends Command
             {
                 Trade t = Trade.getInstance(this.player.getId());
                 t.setStatus(Trade.TradeStatus.TRADING);
+
                 this.embed = t.getTradeEmbed();
             }
             else if(Trade.isInTrade(this.player.getId()) && this.msg[1].equals("deny"))
@@ -39,16 +40,21 @@ public class CommandTrade extends Command
             {
                 Trade t = Trade.getInstance(this.player.getId());
                 t.confirmTrade(this.player.getId());
-                this.event.getChannel().editMessageById(t.getChannelID(), t.getTradeEmbed().build()).queue();
+                //this.event.getChannel().editMessageById(t.getMessageID(), t.getTradeEmbed().build()).queue();
+                this.embed = t.getTradeEmbed();
 
-                if(t.isComplete()) t.onComplete();
+                if(t.isComplete())
+                {
+                    t.onComplete();
+                    this.embed.setDescription("Trade complete!");
+                }
             }
             else if(this.msg[1].contains("<@!") && this.msg[1].contains(">"))
             {
                 String otherID = this.msg[1].substring("<@!".length(), this.msg[1].lastIndexOf(">"));
                 if(!Trade.isInTrade(otherID))
                 {
-                    Trade.initiate(this.player.getId(), otherID).setChannel(this.event.getChannel().getId());
+                    Trade.initiate(this.player.getId(), otherID, this.event.getMessageId());
                     this.embed.setDescription(this.player.getName() + " has requested a trade!");
                 }
                 else this.embed.setDescription(new PlayerDataQuery(otherID).getUsername() + " is already in a trade!");
@@ -71,15 +77,18 @@ public class CommandTrade extends Command
                     if(this.msg[2].equals("add")) t.addCredits(this.player.getId(), Integer.parseInt(this.msg[3]));
                     else if(this.msg[2].equals("remove")) t.removeCredits(this.player.getId(), Integer.parseInt(this.msg[3]));
 
-                    this.event.getChannel().editMessageById(t.getChannelID(), t.getTradeEmbed().build()).queue();
+                    this.embed = t.getTradeEmbed();
+                    //this.event.getChannel().editMessageById(t.getMessageID(), t.getTradeEmbed().build()).queue();
                 }
                 else if(this.msg[1].equals("pokemon") || this.msg[1].equals("p"))
                 {
                     int[] rest = this.getPokemonNumbers(this.msg);
+                    System.out.println(Arrays.toString(rest));
                     if(this.msg[2].equals("add")) t.addPokemon(this.player.getId(), rest);
                     else if(this.msg[2].equals("remove")) t.removePokemon(this.player.getId(), rest);
 
-                    this.event.getChannel().editMessageById(t.getChannelID(), t.getTradeEmbed().build()).queue();
+                    this.embed = t.getTradeEmbed();
+                    //this.event.getChannel().editMessageById(t.getMessageID(), t.getTradeEmbed().build()).queue();
                 }
             }
             else this.embed.setDescription(CommandInvalid.getShort());
@@ -90,14 +99,14 @@ public class CommandTrade extends Command
     private boolean isAllNumeric(String[] msg)
     {
         String[] strs = new String[msg.length - 3];
-        for(int i = 3; i < msg.length; i++) strs[i] = msg[i];
+        for(int i = 3; i < msg.length; i++) strs[i - 3] = msg[i];
         return Arrays.stream(strs).map(String::chars).filter(s -> s.allMatch(Character::isDigit)).count() == strs.length;
     }
 
     private int[] getPokemonNumbers(String[] msg)
     {
         int[] nums = new int[msg.length - 3];
-        for(int i = 3; i < nums.length; i++) nums[i - 3] = Integer.parseInt(msg[i]);
+        for(int i = 3; i < msg.length; i++) nums[i - 3] = Integer.parseInt(msg[i]);
         return nums;
     }
 }
