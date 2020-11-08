@@ -67,14 +67,14 @@ public class CommandTrade extends Command
 
             if(t.getStatus().equals(Trade.TradeStatus.TRADING) && hasAddRemove && isAllNumeric(this.msg))
             {
-                if(this.msg[1].equals("credits"))
+                if(this.msg[1].equals("credits") || this.msg[1].equals("c"))
                 {
                     if(this.msg[2].equals("add")) t.addCredits(this.player.getId(), Integer.parseInt(this.msg[3]));
                     else if(this.msg[2].equals("remove")) t.removeCredits(this.player.getId(), Integer.parseInt(this.msg[3]));
 
                     this.event.getChannel().editMessageById(t.getChannelID(), t.getTradeEmbed().build()).queue();
                 }
-                else if(this.msg[1].equals("pokemon"))
+                else if(this.msg[1].equals("pokemon") || this.msg[1].equals("p"))
                 {
                     int[] rest = this.getPokemonNumbers(this.msg);
                     if(this.msg[2].equals("add")) t.addPokemon(this.player.getId(), rest);
