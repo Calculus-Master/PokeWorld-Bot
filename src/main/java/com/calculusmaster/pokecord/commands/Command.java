@@ -130,8 +130,8 @@ public abstract class Command
         DUEL.setCategory(CommandHelp.CommandCategory.DUEL)
                 .addShortDescription("Duel another player!")
                 .addAliases()
-                .addArgs("player", "accept", "deny")
-                .addArgDesc("player", "Replace this with the mention of the user you want to duel.")
+                .addArgs("@player", "accept", "deny")
+                .addArgDesc("@player", "Replace this with the mention of the user you want to duel.")
                 .addArgDesc("accept", "If someone has requested to duel you, accept their challenge.")
                 .addArgDesc("deny", "If someone has requested to due you, deny their challenge like a coward.");
 
@@ -202,13 +202,14 @@ public abstract class Command
                 .addArgDesc("prefix", "The prefix you want to use instead of the current one.");
 
         //TODO: Implement TRADE COMMAND
+        //p!trade <@player:accept:deny:credits:pokemon> <add:remove> <creditAmount:pokemonNumber>
         TRADE.setCategory(MISC)
                 .addShortDescription("Trade with other players!")
                 .addAliases()
-                .addArgs("player", "accept", "deny", "confirm", "credits", "pokemon")
+                .addArgs("@player", "accept", "deny", "confirm", "credits", "pokemon")
                 .addArgs("add", "remove")
                 .addArgs("creditAmount", "pokemonNumber")
-                .addArgDesc("player", "Mention the player you want to start a trade with.")
+                .addArgDesc("@player", "Mention the player you want to start a trade with.")
                 .addArgDesc("accept", "Accept a trade request.")
                 .addArgDesc("deny", "Deny a trade request.")
                 .addArgDesc("confirm", "Confirm a trade. After both players confirm, the trade will be complete.")

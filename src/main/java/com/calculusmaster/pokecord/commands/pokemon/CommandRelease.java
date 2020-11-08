@@ -41,6 +41,7 @@ public class CommandRelease extends Command
             Pokemon p = Pokemon.build(this.playerData.getPokemonList().getString(releaseRequests.get(this.player.getId()) - 1));
 
             this.playerData.removePokemon(releaseRequests.get(this.player.getId()));
+            Pokemon.deletePokemon(p);
             releaseRequests.remove(this.player.getId());
 
             this.embed.setDescription("Released Level " + p.getLevel() + " " + p.getName());
