@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Global
 {
-    public static final List<String> STARTERS = Arrays.asList("bulbasaur"); //TODO: Add the remaining starters and update this list
+    public static final List<String> STARTERS = Arrays.asList("bulbasaur", "charmander", "squirtle"); //TODO: Add the remaining starters and update this list
     public static final List<String> POKEMON = new ArrayList<>();
 
     public static void logInfo(Class<?> clazz, String method, String msg)
