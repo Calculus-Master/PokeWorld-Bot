@@ -52,10 +52,14 @@ public class CommandTrade extends Command
             else if(this.msg[1].contains("<@!") && this.msg[1].contains(">"))
             {
                 String otherID = this.msg[1].substring("<@!".length(), this.msg[1].lastIndexOf(">"));
-                if(!Trade.isInTrade(otherID))
+                if(!Trade.isInTrade(otherID) && !this.player.getId().equals(otherID))
                 {
                     Trade.initiate(this.player.getId(), otherID, this.event.getMessageId());
                     this.embed.setDescription(this.player.getName() + " has requested a trade!");
+                }
+                else if(this.player.getId().equals(otherID))
+                {
+                    this.embed.setDescription("Don't trade with yourself.");
                 }
                 else this.embed.setDescription(new PlayerDataQuery(otherID).getUsername() + " is already in a trade!");
             }
@@ -67,7 +71,6 @@ public class CommandTrade extends Command
         else if(Trade.isInTrade(this.player.getId()) && this.msg.length >= 4)
         {
             boolean hasAddRemove = this.msg[2].equals("add") || this.msg[2].equals("remove");
-            boolean isNumeric = this.msg[3].chars().allMatch(Character::isDigit);
             Trade t = Trade.getInstance(this.player.getId());
 
             if(t.getStatus().equals(Trade.TradeStatus.TRADING) && hasAddRemove && isAllNumeric(this.msg))
