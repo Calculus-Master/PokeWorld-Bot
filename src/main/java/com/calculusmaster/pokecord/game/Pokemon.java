@@ -4,6 +4,8 @@ import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.elements.Nature;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.enums.items.TM;
+import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
@@ -235,6 +237,10 @@ public class Pokemon
         JSONArray mL = this.genericJSON.getJSONArray("movesLVL");
 
         for(int i = 0; i < m.length(); i++) if(mL.getInt(i) <= this.getLevel()) movesList.add(m.getString(i));
+
+        if(this.heldTM != -1) movesList.add(Global.normalCase(TM.getTM(this.heldTM).toString()));
+        if(this.heldTR != -1) movesList.add(Global.normalCase(TR.getTR(this.heldTR).toString()));
+
         return movesList;
     }
 
