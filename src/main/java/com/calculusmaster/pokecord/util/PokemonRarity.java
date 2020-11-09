@@ -1,7 +1,5 @@
 package com.calculusmaster.pokecord.util;
 
-import com.calculusmaster.pokecord.game.Pokemon;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
