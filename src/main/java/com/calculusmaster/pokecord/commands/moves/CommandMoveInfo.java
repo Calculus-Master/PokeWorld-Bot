@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.moves;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
@@ -25,20 +26,19 @@ public class CommandMoveInfo extends Command
         }
         else
         {
-            Move m = Move.asMove(this.msg[1]);
-            JSONObject mJ = new JSONObject(Mongo.MoveInfo.find(Filters.eq("name", m.getName())).first().toJson());
+            JSONObject move = new JSONObject(Mongo.MoveInfo.find(Filters.eq("name", Global.normalCase(this.msg[1]))).first().toJson());
 
-            String title = m.getName() + " Info";
-            String info = m.getInfo();
-            String type = "Type: " + Global.normalCase(m.getType().toString());
-            String category = "Category: " + mJ.getString("category");
-            String power = "Power: " + m.getPower();
-            String accuracy = "Accuracy: " + m.getAccuracy();
-            String zmove = "Z-Move: " + m.getZMove();
+            String title = Global.normalCase(this.msg[1]) + " Info";
+            String info = move.getString("info");
+            String type = "Type: " + move.getString("type");
+            String category = "Category: " + move.getString("category");
+            String power = "Power: " + move.getInt("power");
+            String accuracy = "Accuracy: " + move.getInt("accuracy");
+            String zmove = "Z-Move: " + move.getString("zmove");
 
             this.embed.setTitle(title);
             this.embed.setDescription(info + "\n\n" + type + "\n" + category + "\n" + power + "\n" + accuracy + "\n" + zmove);
-            this.color = m.getType().getColor();
+            this.color = Type.cast(move.getString("type")).getColor();
         }
         return this;
     }
