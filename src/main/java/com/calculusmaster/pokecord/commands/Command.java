@@ -202,8 +202,6 @@ public abstract class Command
                 .addArgs("prefix")
                 .addArgDesc("prefix", "The prefix you want to use instead of the current one.");
 
-        //TODO: Implement TRADE COMMAND
-        //p!trade <@player:accept:deny:confirm:credits:pokemon> <add:remove> <creditAmount:pokemonNumber>
         TRADE.setCategory(MISC)
                 .addShortDescription("Trade with other players!")
                 .addAliases()

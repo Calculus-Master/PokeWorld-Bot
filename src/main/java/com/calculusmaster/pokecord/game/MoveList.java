@@ -24,7 +24,6 @@ public class MoveList
     public static Move RazorLeaf;
 
     //TMs
-    //TODO: Initialize these (and add to database)
     public static Move WorkUp;
     public static Move DragonClaw;
     public static Move Psyshock;
