@@ -4,7 +4,10 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.Mongo;
+import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import org.json.JSONObject;
 
 public class CommandMoveInfo extends Command
 {
@@ -23,11 +26,12 @@ public class CommandMoveInfo extends Command
         else
         {
             Move m = Move.asMove(this.msg[1]);
+            JSONObject mJ = new JSONObject(Mongo.MoveInfo.find(Filters.eq("name", m.getName())).first().toJson());
 
             String title = m.getName() + " Info";
             String info = m.getInfo();
             String type = "Type: " + Global.normalCase(m.getType().toString());
-            String category = "Category: " + Global.normalCase(m.getCategory().toString());
+            String category = "Category: " + mJ.getString("category");
             String power = "Power: " + m.getPower();
             String accuracy = "Accuracy: " + m.getAccuracy();
             String zmove = "Z-Move: " + m.getZMove();

@@ -1,12 +1,17 @@
 package com.calculusmaster.pokecord.game;
 
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.dragon.DragonClaw;
+import com.calculusmaster.pokecord.game.moves.fighting.BulkUp;
 import com.calculusmaster.pokecord.game.moves.grass.LeechSeed;
 import com.calculusmaster.pokecord.game.moves.grass.RazorLeaf;
 import com.calculusmaster.pokecord.game.moves.grass.VineWhip;
-import com.calculusmaster.pokecord.game.moves.normal.Growl;
-import com.calculusmaster.pokecord.game.moves.normal.Growth;
-import com.calculusmaster.pokecord.game.moves.normal.Tackle;
+import com.calculusmaster.pokecord.game.moves.ice.Hail;
+import com.calculusmaster.pokecord.game.moves.normal.*;
+import com.calculusmaster.pokecord.game.moves.poison.Toxic;
+import com.calculusmaster.pokecord.game.moves.poison.Venoshock;
+import com.calculusmaster.pokecord.game.moves.psychic.CalmMind;
+import com.calculusmaster.pokecord.game.moves.psychic.Psyshock;
 
 public class MoveList
 {
@@ -44,7 +49,16 @@ public class MoveList
         RazorLeaf = new RazorLeaf();
 
         //TMs
-
+        WorkUp = new WorkUp();
+        DragonClaw = new DragonClaw();
+        Psyshock = new Psyshock();
+        CalmMind = new CalmMind();
+        Roar = new Roar();
+        Toxic = new Toxic();
+        Hail = new Hail();
+        BulkUp = new BulkUp();
+        Venoshock = new Venoshock();
+        HiddenPower = new HiddenPower();
 
         //TRs
 
