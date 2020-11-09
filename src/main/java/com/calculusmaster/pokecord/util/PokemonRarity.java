@@ -1,5 +1,7 @@
 package com.calculusmaster.pokecord.util;
 
+import com.calculusmaster.pokecord.game.Pokemon;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,6 +18,9 @@ public class PokemonRarity
         PokemonRarity.add("Charmander", Rarity.COPPER);
         PokemonRarity.add("Charmeleon", Rarity.SILVER);
         PokemonRarity.add("Charizard", Rarity.GOLD);
+        PokemonRarity.add("Squirtle", Rarity.COPPER);
+        PokemonRarity.add("Wartortle", Rarity.SILVER);
+        PokemonRarity.add("Blastoise", Rarity.GOLD);
 
         shuffleSpawns();
     }
