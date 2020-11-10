@@ -271,10 +271,4 @@ public abstract class Command
         Random r = new Random();
         return new Color(r.nextInt(256), r.nextInt(256), r.nextInt(256));
     }
-
-    @Deprecated
-    public String getFormat()
-    {
-        return "`" + this.serverData.getPrefix() + this.format + "`";
-    }
 }
