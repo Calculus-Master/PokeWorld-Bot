@@ -67,12 +67,10 @@ public class CommandDuel extends Command
         }
         else
         {
-            System.out.println(opponentID);
-            Duel.initiate(this.player.getId(), opponentID);
+            Duel d = Duel.initiate(this.player.getId(), opponentID);
 
-            this.embed = Duel.getInstance(this.player.getId()).getRequestEmbed();
-            Duel.getInstance(this.player.getId()).setDuelImage();
-            //Duel.printAllDuels();
+            this.embed = d.getRequestEmbed();
+            d.setDuelImage();
             return this;
         }
     }

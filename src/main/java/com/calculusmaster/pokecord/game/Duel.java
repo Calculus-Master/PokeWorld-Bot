@@ -5,7 +5,6 @@ import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.XPBooster;
 import com.calculusmaster.pokecord.game.moves.Move;
-import com.calculusmaster.pokecord.game.moves.normal.Tackle;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -37,7 +36,7 @@ public class Duel
     private byte[] duelImageBytes;
 
     //Assumes p2 is registered
-    public static void initiate(String p1ID, String p2ID)
+    public static Duel initiate(String p1ID, String p2ID)
     {
         Duel d = new Duel();
 
@@ -47,6 +46,7 @@ public class Duel
         d.setDuelStatus(DuelStatus.WAITING);
 
         DUELS.add(d);
+        return d;
     }
 
     //Static Methods
