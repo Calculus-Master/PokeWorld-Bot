@@ -27,7 +27,7 @@ public class CommandTeach extends Command
         boolean tm = this.msg[1].equals("tm");
         int number = Integer.parseInt(this.msg[2]);
 
-        if((tm && number > 0 && number <= 100 && this.JSONArrayContains(this.playerData.getOwnedTMs(), TM.getTM(number).toString())) || (!tm && number >= 0 && number < 100 && this.JSONArrayContains(this.playerData.getOwnedTRs(), TR.getTR(number).toString())))
+        if((tm && number > 0 && number <= 100 && this.JSONArrayContains(this.playerData.getOwnedTMs(), TM.get(number).toString())) || (!tm && number >= 0 && number < 100 && this.JSONArrayContains(this.playerData.getOwnedTRs(), TR.get(number).toString())))
         {
             Pokemon selected = this.playerData.getSelectedPokemon();
             int held;
@@ -38,10 +38,10 @@ public class CommandTeach extends Command
                 selected.setTM(number);
                 Pokemon.updateTMTR(selected);
 
-                this.embed.setDescription("Taught " + TM.getTM(number).toString() + " - " + TM.getTM(number).getMoveName() + " to " + selected.getName());
+                this.embed.setDescription("Taught " + TM.get(number).toString() + " - " + TM.get(number).getMoveName() + " to " + selected.getName());
 
-                this.playerData.removeTM(TM.getTM(number).toString());
-                if(held != -1) this.playerData.addTM(TM.getTM(held).toString());
+                this.playerData.removeTM(TM.get(number).toString());
+                if(held != -1) this.playerData.addTM(TM.get(held).toString());
             }
             else if(!tm && selected.canLearnTR(number))
             {
@@ -49,10 +49,10 @@ public class CommandTeach extends Command
                 selected.setTR(number);
                 Pokemon.updateTMTR(selected);
 
-                this.embed.setDescription("Taught " + TR.getTR(held).toString() + " - " + TR.getTR(held).getMoveName() + " to " + selected.getName());
+                this.embed.setDescription("Taught " + TR.get(held).toString() + " - " + TR.get(held).getMoveName() + " to " + selected.getName());
 
-                this.playerData.removeTR(TR.getTR(number).toString());
-                if(held != -1) this.playerData.addTR(TR.getTR(held).toString());
+                this.playerData.removeTR(TR.get(number).toString());
+                if(held != -1) this.playerData.addTR(TR.get(held).toString());
             }
         }
 

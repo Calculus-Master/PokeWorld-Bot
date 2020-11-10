@@ -256,8 +256,8 @@ public class Pokemon
 
         for(int i = 0; i < m.length(); i++) if(mL.getInt(i) <= this.getLevel()) movesList.add(m.getString(i));
 
-        if(this.hasTM()) movesList.add(Global.normalCase(TM.getTM(this.heldTM).toString()));
-        if(this.hasTR()) movesList.add(Global.normalCase(TR.getTR(this.heldTR).toString()));
+        if(this.hasTM()) movesList.add(Global.normalCase(TM.get(this.heldTM).toString()));
+        if(this.hasTR()) movesList.add(Global.normalCase(TR.get(this.heldTR).toString()));
 
         return movesList;
     }

@@ -122,7 +122,7 @@ public enum TM
         return Move.isMove(this.move) ? Move.asMove(this.move) : MoveList.Tackle;
     }
 
-    public static TM getTM(int number)
+    public static TM get(int number)
     {
         return values()[number - 1];
     }
