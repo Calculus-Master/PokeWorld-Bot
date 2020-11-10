@@ -28,13 +28,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class Listener extends ListenerAdapter
 {
     private OffsetDateTime catchTimestamp = null;
+    private Map<String, Boolean> hasSpawnEventRunning = new HashMap<>();
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event)
@@ -55,12 +54,11 @@ public class Listener extends ListenerAdapter
         //Create a query object for server data
         serverQuery = new ServerDataQuery(server.getId());
 
-        //Check if a pokemon is able to spawn given the correct time between
-        //TODO: Replace this with the schedule Time Task thing
-        if(!msg[0].startsWith(serverQuery.getPrefix()) && r.nextInt(15) < 2 && (catchTimestamp == null || catchTimestamp.getMinute() - event.getMessage().getTimeCreated().getMinute() >= 3))
+        //Spawn Pokemon
+        if(!this.hasSpawnEventRunning.containsKey(server.getId()))
         {
-            spawnEvent(event);
-            catchTimestamp = event.getMessage().getTimeCreated();
+            this.hasSpawnEventRunning.put(server.getId(), true);
+            new SpawnEvent(server, serverQuery.getSpawnChannelID()).run();
         }
 
         //Set a boolean if the player is registered or not
@@ -76,6 +74,8 @@ public class Listener extends ListenerAdapter
         if(msg[0].startsWith(serverQuery.getPrefix()))
         {
             event.getChannel().sendTyping().queue();
+
+            Global.logInfo(this.getClass(), "getResponseEmbed", "Parsing: " + Arrays.toString(msg));
 
             //Remove prefix from the message array, msg[0] is the raw command name
             msg[0] = msg[0].substring(serverQuery.getPrefix().length());
@@ -189,10 +189,10 @@ public class Listener extends ListenerAdapter
         if(r.nextInt(10) <= 3) Listener.expEvent(event);
     }
 
-    private static void spawnEvent(MessageReceivedEvent event)
+    private static EmbedBuilder spawnEvent(Guild server)
     {
         String spawnPokemon = PokemonRarity.getSpawn();
-        ServerDataQuery data = new ServerDataQuery(event.getGuild().getId());
+        ServerDataQuery data = new ServerDataQuery(server.getId());
         data.setSpawn(Global.normalCase(spawnPokemon));
 
         EmbedBuilder embed = new EmbedBuilder();
@@ -201,18 +201,26 @@ public class Listener extends ListenerAdapter
         embed.setDescription("Try to guess its name and catch it with p!catch <name>!");
         embed.setImage(Pokemon.genericJSON(Global.normalCase(spawnPokemon)).getString("normalURL"));
 
-        event.getGuild().getTextChannelById(data.getSpawnChannelID()).sendMessage(embed.build()).queue();
+        return embed;
     }
 
     public static class SpawnEvent extends TimerTask
     {
-        //TODO: SpawnEvent with TimerTask
         private static final Timer timer = new Timer();
+        private final Guild server;
+        private final String spawnChannel;
+
+        public SpawnEvent(Guild server, String channel)
+        {
+            this.server = server;
+            this.spawnChannel = channel;
+        }
+
         @Override
         public void run()
         {
-            timer.schedule(new SpawnEvent(), SpawnEvent.getDelay());
-            System.out.println("Spawning Pokemon");
+            timer.schedule(new SpawnEvent(this.server, this.spawnChannel), SpawnEvent.getDelay());
+            this.server.getTextChannelById(this.spawnChannel).sendMessage(spawnEvent(this.server).build()).queue();
         }
 
         private static long getDelay()

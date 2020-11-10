@@ -258,8 +258,6 @@ public abstract class Command
 
     public MessageEmbed getResponseEmbed()
     {
-        Global.logInfo(this.getClass(), "getResponseEmbed", "Parsing: " + Arrays.toString(this.msg));
-
         if(this.embed == null) return null;
         this.setAuthor();
         this.setColor();

@@ -26,9 +26,6 @@ public class Pokecord
         System.out.println(Global.POKEMON.toString());
         System.out.println(Move.MOVES.toString());
 
-        //SpawnEvent Timer
-        //TODO: new Listener.SpawnEvent().run();
-
         //Create Bot
         JDABuilder bot = JDABuilder.createDefault(PrivateInfo.TOKEN);
         bot.setActivity(Activity.playing("Pokemon"));
