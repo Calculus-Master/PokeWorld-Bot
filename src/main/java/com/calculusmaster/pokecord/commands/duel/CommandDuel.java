@@ -52,7 +52,7 @@ public class CommandDuel extends Command
 
         if(!PlayerDataQuery.isRegistered(opponentID))
         {
-            this.embed.setDescription(this.event.getGuild().getMemberById(opponentID).getEffectiveName() + " is not registered! Use p!start <starter> to register!");
+            this.embed.setDescription(this.event.getGuild().getMemberById(opponentID).getEffectiveName() + " is not registered! Use p!start <starter> to begin!");
             return this;
         }
         else if(Duel.isInDuel(opponentID))
@@ -69,7 +69,8 @@ public class CommandDuel extends Command
         {
             Duel d = Duel.initiate(this.player.getId(), opponentID);
 
-            this.embed = d.getRequestEmbed();
+            this.event.getChannel().sendMessage(d.getRequestEmbed().build()).queue();
+            this.embed = null;
             d.setDuelImage();
             return this;
         }

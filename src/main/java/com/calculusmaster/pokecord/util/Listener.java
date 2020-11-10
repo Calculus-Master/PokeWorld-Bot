@@ -49,19 +49,19 @@ public class Listener extends ListenerAdapter
         Command c;
         Random r = new Random(System.currentTimeMillis());
 
-        //Check if a pokemon is able to spawn given the correct time between
-        //TODO: Replace this with the schedule Time Task thing
-        if(r.nextInt(15) < 2 && (catchTimestamp == null || catchTimestamp.getMinute() - event.getMessage().getTimeCreated().getMinute() >= 3))
-        {
-            spawnEvent(event);
-            catchTimestamp = event.getMessage().getTimeCreated();
-        }
-
         //Check if the server is registered and register it if it is not
         if(!ServerDataQuery.isRegistered(server)) ServerDataQuery.register(server, event.getChannel().getId());
 
         //Create a query object for server data
         serverQuery = new ServerDataQuery(server.getId());
+
+        //Check if a pokemon is able to spawn given the correct time between
+        //TODO: Replace this with the schedule Time Task thing
+        if(!msg[0].startsWith(serverQuery.getPrefix()) && r.nextInt(15) < 2 && (catchTimestamp == null || catchTimestamp.getMinute() - event.getMessage().getTimeCreated().getMinute() >= 3))
+        {
+            spawnEvent(event);
+            catchTimestamp = event.getMessage().getTimeCreated();
+        }
 
         //Set a boolean if the player is registered or not
         boolean isPlayerRegistered = PlayerDataQuery.isRegistered(player);
