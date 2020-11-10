@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game.moves.normal;
 
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.moves.Move;
 
 public class Tackle extends Move

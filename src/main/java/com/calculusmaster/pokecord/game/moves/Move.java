@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.TypeEffectiveness;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.mongo.MongoQuery;
 import com.calculusmaster.pokecord.util.Global;
@@ -83,9 +84,9 @@ public abstract class Move extends MongoQuery
         double random = (r.nextInt(16) + 85.0) / 100.0;
         double stab = user.getType()[0].equals(this.getType()) || user.getType()[1].equals(this.getType()) ? 1.5 : 1.0;
         double type = TypeEffectiveness.getCombinedMap(opponent.getType()[0], opponent.getType()[1]).get(this.getType());
-        //TODO: double burned = user.isBurned() ? 0.5 : 1.0;
+        double burned = this.getCategory().equals(Category.PHYSICAL) && user.getStatusCondition().equals(StatusCondition.BURNED) ? 0.5 : 1.0;
 
-        double modifier = critical * random * stab * type /* * burned*/;
+        double modifier = critical * random * stab * type * burned;
         double damage = (((2 * level / 5.0 + 2) * power * (double)atkStat / (double)defStat) / 50) + 2;
         double finalDMG = damage * modifier;
         return (int)finalDMG;

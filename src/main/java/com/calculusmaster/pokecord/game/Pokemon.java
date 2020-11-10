@@ -1,9 +1,6 @@
 package com.calculusmaster.pokecord.game;
 
-import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
-import com.calculusmaster.pokecord.game.enums.elements.Nature;
-import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.util.Global;
@@ -40,6 +37,7 @@ public class Pokemon
     private int heldTR;
 
     private int health;
+    private StatusCondition status;
 
     //Init Global List
     public static void init()
@@ -67,7 +65,9 @@ public class Pokemon
         p.setLearnedMoves(specific.getString("moves"));
         p.setTM(specific.getInt("tm"));
         p.setTR(specific.getInt("tr"));
+
         p.setHealth(p.getStat(Stat.HP));
+        p.removeStatusConditions();
 
         Global.logInfo(Pokemon.class, "build", "Pokemon Built (UUID: " + UUID + ", Name: " + p.getName() + ")!");
         return p;
@@ -89,7 +89,9 @@ public class Pokemon
         p.setLearnedMoves("Tackle-Tackle-Tackle-Tackle");
         p.setTM(-1);
         p.setTR(-1);
+
         p.setHealth(p.getStat(Stat.HP));
+        p.removeStatusConditions();
 
         Global.logInfo(Pokemon.class, "create", "New Pokemon (" + name + ") Created!");
         return p;
@@ -208,6 +210,22 @@ public class Pokemon
         return this.specificJSON;
     }
 
+    //Status Conditions
+    public void setStatusCondition(StatusCondition status)
+    {
+        this.status = status;
+    }
+
+    public void removeStatusConditions()
+    {
+        this.status = StatusCondition.NORMAL;
+    }
+
+    public StatusCondition getStatusCondition()
+    {
+        return this.status;
+    }
+
     //Health
     public void setHealth(int num)
     {
@@ -238,8 +256,8 @@ public class Pokemon
 
         for(int i = 0; i < m.length(); i++) if(mL.getInt(i) <= this.getLevel()) movesList.add(m.getString(i));
 
-        if(this.heldTM != -1) movesList.add(Global.normalCase(TM.getTM(this.heldTM).toString()));
-        if(this.heldTR != -1) movesList.add(Global.normalCase(TR.getTR(this.heldTR).toString()));
+        if(this.hasTM()) movesList.add(Global.normalCase(TM.getTM(this.heldTM).toString()));
+        if(this.hasTR()) movesList.add(Global.normalCase(TR.getTR(this.heldTR).toString()));
 
         return movesList;
     }
@@ -276,12 +294,12 @@ public class Pokemon
 
     public boolean hasTM()
     {
-        return this.heldTM == -1;
+        return this.heldTM != -1;
     }
 
     public boolean hasTR()
     {
-        return this.heldTR == -1;
+        return this.heldTR != -1;
     }
 
     public void setTM(int TM)

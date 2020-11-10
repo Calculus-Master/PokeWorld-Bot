@@ -1,8 +1,11 @@
 package com.calculusmaster.pokecord.game;
 
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.XPBooster;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.normal.Tackle;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -28,12 +31,13 @@ public class Duel
     private String[] playerIDs;
     private PlayerDataQuery[] playerData;
     private Pokemon[] playerPokemon;
+    private int[] asleepTurn;
 
     private int turn;
     private byte[] duelImageBytes;
 
     //Assumes p2 is registered
-    public static void initiate(String p1ID, String p2ID) throws IOException
+    public static void initiate(String p1ID, String p2ID)
     {
         Duel d = new Duel();
 
@@ -70,26 +74,86 @@ public class Duel
         int p2Speed = this.playerPokemon[1].getStat(Stat.SPD);
         this.turn = p1Speed == p2Speed ? new Random().nextInt(2) : (p1Speed > p2Speed ? 0 : 1);
 
-        //System.out.println(this.turn);
+        this.asleepTurn = new int[]{0, 0};
+
         this.setDuelStatus(DuelStatus.DUELING);
     }
 
     public String doTurn(int moveIndex)
     {
-        //System.out.println(this.turn);
         this.setDuelStatus(DuelStatus.DUELING);
         String moveString = this.playerPokemon[this.turn].getLearnedMoves().get(moveIndex - 1);
         Move move = Move.asMove(moveString);
+
         boolean accurate = move.getIsAccurate();
-        return !accurate ? move.getMoveResultsFail(this.playerPokemon[this.turn]) : move.logic(this.playerPokemon[this.turn], this.playerPokemon[this.getOtherTurn()]);
+
+        String status = "";
+        int damage;
+        StatusCondition pokeStatus = this.playerPokemon[this.turn].getStatusCondition();
+        String pokeName = this.playerPokemon[this.turn].getName();
+        System.out.println(pokeName + " , " + pokeStatus.toString());
+        if(pokeStatus.equals(StatusCondition.BURNED))
+        {
+            damage = (int)(this.playerPokemon[this.turn].getStat(Stat.HP) / 16.);
+            this.playerPokemon[this.turn].changeHealth(-1 * damage);
+
+            status = pokeName + " is burned! The burn dealt " + damage + " damage!";
+        }
+        else if(pokeStatus.equals(StatusCondition.FROZEN))
+        {
+            List<String> frozenMoves = Arrays.asList("Fusion Flare", "Flame Wheel", "Sacred Fire", "Flare Blitz", "Scald", "Steam Eruption");
+            boolean unfreeze = new Random().nextInt(100) < 20;
+
+            if(frozenMoves.contains(move.getName()) || unfreeze) status = pokeName + " has thawed out!";
+            else return status = pokeName + " is frozen and can't use any moves!";
+        }
+        else if(pokeStatus.equals(StatusCondition.PARALYZED))
+        {
+            if(new Random().nextInt(100) < 25) return status = pokeName + " is paralyzed and can't move!";
+        }
+        else if(pokeStatus.equals(StatusCondition.POISONED))
+        {
+            damage = (int)(this.playerPokemon[this.turn].getStat(Stat.HP) / 8.);
+            status = pokeName + " is poisoned! The poison dealt " + damage + " damage!";
+        }
+        else if(pokeStatus.equals(StatusCondition.ASLEEP))
+        {
+            if(this.asleepTurn[this.turn] == 2)
+            {
+                this.playerPokemon[this.turn].removeStatusConditions();
+                status = "";
+                this.asleepTurn[this.turn] = 0;
+            }
+            else
+            {
+                this.asleepTurn[this.turn]++;
+                return status = pokeName + " is asleep!";
+            }
+        }
+        else if(pokeStatus.equals(StatusCondition.CONFUSED))
+        {
+            if(new Random().nextInt(100) < 33)
+            {
+                move = MoveList.Tackle;
+                damage = move.getDamage(this.playerPokemon[this.turn], this.playerPokemon[this.turn]);
+                move.logic(this.playerPokemon[this.turn], this.playerPokemon[this.turn]);
+                return status = pokeName + " is confused! It hurt itself in its confusion for " + damage + " damage!";
+            }
+        }
+        else status = "";
+
+        //Add code here that needs to check things every turn
+        //Unfreeze opponent if move is fire type
+        if((move.getType().equals(Type.FIRE) || move.getName().equals("Scald") || move.getName().equals("Steam Eruption")) && this.playerPokemon[this.getOtherTurn()].getStatusCondition().equals(StatusCondition.FROZEN)) this.playerPokemon[this.getOtherTurn()].removeStatusConditions();
+
+        String results = !accurate ? move.getMoveResultsFail(this.playerPokemon[this.turn]) : move.logic(this.playerPokemon[this.turn], this.playerPokemon[this.getOtherTurn()]);
+        return results + (!status.isEmpty() ? "\n" + status : "");
     }
 
     public void onWin()
     {
-        //System.out.println(this.turn);
         this.setDuelStatus(DuelStatus.COMPLETE);
         this.turn = this.playerPokemon[0].isFainted() ? 1 : 0;
-        //System.out.println(this.turn);
     }
 
     public String getWinner()
