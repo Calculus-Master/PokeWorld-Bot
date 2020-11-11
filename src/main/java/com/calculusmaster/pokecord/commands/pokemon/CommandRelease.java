@@ -56,6 +56,12 @@ public class CommandRelease extends Command
         }
         else
         {
+            if(this.playerData.getPokemonList().length() == 1)
+            {
+                this.embed.setDescription("You can't release your last Pokemon!");
+                return this;
+            }
+
             releaseRequests.put(this.player.getId(), Integer.parseInt(this.msg[1]));
             Pokemon p = Pokemon.build(this.playerData.getPokemonList().getString(releaseRequests.get(this.player.getId()) - 1));
 

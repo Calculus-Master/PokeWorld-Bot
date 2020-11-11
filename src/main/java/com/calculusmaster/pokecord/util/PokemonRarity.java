@@ -30,6 +30,7 @@ public class PokemonRarity
         PokemonRarity.add("Pidgeot", Rarity.SILVER);
 
         shuffleSpawns();
+        System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());
     }
 
     public static String getSpawn()
