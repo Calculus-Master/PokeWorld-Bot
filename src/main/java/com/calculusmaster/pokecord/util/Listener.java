@@ -63,6 +63,7 @@ public class Listener extends ListenerAdapter
 
         //Set a boolean if the player is registered or not
         boolean isPlayerRegistered = PlayerDataQuery.isRegistered(player);
+        System.out.println(player.getName() + " Registered? : " + isPlayerRegistered);
 
         //If the 'selected' field is out of bounds, force it into bounds to avoid errors
         if(isPlayerRegistered) new PlayerDataQuery(player.getId()).updateSelected();
@@ -226,7 +227,7 @@ public class Listener extends ListenerAdapter
         //TODO: Figure out better spawn rate
         private static long getDelay()
         {
-            return 1000L * 60 * (new Random().nextInt(8));
+            return 1000L * 60 * (2 + new Random().nextInt(8));
         }
     }
 

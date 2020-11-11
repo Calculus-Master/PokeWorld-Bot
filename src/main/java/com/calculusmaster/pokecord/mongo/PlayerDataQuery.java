@@ -40,8 +40,8 @@ public class PlayerDataQuery extends MongoQuery
                 .append("username", player.getName())
                 .append("credits", 1000)
                 .append("selected", 1)
-                .append("tms", TM.values()[new Random().nextInt(TM.values().length)])
-                .append("trs", TR.values()[new Random().nextInt(TR.values().length)]);
+                .append("tms", TM.values()[new Random().nextInt(TM.values().length)].toString())
+                .append("trs", TR.values()[new Random().nextInt(TR.values().length)].toString());
 
         Mongo.PlayerData.insertOne(playerData);
     }
