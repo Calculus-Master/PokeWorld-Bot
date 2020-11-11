@@ -4,7 +4,7 @@ plugins {
     id "com.github.johnrengelman.shadow" version "6.0.0"
 }
 
-mainClassName = "Pokecord"
+mainClassName = "com.calculusmaster.pokecord.Pokecord"
 
 group 'com.calculusmaster'
 version '1.0'
