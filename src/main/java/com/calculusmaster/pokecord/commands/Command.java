@@ -246,6 +246,7 @@ public abstract class Command
     public abstract Command runCommand() throws IOException;
 
     //Useful Methods for other Commands
+    //TODO: Roll these out to all of the commands
     protected boolean isLength(int len)
     {
         return this.msg.length >= len;

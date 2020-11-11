@@ -382,7 +382,8 @@ public class Pokemon
 
     public URL getURL() throws MalformedURLException
     {
-        return new URL(this.getImage());
+        String wip = "http://clipart-library.com/img/1657818.png";
+        return new URL(this.getImage().equals("") ? wip : this.getImage());
     }
 
     //Levels and Experience
