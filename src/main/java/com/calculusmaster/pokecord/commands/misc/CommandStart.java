@@ -31,7 +31,7 @@ public class CommandStart extends Command
             this.embed.setDescription("To begin, use p!start <starter>, where <starter> is the name of the starter you wish to pick.\n" +
                     "Possible Starters: \n" +
                     "**Bulbasaur** | **Charmander** | **Squirtle**\n" +
-                    "**Chikorita** | Cyndaquil | **Totodile**\n" +
+                    "**Chikorita** | **Cyndaquil** | **Totodile**\n" +
                     "**Treecko** | **Torchic** | **Mudkip**\n" +
                     "**Turtwig** | **Chimchar** | **Piplup**\n" +
                     "**Snivy** | **Tepig** | **Oshawott**\n" +

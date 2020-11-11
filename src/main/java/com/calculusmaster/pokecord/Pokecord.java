@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 
 import javax.security.auth.login.LoginException;
+import java.util.stream.Collectors;
 
 public class Pokecord
 {
@@ -24,7 +25,7 @@ public class Pokecord
         Command.init();
 
         System.out.println(Global.POKEMON.toString());
-        System.out.println(Move.MOVES.toString());
+        System.out.println(Move.MOVES.stream().map(Move::getName).collect(Collectors.toList()).toString());
 
         //Create Bot
         JDABuilder bot = JDABuilder.createDefault(PrivateInfo.TOKEN);
