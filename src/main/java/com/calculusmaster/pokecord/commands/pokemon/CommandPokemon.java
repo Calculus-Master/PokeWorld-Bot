@@ -44,9 +44,10 @@ public class CommandPokemon extends Command
         boolean hasPage = this.msg.length == 2;
         Pokemon p;
         List<String> list = this.getPlayerPokemon();
+        int perPage = 20;
         int startIndex = hasPage ? (Integer.parseInt(this.msg[1]) > list.size() ? 0 : Integer.parseInt(this.msg[1])) : 0;
 
-        for(int i = startIndex; i < startIndex + 20; i++)
+        for(int i = startIndex * perPage; i < startIndex + perPage; i++)
         {
             if(i > list.size() - 1) break;
             p = Pokemon.buildCore(list.get(i));

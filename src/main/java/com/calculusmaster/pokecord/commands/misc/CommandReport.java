@@ -20,7 +20,7 @@ public class CommandReport extends Command
         {
             Document reportInfo = new Document("user", this.player.getName())
                     .append("command", this.msg[1])
-                    .append("report", this.msg[2]);
+                    .append("report", this.restOfString());
 
             Mongo.ReportData.insertOne(reportInfo);
             this.embed.setDescription("Successfully submitted!");
@@ -28,5 +28,12 @@ public class CommandReport extends Command
         else this.embed.setDescription(CommandInvalid.getFull());
 
         return this;
+    }
+
+    private String restOfString()
+    {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 2; i < this.msg.length; i++) sb.append(this.msg[i] + " ");
+        return sb.toString().trim();
     }
 }
