@@ -20,17 +20,17 @@ public class CommandRelease extends Command
     @Override
     public Command runCommand()
     {
-        if(this.msg.length != 2)
+        if(!isLength(2))
         {
             this.embed.setDescription(CommandInvalid.getShort());
             return this;
         }
-        else if(!this.msg[1].chars().allMatch(Character::isDigit) && !this.msg[1].equals("confirm") && !this.msg[1].equals("deny"))
+        else if(!isNumeric(1) && !this.msg[1].equals("confirm") && !this.msg[1].equals("deny"))
         {
             this.embed.setDescription(CommandInvalid.getShort());
             return this;
         }
-        else if(this.msg[1].chars().allMatch(Character::isDigit) && this.playerData.getPokemonList().length() <= Integer.parseInt(this.msg[1]))
+        else if(!isNumeric(1) && this.playerData.getPokemonList().length() <= Integer.parseInt(this.msg[1]))
         {
             this.embed.setDescription(CommandInvalid.getShort());
             return this;

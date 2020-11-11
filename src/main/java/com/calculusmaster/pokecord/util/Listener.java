@@ -189,21 +189,6 @@ public class Listener extends ListenerAdapter
         if(r.nextInt(10) <= 3) Listener.expEvent(event);
     }
 
-    private static EmbedBuilder spawnEvent(Guild server)
-    {
-        String spawnPokemon = PokemonRarity.getSpawn();
-        ServerDataQuery data = new ServerDataQuery(server.getId());
-        data.setSpawn(Global.normalCase(spawnPokemon));
-
-        EmbedBuilder embed = new EmbedBuilder();
-
-        embed.setTitle("A wild Pokemon spawned!");
-        embed.setDescription("Try to guess its name and catch it with p!catch <name>!");
-        embed.setImage(Pokemon.genericJSON(Global.normalCase(spawnPokemon)).getString("normalURL"));
-
-        return embed;
-    }
-
     public static class SpawnEvent extends TimerTask
     {
         private static final Timer timer = new Timer();
@@ -221,6 +206,21 @@ public class Listener extends ListenerAdapter
         {
             timer.schedule(new SpawnEvent(this.server, this.spawnChannel), SpawnEvent.getDelay());
             this.server.getTextChannelById(this.spawnChannel).sendMessage(spawnEvent(this.server).build()).queue();
+        }
+
+        private static EmbedBuilder spawnEvent(Guild server)
+        {
+            String spawnPokemon = PokemonRarity.getSpawn();
+            ServerDataQuery data = new ServerDataQuery(server.getId());
+            data.setSpawn(Global.normalCase(spawnPokemon));
+
+            EmbedBuilder embed = new EmbedBuilder();
+
+            embed.setTitle("A wild Pokemon spawned!");
+            embed.setDescription("Try to guess its name and catch it with p!catch <name>!");
+            embed.setImage(Pokemon.genericJSON(Global.normalCase(spawnPokemon)).getString("normalURL"));
+
+            return embed;
         }
 
         private static long getDelay()

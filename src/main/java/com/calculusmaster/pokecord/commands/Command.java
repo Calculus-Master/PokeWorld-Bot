@@ -245,6 +245,29 @@ public abstract class Command
 
     public abstract Command runCommand() throws IOException;
 
+    //Useful Methods for other Commands
+    protected boolean isLength(int len)
+    {
+        return this.msg.length >= len;
+    }
+
+    protected boolean isNumeric(int index)
+    {
+        return this.msg[index].chars().allMatch(Character::isDigit);
+    }
+
+    protected boolean isPokemon(String pokemon)
+    {
+        return Global.POKEMON.contains(Global.normalCase(pokemon));
+    }
+
+    protected int getInt(int index)
+    {
+        return Integer.parseInt(this.msg[index]);
+    }
+
+    //Embed-Related
+
     protected void setAuthor()
     {
         List<String> professors = Arrays.asList("Pokecord", "Oak", "Juniper", "Elm", "Birch", "Rowan", "Sycamore", "Kukui", "Magnolia", "Sonia");

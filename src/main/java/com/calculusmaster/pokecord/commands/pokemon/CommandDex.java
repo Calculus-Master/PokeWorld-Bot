@@ -22,7 +22,12 @@ public class CommandDex extends Command
     {
         boolean isShiny = this.msg[1].toLowerCase().equals("shiny");
 
-        if(!Global.POKEMON.contains(Global.normalCase(this.getPokemonName())))
+        if(!isLength(2))
+        {
+            this.embed.setDescription(CommandInvalid.getShort());
+            return this;
+        }
+        else if(!isPokemon(this.getPokemonName()))
         {
             this.embed.setDescription(CommandInvalid.getShort());
             return this;
