@@ -25,6 +25,9 @@ public class PokemonRarity
         PokemonRarity.add("Weedle", Rarity.COPPER);
         PokemonRarity.add("Kakuna", Rarity.COPPER);
         PokemonRarity.add("Beedrill", Rarity.GOLD);
+        PokemonRarity.add("Pidgey", Rarity.COPPER);
+        PokemonRarity.add("Pidgeotto", Rarity.SILVER);
+        PokemonRarity.add("Pidgeot", Rarity.SILVER);
 
         shuffleSpawns();
     }
