@@ -19,6 +19,9 @@ public class PokemonRarity
         PokemonRarity.add("Squirtle", Rarity.COPPER);
         PokemonRarity.add("Wartortle", Rarity.SILVER);
         PokemonRarity.add("Blastoise", Rarity.GOLD);
+        PokemonRarity.add("Caterpie", Rarity.COPPER);
+        PokemonRarity.add("Metapod", Rarity.COPPER);
+        PokemonRarity.add("Butterfree", Rarity.SILVER);
 
         shuffleSpawns();
     }
