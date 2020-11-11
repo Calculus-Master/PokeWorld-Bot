@@ -46,7 +46,7 @@ public class CommandPokemon extends Command
         List<String> list = this.getPlayerPokemon();
         int startIndex = hasPage ? (Integer.parseInt(this.msg[1]) > list.size() ? 0 : Integer.parseInt(this.msg[1])) : 0;
 
-        for(int i = 0; i < startIndex + 20; i++)
+        for(int i = startIndex; i < startIndex + 20; i++)
         {
             if(i > list.size() - 1) break;
             p = Pokemon.buildCore(list.get(i));

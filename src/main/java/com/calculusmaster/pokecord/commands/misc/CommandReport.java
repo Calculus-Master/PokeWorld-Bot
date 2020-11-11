@@ -16,7 +16,7 @@ public class CommandReport extends Command
     @Override
     public Command runCommand()
     {
-        if(this.msg.length == 3)
+        if(this.msg.length >= 3)
         {
             Document reportInfo = new Document("user", this.player.getName())
                     .append("command", this.msg[1])
