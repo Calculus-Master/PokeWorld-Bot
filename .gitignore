@@ -2,3 +2,5 @@
 /.gradle/
 /build/
 /build/classes/java/main/
+/src/main/resources/PokemonJSONs/
+/src/main/java/com/calculusmaster/pokecord/util/PrivateInfo.java
