@@ -93,6 +93,12 @@ public class Trade
         this.confirms[this.p(id)] = false;
     }
 
+    public void unconfirmTrade()
+    {
+        this.unconfirmTrade(this.players[0]);
+        this.unconfirmTrade(this.players[1]);
+    }
+
     public boolean isComplete()
     {
         return this.confirms[0] == this.confirms[1] && this.confirms[0];
@@ -101,26 +107,26 @@ public class Trade
     public void addCredits(String id, int c)
     {
         this.offers[this.p(id)].addCredits(c);
-        this.unconfirmTrade(id);
+        this.unconfirmTrade();
     }
 
     public void removeCredits(String id, int c)
     {
         this.offers[this.p(id)].removeCredits(c);
-        this.unconfirmTrade(id);
+        this.unconfirmTrade();
     }
 
     public void addPokemon(String id, int... ints)
     {
         System.out.println(Arrays.toString(ints));
         for(int n : ints) this.offers[this.p(id)].addPokemon(this.playerData[this.p(id)].getPokemonList().getString(n - 1));
-        this.unconfirmTrade(id);
+        this.unconfirmTrade();
     }
 
     public void removePokemon(String id, int... ints)
     {
         for(int n : ints) this.offers[this.p(id)].removePokemon(this.playerData[this.p(id)].getPokemonList().getString(n - 1));
-        this.unconfirmTrade(id);
+        this.unconfirmTrade();
     }
 
     //Getters
