@@ -571,6 +571,11 @@ public class Pokemon
         return String.format("%.2f", this.getIVs().values().stream().mapToDouble(iv -> iv / 31D).sum() * 100 / 6D) + "%";
     }
 
+    public double getTotalIVRounded()
+    {
+        return Double.parseDouble(this.getTotalIV().substring(0, 5));
+    }
+
     //Nature
     public void setNature(String nature)
     {

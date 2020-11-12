@@ -16,7 +16,7 @@ public class CommandPokemon extends Command
     List<Pokemon> pokemon = new LinkedList<>();
     public CommandPokemon(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg, "pokemon <flags>");
+        super(event, msg);
         this.buildList();
     }
 
@@ -39,6 +39,17 @@ public class CommandPokemon extends Command
             else if(after.equals("<") && isNumeric(index + 1)) this.pokemon = this.pokemon.stream().filter(p -> p.getLevel() < getInt(index + 1)).collect(Collectors.toList());
             else if(isNumeric(index)) this.pokemon = this.pokemon.stream().filter(p -> p.getLevel() == getInt(index)).collect(Collectors.toList());
         }
+
+        if(msg.contains("--iv"))
+        {
+            int index = msg.indexOf("--iv") + 1;
+            String after = msg.get(index);
+            if(after.equals(">") && isNumeric(index + 1)) this.pokemon = this.pokemon.stream().filter(p -> p.getTotalIVRounded() > getInt(index + 1)).collect(Collectors.toList());
+            else if(after.equals("<") && isNumeric(index + 1)) this.pokemon = this.pokemon.stream().filter(p -> p.getTotalIVRounded() < getInt(index + 1)).collect(Collectors.toList());
+            else if(isNumeric(index)) this.pokemon = this.pokemon.stream().filter(p -> (int)p.getTotalIVRounded() == getInt(index)).collect(Collectors.toList());
+        }
+
+        //TODO: --hpiv, --atkiv, --defiv, --spatkiv, --spdefiv, --spdiv
 
         if(msg.contains("--order"))
         {
