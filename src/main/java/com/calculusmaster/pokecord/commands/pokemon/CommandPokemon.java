@@ -31,6 +31,15 @@ public class CommandPokemon extends Command
             if(isPokemon(name)) this.pokemon = this.pokemon.stream().filter(p -> p.getName().equals(Global.normalCase(name))).collect(Collectors.toList());
         }
 
+        if(msg.contains("--level"))
+        {
+            int index = msg.indexOf("--level") + 1;
+            String after = msg.get(index);
+            if(after.equals(">") && isNumeric(index + 1)) this.pokemon = this.pokemon.stream().filter(p -> p.getLevel() > getInt(index + 1)).collect(Collectors.toList());
+            else if(after.equals("<") && isNumeric(index + 1)) this.pokemon = this.pokemon.stream().filter(p -> p.getLevel() < getInt(index + 1)).collect(Collectors.toList());
+            else if(isNumeric(index)) this.pokemon = this.pokemon.stream().filter(p -> p.getLevel() == getInt(index)).collect(Collectors.toList());
+        }
+
         if(msg.contains("--order"))
         {
             String order = msg.get(msg.indexOf("--order") + 1);
