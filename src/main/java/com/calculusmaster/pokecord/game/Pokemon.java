@@ -99,7 +99,7 @@ public class Pokemon
 
     //Builder for minimal access
     //WILL CRASH IF ANY OTHER GETTERS ARE USED
-    public static Pokemon buildCore(String UUID)
+    public static Pokemon buildCore(String UUID, int num)
     {
         JSONObject specific = Pokemon.specificJSON(UUID);
 
@@ -119,11 +119,22 @@ public class Pokemon
             public String getName() {
                 return specific.getString("name");
             }
+
+            @Override
+            public int getNumber()
+            {
+                return num + 1;
+            }
         };
 
         p.setIVs(specific.getString("ivs"));
 
         return p;
+    }
+
+    public int getNumber()
+    {
+        return -1;
     }
 
     //JSONs

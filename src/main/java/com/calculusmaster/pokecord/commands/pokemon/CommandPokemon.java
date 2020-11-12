@@ -1,47 +1,79 @@
 package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
-import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CommandPokemon extends Command
 {
-    List<Pokemon> pokemon = new ArrayList<>();
+    List<Pokemon> pokemon = new LinkedList<>();
     public CommandPokemon(MessageReceivedEvent event, String[] msg)
     {
         super(event, msg, "pokemon <flags>");
+        this.buildList();
     }
 
     @Override
     public Command runCommand()
     {
-        boolean noFlags = this.msg.length == 1 || (this.msg.length == 2 && this.msg[1].chars().allMatch(Character::isDigit));
+        List<String> msg = Arrays.asList(this.msg);
 
-        this.buildList();
-
-        if(!noFlags)
+        if(msg.contains("--name"))
         {
-            this.embed.setDescription(CommandInvalid.getShort());
-            return this;
+            String name = msg.get(msg.indexOf("--name") + 1);
+            if(isPokemon(name)) this.pokemon = this.pokemon.stream().filter(p -> p.getName().equals(Global.normalCase(name))).collect(Collectors.toList());
         }
-        else if(noFlags) this.runCommand_NoFlags();
+
+        if(msg.contains("--order"))
+        {
+            String order = msg.get(msg.indexOf("--order") + 1);
+            OrderSort o = OrderSort.cast(order);
+            if(o != null) this.sortOrder(o);
+        }
+        else this.sortOrder(OrderSort.NUMBER);
+
+        this.createListEmbed();
 
         return this;
     }
 
-    private void sortByNumber()
+    private void sortOrder(OrderSort o)
     {
-        StringBuilder sb = new StringBuilder();
+        switch (o)
+        {
+            case NUMBER -> this.pokemon.sort((o1, o2) -> o2.getNumber() - o1.getNumber());
+            case IV -> this.pokemon.sort((o1, o2) -> (int) (Double.parseDouble(o2.getTotalIV().substring(0, 5)) - Double.parseDouble(o1.getTotalIV().substring(0, 5))));
+            case LEVEL -> this.pokemon.sort((o1, o2) -> o2.getLevel() - o1.getLevel());
+            case NAME -> this.pokemon.sort((o1, o2) -> o2.getName().compareTo(o1.getName()));
+        }
     }
 
-    private void runCommand_NoFlags()
+    enum OrderSort
+    {
+        NUMBER,
+        IV,
+        LEVEL,
+        NAME;
+
+        static OrderSort cast(String s)
+        {
+            for(OrderSort o : values()) if(o.toString().equals(s.toUpperCase())) return o;
+            return null;
+        }
+    }
+
+    //Do sorting before this
+    private void createListEmbed()
     {
         StringBuilder sb = new StringBuilder();
-        boolean hasPage = this.msg.length == 2;
+        boolean hasPage = this.msg.length >= 2 && this.isNumeric(1);
         int perPage = 20;
         int startIndex = hasPage ? (Integer.parseInt(this.msg[1]) > this.pokemon.size() ? 0 : Integer.parseInt(this.msg[1])) : 0;
         if(startIndex != 0) startIndex--;
@@ -50,7 +82,7 @@ public class CommandPokemon extends Command
         for(int i = startIndex; i < startIndex + perPage; i++)
         {
             if(i > this.pokemon.size() - 1) break;
-            sb.append(this.getLine(this.pokemon.get(i)));
+            sb.append(this.getLine(this.pokemon.get(i), i));
         }
 
         this.embed.setDescription(sb.toString());
@@ -59,12 +91,17 @@ public class CommandPokemon extends Command
 
     private void buildList()
     {
-        for(int i = 0; i < this.playerData.getPokemonList().length(); i++) this.pokemon.add(Pokemon.buildCore(this.playerData.getPokemonList().getString(i)));
+        for(int i = 0; i < this.playerData.getPokemonList().length(); i++) this.pokemon.add(Pokemon.buildCore(this.playerData.getPokemonList().getString(i), i));
+    }
+
+    private String getLine(Pokemon p, int index)
+    {
+        return "**" + p.getName() + "** | Number: " + (index + 1) + " | Level " + p.getLevel() + " | Total IV: " + p.getTotalIV() + "\n";
     }
 
     private String getLine(Pokemon p)
     {
-        return "**" + p.getName() + "** | Number: " + (this.jsonIndexOf(p.getUUID()) + 1) + " | Level " + p.getLevel() + " | Total IV: " + p.getTotalIV() + "\n";
+        return this.getLine(p, this.jsonIndexOf(p.getUUID()));
     }
 
     private int jsonIndexOf(String UUID)
