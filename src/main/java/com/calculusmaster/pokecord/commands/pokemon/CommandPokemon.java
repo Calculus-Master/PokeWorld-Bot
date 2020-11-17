@@ -25,13 +25,13 @@ public class CommandPokemon extends Command
     {
         List<String> msg = Arrays.asList(this.msg);
 
-        if(msg.contains("--name"))
+        if(msg.contains("--name") && msg.indexOf("--name") + 1 < msg.size())
         {
             String name = msg.get(msg.indexOf("--name") + 1);
             if(isPokemon(name)) this.pokemon = this.pokemon.stream().filter(p -> p.getName().equals(Global.normalCase(name))).collect(Collectors.toList());
         }
 
-        if(msg.contains("--level"))
+        if(msg.contains("--level") && msg.indexOf("--level") + 1 < msg.size())
         {
             int index = msg.indexOf("--level") + 1;
             String after = msg.get(index);
@@ -40,7 +40,7 @@ public class CommandPokemon extends Command
             else if(isNumeric(index)) this.pokemon = this.pokemon.stream().filter(p -> p.getLevel() == getInt(index)).collect(Collectors.toList());
         }
 
-        if(msg.contains("--iv"))
+        if(msg.contains("--iv") && msg.indexOf("--iv") + 1 < msg.size())
         {
             int index = msg.indexOf("--iv") + 1;
             String after = msg.get(index);
@@ -51,7 +51,7 @@ public class CommandPokemon extends Command
 
         //TODO: --hpiv, --atkiv, --defiv, --spatkiv, --spdefiv, --spdiv
 
-        if(msg.contains("--order"))
+        if(msg.contains("--order") && msg.indexOf("--order") + 1 < msg.size())
         {
             String order = msg.get(msg.indexOf("--order") + 1);
             OrderSort o = OrderSort.cast(order);
