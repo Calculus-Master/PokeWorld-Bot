@@ -71,7 +71,7 @@ public class CommandPokemon extends Command
             case NUMBER -> this.pokemon.sort((o1, o2) -> o2.getNumber() - o1.getNumber());
             case IV -> this.pokemon.sort((o1, o2) -> (int) (Double.parseDouble(o2.getTotalIV().substring(0, 5)) - Double.parseDouble(o1.getTotalIV().substring(0, 5))));
             case LEVEL -> this.pokemon.sort((o1, o2) -> o2.getLevel() - o1.getLevel());
-            case NAME -> this.pokemon.sort((o1, o2) -> o2.getName().compareTo(o1.getName()));
+            case NAME -> this.pokemon.sort(Comparator.comparing(Pokemon::getName));
         }
     }
 
@@ -95,11 +95,12 @@ public class CommandPokemon extends Command
         StringBuilder sb = new StringBuilder();
         boolean hasPage = this.msg.length >= 2 && this.isNumeric(1);
         int perPage = 20;
-        int startIndex = hasPage ? (Integer.parseInt(this.msg[1]) > this.pokemon.size() ? 0 : Integer.parseInt(this.msg[1])) : 0;
+        int startIndex = hasPage ? (getInt(1) > this.pokemon.size() ? 0 : getInt(1)) : 0;
         if(startIndex != 0) startIndex--;
 
         startIndex *= perPage;
-        for(int i = startIndex; i < startIndex + perPage; i++)
+        int endIndex = Math.min(startIndex + perPage, this.pokemon.size());
+        for(int i = startIndex; i < endIndex; i++)
         {
             if(i > this.pokemon.size() - 1) break;
             sb.append(this.getLine(this.pokemon.get(i), i));
@@ -107,6 +108,7 @@ public class CommandPokemon extends Command
 
         this.embed.setDescription(sb.toString());
         this.embed.setTitle(this.player.getName() + "'s Pokemon");
+        this.embed.setFooter("Showing Pokemon " + (startIndex + 1) + " to " + (endIndex));
     }
 
     private void buildList()

@@ -20,19 +20,6 @@ import static com.calculusmaster.pokecord.commands.misc.CommandHelp.CommandCateg
 
 public abstract class Command
 {
-    protected MessageReceivedEvent event;
-    protected String[] msg;
-    private final String format;
-
-    protected User player;
-    protected Guild server;
-
-    protected ServerDataQuery serverData;
-    protected PlayerDataQuery playerData;
-
-    protected EmbedBuilder embed;
-    protected Color color;
-
     public static final CommandHelp.HelpEntry START = new CommandHelp.HelpEntry("start");
     public static final CommandHelp.HelpEntry SPAWNCHANNEL = new CommandHelp.HelpEntry("setspawn");
     public static final CommandHelp.HelpEntry BALANCE = new CommandHelp.HelpEntry("balance");
@@ -56,14 +43,14 @@ public abstract class Command
     public static final CommandHelp.HelpEntry HELP = new CommandHelp.HelpEntry("help");
     public static final CommandHelp.HelpEntry PREFIX = new CommandHelp.HelpEntry("prefix");
     public static final CommandHelp.HelpEntry TRADE = new CommandHelp.HelpEntry("trade");
-    
+
     public static void init()
     {
         START.setCategory(MISC)
-            .addShortDescription("Start your journey!")
-            .addAliases()
-            .addArgs("starter")
-            .addArgDesc("starter", "The starter Pokemon you want to begin with.");
+                .addShortDescription("Start your journey!")
+                .addAliases()
+                .addArgs("starter")
+                .addArgDesc("starter", "The starter Pokemon you want to begin with.");
 
         SPAWNCHANNEL.setCategory(CONFIG)
                 .addShortDescription("Set a channel where Pokemon will spawn.")
@@ -221,12 +208,24 @@ public abstract class Command
 
     }
 
-    @Deprecated
-    public Command(MessageReceivedEvent event, String[] msg, String format)
+    protected MessageReceivedEvent event;
+    protected String[] msg;
+
+    protected User player;
+    protected Guild server;
+
+    protected ServerDataQuery serverData;
+    protected PlayerDataQuery playerData;
+
+    protected EmbedBuilder embed;
+    protected Color color;
+
+    private long timeI, timeF;
+
+    public Command(MessageReceivedEvent event, String[] msg)
     {
         this.event = event;
         this.msg = msg;
-        this.format = format;
 
         this.player = event.getAuthor();
         this.server = event.getGuild();
@@ -236,11 +235,14 @@ public abstract class Command
 
         this.embed = new EmbedBuilder();
         this.color = null;
+
+        this.timeI = System.currentTimeMillis();
     }
 
-    public Command(MessageReceivedEvent event, String[] msg)
+    @Deprecated
+    public Command(MessageReceivedEvent event, String[] msg, String format)
     {
-        this(event, msg, null);
+        this(event, msg);
     }
 
     public abstract Command runCommand() throws IOException;
@@ -282,6 +284,9 @@ public abstract class Command
 
     public MessageEmbed getResponseEmbed()
     {
+        this.timeF = System.currentTimeMillis();
+        Global.logTime(this.getClass(), this.msg[0], this.timeI, this.timeF, this.event.getMessage().getTimeCreated());
+
         if(this.embed == null) return null;
         this.setAuthor();
         this.setColor();

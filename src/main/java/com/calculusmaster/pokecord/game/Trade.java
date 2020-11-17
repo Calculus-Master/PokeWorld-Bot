@@ -74,7 +74,7 @@ public class Trade
         if(offer.credits != 0) sb.append(offer.credits + " Credits\n");
         if(!offer.pokemon.isEmpty()) for(String s : offer.pokemon)
         {
-            Pokemon p = Pokemon.buildCore(s);
+            Pokemon p = Pokemon.buildCore(s, -1);
             sb.append("Level " + p.getLevel() + " " + p.getName() + "\n");
         }
         sb.append("```");

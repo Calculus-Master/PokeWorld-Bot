@@ -1,7 +1,10 @@
 package com.calculusmaster.pokecord.util;
 
+import org.bson.Document;
 import org.slf4j.LoggerFactory;
 
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,6 +17,18 @@ public class Global
     public static void logInfo(Class<?> clazz, String method, String msg)
     {
         LoggerFactory.getLogger(clazz).info("#" + method + ": " + msg);
+    }
+
+    public static void logTime(Class<?> clazz, String command, long timeI, long timeF, OffsetDateTime timestamp)
+    {
+        LoggerFactory.getLogger(clazz).info(command + " took " + (timeF - timeI) + " ms to complete!");
+        addPerformanceEntry(command, timeI, timeF, timestamp);
+    }
+
+    private static void addPerformanceEntry(String command, long timeI, long timeF, OffsetDateTime timestamp)
+    {
+        Document data = new Document("command", command).append("time", timeF - timeI).append("timestamp", timestamp.format(DateTimeFormatter.RFC_1123_DATE_TIME));
+        Mongo.PerformanceData.insertOne(data);
     }
 
     public static boolean isStarter(String s)
