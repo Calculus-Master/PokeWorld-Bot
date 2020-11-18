@@ -428,7 +428,7 @@ public class Pokemon
         this.exp += exp;
         int required = GrowthRate.getRequiredExp(this.genericJSON.getString("growthrate"), this.level);
 
-        System.out.println("Initial LVL: " + this.level + ", Initial EXP: " + this.exp);
+        //System.out.println("Initial LVL: " + this.level + ", Initial EXP: " + this.exp);
 
         while(this.exp >= required && this.level < 100)
         {
