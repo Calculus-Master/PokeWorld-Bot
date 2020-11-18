@@ -17,13 +17,13 @@ public class CommandSelect extends Command
     @Override
     public Command runCommand()
     {
-        if(this.msg.length != 2 || !this.msg[1].chars().allMatch(Character::isDigit) || Integer.parseInt(this.msg[1]) > this.playerData.getPokemonList().length())
+        if(this.msg.length != 2 || (!this.msg[1].equals("latest") && (!this.msg[1].chars().allMatch(Character::isDigit) || Integer.parseInt(this.msg[1]) > this.playerData.getPokemonList().length())))
         {
             this.embed.setDescription(CommandInvalid.getShort());
         }
         else
         {
-            int selected = Integer.parseInt(this.msg[1]);
+            int selected = this.msg[1].equals("latest") ? this.playerData.getPokemonList().length() - 1 : Integer.parseInt(this.msg[1]);
             this.playerData.setSelected(selected);
             JSONObject pokemon = Pokemon.specificJSON(this.playerData.getPokemonList().getString(this.playerData.getSelected()));
             this.embed.setDescription("You selected your **Level " + pokemon.getInt("level") + " " + Global.normalCase(pokemon.getString("name")) + "** (#" + selected + ")!");
