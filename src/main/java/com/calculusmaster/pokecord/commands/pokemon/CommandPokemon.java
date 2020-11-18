@@ -68,7 +68,7 @@ public class CommandPokemon extends Command
     {
         switch (o)
         {
-            case NUMBER -> this.pokemon.sort((o1, o2) -> o2.getNumber() - o1.getNumber());
+            case NUMBER -> this.pokemon.sort(Comparator.comparingInt(Pokemon::getNumber));
             case IV -> this.pokemon.sort((o1, o2) -> (int) (Double.parseDouble(o2.getTotalIV().substring(0, 5)) - Double.parseDouble(o1.getTotalIV().substring(0, 5))));
             case LEVEL -> this.pokemon.sort((o1, o2) -> o2.getLevel() - o1.getLevel());
             case NAME -> this.pokemon.sort(Comparator.comparing(Pokemon::getName));
@@ -108,7 +108,7 @@ public class CommandPokemon extends Command
 
         this.embed.setDescription(sb.toString());
         this.embed.setTitle(this.player.getName() + "'s Pokemon");
-        this.embed.setFooter("Showing Pokemon " + (startIndex + 1) + " to " + (endIndex));
+        this.embed.setFooter("Showing Numbers " + (startIndex + 1) + " to " + (endIndex) + " out of " + this.pokemon.size() + " Pokemon");
     }
 
     private void buildList()

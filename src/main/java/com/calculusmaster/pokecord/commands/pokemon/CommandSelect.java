@@ -23,7 +23,7 @@ public class CommandSelect extends Command
         }
         else
         {
-            int selected = this.msg[1].equals("latest") ? this.playerData.getPokemonList().length() - 1 : Integer.parseInt(this.msg[1]);
+            int selected = this.msg[1].equals("latest") ? this.playerData.getPokemonList().length() : Integer.parseInt(this.msg[1]);
             this.playerData.setSelected(selected);
             JSONObject pokemon = Pokemon.specificJSON(this.playerData.getPokemonList().getString(this.playerData.getSelected()));
             this.embed.setDescription("You selected your **Level " + pokemon.getInt("level") + " " + Global.normalCase(pokemon.getString("name")) + "** (#" + selected + ")!");

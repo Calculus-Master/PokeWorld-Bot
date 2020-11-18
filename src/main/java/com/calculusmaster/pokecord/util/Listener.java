@@ -189,17 +189,19 @@ public class Listener extends ListenerAdapter
                 if(msg[0].equals("deleteperformance"))
                 {
                     Mongo.PerformanceData.deleteMany(Filters.exists("command"));
+                    c = null;
                 }
                 else if(msg[0].equals("deletepokemon"))
                 {
                     Mongo.PokemonData.deleteMany(Filters.exists("name"));
+                    c = null;
                 }
                 else if(msg[0].equals("deleteplayers"))
                 {
                     Mongo.PlayerData.deleteMany(Filters.exists("name"));
+                    c = null;
                 }
-
-                c = null;
+                else c = new CommandInvalid(event, msg).runCommand();
             }
             else c = new CommandInvalid(event, msg).runCommand();
 
