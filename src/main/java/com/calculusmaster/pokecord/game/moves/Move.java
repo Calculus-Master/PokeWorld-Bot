@@ -19,6 +19,7 @@ public abstract class Move extends MongoQuery
 {
     private String name;
     private boolean isWIP;
+    private boolean isCustom;
 
     //TODO: Change this is the stat multipler used in moves
     //When a move request to lower or raise a stat by a stage, how many IVs does that lower or raise
@@ -31,6 +32,7 @@ public abstract class Move extends MongoQuery
         super("name", name, Mongo.MoveInfo);
         this.name = name;
         this.isWIP = false;
+        this.isCustom = false;
 
         Move.MOVES.add(this);
     }
@@ -41,9 +43,20 @@ public abstract class Move extends MongoQuery
         return this;
     }
 
+    public Move setCustom()
+    {
+        this.isCustom = true;
+        return this;
+    }
+
     public boolean isWIP()
     {
         return this.isWIP;
+    }
+
+    public boolean isCustom()
+    {
+        return this.isCustom;
     }
 
     public abstract String logic(Pokemon user, Pokemon opponent);
@@ -129,7 +142,7 @@ public abstract class Move extends MongoQuery
 
     public static Move asMove(String move)
     {
-        return Move.MOVES.stream().filter(m -> m.getName().equals(Global.normalCase(move))).collect(Collectors.toList()).get(0);
+        return Move.MOVES.stream().filter(m -> m.getName().toLowerCase().equals(move.toLowerCase())).collect(Collectors.toList()).get(0);
     }
 
     public static boolean isMove(String move)

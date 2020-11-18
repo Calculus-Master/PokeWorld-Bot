@@ -20,26 +20,45 @@ public class CommandMoveInfo extends Command
     @Override
     public Command runCommand()
     {
-        if(this.msg.length != 2 || !Move.isMove(this.msg[1]))
+        //TODO: Add in info for TM and TR that integrates with this command
+        if(this.msg.length < 2)
         {
             this.embed.setDescription(CommandInvalid.getShort());
         }
         else
         {
-            JSONObject move = new JSONObject(Mongo.MoveInfo.find(Filters.eq("name", Global.normalCase(this.msg[1]))).first().toJson());
+            String moveString = Global.normalCase(this.getMove());
+            System.out.println(moveString);
 
-            String title = Global.normalCase(this.msg[1]) + " Info";
-            String info = move.getString("info");
-            String type = "Type: " + move.getString("type");
-            String category = "Category: " + move.getString("category");
-            String power = "Power: " + move.getInt("power");
-            String accuracy = "Accuracy: " + move.getInt("accuracy");
-            String zmove = "Z-Move: " + move.getString("zmove");
+            if(!Move.isMove(moveString))
+            {
+                this.embed.setDescription(CommandInvalid.getShort());
+                return this;
+            }
+
+            Move m = Move.asMove(moveString);
+
+            String title = m.getName() + " Info";
+            String info = m.getInfo();
+            String type = "Type: " + Global.normalCase(m.getType().toString());
+            String category = "Category: " + Global.normalCase(m.getCategory().toString());
+            String power = "Power: " + m.getPower();
+            String accuracy = "Accuracy: " + m.getAccuracy();
+            String zmove = "Z-Move: " + m.getZMove();
 
             this.embed.setTitle(title);
             this.embed.setDescription(info + "\n\n" + type + "\n" + category + "\n" + power + "\n" + accuracy + "\n" + zmove);
-            this.color = Type.cast(move.getString("type")).getColor();
+            this.color = m.getType().getColor();
+
+            if(Move.asMove(moveString).isCustom()) this.embed.setFooter("This move has a custom implementation! It may not work exactly as described!");
         }
         return this;
+    }
+
+    private String getMove()
+    {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 1; i < this.msg.length; i++) sb.append(this.msg[i]).append(" ");
+        return sb.toString().trim();
     }
 }
