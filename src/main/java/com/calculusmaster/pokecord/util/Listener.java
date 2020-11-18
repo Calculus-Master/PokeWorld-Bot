@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.util;
 
-import com.calculusmaster.pokecord.commands.*;
+import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.config.CommandPrefix;
 import com.calculusmaster.pokecord.commands.config.CommandSpawnChannel;
 import com.calculusmaster.pokecord.commands.duel.CommandDuel;

@@ -121,11 +121,6 @@ public class CommandPokemon extends Command
         return "**" + p.getName() + "** | Number: " + (index + 1) + " | Level " + p.getLevel() + " | Total IV: " + p.getTotalIV() + "\n";
     }
 
-    private String getLine(Pokemon p)
-    {
-        return this.getLine(p, this.jsonIndexOf(p.getUUID()));
-    }
-
     private int jsonIndexOf(String UUID)
     {
         for(int i = 0; i < this.playerData.getPokemonList().length(); i++) if(this.playerData.getPokemonList().getString(i).equals(UUID)) return i;
