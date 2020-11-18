@@ -37,7 +37,7 @@ public class CommandInfo extends Command
         this.embed.setTitle(title);
         this.embed.setDescription(exp + "\n" + type + "\n" + nature + "\n\n" + stats);
         this.color = chosen.getType()[0].getColor();
-        this.embed.setImage(chosen.getGenericJSON().getString((chosen.isShiny() ? "shiny" : "normal") + "URL"));
+        this.embed.setImage(chosen.getImage());
         this.embed.setFooter("Showing Pokemon " + (index + 1) + " / " + this.playerData.getPokemonList().length());
 
         return this;

@@ -388,13 +388,18 @@ public class Pokemon
     //Image
     public String getImage()
     {
-        return this.genericJSON.getString(this.isShiny() ? "shinyURL" : "normalURL");
+        String image = this.genericJSON.getString(this.isShiny() ? "shinyURL" : "normalURL");
+        return image.equals("") ? Pokemon.getWIPImage() : image;
     }
 
     public URL getURL() throws MalformedURLException
     {
-        String wip = "http://clipart-library.com/img/1657818.png";
-        return new URL(this.getImage().equals("") ? wip : this.getImage());
+        return new URL(this.getImage());
+    }
+
+    public static String getWIPImage()
+    {
+        return "http://clipart-library.com/img/1657818.png";
     }
 
     //Levels and Experience

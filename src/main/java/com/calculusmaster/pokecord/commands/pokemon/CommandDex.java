@@ -49,11 +49,13 @@ public class CommandDex extends Command
         String megas = "*Megas:* " + this.getMegasFormatted(info.getJSONArray("mega"));
         String baseStats = "*Base Stats:* \n" + this.getStatsFormatted(info.getJSONArray("stats"));
 
+        String image = info.getString((isShiny ? "shiny" : "normal") + "URL");
+
         this.embed.setTitle(title);
         this.embed.setDescription(filler + "\n" + type + "\n" + abilities + "\n" + growth + "" +
                 "\n" + evYield + "\n" + evolutions + "\n" + forms + "       " + megas + "\n" + "\n" + baseStats);
         this.color = Type.cast(info.getJSONArray("type").getString(0)).getColor();
-        this.embed.setImage(info.getString((isShiny ? "shiny" : "normal") + "URL"));
+        this.embed.setImage(image.equals("") ? Pokemon.getWIPImage() : image);
 
         return this;
     }
