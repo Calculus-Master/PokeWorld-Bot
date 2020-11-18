@@ -59,7 +59,8 @@ public class CommandPokemon extends Command
         }
         else this.sortOrder(OrderSort.NUMBER);
 
-        this.createListEmbed();
+        if(!this.pokemon.isEmpty()) this.createListEmbed();
+        else this.embed.setDescription("You have no Pokemon with those characteristics!");
 
         return this;
     }
@@ -103,7 +104,7 @@ public class CommandPokemon extends Command
         for(int i = startIndex; i < endIndex; i++)
         {
             if(i > this.pokemon.size() - 1) break;
-            sb.append(this.getLine(this.pokemon.get(i), i));
+            sb.append(this.getLine(this.pokemon.get(i)));
         }
 
         this.embed.setDescription(sb.toString());
@@ -116,14 +117,8 @@ public class CommandPokemon extends Command
         for(int i = 0; i < this.playerData.getPokemonList().length(); i++) this.pokemon.add(Pokemon.buildCore(this.playerData.getPokemonList().getString(i), i));
     }
 
-    private String getLine(Pokemon p, int index)
+    private String getLine(Pokemon p)
     {
-        return "**" + p.getName() + "** | Number: " + (index + 1) + " | Level " + p.getLevel() + " | Total IV: " + p.getTotalIV() + "\n";
-    }
-
-    private int jsonIndexOf(String UUID)
-    {
-        for(int i = 0; i < this.playerData.getPokemonList().length(); i++) if(this.playerData.getPokemonList().getString(i).equals(UUID)) return i;
-        return -1;
+        return "**" + p.getName() + "** | Number: " + p.getNumber() + " | Level " + p.getLevel() + " | Total IV: " + p.getTotalIV() + "\n";
     }
 }
