@@ -95,7 +95,7 @@ public class CommandPokemon extends Command
         StringBuilder sb = new StringBuilder();
         boolean hasPage = this.msg.length >= 2 && this.isNumeric(1);
         int perPage = 20;
-        int startIndex = hasPage ? (getInt(1) > this.pokemon.size() ? 0 : getInt(1)) : 0;
+        int startIndex = hasPage ? ((getInt(1) - 1) * perPage > this.pokemon.size() ? 0 : getInt(1)) : 0;
         if(startIndex != 0) startIndex--;
 
         startIndex *= perPage;
