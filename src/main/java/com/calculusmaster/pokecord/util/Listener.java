@@ -20,6 +20,7 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.items.XPBooster;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
+import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
@@ -33,8 +34,7 @@ import java.util.*;
 
 public class Listener extends ListenerAdapter
 {
-    private OffsetDateTime catchTimestamp = null;
-    private Map<String, Boolean> hasSpawnEventRunning = new HashMap<>();
+    private final Map<String, Boolean> hasSpawnEventRunning = new HashMap<>();
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event)
@@ -183,9 +183,28 @@ public class Listener extends ListenerAdapter
             {
                 c = new CommandTrade(event, msg).runCommand();
             }
+            //Debug Commands
+            else if(player.getId().equals("309135641453527040"))
+            {
+                if(msg[0].equals("deleteperformance"))
+                {
+                    Mongo.PerformanceData.deleteMany(Filters.exists("command"));
+                }
+                else if(msg[0].equals("deletepokemon"))
+                {
+                    Mongo.PokemonData.deleteMany(Filters.exists("name"));
+                }
+                else if(msg[0].equals("deleteplayers"))
+                {
+                    Mongo.PlayerData.deleteMany(Filters.exists("name"));
+                }
+
+                c = null;
+            }
             else c = new CommandInvalid(event, msg).runCommand();
 
-            if(c.getResponseEmbed() != null) event.getChannel().sendMessage(c.getResponseEmbed()).queue();
+            if(c == null) event.getChannel().sendMessage("Debug command successfully run!").queue();
+            else if(c.getResponseEmbed() != null) event.getChannel().sendMessage(c.getResponseEmbed()).queue();
         }
 
         if(r.nextInt(10) <= 3) Listener.expEvent(event);
