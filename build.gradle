@@ -12,6 +12,7 @@ version '1.0'
 repositories {
     mavenCentral()
     jcenter()
+    //maven { url 'https://dl.bintray.com/sargunv/maven' }
 }
 
 dependencies {
@@ -19,4 +20,6 @@ dependencies {
     compile 'org.mongodb:mongodb-driver-sync:4.1.1'
     implementation 'org.json:json:20200518'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    compile group: 'com.opencsv', name: 'opencsv', version: '5.3'
+    //implementation 'me.sargunvohra.lib:pokekotlin:2.3.1'
 }

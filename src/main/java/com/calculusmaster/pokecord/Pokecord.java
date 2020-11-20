@@ -33,6 +33,4 @@ public class Pokecord
         bot.addEventListeners(new Listener());
         bot.build();
     }
-
-
 }
