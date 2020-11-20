@@ -37,7 +37,7 @@ public class CSVHelper
         createCSVLists();
 
         //Write files
-        writePokemonJSONFile(1);
+        for(int i = 1; i <= 807; i++) writePokemonJSONFile(i);
     }
 
     private static void createCSVLists() throws IOException, CsvException
@@ -77,6 +77,12 @@ public class CSVHelper
     {
         Document data = new Document();
 
+        if(pokemonInfo.stream().filter(l -> l[0].equals("" + dex)).count() == 0)
+        {
+            System.out.println("This dex number failed: " + dex);
+            return null;
+        }
+
         //id,identifier,species_id,height,weight,base_experience,order,is_default
         String[] pokemonCSVLine = pokemonInfo.stream().filter(l -> l[0].equals(dex + "")).collect(Collectors.toList()).get(0);
 
@@ -100,7 +106,7 @@ public class CSVHelper
         List<String[]> pokemonAbilityLines = pokemonAbilityInfo.stream().filter(l -> l[0].equals("" + dex)).collect(Collectors.toList());
 
         data.append(keys[0], Global.normalCase(pokemonCSVLine[1]))
-                .append(keys[1], pokemonSpeciesNameCSVLine[3] + "-" + htwt(pokemonCSVLine[3]) + "-" + htwt(pokemonCSVLine[4]))
+                .append(keys[1], Global.normalCase(pokemonSpeciesCSVLine[1]) + "-" + htwt(pokemonCSVLine[3]) + "-" + htwt(pokemonCSVLine[4]))
                 .append(keys[2], dex)
                 .append(keys[3], type(pokemonTypeCSVLine))
                 .append(keys[4], "[]")
@@ -111,7 +117,7 @@ public class CSVHelper
                 .append(keys[9], ev(pokemonStatLines))
                 .append(keys[10], "[]")
                 .append(keys[11], "[]")
-                .append(keys[12], movesTM(pokemonTMMoveLines))
+                .append(keys[12], "[]"/*movesTM(pokemonTMMoveLines)*/)
                 .append(keys[13], "[]")
                 .append(keys[14], abilities(pokemonAbilityLines))
                 .append(keys[15], growthrate(Integer.parseInt(pokemonSpeciesCSVLine[14])))
@@ -222,6 +228,7 @@ public class CSVHelper
 
     private static String getJSONString(Document d)
     {
+        if(d == null) return "";
         StringBuilder sb = new StringBuilder().append("{\n");
         String indent = "    ";
 
