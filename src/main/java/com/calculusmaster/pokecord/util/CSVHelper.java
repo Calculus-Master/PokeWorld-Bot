@@ -220,8 +220,9 @@ public class CSVHelper
 
     private static void writePokemonJSONFile(int dex) throws IOException
     {
-        String fileName = "pokemon-" + dex + ".json";
         Document data = getPokemonData(dex);
+        String fileName = dex + " " + data.getString("name") + ".json";
+
         Files.write(Paths.get(WRITE_PATH + fileName), getJSONString(data).getBytes());
         System.out.println("Wrote " + fileName);
     }
