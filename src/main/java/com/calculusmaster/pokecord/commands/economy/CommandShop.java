@@ -68,7 +68,6 @@ public class CommandShop extends Command
         for(XPBooster xp : XPBooster.values()) this.page.append("`" + xp.timeForShop() + ":` (" + xp.boost + "x) " + xp.price + "c\n");
     }
 
-    //TODO: Convert to an actual time system rather than just an int
     private static int day = 0;
     public static int currentTMPrice = 2000;
     public static int currentTRPrice = 2500;

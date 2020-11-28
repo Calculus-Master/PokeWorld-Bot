@@ -250,7 +250,6 @@ public class Duel
 
         embed.setTitle(this.getTurnTitle());
         embed.setDescription((this.playerPokemon[this.turn]).getName() + " defeated " + (this.playerPokemon[this.getOtherTurn()]).getName() + "!\n" + this.getNameFromID(getWinner()) + " has won!");
-        //TODO: Some Victory Image
         embed.setColor(this.getTurnColor());
 
         event.getChannel().sendMessage(embed.build()).queue();

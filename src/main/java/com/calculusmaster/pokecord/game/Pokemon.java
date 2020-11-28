@@ -38,6 +38,7 @@ public class Pokemon
 
     private int health;
     private StatusCondition status;
+    private int crit;
 
     //Init Global List
     public static void init()
@@ -68,6 +69,7 @@ public class Pokemon
 
         p.setHealth(p.getStat(Stat.HP));
         p.removeStatusConditions();
+        p.setCrit(1);
 
         Global.logInfo(Pokemon.class, "build", "Pokemon Built (UUID: " + UUID + ", Name: " + p.getName() + ")!");
         return p;
@@ -92,6 +94,7 @@ public class Pokemon
 
         p.setHealth(p.getStat(Stat.HP));
         p.removeStatusConditions();
+        p.setCrit(1);
 
         Global.logInfo(Pokemon.class, "create", "New Pokemon (" + name + ") Created!");
         return p;
@@ -619,6 +622,16 @@ public class Pokemon
             double stat = nature * (5 + ((this.level * (2 * base + IV + EV / 4.0)) / 100));
             return (int)stat;
         }
+    }
+
+    public boolean isCrit()
+    {
+        return (new Random().nextInt(24) + 1) <= this.crit;
+    }
+
+    public void setCrit(int crit)
+    {
+        this.crit = crit;
     }
 
     private int getMaxHP()

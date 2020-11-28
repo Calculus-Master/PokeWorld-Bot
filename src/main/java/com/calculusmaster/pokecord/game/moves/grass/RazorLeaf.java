@@ -13,9 +13,10 @@ public class RazorLeaf extends Move
     @Override
     public String logic(Pokemon user, Pokemon opponent)
     {
-        //TODO: Add increase crit hit ratio
+        user.setCrit(3);
         int damage = this.getDamage(user, opponent);
         opponent.changeHealth(-1 * damage);
+        user.setCrit(1);
 
         return this.getMoveResults(user, opponent, damage);
     }

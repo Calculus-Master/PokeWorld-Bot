@@ -61,6 +61,8 @@ public abstract class Move extends MongoQuery
 
     public abstract String logic(Pokemon user, Pokemon opponent);
 
+    //Move Results
+
     protected String getMoveResults(Pokemon user, Pokemon opponent, int damage)
     {
         return this.getMoveUseResults(user) + " It dealt **" + damage + "** damage to " + opponent.getName() + "!";
@@ -74,6 +76,11 @@ public abstract class Move extends MongoQuery
     public String getMoveResultsFail(Pokemon user)
     {
         return user.getName() + " missed using " + this.getName() + "!";
+    }
+
+    public String getMoveResultsNotEffective(Pokemon opponent)
+    {
+        return this.getName() + " doesn't affect " + opponent.getName() + "!";
     }
 
     public boolean getIsAccurate()

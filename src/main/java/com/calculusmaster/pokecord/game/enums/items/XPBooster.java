@@ -23,11 +23,8 @@ public enum XPBooster
      */
     public int time()
     {
-        int hours;
-        int minute;
-
-        hours = this.toString().contains("HR") ? Integer.parseInt(this.toString().split("_")[1]) : 0;
-        minute = this.toString().contains("MIN") ? Integer.parseInt(this.toString().split("_")[1]) : 0;
+        int hours = this.toString().contains("HR") ? Integer.parseInt(this.toString().split("_")[1]) : 0;
+        int minute = this.toString().contains("MIN") ? Integer.parseInt(this.toString().split("_")[1]) : 0;
 
         return hours * 60 + minute;
     }
