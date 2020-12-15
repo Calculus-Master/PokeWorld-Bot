@@ -2,13 +2,11 @@ package com.calculusmaster.pokecord.commands.moves;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
-import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.enums.items.TM;
+import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.Mongo;
-import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import org.json.JSONObject;
 
 public class CommandMoveInfo extends Command
 {
@@ -29,16 +27,18 @@ public class CommandMoveInfo extends Command
         {
             String moveString = Global.normalCase(this.getMove());
             System.out.println(moveString);
+            boolean isTM = moveString.startsWith("Tm");
+            boolean isTR = moveString.startsWith("Tr");
 
-            if(!Move.isMove(moveString))
+            if(!Move.isMove(moveString) && !(isTM || isTR))
             {
                 this.embed.setDescription(CommandInvalid.getShort());
                 return this;
             }
 
-            Move m = Move.asMove(moveString);
+            Move m = isTM ? TM.get(Integer.parseInt(moveString.substring(3))).asMove() : (isTR ? TR.get(Integer.parseInt(moveString.substring(3))).asMove() : Move.asMove(moveString));
 
-            String title = m.getName() + " Info";
+            String title = m.getName() + " Info" + (isTM || isTR ? "(" + moveString + ")" : "");
             String info = m.getInfo();
             String type = "Type: " + Global.normalCase(m.getType().toString());
             String category = "Category: " + Global.normalCase(m.getCategory().toString());
