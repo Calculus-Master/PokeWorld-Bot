@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game;
 
 import com.calculusmaster.pokecord.game.enums.elements.*;
+import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.util.Global;
@@ -36,6 +37,8 @@ public class Pokemon
     private int heldTM;
     private int heldTR;
 
+    private String heldItem;
+
     private int health;
     private StatusCondition status;
     private int crit;
@@ -66,6 +69,7 @@ public class Pokemon
         p.setLearnedMoves(specific.getString("moves"));
         p.setTM(specific.getInt("tm"));
         p.setTR(specific.getInt("tr"));
+        p.setItem(specific.getString("item"));
 
         p.setHealth(p.getStat(Stat.HP));
         p.removeStatusConditions();
@@ -91,6 +95,7 @@ public class Pokemon
         p.setLearnedMoves("Tackle-Tackle-Tackle-Tackle");
         p.setTM(-1);
         p.setTR(-1);
+        p.removeItem();
 
         p.setHealth(p.getStat(Stat.HP));
         p.removeStatusConditions();
@@ -176,31 +181,31 @@ public class Pokemon
                 .append("evs", p.getVCondensed(p.getEVs()))
                 .append("moves", p.getMovesCondensed())
                 .append("tm", p.getTM())
-                .append("tr", p.getTR());
+                .append("tr", p.getTR())
+                .append("item", p.getItem());
 
         Mongo.PokemonData.insertOne(pokeData);
     }
 
     public static void updateExperience(Pokemon p)
     {
-        Bson query = Filters.eq("UUID", p.getUUID());
-        Mongo.PokemonData.updateOne(query, Updates.set("level", p.getLevel()));
-        Mongo.PokemonData.updateOne(query, Updates.set("exp", p.getExp()));
+        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("level", p.getLevel()));
+        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("exp", p.getExp()));
     }
 
     public static void updateMoves(Pokemon p)
     {
-        Mongo.PokemonData.updateOne(Filters.eq("UUID", p.getUUID()), Updates.set("moves", p.getMovesCondensed()));
+        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("moves", p.getMovesCondensed()));
     }
 
     public static void updateEVs(Pokemon p)
     {
-        Mongo.PokemonData.updateOne(Filters.eq("UUID", p.getUUID()), Updates.set("evs", p.getVCondensed(p.getEVs())));
+        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("evs", p.getVCondensed(p.getEVs())));
     }
 
     public static void updateName(Pokemon p, String evolved)
     {
-        Mongo.PokemonData.updateOne(Filters.eq("UUID", p.getUUID()), Updates.set("name", Global.normalCase(evolved)));
+        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("name", Global.normalCase(evolved)));
     }
 
     public static void updateTMTR(Pokemon p)
@@ -209,9 +214,14 @@ public class Pokemon
         Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("tr", p.getTR()));
     }
 
+    public static void updateItem(Pokemon p)
+    {
+        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("item", p.getItem()));
+    }
+
     public static void deletePokemon(Pokemon p)
     {
-        Mongo.PokemonData.deleteOne(Filters.eq("UUID", p.getUUID()));
+        Mongo.PokemonData.deleteOne(p.getQuery());
     }
 
     public JSONObject getGenericJSON()
@@ -346,6 +356,28 @@ public class Pokemon
     {
         for(int i = 0; i < this.genericJSON.getJSONArray("movesTR").length(); i++) if(this.genericJSON.getJSONArray("movesTR").getInt(i) == tr) return true;
         return false;
+    }
+
+    //Items
+    //TODO: Items
+    public void setItem(String s)
+    {
+        this.heldItem = s;
+    }
+
+    public void setItem(PokeItem item)
+    {
+        this.heldItem = item.getName();
+    }
+
+    public void removeItem()
+    {
+        this.heldItem = PokeItem.NONE.getName();
+    }
+
+    public String getItem()
+    {
+        return this.heldItem;
     }
 
     //UUID
