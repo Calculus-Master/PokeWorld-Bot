@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Nature;
+import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.XPBooster;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -60,7 +61,19 @@ public class CommandBuy extends Command
                 selected.setLevel(selected.getLevel() + num);
             }
         }
-        //TODO: Add p!buy item <name>
+        //TODO: Add p!buy item <name> && item inventory
+        else if(this.msg[1].equals("item") && this.msg.length == 3)
+        {
+            if(isNumeric(2) && this.playerData.getCredits() >= CommandShop.entriesItem.get(Integer.parseInt(this.msg[2]) - 1).cost)
+            {
+                PokeItem item = CommandShop.entriesItem.get(Integer.parseInt(this.msg[2]) - 1);
+
+                this.playerData.changeCredits(-1 * item.cost);
+                this.playerData.addItem(item.getName());
+
+                this.embed.setDescription("Bought `" + item.getStyledName() + "` for " + item.cost + "c!");
+            }
+        }
         else if(this.msg[1].equals("form") && this.msg.length == 3)
         {
             if(selected.hasForms() && this.playerData.getCredits() >= CommandBuy.COST_FORM && selected.getFormsList().contains(Global.normalCase(this.msg[2])))

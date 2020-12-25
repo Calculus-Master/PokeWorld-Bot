@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.economy;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.enums.elements.Nature;
@@ -57,9 +58,29 @@ public class CommandShop extends Command
         return this;
     }
 
+    public static final List<PokeItem> entriesItem = new ArrayList<>();
+
     private void page_items()
     {
         this.page.append("Rare Candies (Level up Pokemon once) : `p!buy candy <amount>`");
+
+        if(day < this.event.getMessage().getTimeCreated().getDayOfYear())
+        {
+            day = this.event.getMessage().getTimeCreated().getDayOfYear();
+            int num = new Random().nextInt(5) + 1;
+            entriesItem.clear();
+
+            PokeItem item;
+            for(int i = 0; i < num; i++)
+            {
+                item = PokeItem.values()[new Random().nextInt(PokeItem.values().length)];
+                if(!entriesItem.contains(item)) entriesItem.add(item);
+            }
+            //TODO: Randomize item prices
+        }
+
+        this.page.append("\n\n**Items**:\n");
+        for(PokeItem i : entriesItem) this.page.append((entriesItem.indexOf(i) + 1) + ": " + i.getStyledName() + " - " + i.cost + " c");
     }
 
     private void page_xp()
