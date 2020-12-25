@@ -81,7 +81,6 @@ public class CommandShop extends Command
                     itemPrices.add(item.cost + (new Random().nextInt(item.cost / 2) * (new Random().nextInt(2) == 1 ? 1 : -1)));
                 }
             }
-            //TODO: Randomize item prices
         }
 
         this.page.append("\n\n**Items**:\n");

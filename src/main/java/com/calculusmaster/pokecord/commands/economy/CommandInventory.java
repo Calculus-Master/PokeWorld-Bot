@@ -16,7 +16,7 @@ public class CommandInventory extends Command
     {
         StringBuilder s = new StringBuilder();
 
-        s.append("`Items (WIP)`: \n");
+        s.append("`Items`: \n");
         if(this.playerData.getItemList() != null)
         {
             for(int i = 0; i < this.playerData.getItemList().length(); i++) s.append((i + 1) + ": " + PokeItem.asItem(this.playerData.getItemList().getString(i)).getStyledName()).append("\n");
