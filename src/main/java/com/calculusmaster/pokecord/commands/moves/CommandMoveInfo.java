@@ -8,6 +8,8 @@ import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.util.Locale;
+
 public class CommandMoveInfo extends Command
 {
     public CommandMoveInfo(MessageReceivedEvent event, String[] msg)
@@ -36,9 +38,9 @@ public class CommandMoveInfo extends Command
                 return this;
             }
 
-            Move m = isTM ? TM.get(Integer.parseInt(moveString.substring(3))).asMove() : (isTR ? TR.get(Integer.parseInt(moveString.substring(3))).asMove() : Move.asMove(moveString));
+            Move m = isTM ? TM.get(Integer.parseInt(moveString.substring(2))).asMove() : (isTR ? TR.get(Integer.parseInt(moveString.substring(2))).asMove() : Move.asMove(moveString));
 
-            String title = m.getName() + " Info" + (isTM || isTR ? "(" + moveString + ")" : "");
+            String title = m.getName() + " Info" + (isTM || isTR ? " (" + moveString.toUpperCase() + ")" : "");
             String info = m.getInfo();
             String type = "Type: " + Global.normalCase(m.getType().toString());
             String category = "Category: " + Global.normalCase(m.getCategory().toString());
@@ -50,7 +52,7 @@ public class CommandMoveInfo extends Command
             this.embed.setDescription(info + "\n\n" + type + "\n" + category + "\n" + power + "\n" + accuracy + "\n" + zmove);
             this.color = m.getType().getColor();
 
-            if(Move.asMove(moveString).isCustom()) this.embed.setFooter("This move has a custom implementation! It may not work exactly as described!");
+            if(m.isCustom()) this.embed.setFooter("This move has a custom implementation! It may not work exactly as described!");
         }
         return this;
     }

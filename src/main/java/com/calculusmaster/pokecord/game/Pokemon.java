@@ -69,9 +69,7 @@ public class Pokemon
         p.setLearnedMoves(specific.getString("moves"));
         p.setTM(specific.getInt("tm"));
         p.setTR(specific.getInt("tr"));
-
-        if(!specific.has("item")) p.setItem(PokeItem.NONE);
-        else p.setItem(specific.getString("item"));
+        p.setItem(specific.has("item") ? specific.getString("item") : PokeItem.NONE.getName());
 
         p.setHealth(p.getStat(Stat.HP));
         p.removeStatusConditions();

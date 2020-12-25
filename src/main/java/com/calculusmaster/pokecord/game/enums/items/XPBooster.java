@@ -19,7 +19,7 @@ public enum XPBooster
 
     /**
      * Returns the booster time
-     * @return Booster time in seconds
+     * @return Booster time in minutes
      */
     public int time()
     {

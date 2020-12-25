@@ -15,8 +15,7 @@ public class CommandInventory extends Command
     {
         StringBuilder s = new StringBuilder();
 
-        //TODO: Items like Magmarizer, etc
-        s.append("`Items (NYI)`: \n");
+        s.append("`Items (WIP)`: \n");
         
         s.append("`TMs`: \n");
         if(this.playerData.getOwnedTMs() != null)

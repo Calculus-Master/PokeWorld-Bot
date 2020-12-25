@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class HiddenPower extends Move
 {
-    Map<Stat, Integer> ivs;
+    Map<Stat, Integer> ivs = null;
     public HiddenPower()
     {
         super("Hidden Power");
@@ -30,6 +30,8 @@ public class HiddenPower extends Move
     @Override
     public Type getType()
     {
+        if(this.ivs == null) return Type.NORMAL;
+
         int a = this.ivs.get(Stat.HP) % 2;
         int b = this.ivs.get(Stat.ATK) % 2;
         int c = this.ivs.get(Stat.DEF) % 2;
