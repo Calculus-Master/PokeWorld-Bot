@@ -61,7 +61,6 @@ public class CommandBuy extends Command
                 selected.setLevel(selected.getLevel() + num);
             }
         }
-        //TODO: Add p!buy item <name> && item inventory
         else if(this.msg[1].equals("item") && this.msg.length == 3)
         {
             if(isNumeric(2) && this.playerData.getCredits() >= CommandShop.entriesItem.get(Integer.parseInt(this.msg[2]) - 1).cost)

@@ -74,13 +74,13 @@ public class CommandShop extends Command
             for(int i = 0; i < num; i++)
             {
                 item = PokeItem.values()[new Random().nextInt(PokeItem.values().length)];
-                if(!entriesItem.contains(item)) entriesItem.add(item);
+                if(!entriesItem.contains(item) && !item.equals(PokeItem.NONE)) entriesItem.add(item);
             }
             //TODO: Randomize item prices
         }
 
         this.page.append("\n\n**Items**:\n");
-        for(PokeItem i : entriesItem) this.page.append((entriesItem.indexOf(i) + 1) + ": " + i.getStyledName() + " - " + i.cost + " c");
+        for(PokeItem i : entriesItem) this.page.append((entriesItem.indexOf(i) + 1) + ": " + i.getStyledName() + " - " + i.cost + " c\n");
     }
 
     private void page_xp()
