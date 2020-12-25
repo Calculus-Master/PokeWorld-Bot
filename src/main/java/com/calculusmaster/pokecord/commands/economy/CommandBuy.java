@@ -63,14 +63,15 @@ public class CommandBuy extends Command
         }
         else if(this.msg[1].equals("item") && this.msg.length == 3)
         {
-            if(isNumeric(2) && this.playerData.getCredits() >= CommandShop.entriesItem.get(Integer.parseInt(this.msg[2]) - 1).cost)
+            int cost = isNumeric(2) ? CommandShop.itemPrices.get(Integer.parseInt(this.msg[2]) - 1) : -1;
+            if(cost > 0 && this.playerData.getCredits() >= cost)
             {
                 PokeItem item = CommandShop.entriesItem.get(Integer.parseInt(this.msg[2]) - 1);
 
-                this.playerData.changeCredits(-1 * item.cost);
+                this.playerData.changeCredits(-1 * cost);
                 this.playerData.addItem(item.getName());
 
-                this.embed.setDescription("Bought `" + item.getStyledName() + "` for " + item.cost + "c!");
+                this.embed.setDescription("Bought `" + item.getStyledName() + "` for " + cost + "c!");
             }
         }
         else if(this.msg[1].equals("form") && this.msg.length == 3)

@@ -59,6 +59,7 @@ public class CommandShop extends Command
     }
 
     public static final List<PokeItem> entriesItem = new ArrayList<>();
+    public static final List<Integer> itemPrices = new ArrayList<>();
 
     private void page_items()
     {
@@ -74,13 +75,17 @@ public class CommandShop extends Command
             for(int i = 0; i < num; i++)
             {
                 item = PokeItem.values()[new Random().nextInt(PokeItem.values().length)];
-                if(!entriesItem.contains(item) && !item.equals(PokeItem.NONE)) entriesItem.add(item);
+                if(!entriesItem.contains(item) && !item.equals(PokeItem.NONE))
+                {
+                    entriesItem.add(item);
+                    itemPrices.add(item.cost + (new Random().nextInt(item.cost / 2) * (new Random().nextInt(2) == 1 ? 1 : -1)));
+                }
             }
             //TODO: Randomize item prices
         }
 
         this.page.append("\n\n**Items**:\n");
-        for(PokeItem i : entriesItem) this.page.append((entriesItem.indexOf(i) + 1) + ": " + i.getStyledName() + " - " + i.cost + " c\n");
+        for(PokeItem i : entriesItem) this.page.append((entriesItem.indexOf(i) + 1) + ": " + i.getStyledName() + " - " + itemPrices.get(entriesItem.indexOf(i)) + "c\n");
     }
 
     private void page_xp()
