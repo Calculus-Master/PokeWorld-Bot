@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -32,7 +33,7 @@ public class CommandInfo extends Command
         String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getGenericJSON().getString("growthrate"), chosen.getLevel()) + " XP";
         String type = "Type: " + (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalCase(chosen.getType()[0].toString()) : Global.normalCase(chosen.getType()[0].toString()) + " | " + Global.normalCase(chosen.getType()[1].toString()));
         String nature = "Nature: " + Global.normalCase(chosen.getNature().toString());
-        String item = "Held Item: " + chosen.getItem();
+        String item = "Held Item: " + PokeItem.asItem(chosen.getItem()).getStyledName();
         String stats = this.getStatsFormatted(chosen);
 
         this.embed.setTitle(title);

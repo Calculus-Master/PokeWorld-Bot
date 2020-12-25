@@ -33,6 +33,8 @@ public class CommandGive extends Command
         {
             if(s.hasItem()) this.playerData.addItem(s.getItem());
             s.setItem(item);
+
+            Pokemon.uploadPokemon(s);
             //TODO: Evolutions that happen when a pokemon gets an item
 
             this.embed.setDescription("Gave " + s.getName() + " `" + item.getStyledName() + "`!");
