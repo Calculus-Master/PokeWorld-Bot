@@ -69,7 +69,9 @@ public class Pokemon
         p.setLearnedMoves(specific.getString("moves"));
         p.setTM(specific.getInt("tm"));
         p.setTR(specific.getInt("tr"));
-        p.setItem(specific.getString("item"));
+
+        if(!specific.has("item")) p.setItem(PokeItem.NONE);
+        else p.setItem(specific.getString("item"));
 
         p.setHealth(p.getStat(Stat.HP));
         p.removeStatusConditions();
@@ -495,7 +497,18 @@ public class Pokemon
     public boolean canEvolve()
     {
         //TODO: Special evolutions, like through trade or items
+        if(specialCanEvolve()) return true;
+        else
         return this.genericJSON.getJSONArray("evolutionsLVL").length() != 0 && this.genericJSON.getJSONArray("evolutionsLVL").getInt(0) <= this.getLevel();
+    }
+
+    public boolean specialCanEvolve()
+    {
+        switch(this.getName())
+        {
+            case "Pikachu": return this.getItem().equals(PokeItem.THUNDER_STONE.getName());
+            default: return false;
+        }
     }
 
     public void evolve()

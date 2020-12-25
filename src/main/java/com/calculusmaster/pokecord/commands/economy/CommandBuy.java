@@ -14,6 +14,7 @@ public class CommandBuy extends Command
     public static final int COST_MEGA = 2000;
     public static final int COST_FORM = 1500;
     public static final int COST_NATURE = 200;
+    public static final int COST_RARE_CANDY = 300;
 
     public CommandBuy(MessageReceivedEvent event, String[] msg)
     {
@@ -40,6 +41,24 @@ public class CommandBuy extends Command
                 this.playerData.changeCredits(-1 * CommandBuy.COST_NATURE);
             }
             else this.embed.setDescription("You do not have enough money!");
+        }
+        else if(this.msg[1].equals("candy"))
+        {
+            int num = this.msg.length > 2 && isNumeric(2) && Integer.parseInt(this.msg[2]) > 0 ? Math.min(100, Integer.parseInt(this.msg[2])) : 1;
+            int cost = num * COST_RARE_CANDY;
+
+            if(this.playerData.getCredits() >= cost)
+            {
+                if(selected.getLevel() + num > 100)
+                {
+                    num = 100 - selected.getLevel();
+                    cost = num * COST_RARE_CANDY;
+                }
+
+                this.embed.setDescription("Bought " + num + " rare candies for a total of " + cost + " credits! " + selected.getName() + " leveled up to Level " + (selected.getLevel() + num) + "!");
+                this.playerData.changeCredits(-1 * cost);
+                selected.setLevel(selected.getLevel() + num);
+            }
         }
         else if(this.msg[1].equals("form") && this.msg.length == 3)
         {

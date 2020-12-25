@@ -60,6 +60,7 @@ public class CommandShop extends Command
     private void page_items()
     {
         //TODO: Items page
+        this.page.append("Rare Candies (Level up Pokemon once) : `p!buy candy <amount>`");
     }
 
     private void page_xp()
