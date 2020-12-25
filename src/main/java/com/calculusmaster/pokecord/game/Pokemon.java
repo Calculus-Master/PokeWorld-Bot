@@ -379,6 +379,11 @@ public class Pokemon
         return this.heldItem;
     }
 
+    public boolean hasItem()
+    {
+        return !this.getItem().equals(PokeItem.NONE.getName());
+    }
+
     //UUID
     private void setUUID()
     {
@@ -500,9 +505,11 @@ public class Pokemon
 
     public boolean specialCanEvolve()
     {
+        PokeItem item = PokeItem.asItem(this.getItem());
+
         switch(this.getName())
         {
-            case "Pikachu": return this.getItem().equals(PokeItem.THUNDER_STONE.getName());
+            case "Pikachu": return item.equals(PokeItem.THUNDER_STONE);
             default: return false;
         }
     }

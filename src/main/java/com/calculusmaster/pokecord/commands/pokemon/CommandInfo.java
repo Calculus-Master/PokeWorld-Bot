@@ -32,10 +32,11 @@ public class CommandInfo extends Command
         String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getGenericJSON().getString("growthrate"), chosen.getLevel()) + " XP";
         String type = "Type: " + (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalCase(chosen.getType()[0].toString()) : Global.normalCase(chosen.getType()[0].toString()) + " | " + Global.normalCase(chosen.getType()[1].toString()));
         String nature = "Nature: " + Global.normalCase(chosen.getNature().toString());
+        String item = "Held Item: " + chosen.getItem();
         String stats = this.getStatsFormatted(chosen);
 
         this.embed.setTitle(title);
-        this.embed.setDescription(exp + "\n" + type + "\n" + nature + "\n\n" + stats);
+        this.embed.setDescription(exp + "\n" + type + "\n" + nature + "\n" + item + "\n\n" + stats);
         this.color = chosen.getType()[0].getColor();
         this.embed.setImage(chosen.getImage());
         this.embed.setFooter("Showing Pokemon " + (index + 1) + " / " + this.playerData.getPokemonList().length());

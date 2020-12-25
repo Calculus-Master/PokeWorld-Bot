@@ -103,6 +103,11 @@ public class PlayerDataQuery extends MongoQuery
         return this.json().getJSONObject("xp").getString("timestamp");
     }
 
+    public JSONArray getItemList()
+    {
+        return !this.json().has("items") ? null : this.json().getJSONArray("items");
+    }
+
     //Updates - run this.update() after each method so the query is up to date
 
     public void changeCredits(int amount)
@@ -211,4 +216,17 @@ public class PlayerDataQuery extends MongoQuery
         this.update();
     }
 
+    public void addItem(String item)
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.push("items", item));
+
+        this.update();
+    }
+
+    public void removeItem(String item)
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.pull("items", item));
+
+        this.update();
+    }
 }

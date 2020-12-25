@@ -7,12 +7,23 @@ import java.util.stream.Collectors;
 
 public enum PokeItem
 {
-    NONE,
-    THUNDER_STONE;
+    NONE(0),
+    THUNDER_STONE(250);
+
+    public int cost;
+    PokeItem(int cost)
+    {
+        this.cost = cost;
+    }
 
     public String getName()
     {
         return Global.normalCase(this.toString());
+    }
+
+    public String getStyledName()
+    {
+        return Global.normalCase(this.getName().replaceAll("_", " "));
     }
 
     public static PokeItem asItem(String s)

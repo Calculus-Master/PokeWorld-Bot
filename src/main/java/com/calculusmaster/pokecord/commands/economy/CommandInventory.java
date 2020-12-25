@@ -16,6 +16,12 @@ public class CommandInventory extends Command
         StringBuilder s = new StringBuilder();
 
         s.append("`Items (WIP)`: \n");
+        if(this.playerData.getItemList() != null)
+        {
+            for(int i = 0; i < this.playerData.getItemList().length(); i++) s.append(this.playerData.getItemList().getString(i)).append(", ");
+            s.delete(s.length() - 2, s.length()).append("\n\n");
+        }
+        else s.append("You don't own any Items!\n\n");
         
         s.append("`TMs`: \n");
         if(this.playerData.getOwnedTMs() != null)

@@ -43,6 +43,7 @@ public abstract class Command
     public static final CommandHelp.HelpEntry HELP = new CommandHelp.HelpEntry("help");
     public static final CommandHelp.HelpEntry PREFIX = new CommandHelp.HelpEntry("prefix");
     public static final CommandHelp.HelpEntry TRADE = new CommandHelp.HelpEntry("trade");
+    public static final CommandHelp.HelpEntry GIVE = new CommandHelp.HelpEntry("give");
 
     public static void init()
     {
@@ -206,6 +207,11 @@ public abstract class Command
                 .addArgDesc("creditAmount", "Number of credits you offer")
                 .addArgDesc("pokemonNumber", "Number of the Pokemon you want to offer");
 
+        GIVE.setCategory(CommandHelp.CommandCategory.POKEMON)
+                .addShortDescription("Give your selected Pokemon an item!")
+                .addAliases("giveitem")
+                .addArgs("item")
+                .addArgDesc("item", "The item to give to your selected pokemon.");
     }
 
     protected MessageReceivedEvent event;

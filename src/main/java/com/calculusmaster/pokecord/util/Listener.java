@@ -183,6 +183,10 @@ public class Listener extends ListenerAdapter
             {
                 c = new CommandTrade(event, msg).runCommand();
             }
+            else if(Command.GIVE.contains(msg[0]))
+            {
+                c = new CommandGive(event, msg).runCommand();
+            }
             //Debug Commands
             else if(player.getId().equals("309135641453527040"))
             {
