@@ -6,10 +6,10 @@ import com.calculusmaster.pokecord.game.moves.Move;
 
 public class Toxic extends Move
 {
-    //TODO: This is a custom implemented class (normally does Badly Poisoned)
     public Toxic()
     {
         super("Toxic");
+        this.setCustom();
     }
 
     @Override

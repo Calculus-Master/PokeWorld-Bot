@@ -359,7 +359,6 @@ public class Pokemon
     }
 
     //Items
-    //TODO: Items
     public void setItem(String s)
     {
         this.heldItem = s;
@@ -494,7 +493,6 @@ public class Pokemon
     //Evolution
     public boolean canEvolve()
     {
-        //TODO: Special evolutions, like through trade or items
         if(specialCanEvolve()) return true;
         else
         return this.genericJSON.getJSONArray("evolutionsLVL").length() != 0 && this.genericJSON.getJSONArray("evolutionsLVL").getInt(0) <= this.getLevel();

@@ -20,7 +20,6 @@ public class CommandMoveInfo extends Command
     @Override
     public Command runCommand()
     {
-        //TODO: Add in info for TM and TR that integrates with this command
         if(this.msg.length < 2)
         {
             this.embed.setDescription(CommandInvalid.getShort());

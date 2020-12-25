@@ -60,6 +60,7 @@ public class CommandBuy extends Command
                 selected.setLevel(selected.getLevel() + num);
             }
         }
+        //TODO: Add p!buy item <name>
         else if(this.msg[1].equals("form") && this.msg.length == 3)
         {
             if(selected.hasForms() && this.playerData.getCredits() >= CommandBuy.COST_FORM && selected.getFormsList().contains(Global.normalCase(this.msg[2])))

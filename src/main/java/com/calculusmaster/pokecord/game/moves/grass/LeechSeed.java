@@ -10,12 +10,12 @@ public class LeechSeed extends Move
     public LeechSeed()
     {
         super("Leech Seed");
+        this.setCustom();
     }
 
     @Override
     public String logic(Pokemon user, Pokemon opponent)
     {
-        //TODO: This is a custom modified move!
         if(!opponent.getType()[0].equals(Type.GRASS) && !opponent.getType()[1].equals(Type.GRASS))
         {
             int hpGain = opponent.getStat(Stat.HP) / 8;
