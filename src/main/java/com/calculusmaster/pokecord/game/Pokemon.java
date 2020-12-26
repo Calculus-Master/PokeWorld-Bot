@@ -95,7 +95,7 @@ public class Pokemon
         p.setLearnedMoves("Tackle-Tackle-Tackle-Tackle");
         p.setTM(-1);
         p.setTR(-1);
-        p.removeItem();
+        p.setItem(PokeItem.NONE);
 
         p.setHealth(p.getStat(Stat.HP));
         p.removeStatusConditions();
@@ -369,6 +369,7 @@ public class Pokemon
         this.heldItem = item.getName();
     }
 
+    @Deprecated
     public void removeItem()
     {
         this.heldItem = PokeItem.NONE.getName();
