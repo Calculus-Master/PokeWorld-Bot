@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.economy;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class CommandMarket extends Command
 {
@@ -42,7 +44,17 @@ public class CommandMarket extends Command
         else if(this.msg.length >= 3 && this.msg[1].equals("buy") && isNumeric(2))
         {
             //Buy pokemon from market
+            MarketEntry entry = marketEntries.stream().filter(m -> m.marketID.equals(this.msg[2])).collect(Collectors.toList()).get(0);
+            if(!this.player.getId().equals(entry.sellerID) && this.playerData.getCredits() >= entry.price)
+            {
+                marketEntries.remove(entry);
+                Mongo.MarketData.deleteOne(Filters.eq("marketID", entry.marketID));
 
+                this.playerData.changeCredits(-1 * entry.price);
+                this.playerData.addPokemon(entry.pokemonID);
+
+                this.embed.setDescription("Purchased a Level " + entry.pokemon.getLevel() + " " + entry.pokemon.getName() + " for " + entry.price + "c!");
+            }
         }
         else
         {
