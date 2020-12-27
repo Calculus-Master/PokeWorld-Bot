@@ -6,10 +6,7 @@ import com.calculusmaster.pokecord.commands.config.CommandPrefix;
 import com.calculusmaster.pokecord.commands.config.CommandSpawnChannel;
 import com.calculusmaster.pokecord.commands.duel.CommandDuel;
 import com.calculusmaster.pokecord.commands.duel.CommandUse;
-import com.calculusmaster.pokecord.commands.economy.CommandBalance;
-import com.calculusmaster.pokecord.commands.economy.CommandBuy;
-import com.calculusmaster.pokecord.commands.economy.CommandInventory;
-import com.calculusmaster.pokecord.commands.economy.CommandShop;
+import com.calculusmaster.pokecord.commands.economy.*;
 import com.calculusmaster.pokecord.commands.misc.CommandHelp;
 import com.calculusmaster.pokecord.commands.misc.CommandReport;
 import com.calculusmaster.pokecord.commands.misc.CommandStart;
@@ -186,6 +183,10 @@ public class Listener extends ListenerAdapter
             else if(Command.GIVE.contains(msg[0]))
             {
                 c = new CommandGive(event, msg).runCommand();
+            }
+            else if(Command.MARKET.contains(msg[0]))
+            {
+                c = new CommandMarket(event, msg).runCommand();
             }
             //Debug Commands
             else if(player.getId().equals("309135641453527040"))

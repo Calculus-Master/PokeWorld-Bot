@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.commands.economy.CommandMarket;
 import com.calculusmaster.pokecord.game.MoveList;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.moves.Move;
@@ -23,6 +24,7 @@ public class Pokecord
         MoveList.init();
         PokemonRarity.init();
         Command.init();
+        CommandMarket.init();
 
         System.out.println(Global.POKEMON.toString());
         System.out.println(Move.MOVES.stream().map(Move::getName).collect(Collectors.toList()).toString());

@@ -44,6 +44,7 @@ public abstract class Command
     public static final CommandHelp.HelpEntry PREFIX = new CommandHelp.HelpEntry("prefix");
     public static final CommandHelp.HelpEntry TRADE = new CommandHelp.HelpEntry("trade");
     public static final CommandHelp.HelpEntry GIVE = new CommandHelp.HelpEntry("give");
+    public static final CommandHelp.HelpEntry MARKET = new CommandHelp.HelpEntry("market");
 
     public static void init()
     {
@@ -212,6 +213,16 @@ public abstract class Command
                 .addAliases("giveitem")
                 .addArgs("item")
                 .addArgDesc("item", "The item to give to your selected pokemon.");
+
+        MARKET.setCategory(ECONOMY)
+                .addShortDescription("A market where you can buy and sell other players' pokemon!")
+                .addAliases()
+                .addArgs("list")
+                .addArgs("number")
+                .addArgs("price")
+                .addArgDesc("list", "List a pokemon for sale on the market")
+                .addArgDesc("number", "The number of the pokemon you want to sell")
+                .addArgDesc("price", "The price you want to sell your pokemon for");
     }
 
     protected MessageReceivedEvent event;
