@@ -41,7 +41,7 @@ public class CommandMarket extends Command
         if(this.msg.length >= 4 && (this.msg[1].equals("list") || this.msg[1].equals("sell")) && isNumeric(2) && isNumeric(3) && Integer.parseInt(this.msg[2]) <= this.playerData.getPokemonList().length() && Integer.parseInt(this.msg[3]) > 0)
         {
             //Add pokemon to the market
-            MarketEntry newMarketEntry = MarketEntry.create(this.player.getId(), this.playerData.getPokemonList().getString(Integer.parseInt(this.msg[2]) - 1), Integer.parseInt(this.msg[3]));
+            MarketEntry newMarketEntry = MarketEntry.create(this.player.getId(), this.player.getName(), this.playerData.getPokemonList().getString(Integer.parseInt(this.msg[2]) - 1), Integer.parseInt(this.msg[3]));
             marketEntries.add(newMarketEntry);
             this.playerData.removePokemon(newMarketEntry.pokemonID);
 
@@ -69,7 +69,7 @@ public class CommandMarket extends Command
             Pokemon chosen = Pokemon.build(entry.pokemonID);
 
             String title = "**Level " + chosen.getLevel() + " " + chosen.getName() + "**" + (chosen.isShiny() ? " :star2:" : "");
-            String market = "Market ID: " + entry.marketID + " | Price: " + entry.price + "c!";
+            String market = "Market ID: " + entry.marketID + " | Price: " + entry.price + "c | Sold by: " + entry.sellerName;
             String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getGenericJSON().getString("growthrate"), chosen.getLevel()) + " XP";
             String type = "Type: " + (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalCase(chosen.getType()[0].toString()) : Global.normalCase(chosen.getType()[0].toString()) + " | " + Global.normalCase(chosen.getType()[1].toString()));
             String nature = "Nature: " + Global.normalCase(chosen.getNature().toString());
@@ -112,14 +112,15 @@ public class CommandMarket extends Command
     {
         public String marketID;
         public String sellerID;
+        public String sellerName;
         public String pokemonID;
         public int price;
         public Pokemon pokemon;
 
-        public static MarketEntry create(String sellerID, String pokemonID, int price)
+        public static MarketEntry create(String sellerID, String sellerName, String pokemonID, int price)
         {
             String marketID = generateUUID();
-            Document marketData = new Document("marketID", marketID).append("sellerID", sellerID).append("pokemonID", pokemonID).append("price", price);
+            Document marketData = new Document("marketID", marketID).append("sellerID", sellerID).append("sellerName", sellerName).append("pokemonID", pokemonID).append("price", price);
             Mongo.MarketData.insertOne(marketData);
 
             return build(marketID);
@@ -132,6 +133,7 @@ public class CommandMarket extends Command
 
             JSONObject marketJSON = getMarketJSON(marketID);
             m.sellerID = marketJSON.getString("sellerID");
+            m.sellerName = marketJSON.getString("sellerName");
             m.pokemonID = marketJSON.getString("pokemonID");
             m.price = marketJSON.getInt("price");
             m.pokemon = Pokemon.buildCore(m.pokemonID, -1);
