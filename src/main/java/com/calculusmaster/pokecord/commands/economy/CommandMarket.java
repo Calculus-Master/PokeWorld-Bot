@@ -30,7 +30,7 @@ public class CommandMarket extends Command
     @Override
     public Command runCommand()
     {
-        if(this.msg.length >= 4 && this.msg[1].equals("list") && isNumeric(2) && isNumeric(3) && Integer.parseInt(this.msg[2]) <= this.playerData.getPokemonList().length() && Integer.parseInt(this.msg[3]) > 0)
+        if(this.msg.length >= 4 && (this.msg[1].equals("list") || this.msg[1].equals("sell")) && isNumeric(2) && isNumeric(3) && Integer.parseInt(this.msg[2]) <= this.playerData.getPokemonList().length() && Integer.parseInt(this.msg[3]) > 0)
         {
             //Add pokemon to the market
             MarketEntry newMarketEntry = MarketEntry.create(this.player.getId(), this.playerData.getPokemonList().getString(Integer.parseInt(this.msg[2]) - 1), Integer.parseInt(this.msg[3]));
@@ -38,6 +38,11 @@ public class CommandMarket extends Command
             this.playerData.removePokemon(newMarketEntry.pokemonID);
 
             this.embed.setDescription("Listed your " + newMarketEntry.pokemon.getName() + " for " + newMarketEntry.price + "c!");
+        }
+        else if(this.msg.length >= 3 && this.msg[1].equals("buy") && isNumeric(2))
+        {
+            //Buy pokemon from market
+
         }
         else
         {
@@ -64,8 +69,6 @@ public class CommandMarket extends Command
     {
         return "ID: " + m.marketID + " | Level " + m.pokemon.getLevel() + " " + m.pokemon.getName() + " | Price: " + m.price;
     }
-
-
 
     public static class MarketEntry
     {
@@ -96,6 +99,11 @@ public class CommandMarket extends Command
             m.pokemon = Pokemon.buildCore(m.pokemonID, -1);
 
             return m;
+        }
+
+        public static boolean isIDValid(String marketID)
+        {
+            return marketEntries.stream().anyMatch(m -> m.marketID.equals(marketID));
         }
 
         public static JSONObject getMarketJSON(String marketID)
