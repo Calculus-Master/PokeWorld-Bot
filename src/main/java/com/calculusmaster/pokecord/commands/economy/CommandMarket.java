@@ -52,6 +52,7 @@ public class CommandMarket extends Command
 
                 this.playerData.changeCredits(-1 * entry.price);
                 this.playerData.addPokemon(entry.pokemonID);
+                new PlayerDataQuery(entry.sellerID).changeCredits(entry.price);
 
                 this.embed.setDescription("Purchased a Level " + entry.pokemon.getLevel() + " " + entry.pokemon.getName() + " for " + entry.price + "c!");
             }
