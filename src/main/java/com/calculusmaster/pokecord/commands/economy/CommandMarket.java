@@ -29,6 +29,7 @@ public class CommandMarket extends Command
         super(event, msg);
     }
 
+    //TODO: p!market info, p!market collect, p!market search
     @Override
     public Command runCommand()
     {
