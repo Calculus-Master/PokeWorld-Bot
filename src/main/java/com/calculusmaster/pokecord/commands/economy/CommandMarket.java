@@ -1,8 +1,12 @@
 package com.calculusmaster.pokecord.commands.economy;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.commands.pokemon.CommandInfo;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
+import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -30,6 +34,7 @@ public class CommandMarket extends Command
     }
 
     //TODO: p!market info, p!market collect, p!market search
+    //TODO: Add invalid messages for each if block
     @Override
     public Command runCommand()
     {
@@ -42,7 +47,7 @@ public class CommandMarket extends Command
 
             this.embed.setDescription("Listed your " + newMarketEntry.pokemon.getName() + " for " + newMarketEntry.price + "c!");
         }
-        else if(this.msg.length >= 3 && this.msg[1].equals("buy") && isNumeric(2))
+        else if(this.msg.length >= 3 && this.msg[1].equals("buy") && isNumeric(2) && MarketEntry.isIDValid(this.msg[2]))
         {
             //Buy pokemon from market
             MarketEntry entry = marketEntries.stream().filter(m -> m.marketID.equals(this.msg[2])).collect(Collectors.toList()).get(0);
@@ -57,6 +62,25 @@ public class CommandMarket extends Command
 
                 this.embed.setDescription("Purchased a Level " + entry.pokemon.getLevel() + " " + entry.pokemon.getName() + " for " + entry.price + "c!");
             }
+        }
+        else if(this.msg.length >= 3 && this.msg[1].equals("info") && isNumeric(2) && MarketEntry.isIDValid(this.msg[2]))
+        {
+            MarketEntry entry = marketEntries.stream().filter(m -> m.marketID.equals(this.msg[2])).collect(Collectors.toList()).get(0);
+            Pokemon chosen = Pokemon.build(entry.pokemonID);
+
+            String title = "**Level " + chosen.getLevel() + " " + chosen.getName() + "**" + (chosen.isShiny() ? " :star2:" : "");
+            String market = "Market ID: " + entry.marketID + " | Price: " + entry.price + "c!";
+            String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getGenericJSON().getString("growthrate"), chosen.getLevel()) + " XP";
+            String type = "Type: " + (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalCase(chosen.getType()[0].toString()) : Global.normalCase(chosen.getType()[0].toString()) + " | " + Global.normalCase(chosen.getType()[1].toString()));
+            String nature = "Nature: " + Global.normalCase(chosen.getNature().toString());
+            String item = "Held Item: " + PokeItem.asItem(chosen.getItem()).getStyledName();
+            String stats = CommandInfo.getStatsFormatted(chosen);
+
+            this.embed.setTitle(title);
+            this.embed.setDescription(market + "\n" + exp + "\n" + type + "\n" + nature + "\n" + item + "\n\n" + stats);
+            this.color = chosen.getType()[0].getColor();
+            this.embed.setImage(chosen.getImage());
+            this.embed.setFooter("Buy this pokemon with `p!market buy " + entry.marketID + "`!");
         }
         else
         {

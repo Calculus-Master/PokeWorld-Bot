@@ -34,7 +34,7 @@ public class CommandInfo extends Command
         String type = "Type: " + (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalCase(chosen.getType()[0].toString()) : Global.normalCase(chosen.getType()[0].toString()) + " | " + Global.normalCase(chosen.getType()[1].toString()));
         String nature = "Nature: " + Global.normalCase(chosen.getNature().toString());
         String item = "Held Item: " + PokeItem.asItem(chosen.getItem()).getStyledName();
-        String stats = this.getStatsFormatted(chosen);
+        String stats = getStatsFormatted(chosen);
 
         this.embed.setTitle(title);
         this.embed.setDescription(exp + "\n" + type + "\n" + nature + "\n" + item + "\n\n" + stats);
@@ -45,20 +45,20 @@ public class CommandInfo extends Command
         return this;
     }
 
-    private String getStatsFormatted(Pokemon p)
+    public static String getStatsFormatted(Pokemon p)
     {
-        String HP = this.formatStat(p, Stat.HP, "HP");
-        String ATK = this.formatStat(p, Stat.ATK, "Attack");
-        String DEF = this.formatStat(p, Stat.DEF, "Defense");
-        String SPATK = this.formatStat(p, Stat.SPATK, "Sp. Attack");
-        String SPDEF = this.formatStat(p, Stat.SPDEF, "Sp. Defense");
-        String SPD = this.formatStat(p, Stat.SPD, "Speed");
+        String HP = formatStat(p, Stat.HP, "HP");
+        String ATK = formatStat(p, Stat.ATK, "Attack");
+        String DEF = formatStat(p, Stat.DEF, "Defense");
+        String SPATK = formatStat(p, Stat.SPATK, "Sp. Attack");
+        String SPDEF = formatStat(p, Stat.SPDEF, "Sp. Defense");
+        String SPD = formatStat(p, Stat.SPD, "Speed");
         String total = "Total IV %: " + p.getTotalIV();
 
         return HP + ATK + DEF + SPATK + SPDEF + SPD + total;
     }
 
-    private String formatStat(Pokemon p, Stat s, String statName)
+    private static String formatStat(Pokemon p, Stat s, String statName)
     {
         return "**" + statName + ":** " + p.getStat(s) + " - IV: " + p.getIVs().get(s) + " / 31\n";
     }
