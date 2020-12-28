@@ -133,6 +133,7 @@ public class CommandMarket extends Command
                         case "number" -> display.sort(Comparator.comparingInt(m -> m.pokemon.getNumber()));
                         case "iv" -> display.sort((m1, m2) -> (int) (Double.parseDouble(m1.pokemon.getTotalIV().substring(0, 5)) - Double.parseDouble(m2.pokemon.getTotalIV().substring(0, 5))));
                         case "level" -> display.sort(Comparator.comparingInt(m -> m.pokemon.getLevel()));
+                        case "price" -> display.sort(Comparator.comparingInt(m -> m.price));
                         default -> display.sort(Comparator.comparing(m -> m.pokemon.getName()));
                     }
                 }
