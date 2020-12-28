@@ -38,12 +38,6 @@ public class Global
         updatePokemonList(playerID);
     }
 
-    private static int indexOfUUID(List<Pokemon> l, String UUID)
-    {
-        for(int i = 0; i < l.size(); i++) if(l.get(i).getUUID().equals(UUID)) return i;
-        return -1;
-    }
-
     public static void logInfo(Class<?> clazz, String method, String msg)
     {
         LoggerFactory.getLogger(clazz).info("#" + method + ": " + msg);
