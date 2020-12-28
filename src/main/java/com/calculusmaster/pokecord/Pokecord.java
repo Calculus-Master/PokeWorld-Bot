@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.economy.CommandMarket;
+import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.game.MoveList;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.moves.Move;
@@ -36,6 +37,7 @@ public class Pokecord
         PokemonRarity.init();
         Command.init();
         CommandMarket.init();
+        CommandPokemon.init();
 
         System.out.println(Global.POKEMON.toString());
         System.out.println(Move.MOVES.stream().map(Move::getName).collect(Collectors.toList()).toString());

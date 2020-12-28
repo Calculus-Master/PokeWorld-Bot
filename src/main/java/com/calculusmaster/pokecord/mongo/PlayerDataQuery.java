@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.enums.items.XPBooster;
+import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.User;
@@ -49,6 +50,12 @@ public class PlayerDataQuery extends MongoQuery
     private void update()
     {
         this.document = Mongo.PlayerData.find(this.query).first();
+        this.updatePokemonList();
+    }
+
+    private void updatePokemonList()
+    {
+        new Thread(() -> Global.updatePokemonList(this.json().getString("playerID"))).start();
     }
 
     //Gets

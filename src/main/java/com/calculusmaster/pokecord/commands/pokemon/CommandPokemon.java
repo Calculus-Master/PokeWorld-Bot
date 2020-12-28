@@ -3,6 +3,8 @@ package com.calculusmaster.pokecord.commands.pokemon;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.Mongo;
+import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;
@@ -13,11 +15,17 @@ import java.util.stream.Collectors;
 
 public class CommandPokemon extends Command
 {
+    public static void init()
+    {
+        Mongo.PlayerData.find(Filters.exists("playerID")).forEach(d -> Global.updatePokemonList(d.getString("playerID")));
+    }
+
     List<Pokemon> pokemon = new LinkedList<>();
     public CommandPokemon(MessageReceivedEvent event, String[] msg)
     {
         super(event, msg);
-        this.buildList();
+        //this.buildList();
+        this.pokemon = List.copyOf(Global.POKEMON_LISTS.get(this.player.getId()));
     }
 
     @Override
@@ -112,9 +120,12 @@ public class CommandPokemon extends Command
         this.embed.setFooter("Showing Numbers " + (startIndex + 1) + " to " + (endIndex) + " out of " + this.pokemon.size() + " Pokemon");
     }
 
+    //TODO: Optimize. This method takes up an average of 2 seconds per runtime, meaning this is the performance hit
     private void buildList()
     {
+        //long l = System.currentTimeMillis();
         for(int i = 0; i < this.playerData.getPokemonList().length(); i++) this.pokemon.add(Pokemon.buildCore(this.playerData.getPokemonList().getString(i), i));
+        //System.out.println("Creating the full list took " + (System.currentTimeMillis() - l) + "ms");
     }
 
     private String getLine(Pokemon p)

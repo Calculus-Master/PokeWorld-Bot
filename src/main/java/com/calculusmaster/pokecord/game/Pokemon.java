@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game;
 
+import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.TM;
@@ -185,38 +186,50 @@ public class Pokemon
                 .append("item", p.getItem());
 
         Mongo.PokemonData.insertOne(pokeData);
+        updateAllPlayerPokemonLists(p.getUUID());
     }
 
     public static void updateExperience(Pokemon p)
     {
         Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("level", p.getLevel()));
         Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("exp", p.getExp()));
+        updateAllPlayerPokemonLists(p.getUUID());
     }
 
     public static void updateMoves(Pokemon p)
     {
         Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("moves", p.getMovesCondensed()));
+        updateAllPlayerPokemonLists(p.getUUID());
     }
 
     public static void updateEVs(Pokemon p)
     {
         Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("evs", p.getVCondensed(p.getEVs())));
+        updateAllPlayerPokemonLists(p.getUUID());
     }
 
     public static void updateName(Pokemon p, String evolved)
     {
         Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("name", Global.normalCase(evolved)));
+        updateAllPlayerPokemonLists(p.getUUID());
     }
 
     public static void updateTMTR(Pokemon p)
     {
         Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("tm", p.getTM()));
         Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("tr", p.getTR()));
+        updateAllPlayerPokemonLists(p.getUUID());
     }
 
     public static void updateItem(Pokemon p)
     {
         Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("item", p.getItem()));
+        updateAllPlayerPokemonLists(p.getUUID());
+    }
+
+    private static void updateAllPlayerPokemonLists(String UUID)
+    {
+        new Thread(() -> Global.updatePokemonInList(UUID)).start();
     }
 
     public static void deletePokemon(Pokemon p)

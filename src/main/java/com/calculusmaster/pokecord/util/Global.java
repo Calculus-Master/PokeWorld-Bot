@@ -1,18 +1,48 @@
 package com.calculusmaster.pokecord.util;
 
+import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import org.bson.Document;
 import org.slf4j.LoggerFactory;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Global
 {
     public static final List<String> STARTERS = Arrays.asList("bulbasaur", "charmander", "squirtle"); //TODO: Add the remaining starters and update this list
     public static final List<String> POKEMON = new ArrayList<>();
+
+    public static final Map<String, List<Pokemon>> POKEMON_LISTS = new HashMap<>();
+
+    public static List<Pokemon> getPokemonList(String playerID)
+    {
+        PlayerDataQuery p = new PlayerDataQuery(playerID);
+        List<Pokemon> list = new LinkedList<>();
+        for(int i = 0; i < p.getPokemonList().length(); i++) list.add(Pokemon.buildCore(p.getPokemonList().getString(i), i));
+        return list;
+    }
+
+    public static void updatePokemonList(String playerID)
+    {
+        if(playerID.equals("")) throw new IllegalStateException("Player not found");
+        POKEMON_LISTS.put(playerID, getPokemonList(playerID));
+    }
+
+    public static void updatePokemonInList(String UUID)
+    {
+        String playerID = "";
+        for(String s : POKEMON_LISTS.keySet()) if(POKEMON_LISTS.get(s).stream().anyMatch(p -> p.getUUID().equals(UUID))) playerID = s;
+        updatePokemonList(playerID);
+    }
+
+    private static int indexOfUUID(List<Pokemon> l, String UUID)
+    {
+        for(int i = 0; i < l.size(); i++) if(l.get(i).getUUID().equals(UUID)) return i;
+        return -1;
+    }
 
     public static void logInfo(Class<?> clazz, String method, String msg)
     {
