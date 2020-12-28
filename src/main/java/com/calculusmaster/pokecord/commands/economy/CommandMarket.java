@@ -126,6 +126,15 @@ public class CommandMarket extends Command
                     else if(isNumeric(index)) display = display.stream().filter(m -> (int)m.pokemon.getTotalIVRounded() == getInt(index)).collect(Collectors.toList());
                 }
 
+                if(args.contains("--price") && args.indexOf("--price") + 1 < args.size())
+                {
+                    int index = args.indexOf("--price") + 1;
+                    String after = args.get(index);
+                    if(after.equals(">") && isNumeric(index + 1)) display = display.stream().filter(m -> m.price > getInt(index + 1)).collect(Collectors.toList());
+                    else if(after.equals("<") && isNumeric(index + 1)) display = display.stream().filter(m -> m.price < getInt(index + 1)).collect(Collectors.toList());
+                    else if(isNumeric(index)) display = display.stream().filter(m -> m.price == getInt(index)).collect(Collectors.toList());
+                }
+
                 if(args.contains("--order") && (args.indexOf("--order") + 1) < args.size())
                 {
                     switch(args.get(args.indexOf("--order") + 1))
