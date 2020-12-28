@@ -13,10 +13,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.bson.Document;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CommandMarket extends Command
@@ -100,6 +97,23 @@ public class CommandMarket extends Command
 
             //p!market listings - Shows only the player's listings
             if(this.msg[1].equals("listings")) display = display.stream().filter(m -> m.sellerID.equals(this.player.getId())).collect(Collectors.toList());
+            else if(this.msg[1].equals("search"))
+            {
+                List<String> args = Arrays.asList(this.msg);
+                args.remove(0); args.remove(1);
+
+                if(args.contains("--order") && (args.indexOf("--order") + 1) < args.size())
+                {
+                    switch(args.get(args.indexOf("--order") + 1))
+                    {
+                        case "number" -> display.sort(Comparator.comparingInt(m -> m.pokemon.getNumber()));
+                        case "iv" -> display.sort((m1, m2) -> (int) (Double.parseDouble(m1.pokemon.getTotalIV().substring(0, 5)) - Double.parseDouble(m2.pokemon.getTotalIV().substring(0, 5))));
+                        case "level" -> display.sort(Comparator.comparingInt(m -> m.pokemon.getLevel()));
+                        default -> display.sort(Comparator.comparing(m -> m.pokemon.getName()));
+                    }
+                }
+                else display.sort(Comparator.comparing(m -> m.pokemon.getName()));
+            }
             //If no other arguments, displays random assortment of market listings
             else Collections.shuffle(display);
 
