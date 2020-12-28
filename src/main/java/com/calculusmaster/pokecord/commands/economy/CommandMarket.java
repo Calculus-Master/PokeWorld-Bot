@@ -47,6 +47,18 @@ public class CommandMarket extends Command
 
             this.embed.setDescription("Listed your " + newMarketEntry.pokemon.getName() + " for " + newMarketEntry.price + "c!");
         }
+        else if(this.msg.length >= 3 && this.msg[1].equals("collect") && isNumeric(2))
+        {
+            MarketEntry entry = marketEntries.stream().filter(m -> m.marketID.equals(this.msg[2])).collect(Collectors.toList()).get(0);
+            if(entry.sellerID.equals(this.player.getId()))
+            {
+                marketEntries.remove(entry);
+                this.playerData.addPokemon(entry.pokemonID);
+                Mongo.MarketData.deleteOne(Filters.eq("marketID", entry.marketID));
+
+                this.embed.setDescription("Removed your listing from the market!");
+            }
+        }
         else if(this.msg.length >= 3 && this.msg[1].equals("buy") && isNumeric(2) && MarketEntry.isIDValid(this.msg[2]))
         {
             //Buy pokemon from market
@@ -84,21 +96,25 @@ public class CommandMarket extends Command
         }
         else
         {
-            //Catch all - Displays random assortment of market entries
-            Collections.shuffle(marketEntries);
+            List<MarketEntry> display = new ArrayList<>(List.copyOf(marketEntries));
+
+            //p!market listings - Shows only the player's listings
+            if(this.msg[1].equals("listings")) display = display.stream().filter(m -> m.sellerID.equals(this.player.getId())).collect(Collectors.toList());
+            //If no other arguments, displays random assortment of market listings
+            else Collections.shuffle(display);
 
             this.embed.setTitle("Market Listings");
-            this.embed.setDescription(getMarketPage(this.msg.length > 2 && isNumeric(2) ? Integer.parseInt(this.msg[2]) : 0));
+            this.embed.setDescription(getMarketPage(display, this.msg.length > 2 && isNumeric(2) ? Integer.parseInt(this.msg[2]) : 0));
         }
 
         return this;
     }
 
-    private static String getMarketPage(int start)
+    private static String getMarketPage(List<MarketEntry> list, int start)
     {
         StringBuilder mList = new StringBuilder();
 
-        for(int i = start * 20; i < start * 20 + 20; i++) if(i < marketEntries.size()) mList.append(getEntryLine(marketEntries.get(i))).append("\n");
+        for(int i = start * 20; i < start * 20 + 20; i++) if(i < list.size()) mList.append(getEntryLine(list.get(i))).append("\n");
 
         return mList.toString();
     }
