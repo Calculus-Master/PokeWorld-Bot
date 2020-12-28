@@ -120,7 +120,7 @@ public class CommandPokemon extends Command
         this.embed.setFooter("Showing Numbers " + (startIndex + 1) + " to " + (endIndex) + " out of " + this.pokemon.size() + " Pokemon");
     }
 
-    //TODO: Optimize. This method takes up an average of 2 seconds per runtime, meaning this is the performance hit
+    @Deprecated
     private void buildList()
     {
         //long l = System.currentTimeMillis();
