@@ -104,7 +104,9 @@ public class CommandMarket extends Command
             else Collections.shuffle(display);
 
             this.embed.setTitle("Market Listings");
-            this.embed.setDescription(getMarketPage(display, this.msg.length > 2 && isNumeric(2) ? Integer.parseInt(this.msg[2]) : 0));
+
+            if(display.isEmpty()) this.embed.setDescription("There are no market listings. Add one using p!market list <pokemon> <price>!");
+            else this.embed.setDescription(getMarketPage(display, this.msg.length > 2 && isNumeric(2) ? Integer.parseInt(this.msg[2]) : 0));
         }
 
         return this;
