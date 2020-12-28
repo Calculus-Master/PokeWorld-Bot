@@ -304,10 +304,14 @@ public abstract class Command
         this.timeF = System.currentTimeMillis();
         Global.logTime(this.getClass(), this.msg[0], this.timeI, this.timeF, this.event.getMessage().getTimeCreated());
 
-        if(this.embed == null) return null;
         this.setAuthor();
         this.setColor();
         return this.embed.build();
+    }
+
+    public boolean isNull()
+    {
+        return this.embed == null;
     }
 
     private Color getRandomColor()

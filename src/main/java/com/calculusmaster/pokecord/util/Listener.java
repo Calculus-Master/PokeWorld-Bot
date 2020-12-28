@@ -211,7 +211,7 @@ public class Listener extends ListenerAdapter
             else c = new CommandInvalid(event, msg).runCommand();
 
             if(c == null) event.getChannel().sendMessage("Debug command successfully run!").queue();
-            else if(c.getResponseEmbed() != null) event.getChannel().sendMessage(c.getResponseEmbed()).queue();
+            else if(!c.isNull()) event.getChannel().sendMessage(c.getResponseEmbed()).queue();
         }
 
         if(r.nextInt(10) <= 3) Listener.expEvent(event);
