@@ -102,6 +102,30 @@ public class CommandMarket extends Command
                 List<String> args = Arrays.asList(this.msg);
                 args.remove(0); args.remove(1);
 
+                if(args.contains("--name") && args.indexOf("--name") + 1 < args.size())
+                {
+                    String name = args.get(args.indexOf("--name") + 1);
+                    if(isPokemon(name)) display = display.stream().filter(m -> m.pokemon.getName().equals(Global.normalCase(name))).collect(Collectors.toList());
+                }
+
+                if(args.contains("--level") && args.indexOf("--level") + 1 < args.size())
+                {
+                    int index = args.indexOf("--level") + 1;
+                    String after = args.get(index);
+                    if(after.equals(">") && isNumeric(index + 1)) display = display.stream().filter(m -> m.pokemon.getLevel() > getInt(index + 1)).collect(Collectors.toList());
+                    else if(after.equals("<") && isNumeric(index + 1)) display = display.stream().filter(m -> m.pokemon.getLevel() < getInt(index + 1)).collect(Collectors.toList());
+                    else if(isNumeric(index)) display = display.stream().filter(m -> m.pokemon.getLevel() == getInt(index)).collect(Collectors.toList());
+                }
+
+                if(args.contains("--iv") && args.indexOf("--iv") + 1 < args.size())
+                {
+                    int index = args.indexOf("--iv") + 1;
+                    String after = args.get(index);
+                    if(after.equals(">") && isNumeric(index + 1)) display = display.stream().filter(m -> m.pokemon.getTotalIVRounded() > getInt(index + 1)).collect(Collectors.toList());
+                    else if(after.equals("<") && isNumeric(index + 1)) display = display.stream().filter(m -> m.pokemon.getTotalIVRounded() < getInt(index + 1)).collect(Collectors.toList());
+                    else if(isNumeric(index)) display = display.stream().filter(m -> (int)m.pokemon.getTotalIVRounded() == getInt(index)).collect(Collectors.toList());
+                }
+
                 if(args.contains("--order") && (args.indexOf("--order") + 1) < args.size())
                 {
                     switch(args.get(args.indexOf("--order") + 1))
