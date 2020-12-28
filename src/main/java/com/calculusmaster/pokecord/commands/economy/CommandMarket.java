@@ -112,8 +112,9 @@ public class CommandMarket extends Command
                 {
                     int index = args.indexOf("--level") + 1;
                     String after = args.get(index);
-                    if(after.equals(">") && isNumeric(index + 1)) display = display.stream().filter(m -> m.pokemon.getLevel() > getInt(index + 1)).collect(Collectors.toList());
-                    else if(after.equals("<") && isNumeric(index + 1)) display = display.stream().filter(m -> m.pokemon.getLevel() < getInt(index + 1)).collect(Collectors.toList());
+                    boolean validIndex = index + 1 < args.size();
+                    if(after.equals(">") && validIndex && isNumeric(index + 1)) display = display.stream().filter(m -> m.pokemon.getLevel() > getInt(index + 1)).collect(Collectors.toList());
+                    else if(after.equals("<") && validIndex && isNumeric(index + 1)) display = display.stream().filter(m -> m.pokemon.getLevel() < getInt(index + 1)).collect(Collectors.toList());
                     else if(isNumeric(index)) display = display.stream().filter(m -> m.pokemon.getLevel() == getInt(index)).collect(Collectors.toList());
                 }
 
@@ -121,8 +122,9 @@ public class CommandMarket extends Command
                 {
                     int index = args.indexOf("--iv") + 1;
                     String after = args.get(index);
-                    if(after.equals(">") && isNumeric(index + 1)) display = display.stream().filter(m -> m.pokemon.getTotalIVRounded() > getInt(index + 1)).collect(Collectors.toList());
-                    else if(after.equals("<") && isNumeric(index + 1)) display = display.stream().filter(m -> m.pokemon.getTotalIVRounded() < getInt(index + 1)).collect(Collectors.toList());
+                    boolean validIndex = index + 1 < args.size();
+                    if(after.equals(">") && validIndex && isNumeric(index + 1)) display = display.stream().filter(m -> m.pokemon.getTotalIVRounded() > getInt(index + 1)).collect(Collectors.toList());
+                    else if(after.equals("<") && validIndex && isNumeric(index + 1)) display = display.stream().filter(m -> m.pokemon.getTotalIVRounded() < getInt(index + 1)).collect(Collectors.toList());
                     else if(isNumeric(index)) display = display.stream().filter(m -> (int)m.pokemon.getTotalIVRounded() == getInt(index)).collect(Collectors.toList());
                 }
 
@@ -130,8 +132,9 @@ public class CommandMarket extends Command
                 {
                     int index = args.indexOf("--price") + 1;
                     String after = args.get(index);
-                    if(after.equals(">") && isNumeric(index + 1)) display = display.stream().filter(m -> m.price > getInt(index + 1)).collect(Collectors.toList());
-                    else if(after.equals("<") && isNumeric(index + 1)) display = display.stream().filter(m -> m.price < getInt(index + 1)).collect(Collectors.toList());
+                    boolean validIndex = index + 1 < args.size();
+                    if(after.equals(">") && validIndex && isNumeric(index + 1)) display = display.stream().filter(m -> m.price > getInt(index + 1)).collect(Collectors.toList());
+                    else if(after.equals("<") && validIndex && isNumeric(index + 1)) display = display.stream().filter(m -> m.price < getInt(index + 1)).collect(Collectors.toList());
                     else if(isNumeric(index)) display = display.stream().filter(m -> m.price == getInt(index)).collect(Collectors.toList());
                 }
 
