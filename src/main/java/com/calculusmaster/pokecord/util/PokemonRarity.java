@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -29,7 +30,7 @@ public class PokemonRarity
         PokemonRarity.add("Pidgeotto", Rarity.SILVER);
         PokemonRarity.add("Pidgeot", Rarity.SILVER);
 
-        shuffleSpawns();
+        Collections.shuffle(SPAWNS);
         System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());
     }
 
@@ -41,20 +42,6 @@ public class PokemonRarity
     public static void add(String name, Rarity r)
     {
         for(int i = 0; i < r.num; i++) SPAWNS.add(name);
-    }
-
-    private static void shuffleSpawns()
-    {
-        List<String> spawnsOld = new ArrayList<>(List.copyOf(SPAWNS));
-        SPAWNS.clear();
-        Random r = new Random();
-
-        while(spawnsOld.size() > 0)
-        {
-            String s = spawnsOld.get(r.nextInt(spawnsOld.size()));
-            SPAWNS.add(s);
-            spawnsOld.remove(s);
-        }
     }
 
     public enum Rarity
