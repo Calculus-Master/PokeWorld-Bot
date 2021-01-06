@@ -29,7 +29,6 @@ public class CommandMarket extends Command
         super(event, msg);
     }
 
-    //TODO: p!market info, p!market collect, p!market search
     //TODO: Add invalid messages for each if block
     @Override
     public Command runCommand()
