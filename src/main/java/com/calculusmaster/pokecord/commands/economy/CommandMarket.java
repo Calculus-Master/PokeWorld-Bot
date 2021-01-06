@@ -54,7 +54,8 @@ public class CommandMarket extends Command
 
                 this.embed.setDescription("Removed your listing from the market!");
             }
-        } else if (this.msg.length >= 3 && this.msg[1].equals("buy") && isNumeric(2) && MarketEntry.isIDValid(this.msg[2]))
+        }
+        else if (this.msg.length >= 3 && this.msg[1].equals("buy") && isNumeric(2) && MarketEntry.isIDValid(this.msg[2]))
         {
             //Buy pokemon from market
             MarketEntry entry = marketEntries.stream().filter(m -> m.marketID.equals(this.msg[2])).collect(Collectors.toList()).get(0);
@@ -68,6 +69,19 @@ public class CommandMarket extends Command
                 new PlayerDataQuery(entry.sellerID).changeCredits(entry.price);
 
                 this.embed.setDescription("Purchased a Level " + entry.pokemon.getLevel() + " " + entry.pokemon.getName() + " for " + entry.price + "c!");
+            }
+        }
+        else if(this.msg.length >= 3 && this.msg[1].equals("collect") && isNumeric(2) && MarketEntry.isIDValid(this.msg[2]))
+        {
+            //Collect a listing from market
+            MarketEntry entry = marketEntries.stream().filter(m -> m.marketID.equals(this.msg[2])).collect(Collectors.toList()).get(0);
+            if(this.player.getId().equals(entry.sellerID))
+            {
+                marketEntries.remove(entry);
+                Mongo.MarketData.deleteOne(Filters.eq("marketID", entry.marketID));
+
+                this.playerData.addPokemon(entry.pokemonID);
+                this.embed.setDescription("Collected your Level " + entry.pokemon.getLevel() + " " + entry.pokemon.getName() + " from the market!");
             }
         }
         else if (this.msg.length >= 3 && this.msg[1].equals("info") && isNumeric(2) && MarketEntry.isIDValid(this.msg[2]))
