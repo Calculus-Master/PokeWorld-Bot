@@ -197,14 +197,9 @@ public class CommandMarket extends Command
     {
         StringBuilder mList = new StringBuilder();
 
-        for(int i = start * 20; i < start * 20 + 20; i++) if(i < list.size()) mList.append(getEntryLine(list.get(i))).append("\n");
+        for(int i = start * 20; i < start * 20 + 20; i++) if(i < list.size()) mList.append(list.get(i).getEntryLine()).append("\n");
 
         return mList.toString();
-    }
-
-    private static String getEntryLine(MarketEntry m)
-    {
-        return "ID: " + m.marketID + " | Level " + m.pokemon.getLevel() + " " + m.pokemon.getName() + " | Price: " + m.price;
     }
 
     public static class MarketEntry
@@ -238,6 +233,11 @@ public class CommandMarket extends Command
             m.pokemon = Pokemon.buildCore(m.pokemonID, -1);
 
             return m;
+        }
+
+        private String getEntryLine()
+        {
+            return "ID: " + this.marketID + " | Level " + this.pokemon.getLevel() + " " + this.pokemon.getName() + " | Price: " + this.price;
         }
 
         public static boolean isIDValid(String marketID)
