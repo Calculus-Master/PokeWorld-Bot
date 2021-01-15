@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.mongo;
 
+import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
@@ -233,6 +234,13 @@ public class PlayerDataQuery extends MongoQuery
     public void removeItem(String item)
     {
         Mongo.PlayerData.updateOne(this.query, Updates.pull("items", item));
+
+        this.update();
+    }
+
+    public void addAchievement(Achievements a)
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.push("achievements", a.toString()));
 
         this.update();
     }
