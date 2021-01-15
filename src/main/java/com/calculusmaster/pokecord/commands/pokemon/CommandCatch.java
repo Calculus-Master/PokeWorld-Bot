@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Pokemon;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -36,6 +37,8 @@ public class CommandCatch extends Command
         {
             Pokemon caught = Pokemon.create(this.serverData.getSpawn());
             caught.setLevel(new Random().nextInt(42) + 1);
+
+            if(this.playerData.getPokemonList() == null) Achievements.grant(this.player.getId(), Achievements.CAUGHT_1ST_POKEMON, this.event);
 
             Pokemon.uploadPokemon(caught);
             this.playerData.addPokemon(caught.getUUID());

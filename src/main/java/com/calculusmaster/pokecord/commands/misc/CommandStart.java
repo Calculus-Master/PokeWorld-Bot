@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands.misc;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
@@ -51,6 +52,8 @@ public class CommandStart extends Command
 
             Pokemon starter = Pokemon.create(Global.normalCase(this.msg[1]));
             starter.setLevel(5);
+
+            Achievements.grant(this.player.getId(), Achievements.START_JOURNEY, this.event);
 
             Pokemon.uploadPokemon(starter);
             p.addPokemon(starter.getUUID());

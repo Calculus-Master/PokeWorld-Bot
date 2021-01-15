@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game;
 
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public enum Achievements
 {
@@ -22,6 +23,11 @@ public enum Achievements
         p.changeCredits(a.credits);
 
         return "Unlocked an achievement: " + a.name + " !";
+    }
+
+    public static void grant(String playerID, Achievements a, MessageReceivedEvent event)
+    {
+        event.getChannel().sendMessage(grant(playerID, a)).queue();
     }
 
     public static Achievements asAchievement(String a)
