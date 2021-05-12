@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -227,6 +228,7 @@ public abstract class Command
 
     protected MessageReceivedEvent event;
     protected String[] msg;
+    protected List<Member> mentions;
 
     protected User player;
     protected Guild server;
@@ -243,6 +245,7 @@ public abstract class Command
     {
         this.event = event;
         this.msg = msg;
+        this.mentions = event.getMessage().getMentionedMembers();
 
         this.player = event.getAuthor();
         this.server = event.getGuild();

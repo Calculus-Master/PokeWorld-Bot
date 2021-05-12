@@ -26,20 +26,22 @@ public class CommandGive extends Command
             return this;
         }
 
-        PokeItem item = PokeItem.asItem(this.playerData.getItemList().getString(Integer.parseInt(this.msg[1]) - 1));
+        String itemRaw = this.playerData.getItemList().getString(Integer.parseInt(this.msg[1]) - 1);
+        PokeItem item = PokeItem.isItem(itemRaw) ? PokeItem.asItem(itemRaw) : null;
         Pokemon s = this.playerData.getSelectedPokemon();
 
-        if(this.playerHasItem(item.getName()))
+        if(item != null && this.playerHasItem(item.getName()))
         {
             if(s.hasItem()) this.playerData.addItem(s.getItem());
             s.setItem(item);
 
             Pokemon.updateItem(s);
-            //TODO: Evolutions that happen when a pokemon gets an item
 
-            this.embed.setDescription("Gave " + s.getName() + " `" + item.getStyledName() + "`!");
+            this.embed.setDescription("Gave " + s.getName() + " a `" + item.getStyledName() + "`!");
+
+            if(s.specialCanEvolve()) s.evolve();
         }
-        else this.embed.setDescription("You don't have `" + item.getStyledName() + "`!");
+        else this.embed.setDescription(item == null ? "Invalid item name!" : "You don't have any `" + item.getStyledName() + "`!");
 
         return this;
     }

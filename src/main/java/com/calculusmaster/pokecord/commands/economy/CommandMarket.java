@@ -160,7 +160,8 @@ public class CommandMarket extends Command
                         case "price" -> display.sort(Comparator.comparingInt(m -> m.price));
                         default -> display.sort(Comparator.comparing(m -> m.pokemon.getName()));
                     }
-                } else display.sort(Comparator.comparing(m -> m.pokemon.getName()));
+                }
+                else display.sort(Comparator.comparing(m -> m.pokemon.getName()));
             }
             //If no other arguments, displays random assortment of market listings
             else Collections.shuffle(display);

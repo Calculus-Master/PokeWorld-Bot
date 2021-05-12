@@ -49,9 +49,9 @@ public class CommandTrade extends Command
                     this.embed.setDescription("Trade complete!");
                 }
             }
-            else if(this.msg[1].contains("<@!") && this.msg[1].contains(">"))
+            else if(this.mentions.size() > 0)
             {
-                String otherID = this.msg[1].substring("<@!".length(), this.msg[1].lastIndexOf(">"));
+                String otherID = this.mentions.get(0).getId();
                 if(!Trade.isInTrade(otherID) && !this.player.getId().equals(otherID))
                 {
                     Trade.initiate(this.player.getId(), otherID, this.event.getMessageId());

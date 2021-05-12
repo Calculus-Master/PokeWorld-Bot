@@ -30,7 +30,7 @@ public class CommandInventory extends Command
             for(int i = 0; i < this.playerData.getOwnedTMs().length(); i++) s.append(this.playerData.getOwnedTMs().getString(i)).append(", ");
             s.delete(s.length() - 2, s.length()).append("\n\n");
         }
-        else s.append("You don't own any Technical Machines!\n\n");
+        else s.append("You don't own any Technical Machines (TMs)!\n\n");
 
         s.append("`TRs`: \n");
         if(this.playerData.getOwnedTRs() != null)
@@ -38,7 +38,7 @@ public class CommandInventory extends Command
             for (int i = 0; i < this.playerData.getOwnedTRs().length(); i++) s.append(this.playerData.getOwnedTRs().getString(i)).append(", ");
             s.delete(s.length() - 2, s.length()).append("\n\n");
         }
-        else s.append("You don't own any Technical Records!\n\n");
+        else s.append("You don't own any Technical Records (TRs)!\n\n");
 
 
         this.embed.setDescription(s.toString());

@@ -458,7 +458,7 @@ public class Pokemon
     //Levels and Experience
     public void setLevel(int level)
     {
-        this.level = level;
+        this.level = Math.min(level, 100);
     }
 
     public int getLevel()

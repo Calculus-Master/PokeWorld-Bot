@@ -44,11 +44,17 @@ public class CommandDuel extends Command
         }
         else if(Duel.isInDuel(this.player.getId()))
         {
-            this.embed.setDescription("You are already in a Duel!");
+            this.embed.setDescription("You are already in a duel!");
             return this;
         }
 
-        String opponentID = this.msg[1].substring("<@!".length(), this.msg[1].lastIndexOf(">"));
+        if(this.mentions.size() == 0)
+        {
+            this.embed.setDescription("You need to mention someone to challenge them to a duel!");
+            return this;
+        }
+
+        String opponentID = this.mentions.get(0).getId();
 
         if(!PlayerDataQuery.isRegistered(opponentID))
         {
@@ -67,7 +73,7 @@ public class CommandDuel extends Command
         }
         else
         {
-            Duel d = Duel.initiate(this.player.getId(), opponentID);
+            Duel d = Duel.initiate(this.player.getId(), opponentID, this.event);
 
             this.event.getChannel().sendMessage(d.getRequestEmbed().build()).queue();
             this.embed = null;

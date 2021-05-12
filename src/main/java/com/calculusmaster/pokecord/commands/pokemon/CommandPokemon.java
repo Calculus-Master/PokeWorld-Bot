@@ -7,10 +7,7 @@ import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CommandPokemon extends Command
@@ -20,12 +17,12 @@ public class CommandPokemon extends Command
         Mongo.PlayerData.find(Filters.exists("playerID")).forEach(d -> Global.updatePokemonList(d.getString("playerID")));
     }
 
-    List<Pokemon> pokemon = new LinkedList<>();
+    List<Pokemon> pokemon;
     public CommandPokemon(MessageReceivedEvent event, String[] msg)
     {
         super(event, msg);
         //this.buildList();
-        this.pokemon = List.copyOf(Global.POKEMON_LISTS.get(this.player.getId()));
+        this.pokemon = new LinkedList<>(Global.POKEMON_LISTS.get(this.player.getId()));
     }
 
     @Override

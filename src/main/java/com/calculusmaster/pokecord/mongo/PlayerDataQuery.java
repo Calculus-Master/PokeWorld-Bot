@@ -116,6 +116,11 @@ public class PlayerDataQuery extends MongoQuery
         return !this.json().has("items") ? null : this.json().getJSONArray("items");
     }
 
+    public JSONArray getAchievements()
+    {
+        return this.json().getJSONArray("achievements");
+    }
+
     //Updates - run this.update() after each method so the query is up to date
 
     public void changeCredits(int amount)

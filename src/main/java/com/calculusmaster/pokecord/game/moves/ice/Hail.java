@@ -14,7 +14,7 @@ public class Hail extends Move
     @Override
     public String logic(Pokemon user, Pokemon opponent)
     {
-        //TODO: Weather
+        //TODO: Weather - pass Duel object to a cloned version of this????
         return "ERROR";
     }
 }

@@ -7,19 +7,20 @@ plugins {
 mainClassName = "com.calculusmaster.pokecord.Pokecord"
 
 group 'com.calculusmaster'
-version '1.0'
+version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
-    jcenter()
-    //maven { url 'https://dl.bintray.com/sargunv/maven' }
+    maven {
+        name 'm2-dv8tion'
+        url 'https://m2.dv8tion.net/releases'
+    }
 }
 
 dependencies {
-    implementation 'net.dv8tion:JDA:4.2.0_222'
+    implementation 'net.dv8tion:JDA:4.2.1_262'
     compile 'org.mongodb:mongodb-driver-sync:4.1.1'
     implementation 'org.json:json:20200518'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     compile group: 'com.opencsv', name: 'opencsv', version: '5.3'
-    //implementation 'me.sargunvohra.lib:pokekotlin:2.3.1'
 }

@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game.moves;
 
+import com.calculusmaster.pokecord.game.Duel;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.TypeEffectiveness;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
