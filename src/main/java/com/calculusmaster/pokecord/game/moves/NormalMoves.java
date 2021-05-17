@@ -16,9 +16,9 @@ public class NormalMoves
         if(2 > 1) return "Hi!";
 
         int damage = move.getDamage(user, opponent);
-        opponent.changeHealth(damage * -1);
+        opponent.damage(damage);
 
-        return move.getDamageResult(user, opponent, damage);
+        return move.getDamageResult(opponent, damage);
     }
 
     public String Growl(Pokemon user, Pokemon opponent, Duel duel, MoveNew move)
@@ -70,9 +70,9 @@ public class NormalMoves
         move.setType(t);
 
         int damage = move.getDamage(user, opponent);
-        opponent.changeHealth(damage * -1);
+        opponent.damage(damage);
 
-        return move.getDamageResult(user, opponent, damage) + "Hidden Power's type was " + Global.normalCase(t.toString()) + "! ";
+        return move.getDamageResult(opponent, damage) + "Hidden Power's type was " + Global.normalCase(t.toString()) + "! ";
     }
 
     //TODO: Come up with a custom idea for it

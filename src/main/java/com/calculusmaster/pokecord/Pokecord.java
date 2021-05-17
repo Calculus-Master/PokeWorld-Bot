@@ -8,6 +8,8 @@ import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.game.MoveList;
 import com.calculusmaster.pokecord.game.MoveNew;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.TypeEffectiveness;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Listener;
@@ -46,8 +48,10 @@ public class Pokecord
         System.out.println(MoveNew.MOVES.values().stream().map(MoveNew.MoveData::toString).collect(Collectors.toList()).toString());
 
         //new move system test
-        MoveNew m = new MoveNew("Tackle");
-        System.out.println(m.logic(null, null, null));
+        //MoveNew m = new MoveNew("Tackle");
+        //System.out.println(m.logic(null, null, null));
+
+        //System.out.println(TypeEffectiveness.getCombinedMap(Type.FLYING, Type.FIRE).toString());
 
         //Create Bot
         JDABuilder bot = JDABuilder.createDefault(PrivateInfo.TOKEN);

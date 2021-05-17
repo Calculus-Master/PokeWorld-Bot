@@ -14,9 +14,10 @@ import java.util.*;
 public class MoveNew
 {
     public static Map<String, MoveData> MOVES = new HashMap<>();
-    //TODO: Add the correct moves to each list
-    public static final List<String> WIP_MOVES = Arrays.asList("Roar");
-    public static final List<String> CUSTOM_MOVES = Arrays.asList();
+    //TODO: Add the correct moves to each list and keep these updated
+    //TODO: Keep checking the custom moves and see if they can function as close to the original as possible
+    public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Hail");
+    public static final List<String> CUSTOM_MOVES = Arrays.asList("Leech Seed", "Toxic");
 
     private String name;
     private MoveData moveData;
@@ -84,9 +85,26 @@ public class MoveNew
         return user.getName() + " used **" + this.name + "**! ";
     }
 
-    public String getDamageResult(Pokemon user, Pokemon opponent, int dmg)
+    public String getDamageResult(Pokemon opponent, int dmg)
     {
-        return "It dealt **" + dmg + "** damage to " + opponent.getName() + "!";
+        String effective;
+
+        double e = TypeEffectiveness.getCombinedMap(opponent.getType()[0], opponent.getType()[1]).get(this.type);
+
+        if(e == 4.0) effective = "It's extremely effective (4x)!";
+        else if(e == 2.0) effective = "It's super effective (2x)!";
+        else if(e == 1.0) effective = "";
+        else if(e == 0.5) effective = "It's not very effective (0.5x)!";
+        else if(e == 0.25) effective = "It's extremely ineffective (0.25x)!";
+        else if(e == 0.0) effective = this.getNoEffectResult(opponent);
+        else throw new IllegalStateException("Effectiveness multiplier is a strange value: " + e);
+
+        return "It dealt **" + dmg + "** damage to " + opponent.getName() + "! " + effective;
+    }
+
+    public String getNoEffectResult(Pokemon opponent)
+    {
+        return "It doesn't affect " + opponent.getName() + "...";
     }
 
     //Other Methods
@@ -109,7 +127,7 @@ public class MoveNew
         int level = user.getLevel();
         int power = this.power;
         int atkStat = user.getStat(this.category.equals(Category.PHYSICAL) ? Stat.ATK : Stat.SPATK);
-        int defStat = user.getStat(this.category.equals(Category.PHYSICAL) ? Stat.DEF : Stat.SPDEF);
+        int defStat = opponent.getStat(this.category.equals(Category.PHYSICAL) ? Stat.DEF : Stat.SPDEF);
 
         //Modifier = Targets * Weather * Badge * Critical * Random * STAB * Type * Burn * Other
         //Ignored Components: Targets, Weather, Badge, Other
@@ -119,6 +137,11 @@ public class MoveNew
         double stab = user.getType()[0].equals(this.type) || user.getType()[1].equals(this.type) ? 1.5 : 1.0;
         double type = TypeEffectiveness.getCombinedMap(opponent.getType()[0], opponent.getType()[1]).get(this.type);
         double burned = this.category.equals(Category.PHYSICAL) && user.getStatusCondition().equals(StatusCondition.BURNED) ? 0.5 : 1.0;
+
+        //Any nuances go here
+
+        //Psyshock
+        if(this.name.equals("Psyshock")) defStat = opponent.getStat(Stat.DEF);
 
         double modifier = critical * random * stab * type * burned;
         double damage = (((2 * level / 5.0 + 2) * power * (double)atkStat / (double)defStat) / 50) + 2;
