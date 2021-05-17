@@ -271,6 +271,11 @@ public class Duel
         return this.turn == 0 ? 1 : 0;
     }
 
+    public Weather getDuelWeather()
+    {
+        return this.duelWeather;
+    }
+
     //Embeds
     public EmbedBuilder getRequestEmbed()
     {

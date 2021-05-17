@@ -15,7 +15,7 @@ public class MoveNew
 {
     public static Map<String, MoveData> MOVES = new HashMap<>();
     //TODO: Add the correct moves to each list
-    public static final List<String> WIP_MOVES = Arrays.asList();
+    public static final List<String> WIP_MOVES = Arrays.asList("Roar");
     public static final List<String> CUSTOM_MOVES = Arrays.asList();
 
     private String name;
