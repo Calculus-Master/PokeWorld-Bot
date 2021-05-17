@@ -60,6 +60,7 @@ public class CommandBuy extends Command
                 this.playerData.changeCredits(-1 * cost);
                 selected.setLevel(selected.getLevel() + num);
             }
+            else this.embed.setDescription("You do not have enough money for " + num + " rare candies");
         }
         else if(this.msg[1].equals("item") && this.msg.length == 3)
         {

@@ -21,6 +21,7 @@ import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -72,7 +73,7 @@ public class Listener extends ListenerAdapter
         //If the message starts with the right prefix, continue, otherwise skip the listener
         if(msg[0].startsWith(serverQuery.getPrefix()))
         {
-            event.getChannel().sendTyping().queue();
+            //event.getChannel().sendTyping().queue();
 
             Global.logInfo(this.getClass(), "getResponseEmbed", "Parsing: " + Arrays.toString(msg));
 

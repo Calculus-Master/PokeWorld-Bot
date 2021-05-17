@@ -712,7 +712,7 @@ public class Pokemon
 
     public double getStatMultiplier(Stat s)
     {
-        return this.getStatMultiplier(s) == 0 ? 1.0 : (double)(this.statMultiplier.get(s) < 0 ? 2 : 2 + Math.abs(this.statMultiplier.get(s))) / (this.statMultiplier.get(s) < 0 ? 2 + Math.abs(this.statMultiplier.get(s)) : 2);
+        return this.statMultiplier.get(s) == 0 ? 1.0 : (double)(this.statMultiplier.get(s) < 0 ? 2 : 2 + Math.abs(this.statMultiplier.get(s))) / (this.statMultiplier.get(s) < 0 ? 2 + Math.abs(this.statMultiplier.get(s)) : 2);
     }
 
     public boolean isCrit()

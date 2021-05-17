@@ -77,7 +77,7 @@ public class CommandPokemon extends Command
         switch (o)
         {
             case NUMBER -> this.pokemon.sort(Comparator.comparingInt(Pokemon::getNumber));
-            case IV -> this.pokemon.sort((o1, o2) -> (int) (Double.parseDouble(o2.getTotalIV().substring(0, 5)) - Double.parseDouble(o1.getTotalIV().substring(0, 5))));
+            case IV -> this.pokemon.sort((o1, o2) -> (int)(Double.parseDouble(o2.getTotalIV().substring(0, 5)) * 100 - Double.parseDouble(o1.getTotalIV().substring(0, 5)) * 100));
             case LEVEL -> this.pokemon.sort((o1, o2) -> o2.getLevel() - o1.getLevel());
             case NAME -> this.pokemon.sort(Comparator.comparing(Pokemon::getName));
         }
