@@ -45,6 +45,10 @@ public class Pokecord
 //      System.out.println(Move.MOVES.stream().map(Move::getName).collect(Collectors.toList()).toString());
         System.out.println(MoveNew.MOVES.values().stream().map(MoveNew.MoveData::toString).collect(Collectors.toList()).toString());
 
+        //new move system test
+        MoveNew m = new MoveNew("Tackle");
+        System.out.println(m.logic(null, null, null));
+
         //Create Bot
         JDABuilder bot = JDABuilder.createDefault(PrivateInfo.TOKEN);
         bot.setActivity(Activity.playing("Pokemon"));

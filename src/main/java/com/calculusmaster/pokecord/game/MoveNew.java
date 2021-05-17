@@ -9,7 +9,6 @@ import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class MoveNew
@@ -67,7 +66,7 @@ public class MoveNew
 
         try
         {
-            results = (String)(typeClass.getMethod(this.name.replaceAll("\\s", ""), Pokemon.class, Pokemon.class, Duel.class).invoke(typeClass.getDeclaredConstructor().newInstance(), user, opponent, duel));
+            results = (String)(typeClass.getMethod(this.name.replaceAll("\\s", ""), Pokemon.class, Pokemon.class, Duel.class, MoveNew.class).invoke(typeClass.getDeclaredConstructor().newInstance(), user, opponent, duel, this));
         }
         catch (Exception e)
         {
@@ -77,6 +76,20 @@ public class MoveNew
 
         return results;
     }
+
+    //Different Move Results
+
+    public String getMoveUsedResult(Pokemon user)
+    {
+        return user.getName() + " used **" + this.name + "**!";
+    }
+
+    public String getBasicResult(Pokemon user, Pokemon opponent, int dmg)
+    {
+        return this.getMoveUsedResult(user) + " It dealt **" + dmg + "** damage to " + opponent.getName() + "!";
+    }
+
+    //Other Methods
 
     public static boolean isMove(String move)
     {

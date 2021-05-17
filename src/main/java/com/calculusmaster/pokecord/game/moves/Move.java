@@ -23,7 +23,7 @@ public abstract class Move extends MongoQuery
     private boolean isWIP;
     private boolean isCustom;
 
-    //TODO: Change this is the stat multipler used in moves
+    //TODO: Change this to the stat multiplier
     //When a move request to lower or raise a stat by a stage, how many IVs does that lower or raise
     protected int stageIV = 8;
 
