@@ -1,8 +1,8 @@
 package com.calculusmaster.pokecord.commands.moves;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.game.MoveNew;
 import com.calculusmaster.pokecord.game.Pokemon;
-import com.calculusmaster.pokecord.game.moves.Move;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandMoves extends Command
@@ -21,7 +21,7 @@ public class CommandMoves extends Command
         for(int i = 0; i < 4; i++) movesList.append("Move " + (i + 1) + ": " + selected.getLearnedMoves().get(i) + "\n");
 
         movesList.append("\n**All Moves: **\n");
-        for(String s : selected.getAllMoves()) movesList.append(s + (selected.getAvailableMoves().contains(s) && (Move.isMove(s) && !Move.asMove(s).isWIP()) ? "" : " :lock: ") + "\n");
+        for(String s : selected.getAllMoves()) movesList.append(s + (selected.getAvailableMoves().contains(s) && (MoveNew.isMove(s) && !MoveNew.WIP_MOVES.contains(s)) ? "" : " :lock: ") + "\n");
 
         this.embed.setDescription(movesList.toString());
         this.embed.setTitle("Level " + selected.getLevel() + " " + selected.getName());

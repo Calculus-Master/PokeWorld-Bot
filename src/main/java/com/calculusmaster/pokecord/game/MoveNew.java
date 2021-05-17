@@ -10,13 +10,14 @@ import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class MoveNew
 {
     public static Map<String, MoveData> MOVES = new HashMap<>();
+    //TODO: Add the correct moves to each list
+    public static final List<String> WIP_MOVES = Arrays.asList();
+    public static final List<String> CUSTOM_MOVES = Arrays.asList();
 
     private String name;
     private MoveData moveData;
@@ -38,7 +39,7 @@ public class MoveNew
         this.setDefaultValues();
     }
 
-    public String logic(Pokemon user, Pokemon opponent, Duel duel) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException
+    public String logic(Pokemon user, Pokemon opponent, Duel duel)
     {
         //Call specific move method
         Class<?> typeClass = switch(this.type) {
@@ -62,7 +63,19 @@ public class MoveNew
             case WATER -> WaterMoves.class;
         };
 
-        return (String)(typeClass.getMethod(this.name.replaceAll("\\s", ""), Pokemon.class, Pokemon.class, Duel.class).invoke(typeClass.getDeclaredConstructor().newInstance(), user, opponent, duel));
+        String results;
+
+        try
+        {
+            results = (String)(typeClass.getMethod(this.name.replaceAll("\\s", ""), Pokemon.class, Pokemon.class, Duel.class).invoke(typeClass.getDeclaredConstructor().newInstance(), user, opponent, duel));
+        }
+        catch (Exception e)
+        {
+            System.out.println("Move failed! " + this.toString());
+            results = "MOVE FAILED";
+        }
+
+        return results;
     }
 
     public static boolean isMove(String move)
@@ -165,6 +178,18 @@ public class MoveNew
     public String getZMove()
     {
         return this.moveData.zmove;
+    }
+
+    @Override
+    public String toString() {
+        return "MoveNew{" +
+                "name='" + name + '\'' +
+                ", type=" + type +
+                ", category=" + category +
+                ", power=" + power +
+                ", accuracy=" + accuracy +
+                ", " + moveData.toString() +
+                '}';
     }
 
     public static class MoveData

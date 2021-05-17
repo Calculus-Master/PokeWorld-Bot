@@ -2,9 +2,9 @@ package com.calculusmaster.pokecord.commands.moves;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.MoveNew;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
-import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -31,27 +31,27 @@ public class CommandMoveInfo extends Command
             boolean isTM = moveString.startsWith("Tm");
             boolean isTR = moveString.startsWith("Tr");
 
-            if(!Move.isMove(moveString) && !(isTM || isTR))
+            if(!MoveNew.isMove(moveString) && !(isTM || isTR))
             {
                 this.embed.setDescription(CommandInvalid.getShort());
                 return this;
             }
 
-            Move m = isTM ? TM.get(Integer.parseInt(moveString.substring(2))).asMove() : (isTR ? TR.get(Integer.parseInt(moveString.substring(2))).asMove() : Move.asMove(moveString));
+            MoveNew.MoveData m = isTM ? TM.get(Integer.parseInt(moveString.substring(2))).getMoveData() : (isTR ? TR.get(Integer.parseInt(moveString.substring(2))).getMoveData() : MoveNew.MOVES.get(moveString));
 
-            String title = m.getName() + " Info" + (isTM || isTR ? " (" + moveString.toUpperCase() + ")" : "");
-            String info = m.getInfo();
-            String type = "Type: " + Global.normalCase(m.getType().toString());
-            String category = "Category: " + Global.normalCase(m.getCategory().toString());
-            String power = "Power: " + m.getPower();
-            String accuracy = "Accuracy: " + m.getAccuracy();
-            String zmove = "Z-Move: " + m.getZMove();
+            String title = m.name + " Info" + (isTM || isTR ? " (" + moveString.toUpperCase() + ")" : "");
+            String info = m.info;
+            String type = "Type: " + Global.normalCase(m.type.toString());
+            String category = "Category: " + Global.normalCase(m.category.toString());
+            String power = "Power: " + m.power;
+            String accuracy = "Accuracy: " + m.accuracy;
+            String zmove = "Z-Move: " + m.zmove;
 
             this.embed.setTitle(title);
             this.embed.setDescription(info + "\n\n" + type + "\n" + category + "\n" + power + "\n" + accuracy + "\n" + zmove);
-            this.color = m.getType().getColor();
+            this.color = m.type.getColor();
 
-            if(m.isCustom()) this.embed.setFooter("This move has a custom implementation! It may not work exactly as described!");
+            if(MoveNew.CUSTOM_MOVES.contains(moveString)) this.embed.setFooter("This move has a custom implementation! It may not work exactly as described!");
         }
         return this;
     }

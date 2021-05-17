@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game.enums.items;
 
 import com.calculusmaster.pokecord.game.MoveList;
+import com.calculusmaster.pokecord.game.MoveNew;
 import com.calculusmaster.pokecord.game.moves.Move;
 
 public enum TM
@@ -117,9 +118,16 @@ public enum TM
         return this.move;
     }
 
+    //TODO: Replace
+    @Deprecated
     public Move asMove()
     {
         return Move.isMove(this.move) ? Move.asMove(this.move) : MoveList.Tackle;
+    }
+
+    public MoveNew.MoveData getMoveData()
+    {
+        return MoveNew.isMove(this.move) ? MoveNew.MOVES.get(this.move) : MoveNew.MOVES.get("Tackle");
     }
 
     public static TM get(int number)
