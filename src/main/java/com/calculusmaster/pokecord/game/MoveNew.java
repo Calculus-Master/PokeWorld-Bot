@@ -62,16 +62,16 @@ public class MoveNew
             case WATER -> WaterMoves.class;
         };
 
-        String results;
+        String results = this.getMoveUsedResult(user);
 
         try
         {
-            results = (String)(typeClass.getMethod(this.name.replaceAll("\\s", ""), Pokemon.class, Pokemon.class, Duel.class, MoveNew.class).invoke(typeClass.getDeclaredConstructor().newInstance(), user, opponent, duel, this));
+            results += (String)(typeClass.getMethod(this.name.replaceAll("\\s", ""), Pokemon.class, Pokemon.class, Duel.class, MoveNew.class).invoke(typeClass.getDeclaredConstructor().newInstance(), user, opponent, duel, this));
         }
         catch (Exception e)
         {
             System.out.println("Move failed! " + this.toString());
-            results = "MOVE FAILED";
+            results += "MOVE FAILED";
         }
 
         return results;
@@ -81,12 +81,12 @@ public class MoveNew
 
     public String getMoveUsedResult(Pokemon user)
     {
-        return user.getName() + " used **" + this.name + "**!";
+        return user.getName() + " used **" + this.name + "**! ";
     }
 
-    public String getBasicResult(Pokemon user, Pokemon opponent, int dmg)
+    public String getDamageResult(Pokemon user, Pokemon opponent, int dmg)
     {
-        return this.getMoveUsedResult(user) + " It dealt **" + dmg + "** damage to " + opponent.getName() + "!";
+        return "It dealt **" + dmg + "** damage to " + opponent.getName() + "!";
     }
 
     //Other Methods
@@ -108,8 +108,8 @@ public class MoveNew
         //Damage = [((2 * Level / 5 + 2) * Power * A / D) / 50 + 2] * Modifier
         int level = user.getLevel();
         int power = this.power;
-        int atkStat = this.category.equals(Category.PHYSICAL) ? user.getStat(Stat.ATK) : user.getStat(Stat.SPATK);
-        int defStat = this.category.equals(Category.PHYSICAL) ? opponent.getStat(Stat.DEF) : opponent.getStat(Stat.SPDEF);
+        int atkStat = user.getStat(this.category.equals(Category.PHYSICAL) ? Stat.ATK : Stat.SPATK);
+        int defStat = user.getStat(this.category.equals(Category.PHYSICAL) ? Stat.DEF : Stat.SPDEF);
 
         //Modifier = Targets * Weather * Badge * Critical * Random * STAB * Type * Burn * Other
         //Ignored Components: Targets, Weather, Badge, Other
