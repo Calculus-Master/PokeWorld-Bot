@@ -64,10 +64,16 @@ public class Move
         };
 
         String results = this.getMoveUsedResult(user);
+        String moveName = this.name;
+
+        moveName = moveName.replaceAll("\\s", "");
+
+        //Special cases
+        if(moveName.equals("Double-Edge")) moveName = "DoubleEdge";
 
         try
         {
-            results += (String)(typeClass.getMethod(this.name.replaceAll("\\s", ""), Pokemon.class, Pokemon.class, Duel.class, Move.class).invoke(typeClass.getDeclaredConstructor().newInstance(), user, opponent, duel, this));
+            results += (String)(typeClass.getMethod(moveName, Pokemon.class, Pokemon.class, Duel.class, Move.class).invoke(typeClass.getDeclaredConstructor().newInstance(), user, opponent, duel, this));
         }
         catch (Exception e)
         {

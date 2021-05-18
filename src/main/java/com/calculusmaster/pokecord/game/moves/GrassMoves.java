@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.enums.elements.Weather;
 
 public class GrassMoves
 {
@@ -84,5 +85,15 @@ public class GrassMoves
             return user.getName() + " is now awake!";
         }
         else return move.getNothingResult();
+    }
+
+    public String SolarBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.getDuelWeather().equals(Weather.RAIN) || duel.getDuelWeather().equals(Weather.HAIL) || duel.getDuelWeather().equals(Weather.SANDSTORM)) move.setPower(move.getPower() / 2);
+
+        int damage = move.getDamage(user, opponent);
+        opponent.damage(damage);
+
+        return move.getDamageResult(opponent, damage);
     }
 }
