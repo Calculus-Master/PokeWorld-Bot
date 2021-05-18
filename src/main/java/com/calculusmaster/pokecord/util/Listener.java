@@ -33,6 +33,7 @@ import java.util.*;
 public class Listener extends ListenerAdapter
 {
     private final Map<String, Boolean> hasSpawnEventRunning = new HashMap<>();
+    private final Map<String, SpawnEvent> spawnEventMap = new HashMap<>();
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event)
@@ -57,7 +58,8 @@ public class Listener extends ListenerAdapter
         if(!this.hasSpawnEventRunning.containsKey(server.getId()))
         {
             this.hasSpawnEventRunning.put(server.getId(), true);
-            new SpawnEvent(server, serverQuery.getSpawnChannelID()).run();
+            this.spawnEventMap.put(server.getId(), new SpawnEvent(server, serverQuery.getSpawnChannelID()));
+            this.spawnEventMap.get(server.getId()).run();
         }
 
         //Set a boolean if the player is registered or not
@@ -207,6 +209,13 @@ public class Listener extends ListenerAdapter
                     Mongo.PlayerData.deleteMany(Filters.exists("name"));
                     c = null;
                 }
+                else if(msg[0].equals("forcespawn"))
+                {
+                    this.spawnEventMap.get(server.getId()).cancel();
+                    this.spawnEventMap.put(server.getId(), new SpawnEvent(server, serverQuery.getSpawnChannelID(), msg[1]));
+                    this.spawnEventMap.get(server.getId()).run();
+                    c = null;
+                }
                 else c = new CommandInvalid(event, msg).runCommand();
             }
             else c = new CommandInvalid(event, msg).runCommand();
@@ -223,11 +232,19 @@ public class Listener extends ListenerAdapter
         private static final Timer timer = new Timer();
         private final Guild server;
         private final String spawnChannel;
+        private String forcedSpawn;
 
         public SpawnEvent(Guild server, String channel)
         {
             this.server = server;
             this.spawnChannel = channel;
+            this.forcedSpawn = "";
+        }
+
+        public SpawnEvent(Guild server, String channel, String forced)
+        {
+            this(server, channel);
+            this.forcedSpawn = Global.normalCase(forced);
         }
 
         @Override
@@ -237,10 +254,13 @@ public class Listener extends ListenerAdapter
             this.server.getTextChannelById(this.spawnChannel).sendMessage(spawnEvent(this.server).build()).queue();
         }
 
-        private static EmbedBuilder spawnEvent(Guild server)
+        private EmbedBuilder spawnEvent(Guild server)
         {
             String spawnPokemon = PokemonRarity.getSpawn();
             ServerDataQuery data = new ServerDataQuery(server.getId());
+
+            if(!this.forcedSpawn.equals("")) spawnPokemon = this.forcedSpawn;
+
             data.setSpawn(Global.normalCase(spawnPokemon));
 
             EmbedBuilder embed = new EmbedBuilder();
@@ -248,6 +268,8 @@ public class Listener extends ListenerAdapter
             embed.setTitle("A wild Pokemon spawned!");
             embed.setDescription("Try to guess its name and catch it with p!catch <name>!");
             embed.setImage(Pokemon.genericJSON(Global.normalCase(spawnPokemon)).getString("normalURL"));
+
+            this.forcedSpawn = "";
             return embed;
         }
 
