@@ -5,12 +5,8 @@ import ch.qos.logback.classic.LoggerContext;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.economy.CommandMarket;
 import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
-import com.calculusmaster.pokecord.game.MoveList;
 import com.calculusmaster.pokecord.game.MoveNew;
 import com.calculusmaster.pokecord.game.Pokemon;
-import com.calculusmaster.pokecord.game.TypeEffectiveness;
-import com.calculusmaster.pokecord.game.enums.elements.Type;
-import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Listener;
 import com.calculusmaster.pokecord.util.PokemonRarity;
@@ -36,7 +32,6 @@ public class Pokecord
 
         //Initializations
         Pokemon.init();
-        MoveList.init();
         MoveNew.init();
         PokemonRarity.init();
         Command.init();
