@@ -102,6 +102,11 @@ public class Move
         return "It dealt **" + dmg + "** damage to " + opponent.getName() + "! " + effective;
     }
 
+    public String getRecoilDamageResult(Pokemon user, int dmg)
+    {
+        return user.getName() + " took " + dmg + " damage in recoil!";
+    }
+
     public String getNoEffectResult(Pokemon opponent)
     {
         return "It doesn't affect " + opponent.getName() + "...";

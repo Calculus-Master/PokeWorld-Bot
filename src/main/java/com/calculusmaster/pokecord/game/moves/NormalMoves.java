@@ -12,9 +12,6 @@ public class NormalMoves
 {
     public String Tackle(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        //Temporary
-        if(2 > 1) return "Hi!";
-
         int damage = move.getDamage(user, opponent);
         opponent.damage(damage);
 
@@ -87,5 +84,15 @@ public class NormalMoves
         user.changeStatMultiplier(Stat.SPATK, 1);
 
         return "It increased " + user.getName() + "'s Attack and Special Attack by 1 stage!";
+    }
+
+    public String TakeDown(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+
+        opponent.damage(damage);
+        user.damage(damage / 4);
+
+        return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 4);
     }
 }
