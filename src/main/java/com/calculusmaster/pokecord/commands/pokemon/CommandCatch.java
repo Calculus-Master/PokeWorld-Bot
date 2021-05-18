@@ -40,8 +40,10 @@ public class CommandCatch extends Command
 
             if(this.playerData.getPokemonList() == null) Achievements.grant(this.player.getId(), Achievements.CAUGHT_1ST_POKEMON, this.event);
 
-            Pokemon.uploadPokemon(caught);
-            this.playerData.addPokemon(caught.getUUID());
+            new Thread(() -> {
+                Pokemon.uploadPokemon(caught);
+                this.playerData.addPokemon(caught.getUUID());
+            }).start();
 
             this.embed.setDescription("You caught a **Level " + caught.getLevel() + " " + caught.getName() + "**!");
             this.color = caught.getType()[0].getColor();
