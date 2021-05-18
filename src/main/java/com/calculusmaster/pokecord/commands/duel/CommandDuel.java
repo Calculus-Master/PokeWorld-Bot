@@ -75,7 +75,7 @@ public class CommandDuel extends Command
         {
             Duel d = Duel.initiate(this.player.getId(), opponentID, this.event);
 
-            this.event.getChannel().sendMessage(d.getRequestEmbed().build()).queue();
+            this.event.getChannel().sendMessage("<@" + opponentID + "> ! " + this.player.getName() + " has challenged you to a duel! Type `p!duel accept` to accept!").queue();
             this.embed = null;
             d.setDuelImage();
             return this;

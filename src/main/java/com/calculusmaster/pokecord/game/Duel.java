@@ -276,6 +276,7 @@ public class Duel
     }
 
     //Embeds
+    @Deprecated
     public EmbedBuilder getRequestEmbed()
     {
         EmbedBuilder embed = new EmbedBuilder();
