@@ -12,4 +12,11 @@ public class DragonMoves
         opponent.damage(damage);
         return move.getDamageResult(opponent, damage);
     }
+
+    public String DragonRage(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.damage(40);
+
+        return move.getDamageResult(opponent, 40);
+    }
 }

@@ -111,4 +111,35 @@ public class NormalMoves
 
         return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 3);
     }
+
+    public String Scratch(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        opponent.damage(damage);
+
+        return move.getDamageResult(opponent, damage);
+    }
+
+    public String Smokescreen(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        //TODO: Accuracy Stat Multiplier
+        return move.getNotImplementedResult();
+    }
+
+    public String ScaryFace(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.changeStatMultiplier(Stat.SPD, -2);
+
+        return opponent.getName() + "'s Speed fell by 2 stages!";
+    }
+
+    public String Slash(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.setCrit(3);
+        int damage = move.getDamage(user, opponent);
+        opponent.damage(damage);
+        user.setCrit(1);
+
+        return move.getDamageResult(opponent, damage);
+    }
 }
