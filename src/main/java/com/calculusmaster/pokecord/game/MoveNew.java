@@ -107,6 +107,11 @@ public class MoveNew
         return "It doesn't affect " + opponent.getName() + "...";
     }
 
+    public String getMissedResult(Pokemon user)
+    {
+        return user.getName() + " missed " + this.getName() + "!";
+    }
+
     //Other Methods
 
     public static boolean isMove(String move)

@@ -91,10 +91,11 @@ public class Duel
     {
         this.setDuelStatus(DuelStatus.DUELING);
         String moveString = this.playerPokemon[this.turn].getLearnedMoves().get(moveIndex - 1);
-        Move move = Move.asMove(moveString);
+        //Move move = Move.asMove(moveString);
+        MoveNew move = new MoveNew(moveString);
         //TODO: If move has special effects depending on weather, add a setter to the move object here to send the data about that
 
-        boolean accurate = move.getIsAccurate();
+        boolean accurate = move.isAccurate();
 
         //Weather effects
         String weatherEffects = "";
@@ -154,9 +155,9 @@ public class Duel
             case CONFUSED:
                 if(new Random().nextInt(100) < 33)
                 {
-                    move = MoveList.Tackle;
+                    move = new MoveNew("Tackle");
                     damage = move.getDamage(this.playerPokemon[this.turn], this.playerPokemon[this.turn]);
-                    move.logic(this.playerPokemon[this.turn], this.playerPokemon[this.turn]);
+                    move.logic(this.playerPokemon[this.turn], this.playerPokemon[this.turn], this);
                     return status = pokeName + " is confused! It hurt itself in its confusion for " + damage + " damage!";
                 }
                 else if(new Random().nextInt(100) < 50) this.playerPokemon[this.turn].removeStatusConditions();
@@ -172,7 +173,7 @@ public class Duel
         if((move.getType().equals(Type.FIRE) || move.getName().equals("Scald") || move.getName().equals("Steam Eruption")) && this.playerPokemon[this.getOtherTurn()].getStatusCondition().equals(StatusCondition.FROZEN)) this.playerPokemon[this.getOtherTurn()].removeStatusConditions();
 
         //Main move results
-        String results = !accurate ? move.getMoveResultsFail(this.playerPokemon[this.turn]) : move.logic(this.playerPokemon[this.turn], this.playerPokemon[this.getOtherTurn()]);
+        String results = !accurate ? move.getMissedResult(this.playerPokemon[this.turn]) : move.logic(this.playerPokemon[this.turn], this.playerPokemon[this.getOtherTurn()], this);
 
         //Status condition
         results += (!status.isEmpty() ? "\n" + status : "");
@@ -182,7 +183,7 @@ public class Duel
 
         if(accurate)
         {
-            if(move instanceof Hail)
+            if(move.getName().equals("Hail"))
             {
                 this.duelWeather = Weather.HAIL;
                 this.weatherTurns = 5;
