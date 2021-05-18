@@ -75,7 +75,7 @@ public class NormalMoves
     //TODO: Come up with a custom idea for it
     public String Roar(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return "It did nothing!";
+        return move.getNotImplementedResult();
     }
 
     public String WorkUp(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -94,5 +94,11 @@ public class NormalMoves
         user.damage(damage / 4);
 
         return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 4);
+    }
+
+    //TODO: Evasion or custom idea
+    public String SweetScent(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
     }
 }
