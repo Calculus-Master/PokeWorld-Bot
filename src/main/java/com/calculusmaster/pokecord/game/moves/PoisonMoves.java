@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Type;
 
 public class PoisonMoves
 {
+    //TODO: Badly Poisoned
     public String Toxic(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         if(opponent.getStatusCondition().equals(StatusCondition.NORMAL)) opponent.setStatusCondition(StatusCondition.POISONED);
