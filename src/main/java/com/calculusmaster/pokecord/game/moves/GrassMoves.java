@@ -51,4 +51,12 @@ public class GrassMoves
 
         return opponent.getName() + "is asleep!";
     }
+
+    public String SeedBomb(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        opponent.damage(damage);
+
+        return move.getDamageResult(opponent, damage);
+    }
 }
