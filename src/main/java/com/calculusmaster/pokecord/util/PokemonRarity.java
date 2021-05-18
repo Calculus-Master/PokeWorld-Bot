@@ -29,6 +29,10 @@ public class PokemonRarity
         PokemonRarity.add("Pidgey", Rarity.COPPER);
         PokemonRarity.add("Pidgeotto", Rarity.SILVER);
         PokemonRarity.add("Pidgeot", Rarity.SILVER);
+        PokemonRarity.add("Rattata", Rarity.COPPER);
+        PokemonRarity.add("Alolan Rattata", Rarity.SILVER);
+        PokemonRarity.add("Raticate", Rarity.SILVER);
+        PokemonRarity.add("Alolan Raticate", Rarity.GOLD);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());
