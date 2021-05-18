@@ -75,4 +75,14 @@ public class GrassMoves
 
         return user.getName() + " healed " + healAmount + " HP!";
     }
+
+    public String WorrySeed(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(user.getStatusCondition().equals(StatusCondition.ASLEEP))
+        {
+            user.removeStatusConditions();
+            return user.getName() + " is now awake!";
+        }
+        else return move.getNothingResult();
+    }
 }

@@ -117,6 +117,11 @@ public class Move
         return user.getName() + " missed " + this.getName() + "!";
     }
 
+    public String getNothingResult()
+    {
+        return "Nothing happened!";
+    }
+
     public String getNotImplementedResult()
     {
         return "It did nothing! (Move has not been implemented yet)";
