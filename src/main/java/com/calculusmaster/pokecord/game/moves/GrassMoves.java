@@ -96,4 +96,22 @@ public class GrassMoves
 
         return move.getDamageResult(opponent, damage);
     }
+
+    public String PetalBlizzard(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        opponent.damage(damage);
+
+        return move.getDamageResult(opponent, damage);
+    }
+
+    public String PetalDance(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        opponent.damage(damage);
+
+        opponent.setStatusCondition(StatusCondition.CONFUSED);
+
+        return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " is now confused!";
+    }
 }
