@@ -248,7 +248,6 @@ public class Listener extends ListenerAdapter
             embed.setTitle("A wild Pokemon spawned!");
             embed.setDescription("Try to guess its name and catch it with p!catch <name>!");
             embed.setImage(Pokemon.genericJSON(Global.normalCase(spawnPokemon)).getString("normalURL"));
-
             return embed;
         }
 
@@ -279,6 +278,7 @@ public class Listener extends ListenerAdapter
     private static void expEvent(MessageReceivedEvent event)
     {
         PlayerDataQuery data = new PlayerDataQuery(event.getAuthor().getId());
+        String mention = "<@" + event.getAuthor().getId() + ">";
         Pokemon p = data.getSelectedPokemon();
 
         int initL = p.getLevel();
@@ -288,20 +288,15 @@ public class Listener extends ListenerAdapter
 
         if(p.getLevel() != initL)
         {
-            EmbedBuilder embed = new EmbedBuilder();
-            embed.setTitle(event.getAuthor().getName());
-            embed.setDescription("Your " + p.getName() + " leveled up to Level " + p.getLevel() + "!");
-            event.getChannel().sendMessage(embed.build()).queue();
+            event.getChannel().sendMessage(mention + ": Your " + p.getName() + " leveled up to Level " + p.getLevel() + "!").queue();
         }
 
         if(p.canEvolve())
         {
             String old = p.getName();
             p.evolve();
-            EmbedBuilder embed = new EmbedBuilder();
-            embed.setTitle(event.getAuthor().getName());
-            embed.setDescription("Your " + old + " evolved into a " + p.getName() + "!");
-            event.getChannel().sendMessage(embed.build()).queue();
+
+            event.getChannel().sendMessage(mention + ": Your " + old + " evolved into a " + p.getName() + "!").queue();
         }
 
         Pokemon.updateExperience(p);

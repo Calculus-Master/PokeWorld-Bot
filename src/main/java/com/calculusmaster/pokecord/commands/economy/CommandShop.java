@@ -32,7 +32,7 @@ public class CommandShop extends Command
     {
         if(this.msg.length == 1)
         {
-            this.embed.setDescription("`p!shop mega` – Mega Evolutions\n`p!shop forms` – Pokemon Forms\n`p!shop nature` – Change your Pokemon's Nature\n`p!shop items` – Misc. Items");
+            this.embed.setDescription("`p!shop mega` – Mega Evolutions\n`p!shop forms` – Pokemon Forms\n`p!shop nature` – Change your Pokemon's Nature\n`p!shop tm:tr` – Buy TMs and TRs\n`p!shop items` – Misc. Items");
             this.embed.setTitle("Pokecord Shop");
             return this;
         }
@@ -63,7 +63,7 @@ public class CommandShop extends Command
 
     private void page_items()
     {
-        this.page.append("Rare Candies (Level up Pokemon once) : `p!buy candy <amount>`");
+        this.page.append("Rare Candies (Level up Pokemon once per candy) : `p!buy candy <amount>`");
 
         if(day < this.event.getMessage().getTimeCreated().getDayOfYear())
         {
@@ -102,6 +102,9 @@ public class CommandShop extends Command
 
     private void page_tm_tr()
     {
+        System.out.println(this.event.getMessage().getTimeCreated().getDayOfYear());
+        System.out.println(day);
+
         if(day < this.event.getMessage().getTimeCreated().getDayOfYear())
         {
             day = this.event.getMessage().getTimeCreated().getDayOfYear();
