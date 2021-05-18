@@ -69,7 +69,6 @@ public class Move
         moveName = moveName.replaceAll("\\s", "");
 
         //Special cases
-        if(moveName.equals("Double-Edge")) moveName = "DoubleEdge";
 
         try
         {
@@ -97,11 +96,11 @@ public class Move
 
         double e = TypeEffectiveness.getCombinedMap(opponent.getType()[0], opponent.getType()[1]).get(this.type);
 
-        if(e == 4.0) effective = "It's extremely effective (4x)!";
-        else if(e == 2.0) effective = "It's super effective (2x)!";
+        if(e == 4.0) effective = "It's **extremely** effective (4x)!";
+        else if(e == 2.0) effective = "It's **super** effective (2x)!";
         else if(e == 1.0) effective = "";
-        else if(e == 0.5) effective = "It's not very effective (0.5x)!";
-        else if(e == 0.25) effective = "It's extremely ineffective (0.25x)!";
+        else if(e == 0.5) effective = "It's **not very** effective (0.5x)!";
+        else if(e == 0.25) effective = "It's **extremely** ineffective (0.25x)!";
         else if(e == 0.0) effective = this.getNoEffectResult(opponent);
         else throw new IllegalStateException("Effectiveness multiplier is a strange value: " + e);
 
@@ -110,27 +109,27 @@ public class Move
 
     public String getRecoilDamageResult(Pokemon user, int dmg)
     {
-        return user.getName() + " took " + dmg + " damage in recoil!";
+        return user.getName() + " took **" + dmg + "** damage in recoil!";
     }
 
     public String getNoEffectResult(Pokemon opponent)
     {
-        return "It doesn't affect " + opponent.getName() + "...";
+        return "It **doesn't affect** " + opponent.getName() + "...";
     }
 
     public String getMissedResult(Pokemon user)
     {
-        return user.getName() + " missed " + this.getName() + "!";
+        return user.getName() + " **missed** " + this.getName() + "!";
     }
 
     public String getNothingResult()
     {
-        return "Nothing happened!";
+        return "**Nothing** happened!";
     }
 
     public String getNotImplementedResult()
     {
-        return "It did nothing! (Move has not been implemented yet)";
+        return "It did **nothing**! (Move has not been implemented yet)";
     }
 
     //Other Methods
