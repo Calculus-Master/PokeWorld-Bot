@@ -162,7 +162,7 @@ public class Pokemon
 
     public static JSONObject genericJSON(String name)
     {
-        return new JSONObject(Mongo.PokemonInfo.find(Filters.eq("name", name.substring(0, 1).toUpperCase() + name.substring(1))).first().toJson());
+        return new JSONObject(Mongo.PokemonInfo.find(Filters.eq("name", Global.normalCase(name))).first().toJson());
     }
 
     public static JSONObject specificJSON(String UUID)
@@ -307,8 +307,8 @@ public class Pokemon
 
         for(int i = 0; i < m.length(); i++) if(mL.getInt(i) <= this.getLevel()) movesList.add(m.getString(i));
 
-        if(this.hasTM()) movesList.add(Global.normalCase(TM.get(this.heldTM).toString()));
-        if(this.hasTR()) movesList.add(Global.normalCase(TR.get(this.heldTR).toString()));
+        if(this.hasTM()) movesList.add(Global.normalCase(TM.get(this.heldTM).getMoveName()));
+        if(this.hasTR()) movesList.add(Global.normalCase(TR.get(this.heldTR).getMoveName()));
 
         return movesList;
     }
@@ -566,7 +566,7 @@ public class Pokemon
     private List<String> getListStringFromJSONArray(String key)
     {
         List<String> list = new ArrayList<>();
-        for(int i = 0; i < this.genericJSON.getJSONArray(key).length(); i++) list.add(this.genericJSON.getJSONArray("mega").getString(i));
+        for(int i = 0; i < this.genericJSON.getJSONArray(key).length(); i++) list.add(this.genericJSON.getJSONArray(key).getString(i));
         return list;
     }
 

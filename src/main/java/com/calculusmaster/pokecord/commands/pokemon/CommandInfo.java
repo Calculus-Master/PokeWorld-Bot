@@ -5,6 +5,8 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.enums.items.TM;
+import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -34,10 +36,12 @@ public class CommandInfo extends Command
         String type = "Type: " + (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalCase(chosen.getType()[0].toString()) : Global.normalCase(chosen.getType()[0].toString()) + " | " + Global.normalCase(chosen.getType()[1].toString()));
         String nature = "Nature: " + Global.normalCase(chosen.getNature().toString());
         String item = "Held Item: " + PokeItem.asItem(chosen.getItem()).getStyledName();
+        String tm = chosen.hasTM() ? "TM: TM" + (chosen.getTM() < 10 ? "0" : "") + chosen.getTM()  + " - " + TM.get(chosen.getTM()).getMoveName() : "";
+        String tr = chosen.hasTR() ? "TR: TR" + (chosen.getTR() < 10 ? "0" : "") + chosen.getTR()  + " - " + TR.get(chosen.getTR()).getMoveName() : "";
         String stats = getStatsFormatted(chosen);
 
         this.embed.setTitle(title);
-        this.embed.setDescription(exp + "\n" + type + "\n" + nature + "\n" + item + "\n\n" + stats);
+        this.embed.setDescription(exp + "\n" + type + "\n" + nature + "\n" + item + "\n" + tm + "\n" + tr + "\n\n" + stats);
         this.color = chosen.getType()[0].getColor();
         this.embed.setImage(chosen.getImage());
         this.embed.setFooter("Showing Pokemon " + (index + 1) + " / " + this.playerData.getPokemonList().length());

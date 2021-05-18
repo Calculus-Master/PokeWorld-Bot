@@ -89,7 +89,7 @@ public class CommandMarket extends Command
             Pokemon chosen = Pokemon.build(entry.pokemonID);
 
             String title = "**Level " + chosen.getLevel() + " " + chosen.getName() + "**" + (chosen.isShiny() ? " :star2:" : "");
-            String market = "Market ID: " + entry.marketID + " | Price: " + entry.price + "c | Sold by: " + entry.sellerName;
+            String market = "Market ID: " + entry.marketID + " | Price: " + entry.price + "\nSold by: " + entry.sellerName;
             String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getGenericJSON().getString("growthrate"), chosen.getLevel()) + " XP";
             String type = "Type: " + (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalCase(chosen.getType()[0].toString()) : Global.normalCase(chosen.getType()[0].toString()) + " | " + Global.normalCase(chosen.getType()[1].toString()));
             String nature = "Nature: " + Global.normalCase(chosen.getNature().toString());
@@ -107,10 +107,11 @@ public class CommandMarket extends Command
             List<MarketEntry> display = new ArrayList<>(List.copyOf(marketEntries));
 
             //p!market listings - Shows only the player's listings
-            if (this.msg[1].equals("listings")) display = display.stream().filter(m -> m.sellerID.equals(this.player.getId())).collect(Collectors.toList());
+            if(this.msg.length == 1) Collections.shuffle(display);
+            else if (this.msg[1].equals("listings")) display = display.stream().filter(m -> m.sellerID.equals(this.player.getId())).collect(Collectors.toList());
             else if (this.msg[1].equals("search"))
             {
-                List<String> args = Arrays.asList(this.msg);
+                List<String> args = new ArrayList<>(Arrays.asList(this.msg));
                 args.remove(0);
                 args.remove(1);
 

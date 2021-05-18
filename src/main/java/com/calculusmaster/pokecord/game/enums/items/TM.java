@@ -118,11 +118,9 @@ public enum TM
         return this.move;
     }
 
-    //TODO: Replace
-    @Deprecated
-    public Move asMove()
+    public MoveNew asMove()
     {
-        return Move.isMove(this.move) ? Move.asMove(this.move) : MoveList.Tackle;
+        return MoveNew.isMove(this.move) ? new MoveNew(this.move) : new MoveNew("Tackle");
     }
 
     public MoveNew.MoveData getMoveData()

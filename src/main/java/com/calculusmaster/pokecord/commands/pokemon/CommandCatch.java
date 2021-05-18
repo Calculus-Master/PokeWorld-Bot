@@ -19,7 +19,7 @@ public class CommandCatch extends Command
     @Override
     public Command runCommand()
     {
-        if(this.msg.length != 2)
+        if(this.msg.length != 2 && this.msg.length != 3)
         {
             this.embed.setDescription(CommandInvalid.getShort());
         }
@@ -28,7 +28,7 @@ public class CommandCatch extends Command
             this.embed.setDescription("Nothing has spawned yet in this server!");
             this.color = new Color(0, 0, 0);
         }
-        else if(!this.msg[1].toLowerCase().equals(this.serverData.getSpawn().toLowerCase()))
+        else if(!(this.msg[1] + (this.msg.length == 3 ? " " + this.msg[2] : "")).toLowerCase().equals(this.serverData.getSpawn().toLowerCase()))
         {
             this.embed.setDescription("Incorrect name!");
             this.color = new Color(0, 0, 0);

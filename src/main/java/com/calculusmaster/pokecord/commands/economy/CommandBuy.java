@@ -75,19 +75,20 @@ public class CommandBuy extends Command
                 this.embed.setDescription("Bought `" + item.getStyledName() + "` for " + cost + "c!");
             }
         }
-        else if(this.msg[1].equals("form") && this.msg.length == 3)
+        else if(this.msg[1].equals("form") && this.msg.length >= 3)
         {
-            if(selected.hasForms() && this.playerData.getCredits() >= CommandBuy.COST_FORM && selected.getFormsList().contains(Global.normalCase(this.msg[2])))
+            String form = Global.normalCase(this.msg.length == 3 ? this.msg[2] : this.msg[2] + " " + this.msg[3]);
+            if(selected.hasForms() && this.playerData.getCredits() >= CommandBuy.COST_FORM && selected.getFormsList().contains(form))
             {
-                this.embed.setDescription(selected.getName() + " transformed into " + Global.normalCase(this.msg[2]));
-                selected.changeForm(this.msg[2]);
+                this.embed.setDescription(selected.getName() + " transformed into " + form);
+                selected.changeForm(form);
                 this.playerData.changeCredits(-1 * CommandBuy.COST_FORM);
             }
             else if(this.playerData.getCredits() < CommandBuy.COST_FORM)
             {
                 this.embed.setDescription("You do not have enough money! You need " + (CommandBuy.COST_FORM - this.playerData.getCredits()) + " more credits!");
             }
-            else this.embed.setDescription(selected.getName() + " cannot transform into " + this.msg[2]);
+            else this.embed.setDescription(selected.getName() + " cannot transform into " + form);
         }
         else if(this.msg[1].equals("mega"))
         {
