@@ -59,4 +59,20 @@ public class GrassMoves
 
         return move.getDamageResult(opponent, damage);
     }
+
+    public String Synthesis(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int healAmount = user.getStat(Stat.HP);
+
+        switch (duel.getDuelWeather())
+        {
+            case CLEAR -> healAmount /= 2;
+            case HARSH_SUNLIGHT -> healAmount = healAmount * 2 / 3;
+            default -> healAmount /= 4;
+        }
+
+        user.heal(healAmount);
+
+        return user.getName() + " healed " + healAmount + " HP!";
+    }
 }
