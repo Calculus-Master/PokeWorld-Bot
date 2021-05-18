@@ -103,8 +103,8 @@ public class Duel
             boolean isThisPokemonAffected = !this.playerPokemon[this.turn].getType()[0].equals(Type.ICE) || !this.playerPokemon[this.turn].getType()[1].equals(Type.ICE);
             boolean isOtherPokemonAffected = !this.playerPokemon[this.getOtherTurn()].getType()[0].equals(Type.ICE) || !this.playerPokemon[this.getOtherTurn()].getType()[1].equals(Type.ICE);
 
-            if(isThisPokemonAffected) this.playerPokemon[this.turn].changeHealth(this.playerPokemon[this.turn].getStat(Stat.HP) / 16);
-            if(isOtherPokemonAffected) this.playerPokemon[this.getOtherTurn()].changeHealth(this.playerPokemon[this.getOtherTurn()].getStat(Stat.HP) / 16);
+            if(isThisPokemonAffected) this.playerPokemon[this.turn].damage(this.playerPokemon[this.turn].getStat(Stat.HP) / 16);
+            if(isOtherPokemonAffected) this.playerPokemon[this.getOtherTurn()].damage(this.playerPokemon[this.getOtherTurn()].getStat(Stat.HP) / 16);
 
             weatherEffects = (isThisPokemonAffected && isOtherPokemonAffected ? "Both pokemon" : (isThisPokemonAffected ? this.playerPokemon[this.turn].getName() : (isOtherPokemonAffected ? this.playerPokemon[this.getOtherTurn()].getName() : "Neither pokemon"))) + " took damage from the freezing hailstorm!";
         }
@@ -119,7 +119,7 @@ public class Duel
         {
             case BURNED:
                 damage = (int)(this.playerPokemon[this.turn].getStat(Stat.HP) / 16.);
-                this.playerPokemon[this.turn].changeHealth(-1 * damage);
+                this.playerPokemon[this.turn].damage(damage);
 
                 status = pokeName + " is burned! The burn dealt " + damage + " damage!";
                 break;

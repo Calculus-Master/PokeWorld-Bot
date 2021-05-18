@@ -272,12 +272,6 @@ public class Pokemon
         this.health = num;
     }
 
-    @Deprecated
-    public void changeHealth(int amount)
-    {
-        this.health += amount;
-    }
-
     public void damage(int amount)
     {
         this.health -= amount;
