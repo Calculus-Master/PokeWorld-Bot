@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 
 public class PoisonMoves
 {
@@ -23,5 +24,15 @@ public class PoisonMoves
         opponent.damage(damage);
 
         return move.getDamageResult(opponent, damage);
+    }
+
+    public String PoisonPowder(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(!opponent.getType()[0].equals(Type.POISON) && !opponent.getType()[1].equals(Type.POISON) && !opponent.getType()[0].equals(Type.STEEL) && !opponent.getType()[1].equals(Type.STEEL))
+        {
+            opponent.setStatusCondition(StatusCondition.POISONED);
+            return opponent.getName() + " is poisoned!";
+        }
+        else return move.getNoEffectResult(opponent);
     }
 }
