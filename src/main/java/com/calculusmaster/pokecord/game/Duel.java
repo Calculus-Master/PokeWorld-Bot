@@ -90,7 +90,7 @@ public class Duel
         this.setDuelStatus(DuelStatus.DUELING);
         String moveString = this.playerPokemon[this.turn].getLearnedMoves().get(moveIndex - 1);
         //Move move = Move.asMove(moveString);
-        MoveNew move = new MoveNew(moveString);
+        Move move = new Move(moveString);
         //TODO: If move has special effects depending on weather, add a setter to the move object here to send the data about that
 
         boolean accurate = move.isAccurate();
@@ -153,7 +153,7 @@ public class Duel
             case CONFUSED:
                 if(new Random().nextInt(100) < 33)
                 {
-                    move = new MoveNew("Tackle");
+                    move = new Move("Tackle");
                     damage = move.getDamage(this.playerPokemon[this.turn], this.playerPokemon[this.turn]);
                     move.logic(this.playerPokemon[this.turn], this.playerPokemon[this.turn], this);
                     return status = pokeName + " is confused! It hurt itself in its confusion for " + damage + " damage!";

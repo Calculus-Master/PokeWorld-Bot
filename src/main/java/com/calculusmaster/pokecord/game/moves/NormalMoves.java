@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.game.moves;
 
 import com.calculusmaster.pokecord.game.Duel;
-import com.calculusmaster.pokecord.game.MoveNew;
+import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
@@ -10,7 +10,7 @@ import com.calculusmaster.pokecord.util.Global;
 
 public class NormalMoves
 {
-    public String Tackle(Pokemon user, Pokemon opponent, Duel duel, MoveNew move)
+    public String Tackle(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         //Temporary
         if(2 > 1) return "Hi!";
@@ -21,13 +21,13 @@ public class NormalMoves
         return move.getDamageResult(opponent, damage);
     }
 
-    public String Growl(Pokemon user, Pokemon opponent, Duel duel, MoveNew move)
+    public String Growl(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         opponent.changeStatMultiplier(Stat.ATK, -1);
         return "It lowered " + opponent.getName() + "'s Attack by one stage!";
     }
 
-    public String Growth(Pokemon user, Pokemon opponent, Duel duel, MoveNew move)
+    public String Growth(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         boolean harshSun = duel.getDuelWeather().equals(Weather.HARSH_SUNLIGHT);
         user.changeStatMultiplier(Stat.ATK, harshSun ? 2 : 1);
@@ -35,7 +35,7 @@ public class NormalMoves
         return "It increased " + user.getName() + "'s Attack and Special Attack by " + (harshSun ? 2 : 1) + " stage" + (harshSun ? "s" : "") + "!";
     }
 
-    public String HiddenPower(Pokemon user, Pokemon opponent, Duel duel, MoveNew move)
+    public String HiddenPower(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int a = user.getIVs().get(Stat.HP) % 2;
         int b = user.getIVs().get(Stat.ATK) % 2;
@@ -76,12 +76,12 @@ public class NormalMoves
     }
 
     //TODO: Come up with a custom idea for it
-    public String Roar(Pokemon user, Pokemon opponent, Duel duel, MoveNew move)
+    public String Roar(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return "It did nothing!";
     }
 
-    public String WorkUp(Pokemon user, Pokemon opponent, Duel duel, MoveNew move)
+    public String WorkUp(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         user.changeStatMultiplier(Stat.ATK, 1);
         user.changeStatMultiplier(Stat.SPATK, 1);

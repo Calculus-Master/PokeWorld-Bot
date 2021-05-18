@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.game.enums.items;
 
-import com.calculusmaster.pokecord.game.MoveNew;
+import com.calculusmaster.pokecord.game.Move;
 
 public enum TR
 {
@@ -116,14 +116,14 @@ public enum TR
         return this.move;
     }
 
-    public MoveNew asMove()
+    public Move asMove()
     {
-        return MoveNew.isMove(this.move) ? new MoveNew(this.move) : new MoveNew("Tackle");
+        return Move.isMove(this.move) ? new Move(this.move) : new Move("Tackle");
     }
 
-    public MoveNew.MoveData getMoveData()
+    public Move.MoveData getMoveData()
     {
-        return MoveNew.isMove(this.move) ? MoveNew.MOVES.get(this.move) : MoveNew.MOVES.get("Tackle");
+        return Move.isMove(this.move) ? Move.MOVES.get(this.move) : Move.MOVES.get("Tackle");
     }
 
     public static TR get(int number)

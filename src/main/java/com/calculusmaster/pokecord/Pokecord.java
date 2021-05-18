@@ -5,7 +5,7 @@ import ch.qos.logback.classic.LoggerContext;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.economy.CommandMarket;
 import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
-import com.calculusmaster.pokecord.game.MoveNew;
+import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Listener;
@@ -32,7 +32,7 @@ public class Pokecord
 
         //Initializations
         Pokemon.init();
-        MoveNew.init();
+        Move.init();
         PokemonRarity.init();
         Command.init();
         CommandMarket.init();
@@ -40,7 +40,7 @@ public class Pokecord
 
         System.out.println(Global.POKEMON.toString());
 //      System.out.println(Move.MOVES.stream().map(Move::getName).collect(Collectors.toList()).toString());
-        System.out.println(MoveNew.MOVES.values().stream().map(MoveNew.MoveData::toString).collect(Collectors.toList()).toString());
+        System.out.println(Move.MOVES.values().stream().map(Move.MoveData::toString).collect(Collectors.toList()).toString());
 
         //new move system test
         //MoveNew m = new MoveNew("Tackle");

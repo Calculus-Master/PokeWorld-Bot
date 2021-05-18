@@ -1,14 +1,14 @@
 package com.calculusmaster.pokecord.game.moves;
 
 import com.calculusmaster.pokecord.game.Duel;
-import com.calculusmaster.pokecord.game.MoveNew;
+import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 
 public class GrassMoves
 {
-    public String RazorLeaf(Pokemon user, Pokemon opponent, Duel duel, MoveNew move)
+    public String RazorLeaf(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         user.setCrit(3);
 
@@ -20,7 +20,7 @@ public class GrassMoves
         return move.getDamageResult(opponent, damage);
     }
 
-    public String VineWhip(Pokemon user, Pokemon opponent, Duel duel, MoveNew move)
+    public String VineWhip(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
         opponent.damage(damage);
@@ -28,7 +28,7 @@ public class GrassMoves
         return move.getDamageResult(opponent, damage);
     }
 
-    public String LeechSeed(Pokemon user, Pokemon opponent, Duel duel, MoveNew move)
+    public String LeechSeed(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         //TODO: LeechSeed sucks health each turn, right now its coded to steal max health once
 

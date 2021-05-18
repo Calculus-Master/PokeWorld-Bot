@@ -2,13 +2,11 @@ package com.calculusmaster.pokecord.commands.moves;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
-import com.calculusmaster.pokecord.game.MoveNew;
+import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-
-import java.util.Locale;
 
 public class CommandMoveInfo extends Command
 {
@@ -31,13 +29,13 @@ public class CommandMoveInfo extends Command
             boolean isTM = moveString.startsWith("Tm");
             boolean isTR = moveString.startsWith("Tr");
 
-            if(!MoveNew.isMove(moveString) && !(isTM || isTR))
+            if(!Move.isMove(moveString) && !(isTM || isTR))
             {
                 this.embed.setDescription(CommandInvalid.getShort());
                 return this;
             }
 
-            MoveNew.MoveData m = isTM ? TM.get(Integer.parseInt(moveString.substring(2))).getMoveData() : (isTR ? TR.get(Integer.parseInt(moveString.substring(2))).getMoveData() : MoveNew.MOVES.get(moveString));
+            Move.MoveData m = isTM ? TM.get(Integer.parseInt(moveString.substring(2))).getMoveData() : (isTR ? TR.get(Integer.parseInt(moveString.substring(2))).getMoveData() : Move.MOVES.get(moveString));
 
             String title = m.name + " Info" + (isTM || isTR ? " (" + moveString.toUpperCase() + ")" : "");
             String info = m.info;
@@ -51,7 +49,7 @@ public class CommandMoveInfo extends Command
             this.embed.setDescription(info + "\n\n" + type + "\n" + category + "\n" + power + "\n" + accuracy + "\n" + zmove);
             this.color = m.type.getColor();
 
-            if(MoveNew.CUSTOM_MOVES.contains(moveString)) this.embed.setFooter("This move has a custom implementation! It may not work exactly as described!");
+            if(Move.CUSTOM_MOVES.contains(moveString)) this.embed.setFooter("This move has a custom implementation! It may not work exactly as described!");
         }
         return this;
     }

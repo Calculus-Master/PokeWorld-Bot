@@ -11,7 +11,7 @@ import com.mongodb.client.model.Filters;
 
 import java.util.*;
 
-public class MoveNew
+public class Move
 {
     public static Map<String, MoveData> MOVES = new HashMap<>();
     //TODO: Add the correct moves to each list and keep these updated
@@ -32,7 +32,7 @@ public class MoveNew
     }
 
     //TODO: Do this!
-    public MoveNew(String name)
+    public Move(String name)
     {
         this.moveData = MOVES.get(name);
         this.name = this.moveData.name;
@@ -67,7 +67,7 @@ public class MoveNew
 
         try
         {
-            results += (String)(typeClass.getMethod(this.name.replaceAll("\\s", ""), Pokemon.class, Pokemon.class, Duel.class, MoveNew.class).invoke(typeClass.getDeclaredConstructor().newInstance(), user, opponent, duel, this));
+            results += (String)(typeClass.getMethod(this.name.replaceAll("\\s", ""), Pokemon.class, Pokemon.class, Duel.class, Move.class).invoke(typeClass.getDeclaredConstructor().newInstance(), user, opponent, duel, this));
         }
         catch (Exception e)
         {
