@@ -197,6 +197,10 @@ public class Listener extends ListenerAdapter
             {
                 c = new CommandMarket(event, msg).runCommand();
             }
+            else if(Command.EVOLVE.contains(msg[0]))
+            {
+                c = new CommandEvolve(event, msg).runCommand();
+            }
             //Debug Commands
             else if(player.getId().equals("309135641453527040"))
             {
@@ -319,13 +323,13 @@ public class Listener extends ListenerAdapter
             event.getChannel().sendMessage(mention + ": Your " + p.getName() + " leveled up to Level " + p.getLevel() + "!").queue();
         }
 
-        if(p.canEvolve())
-        {
-            String old = p.getName();
-            p.evolve();
-
-            event.getChannel().sendMessage(mention + ": Your " + old + " evolved into a " + p.getName() + "!").queue();
-        }
+//        if(p.canEvolve())
+//        {
+//            String old = p.getName();
+//            p.evolve();
+//
+//            event.getChannel().sendMessage(mention + ": Your " + old + " evolved into a " + p.getName() + "!").queue();
+//        }
 
         Pokemon.updateExperience(p);
     }

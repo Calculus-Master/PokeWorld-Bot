@@ -46,6 +46,7 @@ public abstract class Command
     public static final CommandHelp.HelpEntry TRADE = new CommandHelp.HelpEntry("trade");
     public static final CommandHelp.HelpEntry GIVE = new CommandHelp.HelpEntry("give");
     public static final CommandHelp.HelpEntry MARKET = new CommandHelp.HelpEntry("market");
+    public static final CommandHelp.HelpEntry EVOLVE = new CommandHelp.HelpEntry("evolve");
 
     public static void init()
     {
@@ -224,6 +225,9 @@ public abstract class Command
                 .addArgDesc("list", "List a pokemon for sale on the market")
                 .addArgDesc("number", "The number of the pokemon you want to sell")
                 .addArgDesc("price", "The price you want to sell your pokemon for");
+
+        EVOLVE.setCategory(CommandHelp.CommandCategory.POKEMON)
+                .addShortDescription("Evolve your selected Pokemon, if it meets the necessary requirements!");
     }
 
     protected MessageReceivedEvent event;

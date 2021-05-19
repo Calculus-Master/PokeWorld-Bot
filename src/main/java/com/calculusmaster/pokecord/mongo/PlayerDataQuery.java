@@ -66,6 +66,11 @@ public class PlayerDataQuery extends MongoQuery
         return this.json().getString("username");
     }
 
+    public String getMention()
+    {
+        return "<@" + this.json().getString("playerID") + ">";
+    }
+
     public int getCredits()
     {
         return this.json().getInt("credits");
