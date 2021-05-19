@@ -11,15 +11,15 @@ public class PokemonRarity
 
     public static void init()
     {
-        PokemonRarity.add("Bulbasaur", Rarity.COPPER);
-        PokemonRarity.add("Ivysaur", Rarity.SILVER);
-        PokemonRarity.add("Venusaur", Rarity.GOLD);
-        PokemonRarity.add("Charmander", Rarity.COPPER);
-        PokemonRarity.add("Charmeleon", Rarity.SILVER);
-        PokemonRarity.add("Charizard", Rarity.GOLD);
-        PokemonRarity.add("Squirtle", Rarity.COPPER);
-        PokemonRarity.add("Wartortle", Rarity.SILVER);
-        PokemonRarity.add("Blastoise", Rarity.GOLD);
+        PokemonRarity.add("Bulbasaur", Rarity.SILVER);
+        PokemonRarity.add("Ivysaur", Rarity.GOLD);
+        PokemonRarity.add("Venusaur", Rarity.DIAMOND);
+        PokemonRarity.add("Charmander", Rarity.SILVER);
+        PokemonRarity.add("Charmeleon", Rarity.GOLD);
+        PokemonRarity.add("Charizard", Rarity.DIAMOND);
+        PokemonRarity.add("Squirtle", Rarity.SILVER);
+        PokemonRarity.add("Wartortle", Rarity.GOLD);
+        PokemonRarity.add("Blastoise", Rarity.DIAMOND);
         PokemonRarity.add("Caterpie", Rarity.COPPER);
         PokemonRarity.add("Metapod", Rarity.COPPER);
         PokemonRarity.add("Butterfree", Rarity.SILVER);
