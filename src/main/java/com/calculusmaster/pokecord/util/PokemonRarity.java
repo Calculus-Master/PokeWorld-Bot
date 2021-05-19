@@ -37,6 +37,9 @@ public class PokemonRarity
         PokemonRarity.add("Fearow", Rarity.SILVER);
         PokemonRarity.add("Ekans", Rarity.COPPER);
         PokemonRarity.add("Arbok", Rarity.SILVER);
+        PokemonRarity.add("Pikachu", Rarity.SILVER);
+        PokemonRarity.add("Raichu", Rarity.GOLD);
+        PokemonRarity.add("Alolan Raichu", Rarity.DIAMOND);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());
