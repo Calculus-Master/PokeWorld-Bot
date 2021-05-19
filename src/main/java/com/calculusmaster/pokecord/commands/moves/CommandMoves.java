@@ -17,11 +17,12 @@ public class CommandMoves extends Command
     public Command runCommand()
     {
         Pokemon selected = this.playerData.getSelectedPokemon();
+        boolean inDuel = Duel.isInDuel(this.player.getId());
 
         StringBuilder movesList = new StringBuilder().append("**Learned Moves: **\n");
         for(int i = 0; i < 4; i++) movesList.append("Move " + (i + 1) + ": " + selected.getLearnedMoves().get(i) + "\n");
 
-        if(!Duel.isInDuel(this.player.getId()))
+        if(!inDuel)
         {
             movesList.append("\n**All Moves: **\n");
             for (String s : selected.getAllMoves()) movesList.append(s + (selected.getAvailableMoves().contains(s) && (Move.isMove(s) && !Move.WIP_MOVES.contains(s)) ? "" : " :lock: ") + "\n");
@@ -29,7 +30,7 @@ public class CommandMoves extends Command
 
         this.embed.setDescription(movesList.toString());
         this.embed.setTitle("Level " + selected.getLevel() + " " + selected.getName());
-        this.embed.setFooter("Moves with :lock: next to them are either not yet unlocked, WIP, or not implemented! Unlock them by leveling up this Pokemon!");
+        if(!inDuel) this.embed.setFooter(":lock: signifies moves that are either not unlocked or not implemented! Unlock them by leveling up this Pokemon!");
 
         return this;
     }

@@ -24,6 +24,7 @@ public class Duel
 {
     public static final List<Duel> DUELS = new ArrayList<>();
     private static final String DUEL_BACKGROUND = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/33f87af1-69a0-4629-856b-bcd83431548e/d4o49yb-f6ce0e46-18c7-4b95-8604-dfc301eb506b.png/v1/fill/w_1192,h_670,q_70,strp/battle_bases_01bg_hd_by_xalien95_d4o49yb-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD0xMDgwIiwicGF0aCI6IlwvZlwvMzNmODdhZjEtNjlhMC00NjI5LTg1NmItYmNkODM0MzE1NDhlXC9kNG80OXliLWY2Y2UwZTQ2LTE4YzctNGI5NS04NjA0LWRmYzMwMWViNTA2Yi5wbmciLCJ3aWR0aCI6Ijw9MTkyMCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.vplnuE1otbM1_I8d7PytMdOC8XyVO2_g3Ig4P06OExI";
+    //private static final String DUEL_BACKGROUND = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/549a70f1-b9f4-4aa7-b76b-589288b03302/d6vkkr7-2c5b3fd6-ed46-4e66-a81e-cab4a30069a0.png/v1/fill/w_1032,h_774,strp/pokemon_x_and_y_vs_template_by_lil_riku_d6vkkr7-pre.png";
 
     private DuelStatus status;
 
@@ -178,7 +179,7 @@ public class Duel
         if((move.getType().equals(Type.FIRE) || move.getName().equals("Scald") || move.getName().equals("Steam Eruption")) && this.playerPokemon[this.getOtherTurn()].getStatusCondition().equals(StatusCondition.FROZEN)) this.playerPokemon[this.getOtherTurn()].removeStatusConditions();
 
         //Main move results
-        String results = !accurate ? move.getMissedResult(this.playerPokemon[this.turn]) : move.logic(this.playerPokemon[this.turn], this.playerPokemon[this.getOtherTurn()], this);
+        String results = "\n" + (!accurate ? move.getMissedResult(this.playerPokemon[this.turn]) : move.logic(this.playerPokemon[this.turn], this.playerPokemon[this.getOtherTurn()], this));
 
         //Status condition
         results += (!status.isEmpty() ? "\n" + status : "");

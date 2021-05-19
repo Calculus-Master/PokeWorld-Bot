@@ -13,6 +13,8 @@ import com.calculusmaster.pokecord.util.PokemonRarity;
 import com.calculusmaster.pokecord.util.PrivateInfo;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.internal.requests.Route;
 import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
