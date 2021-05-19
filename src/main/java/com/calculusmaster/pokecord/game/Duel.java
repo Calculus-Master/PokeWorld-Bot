@@ -389,7 +389,7 @@ public class Duel
     //Image
     public void setDuelImage() throws IOException
     {
-        int size = 256 + 128;
+        int size = 256 + 128 + 32;
         int hint = BufferedImage.TYPE_INT_ARGB;
 
         BufferedImage background = ImageIO.read(new URL(DUEL_BACKGROUND));
@@ -398,8 +398,8 @@ public class Duel
 
         BufferedImage combined = new BufferedImage(background.getWidth(), background.getHeight(), hint);
         combined.getGraphics().drawImage(background, 0, 0, null);
-        combined.getGraphics().drawImage(p1, 100, 250, null);
-        combined.getGraphics().drawImage(p2, 700, 50, null);
+        combined.getGraphics().drawImage(p1, 100, 150, null);
+        combined.getGraphics().drawImage(p2, 700, 150, null);
         combined.getGraphics().dispose();
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
