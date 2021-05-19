@@ -551,9 +551,16 @@ public class Pokemon
 
     public void evolve()
     {
-        if(!this.canEvolve()) return;
+        boolean isNormal = !this.specialCanEvolve();
+        String newEvolution = "";
 
-        String newEvolution = this.genericJSON.getJSONArray("evolutions").getString(0);
+        if(isNormal) newEvolution = this.genericJSON.getJSONArray("evolutions").getString(0);
+        else
+        {
+            if(this.getName().equals("Pikachu")) newEvolution = "Raichu";
+        }
+
+        if(newEvolution.isEmpty()) throw new IllegalStateException("Evolution failed - " + this.getName());
 
         this.linkGenericJSON(Global.normalCase(newEvolution));
         Pokemon.updateName(this, newEvolution);
