@@ -43,9 +43,9 @@ public class CommandUse extends Command
             if(duel.isComplete())
             {
                 duel.onWin();
-                duel.sendWinEmbed(this.event);
                 duel.giveWinExp();
                 duel.giveWinCredits();
+                duel.sendWinEmbed(this.event);
                 Duel.remove(this.player.getId());
                 this.embed = null;
             }

@@ -364,12 +364,14 @@ public class Duel
         event.getChannel().sendFile(this.getDuelImage(), "duel.png").embed(embed.build()).queue();
     }
 
+    private int winExp = 0;
+    private int winCredits = 0;
     public void sendWinEmbed(MessageReceivedEvent event)
     {
         EmbedBuilder embed = new EmbedBuilder();
 
         embed.setTitle(this.getTurnTitle());
-        embed.setDescription((this.playerPokemon[this.turn]).getName() + " defeated " + (this.playerPokemon[this.getOtherTurn()]).getName() + "!\n" + this.getNameFromID(getWinner()) + " has won!");
+        embed.setDescription((this.playerPokemon[this.turn]).getName() + " defeated " + (this.playerPokemon[this.getOtherTurn()]).getName() + "!\n" + this.getNameFromID(getWinner()) + " has won! The winner got " + this.winExp + "XP and " + this.winCredits + " credits!");
         embed.setColor(this.getTurnColor());
 
         Achievements.grant(this.getWinner(), Achievements.WON_1ST_DUEL, event);
@@ -382,7 +384,9 @@ public class Duel
         int winner = this.getWinner().equals(this.playerIDs[0]) ? 0 : 1;
         Pokemon win = this.playerPokemon[winner];
         double booster = this.playerData[winner].hasXPBooster() ? XPBooster.getInstance(this.playerData[winner].getXPBoosterLength()).boost : 1.0;
-        win.addExp((int)(booster * win.getDuelExp(this.playerPokemon[winner == 0 ? 1 : 0])));
+
+        this.winExp = (int)(booster * win.getDuelExp(this.playerPokemon[winner == 0 ? 1 : 0]));
+        win.addExp(this.winExp);
         win.gainEVs(this.playerPokemon[winner == 0 ? 1 : 0]);
 
         Pokemon.updateExperience(win);
@@ -391,7 +395,8 @@ public class Duel
 
     public void giveWinCredits()
     {
-        new PlayerDataQuery(this.getWinner()).changeCredits(new Random().nextInt(501) + 500);
+        this.winCredits = new Random().nextInt(501) + 500;
+        new PlayerDataQuery(this.getWinner()).changeCredits(this.winCredits);
     }
 
     private String getHealthBars()
