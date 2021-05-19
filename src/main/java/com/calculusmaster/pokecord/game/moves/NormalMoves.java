@@ -13,7 +13,7 @@ public class NormalMoves
     public String Tackle(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
 
         return move.getDamageResult(opponent, damage);
     }
@@ -67,7 +67,7 @@ public class NormalMoves
         move.setType(t);
 
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
 
         return move.getDamageResult(opponent, damage) + "Hidden Power's type was " + Global.normalCase(t.toString()) + "! ";
     }
@@ -90,8 +90,8 @@ public class NormalMoves
     {
         int damage = move.getDamage(user, opponent);
 
-        opponent.damage(damage);
-        user.damage(damage / 4);
+        opponent.damage(damage, duel);
+        user.damage(damage / 4, duel);
 
         return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 4);
     }
@@ -106,8 +106,8 @@ public class NormalMoves
     {
         int damage = move.getDamage(user, opponent);
 
-        opponent.damage(damage);
-        user.damage(damage / 3);
+        opponent.damage(damage, duel);
+        user.damage(damage / 3, duel);
 
         return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 3);
     }
@@ -115,7 +115,7 @@ public class NormalMoves
     public String Scratch(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
 
         return move.getDamageResult(opponent, damage);
     }
@@ -137,7 +137,7 @@ public class NormalMoves
     {
         user.setCrit(3);
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
         user.setCrit(1);
 
         return move.getDamageResult(opponent, damage);
@@ -153,7 +153,7 @@ public class NormalMoves
     public String RapidSpin(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
 
         user.changeStatMultiplier(Stat.SPD, 1);
 
@@ -169,7 +169,7 @@ public class NormalMoves
     public String SkullBash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
 
         user.changeStatMultiplier(Stat.DEF, 1);
 

@@ -13,13 +13,13 @@ public class DragonMoves
     public String DragonClaw(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
         return move.getDamageResult(opponent, damage);
     }
 
     public String DragonRage(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.damage(40);
+        opponent.damage(40, duel);
 
         return move.getDamageResult(opponent, 40);
     }
@@ -27,7 +27,7 @@ public class DragonMoves
     public String DragonBreath(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
 
         if(!opponent.getType()[0].equals(Type.ELECTRIC) && !opponent.getType()[1].equals(Type.ELECTRIC) && new Random().nextInt(100) < 30)
         {

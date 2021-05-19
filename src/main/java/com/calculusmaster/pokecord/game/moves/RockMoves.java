@@ -8,6 +8,6 @@ public class RockMoves
 {
     public String Rollout(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, move);
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 }

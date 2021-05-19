@@ -12,7 +12,7 @@ public class WaterMoves
 {
     public String WaterGun(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, move);
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String Withdraw(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -25,7 +25,7 @@ public class WaterMoves
     public String Bubble(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
 
         if(new Random().nextInt(100) < 10)
         {
@@ -40,7 +40,7 @@ public class WaterMoves
     public String WaterPulse(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
 
         if(new Random().nextInt(100) < 20)
         {
@@ -54,7 +54,7 @@ public class WaterMoves
     public String AquaTail(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
 
         return move.getDamageResult(opponent, damage);
     }
@@ -68,7 +68,7 @@ public class WaterMoves
     public String HydroPump(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
 
         return move.getDamageResult(opponent, damage);
     }

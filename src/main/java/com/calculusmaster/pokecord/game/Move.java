@@ -85,10 +85,10 @@ public class Move
 
     //Move logic
     //TODO: Propagate this method
-    public static String simpleDamageMove(Pokemon user, Pokemon opponent, Move move)
+    public static String simpleDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
 
         return move.getDamageResult(opponent, damage);
     }

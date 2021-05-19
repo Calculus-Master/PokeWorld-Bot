@@ -37,7 +37,7 @@ public class Duel
     private Weather duelWeather;
     private int weatherTurns;
 
-    private int turn;
+    public int turn;
     private byte[] duelImageBytes;
 
     //Assumes p2 is registered
@@ -92,11 +92,13 @@ public class Duel
         this.usedDefenseCurl = false;
         this.iceBallTurns = 1;
         this.rolloutTurns = 1;
+        this.lastDamage = 0;
     }
 
     //Variable specific to certain moves
     private boolean usedDefenseCurl;
     private int iceBallTurns, rolloutTurns;
+    public int lastDamage;
 
     public String doTurn(int moveIndex)
     {
@@ -116,8 +118,8 @@ public class Duel
             boolean isThisPokemonAffected = !this.playerPokemon[this.turn].getType()[0].equals(Type.ICE) || !this.playerPokemon[this.turn].getType()[1].equals(Type.ICE);
             boolean isOtherPokemonAffected = !this.playerPokemon[this.getOtherTurn()].getType()[0].equals(Type.ICE) || !this.playerPokemon[this.getOtherTurn()].getType()[1].equals(Type.ICE);
 
-            if(isThisPokemonAffected) this.playerPokemon[this.turn].damage(this.playerPokemon[this.turn].getStat(Stat.HP) / 16);
-            if(isOtherPokemonAffected) this.playerPokemon[this.getOtherTurn()].damage(this.playerPokemon[this.getOtherTurn()].getStat(Stat.HP) / 16);
+            if(isThisPokemonAffected) this.playerPokemon[this.turn].damage(this.playerPokemon[this.turn].getStat(Stat.HP) / 16, this);
+            if(isOtherPokemonAffected) this.playerPokemon[this.getOtherTurn()].damage(this.playerPokemon[this.getOtherTurn()].getStat(Stat.HP) / 16, this);
 
             weatherEffects = (isThisPokemonAffected && isOtherPokemonAffected ? "Both pokemon" : (isThisPokemonAffected ? this.playerPokemon[this.turn].getName() : (isOtherPokemonAffected ? this.playerPokemon[this.getOtherTurn()].getName() : "Neither pokemon"))) + " took damage from the freezing hailstorm!";
         }
@@ -132,7 +134,7 @@ public class Duel
         {
             case BURNED:
                 damage = (int)(this.playerPokemon[this.turn].getStat(Stat.HP) / 16.);
-                this.playerPokemon[this.turn].damage(damage);
+                this.playerPokemon[this.turn].damage(damage, this);
 
                 status = pokeName + " is burned! The burn dealt " + damage + " damage!";
                 break;
@@ -299,6 +301,11 @@ public class Duel
     public List<String> getPlayers()
     {
         return Arrays.asList(this.playerIDs);
+    }
+
+    public Pokemon[] getPokemon()
+    {
+        return this.playerPokemon;
     }
 
     public DuelStatus getStatus()

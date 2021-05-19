@@ -16,7 +16,7 @@ public class IceMoves
 
     public String IceBall(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, move);
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String IcicleCrash(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -24,10 +24,10 @@ public class IceMoves
         if(new Random().nextInt(100) < 30)
         {
             opponent.setFlinched(true);
-            return Move.simpleDamageMove(user, opponent, move) + " " + opponent.getName() + " flinched!";
+            return Move.simpleDamageMove(user, opponent, duel, move) + " " + opponent.getName() + " flinched!";
         }
 
-        return Move.simpleDamageMove(user, opponent, move);
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String IcicleSpear(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -65,7 +65,7 @@ public class IceMoves
             }
         }
 
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
 
         return move.getDamageResult(opponent, damage) + " Icicle Spear hit " + times + " time" + (times > 1 ? "s!" : "!");
     }

@@ -285,9 +285,11 @@ public class Pokemon
         this.health = num;
     }
 
-    public void damage(int amount)
+    public void damage(int amount, Duel duel)
     {
         this.health -= amount;
+        //TODO: Instead of making the parameter duel, just search the hashmap
+        if(!duel.getPokemon()[duel.turn].getUUID().equals(this.getUUID())) duel.lastDamage = amount;
     }
 
     public void heal(int amount)

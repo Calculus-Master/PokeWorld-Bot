@@ -11,7 +11,7 @@ public class DarkMoves
     public String Bite(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
 
         if(new Random().nextInt(100) < 30)
         {

@@ -22,7 +22,7 @@ public class PoisonMoves
 
         if(opponent.getStatusCondition().equals(StatusCondition.POISONED)) damage *= 2;
 
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
 
         return move.getDamageResult(opponent, damage);
     }

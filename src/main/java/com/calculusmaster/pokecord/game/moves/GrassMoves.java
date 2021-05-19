@@ -15,7 +15,7 @@ public class GrassMoves
         user.setCrit(3);
 
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
 
         user.setCrit(1);
 
@@ -25,7 +25,7 @@ public class GrassMoves
     public String VineWhip(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
 
         return move.getDamageResult(opponent, damage);
     }
@@ -39,7 +39,7 @@ public class GrassMoves
             int hpGain = opponent.getStat(Stat.HP) / 8;
 
             user.heal(hpGain);
-            opponent.damage(hpGain);
+            opponent.damage(hpGain, duel);
 
             return user.getName() + " leeched " + hpGain + " HP from " + opponent.getName() + "!";
         }
@@ -56,7 +56,7 @@ public class GrassMoves
     public String SeedBomb(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
 
         return move.getDamageResult(opponent, damage);
     }
@@ -92,7 +92,7 @@ public class GrassMoves
         if(duel.getDuelWeather().equals(Weather.RAIN) || duel.getDuelWeather().equals(Weather.HAIL) || duel.getDuelWeather().equals(Weather.SANDSTORM)) move.setPower(move.getPower() / 2);
 
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
 
         return move.getDamageResult(opponent, damage);
     }
@@ -100,7 +100,7 @@ public class GrassMoves
     public String PetalBlizzard(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
 
         return move.getDamageResult(opponent, damage);
     }
@@ -108,7 +108,7 @@ public class GrassMoves
     public String PetalDance(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        opponent.damage(damage, duel);
 
         opponent.setStatusCondition(StatusCondition.CONFUSED);
 
