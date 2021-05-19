@@ -26,7 +26,14 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.OffsetDateTime;
 import java.util.*;
 
@@ -261,10 +268,11 @@ public class Listener extends ListenerAdapter
         public void run()
         {
             timer.schedule(new SpawnEvent(this.server, this.spawnChannel), SpawnEvent.getDelay());
-            this.server.getTextChannelById(this.spawnChannel).sendMessage(spawnEvent(this.server).build()).queue();
+            new Thread(this::spawnEvent).start();
+            //this.server.getTextChannelById(this.spawnChannel).sendMessage(spawnEvent(this.server).build()).queue();
         }
 
-        private EmbedBuilder spawnEvent(Guild server)
+        private void spawnEvent()
         {
             String spawnPokemon = PokemonRarity.getSpawn();
             ServerDataQuery data = new ServerDataQuery(server.getId());
@@ -277,10 +285,24 @@ public class Listener extends ListenerAdapter
 
             embed.setTitle("A wild Pokemon spawned!");
             embed.setDescription("Try to guess its name and catch it with p!catch <name>!");
-            embed.setImage(Pokemon.genericJSON(Global.normalCase(spawnPokemon)).getString("normalURL"));
+            embed.setColor(new Color(new Random().nextInt(256), new Random().nextInt(256), new Random().nextInt(256)));
+
+            embed.setImage("attachment://pkmn.png");
+
+            try
+            {
+                URL url = new URL(Pokemon.genericJSON(Global.normalCase(spawnPokemon)).getString("normalURL"));
+                BufferedImage img = ImageIO.read(url);
+                File file = new File("pokemon.png");
+                ImageIO.write(img, "png", file);
+                this.server.getTextChannelById(this.spawnChannel).sendFile(file, "pkmn.png").embed(embed.build()).queue();
+            }
+            catch (Exception e)
+            {
+                System.out.println("SPAWN EVENT FAILED!");
+            }
 
             this.forcedSpawn = "";
-            return embed;
         }
 
         //TODO: Figure out better spawn rate

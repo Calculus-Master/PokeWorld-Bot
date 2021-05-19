@@ -34,6 +34,7 @@ public class Global
     public static void updatePokemonInList(String UUID)
     {
         String playerID = "";
+        System.out.println(POKEMON_LISTS);
         for(String s : POKEMON_LISTS.keySet()) if(POKEMON_LISTS.get(s).stream().anyMatch(p -> p.getUUID().equals(UUID))) playerID = s;
         updatePokemonList(playerID);
     }
