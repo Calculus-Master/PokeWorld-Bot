@@ -4,6 +4,8 @@ import com.calculusmaster.pokecord.game.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 
+import java.util.Random;
+
 public class IceMoves
 {
     public String Hail(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -15,5 +17,56 @@ public class IceMoves
     public String IceBall(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return Move.simpleDamageMove(user, opponent, move);
+    }
+
+    public String IcicleCrash(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(new Random().nextInt(100) < 30)
+        {
+            opponent.setFlinched(true);
+            return Move.simpleDamageMove(user, opponent, move) + " " + opponent.getName() + " flinched!";
+        }
+
+        return Move.simpleDamageMove(user, opponent, move);
+    }
+
+    public String IcicleSpear(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        int times = 1;
+
+        Random r = new Random();
+
+        if(r.nextInt(8) < 3)
+        {
+            move.setPower(50);
+            damage += move.getDamage(user, opponent);
+            times++;
+
+            if(r.nextInt(8) < 3)
+            {
+                move.setPower(75);
+                damage += move.getDamage(user, opponent);
+                times++;
+
+                if(r.nextInt(8) < 1)
+                {
+                    move.setPower(100);
+                    damage += move.getDamage(user, opponent);
+                    times++;
+
+                    if(r.nextInt(8) < 1)
+                    {
+                        move.setPower(125);
+                        damage += move.getDamage(user, opponent);
+                        times++;
+                    }
+                }
+            }
+        }
+
+        opponent.damage(damage);
+
+        return move.getDamageResult(opponent, damage) + " Icicle Spear hit " + times + " time" + (times > 1 ? "s!" : "!");
     }
 }

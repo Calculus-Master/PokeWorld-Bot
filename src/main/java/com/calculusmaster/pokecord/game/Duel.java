@@ -197,6 +197,7 @@ public class Duel
 
             move.setPower((this.usedDefenseCurl ? 2 : 1) * 30 * (int) Math.pow(2, this.rolloutTurns));
         }
+        else this.rolloutTurns = 1;
 
         if(move.getName().equals("Ice Ball"))
         {
