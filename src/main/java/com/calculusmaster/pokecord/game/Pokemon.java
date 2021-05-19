@@ -44,6 +44,7 @@ public class Pokemon
     private StatusCondition status;
     private int crit;
     private Map<Stat, Integer> statMultiplier = new TreeMap<>();
+    private boolean isFlinched;
 
     //Init Global List
     public static void init()
@@ -77,6 +78,7 @@ public class Pokemon
         p.removeStatusConditions();
         p.setCrit(1);
         p.setDefaultStatMultipliers();
+        p.setFlinched(false);
 
         Global.logInfo(Pokemon.class, "build", "Pokemon Built (UUID: " + UUID + ", Name: " + p.getName() + ")!");
         return p;
@@ -104,6 +106,7 @@ public class Pokemon
         p.removeStatusConditions();
         p.setCrit(1);
         p.setDefaultStatMultipliers();
+        p.setFlinched(false);
 
         Global.logInfo(Pokemon.class, "create", "New Pokemon (" + name + ") Created!");
         return p;
@@ -264,6 +267,16 @@ public class Pokemon
     public StatusCondition getStatusCondition()
     {
         return this.status;
+    }
+
+    public void setFlinched(boolean flinched)
+    {
+        this.isFlinched = flinched;
+    }
+
+    public boolean isFlinched()
+    {
+        return this.isFlinched;
     }
 
     //Health

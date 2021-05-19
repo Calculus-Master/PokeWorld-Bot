@@ -165,6 +165,13 @@ public class Duel
                 break;
         }
 
+        //Flinching
+        if(this.playerPokemon[this.turn].isFlinched())
+        {
+            this.playerPokemon[this.turn].setFlinched(false);
+            return this.playerPokemon[this.turn].getName() + " flinched and cannot move!";
+        }
+
         //Add code here that needs to check things every turn
 
         //Unfreeze opponent if move is fire type

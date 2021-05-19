@@ -41,6 +41,12 @@ public class Listener extends ListenerAdapter
         //Check if the message was sent by a bot, and skip the listener if true
         if(event.getAuthor().isBot()) return;
 
+        //If a link is sent, skip the listener
+        if(event.getMessage().getContentRaw().toLowerCase().startsWith("http")) return;
+
+        //If any attachment is sent, skip the listener
+        if(event.getMessage().getAttachments().size() > 0) return;
+
         User player = event.getAuthor();
         Guild server = event.getGuild();
         String[] msg = event.getMessage().getContentRaw().toLowerCase().trim().split("\\s+");

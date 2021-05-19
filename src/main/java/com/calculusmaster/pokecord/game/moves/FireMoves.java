@@ -26,8 +26,25 @@ public class FireMoves
 
     public String FireFang(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Ember(user, opponent, duel, move);
-        //TODO: Flinching
+        int damage = move.getDamage(user, opponent);
+        opponent.damage(damage);
+
+        String burned = "";
+        String flinched = "";
+
+        if((!opponent.getType()[0].equals(Type.FIRE) && !opponent.getType()[1].equals(Type.FIRE)) && new Random().nextInt(100) < 10)
+        {
+            opponent.setStatusCondition(StatusCondition.BURNED);
+            burned = " " + opponent.getName() + " is burned!";
+        }
+
+        if(new Random().nextInt(100) < 10)
+        {
+            opponent.setFlinched(true);
+            flinched = " " + opponent.getName() + " flinched!";
+        }
+
+        return move.getDamageResult(opponent, damage) + burned + flinched;
     }
 
     public String FlameBurst(Pokemon user, Pokemon opponent, Duel duel, Move move)
