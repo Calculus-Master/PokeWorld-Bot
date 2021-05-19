@@ -45,8 +45,8 @@ public class CommandCatch extends Command
                 this.playerData.addPokemon(caught.getUUID());
             }).start();
 
-            this.embed.setDescription("You caught a **Level " + caught.getLevel() + " " + caught.getName() + "**!");
-            this.color = caught.getType()[0].getColor();
+            this.embed = null;
+            this.event.getChannel().sendMessage("<@" + this.player.getId() + ">: You caught a **Level " + caught.getLevel() + " " + caught.getName() + "**!").queue();
 
             this.serverData.setSpawn("");
         }
