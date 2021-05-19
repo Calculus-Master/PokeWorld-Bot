@@ -142,4 +142,37 @@ public class NormalMoves
 
         return move.getDamageResult(opponent, damage);
     }
+
+    public String TailWhip(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.changeStatMultiplier(Stat.DEF, -1);
+
+        return opponent.getName() + "'s Defense was lowered by 1 stage!";
+    }
+
+    public String RapidSpin(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        opponent.damage(damage);
+
+        user.changeStatMultiplier(Stat.SPD, 1);
+
+        return move.getDamageResult(opponent, damage) + " " + user.getName() + "'s Speed rose by 1 stage!";
+    }
+
+    public String Protect(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        //TODO: Protect!
+        return move.getNotImplementedResult();
+    }
+
+    public String SkullBash(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        opponent.damage(damage);
+
+        user.changeStatMultiplier(Stat.DEF, 1);
+
+        return move.getDamageResult(opponent, damage) + " " + user.getName() + "'s Defense rose by 1 stage!";
+    }
 }

@@ -16,8 +16,8 @@ public class Move
     public static Map<String, MoveData> MOVES = new HashMap<>();
     //TODO: Add the correct moves to each list and keep these updated
     //TODO: Keep checking the custom moves and see if they can function as close to the original as possible
-    public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Hail", "Sweet Scent", "Smokescreen");
-    public static final List<String> CUSTOM_MOVES = Arrays.asList("Leech Seed", "Toxic", "Fire Spin", "Air Slash");
+    public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Hail", "Sweet Scent", "Smokescreen", "Protect", "Rain Dance");
+    public static final List<String> CUSTOM_MOVES = Arrays.asList("Leech Seed", "Toxic", "Rapid Spin");
 
     private String name;
     private MoveData moveData;
@@ -81,6 +81,16 @@ public class Move
         }
 
         return results;
+    }
+
+    //Move logic
+    //TODO: Propagate this method
+    public static String simpleDamageMove(Pokemon user, Pokemon opponent, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        opponent.damage(damage);
+
+        return move.getDamageResult(opponent, damage);
     }
 
     //Different Move Results
