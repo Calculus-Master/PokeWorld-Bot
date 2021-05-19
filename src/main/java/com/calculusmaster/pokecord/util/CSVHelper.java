@@ -37,7 +37,7 @@ public class CSVHelper
         createCSVLists();
 
         //Write files
-        for(int i = 1; i <= 807; i++) writePokemonJSONFile(i);
+        for(int i = 27; i <= 807; i++) writePokemonJSONFile(i);
     }
 
     private static void createCSVLists() throws IOException, CsvException

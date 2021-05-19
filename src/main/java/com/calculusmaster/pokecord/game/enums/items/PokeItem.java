@@ -8,7 +8,8 @@ import java.util.stream.Collectors;
 public enum PokeItem
 {
     NONE(0),
-    THUNDER_STONE(250);
+    THUNDER_STONE(250),
+    ICE_STONE(250);
 
     public int cost;
     PokeItem(int cost)

@@ -545,6 +545,7 @@ public class Pokemon
         switch(this.getName())
         {
             case "Pikachu": return item.equals(PokeItem.THUNDER_STONE);
+            case "Alolan Sandshrew": return item.equals(PokeItem.ICE_STONE);
             default: return false;
         }
     }
@@ -558,6 +559,7 @@ public class Pokemon
         else
         {
             if(this.getName().equals("Pikachu")) newEvolution = "Raichu";
+            else if(this.getName().equals("Alolan Sandshrew")) newEvolution = "Alolan Sandslash";
         }
 
         if(newEvolution.isEmpty()) throw new IllegalStateException("Evolution failed - " + this.getName());

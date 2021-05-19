@@ -40,6 +40,10 @@ public class PokemonRarity
         PokemonRarity.add("Pikachu", Rarity.SILVER);
         PokemonRarity.add("Raichu", Rarity.GOLD);
         PokemonRarity.add("Alolan Raichu", Rarity.DIAMOND);
+        PokemonRarity.add("Sandshrew", Rarity.COPPER);
+        PokemonRarity.add("Alolan Sandshrew", Rarity.SILVER);
+        PokemonRarity.add("Sandslash", Rarity.SILVER);
+        PokemonRarity.add("Alolan Sandslash", Rarity.GOLD);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());
