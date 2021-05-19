@@ -51,6 +51,7 @@ public class Duel
         d.setPlayerPokemon();
         d.setDuelStatus(DuelStatus.WAITING);
         d.setDuelWeather(Weather.CLEAR);
+        d.setDefaultInstanceVariables();
 
         DUELS.add(d);
         return d;
@@ -85,6 +86,17 @@ public class Duel
 
         this.setDuelStatus(DuelStatus.DUELING);
     }
+
+    public void setDefaultInstanceVariables()
+    {
+        this.usedDefenseCurl = false;
+        this.iceBallTurns = 1;
+        this.rolloutTurns = 1;
+    }
+
+    //Variable specific to certain moves
+    private boolean usedDefenseCurl;
+    private int iceBallTurns, rolloutTurns;
 
     public String doTurn(int moveIndex)
     {
@@ -178,8 +190,33 @@ public class Duel
         //Unfreeze opponent if move is fire type
         if((move.getType().equals(Type.FIRE) || move.getName().equals("Scald") || move.getName().equals("Steam Eruption")) && this.playerPokemon[this.getOtherTurn()].getStatusCondition().equals(StatusCondition.FROZEN)) this.playerPokemon[this.getOtherTurn()].removeStatusConditions();
 
+        if(move.getName().equals("Rollout"))
+        {
+            if(accurate) this.rolloutTurns++;
+            else this.rolloutTurns = 1;
+
+            move.setPower((this.usedDefenseCurl ? 2 : 1) * 30 * (int) Math.pow(2, this.rolloutTurns));
+        }
+
+        if(move.getName().equals("Ice Ball"))
+        {
+            if(accurate) this.iceBallTurns++;
+            else this.iceBallTurns = 1;
+
+            move.setPower((this.usedDefenseCurl ? 2 : 1) * 30 * (int) Math.pow(2, this.iceBallTurns));
+        }
+        else this.iceBallTurns = 1;
+
         //Main move results
-        String results = "\n" + (!accurate ? move.getMissedResult(this.playerPokemon[this.turn]) : move.logic(this.playerPokemon[this.turn], this.playerPokemon[this.getOtherTurn()], this));
+        String results = "\n";
+
+        if(!accurate) results += move.getMissedResult(this.playerPokemon[this.turn]);
+        else
+        {
+            results += move.logic(this.playerPokemon[this.turn], this.playerPokemon[this.getOtherTurn()], this);
+
+            if(move.getName().equals("Defense Curl")) this.usedDefenseCurl = true;
+        }
 
         //Status condition
         results += (!status.isEmpty() ? "\n" + status : "");

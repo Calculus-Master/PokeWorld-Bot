@@ -11,4 +11,9 @@ public class IceMoves
         //TODO: Hail!
         return "NYI";
     }
+
+    public String IceBall(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, move);
+    }
 }

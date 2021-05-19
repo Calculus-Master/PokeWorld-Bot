@@ -186,4 +186,11 @@ public class NormalMoves
 
         return user.getName() + "'s Defense and Special Defense were lowered by 1 stage each! " + user.getName() + "'s Attack, Special Attack and Speed rose by 2 stages each!";
     }
+
+    public String DefenseCurl(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.changeStatMultiplier(Stat.DEF, 1);
+
+        return user.getName() + "'s Defense rose by 1 stage!";
+    }
 }
