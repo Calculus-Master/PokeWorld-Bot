@@ -221,4 +221,11 @@ public class NormalMoves
 
         return success ? opponent.getName() + "'s Special Attack was lowered by 2 stages!" : move.getNothingResult();
     }
+
+    public String Harden(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.changeStatMultiplier(Stat.DEF, 1);
+
+        return user.getName() + "'s Defense rose by 1 stage!";
+    }
 }
