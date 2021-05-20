@@ -71,6 +71,11 @@ public class PokemonRarity
         PokemonRarity.add("Alolan Diglett", Rarity.SILVER);
         PokemonRarity.add("Dugtrio", Rarity.SILVER);
         PokemonRarity.add("Alolan Dugtrio", Rarity.SILVER);
+        PokemonRarity.add("Meowth", Rarity.COPPER);
+        PokemonRarity.add("Alolan Meowth", Rarity.SILVER);
+        PokemonRarity.add("Galarian Meowth", Rarity.SILVER);
+        PokemonRarity.add("Persian", Rarity.SILVER);
+        PokemonRarity.add("Alolan Persian", Rarity.SILVER);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());

@@ -543,6 +543,7 @@ public class Pokemon
     public boolean specialCanEvolve()
     {
         PokeItem item = PokeItem.asItem(this.getItem());
+        //TODO: Friendship evolutions: Alolan Meowth -> Persian
 
         switch(this.getName())
         {
