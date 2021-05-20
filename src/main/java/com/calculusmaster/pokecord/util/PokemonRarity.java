@@ -80,6 +80,8 @@ public class PokemonRarity
         PokemonRarity.add("Golduck", Rarity.SILVER);
         PokemonRarity.add("Mankey", Rarity.COPPER);
         PokemonRarity.add("Primeape", Rarity.SILVER);
+        PokemonRarity.add("Growlithe", Rarity.SILVER);
+        PokemonRarity.add("Arcanine", Rarity.GOLD);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());
