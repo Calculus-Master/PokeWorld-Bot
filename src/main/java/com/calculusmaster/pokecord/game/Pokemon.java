@@ -547,10 +547,12 @@ public class Pokemon
         switch(this.getName())
         {
             case "Pikachu": return item.equals(PokeItem.THUNDER_STONE);
-            case "Alolan Sandshrew": return item.equals(PokeItem.ICE_STONE);
+            case "Alolan Sandshrew":
+            case "Alolan Vulpix": return item.equals(PokeItem.ICE_STONE);
             case "Nidorina":
             case "Nidorino":
             case "Clefairy": return item.equals(PokeItem.MOON_STONE);
+            case "Vulpix": return item.equals(PokeItem.FIRE_STONE);
             default: return false;
         }
     }
@@ -568,6 +570,8 @@ public class Pokemon
                 case "Nidorina" -> "Nidoqueen";
                 case "Nidorino" -> "Nidoking";
                 case "Clefairy" -> "Clefable";
+                case "Vulpix" -> "Ninetales";
+                case "Alolan Vulpix" -> "Alolan Ninetales";
                 default -> "";
             };
 
