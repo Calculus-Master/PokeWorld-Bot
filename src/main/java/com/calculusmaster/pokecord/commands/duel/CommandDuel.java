@@ -111,7 +111,7 @@ public class CommandDuel extends Command
             if(Duel.getInstance(this.id).getStatus().equals(Duel.DuelStatus.WAITING))
             {
                 Duel.remove(this.id);
-                this.event.getChannel().sendMessage("Duel request expired!").queue();
+                this.event.getChannel().sendMessage("<@" + this.id + ">: Duel request expired!").queue();
             }
         }
     }

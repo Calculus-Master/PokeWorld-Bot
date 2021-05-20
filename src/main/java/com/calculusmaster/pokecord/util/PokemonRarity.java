@@ -44,6 +44,12 @@ public class PokemonRarity
         PokemonRarity.add("Alolan Sandshrew", Rarity.SILVER);
         PokemonRarity.add("Sandslash", Rarity.SILVER);
         PokemonRarity.add("Alolan Sandslash", Rarity.GOLD);
+        PokemonRarity.add("NidoranF", Rarity.COPPER);
+        PokemonRarity.add("Nidorina", Rarity.SILVER);
+        PokemonRarity.add("Nidoqueen", Rarity.DIAMOND);
+        PokemonRarity.add("NidoranM", Rarity.COPPER);
+        PokemonRarity.add("Nidorino", Rarity.SILVER);
+        PokemonRarity.add("Nidoking", Rarity.DIAMOND);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());

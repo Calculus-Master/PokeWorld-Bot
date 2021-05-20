@@ -548,6 +548,8 @@ public class Pokemon
         {
             case "Pikachu": return item.equals(PokeItem.THUNDER_STONE);
             case "Alolan Sandshrew": return item.equals(PokeItem.ICE_STONE);
+            case "Nidorina": return item.equals(PokeItem.MOON_STONE);
+            case "Nidorino": return item.equals(PokeItem.MOON_STONE);
             default: return false;
         }
     }
@@ -558,11 +560,14 @@ public class Pokemon
         String newEvolution = "";
 
         if(isNormal) newEvolution = this.genericJSON.getJSONArray("evolutions").getString(0);
-        else
-        {
-            if(this.getName().equals("Pikachu")) newEvolution = "Raichu";
-            else if(this.getName().equals("Alolan Sandshrew")) newEvolution = "Alolan Sandslash";
-        }
+        else newEvolution = switch(this.getName())
+            {
+                case "Pikachu" -> "Raichu";
+                case "Alolan Sandshrew" -> "Alolan Sandslash";
+                case "Nidorina" -> "Nidoqueen";
+                case "Nidorino" -> "Nidoking";
+                default -> "";
+            };
 
         if(newEvolution.isEmpty()) throw new IllegalStateException("Evolution failed - " + this.getName());
 
