@@ -58,6 +58,19 @@ public class PokemonRarity
         PokemonRarity.add("Alolan Ninetales", Rarity.GOLD);
         PokemonRarity.add("Jigglypuff", Rarity.COPPER);
         PokemonRarity.add("Wigglytuff", Rarity.SILVER);
+        PokemonRarity.add("Zubat", Rarity.COPPER);
+        PokemonRarity.add("Golbat", Rarity.SILVER);
+        PokemonRarity.add("Oddish", Rarity.COPPER);
+        PokemonRarity.add("Gloom", Rarity.SILVER);
+        PokemonRarity.add("Vileplume", Rarity.GOLD);
+        PokemonRarity.add("Paras", Rarity.COPPER);
+        PokemonRarity.add("Parasect", Rarity.SILVER);
+        PokemonRarity.add("Venonat", Rarity.COPPER);
+        PokemonRarity.add("Venomoth", Rarity.SILVER);
+        PokemonRarity.add("Diglett", Rarity.COPPER);
+        PokemonRarity.add("Alolan Diglett", Rarity.SILVER);
+        PokemonRarity.add("Dugtrio", Rarity.SILVER);
+        PokemonRarity.add("Alolan Dugtrio", Rarity.SILVER);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());

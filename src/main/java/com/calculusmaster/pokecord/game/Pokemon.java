@@ -554,6 +554,7 @@ public class Pokemon
             case "Clefairy":
             case "Jigglypuff": return item.equals(PokeItem.MOON_STONE);
             case "Vulpix": return item.equals(PokeItem.FIRE_STONE);
+            case "Gloom": return item.equals(PokeItem.LEAF_STONE) || item.equals(PokeItem.SUN_STONE);
             default: return false;
         }
     }
@@ -574,6 +575,7 @@ public class Pokemon
                 case "Vulpix" -> "Ninetales";
                 case "Alolan Vulpix" -> "Alolan Ninetales";
                 case "Jigglypuff" -> "Wigglytuff";
+                case "Gloom" -> PokeItem.asItem(this.getItem()).equals(PokeItem.LEAF_STONE) ? "Vileplume" : "Bellossom";
                 default -> "";
             };
 
