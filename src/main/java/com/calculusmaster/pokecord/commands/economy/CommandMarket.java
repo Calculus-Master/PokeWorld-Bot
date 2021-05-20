@@ -65,7 +65,7 @@ public class CommandMarket extends Command
 
                 this.playerData.changeCredits(-1 * entry.price);
                 this.playerData.addPokemon(entry.pokemonID);
-                new PlayerDataQuery(entry.sellerID).changeCredits(entry.price);
+                if(!entry.sellerID.equals("BOT")) new PlayerDataQuery(entry.sellerID).changeCredits(entry.price);
 
                 this.embed.setDescription("Purchased a Level " + entry.pokemon.getLevel() + " " + entry.pokemon.getName() + " for " + entry.price + "c!");
             }
@@ -193,6 +193,22 @@ public class CommandMarket extends Command
         }
 
         return out;
+    }
+
+    public static void addBotEntry()
+    {
+        Pokemon p = Pokemon.create(Global.POKEMON.get(new Random().nextInt(Global.POKEMON.size())));
+        p.setLevel(new Random().nextInt(100) + 1);
+
+        Pokemon.uploadPokemon(p);
+
+        int val = p.getValue();
+
+        val += new Random().nextInt(val / 4) * (new Random().nextInt(50) < 25 ? -1 : 1);
+
+        MarketEntry m = MarketEntry.create("BOT", "BOT", p.getUUID(), p.getValue());
+
+        marketEntries.add(m);
     }
 
     private static String getMarketPage(List<MarketEntry> list, int start)

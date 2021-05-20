@@ -274,6 +274,8 @@ public class Listener extends ListenerAdapter
 
         private void spawnEvent()
         {
+            CommandMarket.addBotEntry();
+
             String spawnPokemon = PokemonRarity.getSpawn();
             ServerDataQuery data = new ServerDataQuery(server.getId());
 

@@ -1,13 +1,11 @@
 package com.calculusmaster.pokecord.util;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class PokemonRarity
 {
     public static final List<String> SPAWNS = new ArrayList<>();
+    public static final Map<String, Rarity> POKEMON_RARITIES = new HashMap<>();
 
     public static void init()
     {
@@ -115,6 +113,8 @@ public class PokemonRarity
     public static void add(String name, Rarity r)
     {
         for(int i = 0; i < r.num; i++) SPAWNS.add(name);
+
+        POKEMON_RARITIES.put(name, r);
     }
 
     public enum Rarity

@@ -68,13 +68,16 @@ public class CommandShop extends Command
         if(day < this.event.getMessage().getTimeCreated().getDayOfYear())
         {
             day = this.event.getMessage().getTimeCreated().getDayOfYear();
-            int num = new Random().nextInt(5) + 1;
+            int num = new Random().nextInt(8) + 3;
             entriesItem.clear();
 
             PokeItem item;
             for(int i = 0; i < num; i++)
             {
                 item = PokeItem.values()[new Random().nextInt(PokeItem.values().length)];
+
+                if(item.equals(PokeItem.NONE)) i--;
+
                 if(!entriesItem.contains(item) && !item.equals(PokeItem.NONE))
                 {
                     entriesItem.add(item);
