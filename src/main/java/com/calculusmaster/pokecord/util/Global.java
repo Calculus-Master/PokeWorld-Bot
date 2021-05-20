@@ -69,6 +69,11 @@ public class Global
 
     public static String normalCase(String s)
     {
+        if(s.toLowerCase().startsWith("nidoran"))
+        {
+            return s.toLowerCase().contains("f") ? "NidoranF" : "NidoranM";
+        }
+
         StringBuilder sb = new StringBuilder();
         for(String str : s.replaceAll("-", " ").split("\\s+")) sb.append(str.substring(0, 1).toUpperCase()).append(str.substring(1).toLowerCase()).append(" ");
         return s.contains("-") ? sb.toString().replaceAll("\\s", "-").trim() : sb.toString().trim();
