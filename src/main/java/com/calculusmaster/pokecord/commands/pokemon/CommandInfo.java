@@ -64,6 +64,6 @@ public class CommandInfo extends Command
 
     private static String formatStat(Pokemon p, Stat s, String statName)
     {
-        return "**" + statName + ":** " + p.getStat(s) + " - IV: " + p.getIVs().get(s) + " / 31\n";
+        return "**" + statName + ":** " + p.getStat(s) + " - IV: " + p.getIVs().get(s) + " / 31 " + "(EV: " + p.getEVs().get(s) + ")\n";
     }
 }
