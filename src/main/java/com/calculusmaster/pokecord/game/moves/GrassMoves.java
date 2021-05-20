@@ -114,4 +114,11 @@ public class GrassMoves
 
         return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " is now confused!";
     }
+
+    public String StunSpore(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.setStatusCondition(StatusCondition.PARALYZED);
+
+        return opponent.getName() + " is paralyzed!";
+    }
 }

@@ -21,4 +21,14 @@ public class FlyingMoves
 
         return move.getDamageResult(opponent, damage);
     }
+
+    public String Gust(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String Tailwind(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
 }

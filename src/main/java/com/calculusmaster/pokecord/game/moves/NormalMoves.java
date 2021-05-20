@@ -4,9 +4,12 @@ import com.calculusmaster.pokecord.game.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.elements.Weather;
 import com.calculusmaster.pokecord.util.Global;
+
+import java.util.Random;
 
 public class NormalMoves
 {
@@ -192,5 +195,30 @@ public class NormalMoves
         user.changeStatMultiplier(Stat.DEF, 1);
 
         return user.getName() + "'s Defense rose by 1 stage!";
+    }
+
+    public String Supersonic(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.setStatusCondition(StatusCondition.CONFUSED);
+
+        return opponent.getName() + " is confused!";
+    }
+
+    public String Safeguard(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String Whirlwind(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String Captivate(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        boolean success = new Random().nextInt(100) < 50;
+        if(success) opponent.changeStatMultiplier(Stat.SPATK, -2);
+
+        return success ? opponent.getName() + "'s Special Attack was lowered by 2 stages!" : move.getNothingResult();
     }
 }
