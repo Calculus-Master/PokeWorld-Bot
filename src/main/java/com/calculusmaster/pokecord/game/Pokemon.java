@@ -612,6 +612,8 @@ public class Pokemon
         PokeItem item = PokeItem.asItem(this.getItem());
         //TODO: Friendship evolutions: Alolan Meowth -> Persian
         //TODO: Trade evolutions: Poliwhirl -> Politoed, Kadabra -> Alakazam, Machoke -> Machamp, Graveler -> Golem, Alolan Graveler -> Alolan Golem
+        //TODO: Trade evolutions w/item: Slowpoke -> Slowking w/Kings Rock
+        //TODO: Item evolutions: Galarian Slowpoke -> Galarian Slowbro (w/Galarica Cuff), Galarian Slowpoke -> Galarian Slowking (w/Galarica Wreath)
 
         switch(this.getName())
         {
