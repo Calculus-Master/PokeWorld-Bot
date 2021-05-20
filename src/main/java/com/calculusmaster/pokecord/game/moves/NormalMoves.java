@@ -228,4 +228,68 @@ public class NormalMoves
 
         return user.getName() + "'s Defense rose by 1 stage!";
     }
+
+    public String FuryAttack(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        int times = 1;
+
+        Random r = new Random();
+
+        if(r.nextInt(8) < 3)
+        {
+            move.setPower(30);
+            damage += move.getDamage(user, opponent);
+            times++;
+
+            if(r.nextInt(8) < 3)
+            {
+                move.setPower(45);
+                damage += move.getDamage(user, opponent);
+                times++;
+
+                if(r.nextInt(8) < 1)
+                {
+                    move.setPower(60);
+                    damage += move.getDamage(user, opponent);
+                    times++;
+
+                    if(r.nextInt(8) < 1)
+                    {
+                        move.setPower(75);
+                        damage += move.getDamage(user, opponent);
+                        times++;
+                    }
+                }
+            }
+        }
+
+        opponent.damage(damage, duel);
+
+        return move.getDamageResult(opponent, damage) + " Icicle Spear hit " + times + " time" + (times > 1 ? "s!" : "!");
+    }
+
+    public String Rage(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String FocusEnergy(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.setCrit(user.getCrit() * 3);
+
+        return user.getName() + "'s critical ratio was increased!";
+    }
+
+    public String Endeavor(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = opponent.getHealth() - user.getHealth();
+
+        if(damage > 0)
+        {
+            opponent.damage(damage, duel);
+            return move.getDamageResult(opponent, damage);
+        }
+        else return move.getNothingResult();
+    }
 }

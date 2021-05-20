@@ -4,6 +4,8 @@ import com.calculusmaster.pokecord.game.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 
 import java.util.Random;
 
@@ -54,5 +56,76 @@ public class BugMoves
         user.changeStatMultiplier(Stat.SPD, 1);
 
         return user.getName() + "'s Special Attack, Special Defense and Speed rose by 1 stage";
+    }
+
+    public String Twineedle(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        damage += move.getDamage(user, opponent);
+
+        if(!opponent.getType()[0].equals(Type.STEEL) && !opponent.getType()[1].equals(Type.STEEL) && !opponent.getType()[0].equals(Type.POISON) && !opponent.getType()[1].equals(Type.POISON))
+        {
+            if(new Random().nextInt(100) < 20)
+            {
+                opponent.setStatusCondition(StatusCondition.POISONED);
+                return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " is poisoned!";
+            }
+        }
+
+        return move.getDamageResult(opponent, damage);
+    }
+
+    public String PinMissile(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        int times = 1;
+
+        Random r = new Random();
+
+        if(r.nextInt(8) < 3)
+        {
+            move.setPower(50);
+            damage += move.getDamage(user, opponent);
+            times++;
+
+            if(r.nextInt(8) < 3)
+            {
+                move.setPower(75);
+                damage += move.getDamage(user, opponent);
+                times++;
+
+                if(r.nextInt(8) < 1)
+                {
+                    move.setPower(100);
+                    damage += move.getDamage(user, opponent);
+                    times++;
+
+                    if(r.nextInt(8) < 1)
+                    {
+                        move.setPower(125);
+                        damage += move.getDamage(user, opponent);
+                        times++;
+                    }
+                }
+            }
+        }
+
+        opponent.damage(damage, duel);
+
+        return move.getDamageResult(opponent, damage) + " Pin Missile hit " + times + " time" + (times > 1 ? "s!" : "!");
+    }
+
+    public String FellStinger(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        opponent.damage(damage, duel);
+
+        if(damage > user.getHealth())
+        {
+            user.changeStatMultiplier(Stat.ATK, 3);
+            return move.getDamageResult(opponent, damage) + " " + user.getName() + "'s Attack rose by 3 stages!";
+        }
+
+        return move.getDamageResult(opponent, damage);
     }
 }

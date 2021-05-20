@@ -743,6 +743,11 @@ public class Pokemon
         this.crit = crit;
     }
 
+    public int getCrit()
+    {
+        return this.crit;
+    }
+
     private int getMaxHP()
     {
         //HP = Level + 10 + [((2 * Base + IV + EV / 4) * Level) / 100]

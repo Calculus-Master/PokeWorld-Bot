@@ -21,4 +21,16 @@ public class DarkMoves
 
         return move.getDamageResult(opponent, damage);
     }
+
+    public String Pursuit(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String Assurance(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.lastDamage > 0) move.setPower(move.getPower() * 2);
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

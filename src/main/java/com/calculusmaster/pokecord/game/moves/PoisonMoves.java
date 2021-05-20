@@ -6,6 +6,8 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 
+import java.util.Random;
+
 public class PoisonMoves
 {
     //TODO: Badly Poisoned
@@ -35,5 +37,25 @@ public class PoisonMoves
             return opponent.getName() + " is poisoned!";
         }
         else return move.getNoEffectResult(opponent);
+    }
+
+    public String ToxicSpikes(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String PoisonJab(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        opponent.damage(damage, duel);
+
+        if(new Random().nextInt(100) < 30)
+        {
+            opponent.setStatusCondition(StatusCondition.POISONED);
+
+            return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " was poisoned!";
+        }
+
+        return move.getDamageResult(opponent, damage);
     }
 }

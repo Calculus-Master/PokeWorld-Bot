@@ -1,9 +1,6 @@
 package com.calculusmaster.pokecord.game;
 
-import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
-import com.calculusmaster.pokecord.game.enums.elements.Type;
-import com.calculusmaster.pokecord.game.enums.elements.Weather;
+import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.XPBooster;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -89,15 +86,16 @@ public class Duel
 
     public void setDefaultInstanceVariables()
     {
-        this.usedDefenseCurl = false;
-        this.iceBallTurns = 1;
-        this.rolloutTurns = 1;
+        this.usedDefenseCurl = new boolean[]{false, false};
+        this.iceBallTurns = new int[]{1, 1};
+        this.rolloutTurns = new int[]{1, 1};
         this.lastDamage = 0;
+        this.usedRage = new boolean[]{false, false};
     }
 
     //Variable specific to certain moves
-    private boolean usedDefenseCurl;
-    private int iceBallTurns, rolloutTurns;
+    private boolean[] usedDefenseCurl, usedRage;
+    private int[] iceBallTurns, rolloutTurns;
     public int lastDamage;
 
     public String doTurn(int moveIndex)
@@ -194,21 +192,23 @@ public class Duel
 
         if(move.getName().equals("Rollout"))
         {
-            if(accurate) this.rolloutTurns++;
-            else this.rolloutTurns = 1;
+            if(accurate) this.rolloutTurns[this.turn]++;
+            else this.rolloutTurns[this.turn] = 1;
 
-            move.setPower((this.usedDefenseCurl ? 2 : 1) * 30 * (int) Math.pow(2, this.rolloutTurns));
+            move.setPower((this.usedDefenseCurl[this.turn] ? 2 : 1) * 30 * (int) Math.pow(2, this.rolloutTurns[this.turn]));
         }
-        else this.rolloutTurns = 1;
+        else this.rolloutTurns[this.turn] = 1;
 
         if(move.getName().equals("Ice Ball"))
         {
-            if(accurate) this.iceBallTurns++;
-            else this.iceBallTurns = 1;
+            if(accurate) this.iceBallTurns[this.turn]++;
+            else this.iceBallTurns[this.turn] = 1;
 
-            move.setPower((this.usedDefenseCurl ? 2 : 1) * 30 * (int) Math.pow(2, this.iceBallTurns));
+            move.setPower((this.usedDefenseCurl[this.turn] ? 2 : 1) * 30 * (int) Math.pow(2, this.iceBallTurns[this.turn]));
         }
-        else this.iceBallTurns = 1;
+        else this.iceBallTurns[this.turn] = 1;
+
+        if(this.usedRage[this.turn] && this.lastDamage > 0) this.playerPokemon[this.turn].changeStatMultiplier(Stat.ATK, 1);
 
         //Main move results
         String results = "\n";
@@ -218,8 +218,12 @@ public class Duel
         {
             results += move.logic(this.playerPokemon[this.turn], this.playerPokemon[this.getOtherTurn()], this);
 
-            if(move.getName().equals("Defense Curl")) this.usedDefenseCurl = true;
+            if(move.getCategory().equals(Category.STATUS)) this.lastDamage = 0;
+
+            if(move.getName().equals("Defense Curl")) this.usedDefenseCurl[this.turn] = true;
         }
+
+        this.usedRage[this.turn] = accurate && move.getName().equals("Rage");
 
         //Status condition
         results += (!status.isEmpty() ? "\n" + status : "");

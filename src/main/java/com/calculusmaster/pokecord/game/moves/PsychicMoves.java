@@ -45,4 +45,11 @@ public class PsychicMoves
     {
         return Confusion(user, opponent, duel, move);
     }
+
+    public String Agility(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.changeStatMultiplier(Stat.SPD, 2);
+
+        return user.getName() + "'s Speed rose by 2 stages!";
+    }
 }

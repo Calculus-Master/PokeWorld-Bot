@@ -16,8 +16,8 @@ public class Move
     public static Map<String, MoveData> MOVES = new HashMap<>();
     //TODO: Add the correct moves to each list and keep these updated
     //TODO: Keep checking the custom moves and see if they can function as close to the original as possible
-    public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Hail", "Sweet Scent", "Smokescreen", "Protect", "Rain Dance", "Safeguard", "Whirlwind", "Rage Powder", "Tailwind");
-    public static final List<String> CUSTOM_MOVES = Arrays.asList("Leech Seed", "Toxic", "Rapid Spin");
+    public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Hail", "Sweet Scent", "Smokescreen", "Protect", "Rain Dance", "Safeguard", "Whirlwind", "Rage Powder", "Tailwind", "Toxic Spikes");
+    public static final List<String> CUSTOM_MOVES = Arrays.asList("Leech Seed", "Toxic", "Rapid Spin", "Fell Stinger");
 
     private String name;
     private MoveData moveData;
