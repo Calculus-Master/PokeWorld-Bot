@@ -100,6 +100,10 @@ public class PokemonRarity
         PokemonRarity.add("Alolan Graveler", Rarity.GOLD);
         PokemonRarity.add("Golem", Rarity.GOLD);
         PokemonRarity.add("Alolan Golem", Rarity.DIAMOND);
+        PokemonRarity.add("Ponyta", Rarity.COPPER);
+        PokemonRarity.add("Galarian Ponyta", Rarity.SILVER);
+        PokemonRarity.add("Rapidash", Rarity.SILVER);
+        PokemonRarity.add("Galarian Rapidash", Rarity.SILVER);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());

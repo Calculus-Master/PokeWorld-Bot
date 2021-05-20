@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.pokemon.CommandInfo;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
+import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
@@ -178,27 +179,18 @@ public class CommandMarket extends Command
         return this;
     }
 
-    //TODO: Insert methods as parameters
-    public List<MarketEntry> filterNumeric(List<MarketEntry> marketList, List<String> args, String flag)
-    {
-        List<MarketEntry> out = List.copyOf(marketList);
-
-        if(args.contains(flag) && args.indexOf(flag) + 1 < args.size())
-        {
-            int index = args.indexOf(flag) + 1;
-            String after = args.get(index);
-            boolean isValid = index + 1 < args.size();
-
-            if(after.equals(">") && isValid && isNumeric(index + 1)) out = out.stream().filter(m -> m == null).collect(Collectors.toList());
-        }
-
-        return out;
-    }
-
     public static void addBotEntry()
     {
         Pokemon p = Pokemon.create(Global.POKEMON.get(new Random().nextInt(Global.POKEMON.size())));
         p.setLevel(new Random().nextInt(100) + 1);
+
+        Random r = new Random();
+        boolean rare = r.nextInt(100) < 10;
+        StringBuilder condensed = new StringBuilder();
+        for(int i = 0; i < 6; i++) condensed.append(rare ? r.nextInt(252) : r.nextInt(100)).append("-");
+        condensed.deleteCharAt(condensed.length() - 1);
+
+        p.setEVs(condensed.toString());
 
         Pokemon.uploadPokemon(p);
 

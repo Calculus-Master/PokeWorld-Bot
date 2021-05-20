@@ -233,6 +233,11 @@ public class Listener extends ListenerAdapter
                     this.spawnEventMap.get(server.getId()).run();
                     c = null;
                 }
+                else if(msg[0].equals("deletebotmarket"))
+                {
+                    Mongo.MarketData.deleteMany(Filters.eq("sellerID", "BOT"));
+                    c = null;
+                }
                 else c = new CommandInvalid(event, msg).runCommand();
             }
             else c = new CommandInvalid(event, msg).runCommand();
@@ -274,7 +279,7 @@ public class Listener extends ListenerAdapter
 
         private void spawnEvent()
         {
-            CommandMarket.addBotEntry();
+            if(new Random().nextInt(100) < 30) CommandMarket.addBotEntry();
 
             String spawnPokemon = PokemonRarity.getSpawn();
             ServerDataQuery data = new ServerDataQuery(server.getId());
