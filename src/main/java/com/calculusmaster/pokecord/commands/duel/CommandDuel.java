@@ -7,6 +7,8 @@ import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class CommandDuel extends Command
 {
@@ -82,10 +84,35 @@ public class CommandDuel extends Command
         {
             Duel d = Duel.initiate(this.player.getId(), opponentID, this.event);
 
+            Timer timer = new Timer();
+            timer.schedule(new CancelTask(this.player.getId(), this.event), 3 * 60 * 1000);
+
             this.event.getChannel().sendMessage("<@" + opponentID + "> ! " + this.player.getName() + " has challenged you to a duel! Type `p!duel accept` to accept!").queue();
             this.embed = null;
             d.setDuelImage();
             return this;
+        }
+    }
+
+    static class CancelTask extends TimerTask
+    {
+        private String id;
+        private MessageReceivedEvent event;
+
+        CancelTask(String id, MessageReceivedEvent event)
+        {
+            this.id = id;
+            this.event = event;
+        }
+
+        @Override
+        public void run()
+        {
+            if(Duel.getInstance(this.id).getStatus().equals(Duel.DuelStatus.WAITING))
+            {
+                Duel.remove(this.id);
+                this.event.getChannel().sendMessage("Duel request expired!").queue();
+            }
         }
     }
 }
