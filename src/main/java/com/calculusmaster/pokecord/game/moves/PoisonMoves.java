@@ -41,7 +41,7 @@ public class PoisonMoves
 
     public String ToxicSpikes(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return move.getNotImplementedResult();
+        return Toxic(user, opponent, duel, move);
     }
 
     public String PoisonJab(Pokemon user, Pokemon opponent, Duel duel, Move move)
