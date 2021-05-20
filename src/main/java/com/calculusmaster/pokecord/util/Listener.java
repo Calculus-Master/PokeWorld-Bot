@@ -229,7 +229,7 @@ public class Listener extends ListenerAdapter
                 else if(msg[0].equals("forcespawn"))
                 {
                     this.spawnEventMap.get(server.getId()).cancel();
-                    this.spawnEventMap.put(server.getId(), new SpawnEvent(server, serverQuery.getSpawnChannelID(), msg[1]));
+                    this.spawnEventMap.put(server.getId(), new SpawnEvent(server, serverQuery.getSpawnChannelID(), msg.length > 2 ? msg[1] + " " + msg[2] : msg[1]));
                     this.spawnEventMap.get(server.getId()).run();
                     c = null;
                 }
@@ -300,6 +300,8 @@ public class Listener extends ListenerAdapter
             catch (Exception e)
             {
                 System.out.println("SPAWN EVENT FAILED!");
+                System.out.println(Global.normalCase(spawnPokemon));
+                e.printStackTrace();
             }
 
             this.forcedSpawn = "";
@@ -308,7 +310,7 @@ public class Listener extends ListenerAdapter
         //TODO: Figure out better spawn rate
         private static long getDelay()
         {
-            return 1000L * 60 * (2 + new Random().nextInt(8));
+            return 1000L * (30 + new Random().nextInt(5 * 60));
         }
     }
 

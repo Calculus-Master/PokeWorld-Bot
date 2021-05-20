@@ -544,6 +544,7 @@ public class Pokemon
     {
         PokeItem item = PokeItem.asItem(this.getItem());
         //TODO: Friendship evolutions: Alolan Meowth -> Persian
+        //TODO: Trade evolutions: Poliwhirl -> Politoed, Kadabra -> Alakazam, Machoke -> Machamp, Graveler -> Golem, Alolan Graveler -> Alolan Golem
 
         switch(this.getName())
         {
@@ -557,6 +558,7 @@ public class Pokemon
             case "Vulpix":
             case "Growlithe": return item.equals(PokeItem.FIRE_STONE);
             case "Gloom": return item.equals(PokeItem.LEAF_STONE) || item.equals(PokeItem.SUN_STONE);
+            case "Weepinbell": return item.equals(PokeItem.LEAF_STONE);
             default: return false;
         }
     }
@@ -579,6 +581,7 @@ public class Pokemon
                 case "Jigglypuff" -> "Wigglytuff";
                 case "Gloom" -> PokeItem.asItem(this.getItem()).equals(PokeItem.LEAF_STONE) ? "Vileplume" : "Bellossom";
                 case "Growlithe" -> "Arcanine";
+                case "Weepinbell" -> "Victreebel";
                 default -> "";
             };
 

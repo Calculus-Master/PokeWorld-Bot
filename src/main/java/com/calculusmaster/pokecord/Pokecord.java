@@ -42,7 +42,7 @@ public class Pokecord
 
         System.out.println(Global.POKEMON.toString());
 //      System.out.println(Move.MOVES.stream().map(Move::getName).collect(Collectors.toList()).toString());
-        System.out.println(Move.MOVES.values().stream().map(Move.MoveData::toString).collect(Collectors.toList()).toString());
+        //System.out.println(Move.MOVES.values().stream().map(Move.MoveData::toString).collect(Collectors.toList()).toString());
 
         //new move system test
         //MoveNew m = new MoveNew("Tackle");

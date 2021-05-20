@@ -82,6 +82,26 @@ public class PokemonRarity
         PokemonRarity.add("Primeape", Rarity.SILVER);
         PokemonRarity.add("Growlithe", Rarity.SILVER);
         PokemonRarity.add("Arcanine", Rarity.GOLD);
+        PokemonRarity.add("Poliwag", Rarity.COPPER);
+        PokemonRarity.add("Poliwhirl", Rarity.SILVER);
+        PokemonRarity.add("Poliwrath", Rarity.GOLD);
+        PokemonRarity.add("Abra", Rarity.COPPER);
+        PokemonRarity.add("Kadabra", Rarity.SILVER);
+        PokemonRarity.add("Alakazam", Rarity.GOLD);
+        PokemonRarity.add("Machop", Rarity.COPPER);
+        PokemonRarity.add("Machoke", Rarity.SILVER);
+        PokemonRarity.add("Machamp", Rarity.GOLD);
+        PokemonRarity.add("Bellsprout", Rarity.COPPER);
+        PokemonRarity.add("Weepinbell", Rarity.SILVER);
+        PokemonRarity.add("Victreebel", Rarity.GOLD);
+        PokemonRarity.add("Tentacool", Rarity.COPPER);
+        PokemonRarity.add("Tentacruel", Rarity.SILVER);
+        PokemonRarity.add("Geodude", Rarity.COPPER);
+        PokemonRarity.add("Alolan Geodude", Rarity.SILVER);
+        PokemonRarity.add("Graveler", Rarity.SILVER);
+        PokemonRarity.add("Alolan Graveler", Rarity.GOLD);
+        PokemonRarity.add("Golem", Rarity.GOLD);
+        PokemonRarity.add("Alolan Golem", Rarity.DIAMOND);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());
