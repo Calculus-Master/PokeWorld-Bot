@@ -42,6 +42,13 @@ public class CommandDuel extends Command
             //Duel.printAllDuels();
             return this;
         }
+        else if(Duel.isInDuel(this.player.getId()) && Duel.getInstance(this.player.getId()).getStatus().equals(Duel.DuelStatus.WAITING) && this.msg[1].equals("cancel"))
+        {
+            Duel.remove(this.player.getId());
+
+            this.embed.setDescription("Duel canceled!");
+            return this;
+        }
         else if(Duel.isInDuel(this.player.getId()))
         {
             this.embed.setDescription("You are already in a duel!");
