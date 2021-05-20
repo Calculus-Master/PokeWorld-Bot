@@ -25,13 +25,13 @@ public class CommandCatch extends Command
         }
         else if(this.serverData.getSpawn().equals(""))
         {
-            this.embed.setDescription("Nothing has spawned yet in this server!");
-            this.color = new Color(0, 0, 0);
+            this.event.getChannel().sendMessage("<@" + this.player.getId() + ">: Nothing has spawned yet in this server!").queue();
+            this.embed = null;
         }
         else if(!(this.msg[1] + (this.msg.length == 3 ? " " + this.msg[2] : "")).toLowerCase().equals(this.serverData.getSpawn().toLowerCase()))
         {
-            this.embed.setDescription("Incorrect name!");
-            this.color = new Color(0, 0, 0);
+            this.event.getChannel().sendMessage("<@" + this.player.getId() + ">: Incorrect name!").queue();
+            this.embed = null;
         }
         else
         {
