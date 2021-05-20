@@ -551,7 +551,8 @@ public class Pokemon
             case "Alolan Vulpix": return item.equals(PokeItem.ICE_STONE);
             case "Nidorina":
             case "Nidorino":
-            case "Clefairy": return item.equals(PokeItem.MOON_STONE);
+            case "Clefairy":
+            case "Jigglypuff": return item.equals(PokeItem.MOON_STONE);
             case "Vulpix": return item.equals(PokeItem.FIRE_STONE);
             default: return false;
         }
@@ -572,6 +573,7 @@ public class Pokemon
                 case "Clefairy" -> "Clefable";
                 case "Vulpix" -> "Ninetales";
                 case "Alolan Vulpix" -> "Alolan Ninetales";
+                case "Jigglypuff" -> "Wigglytuff";
                 default -> "";
             };
 

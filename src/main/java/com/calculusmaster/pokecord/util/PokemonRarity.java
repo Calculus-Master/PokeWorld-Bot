@@ -56,6 +56,8 @@ public class PokemonRarity
         PokemonRarity.add("Alolan Vulpix", Rarity.SILVER);
         PokemonRarity.add("Ninetales", Rarity.SILVER);
         PokemonRarity.add("Alolan Ninetales", Rarity.GOLD);
+        PokemonRarity.add("Jigglypuff", Rarity.COPPER);
+        PokemonRarity.add("Wigglytuff", Rarity.SILVER);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());
