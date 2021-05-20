@@ -50,6 +50,8 @@ public class PokemonRarity
         PokemonRarity.add("NidoranM", Rarity.COPPER);
         PokemonRarity.add("Nidorino", Rarity.SILVER);
         PokemonRarity.add("Nidoking", Rarity.DIAMOND);
+        PokemonRarity.add("Clefairy", Rarity.SILVER);
+        PokemonRarity.add("Clefable", Rarity.GOLD);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());

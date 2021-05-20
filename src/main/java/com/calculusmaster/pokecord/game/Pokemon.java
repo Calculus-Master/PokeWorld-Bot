@@ -548,8 +548,9 @@ public class Pokemon
         {
             case "Pikachu": return item.equals(PokeItem.THUNDER_STONE);
             case "Alolan Sandshrew": return item.equals(PokeItem.ICE_STONE);
-            case "Nidorina": return item.equals(PokeItem.MOON_STONE);
-            case "Nidorino": return item.equals(PokeItem.MOON_STONE);
+            case "Nidorina":
+            case "Nidorino":
+            case "Clefairy": return item.equals(PokeItem.MOON_STONE);
             default: return false;
         }
     }
@@ -566,6 +567,7 @@ public class Pokemon
                 case "Alolan Sandshrew" -> "Alolan Sandslash";
                 case "Nidorina" -> "Nidoqueen";
                 case "Nidorino" -> "Nidoking";
+                case "Clefairy" -> "Clefable";
                 default -> "";
             };
 
