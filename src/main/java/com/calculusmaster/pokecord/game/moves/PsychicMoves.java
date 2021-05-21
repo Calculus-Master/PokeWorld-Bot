@@ -52,4 +52,9 @@ public class PsychicMoves
 
         return user.getName() + "'s Speed rose by 2 stages!";
     }
+
+    public String LightScreen(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
 }

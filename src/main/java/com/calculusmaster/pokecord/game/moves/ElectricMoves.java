@@ -32,4 +32,18 @@ public class ElectricMoves
 
         return opponent.getName() + " is paralyzed!";
     }
+
+    public String Spark(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        boolean paralyzed = new Random().nextInt(100) < 30;
+        String s = "";
+
+        if(paralyzed)
+        {
+            opponent.setStatusCondition(StatusCondition.PARALYZED);
+            s = " " + opponent.getName() + " is paralyzed!";
+        }
+
+        return Move.simpleDamageMove(user, opponent, duel, move) + s;
+    }
 }

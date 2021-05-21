@@ -52,4 +52,9 @@ public class SteelMoves
 
         return move.getDamageResult(opponent, damage);
     }
+
+    public String MagnetBomb(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

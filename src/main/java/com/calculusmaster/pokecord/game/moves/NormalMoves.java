@@ -321,4 +321,15 @@ public class NormalMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move) + statusStr;
     }
+
+    public String SonicBoom(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(opponent.isType(Type.GHOST)) return move.getNoEffectResult(opponent);
+        else
+        {
+            opponent.damage(20, duel);
+
+            return move.getDamageResult(opponent, 20);
+        }
+    }
 }
