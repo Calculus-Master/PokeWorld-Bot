@@ -119,13 +119,13 @@ public class CommandPokemon extends Command
         this.embed.setFooter("Showing Numbers " + (startIndex + 1) + " to " + (endIndex) + " out of " + this.pokemon.size() + " Pokemon");
     }
 
-    @Deprecated
-    private void buildList()
-    {
-        //long l = System.currentTimeMillis();
-        for(int i = 0; i < this.playerData.getPokemonList().length(); i++) this.pokemon.add(Pokemon.buildCore(this.playerData.getPokemonList().getString(i), i));
-        //System.out.println("Creating the full list took " + (System.currentTimeMillis() - l) + "ms");
-    }
+//    @Deprecated
+//    private void buildList()
+//    {
+//        //long l = System.currentTimeMillis();
+//        for(int i = 0; i < this.playerData.getPokemonList().length(); i++) this.pokemon.add(Pokemon.buildCore(this.playerData.getPokemonList().getString(i), i));
+//        //System.out.println("Creating the full list took " + (System.currentTimeMillis() - l) + "ms");
+//    }
 
     private String getLine(Pokemon p)
     {

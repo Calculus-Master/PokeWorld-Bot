@@ -148,6 +148,30 @@ public class Pokemon
         return p;
     }
 
+    public static PokemonBase build(String UUID, int num)
+    {
+        JSONObject specific = Pokemon.specificJSON(UUID);
+
+        Map<Stat, Integer> IV = new HashMap<>();
+        for(int i = 0; i < 6; i++) IV.put(Stat.values()[i], Integer.parseInt(specific.getString("ivs").split("-")[i]));
+
+        return new PokemonBase(specific.getString("name"), UUID, specific.getInt("level"), num, IV);
+    }
+
+    //TODO: Replace the buildCore() with a record class
+    public record PokemonBase(String name, String UUID, int level, int number, Map<Stat, Integer> IVs)
+    {
+        public String getTotalIV()
+        {
+            return String.format("%.2f", this.IVs().values().stream().mapToDouble(iv -> iv / 31D).sum() * 100 / 6D) + "%";
+        }
+
+        public Double getTotalIVRounded()
+        {
+            return Double.parseDouble(this.getTotalIV().substring(0, 5));
+        }
+    }
+
     public int getNumber()
     {
         return -1;
