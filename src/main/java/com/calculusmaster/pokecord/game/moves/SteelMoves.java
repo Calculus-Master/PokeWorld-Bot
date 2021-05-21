@@ -57,4 +57,22 @@ public class SteelMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String MirrorShot(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String MetalSound(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.changeStatMultiplier(Stat.SPDEF, -2);
+        return opponent.getName() + "'s Special Defense was lowered by 2 stages!";
+    }
+
+    public String GyroBall(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        move.setPower((int)(25 * (double)opponent.getStat(Stat.SPD) / user.getStat(Stat.SPD)));
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

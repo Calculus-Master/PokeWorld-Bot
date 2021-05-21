@@ -332,4 +332,15 @@ public class NormalMoves
             return move.getDamageResult(opponent, 20);
         }
     }
+
+    public String Screech(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.changeStatMultiplier(Stat.DEF, -2);
+        return opponent.getName() + "'s Defense was lowered by 2 stages!";
+    }
+
+    public String LockOn(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
 }

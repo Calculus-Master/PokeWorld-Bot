@@ -93,11 +93,13 @@ public class Duel
         this.usedRage = new boolean[]{false, false};
         this.electricTerrainTurns = -1;
         this.electricTerrainActive = false;
+        this.magnetRiseTurns = new int[]{-1, -1};
+        this.usedMagnetRise = new boolean[]{false, false};
     }
 
     //Variable specific to certain moves
-    private boolean[] usedDefenseCurl, usedRage;
-    private int[] iceBallTurns, rolloutTurns;
+    private boolean[] usedDefenseCurl, usedRage, usedMagnetRise;
+    private int[] iceBallTurns, rolloutTurns, magnetRiseTurns;
     public int lastDamage;
 
     public boolean electricTerrainActive;
@@ -129,6 +131,7 @@ public class Duel
 
         String status = "";
         int damage;
+        boolean immune = false;
         StatusCondition pokeStatus = this.playerPokemon[this.turn].getStatusCondition();
         String pokeName = this.playerPokemon[this.turn].getName();
         System.out.println(pokeName + " , " + pokeStatus.toString());
@@ -228,10 +231,24 @@ public class Duel
             this.electricTerrainTurns--;
         }
 
+        if(this.usedMagnetRise[this.getOtherTurn()])
+        {
+            this.magnetRiseTurns[this.getOtherTurn()]--;
+
+            if(move.getType().equals(Type.GROUND)) immune = true;
+
+            if(this.magnetRiseTurns[this.getOtherTurn()] <= 0)
+            {
+                this.magnetRiseTurns[this.getOtherTurn()] = -1;
+                this.usedMagnetRise[this.getOtherTurn()] = false;
+            }
+        }
+
         //Main move results
         String results = "\n";
 
         if(!accurate) results += move.getMissedResult(this.playerPokemon[this.turn]);
+        else if(immune) results += this.playerPokemon[this.getOtherTurn()].getName() + " is immune to the attack!";
         else
         {
             results += move.logic(this.playerPokemon[this.turn], this.playerPokemon[this.getOtherTurn()], this);
