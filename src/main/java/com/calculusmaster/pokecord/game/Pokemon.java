@@ -883,4 +883,10 @@ public class Pokemon
     {
         return new Type[]{Type.cast(this.genericJSON.getJSONArray("type").getString(0)), Type.cast(this.genericJSON.getJSONArray("type").getString(1))};
     }
+
+    //TODO: Use this everywhere
+    public boolean isType(Type t)
+    {
+        return this.getType()[0].equals(t) || this.getType()[1].equals(t);
+    }
 }

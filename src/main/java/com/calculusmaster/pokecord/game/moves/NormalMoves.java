@@ -292,4 +292,33 @@ public class NormalMoves
         }
         else return move.getNothingResult();
     }
+
+    public String TriAttack(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        boolean status = new Random().nextInt(100) < 20;
+        String statusStr = "";
+
+        if(status)
+        {
+            int s = new Random().nextInt(9);
+
+            switch (s)
+            {
+                case 0, 1, 2 -> {
+                    opponent.setStatusCondition(StatusCondition.BURNED);
+                    statusStr = opponent.getName() + " is burned!";
+                }
+                case 3, 4, 5 -> {
+                    opponent.setStatusCondition(StatusCondition.PARALYZED);
+                    statusStr = opponent.getName() + " is paralyzed!";
+                }
+                case 6, 7, 8 -> {
+                    opponent.setStatusCondition(StatusCondition.FROZEN);
+                    statusStr = opponent.getName() + " is frozen!";
+                }
+            }
+        }
+
+        return Move.simpleDamageMove(user, opponent, duel, move) + statusStr;
+    }
 }

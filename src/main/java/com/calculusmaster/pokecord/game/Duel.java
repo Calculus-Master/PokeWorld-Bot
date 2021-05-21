@@ -91,12 +91,17 @@ public class Duel
         this.rolloutTurns = new int[]{1, 1};
         this.lastDamage = 0;
         this.usedRage = new boolean[]{false, false};
+        this.electricTerrainTurns = -1;
+        this.electricTerrainActive = false;
     }
 
     //Variable specific to certain moves
     private boolean[] usedDefenseCurl, usedRage;
     private int[] iceBallTurns, rolloutTurns;
     public int lastDamage;
+
+    public boolean electricTerrainActive;
+    public int electricTerrainTurns;
 
     public String doTurn(int moveIndex)
     {
@@ -151,10 +156,10 @@ public class Duel
                 status = pokeName + " is poisoned! The poison dealt " + damage + " damage!";
                 break;
             case ASLEEP:
-                if(this.asleepTurn[this.turn] == 2)
+                if(this.asleepTurn[this.turn] == 2 || (this.electricTerrainActive && !this.playerPokemon[this.turn].isType(Type.FLYING)))
                 {
                     this.playerPokemon[this.turn].removeStatusConditions();
-                    status = "";
+                    status = this.playerPokemon[this.turn] + " woke up" + (this.electricTerrainActive ? " due to the Electric Field!" : "!");
                     this.asleepTurn[this.turn] = 0;
                 }
                 else
@@ -209,6 +214,19 @@ public class Duel
         else this.iceBallTurns[this.turn] = 1;
 
         if(this.usedRage[this.turn] && this.lastDamage > 0) this.playerPokemon[this.turn].changeStatMultiplier(Stat.ATK, 1);
+
+        if(this.electricTerrainTurns <= 0)
+        {
+            this.electricTerrainActive = false;
+            this.electricTerrainTurns = -1;
+        }
+
+        if(this.electricTerrainActive)
+        {
+            if(move.getType().equals(Type.ELECTRIC)) move.setPower((int)(move.getPower() * 1.5));
+
+            this.electricTerrainTurns--;
+        }
 
         //Main move results
         String results = "\n";

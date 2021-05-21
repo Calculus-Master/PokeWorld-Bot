@@ -31,7 +31,6 @@ public class Move
         Mongo.MoveInfo.find(Filters.exists("name")).forEach(d -> MOVES.put(d.getString("name"), new MoveData(d.getString("name"), d.getString("type"), d.getString("category"), d.getInteger("power"), d.getInteger("accuracy"), d.getString("info"), d.getString("zmove"))));
     }
 
-    //TODO: Do this!
     public Move(String name)
     {
         this.moveData = MOVES.get(name);
