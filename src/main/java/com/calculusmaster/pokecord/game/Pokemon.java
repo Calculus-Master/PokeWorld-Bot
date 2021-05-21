@@ -1,6 +1,5 @@
 package com.calculusmaster.pokecord.game;
 
-import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.TM;
@@ -42,7 +41,8 @@ public class Pokemon
     private String heldItem;
 
     private int health;
-    private StatusCondition status;
+    private StatusCondition statusOLD;
+    private Map<StatusCondition, Boolean> status;
     private int crit;
     private Map<Stat, Integer> statMultiplier = new TreeMap<>();
     private boolean isFlinched;
@@ -77,6 +77,7 @@ public class Pokemon
 
         p.setHealth(p.getStat(Stat.HP));
         p.removeStatusConditions();
+        p.clearStatusConditions();
         p.setCrit(1);
         p.setDefaultStatMultipliers();
         p.setFlinched(false);
@@ -105,6 +106,7 @@ public class Pokemon
 
         p.setHealth(p.getStat(Stat.HP));
         p.removeStatusConditions();
+        p.clearStatusConditions();
         p.setCrit(1);
         p.setDefaultStatMultipliers();
         p.setFlinched(false);
@@ -345,26 +347,67 @@ public class Pokemon
     }
 
     //Status Conditions
+    @Deprecated
     public void setStatusCondition(StatusCondition status)
     {
-        this.status = status;
+        this.statusOLD = status;
     }
 
+    @Deprecated
     public void removeStatusConditions()
     {
-        this.status = StatusCondition.NORMAL;
+        this.statusOLD = StatusCondition.NORMAL;
     }
 
+    @Deprecated
     public StatusCondition getStatusCondition()
     {
-        return this.status;
+        return this.statusOLD;
     }
 
+    public void addStatusCondition(StatusCondition s)
+    {
+        if((this.isType(Type.ELECTRIC) && s.equals(StatusCondition.PARALYZED)) ||
+                (this.isType(Type.ICE) && s.equals(StatusCondition.FROZEN)) ||
+                (this.isType(Type.FIRE) && s.equals(StatusCondition.BURNED)) ||
+                ((this.isType(Type.POISON) || this.isType(Type.STEEL)) && s.equals(StatusCondition.POISONED))) return;
+        else this.status.put(s, true);
+    }
+
+    public void removeStatusCondition(StatusCondition s)
+    {
+        this.status.put(s, false);
+    }
+
+    public void clearStatusConditions()
+    {
+        this.status.replaceAll((s, v) -> false);
+    }
+
+    public boolean getStatusCondition(StatusCondition s)
+    {
+        return this.status.get(s);
+    }
+
+    public String getActiveStatusConditions()
+    {
+        List<String> active = new ArrayList<>();
+        for(StatusCondition s : this.status.keySet()) if(this.status.get(s)) active.add(s.getAbbrev());
+
+        StringBuilder s = new StringBuilder().append("(");
+        for(String str : active) s.append(str).append(", ");
+        s.deleteCharAt(s.length() - 1).deleteCharAt(s.length() - 1).append(")");
+
+        return s.toString();
+    }
+
+    @Deprecated
     public void setFlinched(boolean flinched)
     {
         this.isFlinched = flinched;
     }
 
+    @Deprecated
     public boolean isFlinched()
     {
         return this.isFlinched;

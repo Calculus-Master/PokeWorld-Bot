@@ -284,7 +284,7 @@ public class Duel
             weatherUpdate = "The weather is now clear again!";
         }
 
-        return results + "\n" + weatherUpdate;
+        return results + "\n" + weatherUpdate + "\n" + weatherEffects;
     }
 
     public void onWin()
