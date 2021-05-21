@@ -448,7 +448,7 @@ public class Duel
 
     private String getHB(int p)
     {
-        return this.getNameFromID(this.playerIDs[p]) + "'s " + this.playerPokemon[p].getName() + ": " + this.playerPokemon[p].getHealth() + " / " + this.playerPokemon[p].getStat(Stat.HP) + " HP" + (!this.playerPokemon[p].getStatusCondition().equals(StatusCondition.NORMAL) ? "(" + this.playerPokemon[p].getStatusCondition().getAbbrev() + ")" : "");
+        return this.getNameFromID(this.playerIDs[p]) + "'s " + this.playerPokemon[p].getName() + ": " + this.playerPokemon[p].getHealth() + " / " + this.playerPokemon[p].getStat(Stat.HP) + " HP" + (!this.playerPokemon[p].getStatusCondition().equals(StatusCondition.NORMAL) ? " (" + this.playerPokemon[p].getStatusCondition().getAbbrev() + ")" : "");
     }
 
     private String getTurnTitle()
