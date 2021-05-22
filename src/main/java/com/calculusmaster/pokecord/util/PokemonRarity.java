@@ -171,6 +171,11 @@ public class PokemonRarity
         PokemonRarity.add("Vaporeon", Rarity.SILVER);
         PokemonRarity.add("Jolteon", Rarity.SILVER);
         PokemonRarity.add("Flareon", Rarity.SILVER);
+        PokemonRarity.add("Porygon", Rarity.COPPER);
+        PokemonRarity.add("Omanyte", Rarity.SILVER);
+        PokemonRarity.add("Omastar", Rarity.GOLD);
+        PokemonRarity.add("Kabuto", Rarity.SILVER);
+        PokemonRarity.add("Kabutops", Rarity.GOLD);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());

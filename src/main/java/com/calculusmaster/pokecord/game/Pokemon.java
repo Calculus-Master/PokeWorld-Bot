@@ -664,7 +664,7 @@ public class Pokemon
         PokeItem item = PokeItem.asItem(this.getItem());
         //TODO: Friendship evolutions: Alolan Meowth -> Persian, Chansey -> Blissey
         //TODO: Trade evolutions: Poliwhirl -> Politoed, Kadabra -> Alakazam, Machoke -> Machamp, Graveler -> Golem, Alolan Graveler -> Alolan Golem, Haunter -> Gengar
-        //TODO: Trade evolutions w/item: Slowpoke -> Slowking w/Kings Rock, Onix -> Steelix w/Metal Coat, Seadra -> Kingdra w/Dragon Scale, Scyther -> Scizor w/Metal Coat, Electabuzz -> Electivire w/Elecitrizer, Magmar -> Magmortar w/Magmarizer
+        //TODO: Trade evolutions w/item: Slowpoke -> Slowking w/Kings Rock, Onix -> Steelix w/Metal Coat, Seadra -> Kingdra w/Dragon Scale, Scyther -> Scizor w/Metal Coat, Electabuzz -> Electivire w/Elecitrizer, Magmar -> Magmortar w/Magmarizer, Porygon -> Porygon2 w/Upgrade, Porygon2 -> PorygonZ w/Dubious Disc
         //TODO: Item evolutions: Galarian Slowpoke -> Galarian Slowbro (w/Galarica Cuff), Galarian Slowpoke -> Galarian Slowking (w/Galarica Wreath)
         //TODO: Regional evolutions: Exeggcute -> Alolan Exeggutor w/Leaf Stone in Alola, Koffing -> Galarian Weezing in Galar
         //TODO: Other evolutions: Cubone -> Alolan Marowak in Alola Nighttime
