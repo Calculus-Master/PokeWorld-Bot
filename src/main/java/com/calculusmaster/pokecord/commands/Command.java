@@ -93,7 +93,7 @@ public abstract class Command
 
         POKEMON.setCategory(CommandHelp.CommandCategory.POKEMON)
                 .addShortDescription("View your Pokemon!")
-                .addAliases()
+                .addAliases("p")
                 .addArgs("page")
                 .addArgDesc("page", "The page of Pokemon you want to view (if you have more than 20).");
 
