@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.moves;
 import com.calculusmaster.pokecord.game.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 
 import java.util.Random;
 
@@ -15,7 +16,7 @@ public class FlyingMoves
 
         if(new Random().nextInt(100) < 30)
         {
-            opponent.setFlinched(true);
+            opponent.addStatusCondition(StatusCondition.FLINCHED);
             return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " flinched!";
         }
 

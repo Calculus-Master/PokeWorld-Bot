@@ -40,7 +40,7 @@ public class FireMoves
 
         if(new Random().nextInt(100) < 10)
         {
-            opponent.setFlinched(true);
+            opponent.addStatusCondition(StatusCondition.FLINCHED);
             flinched = " " + opponent.getName() + " flinched!";
         }
 
