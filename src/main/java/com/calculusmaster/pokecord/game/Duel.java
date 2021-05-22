@@ -135,6 +135,13 @@ public class Duel
 
             if(move.getName().equals("Thunder") || move.getName().equals("Hurricane")) move.setAccuracy(50);
         }
+        else if(this.duelWeather.equals(Weather.RAIN))
+        {
+            if(move.getType().equals(Type.WATER)) move.setPower((int)(move.getPower() * 1.5));
+            else if(move.getType().equals(Type.FIRE) || move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower((int)(move.getPower() * 0.5));
+
+            if(move.getName().equals("Thunder") || move.getName().equals("Hurricane")) move.setAccuracy(100);
+        }
 
         List<String> status = new ArrayList<>();
         boolean immune = false;
@@ -311,6 +318,11 @@ public class Duel
             else if(move.getName().equals("Sunny Day"))
             {
                 this.duelWeather = Weather.HARSH_SUNLIGHT;
+                this.weatherTurns = 5;
+            }
+            else if(move.getName().equals("Rain Dance"))
+            {
+                this.duelWeather = Weather.RAIN;
                 this.weatherTurns = 5;
             }
         }

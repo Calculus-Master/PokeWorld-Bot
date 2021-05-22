@@ -61,8 +61,7 @@ public class WaterMoves
 
     public String RainDance(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        //TODO: Rain
-        return move.getNotImplementedResult();
+        return user.getName() + " caused a rain shower!";
     }
 
     public String HydroPump(Pokemon user, Pokemon opponent, Duel duel, Move move)
