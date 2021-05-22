@@ -187,6 +187,7 @@ public class PokemonRarity
         PokemonRarity.add("Dratini", Rarity.COPPER);
         PokemonRarity.add("Dragonair", Rarity.SILVER);
         PokemonRarity.add("Dragonite", Rarity.GOLD);
+        PokemonRarity.add("Mewtwo", Rarity.LEGENDARY);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());
