@@ -35,6 +35,9 @@ public class CommandUse extends Command
 
             if(!duel.isComplete())
             {
+                //Delete the p!use message sent
+                this.event.getChannel().deleteMessageById(this.event.getMessageId()).queue();
+
                 String results = duel.doTurn(Integer.parseInt(this.msg[1]));
                 if(duel.getTurnID().equals(this.player.getId())) duel.swapTurns();
                 duel.sendGenericTurnEmbed(this.event, results);
