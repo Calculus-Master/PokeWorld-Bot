@@ -135,6 +135,20 @@ public class PokemonRarity
         PokemonRarity.add("Exeggcute", Rarity.COPPER);
         PokemonRarity.add("Exeggutor", Rarity.SILVER);
         PokemonRarity.add("Alolan Exeggutor", Rarity.SILVER);
+        PokemonRarity.add("Cubone", Rarity.COPPER);
+        PokemonRarity.add("Marowak", Rarity.SILVER);
+        PokemonRarity.add("Alolan Marowak", Rarity.SILVER);
+        PokemonRarity.add("Hitmonlee", Rarity.SILVER);
+        PokemonRarity.add("Hitmonchan", Rarity.SILVER);
+        PokemonRarity.add("Lickitung", Rarity.SILVER);
+        PokemonRarity.add("Koffing", Rarity.COPPER);
+        PokemonRarity.add("Weezing", Rarity.SILVER);
+        PokemonRarity.add("Galarian Weezing", Rarity.SILVER);
+        PokemonRarity.add("Rhyhorn", Rarity.COPPER);
+        PokemonRarity.add("Rhydon", Rarity.SILVER);
+        PokemonRarity.add("Chansey", Rarity.SILVER);
+        PokemonRarity.add("Tangela", Rarity.SILVER);
+        PokemonRarity.add("Kangaskhan", Rarity.GOLD);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());
