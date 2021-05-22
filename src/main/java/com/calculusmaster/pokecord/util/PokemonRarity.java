@@ -132,6 +132,9 @@ public class PokemonRarity
         PokemonRarity.add("Kingler", Rarity.SILVER);
         PokemonRarity.add("Voltorb", Rarity.COPPER);
         PokemonRarity.add("Electrode", Rarity.SILVER);
+        PokemonRarity.add("Exeggcute", Rarity.COPPER);
+        PokemonRarity.add("Exeggutor", Rarity.SILVER);
+        PokemonRarity.add("Alolan Exeggutor", Rarity.SILVER);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());
