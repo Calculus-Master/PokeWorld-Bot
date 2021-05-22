@@ -178,6 +178,12 @@ public class PokemonRarity
         PokemonRarity.add("Kabutops", Rarity.GOLD);
         PokemonRarity.add("Aerodactyl", Rarity.SILVER);
         PokemonRarity.add("Snorlax", Rarity.SILVER);
+        PokemonRarity.add("Articuno", Rarity.LEGENDARY);
+        PokemonRarity.add("Galarian Articuno", Rarity.LEGENDARY);
+        PokemonRarity.add("Zapdos", Rarity.LEGENDARY);
+        PokemonRarity.add("Galarian Zapdos", Rarity.LEGENDARY);
+        PokemonRarity.add("Moltres", Rarity.LEGENDARY);
+        PokemonRarity.add("Galarian Moltres", Rarity.LEGENDARY);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());
