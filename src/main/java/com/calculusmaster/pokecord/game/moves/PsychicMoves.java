@@ -57,4 +57,13 @@ public class PsychicMoves
     {
         return move.getNotImplementedResult();
     }
+
+    public String Psychic(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        boolean lower = new Random().nextInt(100) < 10;
+
+        if(lower) opponent.changeStatMultiplier(Stat.SPDEF, -1);
+
+        return Move.simpleDamageMove(user, opponent, duel, move) + (lower ? " " + opponent.getName() + "'s Special Defense lowered by 1 stage!" : "");
+    }
 }
