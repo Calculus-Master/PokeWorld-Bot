@@ -47,7 +47,7 @@ public class Global
     public static void logTime(Class<?> clazz, String command, long timeI, long timeF, OffsetDateTime timestamp)
     {
         LoggerFactory.getLogger(clazz).info(command + " took " + (timeF - timeI) + " ms to complete!");
-        addPerformanceEntry(command, timeI, timeF, timestamp);
+        //addPerformanceEntry(command, timeI, timeF, timestamp);
     }
 
     private static void addPerformanceEntry(String command, long timeI, long timeF, OffsetDateTime timestamp)
