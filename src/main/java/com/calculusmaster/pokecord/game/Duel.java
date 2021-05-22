@@ -97,12 +97,15 @@ public class Duel
         this.usedMagnetRise = new boolean[]{false, false};
         this.tauntTurns = new int[]{-1, -1};
         this.usedTaunt = new boolean[]{false, false};
+        this.recharge = new boolean[]{false, false};
     }
 
     //Variable specific to certain moves
     private boolean[] usedDefenseCurl, usedRage, usedMagnetRise, usedTaunt;
     private int[] iceBallTurns, rolloutTurns, magnetRiseTurns, tauntTurns;
     public int lastDamage;
+
+    private boolean[] recharge;
 
     public boolean electricTerrainActive;
     public int electricTerrainTurns;
@@ -319,8 +322,11 @@ public class Duel
         //Main move results
         String results = "\n";
 
-        if(unableToUse) results += this.playerPokemon[this.turn].getName() + " can't use " + move.getName() + " right now!";
-        if(!accurate) results += move.getMissedResult(this.playerPokemon[this.turn]);
+        List<String> rechargeMoves = Arrays.asList("Hyper Beam");
+
+        if(this.recharge[this.turn] && rechargeMoves.contains(move.getName())) results += this.playerPokemon[this.turn] + " can't use " + move.getName() + " this turn because it needs to recharge!";
+        else if(unableToUse) results += this.playerPokemon[this.turn].getName() + " can't use " + move.getName() + " right now!";
+        else if(!accurate) results += move.getMissedResult(this.playerPokemon[this.turn]);
         else if(immune) results += this.playerPokemon[this.getOtherTurn()].getName() + " is immune to the attack!";
         else
         {
@@ -329,17 +335,23 @@ public class Duel
             if(move.getCategory().equals(Category.STATUS)) this.lastDamage = 0;
 
             if(move.getName().equals("Defense Curl")) this.usedDefenseCurl[this.turn] = true;
+
             if(move.getName().equals("Magnet Rise"))
             {
                 this.usedMagnetRise[this.turn] = true;
                 this.magnetRiseTurns[this.turn] = this.magnetRiseTurns[this.turn] <= 0 ? 5 : this.magnetRiseTurns[this.turn];
             }
+
             if(move.getName().equals("Taunt"))
             {
                 this.usedTaunt[this.turn] = false;
                 this.tauntTurns[this.turn] = this.tauntTurns[this.turn] <= 0 ? 3 : this.tauntTurns[this.turn];
             }
+
+            if(rechargeMoves.contains(move.getName())) this.recharge[this.turn] = true;
         }
+
+        if(this.recharge[this.turn]) this.recharge[this.turn] = false;
 
         this.usedRage[this.turn] = accurate && move.getName().equals("Rage");
 

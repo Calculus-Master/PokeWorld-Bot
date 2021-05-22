@@ -350,4 +350,9 @@ public class NormalMoves
 
         return user.getName() + "'s Attack rose by 2 stages!";
     }
+
+    public String HyperBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
