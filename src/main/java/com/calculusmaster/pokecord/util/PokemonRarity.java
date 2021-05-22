@@ -165,6 +165,12 @@ public class PokemonRarity
         PokemonRarity.add("Tauros", Rarity.SILVER);
         PokemonRarity.add("Magikarp", Rarity.COPPER);
         PokemonRarity.add("Gyarados", Rarity.SILVER);
+        PokemonRarity.add("Lapras", Rarity.SILVER);
+        PokemonRarity.add("Ditto", Rarity.SILVER);
+        PokemonRarity.add("Eevee", Rarity.COPPER);
+        PokemonRarity.add("Vaporeon", Rarity.SILVER);
+        PokemonRarity.add("Jolteon", Rarity.SILVER);
+        PokemonRarity.add("Flareon", Rarity.SILVER);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());

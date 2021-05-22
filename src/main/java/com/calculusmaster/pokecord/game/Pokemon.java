@@ -668,6 +668,7 @@ public class Pokemon
         //TODO: Item evolutions: Galarian Slowpoke -> Galarian Slowbro (w/Galarica Cuff), Galarian Slowpoke -> Galarian Slowking (w/Galarica Wreath)
         //TODO: Regional evolutions: Exeggcute -> Alolan Exeggutor w/Leaf Stone in Alola, Koffing -> Galarian Weezing in Galar
         //TODO: Other evolutions: Cubone -> Alolan Marowak in Alola Nighttime
+        //TODO: Eeveelutions: Espeon (High Friendship, Daytime), Umbreon (High Friendship, Nighttime), Leafeon (Mossy Rock), Glaceon (Icy Rock), Sylveon (Affection/Fairy Move)
 
         switch(this.getName())
         {
@@ -685,6 +686,7 @@ public class Pokemon
             case "Exeggcute": return item.equals(PokeItem.LEAF_STONE);
             case "Shellder":
             case "Staryu": return item.equals(PokeItem.WATER_STONE);
+            case "Eevee": return item.equals(PokeItem.WATER_STONE) || item.equals(PokeItem.FIRE_STONE) || item.equals(PokeItem.THUNDER_STONE);
             default: return false;
         }
     }
@@ -711,6 +713,7 @@ public class Pokemon
                 case "Shellder" -> "Cloyster";
                 case "Exeggcute" -> "Exeggutor";
                 case "Staryu" -> "Starmie";
+                case "Eevee" -> PokeItem.asItem(this.getItem()).equals(PokeItem.WATER_STONE) ? "Vaporeon" : (PokeItem.asItem(this.getItem()).equals(PokeItem.THUNDER_STONE) ? "Jolteon" : "Flareon");
                 default -> "";
             };
 
