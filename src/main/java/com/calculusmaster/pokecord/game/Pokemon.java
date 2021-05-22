@@ -381,6 +381,7 @@ public class Pokemon
         this.status.put(StatusCondition.POISONED, false);
         this.status.put(StatusCondition.ASLEEP, false);
         this.status.put(StatusCondition.CONFUSED, false);
+        this.status.put(StatusCondition.FLINCHED, false);
     }
 
     public String getActiveStatusConditions()

@@ -111,7 +111,6 @@ public class Duel
         String moveString = this.playerPokemon[this.turn].getLearnedMoves().get(moveIndex - 1);
         //Move move = Move.asMove(moveString);
         Move move = new Move(moveString);
-        //TODO: If move has special effects depending on weather, add a setter to the move object here to send the data about that
 
         boolean accurate = move.isAccurate();
 
@@ -127,6 +126,14 @@ public class Duel
             if(isOtherPokemonAffected) this.playerPokemon[this.getOtherTurn()].damage(this.playerPokemon[this.getOtherTurn()].getStat(Stat.HP) / 16, this);
 
             weatherEffects = (isThisPokemonAffected && isOtherPokemonAffected ? "Both pokemon" : (isThisPokemonAffected ? this.playerPokemon[this.turn].getName() : (isOtherPokemonAffected ? this.playerPokemon[this.getOtherTurn()].getName() : "Neither pokemon"))) + " took damage from the freezing hailstorm!";
+
+            if(move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower(move.getPower() / 2);
+
+            if(move.getName().equals("Weather Ball"))
+            {
+                move.setType(Type.ICE);
+                move.setPower(move.getPower() * 2);
+            }
         }
 
         List<String> status = new ArrayList<>();
@@ -302,7 +309,6 @@ public class Duel
             {
                 this.duelWeather = Weather.HAIL;
                 this.weatherTurns = 5;
-                weatherUpdate = this.playerPokemon[this.turn].getName() + " changed the weather to fierce hailstorm!";
             }
         }
 
