@@ -118,8 +118,8 @@ public class Duel
         String weatherEffects = "";
         if(this.duelWeather.equals(Weather.HAIL))
         {
-            boolean isThisPokemonAffected = !this.playerPokemon[this.turn].getType()[0].equals(Type.ICE) || !this.playerPokemon[this.turn].getType()[1].equals(Type.ICE);
-            boolean isOtherPokemonAffected = !this.playerPokemon[this.getOtherTurn()].getType()[0].equals(Type.ICE) || !this.playerPokemon[this.getOtherTurn()].getType()[1].equals(Type.ICE);
+            boolean isThisPokemonAffected = !this.playerPokemon[this.turn].isType(Type.ICE);
+            boolean isOtherPokemonAffected = !this.playerPokemon[this.getOtherTurn()].isType(Type.ICE);
 
             if(isThisPokemonAffected) this.playerPokemon[this.turn].damage(this.playerPokemon[this.turn].getStat(Stat.HP) / 16, this);
             if(isOtherPokemonAffected) this.playerPokemon[this.getOtherTurn()].damage(this.playerPokemon[this.getOtherTurn()].getStat(Stat.HP) / 16, this);
@@ -141,6 +141,20 @@ public class Duel
             else if(move.getType().equals(Type.FIRE) || move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower((int)(move.getPower() * 0.5));
 
             if(move.getName().equals("Thunder") || move.getName().equals("Hurricane")) move.setAccuracy(100);
+        }
+        else if(this.duelWeather.equals(Weather.SANDSTORM))
+        {
+            boolean isThisPokemonAffected = !this.playerPokemon[this.turn].isType(Type.GROUND) && !this.playerPokemon[this.turn].isType(Type.ROCK) && !this.playerPokemon[this.turn].isType(Type.STEEL);
+            boolean isOtherPokemonAffected = !this.playerPokemon[this.getOtherTurn()].isType(Type.GROUND) && !this.playerPokemon[this.getOtherTurn()].isType(Type.ROCK) && !this.playerPokemon[this.getOtherTurn()].isType(Type.STEEL);
+
+            if(isThisPokemonAffected) this.playerPokemon[this.turn].damage(this.playerPokemon[this.turn].getStat(Stat.HP) / 16, this);
+            if(isOtherPokemonAffected) this.playerPokemon[this.getOtherTurn()].damage(this.playerPokemon[this.getOtherTurn()].getStat(Stat.HP) / 16, this);
+
+            weatherEffects = (isThisPokemonAffected && isOtherPokemonAffected ? "Both pokemon" : (isThisPokemonAffected ? this.playerPokemon[this.turn].getName() : (isOtherPokemonAffected ? this.playerPokemon[this.getOtherTurn()].getName() : "Neither pokemon"))) + " took damage from the sandstorm!";
+
+            //TODO: Rock type SPDEF increases by 50% in Sandstorm
+
+            if(move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower(move.getPower() / 2);
         }
 
         List<String> status = new ArrayList<>();
@@ -310,20 +324,24 @@ public class Duel
 
         if(accurate)
         {
-            if(move.getName().equals("Hail"))
+            switch (move.getName())
             {
-                this.duelWeather = Weather.HAIL;
-                this.weatherTurns = 5;
-            }
-            else if(move.getName().equals("Sunny Day"))
-            {
-                this.duelWeather = Weather.HARSH_SUNLIGHT;
-                this.weatherTurns = 5;
-            }
-            else if(move.getName().equals("Rain Dance"))
-            {
-                this.duelWeather = Weather.RAIN;
-                this.weatherTurns = 5;
+                case "Hail" -> {
+                    this.duelWeather = Weather.HAIL;
+                    this.weatherTurns = 5;
+                }
+                case "Sunny Day" -> {
+                    this.duelWeather = Weather.HARSH_SUNLIGHT;
+                    this.weatherTurns = 5;
+                }
+                case "Rain Dance" -> {
+                    this.duelWeather = Weather.RAIN;
+                    this.weatherTurns = 5;
+                }
+                case "Sandstorm" -> {
+                    this.duelWeather = Weather.SANDSTORM;
+                    this.weatherTurns = 5;
+                }
             }
         }
 

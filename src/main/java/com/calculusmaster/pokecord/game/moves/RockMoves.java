@@ -10,4 +10,9 @@ public class RockMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String Sandstorm(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return user.getName() + " caused a sandstorm!";
+    }
 }
