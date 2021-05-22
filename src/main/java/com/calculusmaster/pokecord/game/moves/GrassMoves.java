@@ -48,7 +48,7 @@ public class GrassMoves
 
     public String SleepPowder(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.setStatusCondition(StatusCondition.ASLEEP);
+        opponent.addStatusCondition(StatusCondition.ASLEEP);
 
         return opponent.getName() + "is asleep!";
     }
@@ -79,9 +79,9 @@ public class GrassMoves
 
     public String WorrySeed(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(user.getStatusCondition().equals(StatusCondition.ASLEEP))
+        if(user.hasStatusCondition(StatusCondition.ASLEEP))
         {
-            user.removeStatusConditions();
+            user.removeStatusCondition(StatusCondition.ASLEEP);
             return user.getName() + " is now awake!";
         }
         else return move.getNothingResult();
@@ -110,14 +110,14 @@ public class GrassMoves
         int damage = move.getDamage(user, opponent);
         opponent.damage(damage, duel);
 
-        opponent.setStatusCondition(StatusCondition.CONFUSED);
+        opponent.addStatusCondition(StatusCondition.CONFUSED);
 
         return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " is now confused!";
     }
 
     public String StunSpore(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.setStatusCondition(StatusCondition.PARALYZED);
+        opponent.addStatusCondition(StatusCondition.PARALYZED);
 
         return opponent.getName() + " is paralyzed!";
     }

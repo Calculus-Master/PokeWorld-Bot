@@ -129,62 +129,60 @@ public class Duel
             weatherEffects = (isThisPokemonAffected && isOtherPokemonAffected ? "Both pokemon" : (isThisPokemonAffected ? this.playerPokemon[this.turn].getName() : (isOtherPokemonAffected ? this.playerPokemon[this.getOtherTurn()].getName() : "Neither pokemon"))) + " took damage from the freezing hailstorm!";
         }
 
-        String status = "";
+        List<String> status = new ArrayList<>();
         int damage;
         boolean immune = false;
-        StatusCondition pokeStatus = this.playerPokemon[this.turn].getStatusCondition();
         String pokeName = this.playerPokemon[this.turn].getName();
-        System.out.println(pokeName + " , " + pokeStatus.toString());
 
-        switch(pokeStatus)
-        {
-            case BURNED:
-                damage = (int)(this.playerPokemon[this.turn].getStat(Stat.HP) / 16.);
-                this.playerPokemon[this.turn].damage(damage, this);
-
-                status = pokeName + " is burned! The burn dealt " + damage + " damage!";
-                break;
-            case FROZEN:
-                List<String> frozenMoves = Arrays.asList("Fusion Flare", "Flame Wheel", "Sacred Fire", "Flare Blitz", "Scald", "Steam Eruption");
-                boolean unfreeze = new Random().nextInt(100) < 20;
-
-                if(frozenMoves.contains(move.getName()) || unfreeze) status = pokeName + " has thawed out!";
-                else return status = pokeName + " is frozen and can't use any moves!";
-                break;
-            case PARALYZED:
-                if(new Random().nextInt(100) < 25) return status = pokeName + " is paralyzed and can't move!";
-                break;
-            case POISONED:
-                damage = (int)(this.playerPokemon[this.turn].getStat(Stat.HP) / 8.);
-                status = pokeName + " is poisoned! The poison dealt " + damage + " damage!";
-                break;
-            case ASLEEP:
-                if(this.asleepTurn[this.turn] == 2 || (this.electricTerrainActive && !this.playerPokemon[this.turn].isType(Type.FLYING)))
-                {
-                    this.playerPokemon[this.turn].removeStatusConditions();
-                    status = this.playerPokemon[this.turn] + " woke up" + (this.electricTerrainActive ? " due to the Electric Field!" : "!");
-                    this.asleepTurn[this.turn] = 0;
-                }
-                else
-                {
-                    this.asleepTurn[this.turn]++;
-                    return status = pokeName + " is asleep!";
-                }
-                break;
-            case CONFUSED:
-                if(new Random().nextInt(100) < 33)
-                {
-                    move = new Move("Tackle");
-                    damage = move.getDamage(this.playerPokemon[this.turn], this.playerPokemon[this.turn]);
-                    move.logic(this.playerPokemon[this.turn], this.playerPokemon[this.turn], this);
-                    return status = pokeName + " is confused! It hurt itself in its confusion for " + damage + " damage!";
-                }
-                else if(new Random().nextInt(100) < 50) this.playerPokemon[this.turn].removeStatusConditions();
-                break;
-            default:
-                status = "";
-                break;
-        }
+//        switch(pokeStatus)
+//        {
+//            case BURNED:
+//                damage = (int)(this.playerPokemon[this.turn].getStat(Stat.HP) / 16.);
+//                this.playerPokemon[this.turn].damage(damage, this);
+//
+//                status = pokeName + " is burned! The burn dealt " + damage + " damage!";
+//                break;
+//            case FROZEN:
+//                List<String> frozenMoves = Arrays.asList("Fusion Flare", "Flame Wheel", "Sacred Fire", "Flare Blitz", "Scald", "Steam Eruption");
+//                boolean unfreeze = new Random().nextInt(100) < 20;
+//
+//                if(frozenMoves.contains(move.getName()) || unfreeze) status = pokeName + " has thawed out!";
+//                else return status = pokeName + " is frozen and can't use any moves!";
+//                break;
+//            case PARALYZED:
+//                if(new Random().nextInt(100) < 25) return status = pokeName + " is paralyzed and can't move!";
+//                break;
+//            case POISONED:
+//                damage = (int)(this.playerPokemon[this.turn].getStat(Stat.HP) / 8.);
+//                status = pokeName + " is poisoned! The poison dealt " + damage + " damage!";
+//                break;
+//            case ASLEEP:
+//                if(this.asleepTurn[this.turn] == 2 || (this.electricTerrainActive && !this.playerPokemon[this.turn].isType(Type.FLYING)))
+//                {
+//                    this.playerPokemon[this.turn].removeStatusConditions();
+//                    status = this.playerPokemon[this.turn] + " woke up" + (this.electricTerrainActive ? " due to the Electric Field!" : "!");
+//                    this.asleepTurn[this.turn] = 0;
+//                }
+//                else
+//                {
+//                    this.asleepTurn[this.turn]++;
+//                    return status = pokeName + " is asleep!";
+//                }
+//                break;
+//            case CONFUSED:
+//                if(new Random().nextInt(100) < 33)
+//                {
+//                    move = new Move("Tackle");
+//                    damage = move.getDamage(this.playerPokemon[this.turn], this.playerPokemon[this.turn]);
+//                    move.logic(this.playerPokemon[this.turn], this.playerPokemon[this.turn], this);
+//                    return status = pokeName + " is confused! It hurt itself in its confusion for " + damage + " damage!";
+//                }
+//                else if(new Random().nextInt(100) < 50) this.playerPokemon[this.turn].removeStatusConditions();
+//                break;
+//            default:
+//                status = "";
+//                break;
+//        }
 
         //Status Condition Logic 2.0
         int statusDamage = 0;
@@ -194,7 +192,7 @@ public class Duel
             statusDamage = (int)(this.playerPokemon[this.turn].getStat(Stat.HP) / 16.);
             this.playerPokemon[this.turn].damage(statusDamage, this);
 
-            status = pokeName + " is burned! The burn dealt " + statusDamage + " damage!";
+            status.add(pokeName + " is burned! The burn dealt " + statusDamage + " damage!");
         }
 
         if(this.playerPokemon[this.turn].hasStatusCondition(StatusCondition.POISONED))
@@ -202,7 +200,7 @@ public class Duel
             statusDamage = (int)(this.playerPokemon[this.turn].getStat(Stat.HP) / 8.);
             this.playerPokemon[this.turn].damage(statusDamage, this);
 
-            status = pokeName + " is poisoned! The poison dealt " + statusDamage + " damage!";
+            status.add(pokeName + " is poisoned! The poison dealt " + statusDamage + " damage!");
         }
 
         if(this.playerPokemon[this.turn].hasStatusCondition(StatusCondition.CONFUSED))
@@ -212,7 +210,9 @@ public class Duel
                 statusDamage = new Move("Tackle").getDamage(this.playerPokemon[this.turn], this.playerPokemon[this.turn]);
                 this.playerPokemon[this.turn].damage(statusDamage, this);
 
-                return status = pokeName + " is confused! It hurt itself in its confusion for " + statusDamage + " damage!";
+                status.add(pokeName + " is confused! It hurt itself in its confusion for " + statusDamage + " damage!");
+
+                return this.getStatusResults(status);
             }
             else if(new Random().nextInt(100) < 50) this.playerPokemon[this.turn].removeStatusCondition(StatusCondition.CONFUSED);
         }
@@ -224,10 +224,14 @@ public class Duel
 
             if(unfreezeMoves.contains(move.getName()) || unfreeze)
             {
-                status = pokeName + " has thawed out!";
+                status.add(pokeName + " has thawed out!");
                 this.playerPokemon[this.turn].removeStatusCondition(StatusCondition.FROZEN);
             }
-            else return status = pokeName + " is frozen and can't use any moves!";
+            else
+            {
+                status.add(pokeName + " is frozen and can't use any moves!");
+                return this.getStatusResults(status);
+            }
         }
 
         if(this.playerPokemon[this.turn].hasStatusCondition(StatusCondition.ASLEEP))
@@ -235,19 +239,24 @@ public class Duel
             if(this.asleepTurn[this.turn] == 2 || (this.electricTerrainActive && !this.playerPokemon[this.turn].isType(Type.FLYING)))
             {
                 this.playerPokemon[this.turn].removeStatusCondition(StatusCondition.ASLEEP);
-                status = this.playerPokemon[this.turn] + " woke up" + (this.electricTerrainActive ? " due to the Electric Field!" : "!");
+                status.add(this.playerPokemon[this.turn].getName() + " woke up" + (this.electricTerrainActive ? " due to the Electric Field!" : "!"));
                 this.asleepTurn[this.turn] = 0;
             }
             else
             {
                 this.asleepTurn[this.turn]++;
-                return status = pokeName + " is asleep!";
+                status.add(pokeName + " is asleep!");
+                return this.getStatusResults(status);
             }
         }
 
         if(this.playerPokemon[this.turn].hasStatusCondition(StatusCondition.PARALYZED))
         {
-            if(new Random().nextInt(100) < 25) return status = pokeName + " is paralyzed and can't move!";
+            if(new Random().nextInt(100) < 25)
+            {
+                status.add(pokeName + " is paralyzed and can't move!");
+                return this.getStatusResults(status);
+            }
         }
 
         //Flinching
@@ -260,7 +269,7 @@ public class Duel
         //Add code here that needs to check things every turn
 
         //Unfreeze opponent if move is fire type
-        if((move.getType().equals(Type.FIRE) || move.getName().equals("Scald") || move.getName().equals("Steam Eruption")) && this.playerPokemon[this.getOtherTurn()].getStatusCondition().equals(StatusCondition.FROZEN)) this.playerPokemon[this.getOtherTurn()].removeStatusConditions();
+        if((move.getType().equals(Type.FIRE) || move.getName().equals("Scald") || move.getName().equals("Steam Eruption")) && this.playerPokemon[this.getOtherTurn()].hasStatusCondition(StatusCondition.FROZEN)) this.playerPokemon[this.getOtherTurn()].removeStatusCondition(StatusCondition.FROZEN);
 
         if(move.getName().equals("Rollout"))
         {
@@ -295,6 +304,8 @@ public class Duel
             this.electricTerrainTurns--;
         }
 
+        System.out.println("Magnet Rise (this=" + this.playerPokemon[this.turn].getName() + ") " + this.usedMagnetRise[this.getOtherTurn()] + ", this:" + this.usedMagnetRise[this.turn]);
+
         if(this.usedMagnetRise[this.getOtherTurn()])
         {
             this.magnetRiseTurns[this.getOtherTurn()]--;
@@ -320,12 +331,17 @@ public class Duel
             if(move.getCategory().equals(Category.STATUS)) this.lastDamage = 0;
 
             if(move.getName().equals("Defense Curl")) this.usedDefenseCurl[this.turn] = true;
+            if(move.getName().equals("Magnet Rise"))
+            {
+                this.usedMagnetRise[this.turn] = true;
+                this.magnetRiseTurns[this.turn] = this.magnetRiseTurns[this.turn] <= 0 ? 5 : this.magnetRiseTurns[this.turn];
+            }
         }
 
         this.usedRage[this.turn] = accurate && move.getName().equals("Rage");
 
         //Status condition
-        results += (!status.isEmpty() ? "\n" + status : "");
+        results += (!status.isEmpty() ? "\n" + this.getStatusResults(status) : "");
 
         //Weather (TODO: Maybe change image depending on weather? probably not since performance but cool)
         String weatherUpdate = this.duelWeather.getStatus();
@@ -349,6 +365,15 @@ public class Duel
         }
 
         return results + "\n" + weatherUpdate + "\n" + weatherEffects;
+    }
+
+    private String getStatusResults(List<String> status)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for(String s : status) sb.append(s).append(status.indexOf(s) == status.size() - 1 ? "" : "\n");
+
+        return sb.toString().trim();
     }
 
     public void onWin()
@@ -512,7 +537,8 @@ public class Duel
 
     private String getHB(int p)
     {
-        return this.getNameFromID(this.playerIDs[p]) + "'s " + this.playerPokemon[p].getName() + ": " + this.playerPokemon[p].getHealth() + " / " + this.playerPokemon[p].getStat(Stat.HP) + " HP" + (!this.playerPokemon[p].getStatusCondition().equals(StatusCondition.NORMAL) ? " (" + this.playerPokemon[p].getStatusCondition().getAbbrev() + ")" : "");
+        //return this.getNameFromID(this.playerIDs[p]) + "'s " + this.playerPokemon[p].getName() + ": " + this.playerPokemon[p].getHealth() + " / " + this.playerPokemon[p].getStat(Stat.HP) + " HP" + (!this.playerPokemon[p].getStatusCondition().equals(StatusCondition.NORMAL) ? " (" + this.playerPokemon[p].getStatusCondition().getAbbrev() + ")" : "");
+        return this.getNameFromID(this.playerIDs[p]) + "'s " + this.playerPokemon[p].getName() + ": " + this.playerPokemon[p].getHealth() + " / " + this.playerPokemon[p].getStat(Stat.HP) + " HP " + this.playerPokemon[p].getActiveStatusConditions();
     }
 
     private String getTurnTitle()

@@ -31,7 +31,7 @@ public class DragonMoves
 
         if(!opponent.getType()[0].equals(Type.ELECTRIC) && !opponent.getType()[1].equals(Type.ELECTRIC) && new Random().nextInt(100) < 30)
         {
-            opponent.setStatusCondition(StatusCondition.PARALYZED);
+            opponent.addStatusCondition(StatusCondition.PARALYZED);
             return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " is paralyzed!";
         }
 

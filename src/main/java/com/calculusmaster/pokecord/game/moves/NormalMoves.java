@@ -199,7 +199,7 @@ public class NormalMoves
 
     public String Supersonic(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.setStatusCondition(StatusCondition.CONFUSED);
+        opponent.addStatusCondition(StatusCondition.CONFUSED);
 
         return opponent.getName() + " is confused!";
     }
@@ -305,15 +305,15 @@ public class NormalMoves
             switch (s)
             {
                 case 0, 1, 2 -> {
-                    opponent.setStatusCondition(StatusCondition.BURNED);
+                    opponent.addStatusCondition(StatusCondition.BURNED);
                     statusStr = opponent.getName() + " is burned!";
                 }
                 case 3, 4, 5 -> {
-                    opponent.setStatusCondition(StatusCondition.PARALYZED);
+                    opponent.addStatusCondition(StatusCondition.PARALYZED);
                     statusStr = opponent.getName() + " is paralyzed!";
                 }
                 case 6, 7, 8 -> {
-                    opponent.setStatusCondition(StatusCondition.FROZEN);
+                    opponent.addStatusCondition(StatusCondition.FROZEN);
                     statusStr = opponent.getName() + " is frozen!";
                 }
             }

@@ -170,7 +170,7 @@ public class Move
         double random = (r.nextInt(16) + 85.0) / 100.0;
         double stab = user.getType()[0].equals(this.type) || user.getType()[1].equals(this.type) ? 1.5 : 1.0;
         double type = TypeEffectiveness.getCombinedMap(opponent.getType()[0], opponent.getType()[1]).get(this.type);
-        double burned = this.category.equals(Category.PHYSICAL) && user.getStatusCondition().equals(StatusCondition.BURNED) ? 0.5 : 1.0;
+        double burned = this.category.equals(Category.PHYSICAL) && user.hasStatusCondition(StatusCondition.BURNED) ? 0.5 : 1.0;
 
         //Any nuances go here
 

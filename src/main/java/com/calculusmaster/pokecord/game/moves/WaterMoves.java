@@ -44,7 +44,7 @@ public class WaterMoves
 
         if(new Random().nextInt(100) < 20)
         {
-            opponent.setStatusCondition(StatusCondition.CONFUSED);
+            opponent.addStatusCondition(StatusCondition.CONFUSED);
             return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " is confused!";
         }
 

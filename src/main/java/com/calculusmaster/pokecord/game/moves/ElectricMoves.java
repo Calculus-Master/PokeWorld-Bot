@@ -22,14 +22,14 @@ public class ElectricMoves
     {
         boolean paralyzed = new Random().nextInt(100) < 10;
 
-        if(paralyzed) opponent.setStatusCondition(StatusCondition.PARALYZED);
+        if(paralyzed) opponent.addStatusCondition(StatusCondition.PARALYZED);
 
         return Move.simpleDamageMove(user, opponent, duel, move) + (paralyzed ? " " + opponent.getName() + " is paralyzed!" : "");
     }
 
     public String ThunderWave(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.setStatusCondition(StatusCondition.PARALYZED);
+        opponent.addStatusCondition(StatusCondition.PARALYZED);
 
         return opponent.getName() + " is paralyzed!";
     }
@@ -41,7 +41,7 @@ public class ElectricMoves
 
         if(paralyzed)
         {
-            opponent.setStatusCondition(StatusCondition.PARALYZED);
+            opponent.addStatusCondition(StatusCondition.PARALYZED);
             s = " " + opponent.getName() + " is paralyzed!";
         }
 
@@ -73,7 +73,7 @@ public class ElectricMoves
 
     public String ZapCannon(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.setStatusCondition(StatusCondition.PARALYZED);
+        opponent.addStatusCondition(StatusCondition.PARALYZED);
         return Move.simpleDamageMove(user, opponent, duel, move) + " " + opponent.getName() + " is paralyzed!";
     }
 }

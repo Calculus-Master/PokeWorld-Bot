@@ -17,7 +17,7 @@ public class FireMoves
 
         if((!opponent.getType()[0].equals(Type.FIRE) && !opponent.getType()[1].equals(Type.FIRE)) && new Random().nextInt(100) < 10)
         {
-            opponent.setStatusCondition(StatusCondition.BURNED);
+            opponent.addStatusCondition(StatusCondition.BURNED);
             return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " is burned!";
         }
 
@@ -34,7 +34,7 @@ public class FireMoves
 
         if((!opponent.getType()[0].equals(Type.FIRE) && !opponent.getType()[1].equals(Type.FIRE)) && new Random().nextInt(100) < 10)
         {
-            opponent.setStatusCondition(StatusCondition.BURNED);
+            opponent.addStatusCondition(StatusCondition.BURNED);
             burned = " " + opponent.getName() + " is burned!";
         }
 
@@ -74,7 +74,7 @@ public class FireMoves
         int damage = move.getDamage(user, opponent);
         opponent.damage(damage, duel);
 
-        opponent.setStatusCondition(StatusCondition.BURNED);
+        opponent.addStatusCondition(StatusCondition.BURNED);
 
         return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " is burned!";
     }
@@ -93,7 +93,7 @@ public class FireMoves
 
         if((!opponent.getType()[0].equals(Type.FIRE) && !opponent.getType()[1].equals(Type.FIRE)) && new Random().nextInt(100) < 10)
         {
-            opponent.setStatusCondition(StatusCondition.BURNED);
+            opponent.addStatusCondition(StatusCondition.BURNED);
             return move.getDamageResult(opponent, damage) + move.getRecoilDamageResult(user, damage / 3) + " " + opponent.getName() + " is burned!";
         }
 

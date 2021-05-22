@@ -67,7 +67,7 @@ public class BugMoves
         {
             if(new Random().nextInt(100) < 20)
             {
-                opponent.setStatusCondition(StatusCondition.POISONED);
+                opponent.addStatusCondition(StatusCondition.POISONED);
                 return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " is poisoned!";
             }
         }

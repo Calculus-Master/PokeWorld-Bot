@@ -4,7 +4,6 @@ import com.calculusmaster.pokecord.game.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
-import com.calculusmaster.pokecord.game.enums.elements.Type;
 
 import java.util.Random;
 
@@ -13,8 +12,7 @@ public class PoisonMoves
     //TODO: Badly Poisoned
     public String Toxic(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(opponent.getStatusCondition().equals(StatusCondition.NORMAL)) opponent.setStatusCondition(StatusCondition.POISONED);
-
+        opponent.addStatusCondition(StatusCondition.POISONED);
         return opponent.getName() + " was poisoned!";
     }
 
@@ -22,7 +20,7 @@ public class PoisonMoves
     {
         int damage = move.getDamage(user, opponent);
 
-        if(opponent.getStatusCondition().equals(StatusCondition.POISONED)) damage *= 2;
+        if(opponent.hasStatusCondition(StatusCondition.POISONED)) damage *= 2;
 
         opponent.damage(damage, duel);
 
@@ -31,12 +29,8 @@ public class PoisonMoves
 
     public String PoisonPowder(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(!opponent.getType()[0].equals(Type.POISON) && !opponent.getType()[1].equals(Type.POISON) && !opponent.getType()[0].equals(Type.STEEL) && !opponent.getType()[1].equals(Type.STEEL))
-        {
-            opponent.setStatusCondition(StatusCondition.POISONED);
-            return opponent.getName() + " is poisoned!";
-        }
-        else return move.getNoEffectResult(opponent);
+        opponent.addStatusCondition(StatusCondition.POISONED);
+        return opponent.getName() + " is poisoned";
     }
 
     public String ToxicSpikes(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -51,7 +45,7 @@ public class PoisonMoves
 
         if(new Random().nextInt(100) < 30)
         {
-            opponent.setStatusCondition(StatusCondition.POISONED);
+            opponent.addStatusCondition(StatusCondition.POISONED);
 
             return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " was poisoned!";
         }

@@ -33,7 +33,7 @@ public class PsychicMoves
 
         if(new Random().nextInt(100) < 10)
         {
-            opponent.setStatusCondition(StatusCondition.CONFUSED);
+            opponent.addStatusCondition(StatusCondition.CONFUSED);
 
             return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " is confused!";
         }

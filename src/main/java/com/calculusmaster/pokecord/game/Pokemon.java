@@ -76,7 +76,6 @@ public class Pokemon
         p.setItem(specific.has("item") ? specific.getString("item") : PokeItem.NONE.getName());
 
         p.setHealth(p.getStat(Stat.HP));
-        p.removeStatusConditions();
         p.setStatusConditions();
         p.setCrit(1);
         p.setDefaultStatMultipliers();
@@ -105,7 +104,6 @@ public class Pokemon
         p.setItem(PokeItem.NONE);
 
         p.setHealth(p.getStat(Stat.HP));
-        p.removeStatusConditions();
         p.setStatusConditions();
         p.setCrit(1);
         p.setDefaultStatMultipliers();
@@ -347,23 +345,6 @@ public class Pokemon
     }
 
     //Status Conditions
-    @Deprecated
-    public void setStatusCondition(StatusCondition status)
-    {
-        this.statusOLD = status;
-    }
-
-    @Deprecated
-    public void removeStatusConditions()
-    {
-        this.statusOLD = StatusCondition.NORMAL;
-    }
-
-    @Deprecated
-    public StatusCondition getStatusCondition()
-    {
-        return this.statusOLD;
-    }
 
     public void addStatusCondition(StatusCondition s)
     {
@@ -396,18 +377,22 @@ public class Pokemon
 
     public void setStatusConditions()
     {
-        this.addStatusCondition(StatusCondition.BURNED);
-        this.addStatusCondition(StatusCondition.FROZEN);
-        this.addStatusCondition(StatusCondition.PARALYZED);
-        this.addStatusCondition(StatusCondition.POISONED);
-        this.addStatusCondition(StatusCondition.ASLEEP);
-        this.addStatusCondition(StatusCondition.CONFUSED);
+        this.status = new HashMap<>();
+
+        this.status.put(StatusCondition.BURNED, false);
+        this.status.put(StatusCondition.FROZEN, false);
+        this.status.put(StatusCondition.PARALYZED, false);
+        this.status.put(StatusCondition.POISONED, false);
+        this.status.put(StatusCondition.ASLEEP, false);
+        this.status.put(StatusCondition.CONFUSED, false);
     }
 
     public String getActiveStatusConditions()
     {
         List<String> active = new ArrayList<>();
         for(StatusCondition s : this.status.keySet()) if(this.status.get(s)) active.add(s.getAbbrev());
+
+        if(active.isEmpty()) return "";
 
         StringBuilder s = new StringBuilder().append("(");
         for(String str : active) s.append(str).append(", ");
