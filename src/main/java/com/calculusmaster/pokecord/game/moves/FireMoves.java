@@ -99,4 +99,9 @@ public class FireMoves
 
         return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 3);
     }
+
+    public String SunnyDay(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return user.getName() + " caused harsh sunlight!";
+    }
 }

@@ -54,6 +54,7 @@ public class CommandTeach extends Command
                 this.playerData.removeTR(TR.get(number).toString());
                 if(held != -1) this.playerData.addTR(TR.get(held).toString());
             }
+            else this.embed.setDescription(selected.getName() + " cannot learn that " + (tm ? "TM" : "TR") + "!");
         }
 
         return this;

@@ -164,8 +164,8 @@ public class Move
         int defStat = opponent.getStat(this.category.equals(Category.PHYSICAL) ? Stat.DEF : Stat.SPDEF);
 
         //Modifier = Targets * Weather * Badge * Critical * Random * STAB * Type * Burn * Other
-        //Ignored Components: Targets, Weather, Badge, Other
-        //TODO: Weather
+        //Ignored Components: Targets, Badge, Other
+        //Weather component is done in the Harsh Sunlight section in Duel
         double critical = user.isCrit() ? 1.5 : 1.0;
         double random = (r.nextInt(16) + 85.0) / 100.0;
         double stab = user.getType()[0].equals(this.type) || user.getType()[1].equals(this.type) ? 1.5 : 1.0;

@@ -118,7 +118,6 @@ public class Duel
         String weatherEffects = "";
         if(this.duelWeather.equals(Weather.HAIL))
         {
-            //TODO: Hail has a ton of effects
             boolean isThisPokemonAffected = !this.playerPokemon[this.turn].getType()[0].equals(Type.ICE) || !this.playerPokemon[this.turn].getType()[1].equals(Type.ICE);
             boolean isOtherPokemonAffected = !this.playerPokemon[this.getOtherTurn()].getType()[0].equals(Type.ICE) || !this.playerPokemon[this.getOtherTurn()].getType()[1].equals(Type.ICE);
 
@@ -128,12 +127,13 @@ public class Duel
             weatherEffects = (isThisPokemonAffected && isOtherPokemonAffected ? "Both pokemon" : (isThisPokemonAffected ? this.playerPokemon[this.turn].getName() : (isOtherPokemonAffected ? this.playerPokemon[this.getOtherTurn()].getName() : "Neither pokemon"))) + " took damage from the freezing hailstorm!";
 
             if(move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower(move.getPower() / 2);
+        }
+        else if(this.duelWeather.equals(Weather.HARSH_SUNLIGHT))
+        {
+            if(move.getType().equals(Type.FIRE)) move.setPower((int)(move.getPower() * 1.5));
+            else if(move.getType().equals(Type.WATER)) move.setPower((int)(move.getPower() * 0.5));
 
-            if(move.getName().equals("Weather Ball"))
-            {
-                move.setType(Type.ICE);
-                move.setPower(move.getPower() * 2);
-            }
+            if(move.getName().equals("Thunder") || move.getName().equals("Hurricane")) move.setAccuracy(50);
         }
 
         List<String> status = new ArrayList<>();
@@ -178,9 +178,9 @@ public class Duel
             List<String> unfreezeMoves = Arrays.asList("Fusion Flare", "Flame Wheel", "Sacred Fire", "Flare Blitz", "Scald", "Steam Eruption");
             boolean unfreeze = new Random().nextInt(100) < 20;
 
-            if(unfreezeMoves.contains(move.getName()) || unfreeze)
+            if(unfreezeMoves.contains(move.getName()) || unfreeze || this.duelWeather.equals(Weather.HARSH_SUNLIGHT))
             {
-                status.add(pokeName + " has thawed out!");
+                status.add(pokeName + " has thawed out" + (this.duelWeather.equals(Weather.HARSH_SUNLIGHT) ? " due to the harsh sunlight!" : "!"));
                 this.playerPokemon[this.turn].removeStatusCondition(StatusCondition.FROZEN);
             }
             else
@@ -261,8 +261,6 @@ public class Duel
             this.electricTerrainTurns--;
         }
 
-        System.out.println("Magnet Rise (this=" + this.playerPokemon[this.turn].getName() + ") " + this.usedMagnetRise[this.getOtherTurn()] + ", this:" + this.usedMagnetRise[this.turn]);
-
         if(this.usedMagnetRise[this.getOtherTurn()])
         {
             this.magnetRiseTurns[this.getOtherTurn()]--;
@@ -308,6 +306,11 @@ public class Duel
             if(move.getName().equals("Hail"))
             {
                 this.duelWeather = Weather.HAIL;
+                this.weatherTurns = 5;
+            }
+            else if(move.getName().equals("Sunny Day"))
+            {
+                this.duelWeather = Weather.HARSH_SUNLIGHT;
                 this.weatherTurns = 5;
             }
         }

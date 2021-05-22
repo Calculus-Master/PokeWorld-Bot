@@ -11,7 +11,6 @@ public class IceMoves
 {
     public String Hail(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        //TODO: Hail!
         return user.getName() + " summoned a hailstorm!";
     }
 
