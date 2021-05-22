@@ -81,4 +81,9 @@ public class ElectricMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 10);
     }
+
+    public String Thunder(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
+    }
 }
