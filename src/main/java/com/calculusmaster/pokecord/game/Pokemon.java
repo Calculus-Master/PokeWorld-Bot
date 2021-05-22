@@ -77,7 +77,7 @@ public class Pokemon
 
         p.setHealth(p.getStat(Stat.HP));
         p.removeStatusConditions();
-        p.clearStatusConditions();
+        p.setStatusConditions();
         p.setCrit(1);
         p.setDefaultStatMultipliers();
         p.setFlinched(false);
@@ -106,7 +106,7 @@ public class Pokemon
 
         p.setHealth(p.getStat(Stat.HP));
         p.removeStatusConditions();
-        p.clearStatusConditions();
+        p.setStatusConditions();
         p.setCrit(1);
         p.setDefaultStatMultipliers();
         p.setFlinched(false);
@@ -384,9 +384,24 @@ public class Pokemon
         this.status.replaceAll((s, v) -> false);
     }
 
-    public boolean getStatusCondition(StatusCondition s)
+    public boolean hasStatusCondition(StatusCondition s)
     {
         return this.status.get(s);
+    }
+
+    public Map<StatusCondition, Boolean> getStatusConditionMap()
+    {
+        return this.status;
+    }
+
+    public void setStatusConditions()
+    {
+        this.addStatusCondition(StatusCondition.BURNED);
+        this.addStatusCondition(StatusCondition.FROZEN);
+        this.addStatusCondition(StatusCondition.PARALYZED);
+        this.addStatusCondition(StatusCondition.POISONED);
+        this.addStatusCondition(StatusCondition.ASLEEP);
+        this.addStatusCondition(StatusCondition.CONFUSED);
     }
 
     public String getActiveStatusConditions()

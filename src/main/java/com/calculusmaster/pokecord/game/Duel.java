@@ -186,6 +186,70 @@ public class Duel
                 break;
         }
 
+        //Status Condition Logic 2.0
+        int statusDamage = 0;
+
+        if(this.playerPokemon[this.turn].hasStatusCondition(StatusCondition.BURNED))
+        {
+            statusDamage = (int)(this.playerPokemon[this.turn].getStat(Stat.HP) / 16.);
+            this.playerPokemon[this.turn].damage(statusDamage, this);
+
+            status = pokeName + " is burned! The burn dealt " + statusDamage + " damage!";
+        }
+
+        if(this.playerPokemon[this.turn].hasStatusCondition(StatusCondition.POISONED))
+        {
+            statusDamage = (int)(this.playerPokemon[this.turn].getStat(Stat.HP) / 8.);
+            this.playerPokemon[this.turn].damage(statusDamage, this);
+
+            status = pokeName + " is poisoned! The poison dealt " + statusDamage + " damage!";
+        }
+
+        if(this.playerPokemon[this.turn].hasStatusCondition(StatusCondition.CONFUSED))
+        {
+            if(new Random().nextInt(100) < 33)
+            {
+                statusDamage = new Move("Tackle").getDamage(this.playerPokemon[this.turn], this.playerPokemon[this.turn]);
+                this.playerPokemon[this.turn].damage(statusDamage, this);
+
+                return status = pokeName + " is confused! It hurt itself in its confusion for " + statusDamage + " damage!";
+            }
+            else if(new Random().nextInt(100) < 50) this.playerPokemon[this.turn].removeStatusCondition(StatusCondition.CONFUSED);
+        }
+
+        if(this.playerPokemon[this.turn].hasStatusCondition(StatusCondition.FROZEN))
+        {
+            List<String> unfreezeMoves = Arrays.asList("Fusion Flare", "Flame Wheel", "Sacred Fire", "Flare Blitz", "Scald", "Steam Eruption");
+            boolean unfreeze = new Random().nextInt(100) < 20;
+
+            if(unfreezeMoves.contains(move.getName()) || unfreeze)
+            {
+                status = pokeName + " has thawed out!";
+                this.playerPokemon[this.turn].removeStatusCondition(StatusCondition.FROZEN);
+            }
+            else return status = pokeName + " is frozen and can't use any moves!";
+        }
+
+        if(this.playerPokemon[this.turn].hasStatusCondition(StatusCondition.ASLEEP))
+        {
+            if(this.asleepTurn[this.turn] == 2 || (this.electricTerrainActive && !this.playerPokemon[this.turn].isType(Type.FLYING)))
+            {
+                this.playerPokemon[this.turn].removeStatusCondition(StatusCondition.ASLEEP);
+                status = this.playerPokemon[this.turn] + " woke up" + (this.electricTerrainActive ? " due to the Electric Field!" : "!");
+                this.asleepTurn[this.turn] = 0;
+            }
+            else
+            {
+                this.asleepTurn[this.turn]++;
+                return status = pokeName + " is asleep!";
+            }
+        }
+
+        if(this.playerPokemon[this.turn].hasStatusCondition(StatusCondition.PARALYZED))
+        {
+            if(new Random().nextInt(100) < 25) return status = pokeName + " is paralyzed and can't move!";
+        }
+
         //Flinching
         if(this.playerPokemon[this.turn].isFlinched())
         {

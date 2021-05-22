@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.game.enums.elements;
 
 public enum StatusCondition
 {
-    NORMAL(""),
+    @Deprecated NORMAL(""),
     BURNED("BRN"),
     FROZEN("FRZ"),
     PARALYZED("PAR"),
