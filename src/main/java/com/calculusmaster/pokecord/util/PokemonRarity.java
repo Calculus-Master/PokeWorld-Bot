@@ -158,6 +158,7 @@ public class PokemonRarity
         PokemonRarity.add("Mr Mime", Rarity.COPPER);
         PokemonRarity.add("Galarian MrMime", Rarity.SILVER);
         PokemonRarity.add("Scyther", Rarity.COPPER);
+        PokemonRarity.add("Jynx", Rarity.COPPER);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());
