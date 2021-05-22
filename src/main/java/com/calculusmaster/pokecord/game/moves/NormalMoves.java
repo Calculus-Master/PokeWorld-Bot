@@ -360,4 +360,9 @@ public class NormalMoves
     {
         return move.getNotImplementedResult();
     }
+
+    public String Return(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
 }

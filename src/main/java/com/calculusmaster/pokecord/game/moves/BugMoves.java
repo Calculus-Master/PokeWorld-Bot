@@ -128,4 +128,13 @@ public class BugMoves
 
         return move.getDamageResult(opponent, damage);
     }
+
+    public String LeechLife(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        opponent.damage(damage, duel);
+        user.heal(damage / 2);
+
+        return move.getDamageResult(opponent, damage) + " " + user.getName() + " healed " + (damage / 2) + " HP!";
+    }
 }
