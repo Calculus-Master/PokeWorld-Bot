@@ -128,6 +128,8 @@ public class Duel
 
             weatherEffects = (isThisPokemonAffected && isOtherPokemonAffected ? "Both pokemon" : (isThisPokemonAffected ? this.playerPokemon[this.turn].getName() : (isOtherPokemonAffected ? this.playerPokemon[this.getOtherTurn()].getName() : "Neither pokemon"))) + " took damage from the freezing hailstorm!";
 
+            if(move.getName().equals("Blizzard")) move.setAccuracy(100);
+
             if(move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower(move.getPower() / 2);
         }
         else if(this.duelWeather.equals(Weather.HARSH_SUNLIGHT))

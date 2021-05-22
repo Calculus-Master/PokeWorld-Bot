@@ -78,4 +78,13 @@ public class IceMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move) + (freeze ? " " + opponent.getName() + " is now frozen!" : "");
     }
+
+    public String Blizzard(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        boolean freeze = new Random().nextInt(100) < 10;
+
+        if(freeze) opponent.addStatusCondition(StatusCondition.FROZEN);
+
+        return Move.simpleDamageMove(user, opponent, duel, move) + (freeze ? " " + opponent.getName() + " is now frozen!" : "");
+    }
 }
