@@ -176,6 +176,8 @@ public class PokemonRarity
         PokemonRarity.add("Omastar", Rarity.GOLD);
         PokemonRarity.add("Kabuto", Rarity.SILVER);
         PokemonRarity.add("Kabutops", Rarity.GOLD);
+        PokemonRarity.add("Aerodactyl", Rarity.SILVER);
+        PokemonRarity.add("Snorlax", Rarity.SILVER);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());
