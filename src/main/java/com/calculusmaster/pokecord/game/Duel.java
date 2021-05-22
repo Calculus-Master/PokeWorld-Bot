@@ -110,14 +110,14 @@ public class Duel
     public boolean electricTerrainActive;
     public int electricTerrainTurns;
 
+    public boolean accurate;
+
     public String doTurn(int moveIndex)
     {
         this.setDuelStatus(DuelStatus.DUELING);
         String moveString = this.playerPokemon[this.turn].getLearnedMoves().get(moveIndex - 1);
         //Move move = Move.asMove(moveString);
         Move move = new Move(moveString);
-
-        boolean accurate = move.isAccurate();
 
         //Weather effects
         String weatherEffects = "";
@@ -251,6 +251,8 @@ public class Duel
             return this.getStatusResults(status);
         }
 
+        this.accurate = move.isAccurate();
+
         //Add code here that needs to check things every turn
         boolean unableToUse = false;
 
@@ -259,7 +261,7 @@ public class Duel
 
         if(move.getName().equals("Rollout"))
         {
-            if(accurate) this.rolloutTurns[this.turn]++;
+            if(this.accurate) this.rolloutTurns[this.turn]++;
             else this.rolloutTurns[this.turn] = 1;
 
             move.setPower((this.usedDefenseCurl[this.turn] ? 2 : 1) * 30 * (int) Math.pow(2, this.rolloutTurns[this.turn]));
@@ -268,7 +270,7 @@ public class Duel
 
         if(move.getName().equals("Ice Ball"))
         {
-            if(accurate) this.iceBallTurns[this.turn]++;
+            if(this.accurate) this.iceBallTurns[this.turn]++;
             else this.iceBallTurns[this.turn] = 1;
 
             move.setPower((this.usedDefenseCurl[this.turn] ? 2 : 1) * 30 * (int) Math.pow(2, this.iceBallTurns[this.turn]));
@@ -326,7 +328,7 @@ public class Duel
 
         if(this.recharge[this.turn] && rechargeMoves.contains(move.getName())) results += this.playerPokemon[this.turn].getName() + " can't use " + move.getName() + " this turn because it needs to recharge!";
         else if(unableToUse) results += this.playerPokemon[this.turn].getName() + " can't use " + move.getName() + " right now!";
-        else if(!accurate) results += move.getMissedResult(this.playerPokemon[this.turn]);
+        else if(!this.accurate) results += move.getMissedResult(this.playerPokemon[this.turn]);
         else if(immune) results += this.playerPokemon[this.getOtherTurn()].getName() + " is immune to the attack!";
         else
         {
@@ -359,7 +361,7 @@ public class Duel
         //Weather (TODO: Maybe change image depending on weather? probably not since performance but cool)
         String weatherUpdate = this.duelWeather.getStatus();
 
-        if(accurate)
+        if(this.accurate)
         {
             switch (move.getName())
             {
