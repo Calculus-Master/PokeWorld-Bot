@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.moves;
 import com.calculusmaster.pokecord.game.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 
 import java.util.Random;
@@ -31,5 +32,12 @@ public class FlyingMoves
     public String Tailwind(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return move.getNotImplementedResult();
+    }
+
+    public String Roost(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.heal(user.getStat(Stat.HP) / 2);
+
+        return user.getName() + " healed " + (user.getStat(Stat.HP) / 2) + " HP!";
     }
 }
