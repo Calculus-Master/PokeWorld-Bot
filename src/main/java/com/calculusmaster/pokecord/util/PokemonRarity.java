@@ -120,6 +120,11 @@ public class PokemonRarity
         PokemonRarity.add("Alolan Grimer", Rarity.SILVER);
         PokemonRarity.add("Muk", Rarity.SILVER);
         PokemonRarity.add("Alolan Muk", Rarity.SILVER);
+        PokemonRarity.add("Shellder", Rarity.COPPER);
+        PokemonRarity.add("Cloyster", Rarity.SILVER);
+        PokemonRarity.add("Gastly", Rarity.COPPER);
+        PokemonRarity.add("Haunter", Rarity.SILVER);
+        PokemonRarity.add("Gengar", Rarity.GOLD);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());

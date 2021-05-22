@@ -13,7 +13,8 @@ public enum PokeItem
     MOON_STONE(250),
     FIRE_STONE(250),
     LEAF_STONE(250),
-    SUN_STONE(250);
+    SUN_STONE(250),
+    WATER_STONE(250);
 
     public int cost;
     PokeItem(int cost)

@@ -663,7 +663,7 @@ public class Pokemon
     {
         PokeItem item = PokeItem.asItem(this.getItem());
         //TODO: Friendship evolutions: Alolan Meowth -> Persian
-        //TODO: Trade evolutions: Poliwhirl -> Politoed, Kadabra -> Alakazam, Machoke -> Machamp, Graveler -> Golem, Alolan Graveler -> Alolan Golem
+        //TODO: Trade evolutions: Poliwhirl -> Politoed, Kadabra -> Alakazam, Machoke -> Machamp, Graveler -> Golem, Alolan Graveler -> Alolan Golem, Haunter -> Gengar
         //TODO: Trade evolutions w/item: Slowpoke -> Slowking w/Kings Rock
         //TODO: Item evolutions: Galarian Slowpoke -> Galarian Slowbro (w/Galarica Cuff), Galarian Slowpoke -> Galarian Slowking (w/Galarica Wreath)
 
@@ -680,6 +680,7 @@ public class Pokemon
             case "Growlithe": return item.equals(PokeItem.FIRE_STONE);
             case "Gloom": return item.equals(PokeItem.LEAF_STONE) || item.equals(PokeItem.SUN_STONE);
             case "Weepinbell": return item.equals(PokeItem.LEAF_STONE);
+            case "Shellder": return item.equals(PokeItem.WATER_STONE);
             default: return false;
         }
     }
@@ -703,6 +704,7 @@ public class Pokemon
                 case "Gloom" -> PokeItem.asItem(this.getItem()).equals(PokeItem.LEAF_STONE) ? "Vileplume" : "Bellossom";
                 case "Growlithe" -> "Arcanine";
                 case "Weepinbell" -> "Victreebel";
+                case "Shellder" -> "Cloyster";
                 default -> "";
             };
 
