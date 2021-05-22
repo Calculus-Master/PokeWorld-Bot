@@ -110,6 +110,8 @@ public class PokemonRarity
         PokemonRarity.add("Galarian Slowbro", Rarity.SILVER);
         PokemonRarity.add("Magnemite", Rarity.COPPER);
         PokemonRarity.add("Magneton", Rarity.SILVER);
+        PokemonRarity.add("Farfetchd", Rarity.SILVER);
+        PokemonRarity.add("Galarian Farfetchd", Rarity.GOLD);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());

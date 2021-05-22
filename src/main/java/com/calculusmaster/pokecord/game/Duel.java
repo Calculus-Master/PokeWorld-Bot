@@ -324,7 +324,7 @@ public class Duel
 
         List<String> rechargeMoves = Arrays.asList("Hyper Beam");
 
-        if(this.recharge[this.turn] && rechargeMoves.contains(move.getName())) results += this.playerPokemon[this.turn] + " can't use " + move.getName() + " this turn because it needs to recharge!";
+        if(this.recharge[this.turn] && rechargeMoves.contains(move.getName())) results += this.playerPokemon[this.turn].getName() + " can't use " + move.getName() + " this turn because it needs to recharge!";
         else if(unableToUse) results += this.playerPokemon[this.turn].getName() + " can't use " + move.getName() + " right now!";
         else if(!accurate) results += move.getMissedResult(this.playerPokemon[this.turn]);
         else if(immune) results += this.playerPokemon[this.getOtherTurn()].getName() + " is immune to the attack!";
@@ -348,10 +348,8 @@ public class Duel
                 this.tauntTurns[this.turn] = this.tauntTurns[this.turn] <= 0 ? 3 : this.tauntTurns[this.turn];
             }
 
-            if(rechargeMoves.contains(move.getName())) this.recharge[this.turn] = true;
+            this.recharge[this.turn] = rechargeMoves.contains(move.getName());
         }
-
-        if(this.recharge[this.turn]) this.recharge[this.turn] = false;
 
         this.usedRage[this.turn] = accurate && move.getName().equals("Rage");
 
