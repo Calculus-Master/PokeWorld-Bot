@@ -149,6 +149,12 @@ public class PokemonRarity
         PokemonRarity.add("Chansey", Rarity.SILVER);
         PokemonRarity.add("Tangela", Rarity.SILVER);
         PokemonRarity.add("Kangaskhan", Rarity.GOLD);
+        PokemonRarity.add("Horsea", Rarity.COPPER);
+        PokemonRarity.add("Seadra", Rarity.SILVER);
+        PokemonRarity.add("Goldeen", Rarity.COPPER);
+        PokemonRarity.add("Seaking", Rarity.SILVER);
+        PokemonRarity.add("Staryu", Rarity.COPPER);
+        PokemonRarity.add("Starmie", Rarity.SILVER);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());
