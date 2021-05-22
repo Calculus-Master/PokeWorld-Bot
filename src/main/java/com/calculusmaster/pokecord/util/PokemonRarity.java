@@ -125,6 +125,11 @@ public class PokemonRarity
         PokemonRarity.add("Gastly", Rarity.COPPER);
         PokemonRarity.add("Haunter", Rarity.SILVER);
         PokemonRarity.add("Gengar", Rarity.GOLD);
+        PokemonRarity.add("Onix", Rarity.COPPER);
+        PokemonRarity.add("Drowzee", Rarity.COPPER);
+        PokemonRarity.add("Hypno", Rarity.SILVER);
+        PokemonRarity.add("Krabby", Rarity.COPPER);
+        PokemonRarity.add("Kingler", Rarity.SILVER);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());

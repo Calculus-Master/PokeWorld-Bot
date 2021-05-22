@@ -662,10 +662,12 @@ public class Pokemon
     public boolean specialCanEvolve()
     {
         PokeItem item = PokeItem.asItem(this.getItem());
-        //TODO: Friendship evolutions: Alolan Meowth -> Persian
+        //TODO: Friendship evolutions: Alolan Meowth -> Persian, Chansey -> Blissey
         //TODO: Trade evolutions: Poliwhirl -> Politoed, Kadabra -> Alakazam, Machoke -> Machamp, Graveler -> Golem, Alolan Graveler -> Alolan Golem, Haunter -> Gengar
-        //TODO: Trade evolutions w/item: Slowpoke -> Slowking w/Kings Rock
+        //TODO: Trade evolutions w/item: Slowpoke -> Slowking w/Kings Rock, Onix -> Steelix w/Metal Coat
         //TODO: Item evolutions: Galarian Slowpoke -> Galarian Slowbro (w/Galarica Cuff), Galarian Slowpoke -> Galarian Slowking (w/Galarica Wreath)
+        //TODO: Regional evolutions: Exeggcute -> Alolan Exeggutor w/Leaf Stone in Alola, Koffing -> Galarian Weezing in Galar
+        //TODO: Other evolutions: Cubone -> Alolan Marowak in Alola Nighttime
 
         switch(this.getName())
         {
@@ -679,7 +681,8 @@ public class Pokemon
             case "Vulpix":
             case "Growlithe": return item.equals(PokeItem.FIRE_STONE);
             case "Gloom": return item.equals(PokeItem.LEAF_STONE) || item.equals(PokeItem.SUN_STONE);
-            case "Weepinbell": return item.equals(PokeItem.LEAF_STONE);
+            case "Weepinbell":
+            case "Exeggcute": return item.equals(PokeItem.LEAF_STONE);
             case "Shellder": return item.equals(PokeItem.WATER_STONE);
             default: return false;
         }
@@ -705,6 +708,7 @@ public class Pokemon
                 case "Growlithe" -> "Arcanine";
                 case "Weepinbell" -> "Victreebel";
                 case "Shellder" -> "Cloyster";
+                case "Exeggcute" -> "Exeggutor";
                 default -> "";
             };
 
