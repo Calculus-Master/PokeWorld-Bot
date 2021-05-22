@@ -163,6 +163,8 @@ public class PokemonRarity
         PokemonRarity.add("Magmar", Rarity.SILVER);
         PokemonRarity.add("Pinsir", Rarity.SILVER);
         PokemonRarity.add("Tauros", Rarity.SILVER);
+        PokemonRarity.add("Magikarp", Rarity.COPPER);
+        PokemonRarity.add("Gyarados", Rarity.SILVER);
 
         Collections.shuffle(SPAWNS);
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());
