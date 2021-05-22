@@ -97,6 +97,6 @@ public class FireMoves
             return move.getDamageResult(opponent, damage) + move.getRecoilDamageResult(user, damage / 3) + " " + opponent.getName() + " is burned!";
         }
 
-        return move.getDamageResult(opponent, damage) + move.getRecoilDamageResult(user, damage / 3);
+        return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 3);
     }
 }

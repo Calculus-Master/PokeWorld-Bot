@@ -343,4 +343,11 @@ public class NormalMoves
     {
         return move.getNotImplementedResult();
     }
+
+    public String SwordsDance(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.changeStatMultiplier(Stat.ATK, 2);
+
+        return user.getName() + "'s Attack rose by 2 stages!";
+    }
 }
