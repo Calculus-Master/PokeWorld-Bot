@@ -15,4 +15,10 @@ public class RockMoves
     {
         return user.getName() + " caused a sandstorm!";
     }
+
+    public String SmackDown(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        //TODO: Raised Pokemon
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

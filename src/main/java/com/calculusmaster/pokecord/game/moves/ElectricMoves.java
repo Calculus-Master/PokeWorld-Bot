@@ -76,4 +76,9 @@ public class ElectricMoves
         opponent.addStatusCondition(StatusCondition.PARALYZED);
         return Move.simpleDamageMove(user, opponent, duel, move) + " " + opponent.getName() + " is paralyzed!";
     }
+
+    public String Thunderbolt(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 10);
+    }
 }
