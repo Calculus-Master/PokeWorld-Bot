@@ -11,16 +11,7 @@ public class DarkMoves
 {
     public String Bite(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
-
-        if(new Random().nextInt(100) < 30)
-        {
-            opponent.addStatusCondition(StatusCondition.FLINCHED);
-            return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " flinched!";
-        }
-
-        return move.getDamageResult(opponent, damage);
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
     }
 
     public String Pursuit(Pokemon user, Pokemon opponent, Duel duel, Move move)

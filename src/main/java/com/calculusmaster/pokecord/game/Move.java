@@ -92,6 +92,25 @@ public class Move
         return move.getDamageResult(opponent, damage);
     }
 
+    public static String statusDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move, StatusCondition status, int percent)
+    {
+        String statusUpdate = switch(status) {
+                    case BURNED -> "is burned!";
+                    case FROZEN -> "is frozen!";
+                    case PARALYZED -> "is paralyzed!";
+                    case ASLEEP -> "is asleep!";
+                    case CONFUSED -> "is confused!";
+                    case POISONED -> "is poisoned!";
+                    case FLINCHED -> "flinched!";
+                };
+
+        boolean statusProc = new Random().nextInt(100) < percent;
+
+        if(statusProc) opponent.addStatusCondition(status);
+
+        return Move.simpleDamageMove(user, opponent, duel, move) + (statusProc ? " " + opponent.getName() + " " + statusUpdate : "");
+    }
+
     //Different Move Results
 
     public String getMoveUsedResult(Pokemon user)
