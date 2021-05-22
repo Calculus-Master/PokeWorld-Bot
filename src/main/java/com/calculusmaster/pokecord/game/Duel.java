@@ -95,11 +95,13 @@ public class Duel
         this.electricTerrainActive = false;
         this.magnetRiseTurns = new int[]{-1, -1};
         this.usedMagnetRise = new boolean[]{false, false};
+        this.tauntTurns = new int[]{-1, -1};
+        this.usedTaunt = new boolean[]{false, false};
     }
 
     //Variable specific to certain moves
-    private boolean[] usedDefenseCurl, usedRage, usedMagnetRise;
-    private int[] iceBallTurns, rolloutTurns, magnetRiseTurns;
+    private boolean[] usedDefenseCurl, usedRage, usedMagnetRise, usedTaunt;
+    private int[] iceBallTurns, rolloutTurns, magnetRiseTurns, tauntTurns;
     public int lastDamage;
 
     public boolean electricTerrainActive;
@@ -245,6 +247,7 @@ public class Duel
         }
 
         //Add code here that needs to check things every turn
+        boolean unableToUse = false;
 
         //Unfreeze opponent if move is fire type
         if((move.getType().equals(Type.FIRE) || move.getName().equals("Scald") || move.getName().equals("Steam Eruption")) && this.playerPokemon[this.getOtherTurn()].hasStatusCondition(StatusCondition.FROZEN)) this.playerPokemon[this.getOtherTurn()].removeStatusCondition(StatusCondition.FROZEN);
@@ -295,9 +298,26 @@ public class Duel
             }
         }
 
+        if(this.usedTaunt[this.getOtherTurn()])
+        {
+            this.tauntTurns[this.getOtherTurn()]--;
+
+            if(move.getCategory().equals(Category.STATUS))
+            {
+                unableToUse = true;
+            }
+        }
+
+        if(this.tauntTurns[this.getOtherTurn()] <= 0)
+        {
+            this.tauntTurns[this.getOtherTurn()] = -1;
+            this.usedTaunt[this.getOtherTurn()] = false;
+        }
+
         //Main move results
         String results = "\n";
 
+        if(unableToUse) results += this.playerPokemon[this.turn].getName() + " can't use " + move.getName() + " right now!";
         if(!accurate) results += move.getMissedResult(this.playerPokemon[this.turn]);
         else if(immune) results += this.playerPokemon[this.getOtherTurn()].getName() + " is immune to the attack!";
         else
@@ -311,6 +331,11 @@ public class Duel
             {
                 this.usedMagnetRise[this.turn] = true;
                 this.magnetRiseTurns[this.turn] = this.magnetRiseTurns[this.turn] <= 0 ? 5 : this.magnetRiseTurns[this.turn];
+            }
+            if(move.getName().equals("Taunt"))
+            {
+                this.usedTaunt[this.turn] = false;
+                this.tauntTurns[this.turn] = this.tauntTurns[this.turn] <= 0 ? 3 : this.tauntTurns[this.turn];
             }
         }
 

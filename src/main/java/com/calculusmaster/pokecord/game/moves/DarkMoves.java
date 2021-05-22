@@ -34,4 +34,9 @@ public class DarkMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String Taunt(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return opponent.getName() + " is now unable to use Status moves for 3 turns!";
+    }
 }
