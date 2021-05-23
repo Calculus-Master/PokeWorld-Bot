@@ -192,6 +192,8 @@ public class PokemonRarity
         PokemonRarity.add("Mew", Rarity.MYTHICAL);
 
         Collections.shuffle(SPAWNS);
+
+        System.out.println("Spawn Master List Size: " + SPAWNS.size());
         //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());
     }
 
