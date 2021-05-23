@@ -397,4 +397,34 @@ public class NormalMoves
         user.setEndure(true);
         return user.getName() + " braces for the next attack!";
     }
+
+    public String Disable(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String LaserFocus(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.setCrit(24);
+        return user.getName() + " has guaranteed critical hits!";
+    }
+
+    public String Swift(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String PsychUp(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.setDefaultStatMultipliers();
+
+        for(Stat s : Stat.values()) if(opponent.getStatMultiplier(s) > 0) user.changeStatMultiplier(s, (int)(opponent.getStatMultiplier(s) * 2));
+
+        return user.getName() + " copied " + opponent.getName() + "'s stat multipliers!";
+    }
+
+    public String MeFirst(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
 }

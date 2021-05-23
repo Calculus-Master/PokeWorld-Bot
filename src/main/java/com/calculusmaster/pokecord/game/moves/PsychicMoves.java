@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 
 import java.util.Random;
 
@@ -131,5 +132,52 @@ public class PsychicMoves
     public String TrickRoom(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return move.getNotImplementedResult();
+    }
+
+    public String Psywave(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = (int)(user.getLevel() * (new Random().nextInt(101) + 50) / 100D);
+
+        if(opponent.isType(Type.DARK)) return move.getNoEffectResult(opponent);
+        else
+        {
+            opponent.damage(damage, duel);
+
+            return move.getDamageResult(opponent, damage);
+        }
+    }
+
+    public String MiracleEye(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String GuardSwap(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String PowerSwap(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String Barrier(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.changeStatMultiplier(Stat.DEF, 2);
+
+        return user.getName() + "'s Defense rose by 2 stages!";
+    }
+
+    public String Amnesia(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.changeStatMultiplier(Stat.SPDEF, 2);
+
+        return user.getName() + "'s Special Defense rose by 2 stages!";
+    }
+
+    public String Psystrike(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 }

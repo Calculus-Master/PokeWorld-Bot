@@ -16,7 +16,7 @@ public class Move
     public static Map<String, MoveData> MOVES = new HashMap<>();
     //TODO: Add the correct moves to each list and keep these updated
     //TODO: Keep checking the custom moves and see if they can function as close to the original as possible
-    public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Sweet Scent", "Smokescreen", "Protect", "Safeguard", "Whirlwind", "Rage Powder", "Tailwind", "Light Screen", "Lock On", "Frustration", "Return", "Mind Reader", "Trick Room", "Quick Guard", "Counter", "Magnetic Flux", "After You");
+    public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Sweet Scent", "Smokescreen", "Protect", "Safeguard", "Whirlwind", "Rage Powder", "Tailwind", "Light Screen", "Lock On", "Frustration", "Return", "Mind Reader", "Trick Room", "Quick Guard", "Counter", "Magnetic Flux", "After You", "Disable", "Miracle Eye", "Guard Swap", "Power Swap", "Me First");
     public static final List<String> CUSTOM_MOVES = Arrays.asList("Leech Seed", "Toxic", "Rapid Spin", "Fell Stinger", "Toxic Spikes", "Mirror Shot");
 
     private String name;
@@ -196,8 +196,8 @@ public class Move
 
         //Any nuances go here
 
-        //Psyshock
-        if(this.name.equals("Psyshock")) defStat = opponent.getStat(Stat.DEF);
+        //Psyshock and Psystrike
+        if(this.name.equals("Psyshock") || this.name.equals("Psystrike")) defStat = opponent.getStat(Stat.DEF);
 
         //Freeze Dry
         if(this.name.equals("Freeze Dry")) type = opponent.isType(Type.WATER) || opponent.isType(Type.GRASS) || opponent.isType(Type.GROUND) || opponent.isType(Type.FLYING) || opponent.isType(Type.DRAGON) ? 2.0 : (opponent.isType(Type.FIRE) || opponent.isType(Type.ICE) || opponent.isType(Type.STEEL) ? 0.5 : 1.0);
