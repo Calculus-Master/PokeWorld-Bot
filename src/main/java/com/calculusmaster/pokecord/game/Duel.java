@@ -375,7 +375,7 @@ public class Duel
 
         //Main move results
 
-        List<String> rechargeMoves = Arrays.asList("Hyper Beam");
+        List<String> rechargeMoves = Arrays.asList("Hyper Beam", "Blast Burn");
 
         if(this.recharge[this.turn] && rechargeMoves.contains(move.getName())) results += this.playerPokemon[this.turn].getName() + " can't use " + move.getName() + " this turn because it needs to recharge!";
         else if(unableToUse) results += this.playerPokemon[this.turn].getName() + " can't use " + move.getName() + " right now!";

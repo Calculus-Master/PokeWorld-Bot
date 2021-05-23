@@ -14,9 +14,7 @@ import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class CommandShop extends Command
 {
@@ -32,7 +30,7 @@ public class CommandShop extends Command
     {
         if(this.msg.length == 1)
         {
-            this.embed.setDescription("`p!shop mega` – Mega Evolutions\n`p!shop forms` – Pokemon Forms\n`p!shop nature` – Change your Pokemon's Nature\n`p!shop tm:tr` – Buy TMs and TRs\n`p!shop items` – Misc. Items");
+            this.embed.setDescription("`p!shop mega` – Mega Evolutions\n`p!shop forms` – Pokemon Forms\n`p!shop nature` – Change your Pokemon's Nature\n`p!shop tm:tr` – Buy TMs and TRs\n`p!shop movetutor:tutor:mt` – Buy Move Tutor moves\n`p!shop items` – Misc. Items");
             this.embed.setTitle("Pokecord Shop");
             return this;
         }
@@ -46,6 +44,7 @@ public class CommandShop extends Command
             case "nature" -> page_nature();
             case "items" -> page_items();
             case "tm", "tr" -> page_tm_tr();
+            case "movetutor", "mt", "tutor" -> page_movetutor();
             case "xp" -> page_xp();
             default -> this.embed.setDescription(CommandInvalid.getShort());
         }
@@ -167,6 +166,15 @@ public class CommandShop extends Command
 
         this.page.append("\nBuy forms with p!buy form <form> where <form> is the name of the form. All forms cost " + CommandBuy.COST_FORM + "c.");
         this.embed.setFooter("This page is dynamically updated based on your selected Pokemon.");
+    }
+
+    public static List<String> MOVE_TUTOR_MOVES = Arrays.asList("Blast Burn");
+
+    private void page_movetutor()
+    {
+        this.page.append("Move Tutor Moves: \n\n").append("Blast Burn");
+
+        this.embed.setFooter("All move tutor moves cost " + CommandBuy.COST_MOVETUTOR + "c. Buying a move tutor move will automatically set the move in your first slot to the move tutor move.");
     }
 
     private void page_nature()

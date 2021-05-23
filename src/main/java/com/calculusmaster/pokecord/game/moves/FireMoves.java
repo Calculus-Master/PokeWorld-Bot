@@ -112,4 +112,9 @@ public class FireMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + " is no longer a Fire type!";
     }
+
+    public String BlastBurn(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

@@ -9,6 +9,9 @@ import com.calculusmaster.pokecord.game.enums.items.XPBooster;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class CommandBuy extends Command
 {
     //Prices
@@ -16,6 +19,7 @@ public class CommandBuy extends Command
     public static final int COST_FORM = 1500;
     public static final int COST_NATURE = 200;
     public static final int COST_RARE_CANDY = 300;
+    public static final int COST_MOVETUTOR = 15000;
 
     public CommandBuy(MessageReceivedEvent event, String[] msg)
     {
@@ -147,6 +151,25 @@ public class CommandBuy extends Command
                 this.embed.setDescription("Invalid TR!");
             }
             else this.embed.setDescription("You don't have enough money!");
+        }
+        else if(this.msg[1].equals("movetutor") && this.msg.length >= 3 && this.playerData.getCredits() >= CommandBuy.COST_MOVETUTOR)
+        {
+            String move = this.msg.length == 2 ? Global.normalCase(this.msg[1]) : Global.normalCase(this.msg[2] + " " + this.msg[3]);
+
+            List<String> blastBurnPokemon = Arrays.asList("Charizard", "Mega Charizard X", "Mega Charizard Y", "Typhlosion", "Blaziken", "Mega Blaziken", "Infernape", "Emboar", "Delphox", "Incineroar");
+            if(CommandShop.MOVE_TUTOR_MOVES.contains(move))
+            {
+                if(move.equals("Blast Burn") && blastBurnPokemon.contains(selected.getName()))
+                {
+                    this.playerData.changeCredits(-1 * COST_MOVETUTOR);
+
+                    selected.learnMove("Blast Burn", 1);
+                    Pokemon.updateMoves(selected);
+                    System.out.println(selected.getLearnedMoves());
+
+                    this.embed.setDescription("Bought Blast Burn for " + selected.getName() + "!");
+                }
+            }
         }
         else if(this.msg[1].equals("xp") && this.msg.length == 3 && this.msg[2].chars().allMatch(Character::isDigit))
         {
