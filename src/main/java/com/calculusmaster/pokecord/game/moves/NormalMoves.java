@@ -365,4 +365,18 @@ public class NormalMoves
     {
         return move.getNotImplementedResult();
     }
+
+    public String Recover(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int heal = new Random().nextInt(user.getStat(Stat.HP) / 2) + 1;
+
+        user.heal(heal);
+
+        return user.getName() + " healed for " + heal + " HP!";
+    }
+
+    public String MindReader(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
 }

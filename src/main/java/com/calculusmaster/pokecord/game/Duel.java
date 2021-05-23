@@ -98,17 +98,22 @@ public class Duel
         this.tauntTurns = new int[]{-1, -1};
         this.usedTaunt = new boolean[]{false, false};
         this.recharge = new boolean[]{false, false};
+        this.statImmuneTurns = new int[]{-1, -1};
+        this.futureSightTurns = new int[]{-1, -1};
+        this.usedFutureSight = new boolean[]{false, false};
     }
 
     //Variable specific to certain moves
-    private boolean[] usedDefenseCurl, usedRage, usedMagnetRise, usedTaunt;
-    private int[] iceBallTurns, rolloutTurns, magnetRiseTurns, tauntTurns;
+    private boolean[] usedDefenseCurl, usedRage, usedMagnetRise, usedTaunt, usedFutureSight;
+    private int[] iceBallTurns, rolloutTurns, magnetRiseTurns, tauntTurns, futureSightTurns;
     public int lastDamage;
 
     private boolean[] recharge;
 
     public boolean electricTerrainActive;
     public int electricTerrainTurns;
+
+    public int statImmuneTurns[];
 
     public boolean accurate;
 
@@ -321,6 +326,12 @@ public class Duel
             this.usedTaunt[this.getOtherTurn()] = false;
         }
 
+        if(move.getName().equals("Sheer Cold"))
+        {
+            move.setAccuracy((this.playerPokemon[this.turn].isType(Type.ICE) ? 30 : 20) + (this.playerPokemon[this.turn].getLevel() - this.playerPokemon[this.getOtherTurn()].getLevel()));
+            this.accurate = move.isAccurate();
+        }
+
         //Main move results
         String results = "\n";
 
@@ -350,7 +361,41 @@ public class Duel
                 this.tauntTurns[this.turn] = this.tauntTurns[this.turn] <= 0 ? 3 : this.tauntTurns[this.turn];
             }
 
+            if(move.getName().equals("Future Sight"))
+            {
+                this.usedFutureSight[this.turn] = true;
+                this.futureSightTurns[this.turn] = 2;
+            }
+
+            if(this.usedFutureSight[this.turn])
+            {
+                this.futureSightTurns[this.turn]--;
+
+                if(this.futureSightTurns[this.turn] <= 0)
+                {
+                    move = new Move("Future Sight");
+                    int damage = move.getDamage(this.playerPokemon[this.turn], this.playerPokemon[this.getOtherTurn()]);
+                    this.playerPokemon[this.getOtherTurn()].damage(damage, this);
+
+                    results += "\nFuture Sight hit " + this.playerPokemon[this.getOtherTurn()].getName() + " and dealt " + damage + " damage!";
+
+                    this.futureSightTurns[this.turn] = -1;
+                    this.usedFutureSight[this.turn] = false;
+                }
+            }
+
             this.recharge[this.turn] = rechargeMoves.contains(move.getName());
+        }
+
+        if(this.playerPokemon[this.turn].isStatImmune())
+        {
+            this.statImmuneTurns[this.turn]--;
+
+            if(this.statImmuneTurns[this.turn] <= 0)
+            {
+                this.statImmuneTurns[this.turn] = -1;
+                this.playerPokemon[this.turn].setStatImmune(false);
+            }
         }
 
         this.usedRage[this.turn] = accurate && move.getName().equals("Rage");

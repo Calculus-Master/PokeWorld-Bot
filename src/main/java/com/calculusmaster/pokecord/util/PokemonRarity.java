@@ -6,6 +6,7 @@ public class PokemonRarity
 {
     public static final List<String> SPAWNS = new ArrayList<>();
     public static final Map<String, Rarity> POKEMON_RARITIES = new HashMap<>();
+    public static final List<String> LEGENDARIES = new ArrayList<>();
 
     public static void init()
     {
@@ -199,11 +200,18 @@ public class PokemonRarity
         return SPAWNS.get(new Random().nextInt(SPAWNS.size()));
     }
 
+    public static String getLegendarySpawn()
+    {
+        return LEGENDARIES.get(new Random().nextInt(LEGENDARIES.size()));
+    }
+
     public static void add(String name, Rarity r)
     {
         for(int i = 0; i < r.num; i++) SPAWNS.add(name);
 
         POKEMON_RARITIES.put(name, r);
+
+        if(r.equals(Rarity.LEGENDARY) || r.equals(Rarity.MYTHICAL)) LEGENDARIES.add(name);
     }
 
     public enum Rarity

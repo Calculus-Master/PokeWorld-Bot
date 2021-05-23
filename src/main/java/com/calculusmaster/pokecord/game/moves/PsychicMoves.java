@@ -66,4 +66,70 @@ public class PsychicMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move) + (lower ? " " + opponent.getName() + "'s Special Defense lowered by 1 stage!" : "");
     }
+
+    public String PsychoShift(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(user.getActiveStatusConditions().isEmpty()) return move.getNothingResult();
+        else
+        {
+            for(StatusCondition s : user.getStatusConditionMap().keySet())
+            {
+                if(user.hasStatusCondition(s))
+                {
+                    opponent.addStatusCondition(s);
+                    user.removeStatusCondition(s);
+                }
+            }
+
+            return user.getName() + " transferred all Status Conditions to " + opponent.getName() + "!";
+        }
+    }
+
+    public String Hypnosis(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.addStatusCondition(StatusCondition.ASLEEP);
+
+        return opponent.getName() + " is asleep!";
+    }
+
+    public String PsychoCut(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.setCrit(3);
+
+        int damage = move.getDamage(user, opponent);
+        opponent.damage(damage, duel);
+
+        user.setCrit(1);
+
+        return move.getDamageResult(opponent, damage);
+    }
+
+    public String FreezingGlare(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FROZEN, 10);
+    }
+
+    public String DreamEater(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(opponent.hasStatusCondition(StatusCondition.ASLEEP))
+        {
+            int damage = move.getDamage(user, opponent);
+
+            opponent.damage(damage, duel);
+            user.heal(damage / 2);
+
+            return move.getDamageResult(opponent, damage) + " " + user.getName() + " healed for " + (damage / 2) + " HP!";
+        }
+        else return move.getNoEffectResult(opponent);
+    }
+
+    public String FutureSight(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return "The move will strike in 2 turns!";
+    }
+
+    public String TrickRoom(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
 }

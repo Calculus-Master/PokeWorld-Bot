@@ -44,6 +44,7 @@ public class Pokemon
     private Map<StatusCondition, Boolean> status;
     private int crit;
     private Map<Stat, Integer> statMultiplier = new TreeMap<>();
+    private boolean statImmune;
 
     //Init Global List
     public static void init()
@@ -77,6 +78,7 @@ public class Pokemon
         p.setStatusConditions();
         p.setCrit(1);
         p.setDefaultStatMultipliers();
+        p.setStatImmune(false);
 
         Global.logInfo(Pokemon.class, "build", "Pokemon Built (UUID: " + UUID + ", Name: " + p.getName() + ")!");
         return p;
@@ -104,6 +106,7 @@ public class Pokemon
         p.setStatusConditions();
         p.setCrit(1);
         p.setDefaultStatMultipliers();
+        p.setStatImmune(false);
 
         Global.logInfo(Pokemon.class, "create", "New Pokemon (" + name + ") Created!");
         return p;
@@ -878,12 +881,23 @@ public class Pokemon
 
     public void changeStatMultiplier(Stat s, int stageChange)
     {
-        this.statMultiplier.put(s, (this.statMultiplier.get(s) == -6 && stageChange < 0) || (this.statMultiplier.get(s) == 6 && stageChange > 0) ? this.statMultiplier.get(s) : this.statMultiplier.get(s) + stageChange);
+        if(this.isStatImmune() && stageChange < 0) return;
+        else this.statMultiplier.put(s, (this.statMultiplier.get(s) == -6 && stageChange < 0) || (this.statMultiplier.get(s) == 6 && stageChange > 0) ? this.statMultiplier.get(s) : this.statMultiplier.get(s) + stageChange);
     }
 
     public double getStatMultiplier(Stat s)
     {
         return this.statMultiplier.get(s) == 0 ? 1.0 : (double)(this.statMultiplier.get(s) < 0 ? 2 : 2 + Math.abs(this.statMultiplier.get(s))) / (this.statMultiplier.get(s) < 0 ? 2 + Math.abs(this.statMultiplier.get(s)) : 2);
+    }
+
+    public boolean isStatImmune()
+    {
+        return this.statImmune;
+    }
+
+    public void setStatImmune(boolean statImmune)
+    {
+        this.statImmune = statImmune;
     }
 
     public boolean isCrit()

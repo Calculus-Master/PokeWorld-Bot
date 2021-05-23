@@ -30,7 +30,7 @@ public class CommandRelease extends Command
             this.embed.setDescription(CommandInvalid.getShort());
             return this;
         }
-        else if(!isNumeric(1) && this.playerData.getPokemonList().length() <= Integer.parseInt(this.msg[1]))
+        else if(!isNumeric(1) && !this.msg[1].equals("confirm") && !this.msg[1].equals("deny") && this.playerData.getPokemonList().length() <= Integer.parseInt(this.msg[1]))
         {
             this.embed.setDescription(CommandInvalid.getShort());
             return this;

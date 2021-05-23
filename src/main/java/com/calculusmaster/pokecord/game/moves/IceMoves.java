@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 
 import java.util.Random;
 
@@ -86,5 +87,40 @@ public class IceMoves
         if(freeze) opponent.addStatusCondition(StatusCondition.FROZEN);
 
         return Move.simpleDamageMove(user, opponent, duel, move) + (freeze ? " " + opponent.getName() + " is now frozen!" : "");
+    }
+
+    public String SheerCold(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(opponent.isType(Type.ICE) || opponent.getLevel() > user.getLevel()) return move.getNoEffectResult(opponent);
+        else
+        {
+            int damage = opponent.getHealth();
+            opponent.damage(damage, duel);
+
+            return move.getDamageResult(opponent, damage);
+        }
+    }
+
+    public String PowderSnow(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FROZEN, 10);
+    }
+
+    public String Mist(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.setStatImmune(true);
+        duel.statImmuneTurns[duel.turn] = 3;
+
+        return user.getName() + " is immune to any stat changes for 3 turns!";
+    }
+
+    public String IceShard(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String FreezeDry(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 }

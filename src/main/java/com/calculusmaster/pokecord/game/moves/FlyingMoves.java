@@ -40,4 +40,9 @@ public class FlyingMoves
 
         return user.getName() + " healed " + (user.getStat(Stat.HP) / 2) + " HP!";
     }
+
+    public String Hurricane(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.CONFUSED, 30);
+    }
 }

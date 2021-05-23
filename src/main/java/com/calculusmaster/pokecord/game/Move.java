@@ -16,7 +16,7 @@ public class Move
     public static Map<String, MoveData> MOVES = new HashMap<>();
     //TODO: Add the correct moves to each list and keep these updated
     //TODO: Keep checking the custom moves and see if they can function as close to the original as possible
-    public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Sweet Scent", "Smokescreen", "Protect", "Safeguard", "Whirlwind", "Rage Powder", "Tailwind", "Light Screen", "Lock On", "Frustration", "Return");
+    public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Sweet Scent", "Smokescreen", "Protect", "Safeguard", "Whirlwind", "Rage Powder", "Tailwind", "Light Screen", "Lock On", "Frustration", "Return", "Mind Reader", "Trick Room");
     public static final List<String> CUSTOM_MOVES = Arrays.asList("Leech Seed", "Toxic", "Rapid Spin", "Fell Stinger", "Toxic Spikes", "Mirror Shot");
 
     private String name;
@@ -124,6 +124,9 @@ public class Move
 
         double e = TypeEffectiveness.getCombinedMap(opponent.getType()[0], opponent.getType()[1]).get(this.type);
 
+        //Freeze Dry
+        if(this.name.equals("Freeze Dry")) e = opponent.isType(Type.WATER) || opponent.isType(Type.GRASS) || opponent.isType(Type.GROUND) || opponent.isType(Type.FLYING) || opponent.isType(Type.DRAGON) ? 2.0 : (opponent.isType(Type.FIRE) || opponent.isType(Type.ICE) || opponent.isType(Type.STEEL) ? 0.5 : 1.0);
+
         if(e == 4.0) effective = "It's **extremely** effective (4x)!";
         else if(e == 2.0) effective = "It's **super** effective (2x)!";
         else if(e == 1.0) effective = "";
@@ -195,6 +198,9 @@ public class Move
 
         //Psyshock
         if(this.name.equals("Psyshock")) defStat = opponent.getStat(Stat.DEF);
+
+        //Freeze Dry
+        if(this.name.equals("Freeze Dry")) type = opponent.isType(Type.WATER) || opponent.isType(Type.GRASS) || opponent.isType(Type.GROUND) || opponent.isType(Type.FLYING) || opponent.isType(Type.DRAGON) ? 2.0 : (opponent.isType(Type.FIRE) || opponent.isType(Type.ICE) || opponent.isType(Type.STEEL) ? 0.5 : 1.0);
 
         double modifier = critical * random * stab * type * burned;
         double damage = (((2 * level / 5.0 + 2) * power * (double)atkStat / (double)defStat) / 50) + 2;
