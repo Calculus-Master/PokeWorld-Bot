@@ -285,7 +285,8 @@ public class Listener extends ListenerAdapter
         public void run()
         {
             timer.schedule(new SpawnEvent(this.server, this.spawnChannel), SpawnEvent.getDelay());
-            new Thread(this::spawnEvent).start();
+            //new Thread(this::spawnEvent).start();
+            this.spawnEvent();
             //this.server.getTextChannelById(this.spawnChannel).sendMessage(spawnEvent(this.server).build()).queue();
         }
 

@@ -26,6 +26,8 @@ public class Move
     private int power;
     private int accuracy;
 
+    private boolean hitCrit;
+
     public static void init()
     {
         Mongo.MoveInfo.find(Filters.exists("name")).forEach(d -> MOVES.put(d.getString("name"), new MoveData(d.getString("name"), d.getString("type"), d.getString("category"), d.getInteger("power"), d.getInteger("accuracy"), d.getString("info"), d.getString("zmove"))));
@@ -135,7 +137,7 @@ public class Move
         else if(e == 0.0) effective = this.getNoEffectResult(opponent);
         else throw new IllegalStateException("Effectiveness multiplier is a strange value: " + e);
 
-        return "It dealt **" + dmg + "** damage to " + opponent.getName() + "! " + effective;
+        return "It dealt **" + dmg + "** damage to " + opponent.getName() + "! " + effective + (this.hitCrit ? " It was a critical hit!" : "");
     }
 
     public String getRecoilDamageResult(Pokemon user, int dmg)
@@ -194,6 +196,8 @@ public class Move
         double type = TypeEffectiveness.getCombinedMap(opponent.getType()[0], opponent.getType()[1]).get(this.type);
         double burned = this.category.equals(Category.PHYSICAL) && user.hasStatusCondition(StatusCondition.BURNED) ? 0.5 : 1.0;
 
+        if(critical > 1.0) hitCrit = true;
+
         //Any nuances go here
 
         //Psyshock, Psystrike, Secret Sword
@@ -216,6 +220,7 @@ public class Move
         this.category = this.moveData.category;
         this.power = this.moveData.power;
         this.accuracy = this.moveData.accuracy;
+        this.hitCrit = false;
     }
 
     public void setType(Type t)

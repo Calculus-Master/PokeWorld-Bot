@@ -247,7 +247,7 @@ public class CommandMarket extends Command
 
         private String getEntryLine()
         {
-            return "ID: " + this.marketID + " | Level " + this.pokemon.getLevel() + " " + this.pokemon.getName() + " | Price: " + this.price;
+            return "ID: " + this.marketID + " | Level " + this.pokemon.getLevel() + " " + this.pokemon.getName() + " | Price: " + this.price + " | Total IV: " + this.pokemon.getTotalIV();
         }
 
         public static boolean isIDValid(String marketID)

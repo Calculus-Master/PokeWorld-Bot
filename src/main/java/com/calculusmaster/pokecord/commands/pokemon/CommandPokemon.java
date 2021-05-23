@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.PokemonRarity;
 import com.calculusmaster.pokecord.util.TableBuilder;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -55,6 +56,11 @@ public class CommandPokemon extends Command
             if(after.equals(">") && validIndex && isNumeric(index + 1)) this.pokemon = this.pokemon.stream().filter(p -> p.getTotalIVRounded() > getInt(index + 1)).collect(Collectors.toList());
             else if(after.equals("<") && validIndex && isNumeric(index + 1)) this.pokemon = this.pokemon.stream().filter(p -> p.getTotalIVRounded() < getInt(index + 1)).collect(Collectors.toList());
             else if(isNumeric(index)) this.pokemon = this.pokemon.stream().filter(p -> (int)p.getTotalIVRounded() == getInt(index)).collect(Collectors.toList());
+        }
+
+        if(msg.contains("--legendary") || msg.contains("--leg"))
+        {
+            this.pokemon = this.pokemon.stream().filter(p -> PokemonRarity.LEGENDARIES.contains(p.getName())).collect(Collectors.toList());
         }
 
         //TODO: --hpiv, --atkiv, --defiv, --spatkiv, --spdefiv, --spdiv

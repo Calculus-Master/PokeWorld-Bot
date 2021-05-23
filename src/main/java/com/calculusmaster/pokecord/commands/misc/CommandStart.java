@@ -52,6 +52,7 @@ public class CommandStart extends Command
 
             Pokemon starter = Pokemon.create(Global.normalCase(this.msg[1]));
             starter.setLevel(5);
+            starter.setIVs("");
 
             Achievements.grant(this.player.getId(), Achievements.START_JOURNEY, this.event);
 
