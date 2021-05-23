@@ -78,4 +78,12 @@ public class FlyingMoves
 
         return opponent.getName() + "'s Attack was lowered by 2 stages!";
     }
+
+    public String DragonAscent(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.changeStatMultiplier(Stat.DEF, -1);
+        user.changeStatMultiplier(Stat.SPDEF, -1);
+
+        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + "'s Defense and Special Defense were lowered by 1 stage!";
+    }
 }

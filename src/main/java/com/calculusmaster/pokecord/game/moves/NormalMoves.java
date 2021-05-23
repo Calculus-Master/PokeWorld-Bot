@@ -429,4 +429,9 @@ public class NormalMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String RelicSong(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.ASLEEP, 10);
+    }
 }

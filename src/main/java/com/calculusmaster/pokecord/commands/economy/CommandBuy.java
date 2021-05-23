@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Nature;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.XPBooster;
 import com.calculusmaster.pokecord.util.Global;
@@ -162,35 +163,24 @@ public class CommandBuy extends Command
 
             if(CommandShop.MOVE_TUTOR_MOVES.contains(move))
             {
-                if(move.equals("Blast Burn") && blastBurnPokemon.contains(selected.getName()))
+                boolean blastBurn = move.equals("Blast Burn") && blastBurnPokemon.contains(selected.getName());
+                boolean hydroCannon = move.equals("Hydro Cannon") && hydroCannonPokemon.contains(selected.getName());
+                boolean frenzyPlant = move.equals("Frenzy Plant") && frenzyPlantPokemon.contains(selected.getName());
+                boolean dracoMeteor = move.equals("Draco Meteor") && selected.getType()[0].equals(Type.DRAGON);
+                boolean voltTackle = move.equals("Volt Tackle") && selected.getName().equals("Pikachu");
+                boolean dragonAscent = move.equals("Dragon Ascent") && (selected.getName().equals("Rayquaza") || selected.getName().equals("Mega Rayquaza"));
+                boolean secretSword = move.equals("Secret Sword") && selected.getName().equals("Keldeo");
+                boolean relicSong = move.equals("Relic Song") && selected.getName().contains("Meloetta");
+
+                if(blastBurn || hydroCannon || frenzyPlant || dracoMeteor || voltTackle || dragonAscent || secretSword || relicSong)
                 {
                     this.playerData.changeCredits(-1 * COST_MOVETUTOR);
 
-                    selected.learnMove("Blast Burn", 1);
+                    selected.learnMove(move, 1);
                     Pokemon.updateMoves(selected);
                     System.out.println(selected.getLearnedMoves());
 
-                    this.embed.setDescription("Bought Blast Burn for " + selected.getName() + "!");
-                }
-                else if(move.equals("Hydro Cannon") && hydroCannonPokemon.contains(selected.getName()))
-                {
-                    this.playerData.changeCredits(-1 * COST_MOVETUTOR);
-
-                    selected.learnMove("Hydro Cannon", 1);
-                    Pokemon.updateMoves(selected);
-                    System.out.println(selected.getLearnedMoves());
-
-                    this.embed.setDescription("Bought Hydro Cannon for " + selected.getName() + "!");
-                }
-                else if(move.equals("Frenzy Plant") && frenzyPlantPokemon.contains(selected.getName()))
-                {
-                    this.playerData.changeCredits(-1 * COST_MOVETUTOR);
-
-                    selected.learnMove("Frenzy Plant", 1);
-                    Pokemon.updateMoves(selected);
-                    System.out.println(selected.getLearnedMoves());
-
-                    this.embed.setDescription("Bought Frenzy Plant for " + selected.getName() + "!");
+                    this.embed.setDescription("Bought " + move + " for " + selected.getName() + "!");
                 }
             }
         }

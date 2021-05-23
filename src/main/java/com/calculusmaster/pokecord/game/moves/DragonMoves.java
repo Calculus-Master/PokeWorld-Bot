@@ -58,4 +58,10 @@ public class DragonMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
     }
+
+    public String DracoMeteor(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.changeStatMultiplier(Stat.SPATK, -2);
+        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + "'s Special Attack was lowered by 2 stages!";
+    }
 }

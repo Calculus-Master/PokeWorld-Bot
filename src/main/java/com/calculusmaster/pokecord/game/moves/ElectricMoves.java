@@ -98,4 +98,17 @@ public class ElectricMoves
 
         return user.getName() + "'s Special Defense was raised by 1 stage! " + user.getName() + " is charged up!";
     }
+
+    public String VoltTackle(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        boolean paralyze = new Random().nextInt(100) < 10;
+
+        opponent.damage(damage, duel);
+        user.damage(damage / 3, duel);
+
+        if(paralyze) opponent.addStatusCondition(StatusCondition.PARALYZED);
+
+        return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 3) + (paralyze ? " " + opponent.getName() + " is paralyzed!" : "");
+    }
 }
