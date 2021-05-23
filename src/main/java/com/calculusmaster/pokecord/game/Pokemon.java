@@ -41,6 +41,7 @@ public class Pokemon
     private String heldItem;
 
     private int health;
+    private Type[] type;
     private Map<StatusCondition, Boolean> status;
     private int crit;
     private Map<Stat, Integer> statMultiplier = new TreeMap<>();
@@ -76,6 +77,7 @@ public class Pokemon
         p.setItem(specific.has("item") ? specific.getString("item") : PokeItem.NONE.getName());
 
         p.setHealth(p.getStat(Stat.HP));
+        p.setType();
         p.setStatusConditions();
         p.setCrit(1);
         p.setDefaultStatMultipliers();
@@ -105,6 +107,7 @@ public class Pokemon
         p.setItem(PokeItem.NONE);
 
         p.setHealth(p.getStat(Stat.HP));
+        p.setType();
         p.setStatusConditions();
         p.setCrit(1);
         p.setDefaultStatMultipliers();
@@ -950,7 +953,17 @@ public class Pokemon
 
     public Type[] getType()
     {
-        return new Type[]{Type.cast(this.genericJSON.getJSONArray("type").getString(0)), Type.cast(this.genericJSON.getJSONArray("type").getString(1))};
+        return this.type;
+    }
+
+    public void setType(Type t, int ind)
+    {
+        this.type[ind] = t;
+    }
+
+    public void setType()
+    {
+        this.type = new Type[]{Type.cast(this.genericJSON.getJSONArray("type").getString(0)), Type.cast(this.genericJSON.getJSONArray("type").getString(1))};
     }
 
     //TODO: Use this everywhere

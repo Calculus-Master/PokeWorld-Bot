@@ -104,4 +104,12 @@ public class FireMoves
     {
         return user.getName() + " caused harsh sunlight!";
     }
+
+    public String BurnUp(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(user.getType()[0].equals(Type.FIRE)) user.setType(Type.NORMAL, 0);
+        if(user.getType()[1].equals(Type.FIRE)) user.setType(Type.NORMAL, 1);
+
+        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + " is no longer a Fire type!";
+    }
 }
