@@ -53,4 +53,9 @@ public class DragonMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + " is confused!";
     }
+
+    public String Twister(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
+    }
 }

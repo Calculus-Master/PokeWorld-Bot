@@ -71,4 +71,11 @@ public class FlyingMoves
         user.setCrit(3);
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
     }
+
+    public String FeatherDance(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.changeStatMultiplier(Stat.ATK, -2);
+
+        return opponent.getName() + "'s Attack was lowered by 2 stages!";
+    }
 }

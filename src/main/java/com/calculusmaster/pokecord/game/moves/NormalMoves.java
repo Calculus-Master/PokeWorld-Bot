@@ -15,10 +15,7 @@ public class NormalMoves
 {
     public String Tackle(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
-
-        return move.getDamageResult(opponent, damage);
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String Growl(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -426,5 +423,10 @@ public class NormalMoves
     public String MeFirst(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return move.getNotImplementedResult();
+    }
+
+    public String QuickAttack(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 }
