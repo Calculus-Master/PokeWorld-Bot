@@ -45,4 +45,14 @@ public class FlyingMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.CONFUSED, 30);
     }
+
+    public String Peck(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String DrillPeck(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

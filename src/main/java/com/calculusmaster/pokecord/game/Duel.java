@@ -101,6 +101,7 @@ public class Duel
         this.statImmuneTurns = new int[]{-1, -1};
         this.futureSightTurns = new int[]{-1, -1};
         this.usedFutureSight = new boolean[]{false, false};
+        this.usedDetect = new boolean[]{false, false};
     }
 
     //Variable specific to certain moves
@@ -115,6 +116,8 @@ public class Duel
 
     public int statImmuneTurns[];
 
+    private boolean[] usedDetect;
+
     public boolean accurate;
 
     public String doTurn(int moveIndex)
@@ -123,6 +126,7 @@ public class Duel
         String moveString = this.playerPokemon[this.turn].getLearnedMoves().get(moveIndex - 1);
         //Move move = Move.asMove(moveString);
         Move move = new Move(moveString);
+        String results = "\n";
 
         //Weather effects
         String weatherEffects = "";
@@ -169,6 +173,23 @@ public class Duel
             if(move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower(move.getPower() / 2);
         }
 
+        if(this.usedFutureSight[this.turn])
+        {
+            this.futureSightTurns[this.turn]--;
+
+            if(this.futureSightTurns[this.turn] <= 0)
+            {
+                move = new Move("Future Sight");
+                int damage = move.getDamage(this.playerPokemon[this.turn], this.playerPokemon[this.getOtherTurn()]);
+                this.playerPokemon[this.getOtherTurn()].damage(damage, this);
+
+                results += "\nFuture Sight hit " + this.playerPokemon[this.getOtherTurn()].getName() + " and dealt " + damage + " damage!";
+
+                this.futureSightTurns[this.turn] = -1;
+                this.usedFutureSight[this.turn] = false;
+            }
+        }
+
         List<String> status = new ArrayList<>();
         boolean immune = false;
         String pokeName = this.playerPokemon[this.turn].getName();
@@ -199,6 +220,7 @@ public class Duel
                 statusDamage = new Move("Tackle").getDamage(this.playerPokemon[this.turn], this.playerPokemon[this.turn]);
                 this.playerPokemon[this.turn].damage(statusDamage, this);
 
+                status.add(results);
                 status.add(pokeName + " is confused! It hurt itself in its confusion for " + statusDamage + " damage!");
 
                 return this.getStatusResults(status);
@@ -218,6 +240,7 @@ public class Duel
             }
             else
             {
+                status.add(results);
                 status.add(pokeName + " is frozen and can't use any moves!");
                 return this.getStatusResults(status);
             }
@@ -234,6 +257,7 @@ public class Duel
             else
             {
                 this.asleepTurn[this.turn]++;
+                status.add(results);
                 status.add(pokeName + " is asleep!");
                 return this.getStatusResults(status);
             }
@@ -243,6 +267,7 @@ public class Duel
         {
             if(new Random().nextInt(100) < 25)
             {
+                status.add(results);
                 status.add(pokeName + " is paralyzed and can't move!");
                 return this.getStatusResults(status);
             }
@@ -252,6 +277,7 @@ public class Duel
         {
             this.playerPokemon[this.turn].removeStatusCondition(StatusCondition.FLINCHED);
 
+            status.add(results);
             status.add(pokeName + " flinched and cannot move!");
             return this.getStatusResults(status);
         }
@@ -332,8 +358,14 @@ public class Duel
             this.accurate = move.isAccurate();
         }
 
+        if(this.usedDetect[this.getOtherTurn()])
+        {
+            this.usedDetect[this.getOtherTurn()] = false;
+
+            immune = true;
+        }
+
         //Main move results
-        String results = "\n";
 
         List<String> rechargeMoves = Arrays.asList("Hyper Beam");
 
@@ -367,21 +399,9 @@ public class Duel
                 this.futureSightTurns[this.turn] = 2;
             }
 
-            if(this.usedFutureSight[this.turn])
+            if(move.getName().equals("Detect"))
             {
-                this.futureSightTurns[this.turn]--;
-
-                if(this.futureSightTurns[this.turn] <= 0)
-                {
-                    move = new Move("Future Sight");
-                    int damage = move.getDamage(this.playerPokemon[this.turn], this.playerPokemon[this.getOtherTurn()]);
-                    this.playerPokemon[this.getOtherTurn()].damage(damage, this);
-
-                    results += "\nFuture Sight hit " + this.playerPokemon[this.getOtherTurn()].getName() + " and dealt " + damage + " damage!";
-
-                    this.futureSightTurns[this.turn] = -1;
-                    this.usedFutureSight[this.turn] = false;
-                }
+                this.usedDetect[this.turn] = true;
             }
 
             this.recharge[this.turn] = rechargeMoves.contains(move.getName());
