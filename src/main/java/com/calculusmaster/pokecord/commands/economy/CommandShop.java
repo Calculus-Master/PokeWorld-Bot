@@ -97,8 +97,8 @@ public class CommandShop extends Command
     }
 
     private static int day = 0;
-    public static int currentTMPrice = 2000;
-    public static int currentTRPrice = 2500;
+    public static int currentTMPrice = 10000;
+    public static int currentTRPrice = 10000;
 
     public static final List<String> entriesTM = new ArrayList<>();
     public static final List<String> entriesTR = new ArrayList<>();
@@ -114,19 +114,19 @@ public class CommandShop extends Command
             entriesTM.clear();
             entriesTR.clear();
 
-            for(int i = 0; i < 3; i++)
+            for(int i = 0; i < 10; i++)
             {
                 if(entriesTM.contains(newTMEntry())) i--;
                 else entriesTM.add(newTMEntry());
             }
-            for(int i = 0; i < 3; i++)
+            for(int i = 0; i < 10; i++)
             {
                 if(entriesTR.contains(newTREntry())) i--;
                 else entriesTR.add(newTREntry());
             }
 
-            currentTMPrice = 2000 + (new Random().nextInt(1000) - 500);
-            currentTRPrice = 2500 + (new Random().nextInt(1500) - 500);
+            currentTMPrice = 10000 + new Random().nextInt(5000);
+            currentTRPrice = 10000 + new Random().nextInt(5000);
         }
 
         this.page.append("\n**Technical Machines (TMs) for " + currentTMPrice + "c each: **\n");
