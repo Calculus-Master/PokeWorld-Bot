@@ -60,4 +60,15 @@ public class FlyingMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String WingAttack(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String SkyAttack(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.setCrit(3);
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
+    }
 }

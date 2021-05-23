@@ -379,4 +379,22 @@ public class NormalMoves
     {
         return move.getNotImplementedResult();
     }
+
+    public String Leer(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.changeStatMultiplier(Stat.DEF, -1);
+
+        return opponent.getName() + "'s Defense was lowered by 1 stage!";
+    }
+
+    public String AfterYou(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String Endure(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.setEndure(true);
+        return user.getName() + " braces for the next attack!";
+    }
 }

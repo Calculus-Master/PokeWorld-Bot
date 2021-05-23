@@ -45,6 +45,7 @@ public class Pokemon
     private int crit;
     private Map<Stat, Integer> statMultiplier = new TreeMap<>();
     private boolean statImmune;
+    private boolean endure;
 
     //Init Global List
     public static void init()
@@ -79,6 +80,7 @@ public class Pokemon
         p.setCrit(1);
         p.setDefaultStatMultipliers();
         p.setStatImmune(false);
+        p.setEndure(false);
 
         Global.logInfo(Pokemon.class, "build", "Pokemon Built (UUID: " + UUID + ", Name: " + p.getName() + ")!");
         return p;
@@ -107,6 +109,7 @@ public class Pokemon
         p.setCrit(1);
         p.setDefaultStatMultipliers();
         p.setStatImmune(false);
+        p.setEndure(false);
 
         Global.logInfo(Pokemon.class, "create", "New Pokemon (" + name + ") Created!");
         return p;
@@ -410,6 +413,14 @@ public class Pokemon
     public void damage(int amount, Duel duel)
     {
         this.health -= amount;
+
+        if(this.health <= 0 && this.endure)
+        {
+            this.health = 1;
+            this.endure = false;
+        }
+        else if(this.endure) this.endure = false;
+
         //TODO: Instead of making the parameter duel, just search the hashmap
         if(!duel.getPokemon()[duel.turn].getUUID().equals(this.getUUID())) duel.lastDamage = amount;
     }
@@ -898,6 +909,11 @@ public class Pokemon
     public void setStatImmune(boolean statImmune)
     {
         this.statImmune = statImmune;
+    }
+
+    public void setEndure(boolean endure)
+    {
+        this.endure = endure;
     }
 
     public boolean isCrit()
