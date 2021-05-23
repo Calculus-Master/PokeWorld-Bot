@@ -49,7 +49,7 @@ public class CommandTeach extends Command
                 selected.setTR(number);
                 Pokemon.updateTMTR(selected);
 
-                this.embed.setDescription("Taught " + TR.get(held).toString() + " - " + TR.get(held).getMoveName() + " to " + selected.getName());
+                this.embed.setDescription("Taught " + TR.get(number).toString() + " - " + TR.get(number).getMoveName() + " to " + selected.getName());
 
                 this.playerData.removeTR(TR.get(number).toString());
                 if(held != -1) this.playerData.addTR(TR.get(held).toString());
