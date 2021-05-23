@@ -329,8 +329,7 @@ public class Listener extends ListenerAdapter
         //TODO: Figure out better spawn rate
         private static long getDelay()
         {
-            //return 1000L * 60 * 60;
-            return 1000L * (30 + new Random().nextInt(5 * 60));
+            return 1000L * (60 + new Random().nextInt(3 * 60));
         }
     }
 
