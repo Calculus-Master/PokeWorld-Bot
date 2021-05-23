@@ -47,8 +47,8 @@ public class CommandDex extends Command
         String evolutions = "*" + this.getEvolutionsFormatted(info.getJSONArray("evolutions"), info.getJSONArray("evolutionsLVL")) + "*";
         String forms = "*Forms:* " + this.getFormsFormatted(info.getJSONArray("forms"));
         String megas = "*Megas:* " + this.getMegasFormatted(info.getJSONArray("mega"));
-        String tms = "*TMs*: " + (info.getJSONArray("tms").length() == 0 ? "None" : info.getJSONArray("tms").toString());
-        String trs = "*TRs*: " + (info.getJSONArray("trs").length() == 0 ? "None" : info.getJSONArray("trs").toString());
+        String tms = "*TMs*: " + (info.getJSONArray("movesTM").length() == 0 ? "None" : info.getJSONArray("movesTM").toString());
+        String trs = "*TRs*: " + (info.getJSONArray("movesTR").length() == 0 ? "None" : info.getJSONArray("movesTR").toString());
         String baseStats = "*Base Stats:* \n" + this.getStatsFormatted(info.getJSONArray("stats"));
 
         String image = info.getString((isShiny ? "shiny" : "normal") + "URL");
