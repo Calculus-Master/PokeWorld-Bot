@@ -315,7 +315,9 @@ public class Listener extends ListenerAdapter
                 BufferedImage img = ImageIO.read(url);
                 File file = new File("pokemon.png");
                 ImageIO.write(img, "png", file);
+
                 this.server.getTextChannelById(this.spawnChannel).sendFile(file, "pkmn.png").embed(embed.build()).queue();
+                if(this.server.getId().equals(PrivateInfo.SERVER_ID_MAIN)) this.server.getTextChannelById("843996103639695360").sendFile(file, "pkmn.png").embed(embed.build()).queue();
             }
             catch (Exception e)
             {
