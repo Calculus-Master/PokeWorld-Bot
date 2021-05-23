@@ -34,8 +34,20 @@ public class CommandPokemon extends Command
 
         if(msg.contains("--name") && msg.indexOf("--name") + 1 < msg.size())
         {
-            String name = msg.get(msg.indexOf("--name") + 1);
-            if(isPokemon(name)) this.pokemon = this.pokemon.stream().filter(p -> p.getName().equals(Global.normalCase(name))).collect(Collectors.toList());
+            String name = "";
+
+            for(int i = msg.indexOf("--name") + 1; i < msg.size(); i++)
+            {
+                if(!msg.get(i).contains("--")) name += msg.get(i) + " ";
+                else i = msg.size();
+            }
+
+            name = Global.normalCase(name.trim());
+
+            String searchName = name;
+
+            //String name = msg.get(msg.indexOf("--name") + 1);
+            if(isPokemon(searchName)) this.pokemon = this.pokemon.stream().filter(p -> p.getName().equals(searchName)).collect(Collectors.toList());
         }
 
         if(msg.contains("--level") && msg.indexOf("--level") + 1 < msg.size())
@@ -61,6 +73,11 @@ public class CommandPokemon extends Command
         if(msg.contains("--legendary") || msg.contains("--leg"))
         {
             this.pokemon = this.pokemon.stream().filter(p -> PokemonRarity.LEGENDARIES.contains(p.getName())).collect(Collectors.toList());
+        }
+
+        if(msg.contains("--mega"))
+        {
+            this.pokemon = this.pokemon.stream().filter(p -> p.getName().contains("Mega")).collect(Collectors.toList());
         }
 
         //TODO: --hpiv, --atkiv, --defiv, --spatkiv, --spdefiv, --spdiv
