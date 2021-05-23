@@ -55,4 +55,9 @@ public class FlyingMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String Pluck(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

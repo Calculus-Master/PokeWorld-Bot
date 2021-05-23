@@ -86,4 +86,16 @@ public class ElectricMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
     }
+
+    public String MagneticFlux(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String Charge(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.changeStatMultiplier(Stat.SPDEF, 1);
+
+        return user.getName() + "'s Special Defense was raised by 1 stage! " + user.getName() + " is charged up!";
+    }
 }

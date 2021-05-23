@@ -102,6 +102,7 @@ public class Duel
         this.futureSightTurns = new int[]{-1, -1};
         this.usedFutureSight = new boolean[]{false, false};
         this.usedDetect = new boolean[]{false, false};
+        this.usedCharge = new boolean[]{false, false};
     }
 
     //Variable specific to certain moves
@@ -116,7 +117,7 @@ public class Duel
 
     public int statImmuneTurns[];
 
-    private boolean[] usedDetect;
+    private boolean[] usedDetect, usedCharge;
 
     public boolean accurate;
 
@@ -365,6 +366,13 @@ public class Duel
             immune = true;
         }
 
+        if(this.usedCharge[this.turn])
+        {
+            this.usedCharge[this.turn] = false;
+
+            if(move.getType().equals(Type.ELECTRIC)) move.setPower(move.getPower() * 2);
+        }
+
         //Main move results
 
         List<String> rechargeMoves = Arrays.asList("Hyper Beam");
@@ -403,6 +411,8 @@ public class Duel
             {
                 this.usedDetect[this.turn] = true;
             }
+
+            if(move.getName().equals("Charge")) this.usedCharge[this.turn] = true;
 
             this.recharge[this.turn] = rechargeMoves.contains(move.getName());
         }
