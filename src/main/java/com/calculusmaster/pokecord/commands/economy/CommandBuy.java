@@ -157,6 +157,9 @@ public class CommandBuy extends Command
             String move = this.msg.length == 2 ? Global.normalCase(this.msg[1]) : Global.normalCase(this.msg[2] + " " + this.msg[3]);
 
             List<String> blastBurnPokemon = Arrays.asList("Charizard", "Mega Charizard X", "Mega Charizard Y", "Typhlosion", "Blaziken", "Mega Blaziken", "Infernape", "Emboar", "Delphox", "Incineroar");
+            List<String> hydroCannonPokemon = Arrays.asList("Blastoise", "Mega Blastoise", "Feraligatr", "Swampert", "Mega Swampert", "Empoleon", "Samurott", "Greninja", "Primarina");
+            List<String> frenzyPlantPokemon = Arrays.asList("Venusaur", "Mega Venusaur", "Meganium", "Sceptile", "Mega Sceptile", "Torterra", "Serperior", "Chesnaught", "Decidueye");
+
             if(CommandShop.MOVE_TUTOR_MOVES.contains(move))
             {
                 if(move.equals("Blast Burn") && blastBurnPokemon.contains(selected.getName()))
@@ -168,6 +171,26 @@ public class CommandBuy extends Command
                     System.out.println(selected.getLearnedMoves());
 
                     this.embed.setDescription("Bought Blast Burn for " + selected.getName() + "!");
+                }
+                else if(move.equals("Hydro Cannon") && hydroCannonPokemon.contains(selected.getName()))
+                {
+                    this.playerData.changeCredits(-1 * COST_MOVETUTOR);
+
+                    selected.learnMove("Hydro Cannon", 1);
+                    Pokemon.updateMoves(selected);
+                    System.out.println(selected.getLearnedMoves());
+
+                    this.embed.setDescription("Bought Hydro Cannon for " + selected.getName() + "!");
+                }
+                else if(move.equals("Frenzy Plant") && frenzyPlantPokemon.contains(selected.getName()))
+                {
+                    this.playerData.changeCredits(-1 * COST_MOVETUTOR);
+
+                    selected.learnMove("Frenzy Plant", 1);
+                    Pokemon.updateMoves(selected);
+                    System.out.println(selected.getLearnedMoves());
+
+                    this.embed.setDescription("Bought Frenzy Plant for " + selected.getName() + "!");
                 }
             }
         }

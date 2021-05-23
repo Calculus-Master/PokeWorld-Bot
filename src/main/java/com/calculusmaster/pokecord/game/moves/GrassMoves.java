@@ -121,4 +121,9 @@ public class GrassMoves
 
         return opponent.getName() + " is paralyzed!";
     }
+
+    public String FrenzyPlant(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

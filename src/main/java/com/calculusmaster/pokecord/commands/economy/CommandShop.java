@@ -168,11 +168,13 @@ public class CommandShop extends Command
         this.embed.setFooter("This page is dynamically updated based on your selected Pokemon.");
     }
 
-    public static List<String> MOVE_TUTOR_MOVES = Arrays.asList("Blast Burn");
+    public static List<String> MOVE_TUTOR_MOVES = Arrays.asList("Blast Burn", "Hydro Cannon", "Frenzy Plant");
 
     private void page_movetutor()
     {
-        this.page.append("Move Tutor Moves: \n\n").append("Blast Burn");
+        this.page.append("Move Tutor Moves: \n\n");
+
+        for(String s : MOVE_TUTOR_MOVES) this.page.append("`").append(s).append("`\n");
 
         this.embed.setFooter("All move tutor moves cost " + CommandBuy.COST_MOVETUTOR + "c. Buying a move tutor move will automatically set the move in your first slot to the move tutor move.");
     }
