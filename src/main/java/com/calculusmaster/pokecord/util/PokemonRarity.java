@@ -200,6 +200,10 @@ public class PokemonRarity
 
         //Gen 3
 
+        PokemonRarity.add("Groudon", Rarity.LEGENDARY);
+        PokemonRarity.add("Kyogre", Rarity.LEGENDARY);
+        PokemonRarity.add("Rayquaza", Rarity.LEGENDARY);
+
         //Gen 4
 
         PokemonRarity.add("Dialga", Rarity.LEGENDARY);
