@@ -42,4 +42,10 @@ public enum ZCrystal
     {
         return this.toString().charAt(0) + this.toString().substring(0, this.toString().indexOf("_")).toLowerCase() + " Z";
     }
+
+    public static ZCrystal cast(String z)
+    {
+        for(ZCrystal zc : values()) if(z.equals(zc.getStyledName())) return zc;
+        return null;
+    }
 }
