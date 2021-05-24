@@ -92,6 +92,5 @@ public class SpawnEventHandler
         }
 
         SERVER_SPAWNS.put(g.getId(), spawn);
-        System.out.println(SERVER_SPAWNS);
     }
 }

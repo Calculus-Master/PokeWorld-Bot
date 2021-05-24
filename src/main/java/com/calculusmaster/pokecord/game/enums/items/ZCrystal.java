@@ -47,7 +47,7 @@ public enum ZCrystal
 
     public String getStyledName()
     {
-        return this.toString().charAt(0) + this.toString().substring(0, this.toString().indexOf("_")).toLowerCase() + " Z";
+        return this.toString().charAt(0) + this.toString().substring(1, this.toString().indexOf("_")).toLowerCase() + " Z";
     }
 
     public static ZCrystal cast(String z)
