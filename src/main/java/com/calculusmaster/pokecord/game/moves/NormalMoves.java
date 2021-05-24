@@ -451,4 +451,18 @@ public class NormalMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
     }
+
+    public String MorningSun(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int HP = switch(duel.getDuelWeather())
+                {
+                    case CLEAR -> user.getStat(Stat.HP) / 2;
+                    case HARSH_SUNLIGHT -> user.getStat(Stat.HP) * 2 / 3;
+                    default -> user.getStat(Stat.HP) / 4;
+                };
+
+        user.heal(HP);
+
+        return user.getName() + " healed for " + HP + " HP!";
+    }
 }

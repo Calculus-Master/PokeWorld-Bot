@@ -111,4 +111,9 @@ public class ElectricMoves
 
         return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 3) + (paralyze ? " " + opponent.getName() + " is paralyzed!" : "");
     }
+
+    public String ChargeBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPATK, 1, 70, true);
+    }
 }

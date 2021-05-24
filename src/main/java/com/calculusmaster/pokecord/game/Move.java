@@ -114,6 +114,32 @@ public class Move
         return Move.simpleDamageMove(user, opponent, duel, move) + (statusProc ? " " + opponent.getName() + " " + statusUpdate : "");
     }
 
+    public static String statChangeDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move, Stat s, int stage, int percent, boolean userChange)
+    {
+        boolean change = new Random().nextInt(100) > percent;
+
+        if(change)
+        {
+            if(userChange) user.changeStatMultiplier(s, stage);
+            else opponent.changeStatMultiplier(s, stage);
+        }
+
+        String stat = switch(s)
+                {
+                    case HP -> "HP";
+                    case ATK -> "Attack";
+                    case DEF -> "Defense";
+                    case SPATK -> "Special Attack";
+                    case SPDEF -> "Special Defense";
+                    case SPD -> "Speed";
+                };
+
+        String end = "by " + stage + " stage" + (stage > 1 ? "s" : "") + "!";
+        String statChangeResult = (userChange ? user.getName() : opponent.getName()) + "'s " + stat + (stage > 0 ? "was lowered " : "rose ") + end;
+
+        return Move.simpleDamageMove(user, opponent, duel, move) + (change ? " " + statChangeResult : "");
+    }
+
     //Different Move Results
 
     public String getMoveUsedResult(Pokemon user)
