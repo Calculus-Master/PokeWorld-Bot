@@ -8,7 +8,8 @@ public enum StatusCondition
     POISONED("PSN"),
     ASLEEP("SLP"),
     CONFUSED("CNF"),
-    FLINCHED("FLN");
+    FLINCHED("FLN"),
+    CURSED("CRS");
 
     private final String abbrev;
     StatusCondition(String abbrev)

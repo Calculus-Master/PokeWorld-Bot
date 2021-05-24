@@ -214,6 +214,14 @@ public class Duel
             status.add(pokeName + " is poisoned! The poison dealt " + statusDamage + " damage!");
         }
 
+        if(this.playerPokemon[this.turn].hasStatusCondition(StatusCondition.CURSED))
+        {
+            statusDamage = this.playerPokemon[this.turn].getStat(Stat.HP) / 4;
+            this.playerPokemon[this.turn].damage(statusDamage, this);
+
+            status.add(pokeName + " is cursed! The curse dealt " + statusDamage + " damage!");
+        }
+
         if(this.playerPokemon[this.turn].hasStatusCondition(StatusCondition.CONFUSED))
         {
             if(new Random().nextInt(100) < 33)
@@ -282,6 +290,9 @@ public class Duel
             status.add(pokeName + " flinched and cannot move!");
             return this.getStatusResults(status);
         }
+
+        //Checking if the user has fainted before moving onto the attack
+        if(this.playerPokemon[this.turn].isFainted()) return results + this.getStatusResults(status);
 
         this.accurate = move.isAccurate();
 
@@ -413,6 +424,14 @@ public class Duel
             }
 
             if(move.getName().equals("Charge")) this.usedCharge[this.turn] = true;
+
+            if(move.getName().equals("Curse") && this.playerPokemon[this.turn].isType(Type.GHOST))
+            {
+                int curseDamage = this.playerPokemon[this.turn].getStat(Stat.HP) / 2;
+                this.playerPokemon[this.turn].damage(curseDamage, this);
+
+                results += " " + this.playerPokemon[this.turn].getName() + " sacrificed " + curseDamage + " HP for the curse!";
+            }
 
             this.recharge[this.turn] = rechargeMoves.contains(move.getName());
         }
