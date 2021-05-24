@@ -126,11 +126,10 @@ public class Duel
 
     public boolean accurate;
 
-    public String doTurn(int moveIndex)
+    public String doTurn(int moveIndex, boolean z)
     {
         this.setDuelStatus(DuelStatus.DUELING);
         String moveString = this.playerPokemon[this.turn].getLearnedMoves().get(moveIndex - 1);
-        //Move move = Move.asMove(moveString);
         Move move = new Move(moveString);
         String results = "\n";
 
