@@ -196,6 +196,16 @@ public class PokemonRarity
 
         //Gen 2
 
+        PokemonRarity.add("Chikorita", Rarity.SILVER);
+        PokemonRarity.add("Bayleef", Rarity.GOLD);
+        PokemonRarity.add("Meganium", Rarity.DIAMOND);
+        PokemonRarity.add("Cyndaquil", Rarity.SILVER);
+        PokemonRarity.add("Quilava", Rarity.GOLD);
+        PokemonRarity.add("Typhlosion", Rarity.DIAMOND);
+        PokemonRarity.add("Totodile", Rarity.SILVER);
+        PokemonRarity.add("Croconaw", Rarity.GOLD);
+        PokemonRarity.add("Feraligatr", Rarity.DIAMOND);
+
         PokemonRarity.add("Steelix", Rarity.GOLD);
 
         //Gen 3
@@ -219,8 +229,8 @@ public class PokemonRarity
         //Gen 7
 
         PokemonRarity.add("Necrozma", Rarity.LEGENDARY);
-        PokemonRarity.add("DuskMane Necrozma", Rarity.EXTREME);
-        PokemonRarity.add("DawnWings Necrozma", Rarity.EXTREME);
+        PokemonRarity.add("Dusk Mane Necrozma", Rarity.EXTREME);
+        PokemonRarity.add("Dawn Wings Necrozma", Rarity.EXTREME);
 
         //Gen 8
 
