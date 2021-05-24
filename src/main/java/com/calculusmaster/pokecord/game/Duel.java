@@ -25,6 +25,7 @@ public class Duel
     //private static final String DUEL_BACKGROUND = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/549a70f1-b9f4-4aa7-b76b-589288b03302/d6vkkr7-2c5b3fd6-ed46-4e66-a81e-cab4a30069a0.png/v1/fill/w_1032,h_774,strp/pokemon_x_and_y_vs_template_by_lil_riku_d6vkkr7-pre.png";
 
     private DuelStatus status;
+    private String duelID;
 
     private String[] playerIDs;
     private MessageReceivedEvent event;
@@ -44,6 +45,7 @@ public class Duel
         Duel d = new Duel();
 
         d.setPlayers(p1ID, p2ID);
+        d.setDuelID();
         d.setEvent(event);
         d.setPlayerQuery();
         d.setPlayerPokemon();
@@ -533,6 +535,13 @@ public class Duel
         this.playerIDs = new String[]{p1ID, p2ID};
     }
 
+    public void setDuelID()
+    {
+        StringBuilder UUID = new StringBuilder(16);
+        for(int i = 0; i < 16; i++) UUID.append("abcdefghijklmnopqrstuvwxyz".charAt((int)(Math.random() * 26)));
+        this.duelID = UUID.toString();
+    }
+
     public void setEvent(MessageReceivedEvent event)
     {
         this.event = event;
@@ -558,6 +567,11 @@ public class Duel
     public List<String> getPlayers()
     {
         return Arrays.asList(this.playerIDs);
+    }
+
+    public String getDuelID()
+    {
+        return this.duelID;
     }
 
     public Pokemon[] getPokemon()

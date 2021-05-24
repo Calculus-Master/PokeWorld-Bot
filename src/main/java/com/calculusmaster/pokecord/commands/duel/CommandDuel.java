@@ -85,7 +85,7 @@ public class CommandDuel extends Command
             Duel d = Duel.initiate(this.player.getId(), opponentID, this.event);
 
             Timer timer = new Timer();
-            timer.schedule(new CancelTask(this.player.getId(), this.event), 3 * 60 * 1000);
+            timer.schedule(new CancelTask(this.player.getId(), this.event, d.getDuelID()), 3 * 60 * 1000);
 
             this.event.getChannel().sendMessage("<@" + opponentID + "> ! " + this.player.getName() + " has challenged you to a duel! Type `p!duel accept` to accept!").queue();
             this.embed = null;
@@ -98,17 +98,21 @@ public class CommandDuel extends Command
     {
         private String id;
         private MessageReceivedEvent event;
+        private String duelID;
 
-        CancelTask(String id, MessageReceivedEvent event)
+        CancelTask(String id, MessageReceivedEvent event, String duelID)
         {
             this.id = id;
             this.event = event;
+            this.duelID = duelID;
         }
 
         @Override
         public void run()
         {
-            if(Duel.getInstance(this.id).getStatus().equals(Duel.DuelStatus.WAITING))
+            Duel d = Duel.isInDuel(this.id) ? Duel.getInstance(this.id) : null;
+
+            if(d != null && !d.getDuelID().equals(this.duelID) && d.getStatus().equals(Duel.DuelStatus.WAITING))
             {
                 Duel.remove(this.id);
                 this.event.getChannel().sendMessage("<@" + this.id + ">: Duel request expired!").queue();
