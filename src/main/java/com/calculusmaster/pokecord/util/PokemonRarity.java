@@ -223,6 +223,7 @@ public class PokemonRarity
         PokemonRarity.add("Dialga", Rarity.LEGENDARY);
         PokemonRarity.add("Palkia", Rarity.LEGENDARY);
 
+        PokemonRarity.add("Regigigas", Rarity.LEGENDARY);
         PokemonRarity.add("Giratina", Rarity.LEGENDARY);
         PokemonRarity.add("Origin Giratina", Rarity.EXTREME);
 
