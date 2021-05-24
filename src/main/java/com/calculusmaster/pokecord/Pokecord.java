@@ -65,6 +65,10 @@ public class Pokecord
 
         JDA botJDA = bot.build().awaitReady();
 
-        for(Guild g : botJDA.getGuilds()) SpawnEventHandler.start(g);
+        for(Guild g : botJDA.getGuilds())
+        {
+            Thread.sleep(1000);
+            SpawnEventHandler.start(g);
+        }
     }
 }

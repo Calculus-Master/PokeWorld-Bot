@@ -47,6 +47,7 @@ public abstract class Command
     public static final CommandHelp.HelpEntry GIVE = new CommandHelp.HelpEntry("give");
     public static final CommandHelp.HelpEntry MARKET = new CommandHelp.HelpEntry("market");
     public static final CommandHelp.HelpEntry EVOLVE = new CommandHelp.HelpEntry("evolve");
+    public static final CommandHelp.HelpEntry EQUIP = new CommandHelp.HelpEntry("equip");
 
     public static void init()
     {
@@ -228,6 +229,12 @@ public abstract class Command
 
         EVOLVE.setCategory(CommandHelp.CommandCategory.POKEMON)
                 .addShortDescription("Evolve your selected Pokemon, if it meets the necessary requirements!");
+
+        EQUIP.setCategory(CommandHelp.CommandCategory.POKEMON)
+                .addShortDescription("Equip a Z-Crystal to use in battle!")
+                .addAliases()
+                .addArgs("number")
+                .addArgDesc("number", "The number of the Z-Crystal, shown in your inventory.");
     }
 
     protected MessageReceivedEvent event;

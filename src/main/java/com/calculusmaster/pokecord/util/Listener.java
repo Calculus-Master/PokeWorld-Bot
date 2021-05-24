@@ -197,6 +197,10 @@ public class Listener extends ListenerAdapter
             {
                 c = new CommandEvolve(event, msg).runCommand();
             }
+            else if(Command.EQUIP.contains(msg[0]))
+            {
+                c = new CommandEquip(event, msg).runCommand();
+            }
             else if(msg[0].equals("ness"))
             {
                 event.getGuild().getMemberById("423603232971948044").modifyNickname("I <3 Penis").queue();
