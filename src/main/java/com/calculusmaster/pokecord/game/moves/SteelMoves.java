@@ -84,4 +84,21 @@ public class SteelMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move) + (lower ? " " + opponent.getName() + "'s Defense was lowered by 1 stage!" : "");
     }
+
+    public String StoredPower(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int power = 20;
+
+        for(Stat s : Stat.values()) if(user.getStatMultiplier(s) > 0) power += 20 * user.getStatMultiplier(s);
+
+        move.setPower(power);
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String Autotomize(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.changeStatMultiplier(Stat.SPD, 2);
+        return user.getName() + "'s Speed rose by 2 stages!";
+    }
 }

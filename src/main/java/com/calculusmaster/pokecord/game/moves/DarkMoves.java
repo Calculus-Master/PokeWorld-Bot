@@ -65,4 +65,16 @@ public class DarkMoves
 
         return user.getName() + " fainted and " + opponent.getName() + "'s Attack and Special Attack lowered by 3 stages!";
     }
+
+    public String NightSlash(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.setCrit(3);
+
+        int damage = move.getDamage(user, opponent);
+        opponent.damage(damage, duel);
+
+        user.setCrit(1);
+
+        return move.getDamageResult(opponent, damage);
+    }
 }

@@ -465,4 +465,11 @@ public class NormalMoves
 
         return user.getName() + " healed for " + HP + " HP!";
     }
+
+    public String WringOut(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        move.setPower((int)(120 * (user.getHealth() / (double)user.getStat(Stat.HP))));
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

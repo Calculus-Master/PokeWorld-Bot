@@ -191,4 +191,19 @@ public class PsychicMoves
         user.heal(user.getStat(Stat.HP) / 2);
         return user.getName() + " healed for " + (user.getStat(Stat.HP) / 2) + " HP!";
     }
+
+    public String Gravity(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String PhotonGeyser(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String PrismaticLaser(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

@@ -26,11 +26,16 @@ public class SpawnEventHandler
 
     public static void start(Guild g)
     {
+        start(g, 10);
+    }
+
+    public static void start(Guild g, int initDelay)
+    {
         TextChannel channel = g.getTextChannelById(new ServerDataQuery(g.getId()).getSpawnChannelID());
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-        ScheduledFuture<?> spawnEvent = scheduler.scheduleWithFixedDelay(() -> spawnPokemon(g, channel), 10, 120, TimeUnit.SECONDS);
+        ScheduledFuture<?> spawnEvent = scheduler.scheduleWithFixedDelay(() -> spawnPokemon(g, channel), initDelay, 120, TimeUnit.SECONDS);
 
         SCHEDULERS.put(g.getId(), spawnEvent);
     }
@@ -57,11 +62,13 @@ public class SpawnEventHandler
 
         spawnPokemon(g, g.getTextChannelById(new ServerDataQuery(g.getId()).getSpawnChannelID()), spawn);
 
-        start(g);
+        start(g, 120);
     }
 
     private static void spawnPokemon(Guild g, TextChannel channel, String spawn)
     {
+        spawn = Global.normalCase(spawn);
+
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("A wild Pokemon spawned!")
                 .setDescription("Try to guess its name and catch it with p!catch <name>!")
@@ -85,5 +92,7 @@ public class SpawnEventHandler
             System.out.println("SPAWN EVENT FAILED trying to spawn " + spawn + "!");
             e.printStackTrace();
         }
+
+        System.out.println(SERVER_SPAWNS);
     }
 }
