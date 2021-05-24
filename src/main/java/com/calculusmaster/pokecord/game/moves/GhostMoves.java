@@ -36,4 +36,52 @@ public class GhostMoves
             return user.getName() + "s Attack and Defense rose by 1 stage and Speed lowered by 1 stage!";
         }
     }
+
+    public String OminousWind(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        boolean raise = new Random().nextInt(100) < 10;
+
+        if(raise)
+        {
+            user.changeStatMultiplier(Stat.ATK, 1);
+            user.changeStatMultiplier(Stat.DEF, 1);
+            user.changeStatMultiplier(Stat.SPATK, 1);
+            user.changeStatMultiplier(Stat.SPDEF, 1);
+            user.changeStatMultiplier(Stat.SPD, 1);
+        }
+
+        return Move.simpleDamageMove(user, opponent, duel, move) + (raise ? " " + user.getName() + "'s stats all rose by 1 stage!" : "");
+    }
+
+    public String ShadowSneak(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String DestinyBond(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String ShadowClaw(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.setCrit(3);
+        int damage = move.getDamage(user, opponent);
+        user.setCrit(1);
+        opponent.damage(damage, duel);
+
+        return move.getDamageResult(opponent, damage);
+    }
+
+    public String ShadowForce(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String Hex(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(!opponent.getActiveStatusConditions().equals("")) move.setPower(130);
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
