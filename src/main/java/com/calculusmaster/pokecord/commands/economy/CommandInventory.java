@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.economy;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandInventory extends Command
@@ -19,10 +20,18 @@ public class CommandInventory extends Command
         s.append("`Items`: \n");
         if(this.playerData.getItemList() != null)
         {
-            for(int i = 0; i < this.playerData.getItemList().length(); i++) s.append((i + 1) + ": " + PokeItem.asItem(this.playerData.getItemList().getString(i)).getStyledName()).append("\n");
+            for(int i = 0; i < this.playerData.getItemList().length(); i++) s.append(i + 1).append(": ").append(PokeItem.asItem(this.playerData.getItemList().getString(i)).getStyledName()).append("\n");
             s.append("\n");
         }
         else s.append("You don't own any Items!\n\n");
+
+        s.append("`Z-Crystals`: \n");
+        if(this.playerData.getZCrystalList() != null)
+        {
+            for(int i = 0; i < this.playerData.getZCrystalList().length(); i++) s.append(i + 1).append(": ").append(this.playerData.getZCrystalList().get(i)).append("\n");
+            s.append("\n");
+        }
+        else s.append("You don't own any Z-Crystals!\n\n");
         
         s.append("`TMs`: \n");
         if(this.playerData.getOwnedTMs() != null)
