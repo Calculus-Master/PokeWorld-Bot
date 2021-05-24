@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Nature;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.XPBooster;
+import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -183,6 +184,31 @@ public class CommandBuy extends Command
                     this.embed.setDescription("Bought " + move + " for " + selected.getName() + "!");
                 }
             }
+        }
+        else if(this.msg[1].equals("zcrystal") && this.msg.length == 4)
+        {
+            ZCrystal z = ZCrystal.cast(Global.normalCase(this.msg[2] + " " + this.msg[3]));
+
+            if(z == null || !CommandShop.entriesZCrystal.contains(z.getStyledName()))
+            {
+                this.embed.setDescription("Invalid Z Crystal!");
+                return this;
+            }
+            else if(this.playerData.getCredits() < CommandShop.priceZCrystal)
+            {
+                this.embed.setDescription("You don't have enough credits!");
+                return this;
+            }
+            else if(this.playerData.hasZCrystal(z.getStyledName()))
+            {
+                this.embed.setDescription("You already own this Z-Crystal!");
+                return this;
+            }
+
+            this.playerData.addZCrystal(z.getStyledName());
+            this.playerData.changeCredits(-1 * CommandShop.priceZCrystal);
+
+            this.embed.setDescription("Successfully bought " + z.getStyledName() + "!");
         }
         else if(this.msg[1].equals("xp") && this.msg.length == 3 && this.msg[2].chars().allMatch(Character::isDigit))
         {
