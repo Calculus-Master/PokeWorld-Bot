@@ -14,7 +14,9 @@ public enum PokeItem
     FIRE_STONE(250),
     LEAF_STONE(250),
     SUN_STONE(250),
-    WATER_STONE(250);
+    WATER_STONE(250),
+    TRADE_EVOLVER(1000),
+    METAL_COAT(1500);
 
     public int cost;
     PokeItem(int cost)

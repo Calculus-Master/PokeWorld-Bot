@@ -689,6 +689,8 @@ public class Pokemon
         //TODO: Other evolutions: Cubone -> Alolan Marowak in Alola Nighttime
         //TODO: Eeveelutions: Espeon (High Friendship, Daytime), Umbreon (High Friendship, Nighttime), Leafeon (Mossy Rock), Glaceon (Icy Rock), Sylveon (Affection/Fairy Move)
 
+        //Trade evolutions are converted into item based ones
+
         switch(this.getName())
         {
             case "Pikachu": return item.equals(PokeItem.THUNDER_STONE);
@@ -706,6 +708,8 @@ public class Pokemon
             case "Shellder":
             case "Staryu": return item.equals(PokeItem.WATER_STONE);
             case "Eevee": return item.equals(PokeItem.WATER_STONE) || item.equals(PokeItem.FIRE_STONE) || item.equals(PokeItem.THUNDER_STONE);
+            case "Onix": return item.equals(PokeItem.METAL_COAT);
+            case "Haunter": return item.equals(PokeItem.TRADE_EVOLVER);
             default: return false;
         }
     }
@@ -733,6 +737,8 @@ public class Pokemon
                 case "Exeggcute" -> "Exeggutor";
                 case "Staryu" -> "Starmie";
                 case "Eevee" -> PokeItem.asItem(this.getItem()).equals(PokeItem.WATER_STONE) ? "Vaporeon" : (PokeItem.asItem(this.getItem()).equals(PokeItem.THUNDER_STONE) ? "Jolteon" : "Flareon");
+                case "Onix" -> "Steelix";
+                case "Haunter" -> "Gengar";
                 default -> "";
             };
 

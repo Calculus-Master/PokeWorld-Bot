@@ -43,18 +43,6 @@ public class CommandMarket extends Command
 
             this.embed.setDescription("Listed your " + newMarketEntry.pokemon.getName() + " for " + newMarketEntry.price + "c!");
         }
-        else if (this.msg.length >= 3 && this.msg[1].equals("collect") && isNumeric(2))
-        {
-            MarketEntry entry = marketEntries.stream().filter(m -> m.marketID.equals(this.msg[2])).collect(Collectors.toList()).get(0);
-            if (entry.sellerID.equals(this.player.getId()))
-            {
-                marketEntries.remove(entry);
-                this.playerData.addPokemon(entry.pokemonID);
-                Mongo.MarketData.deleteOne(Filters.eq("marketID", entry.marketID));
-
-                this.embed.setDescription("Removed your listing from the market!");
-            }
-        }
         else if (this.msg.length >= 3 && this.msg[1].equals("buy") && isNumeric(2) && MarketEntry.isIDValid(this.msg[2]))
         {
             //Buy pokemon from market
@@ -113,8 +101,6 @@ public class CommandMarket extends Command
             else if (this.msg[1].equals("search"))
             {
                 List<String> args = new ArrayList<>(Arrays.asList(this.msg));
-                args.remove(0);
-                args.remove(1);
 
                 if (args.contains("--name") && args.indexOf("--name") + 1 < args.size())
                 {
@@ -165,8 +151,6 @@ public class CommandMarket extends Command
                 }
                 else display.sort(Comparator.comparing(m -> m.pokemon.getName()));
             }
-            //If no other arguments, displays random assortment of market listings
-            else Collections.shuffle(display);
 
             this.embed.setTitle("Market Listings");
 
