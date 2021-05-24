@@ -228,6 +228,10 @@ public class PokemonRarity
 
         //Gen 7
 
+        PokemonRarity.add("Grubbin", Rarity.COPPER);
+        PokemonRarity.add("Charjabug", Rarity.SILVER);
+        PokemonRarity.add("Vikavolt", Rarity.GOLD);
+
         PokemonRarity.add("Necrozma", Rarity.LEGENDARY);
         PokemonRarity.add("Dusk Mane Necrozma", Rarity.EXTREME);
         PokemonRarity.add("Dawn Wings Necrozma", Rarity.EXTREME);

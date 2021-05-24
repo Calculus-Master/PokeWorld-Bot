@@ -695,7 +695,8 @@ public class Pokemon
 
         switch(this.getName())
         {
-            case "Pikachu": return item.equals(PokeItem.THUNDER_STONE);
+            case "Pikachu":
+            case "Charjabug": return item.equals(PokeItem.THUNDER_STONE);
             case "Alolan Sandshrew":
             case "Alolan Vulpix": return item.equals(PokeItem.ICE_STONE);
             case "Nidorina":
@@ -741,6 +742,7 @@ public class Pokemon
                 case "Eevee" -> PokeItem.asItem(this.getItem()).equals(PokeItem.WATER_STONE) ? "Vaporeon" : (PokeItem.asItem(this.getItem()).equals(PokeItem.THUNDER_STONE) ? "Jolteon" : "Flareon");
                 case "Onix" -> "Steelix";
                 case "Haunter" -> "Gengar";
+                case "Charjabug" -> "Vikavolt";
                 default -> "";
             };
 
