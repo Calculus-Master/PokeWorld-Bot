@@ -10,6 +10,9 @@ public class PokemonRarity
 
     public static void init()
     {
+
+        //Gen 1
+
         PokemonRarity.add("Bulbasaur", Rarity.SILVER);
         PokemonRarity.add("Ivysaur", Rarity.GOLD);
         PokemonRarity.add("Venusaur", Rarity.DIAMOND);
@@ -191,6 +194,29 @@ public class PokemonRarity
         PokemonRarity.add("Mewtwo", Rarity.LEGENDARY);
         PokemonRarity.add("Mew", Rarity.MYTHICAL);
 
+        //Gen 2
+
+        PokemonRarity.add("Steelix", Rarity.GOLD);
+
+        //Gen 3
+
+        //Gen 4
+
+        PokemonRarity.add("Dialga", Rarity.LEGENDARY);
+        PokemonRarity.add("Palkia", Rarity.LEGENDARY);
+
+        //Gen 5
+
+        //Gen 6
+
+        //Gen 7
+
+        PokemonRarity.add("Necrozma", Rarity.LEGENDARY);
+        PokemonRarity.add("DuskMane Necrozma", Rarity.EXTREME);
+        PokemonRarity.add("DawnWings Necrozma", Rarity.EXTREME);
+
+        //Gen 8
+
         Collections.shuffle(SPAWNS);
 
         System.out.println("Spawn Master List Size: " + SPAWNS.size());
@@ -224,7 +250,8 @@ public class PokemonRarity
         DIAMOND(25),
         PLATINUM(15),
         MYTHICAL(10),
-        LEGENDARY(5);
+        LEGENDARY(5),
+        EXTREME(1);
 
         public int num;
         Rarity(int num)
