@@ -236,6 +236,8 @@ public class PokemonRarity
         PokemonRarity.add("Dusk Mane Necrozma", Rarity.EXTREME);
         PokemonRarity.add("Dawn Wings Necrozma", Rarity.EXTREME);
 
+        PokemonRarity.add("Marshadow", Rarity.MYTHICAL);
+
         //Gen 8
 
         Collections.shuffle(SPAWNS);
