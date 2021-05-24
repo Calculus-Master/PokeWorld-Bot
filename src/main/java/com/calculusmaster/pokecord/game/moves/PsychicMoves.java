@@ -180,4 +180,15 @@ public class PsychicMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String ZenHeadbutt(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 20);
+    }
+
+    public String HealPulse(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.heal(user.getStat(Stat.HP) / 2);
+        return user.getName() + " healed for " + (user.getStat(Stat.HP) / 2) + " HP!";
+    }
 }

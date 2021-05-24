@@ -434,4 +434,22 @@ public class NormalMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.ASLEEP, 10);
     }
+
+    public String Yawn(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String SlackOff(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int hp = new Random().nextInt(user.getStat(Stat.HP) / 2) + 1;
+        user.heal(hp);
+
+        return user.getName() + " healed for " + hp + " HP!";
+    }
+
+    public String Headbutt(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
+    }
 }

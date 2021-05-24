@@ -972,4 +972,9 @@ public class Pokemon
     {
         return this.getType()[0].equals(t) || this.getType()[1].equals(t);
     }
+
+    public double getWeight()
+    {
+        return Double.parseDouble(this.genericJSON.getString("info").split("-")[2]);
+    }
 }
