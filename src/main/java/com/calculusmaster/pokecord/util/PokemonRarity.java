@@ -238,6 +238,9 @@ public class PokemonRarity
 
         PokemonRarity.add("Marshadow", Rarity.MYTHICAL);
 
+        PokemonRarity.add("Meltan", Rarity.PLATINUM);
+        PokemonRarity.add("Melmetal", Rarity.MYTHICAL);
+
         //Gen 8
 
         Collections.shuffle(SPAWNS);
