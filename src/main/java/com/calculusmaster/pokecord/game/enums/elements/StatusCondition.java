@@ -9,7 +9,8 @@ public enum StatusCondition
     ASLEEP("SLP"),
     CONFUSED("CNF"),
     FLINCHED("FLN"),
-    CURSED("CRS");
+    CURSED("CRS"),
+    NIGHTMARE("NTM");
 
     private final String abbrev;
     StatusCondition(String abbrev)

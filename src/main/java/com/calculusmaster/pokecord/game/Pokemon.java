@@ -395,6 +395,7 @@ public class Pokemon
         this.status.put(StatusCondition.CONFUSED, false);
         this.status.put(StatusCondition.FLINCHED, false);
         this.status.put(StatusCondition.CURSED, false);
+        this.status.put(StatusCondition.NIGHTMARE, false);
     }
 
     public String getActiveStatusConditions()

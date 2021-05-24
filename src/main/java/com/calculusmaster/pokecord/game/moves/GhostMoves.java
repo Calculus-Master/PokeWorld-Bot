@@ -84,4 +84,31 @@ public class GhostMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String Lick(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
+    }
+
+    public String ShadowPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String Spite(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String NightShade(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.damage(user.getLevel(), duel);
+        return move.getDamageResult(opponent, user.getLevel());
+    }
+
+    public String Nightmare(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(opponent.hasStatusCondition(StatusCondition.ASLEEP)) opponent.addStatusCondition(StatusCondition.NIGHTMARE);
+        return user.getName() + " cast a Nightmare on " + opponent.getName() + "!";
+    }
 }

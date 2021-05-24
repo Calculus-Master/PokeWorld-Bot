@@ -263,12 +263,25 @@ public class Duel
             if(this.asleepTurn[this.turn] == 2 || (this.electricTerrainActive && !this.playerPokemon[this.turn].isType(Type.FLYING)))
             {
                 this.playerPokemon[this.turn].removeStatusCondition(StatusCondition.ASLEEP);
+                if(this.playerPokemon[this.turn].hasStatusCondition(StatusCondition.NIGHTMARE))
+                {
+                    status.add("The Nightmare was removed!");
+                    this.playerPokemon[this.turn].removeStatusCondition(StatusCondition.NIGHTMARE);
+                }
+
                 status.add(this.playerPokemon[this.turn].getName() + " woke up" + (this.electricTerrainActive ? " due to the Electric Field!" : "!"));
                 this.asleepTurn[this.turn] = 0;
             }
             else
             {
                 this.asleepTurn[this.turn]++;
+
+                if(this.playerPokemon[this.turn].hasStatusCondition(StatusCondition.NIGHTMARE))
+                {
+                    this.playerPokemon[this.turn].damage(this.playerPokemon[this.turn].getStat(Stat.HP) / 4, this);
+                    status.add("The Nightmare dealt " + (this.playerPokemon[this.turn].getStat(Stat.HP) / 4) + " damage!");
+                }
+
                 status.add(results);
                 status.add(pokeName + " is asleep!");
                 return this.getStatusResults(status);

@@ -77,4 +77,9 @@ public class DarkMoves
 
         return move.getDamageResult(opponent, damage);
     }
+
+    public String DarkPulse(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 20);
+    }
 }
