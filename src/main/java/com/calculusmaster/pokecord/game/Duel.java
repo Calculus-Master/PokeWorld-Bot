@@ -3,6 +3,8 @@ package com.calculusmaster.pokecord.game;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.XPBooster;
+import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
+import com.calculusmaster.pokecord.game.moves.*;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -508,6 +510,8 @@ public class Duel
             weatherUpdate = "The weather is now clear again!";
         }
 
+        if(new Random().nextInt(100) < 1) zcrystalEvent(move);
+
         return results + "\n" + weatherUpdate + "\n" + weatherEffects;
     }
 
@@ -534,6 +538,20 @@ public class Duel
     public boolean isComplete()
     {
         return this.playerPokemon[0].isFainted() || this.playerPokemon[1].isFainted();
+    }
+
+    public void zcrystalEvent(Move move)
+    {
+        ZCrystal earnedZ = ZCrystal.getCrystalOfType(move.getType());
+
+        System.out.println("Z-Crystal Event! " + earnedZ + ", " + move.getName() + " - " + move.getType() + "(" + this.playerData[this.turn].getUsername() + ")");
+
+        if(!this.playerData[this.turn].hasZCrystal(earnedZ.getStyledName()))
+        {
+            this.playerData[this.turn].addZCrystal(earnedZ.getStyledName());
+
+            this.event.getChannel().sendMessage("<@" + this.playerIDs[this.turn] + "> earned a Z-Crystal! You earned " + earnedZ.getStyledName() + "!");
+        }
     }
 
     //Constructors and Builders

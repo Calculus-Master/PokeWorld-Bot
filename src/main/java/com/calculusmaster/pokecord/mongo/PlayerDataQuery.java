@@ -131,6 +131,15 @@ public class PlayerDataQuery extends MongoQuery
         return !this.json().has("active_zcrystal") ? null : this.json().getString("active_zcrystal");
     }
 
+    public boolean hasZCrystal(String z)
+    {
+        JSONArray list = this.getZCrystalList();
+        if(list == null) return false;
+
+        for(int i = 0; i < list.length(); i++) if(list.getString(i).equals(z)) return true;
+        return false;
+    }
+
     public JSONArray getAchievements()
     {
         return this.json().getJSONArray("achievements");

@@ -1,5 +1,7 @@
 package com.calculusmaster.pokecord.game.enums.items;
 
+import com.calculusmaster.pokecord.game.enums.elements.Type;
+
 public enum ZCrystal
 {
     BUGINIUM_Z,
@@ -47,5 +49,29 @@ public enum ZCrystal
     {
         for(ZCrystal zc : values()) if(z.equals(zc.getStyledName())) return zc;
         return null;
+    }
+
+    public static ZCrystal getCrystalOfType(Type t)
+    {
+        return switch(t) {
+            case BUG -> ZCrystal.BUGINIUM_Z;
+            case DARK -> ZCrystal.DARKINIUM_Z;
+            case DRAGON -> ZCrystal.DRAGONIUM_Z;
+            case ELECTRIC -> ZCrystal.ELECTRIUM_Z;
+            case FAIRY -> ZCrystal.FAIRIUM_Z;
+            case FIGHTING -> ZCrystal.FIGHTINIUM_Z;
+            case FIRE -> ZCrystal.FIRIUM_Z;
+            case FLYING -> ZCrystal.FLYINIUM_Z;
+            case GHOST -> ZCrystal.GHOSTIUM_Z;
+            case GRASS -> ZCrystal.GRASSIUM_Z;
+            case GROUND -> ZCrystal.GROUNDIUM_Z;
+            case ICE -> ZCrystal.ICIUM_Z;
+            case NORMAL -> ZCrystal.NORMALIUM_Z;
+            case POISON -> ZCrystal.POISONIUM_Z;
+            case PSYCHIC -> ZCrystal.PSYCHIUM_Z;
+            case ROCK -> ZCrystal.ROCKIUM_Z;
+            case STEEL -> ZCrystal.STEELIUM_Z;
+            case WATER -> ZCrystal.WATERIUM_Z;
+        };
     }
 }
