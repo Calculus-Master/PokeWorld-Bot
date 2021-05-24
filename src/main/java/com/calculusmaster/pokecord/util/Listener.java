@@ -39,9 +39,6 @@ import java.util.*;
 
 public class Listener extends ListenerAdapter
 {
-    private final Map<String, Boolean> hasSpawnEventRunning = new HashMap<>();
-    private final Map<String, SpawnEvent> spawnEventMap = new HashMap<>();
-
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event)
     {
@@ -66,14 +63,6 @@ public class Listener extends ListenerAdapter
 
         //Create a query object for server data
         serverQuery = new ServerDataQuery(server.getId());
-
-        //Spawn Pokemon
-        if(!this.hasSpawnEventRunning.containsKey(server.getId()))
-        {
-            this.hasSpawnEventRunning.put(server.getId(), true);
-            this.spawnEventMap.put(server.getId(), new SpawnEvent(server, serverQuery.getSpawnChannelID()));
-            this.spawnEventMap.get(server.getId()).run();
-        }
 
         //Set a boolean if the player is registered or not
         boolean isPlayerRegistered = PlayerDataQuery.isRegistered(player);
@@ -233,16 +222,14 @@ public class Listener extends ListenerAdapter
                 }
                 else if(msg[0].equals("forcespawn"))
                 {
-                    this.spawnEventMap.get(server.getId()).cancel();
-
                     String spawn;
 
                     if(msg[1].equals("random")) spawn = PokemonRarity.getSpawn();
                     else if(msg[1].equals("legendary")) spawn = PokemonRarity.getLegendarySpawn();
                     else spawn = msg.length > 2 ? msg[1] + " " + msg[2] : msg[1];
 
-                    this.spawnEventMap.put(server.getId(), new SpawnEvent(server, serverQuery.getSpawnChannelID(), spawn));
-                    this.spawnEventMap.get(server.getId()).run();
+                    SpawnEventHandler.forceSpawn(server, spawn);
+
                     c = null;
                 }
                 else if(msg[0].equals("deletebotmarket"))
@@ -259,81 +246,6 @@ public class Listener extends ListenerAdapter
         }
 
         if(r.nextInt(10) <= 3) Listener.expEvent(event);
-    }
-
-    public static class SpawnEvent extends TimerTask
-    {
-        private static final Timer timer = new Timer();
-        private final Guild server;
-        private final String spawnChannel;
-        private String forcedSpawn;
-
-        public SpawnEvent(Guild server, String channel)
-        {
-            this.server = server;
-            this.spawnChannel = channel;
-            this.forcedSpawn = "";
-        }
-
-        public SpawnEvent(Guild server, String channel, String forced)
-        {
-            this(server, channel);
-            this.forcedSpawn = Global.normalCase(forced);
-        }
-
-        @Override
-        public void run()
-        {
-            timer.schedule(new SpawnEvent(this.server, this.spawnChannel), SpawnEvent.getDelay());
-            //new Thread(this::spawnEvent).start();
-            this.spawnEvent();
-            //this.server.getTextChannelById(this.spawnChannel).sendMessage(spawnEvent(this.server).build()).queue();
-        }
-
-        private void spawnEvent()
-        {
-            if(new Random().nextInt(100) < 30) CommandMarket.addBotEntry();
-
-            String spawnPokemon = PokemonRarity.getSpawn();
-            ServerDataQuery data = new ServerDataQuery(server.getId());
-
-            if(!this.forcedSpawn.equals("")) spawnPokemon = this.forcedSpawn;
-
-            data.setSpawn(Global.normalCase(spawnPokemon));
-
-            EmbedBuilder embed = new EmbedBuilder();
-
-            embed.setTitle("A wild Pokemon spawned!");
-            embed.setDescription("Try to guess its name and catch it with p!catch <name>!");
-            embed.setColor(new Color(new Random().nextInt(256), new Random().nextInt(256), new Random().nextInt(256)));
-
-            embed.setImage("attachment://pkmn.png");
-
-            try
-            {
-                URL url = new URL(Pokemon.genericJSON(Global.normalCase(spawnPokemon)).getString("normalURL"));
-                BufferedImage img = ImageIO.read(url);
-                File file = new File("pokemon.png");
-                ImageIO.write(img, "png", file);
-
-                this.server.getTextChannelById(this.spawnChannel).sendFile(file, "pkmn.png").embed(embed.build()).queue();
-                if(this.server.getId().equals(PrivateInfo.SERVER_ID_MAIN)) this.server.getTextChannelById("843996103639695360").sendFile(file, "pkmn.png").embed(embed.build()).queue();
-            }
-            catch (Exception e)
-            {
-                System.out.println("SPAWN EVENT FAILED!");
-                System.out.println(Global.normalCase(spawnPokemon));
-                e.printStackTrace();
-            }
-
-            this.forcedSpawn = "";
-        }
-
-        //TODO: Figure out better spawn rate
-        private static long getDelay()
-        {
-            return 1000L * (45 + new Random().nextInt(90));
-        }
     }
 
     private static void checkXPTimeStamp(MessageReceivedEvent event)

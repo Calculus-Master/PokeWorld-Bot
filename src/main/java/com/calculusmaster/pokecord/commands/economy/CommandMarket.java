@@ -182,7 +182,7 @@ public class CommandMarket extends Command
 
         val += new Random().nextInt(val / 4) * (new Random().nextInt(50) < 25 ? -1 : 1);
 
-        MarketEntry m = MarketEntry.create("BOT", "BOT", p.getUUID(), p.getValue());
+        MarketEntry m = MarketEntry.create("BOT", "BOT", p.getUUID(), val);
 
         marketEntries.add(m);
     }

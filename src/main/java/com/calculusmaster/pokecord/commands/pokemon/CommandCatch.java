@@ -2,11 +2,10 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
-import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.util.SpawnEventHandler;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import java.awt.*;
 import java.util.Random;
 
 public class CommandCatch extends Command
@@ -23,22 +22,20 @@ public class CommandCatch extends Command
         {
             this.embed.setDescription(CommandInvalid.getShort());
         }
-        else if(this.serverData.getSpawn().equals(""))
+        else if(SpawnEventHandler.getSpawn(this.server.getId()).isEmpty())
         {
             this.event.getChannel().sendMessage("<@" + this.player.getId() + ">: Nothing has spawned yet in this server!").queue();
             this.embed = null;
         }
-        else if(!(this.msg[1] + (this.msg.length == 3 ? " " + this.msg[2] : "")).toLowerCase().equals(this.serverData.getSpawn().toLowerCase()))
+        else if(!(this.msg[1] + (this.msg.length == 3 ? " " + this.msg[2] : "")).toLowerCase().equals(SpawnEventHandler.getSpawn(this.server.getId()).toLowerCase()))
         {
             this.event.getChannel().sendMessage("<@" + this.player.getId() + ">: Incorrect name!").queue();
             this.embed = null;
         }
         else
         {
-            Pokemon caught = Pokemon.create(this.serverData.getSpawn());
+            Pokemon caught = Pokemon.create(SpawnEventHandler.getSpawn(this.server.getId()));
             caught.setLevel(new Random().nextInt(42) + 1);
-
-            if(this.playerData.getPokemonList() == null) Achievements.grant(this.player.getId(), Achievements.CAUGHT_1ST_POKEMON, this.event);
 
             new Thread(() -> {
                 Pokemon.uploadPokemon(caught);
@@ -48,7 +45,7 @@ public class CommandCatch extends Command
             this.embed = null;
             this.event.getChannel().sendMessage("<@" + this.player.getId() + ">: You caught a **Level " + caught.getLevel() + " " + caught.getName() + "**!").queue();
 
-            this.serverData.setSpawn("");
+            SpawnEventHandler.clearSpawn(this.server.getId());
         }
         return this;
     }

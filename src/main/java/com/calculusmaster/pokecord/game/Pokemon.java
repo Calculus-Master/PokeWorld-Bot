@@ -286,6 +286,7 @@ public class Pokemon
 
     public int getValue()
     {
+        System.out.println(this.getName());
         PokemonRarity.Rarity rarity = PokemonRarity.POKEMON_RARITIES.get(this.getName());
 
         int basePrice = switch(rarity)
