@@ -248,6 +248,9 @@ public class PokemonRarity
 
         //Gen 8
 
+        PokemonRarity.add("Regieleki", Rarity.LEGENDARY);
+        PokemonRarity.add("Regidrago", Rarity.LEGENDARY);
+
         Collections.shuffle(SPAWNS);
 
         System.out.println("Spawn Master List Size: " + SPAWNS.size());
