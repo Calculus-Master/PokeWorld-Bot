@@ -442,10 +442,9 @@ public class NormalMoves
 
     public String SlackOff(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int hp = new Random().nextInt(user.getStat(Stat.HP) / 2) + 1;
-        user.heal(hp);
+        user.heal(user.getStat(Stat.HP) / 2);
 
-        return user.getName() + " healed for " + hp + " HP!";
+        return user.getName() + " healed for " + (user.getStat(Stat.HP) / 2) + " HP!";
     }
 
     public String Headbutt(Pokemon user, Pokemon opponent, Duel duel, Move move)
