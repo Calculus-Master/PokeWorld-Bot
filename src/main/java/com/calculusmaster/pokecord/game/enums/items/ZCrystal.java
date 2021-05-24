@@ -2,6 +2,11 @@ package com.calculusmaster.pokecord.game.enums.items;
 
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public enum ZCrystal
 {
     BUGINIUM_Z,
@@ -73,5 +78,13 @@ public enum ZCrystal
             case STEEL -> ZCrystal.STEELIUM_Z;
             case WATER -> ZCrystal.WATERIUM_Z;
         };
+    }
+
+    public static ZCrystal getRandomUniqueZCrystal()
+    {
+        List<ZCrystal> uniques = new ArrayList<>(Arrays.asList(values()).subList(18, values().length));
+        Collections.shuffle(uniques);
+
+        return uniques.get(0);
     }
 }

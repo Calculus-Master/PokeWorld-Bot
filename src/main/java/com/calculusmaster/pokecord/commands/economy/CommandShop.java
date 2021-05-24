@@ -3,12 +3,9 @@ package com.calculusmaster.pokecord.commands.economy;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.Pokemon;
-import com.calculusmaster.pokecord.game.enums.items.PokeItem;
-import com.calculusmaster.pokecord.game.enums.items.TM;
-import com.calculusmaster.pokecord.game.enums.items.TR;
+import com.calculusmaster.pokecord.game.enums.items.*;
 import com.calculusmaster.pokecord.game.enums.elements.Nature;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.items.XPBooster;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -45,6 +42,7 @@ public class CommandShop extends Command
             case "items" -> page_items();
             case "tm", "tr" -> page_tm_tr();
             case "movetutor", "mt", "tutor" -> page_movetutor();
+            case "zcrystals", "zcrystal", "z" -> page_zcrystals();
             case "xp" -> page_xp();
             default -> this.embed.setDescription(CommandInvalid.getShort());
         }
@@ -177,6 +175,35 @@ public class CommandShop extends Command
         for(String s : MOVE_TUTOR_MOVES) this.page.append("`").append(s).append("`\n");
 
         this.embed.setFooter("All move tutor moves cost " + CommandBuy.COST_MOVETUTOR + "c. Buying a move tutor move will automatically set the move in your first slot to the move tutor move.");
+    }
+
+    public static final List<String> entriesZCrystal = new ArrayList<>();
+    public static int priceZCrystal = 200000;
+
+    private void page_zcrystals()
+    {
+        this.page.append("Z Crystals: \n\n");
+
+        if(day < this.event.getMessage().getTimeCreated().getDayOfYear())
+        {
+            day = this.event.getMessage().getTimeCreated().getDayOfYear();
+
+            entriesZCrystal.clear();
+
+            String z;
+            for(int i = 0; i < 2; i++)
+            {
+                z = ZCrystal.getRandomUniqueZCrystal().getStyledName();
+                if(entriesZCrystal.contains(z)) i--;
+                else entriesZCrystal.add(z);
+            }
+
+            priceZCrystal = (int)(200000 * (Math.random() * 3 + 1));
+        }
+
+        for(String s : entriesZCrystal) this.page.append(s).append("\n");
+
+        this.page.append("Z Crystal Price: ").append(priceZCrystal).append("c!");
     }
 
     private void page_nature()
