@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.SpawnEventHandler;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -18,23 +19,28 @@ public class CommandCatch extends Command
     @Override
     public Command runCommand()
     {
-        if(this.msg.length != 2 && this.msg.length != 3)
+        if(this.msg.length < 2)
         {
             this.embed.setDescription(CommandInvalid.getShort());
+            return this;
         }
-        else if(SpawnEventHandler.getSpawn(this.server.getId()).isEmpty())
+
+        String spawn = SpawnEventHandler.getSpawn(this.server.getId());
+        String guess = this.getPokemon();
+
+        if(spawn.isEmpty())
         {
             this.event.getChannel().sendMessage("<@" + this.player.getId() + ">: Nothing has spawned yet in this server!").queue();
             this.embed = null;
         }
-        else if(!(this.msg[1] + (this.msg.length == 3 ? " " + this.msg[2] : "")).toLowerCase().equals(SpawnEventHandler.getSpawn(this.server.getId()).toLowerCase()))
+        else if(!guess.equals(spawn))
         {
             this.event.getChannel().sendMessage("<@" + this.player.getId() + ">: Incorrect name!").queue();
             this.embed = null;
         }
         else
         {
-            Pokemon caught = Pokemon.create(SpawnEventHandler.getSpawn(this.server.getId()));
+            Pokemon caught = Pokemon.create(spawn);
             caught.setLevel(new Random().nextInt(42) + 1);
 
             new Thread(() -> {
@@ -48,5 +54,12 @@ public class CommandCatch extends Command
             SpawnEventHandler.clearSpawn(this.server.getId());
         }
         return this;
+    }
+
+    private String getPokemon()
+    {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 1; i < this.msg.length; i++) sb.append(this.msg[i]).append(" ");
+        return Global.normalCase(sb.toString().trim());
     }
 }
