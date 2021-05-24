@@ -477,4 +477,16 @@ public class NormalMoves
     {
         return move.getNotImplementedResult();
     }
+
+    public String ViseGrip(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String Thrash(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.addStatusCondition(StatusCondition.CONFUSED);
+
+        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + " is confused!";
+    }
 }

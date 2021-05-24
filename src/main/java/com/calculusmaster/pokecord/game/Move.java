@@ -105,6 +105,7 @@ public class Move
                     case POISONED -> "is poisoned!";
                     case FLINCHED -> "flinched!";
                     case CURSED -> " is cursed!";
+                    case NIGHTMARE -> " has been afflicted with a Nightmare!";
                 };
 
         boolean statusProc = new Random().nextInt(100) < percent;

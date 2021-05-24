@@ -82,4 +82,9 @@ public class DarkMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 20);
     }
+
+    public String Crunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.DEF, -1, 20, false);
+    }
 }

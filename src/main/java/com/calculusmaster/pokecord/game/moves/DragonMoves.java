@@ -79,4 +79,11 @@ public class DragonMoves
 
         return move.getDamageResult(opponent, damage);
     }
+
+    public String DragonEnergy(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        move.setPower((int)(150 * user.getHealth() / (double)user.getStat(Stat.HP)));
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
