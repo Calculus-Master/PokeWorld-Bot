@@ -42,4 +42,9 @@ public class RockMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move) + raise;
     }
+
+    public String PowerGem(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

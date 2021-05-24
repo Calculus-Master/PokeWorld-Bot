@@ -64,4 +64,19 @@ public class DragonMoves
         user.changeStatMultiplier(Stat.SPATK, -2);
         return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + "'s Special Attack was lowered by 2 stages!";
     }
+
+    public String RoarOfTime(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
+    }
+
+    public String SpacialRend(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.setCrit(3);
+        int damage = move.getDamage(user, opponent);
+        user.setCrit(1);
+        opponent.damage(damage, duel);
+
+        return move.getDamageResult(opponent, damage);
+    }
 }

@@ -76,4 +76,13 @@ public class WaterMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String AquaRing(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int heal = user.getStat(Stat.HP) / 16;
+
+        user.heal(heal);
+
+        return user.getName() + " healed for " + heal + " HP!";
+    }
 }

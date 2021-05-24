@@ -75,4 +75,13 @@ public class SteelMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String IronTail(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        boolean lower = new Random().nextInt(100) < 30;
+
+        if(lower) opponent.changeStatMultiplier(Stat.DEF, -1);
+
+        return Move.simpleDamageMove(user, opponent, duel, move) + (lower ? " " + opponent.getName() + "'s Defense was lowered by 1 stage!" : "");
+    }
 }
