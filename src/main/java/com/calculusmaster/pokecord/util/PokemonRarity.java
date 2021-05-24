@@ -205,6 +205,9 @@ public class PokemonRarity
         PokemonRarity.add("Dialga", Rarity.LEGENDARY);
         PokemonRarity.add("Palkia", Rarity.LEGENDARY);
 
+        PokemonRarity.add("Giratina", Rarity.LEGENDARY);
+        PokemonRarity.add("Origin Giratina", Rarity.EXTREME);
+
         //Gen 5
 
         //Gen 6

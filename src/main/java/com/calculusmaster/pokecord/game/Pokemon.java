@@ -297,6 +297,7 @@ public class Pokemon
                     case PLATINUM -> 10000;
                     case MYTHICAL -> 15000;
                     case LEGENDARY -> 20000;
+                    case EXTREME -> 50000;
                 };
 
         int numZero = 0;
