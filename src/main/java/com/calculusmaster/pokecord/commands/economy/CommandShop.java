@@ -27,7 +27,7 @@ public class CommandShop extends Command
     {
         if(this.msg.length == 1)
         {
-            this.embed.setDescription("`p!shop mega` – Mega Evolutions\n`p!shop forms` – Pokemon Forms\n`p!shop nature` – Change your Pokemon's Nature\n`p!shop tm:tr` – Buy TMs and TRs\n`p!shop movetutor:tutor:mt` – Buy Move Tutor moves\n`p!shop items` – Misc. Items");
+            this.embed.setDescription("`p!shop mega` – Mega Evolutions\n`p!shop forms` – Pokemon Forms\n`p!shop nature` – Change your Pokemon's Nature\n`p!shop tm:tr` – Buy TMs and TRs\n`p!shop movetutor:tutor:mt` – Buy Move Tutor moves\n`p!shop zcrystals:zcrystal:z` – Buy Unique Z-Crystals\n`p!shop items` – Misc. Items");
             this.embed.setTitle("Pokecord Shop");
             return this;
         }
