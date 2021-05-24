@@ -82,8 +82,6 @@ public class SpawnEventHandler
             File file = new File("pokemon.png");
             ImageIO.write(img, "png", file);
 
-            SERVER_SPAWNS.put(g.getId(), spawn);
-
             channel.sendFile(file, "pkmn.png").embed(embed.build()).queue();
             if(g.getId().equals(PrivateInfo.SERVER_ID_MAIN)) g.getTextChannelById("843996103639695360").sendFile(file, "pkmn.png").embed(embed.build()).queue();
         }
@@ -93,6 +91,7 @@ public class SpawnEventHandler
             e.printStackTrace();
         }
 
+        SERVER_SPAWNS.put(g.getId(), spawn);
         System.out.println(SERVER_SPAWNS);
     }
 }
