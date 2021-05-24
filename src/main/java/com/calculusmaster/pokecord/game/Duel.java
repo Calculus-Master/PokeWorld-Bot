@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game;
 
 import com.calculusmaster.pokecord.game.enums.elements.*;
+import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.XPBooster;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -382,6 +383,12 @@ public class Duel
             this.usedCharge[this.turn] = false;
 
             if(move.getType().equals(Type.ELECTRIC)) move.setPower(move.getPower() * 2);
+        }
+
+        //Item-based Buffs
+        if(this.playerPokemon[this.turn].hasItem() && PokeItem.asItem(this.playerPokemon[this.turn].getItem()).equals(PokeItem.METAL_COAT))
+        {
+            if(move.getType().equals(Type.STEEL)) move.setPower((int)(move.getPower() * 1.2));
         }
 
         //Main move results
