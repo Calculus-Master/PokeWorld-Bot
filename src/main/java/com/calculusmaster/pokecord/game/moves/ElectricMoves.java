@@ -116,4 +116,15 @@ public class ElectricMoves
     {
         return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPATK, 1, 70, true);
     }
+
+    public String ThunderFang(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        boolean paralyze = new Random().nextInt(100) < 10;
+        boolean flinch = new Random().nextInt(100) < 10;
+
+        if(paralyze) opponent.addStatusCondition(StatusCondition.PARALYZED);
+        if(flinch) opponent.addStatusCondition(StatusCondition.FLINCHED);
+
+        return Move.simpleDamageMove(user, opponent, duel, move) + (paralyze ? " " + opponent.getName() + " is paralyzed!" : "") + (flinch ? " " + opponent.getName() + " flinched!" : "");
+    }
 }

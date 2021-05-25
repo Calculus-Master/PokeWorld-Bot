@@ -489,4 +489,16 @@ public class NormalMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + " is confused!";
     }
+
+    public String Bind(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.addStatusCondition(StatusCondition.BOUND);
+
+        return Move.simpleDamageMove(user, opponent, duel, move) + " " + opponent.getName() + " is Bound!";
+    }
+
+    public String Slam(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

@@ -387,15 +387,7 @@ public class Pokemon
     {
         this.status = new HashMap<>();
 
-        this.status.put(StatusCondition.BURNED, false);
-        this.status.put(StatusCondition.FROZEN, false);
-        this.status.put(StatusCondition.PARALYZED, false);
-        this.status.put(StatusCondition.POISONED, false);
-        this.status.put(StatusCondition.ASLEEP, false);
-        this.status.put(StatusCondition.CONFUSED, false);
-        this.status.put(StatusCondition.FLINCHED, false);
-        this.status.put(StatusCondition.CURSED, false);
-        this.status.put(StatusCondition.NIGHTMARE, false);
+        for(StatusCondition sc : StatusCondition.values()) this.status.put(sc, false);
     }
 
     public String getActiveStatusConditions()

@@ -10,7 +10,8 @@ public enum StatusCondition
     CONFUSED("CNF"),
     FLINCHED("FLN"),
     CURSED("CRS"),
-    NIGHTMARE("NTM");
+    NIGHTMARE("NTM"),
+    BOUND("BND");
 
     private final String abbrev;
     StatusCondition(String abbrev)

@@ -123,4 +123,15 @@ public class IceMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String IceFang(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        boolean freeze = new Random().nextInt(100) < 10;
+        boolean flinch = new Random().nextInt(100) < 10;
+
+        if(freeze) opponent.addStatusCondition(StatusCondition.FROZEN);
+        if(flinch) opponent.addStatusCondition(StatusCondition.FLINCHED);
+
+        return Move.simpleDamageMove(user, opponent, duel, move) + (freeze ? " " + opponent.getName() + " is frozen!" : "") + (flinch ? " " + opponent.getName() + " flinched!" : "");
+    }
 }

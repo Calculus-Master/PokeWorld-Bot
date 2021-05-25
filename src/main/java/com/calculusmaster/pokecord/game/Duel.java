@@ -35,6 +35,7 @@ public class Duel
     private Pokemon[] playerPokemon;
     private boolean[] playerZMoves;
     private int[] asleepTurn;
+    private int[] boundTurn;
 
     private Weather duelWeather;
     private int weatherTurns;
@@ -86,6 +87,7 @@ public class Duel
         this.turn = p1Speed == p2Speed ? new Random().nextInt(2) : (p1Speed > p2Speed ? 0 : 1);
 
         this.asleepTurn = new int[]{0, 0};
+        this.boundTurn = new int[]{0, 0};
 
         this.setDuelStatus(DuelStatus.DUELING);
     }
@@ -246,6 +248,24 @@ public class Duel
                 return this.getStatusResults(status);
             }
             else if(new Random().nextInt(100) < 50) this.playerPokemon[this.turn].removeStatusCondition(StatusCondition.CONFUSED);
+        }
+
+        if(this.playerPokemon[this.turn].hasStatusCondition(StatusCondition.BOUND))
+        {
+            this.boundTurn[this.turn]++;
+
+            if(this.boundTurn[this.turn] == 5)
+            {
+                this.boundTurn[this.turn] = 0;
+
+                status.add(this.playerPokemon[this.turn].getName() + " is no longer bound!");
+            }
+            else
+            {
+                statusDamage = this.playerPokemon[this.turn].getStat(Stat.HP) / 8;
+                this.playerPokemon[this.turn].damage(statusDamage, this);
+                status.add(this.playerPokemon[this.turn].getName() + " took " + statusDamage + " damage from the binding!");
+            }
         }
 
         if(this.playerPokemon[this.turn].hasStatusCondition(StatusCondition.FROZEN))

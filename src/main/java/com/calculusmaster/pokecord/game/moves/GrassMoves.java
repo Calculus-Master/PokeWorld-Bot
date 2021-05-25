@@ -50,7 +50,7 @@ public class GrassMoves
     {
         opponent.addStatusCondition(StatusCondition.ASLEEP);
 
-        return opponent.getName() + "is asleep!";
+        return opponent.getName() + " is asleep!";
     }
 
     public String SeedBomb(Pokemon user, Pokemon opponent, Duel duel, Move move)

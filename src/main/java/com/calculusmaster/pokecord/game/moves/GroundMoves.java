@@ -23,4 +23,10 @@ public class GroundMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move) + (lower ? " " + opponent.getName() + "'s Special Defense was lowered by 1 stage!" : "");
     }
+
+    public String Dig(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        //TODO: Dig invulnerability
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

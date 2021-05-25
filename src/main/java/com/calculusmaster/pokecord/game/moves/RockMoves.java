@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 
 import java.util.Random;
 
@@ -91,5 +92,33 @@ public class RockMoves
     public String StealthRock(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return move.getNotImplementedResult();
+    }
+
+    public String RockThrow(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String RockTomb(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.changeStatMultiplier(Stat.SPD, -1);
+        return Move.simpleDamageMove(user, opponent, duel, move) + " " + opponent.getName() + "'s Speed was lowered by 1 stage!";
+    }
+
+    public String RockSlide(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
+    }
+
+    public String StoneEdge(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.setCrit(3);
+
+        int damage = move.getDamage(user, opponent);
+        opponent.damage(damage, duel);
+
+        user.setCrit(1);
+
+        return move.getDamageResult(opponent, damage);
     }
 }
