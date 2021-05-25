@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.util;
 
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.mongodb.client.model.Filters;
 import org.bson.Document;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +23,14 @@ public class Global
         PlayerDataQuery p = new PlayerDataQuery(playerID);
         List<Pokemon> list = new LinkedList<>();
         for(int i = 0; i < p.getPokemonList().length(); i++) list.add(Pokemon.buildCore(p.getPokemonList().getString(i), i));
+        return list;
+    }
+
+    public static List<Pokemon.Base> getBaseList(String playerID)
+    {
+        PlayerDataQuery p = new PlayerDataQuery(playerID);
+        List<Pokemon.Base> list = new LinkedList<>();
+        for(int i = 0; i < p.getPokemonList().length(); i++) list.add(Pokemon.build(p.getPokemonList().getString(i), i));
         return list;
     }
 

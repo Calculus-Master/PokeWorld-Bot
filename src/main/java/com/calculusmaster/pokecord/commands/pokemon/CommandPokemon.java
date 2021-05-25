@@ -16,7 +16,10 @@ public class CommandPokemon extends Command
 {
     public static void init()
     {
+        long i = System.currentTimeMillis();
         Mongo.PlayerData.find(Filters.exists("playerID")).forEach(d -> Global.updatePokemonList(d.getString("playerID")));
+        long f = System.currentTimeMillis();
+        System.out.println((f - i) + "ms");
     }
 
     List<Pokemon> pokemon;
