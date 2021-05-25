@@ -229,6 +229,14 @@ public class PokemonRarity
 
         //Gen 5
 
+        PokemonRarity.add("Tornadus", Rarity.LEGENDARY);
+        PokemonRarity.add("Tornadus Therian", Rarity.EXTREME);
+        PokemonRarity.add("Thundurus", Rarity.LEGENDARY);
+        PokemonRarity.add("Thundurus Therian", Rarity.EXTREME);
+
+        PokemonRarity.add("Landorus", Rarity.LEGENDARY);
+        PokemonRarity.add("Landorus Therian", Rarity.EXTREME);
+
         //Gen 6
 
         //Gen 7
