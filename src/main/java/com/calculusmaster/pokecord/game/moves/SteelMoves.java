@@ -101,4 +101,9 @@ public class SteelMoves
         user.changeStatMultiplier(Stat.SPD, 2);
         return user.getName() + "'s Speed rose by 2 stages!";
     }
+
+    public String SunsteelStrike(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
