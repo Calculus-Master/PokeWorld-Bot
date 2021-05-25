@@ -48,6 +48,7 @@ public abstract class Command
     public static final CommandHelp.HelpEntry MARKET = new CommandHelp.HelpEntry("market");
     public static final CommandHelp.HelpEntry EVOLVE = new CommandHelp.HelpEntry("evolve");
     public static final CommandHelp.HelpEntry EQUIP = new CommandHelp.HelpEntry("equip");
+    public static final CommandHelp.HelpEntry TEAM = new CommandHelp.HelpEntry("team");
 
     public static void init()
     {
@@ -235,6 +236,9 @@ public abstract class Command
                 .addAliases()
                 .addArgs("number")
                 .addArgDesc("number", "The number of the Z-Crystal, shown in your inventory.");
+
+        TEAM.setCategory(CommandHelp.CommandCategory.POKEMON)
+                .addAliases();
     }
 
     protected MessageReceivedEvent event;

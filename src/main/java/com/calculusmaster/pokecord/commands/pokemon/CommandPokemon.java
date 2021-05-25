@@ -191,6 +191,6 @@ public class CommandPokemon extends Command
 
     private String getLine(Pokemon p)
     {
-        return "**" + p.getName() + "** | Number: " + p.getNumber() + " | Level " + p.getLevel() + " | Total IV: " + p.getTotalIV() + "\n";
+        return "**" + p.getName() + "** " + (this.playerData.isInTeam(p.getUUID()) ? "(T) " : "") + "| Number: " + p.getNumber() + " | Level " + p.getLevel() + " | Total IV: " + p.getTotalIV() + "\n";
     }
 }

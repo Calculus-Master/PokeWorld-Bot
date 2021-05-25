@@ -14,6 +14,8 @@ import org.bson.Document;
 import org.json.JSONArray;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class PlayerDataQuery extends MongoQuery
@@ -84,6 +86,19 @@ public class PlayerDataQuery extends MongoQuery
     public int getSelected()
     {
         return this.json().getInt("selected") - 1;
+    }
+
+    public JSONArray getTeam()
+    {
+        return !this.json().has("team") ? null : this.json().getJSONArray("team");
+    }
+
+    public boolean isInTeam(String UUID)
+    {
+        if(this.getTeam() == null) return false;
+
+        for(int i = 0; i < this.getTeam().length(); i++) if(this.getTeam().getString(i).equals(UUID)) return true;
+        return false;
     }
 
     public Pokemon getSelectedPokemon()
@@ -176,6 +191,22 @@ public class PlayerDataQuery extends MongoQuery
     {
         index--;
         this.removePokemon(this.getPokemonList().getString(index));
+    }
+
+    public void addPokemonToTeam(String UUID, int index)
+    {
+        List<String> team = new ArrayList<>();
+        if(this.getTeam() != null) for(int i = 0; i < this.getTeam().length(); i++) team.add(this.getTeam().getString(i));
+
+        index--;
+
+        if(index >= team.size()) team.add(UUID);
+        else team.set(index, UUID);
+
+        Mongo.PlayerData.updateOne(this.query, Updates.unset("team"));
+        Mongo.PlayerData.updateOne(this.query, Updates.pushEach("team", team));
+
+        this.update();
     }
 
     //Sets the selected pokemon
