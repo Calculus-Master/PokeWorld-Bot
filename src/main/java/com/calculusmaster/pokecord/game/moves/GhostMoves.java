@@ -111,4 +111,18 @@ public class GhostMoves
         if(opponent.hasStatusCondition(StatusCondition.ASLEEP)) opponent.addStatusCondition(StatusCondition.NIGHTMARE);
         return user.getName() + " cast a Nightmare on " + opponent.getName() + "!";
     }
+
+    public String SpectralThief(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        for(Stat s : Stat.values())
+        {
+            if(opponent.getStatMultiplier(s) > 0)
+            {
+                user.changeStatMultiplier(s, (int)(2 * user.getStatMultiplier(s) * -1));
+                user.changeStatMultiplier(s, (int)opponent.getStatMultiplier(s));
+            }
+        }
+
+        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + " transferred all Status Conditions to " + opponent.getName() + "!";
+    }
 }

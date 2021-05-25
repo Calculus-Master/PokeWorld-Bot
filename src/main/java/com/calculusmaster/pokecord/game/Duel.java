@@ -323,7 +323,7 @@ public class Duel
         if(z)
         {
             this.accurate = true;
-            results += this.playerPokemon[this.turn].getName() + " summons its Z-Power!";
+            results += this.playerPokemon[this.turn].getName() + " summons its Z-Power! ";
 
             this.setUsedZMove(this.turn);
         }
