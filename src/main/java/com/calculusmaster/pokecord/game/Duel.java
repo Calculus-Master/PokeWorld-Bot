@@ -92,6 +92,7 @@ public class Duel
 
     public void setDefaultInstanceVariables()
     {
+        this.playerZMoves = new boolean[]{false, false};
         this.usedDefenseCurl = new boolean[]{false, false};
         this.iceBallTurns = new int[]{1, 1};
         this.rolloutTurns = new int[]{1, 1};

@@ -67,7 +67,7 @@ public class DragonMoves
 
     public String RoarOfTime(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String SpacialRend(Pokemon user, Pokemon opponent, Duel duel, Move move)

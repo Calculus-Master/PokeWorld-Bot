@@ -81,7 +81,9 @@ public class Move
         String results = this.getMoveUsedResult(user);
         String moveName = this.name;
 
-        moveName = moveName.replaceAll("\\s", "");
+        if(moveName.equals("10,000,000 Volt Thunderbolt")) moveName = "TenMillionVoltThunderbolt";
+
+        moveName = moveName.replaceAll("\\s", "").replaceAll("'", "");
 
         //Special cases
 
@@ -245,8 +247,8 @@ public class Move
         //Psyshock, Psystrike, Secret Sword
         if(this.name.equals("Psyshock") || this.name.equals("Psystrike") || this.name.equals("Secret Sword")) defStat = opponent.getStat(Stat.DEF);
 
-        //Photon Geyser
-        if(this.name.equals("Photon Geyser")) atkStat = Math.max(user.getStat(Stat.ATK), user.getStat(Stat.SPATK));
+        //Photon Geyser, Light That Burns The Sky
+        if(this.name.equals("Photon Geyser") || this.name.equals("Light That Burns The Sky")) atkStat = Math.max(user.getStat(Stat.ATK), user.getStat(Stat.SPATK));
 
         //Freeze Dry
         if(this.name.equals("Freeze Dry")) type = opponent.isType(Type.WATER) || opponent.isType(Type.GRASS) || opponent.isType(Type.GROUND) || opponent.isType(Type.FLYING) || opponent.isType(Type.DRAGON) ? 2.0 : (opponent.isType(Type.FIRE) || opponent.isType(Type.ICE) || opponent.isType(Type.STEEL) ? 0.5 : 1.0);
