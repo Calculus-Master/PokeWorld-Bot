@@ -31,6 +31,7 @@ public class CommandInventory extends Command
             for(int i = 0; i < this.playerData.getZCrystalList().length(); i++) s.append(i + 1).append(": ").append(this.playerData.getZCrystalList().get(i)).append("\n");
             s.append("\n");
             s.append("Equipped: ").append(this.playerData.getEquippedZCrystal() != null && !this.playerData.getEquippedZCrystal().isEmpty() ? this.playerData.getEquippedZCrystal() : "None");
+            s.append("\n");
         }
         else s.append("You don't own any Z-Crystals!\n\n");
         
