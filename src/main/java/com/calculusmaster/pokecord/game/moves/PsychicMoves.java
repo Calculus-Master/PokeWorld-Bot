@@ -206,4 +206,9 @@ public class PsychicMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String Extrasensory(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 10);
+    }
 }

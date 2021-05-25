@@ -29,4 +29,11 @@ public class GroundMoves
         //TODO: Dig invulnerability
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String Bulldoze(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.changeStatMultiplier(Stat.SPD, -1);
+
+        return Move.simpleDamageMove(user, opponent, duel, move) + opponent.getName() + "'s Speed was lowered by 1 stage!";
+    }
 }
