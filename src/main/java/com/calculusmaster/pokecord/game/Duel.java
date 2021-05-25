@@ -137,6 +137,9 @@ public class Duel
 
         if(z) move = this.getZMove(move);
 
+        //Chance to get Z Crystal
+        if(new Random().nextInt(100) < 1) zcrystalEvent(move);
+
         //Weather effects
         String weatherEffects = "";
         if(this.duelWeather.equals(Weather.HAIL))
@@ -520,8 +523,6 @@ public class Duel
             weatherTurns = -1;
             weatherUpdate = "The weather is now clear again!";
         }
-
-        if(new Random().nextInt(100) < 1) zcrystalEvent(move);
 
         return results + "\n" + weatherUpdate + "\n" + weatherEffects;
     }
