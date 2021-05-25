@@ -43,10 +43,9 @@ public class CommandMoveInfo extends Command
             String category = "Category: " + Global.normalCase(m.category.toString());
             String power = "Power: " + m.power;
             String accuracy = "Accuracy: " + m.accuracy;
-            String zmove = "Z-Move: " + m.zmove;
 
             this.embed.setTitle(title);
-            this.embed.setDescription(info + "\n\n" + type + "\n" + category + "\n" + power + "\n" + accuracy + "\n" + zmove);
+            this.embed.setDescription(info + "\n\n" + type + "\n" + category + "\n" + power + "\n" + accuracy);
             this.color = m.type.getColor();
 
             if(Move.CUSTOM_MOVES.contains(moveString)) this.embed.setFooter("This move has a custom implementation! It may not work exactly as described!");

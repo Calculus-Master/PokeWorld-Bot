@@ -31,7 +31,7 @@ public class Move
 
     public static void init()
     {
-        Mongo.MoveInfo.find(Filters.exists("name")).forEach(d -> MOVES.put(d.getString("name"), new MoveData(d.getString("name"), d.getString("type"), d.getString("category"), d.getInteger("power"), d.getInteger("accuracy"), d.getString("info"), d.getString("zmove"))));
+        Mongo.MoveInfo.find(Filters.exists("name")).forEach(d -> MOVES.put(d.getString("name"), new MoveData(d.getString("name"), d.getString("type"), d.getString("category"), d.getInteger("power"), d.getInteger("accuracy"), d.getString("info"))));
     }
 
     public Move(String name)
@@ -323,11 +323,6 @@ public class Move
         return this.moveData.info;
     }
 
-    public String getZMove()
-    {
-        return this.moveData.zmove;
-    }
-
     @Override
     public String toString() {
         return "MoveNew{" +
@@ -348,9 +343,8 @@ public class Move
         public int power;
         public int accuracy;
         public String info;
-        public String zmove;
 
-        MoveData(String name, String type, String category, int power, int accuracy, String info, String zmove)
+        MoveData(String name, String type, String category, int power, int accuracy, String info)
         {
             this.name = name;
             this.type = Type.cast(type);
@@ -358,7 +352,6 @@ public class Move
             this.power = power;
             this.accuracy = accuracy;
             this.info = info;
-            this.zmove = zmove;
         }
 
         @Override
@@ -370,7 +363,6 @@ public class Move
                     ", power=" + power +
                     ", accuracy=" + accuracy +
                     ", info='" + info + '\'' +
-                    ", zmove='" + zmove + '\'' +
                     '}';
         }
     }

@@ -7,28 +7,14 @@ import com.calculusmaster.pokecord.commands.economy.CommandMarket;
 import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
-import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.*;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
 import org.slf4j.LoggerFactory;
 
-import javax.imageio.ImageIO;
 import javax.security.auth.login.LoginException;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class Pokecord
 {
