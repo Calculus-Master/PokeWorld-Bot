@@ -114,13 +114,13 @@ public class GhostMoves
 
     public String SpectralThief(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        user.setDefaultStatMultipliers();
+        int change;
+
         for(Stat s : Stat.values())
         {
-            if(opponent.getStatMultiplier(s) > 0)
-            {
-                user.changeStatMultiplier(s, (int)(2 * user.getStatMultiplier(s) * -1));
-                user.changeStatMultiplier(s, (int)opponent.getStatMultiplier(s));
-            }
+            change = (int)(2 * opponent.getStatMultiplier(s))  + (opponent.getStat(s) > 0 ? -2 : 2);
+            user.changeStatMultiplier(s, change);
         }
 
         return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + " transferred all Status Conditions to " + opponent.getName() + "!";
