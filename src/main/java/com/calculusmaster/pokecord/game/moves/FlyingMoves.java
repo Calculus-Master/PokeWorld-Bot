@@ -91,4 +91,10 @@ public class FlyingMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String Fly(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        //TODO: Invulnerable phase, like Dig
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
