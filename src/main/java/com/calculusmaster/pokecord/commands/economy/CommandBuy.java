@@ -83,7 +83,10 @@ public class CommandBuy extends Command
         }
         else if(this.msg[1].equals("form") && this.msg.length >= 3)
         {
-            String form = Global.normalCase(this.msg.length == 3 ? this.msg[2] : this.msg[2] + " " + this.msg[3]);
+            StringBuilder formBuilder = new StringBuilder();
+            for(int i = 2; i < this.msg.length; i++) formBuilder.append(this.msg[i]).append(" ");
+            String form = Global.normalCase(formBuilder.toString().trim());
+
             if(selected.hasForms() && this.playerData.getCredits() >= CommandBuy.COST_FORM && selected.getFormsList().contains(form))
             {
                 this.embed.setDescription(selected.getName() + " transformed into " + form);
