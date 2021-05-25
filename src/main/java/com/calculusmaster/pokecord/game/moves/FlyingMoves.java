@@ -86,4 +86,9 @@ public class FlyingMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + "'s Defense and Special Defense were lowered by 1 stage!";
     }
+
+    public String AerialAce(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
