@@ -87,4 +87,15 @@ public class DarkMoves
     {
         return Move.statChangeDamageMove(user, opponent, duel, move, Stat.DEF, -1, 20, false);
     }
+
+    public String Punishment(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int statIncreases = 0;
+
+        for(Stat s : Stat.values()) if(opponent.getStatMultiplier(s) > 0) statIncreases += (int)(opponent.getStatMultiplier(s) * 2 - 2);
+
+        move.setPower(statIncreases * 20 + 60);
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
