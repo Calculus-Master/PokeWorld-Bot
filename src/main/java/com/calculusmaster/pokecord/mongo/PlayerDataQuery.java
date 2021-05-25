@@ -195,6 +195,8 @@ public class PlayerDataQuery extends MongoQuery
 
     public void addPokemonToTeam(String UUID, int index)
     {
+        Mongo.PlayerData.updateOne(this.query, Updates.unset("team"));
+
         List<String> team = new ArrayList<>();
         if(this.getTeam() != null) for(int i = 0; i < this.getTeam().length(); i++) team.add(this.getTeam().getString(i));
 
@@ -203,7 +205,6 @@ public class PlayerDataQuery extends MongoQuery
         if(index >= team.size()) team.add(UUID);
         else team.set(index, UUID);
 
-        Mongo.PlayerData.updateOne(this.query, Updates.unset("team"));
         Mongo.PlayerData.updateOne(this.query, Updates.pushEach("team", team));
 
         this.update();
