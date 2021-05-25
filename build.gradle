@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'net.dv8tion:JDA:4.2.1_262'
+    implementation 'net.dv8tion:JDA:4.2.1_265'
     implementation 'org.mongodb:mongodb-driver-sync:4.3.0-beta1'
     implementation 'org.json:json:20200518'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
