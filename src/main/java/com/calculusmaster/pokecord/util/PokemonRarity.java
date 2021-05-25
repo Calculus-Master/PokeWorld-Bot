@@ -248,6 +248,8 @@ public class PokemonRarity
 
         //Gen 8
 
+        PokemonRarity.add("Eternatus", Rarity.LEGENDARY);
+
         PokemonRarity.add("Regieleki", Rarity.LEGENDARY);
         PokemonRarity.add("Regidrago", Rarity.LEGENDARY);
 
