@@ -25,6 +25,7 @@ public class Move
     private Category category;
     private int power;
     private int accuracy;
+    private boolean isZMove;
 
     private boolean hitCrit;
 
@@ -38,6 +39,17 @@ public class Move
         this.moveData = MOVES.get(name);
         this.name = this.moveData.name;
         this.setDefaultValues();
+    }
+
+    //Z-Move Constructor
+    public Move(String name, Type type, Category category, int power)
+    {
+        this.name = name;
+        this.type = type;
+        this.category = category;
+        this.power = power;
+        this.accuracy = 100;
+        this.isZMove = true;
     }
 
     public String logic(Pokemon user, Pokemon opponent, Duel duel)
@@ -63,6 +75,8 @@ public class Move
             case STEEL -> SteelMoves.class;
             case WATER -> WaterMoves.class;
         };
+
+        if(this.isZMove) typeClass = ZMoves.class;
 
         String results = this.getMoveUsedResult(user);
         String moveName = this.name;
@@ -252,6 +266,7 @@ public class Move
         this.power = this.moveData.power;
         this.accuracy = this.moveData.accuracy;
         this.hitCrit = false;
+        this.isZMove = false;
     }
 
     public void setType(Type t)

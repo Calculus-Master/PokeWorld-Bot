@@ -60,6 +60,13 @@ public class CommandUse extends Command
                     return this;
                 }
 
+                if(zmove && duel.hasUsedZMove(duel.turn))
+                {
+                    this.event.getChannel().sendMessage(this.playerData.getMention() + ": You have already used a Z-Move!").queue();
+                    this.embed = null;
+                    return this;
+                }
+
                 if(zmove)
                 {
                     Pokemon s = this.playerData.getSelectedPokemon();
@@ -105,6 +112,20 @@ public class CommandUse extends Command
                         case TAPUNIUM_Z -> s.getName().contains("Tapu") && move.getName().equals("Nature's Madness");
                         case ULTRANECROZIUM_Z -> s.getName().equals("Ultra Necrozma") && move.getName().equals("Photon Geyser");
                     };
+
+                    if(move.getCategory().equals(Category.STATUS))
+                    {
+                        this.event.getChannel().sendMessage(this.playerData.getMention() + ": Status Z-Moves are not implemented!").queue();
+                        this.embed = null;
+                        return this;
+                    }
+
+                    if(!valid)
+                    {
+                        this.event.getChannel().sendMessage(this.playerData.getMention() + ": " + this.playerData.getEquippedZCrystal() + " does not work on " + move.getName() + "!").queue();
+                        this.embed = null;
+                        return this;
+                    }
                 }
 
                 String results = duel.doTurn(moveNum, zmove);
