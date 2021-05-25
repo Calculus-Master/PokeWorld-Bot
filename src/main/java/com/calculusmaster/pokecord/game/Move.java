@@ -93,7 +93,7 @@ public class Move
         }
         catch (Exception e)
         {
-            System.out.println("Move failed! " + this.toString());
+            System.out.println("Move failed! " + this.getName());
             results += "MOVE FAILED";
         }
 

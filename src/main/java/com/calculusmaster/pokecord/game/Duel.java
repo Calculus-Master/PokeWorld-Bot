@@ -695,7 +695,7 @@ public class Duel
             }
             case GRASSIUM_Z -> {
 
-                ZMove = new Move("Bloom Doom", Type.GRASS, null, 0);
+                ZMove = new Move("Bloom Doom", Type.GRASS, baseMove.getCategory(), 0);
 
                 switch (baseMove.getName())
                 {
