@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 
 import java.util.Random;
 
@@ -35,5 +36,17 @@ public class GroundMoves
         opponent.changeStatMultiplier(Stat.SPD, -1);
 
         return Move.simpleDamageMove(user, opponent, duel, move) + opponent.getName() + "'s Speed was lowered by 1 stage!";
+    }
+
+    public String Fissure(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(opponent.getLevel() > user.getLevel()) return move.getNoEffectResult(opponent);
+        else
+        {
+            int damage = opponent.getHealth();
+            opponent.damage(damage);
+
+            return move.getDamageResult(opponent, damage);
+        }
     }
 }

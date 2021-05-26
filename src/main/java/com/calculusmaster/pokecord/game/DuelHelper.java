@@ -117,11 +117,13 @@ public class DuelHelper
             this.data = new PlayerDataQuery(id);
 
             List<Pokemon> teamBuilder = new ArrayList<>();
-            for(int i = 0; i < numPokemon; i++) teamBuilder.add(Pokemon.build(this.data.getTeam().getString(i)));
+
+            if(numPokemon == 1) teamBuilder.add(this.data.getSelectedPokemon());
+            else for(int i = 0; i < numPokemon; i++) teamBuilder.add(Pokemon.build(this.data.getTeam().getString(i)));
+
             this.team = Collections.unmodifiableList(teamBuilder);
             this.active = this.team.get(0);
             this.move = null;
-
             this.usedZMove = false;
         }
 

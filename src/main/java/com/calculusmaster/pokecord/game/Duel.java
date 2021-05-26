@@ -150,6 +150,7 @@ public class Duel
 
         if(this.isComplete())
         {
+            this.sendTurnEmbed();
             this.sendWinEmbed();
             this.setStatus(DuelStatus.COMPLETE);
         }
@@ -243,6 +244,12 @@ public class Duel
         if(move.getName().equals("Sheer Cold"))
         {
             move.setAccuracy((this.players[this.current].active.isType(Type.ICE) ? 30 : 20) + (this.players[this.current].active.getLevel() - this.players[this.other].active.getLevel()));
+            accurate = move.isAccurate();
+        }
+
+        if(move.getName().equals("Fissure"))
+        {
+            move.setAccuracy(20 + (this.players[this.current].active.getLevel() - this.players[this.other].active.getLevel()));
             accurate = move.isAccurate();
         }
 
