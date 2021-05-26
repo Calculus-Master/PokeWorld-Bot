@@ -27,6 +27,7 @@ public class Move
     private int accuracy;
     private boolean isZMove;
     private int priority;
+    private double damageMultiplier;
 
     private boolean hitCrit;
 
@@ -52,6 +53,7 @@ public class Move
         this.accuracy = 100;
         this.isZMove = true;
         this.setPriority();
+        this.damageMultiplier = 1.0;
     }
 
     public String logic(Pokemon user, Pokemon opponent, Duel duel)
@@ -259,6 +261,8 @@ public class Move
         double modifier = critical * random * stab * type * burned;
         double damage = (((2 * level / 5.0 + 2) * power * (double)atkStat / (double)defStat) / 50) + 2;
         double finalDMG = damage * modifier;
+
+        finalDMG *= this.damageMultiplier;
         return (int)(finalDMG + 0.5);
     }
 
@@ -272,6 +276,7 @@ public class Move
         this.accuracy = this.moveData.accuracy;
         this.hitCrit = false;
         this.isZMove = false;
+        this.damageMultiplier = 1.0;
     }
 
     public void setType(Type t)
@@ -287,6 +292,11 @@ public class Move
     public void setPower(int p)
     {
         this.power = p;
+    }
+
+    public void setPower(double p)
+    {
+        this.power = (int)(p);
     }
 
     public void setAccuracy(int a)
@@ -316,6 +326,11 @@ public class Move
                     case "Trick Room" -> -7;
                     default -> 0;
                 };
+    }
+
+    public void setDamageMultiplier(double d)
+    {
+        this.damageMultiplier = d;
     }
 
     //Getters

@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.game;
 
 import com.calculusmaster.pokecord.commands.duel.CommandDuel;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.elements.Weather;
 import com.calculusmaster.pokecord.game.enums.items.XPBooster;
@@ -30,6 +31,7 @@ public class TeamDuel
     private int size;
     private Player[] players;
     private Map<String, TurnAction> queuedMoves = new HashMap<>();
+    private Map<String, DuelPokemon> pokemonAttributes = new HashMap<>();
 
     private int turn;
     private int current;
@@ -48,6 +50,8 @@ public class TeamDuel
         duel.setEvent(event);
         duel.setPlayers(player1ID, player2ID, size);
         duel.setDefaults();
+        duel.setDuelPokemonObjects(0);
+        duel.setDuelPokemonObjects(1);
 
         DUELS.add(duel);
         return duel;
@@ -148,6 +152,9 @@ public class TeamDuel
         //Weather-based Move Changes
         this.moveWeatherEffects(move);
 
+        //If the pokemon uses an unfreeze remove, remove the Frozen Status Condition
+        if(this.players[this.current].active.hasStatusCondition(StatusCondition.FROZEN) && Arrays.asList("Fusion Flare", "Flame Wheel", "Sacred Fire", "Flare Blitz", "Scald", "Steam Eruption").contains(move.getName())) this.players[this.current].active.removeStatusCondition(StatusCondition.FROZEN);
+
         this.players[this.other].active.damage(300);
         return this.players[this.current].active.getName() + " used " + move.getName() + "!";
     }
@@ -228,6 +235,165 @@ public class TeamDuel
                 if(move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower(move.getPower() / 2);
             }
         }
+    }
+
+    public void turnTerrainEffects(Move move)
+    {
+        switch(this.terrain)
+        {
+            case ELECRIC_TERRAIN -> {
+                if(move.getType().equals(Type.ELECTRIC)) move.setPower(move.getPower() * 1.5);
+            }
+            case GRASSY_TERRAIN -> {
+                if(move.getType().equals(Type.GRASS)) move.setPower(move.getPower() * 1.5);
+            }
+            case MISTY_TERRAIN -> {
+                if(move.getType().equals(Type.DRAGON)) move.setDamageMultiplier(0.5);
+            }
+            case PSYCHIC_TERRAIN -> {
+                if(move.getType().equals(Type.PSYCHIC)) move.setPower(move.getPower() * 1.5);
+            }
+        }
+    }
+
+    //Returns true if the pokemon can attack
+    public boolean statusConditionEffects(int p)
+    {
+        StringBuilder status = new StringBuilder();
+        Random r = new Random();
+        int statusDamage = 0;
+
+        String name = this.players[p].active.getName();
+        Pokemon pokemon = this.players[p].active;
+
+        if(pokemon.hasStatusCondition(StatusCondition.BURNED))
+        {
+            statusDamage = (int)(this.players[0].active.getStat(Stat.HP) / 16.);
+            pokemon.damage(statusDamage);
+
+            status.append(name).append(" is burned! The burn dealt ").append(statusDamage).append(" damage!\n");
+        }
+
+        if(pokemon.hasStatusCondition(StatusCondition.POISONED))
+        {
+            statusDamage = (int)(pokemon.getStat(Stat.HP) / 8.);
+            pokemon.damage(statusDamage);
+
+            status.append(name).append(" is poisoned! The poison dealt ").append(statusDamage).append(" damage!\n");
+        }
+
+        if(pokemon.hasStatusCondition(StatusCondition.CURSED))
+        {
+            statusDamage = pokemon.getStat(Stat.HP) / 4;
+            pokemon.damage(statusDamage);
+
+            status.append(name).append(" is cursed! The curse dealt ").append(statusDamage).append(" damage!\n");
+        }
+
+        if(pokemon.hasStatusCondition(StatusCondition.BOUND))
+        {
+            this.pokemonAttributes.get(pokemon.getUUID()).boundTurns++;
+
+            if(this.pokemonAttributes.get(pokemon.getUUID()).boundTurns == 5)
+            {
+                this.pokemonAttributes.get(pokemon.getUUID()).boundTurns = 0;
+
+                status.append(name).append(" is no longer bound!");
+            }
+            else
+            {
+                statusDamage = pokemon.getStat(Stat.HP) / 8;
+                pokemon.damage(statusDamage);
+
+                status.append(name).append(" is bound! The binding dealt ").append(statusDamage).append(" damage!\n");
+            }
+        }
+
+        if(pokemon.hasStatusCondition(StatusCondition.CONFUSED))
+        {
+            if(r.nextInt(100) < 33)
+            {
+                statusDamage = new Move("Tackle").getDamage(pokemon, pokemon);
+                pokemon.damage(statusDamage);
+
+                status.append(name).append(" is confused! It hurt itself in its confusion for ").append(statusDamage).append(" damage!\n");
+                return false;
+            }
+            else if(r.nextInt(100) < 50) pokemon.removeStatusCondition(StatusCondition.CONFUSED);
+        }
+
+        if(pokemon.hasStatusCondition(StatusCondition.FROZEN))
+        {
+            if(r.nextInt(100) < 20 || this.weather.equals(Weather.HARSH_SUNLIGHT))
+            {
+                pokemon.removeStatusCondition(StatusCondition.FROZEN);
+
+                status.append(name).append(" has thawed out").append(this.weather.equals(Weather.HARSH_SUNLIGHT) ? " due to the harsh sunlight!" : "!");
+            }
+            else
+            {
+                status.append(name).append(" is frozen and can't use any moves!");
+                return false;
+            }
+        }
+
+        if(pokemon.hasStatusCondition(StatusCondition.ASLEEP))
+        {
+            if(this.pokemonAttributes.get(pokemon.getUUID()).asleepTurns == 2 || this.terrain.equals(Terrain.ELECRIC_TERRAIN))
+            {
+                pokemon.removeStatusCondition(StatusCondition.ASLEEP);
+                this.pokemonAttributes.get(pokemon.getUUID()).asleepTurns = 0;
+
+                status.append(name).append(" woke up").append(this.terrain.equals(Terrain.ELECRIC_TERRAIN) ? " due to the Electric Field!\n" : "!\n");
+                if(pokemon.hasStatusCondition(StatusCondition.NIGHTMARE))
+                {
+                    pokemon.removeStatusCondition(StatusCondition.NIGHTMARE);
+                    status.append("The nightmare was removed!\n");
+                }
+            }
+            else
+            {
+                this.pokemonAttributes.get(pokemon.getUUID()).asleepTurns++;
+
+                if(pokemon.hasStatusCondition(StatusCondition.NIGHTMARE))
+                {
+                    statusDamage = pokemon.getStat(Stat.HP) / 4;
+                    pokemon.damage(statusDamage);
+
+                    status.append(name).append(" has a nightmare!").append("The nightmare dealt ").append(statusDamage).append(" damage!");
+                }
+
+                status.append(name).append(" is asleep!");
+
+                return false;
+            }
+        }
+
+        if(pokemon.hasStatusCondition(StatusCondition.PARALYZED))
+        {
+            if(r.nextInt(100) < 25)
+            {
+                status.append(name).append(" is paralyzed and can't move!");
+
+                return false;
+            }
+        }
+
+        if(pokemon.hasStatusCondition(StatusCondition.FLINCHED))
+        {
+            pokemon.removeStatusCondition(StatusCondition.FLINCHED);
+
+            status.append(name).append(" flinched and can't move!");
+
+            return false;
+        }
+
+        return true;
+    }
+
+    public void setDuelPokemonObjects(int player)
+    {
+        for(Pokemon p : this.players[player].team) this.pokemonAttributes.put(p.getUUID(), new DuelPokemon(p.getUUID()));
     }
 
     //Response Embeds

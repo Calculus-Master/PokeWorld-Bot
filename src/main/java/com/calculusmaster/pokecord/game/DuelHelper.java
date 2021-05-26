@@ -42,6 +42,20 @@ public class DuelHelper
         PSYCHIC_TERRAIN;
     }
 
+    public static class DuelPokemon
+    {
+        public String UUID;
+        public int asleepTurns;
+        public int boundTurns;
+
+        public DuelPokemon(String UUID)
+        {
+            this.UUID = UUID;
+            this.asleepTurns = 0;
+            this.boundTurns = 0;
+        }
+    }
+
     public record TurnAction(ActionType action, int moveInd, int swapInd) {}
 
     public enum ActionType
