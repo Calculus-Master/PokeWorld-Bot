@@ -2,6 +2,8 @@ package com.calculusmaster.pokecord.game;
 
 import com.calculusmaster.pokecord.commands.duel.CommandDuel;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.enums.elements.Weather;
 import com.calculusmaster.pokecord.game.enums.items.XPBooster;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -35,6 +37,9 @@ public class TeamDuel
 
     private List<String> results;
 
+    public Weather weather;
+    public Terrain terrain;
+
     public static TeamDuel create(String player1ID, String player2ID, int size, MessageReceivedEvent event)
     {
         TeamDuel duel = new TeamDuel();
@@ -42,6 +47,7 @@ public class TeamDuel
         duel.setStatus(DuelStatus.WAITING);
         duel.setEvent(event);
         duel.setPlayers(player1ID, player2ID, size);
+        duel.setDefaults();
 
         DUELS.add(duel);
         return duel;
@@ -124,23 +130,14 @@ public class TeamDuel
             }
         }
 
+        this.weatherEffects();
+
         if(this.isComplete())
         {
-            this.sendTurnEmbed();
             this.sendWinEmbed();
             this.setStatus(DuelStatus.COMPLETE);
         }
-        else
-        {
-            try
-            {
-                this.sendTurnEmbed();
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
+        else this.sendTurnEmbed();
 
         this.queuedMoves.clear();
     }
@@ -148,8 +145,89 @@ public class TeamDuel
     //Always use this.current!
     public String turn(Move move)
     {
+        //Weather-based Move Changes
+        this.moveWeatherEffects(move);
+
         this.players[this.other].active.damage(300);
         return this.players[this.current].active.getName() + " used " + move.getName() + "!";
+    }
+
+    //Turn Helper Methods
+    public void setDefaults()
+    {
+        this.weather = Weather.CLEAR;
+        this.terrain = Terrain.NORMAL_TERRAIN;
+    }
+
+    public void weatherEffects()
+    {
+        StringBuilder weatherResult = new StringBuilder().append("\n").append(this.weather.getStatus()).append("\n");
+
+        switch(this.weather)
+        {
+            case HAIL -> {
+
+                boolean is1Affected = !this.players[0].active.isType(Type.ICE);
+                boolean is2Affected = !this.players[1].active.isType(Type.ICE);
+
+                if(is1Affected)
+                {
+                    this.players[0].active.damage(this.players[0].active.getStat(Stat.HP) / 16);
+                    weatherResult.append(this.players[0].active.getName()).append(" took damage from the hailstorm!\n");
+                }
+                if(is2Affected)
+                {
+                    this.players[1].active.damage(this.players[1].active.getStat(Stat.HP) / 16);
+                    weatherResult.append(this.players[1].active.getName()).append(" took damage from the hailstorm!\n");
+                }
+
+            }
+            case SANDSTORM -> {
+
+                boolean is1Affected = !this.players[0].active.isType(Type.GROUND) && !this.players[0].active.isType(Type.ROCK) && !this.players[0].active.isType(Type.STEEL);
+                boolean is2Affected = !this.players[1].active.isType(Type.GROUND) && !this.players[1].active.isType(Type.ROCK) && !this.players[1].active.isType(Type.STEEL);
+
+                if(is1Affected)
+                {
+                    this.players[0].active.damage(this.players[0].active.getStat(Stat.HP) / 16);
+                    weatherResult.append(this.players[0].active.getName()).append(" took damage from the sandstorm!\n");
+                }
+                if(is2Affected)
+                {
+                    this.players[1].active.damage(this.players[1].active.getStat(Stat.HP) / 16);
+                    weatherResult.append(this.players[1].active.getName()).append(" took damage from the sandstorm!\n");
+                }
+            }
+        }
+
+        this.results.add(weatherResult.toString());
+    }
+
+    public void moveWeatherEffects(Move move)
+    {
+        switch(this.weather)
+        {
+            case HAIL -> {
+                if(move.getName().equals("Blizzard")) move.setAccuracy(100);
+
+                if(move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower(move.getPower() / 2);
+            }
+            case HARSH_SUNLIGHT -> {
+                if(move.getType().equals(Type.FIRE)) move.setPower((int)(move.getPower() * 1.5));
+                else if(move.getType().equals(Type.WATER)) move.setPower((int)(move.getPower() * 0.5));
+
+                if(move.getName().equals("Thunder") || move.getName().equals("Hurricane")) move.setAccuracy(50);
+            }
+            case RAIN -> {
+                if(move.getType().equals(Type.WATER)) move.setPower((int)(move.getPower() * 1.5));
+                else if(move.getType().equals(Type.FIRE) || move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower((int)(move.getPower() * 0.5));
+
+                if(move.getName().equals("Thunder") || move.getName().equals("Hurricane")) move.setAccuracy(100);
+            }
+            case SANDSTORM -> {
+                if(move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower(move.getPower() / 2);
+            }
+        }
     }
 
     //Response Embeds
@@ -185,6 +263,7 @@ public class TeamDuel
 
         int c = this.giveWinCredits();
         int exp = this.giveWinExp();
+
         embed.setDescription(this.getWinner().data.getUsername() + " has won!\nThey earned " + c + " credits and no exp (WIP)!");
 
         this.event.getChannel().sendMessage(embed.build()).queue();
@@ -266,7 +345,7 @@ public class TeamDuel
     {
         //Background is 800 x 480 -> 400 x 240
 
-        int size = 125;
+        int size = 150;
         int hint = BufferedImage.TYPE_INT_ARGB;
 
         Image background = ImageIO.read(new URL(BACKGROUND)).getScaledInstance(400, 240, hint);

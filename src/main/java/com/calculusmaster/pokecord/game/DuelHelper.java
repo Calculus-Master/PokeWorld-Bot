@@ -33,6 +33,15 @@ public class DuelHelper
         DUELS.remove(index);
     }
 
+    public enum Terrain
+    {
+        NORMAL_TERRAIN,
+        ELECRIC_TERRAIN,
+        GRASSY_TERRAIN,
+        MISTY_TERRAIN,
+        PSYCHIC_TERRAIN;
+    }
+
     public record TurnAction(ActionType action, int moveInd, int swapInd) {}
 
     public enum ActionType

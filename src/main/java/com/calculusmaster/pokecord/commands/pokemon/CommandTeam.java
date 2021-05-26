@@ -17,14 +17,24 @@ public class CommandTeam extends Command
     @Override
     public Command runCommand()
     {
-        if(this.msg.length == 4 && this.msg[1].equals("set") && isNumeric(2) && isNumeric(3))
-        {
-            int teamIndex = this.getInt(2);
-            int pokemonIndex = this.getInt(3);
+        //p!team set index number
+        boolean set = this.msg.length == 4 && this.msg[1].equals("set") && isNumeric(2) && isNumeric(3);
+        //p!team add number
+        boolean add = this.msg.length == 3 && this.msg[1].equals("add") && isNumeric(2);
 
-            if((teamIndex < 1 || teamIndex > MAX_TEAM_SIZE) || (pokemonIndex < 1 || pokemonIndex > this.playerData.getPokemonList().length()))
+        if(set || add)
+        {
+            int teamIndex = add ? MAX_TEAM_SIZE : this.getInt(2);
+            int pokemonIndex = this.getInt(add ? 2 : 3);
+
+            if((teamIndex < 1 || (set && teamIndex > MAX_TEAM_SIZE)) || (pokemonIndex < 1 || pokemonIndex > this.playerData.getPokemonList().length()))
             {
                 this.embed.setDescription(CommandInvalid.getShort());
+                return this;
+            }
+            else if(add && this.playerData.getTeam().length() == MAX_TEAM_SIZE)
+            {
+                this.embed.setDescription("Your team is full! Use p!team set to change certain slots!");
                 return this;
             }
 
