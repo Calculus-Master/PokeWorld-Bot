@@ -6,13 +6,11 @@ import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.DuelHelper;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
-import com.calculusmaster.pokecord.game.TeamDuel;
+import com.calculusmaster.pokecord.game.Duel;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-
-import java.io.IOException;
 
 public class CommandUse extends Command
 {
@@ -30,7 +28,7 @@ public class CommandUse extends Command
             return this;
         }
 
-        TeamDuel d = DuelHelper.instance(this.player.getId());
+        Duel d = DuelHelper.instance(this.player.getId());
 
         if(d.hasPlayerSubmittedMove(this.player.getId()))
         {

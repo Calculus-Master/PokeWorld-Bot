@@ -25,7 +25,7 @@ public class Move
     private Category category;
     private int power;
     private int accuracy;
-    private boolean isZMove;
+    public boolean isZMove;
     private int priority;
     private double damageMultiplier;
 
@@ -109,7 +109,7 @@ public class Move
     public static String simpleDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         return move.getDamageResult(opponent, damage);
     }

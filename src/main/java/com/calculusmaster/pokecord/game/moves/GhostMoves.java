@@ -25,7 +25,11 @@ public class GhostMoves
         if(user.isType(Type.GHOST))
         {
             opponent.addStatusCondition(StatusCondition.CURSED);
-            return opponent.getName() + " is cursed!";
+
+            int curseDamage = user.getStat(Stat.HP) / 2;
+            user.damage(curseDamage);
+
+            return user.getName() + " sacrificed " + curseDamage + " HP to curse " + opponent.getName() + "!";
         }
         else
         {
@@ -68,7 +72,7 @@ public class GhostMoves
         user.setCrit(3);
         int damage = move.getDamage(user, opponent);
         user.setCrit(1);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         return move.getDamageResult(opponent, damage);
     }
@@ -102,7 +106,7 @@ public class GhostMoves
 
     public String NightShade(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.damage(user.getLevel(), duel);
+        opponent.damage(user.getLevel());
         return move.getDamageResult(opponent, user.getLevel());
     }
 

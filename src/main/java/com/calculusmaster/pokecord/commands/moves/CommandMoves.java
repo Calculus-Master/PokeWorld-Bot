@@ -20,6 +20,12 @@ public class CommandMoves extends Command
         Pokemon selected = this.playerData.getSelectedPokemon();
         boolean inDuel = DuelHelper.isInDuel(this.player.getId());
 
+        if(inDuel)
+        {
+            Duel d = DuelHelper.instance(this.player.getId());
+            selected = d.getPlayers()[d.indexOf(this.player.getId())].active;
+        }
+
         StringBuilder movesList = new StringBuilder().append("**Learned Moves: **\n");
         for(int i = 0; i < 4; i++) movesList.append("Move " + (i + 1) + ": " + selected.getLearnedMoves().get(i) + "\n");
 

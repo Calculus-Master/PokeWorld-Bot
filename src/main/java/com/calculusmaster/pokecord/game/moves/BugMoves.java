@@ -14,7 +14,7 @@ public class BugMoves
     public String SilverWind(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         if(new Random().nextInt(100) < 10)
         {
@@ -32,7 +32,7 @@ public class BugMoves
     public String BugBuzz(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         if(new Random().nextInt(100) < 10)
         {
@@ -110,7 +110,7 @@ public class BugMoves
             }
         }
 
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         return move.getDamageResult(opponent, damage) + " Pin Missile hit " + times + " time" + (times > 1 ? "s!" : "!");
     }
@@ -118,7 +118,7 @@ public class BugMoves
     public String FellStinger(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         if(damage > user.getHealth())
         {
@@ -132,7 +132,7 @@ public class BugMoves
     public String LeechLife(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
         user.heal(damage / 2);
 
         return move.getDamageResult(opponent, damage) + " " + user.getName() + " healed " + (damage / 2) + " HP!";

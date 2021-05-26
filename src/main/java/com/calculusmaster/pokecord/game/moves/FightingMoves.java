@@ -48,6 +48,8 @@ public class FightingMoves
 
     public String Detect(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        duel.data(user.getUUID()).detectUsed = true;
+
         return user.getName() + " is now protected!";
     }
 

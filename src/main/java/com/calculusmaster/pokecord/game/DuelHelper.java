@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class DuelHelper
 {
-    public static final List<TeamDuel> DUELS = new ArrayList<>();
+    public static final List<Duel> DUELS = new ArrayList<>();
     public static final String BACKGROUND = "https://cutewallpaper.org/21/pokemon-battle-background/Battle-backgrounds-for-Pokemon-Showdown-Smogon-Forums.jpg";
 
     public static boolean isInDuel(String id)
@@ -20,7 +20,7 @@ public class DuelHelper
         return DUELS.stream().anyMatch(d -> d.hasPlayer(id));
     }
 
-    public static TeamDuel instance(String id)
+    public static Duel instance(String id)
     {
         if(id.chars().allMatch(Character::isDigit)) return DUELS.stream().filter(d -> d.hasPlayer(id)).collect(Collectors.toList()).get(0);
         else return DUELS.stream().filter(d -> d.getPlayers()[0].active.getUUID().equals(id) || d.getPlayers()[1].active.getUUID().equals(id)).collect(Collectors.toList()).get(0);
@@ -29,7 +29,7 @@ public class DuelHelper
     public static void delete(String id)
     {
         int index = -1;
-        for(TeamDuel d : DUELS) if(d.hasPlayer(id)) index = DUELS.indexOf(d);
+        for(Duel d : DUELS) if(d.hasPlayer(id)) index = DUELS.indexOf(d);
         DUELS.remove(index);
     }
 
@@ -45,14 +45,51 @@ public class DuelHelper
     public static class DuelPokemon
     {
         public String UUID;
+        public boolean canUseMove;
+        public int lastDamageTaken;
+        public int statImmuneTurns;
+        public boolean recharge;
+
         public int asleepTurns;
         public int boundTurns;
+
+        public boolean defenseCurlUsed;
+        public int rolloutTurns;
+        public int iceballTurns;
+        public boolean rageUsed;
+        public int magnetRiseTurns;
+        public int tauntTurns;
+        public boolean detectUsed;
+        public boolean chargeUsed;
+        public boolean futureSightUsed;
+        public int futureSightTurns;
 
         public DuelPokemon(String UUID)
         {
             this.UUID = UUID;
+            this.setDefaults();
+        }
+
+        public void setDefaults()
+        {
+            this.canUseMove = true;
+            this.lastDamageTaken = 0;
+            this.statImmuneTurns = 0;
+            this.recharge = false;
+
             this.asleepTurns = 0;
             this.boundTurns = 0;
+
+            this.defenseCurlUsed = false;
+            this.rolloutTurns = 0;
+            this.iceballTurns = 0;
+            this.rageUsed = false;
+            this.magnetRiseTurns = 0;
+            this.tauntTurns = 0;
+            this.detectUsed = false;
+            this.chargeUsed = false;
+            this.futureSightUsed = false;
+            this.futureSightTurns = 0;
         }
     }
 

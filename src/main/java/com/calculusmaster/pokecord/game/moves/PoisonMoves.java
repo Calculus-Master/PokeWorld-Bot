@@ -22,7 +22,7 @@ public class PoisonMoves
 
         if(opponent.hasStatusCondition(StatusCondition.POISONED)) damage *= 2;
 
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         return move.getDamageResult(opponent, damage);
     }
@@ -41,7 +41,7 @@ public class PoisonMoves
     public String PoisonJab(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         if(new Random().nextInt(100) < 30)
         {

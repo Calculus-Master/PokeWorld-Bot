@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.enums.elements.Weather;
 
 import java.util.Random;
 
@@ -17,6 +18,9 @@ public class RockMoves
 
     public String Sandstorm(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        duel.weather = Weather.SANDSTORM;
+        duel.weatherTurns = 5;
+
         return user.getName() + " caused a sandstorm!";
     }
 
@@ -84,7 +88,7 @@ public class RockMoves
             }
         }
 
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         return move.getDamageResult(opponent, damage) + " Rock Blast hit " + times + " time" + (times > 1 ? "s!" : "!");
     }
@@ -115,7 +119,7 @@ public class RockMoves
         user.setCrit(3);
 
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         user.setCrit(1);
 

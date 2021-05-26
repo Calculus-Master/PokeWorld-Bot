@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.enums.elements.Weather;
 
 import java.util.Random;
 
@@ -12,6 +13,9 @@ public class IceMoves
 {
     public String Hail(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        duel.weather = Weather.HAIL;
+        duel.weatherTurns = 5;
+
         return user.getName() + " summoned a hailstorm!";
     }
 
@@ -66,7 +70,7 @@ public class IceMoves
             }
         }
 
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         return move.getDamageResult(opponent, damage) + " Icicle Spear hit " + times + " time" + (times > 1 ? "s!" : "!");
     }
@@ -95,7 +99,7 @@ public class IceMoves
         else
         {
             int damage = opponent.getHealth();
-            opponent.damage(damage, duel);
+            opponent.damage(damage);
 
             return move.getDamageResult(opponent, damage);
         }
@@ -109,7 +113,7 @@ public class IceMoves
     public String Mist(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         user.setStatImmune(true);
-        duel.statImmuneTurns[duel.turn] = 3;
+        duel.data(user.getUUID()).statImmuneTurns = 3;
 
         return user.getName() + " is immune to any stat changes for 3 turns!";
     }

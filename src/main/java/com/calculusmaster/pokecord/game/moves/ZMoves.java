@@ -172,7 +172,7 @@ public class ZMoves
         user.setCrit(12);
 
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         user.setCrit(12);
 
@@ -197,7 +197,7 @@ public class ZMoves
     public String GuardianOfAlola(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = opponent.getStat(Stat.HP) * 3 / 4;
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         return move.getDamageResult(opponent, damage);
     }

@@ -15,7 +15,7 @@ public class GrassMoves
         user.setCrit(3);
 
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         user.setCrit(1);
 
@@ -25,7 +25,7 @@ public class GrassMoves
     public String VineWhip(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         return move.getDamageResult(opponent, damage);
     }
@@ -39,7 +39,7 @@ public class GrassMoves
             int hpGain = opponent.getStat(Stat.HP) / 8;
 
             user.heal(hpGain);
-            opponent.damage(hpGain, duel);
+            opponent.damage(hpGain);
 
             return user.getName() + " leeched " + hpGain + " HP from " + opponent.getName() + "!";
         }
@@ -56,7 +56,7 @@ public class GrassMoves
     public String SeedBomb(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         return move.getDamageResult(opponent, damage);
     }
@@ -65,7 +65,7 @@ public class GrassMoves
     {
         int healAmount = user.getStat(Stat.HP);
 
-        switch (duel.getDuelWeather())
+        switch (duel.weather)
         {
             case CLEAR -> healAmount /= 2;
             case HARSH_SUNLIGHT -> healAmount = healAmount * 2 / 3;
@@ -89,18 +89,13 @@ public class GrassMoves
 
     public String SolarBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(duel.getDuelWeather().equals(Weather.RAIN) || duel.getDuelWeather().equals(Weather.HAIL) || duel.getDuelWeather().equals(Weather.SANDSTORM)) move.setPower(move.getPower() / 2);
-
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
-
-        return move.getDamageResult(opponent, damage);
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String PetalBlizzard(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         return move.getDamageResult(opponent, damage);
     }
@@ -108,7 +103,7 @@ public class GrassMoves
     public String PetalDance(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         opponent.addStatusCondition(StatusCondition.CONFUSED);
 

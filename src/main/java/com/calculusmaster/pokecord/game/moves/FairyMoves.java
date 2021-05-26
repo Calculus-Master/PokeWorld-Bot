@@ -9,7 +9,7 @@ public class FairyMoves
 {
     public String Moonlight(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int HP = switch(duel.getDuelWeather())
+        int HP = switch(duel.weather)
                 {
                     case CLEAR -> user.getStat(Stat.HP) / 2;
                     case HARSH_SUNLIGHT -> user.getStat(Stat.HP) * 2 / 3;

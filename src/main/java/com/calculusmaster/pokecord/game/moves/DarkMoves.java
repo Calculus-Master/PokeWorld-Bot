@@ -6,8 +6,6 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 
-import java.util.Random;
-
 public class DarkMoves
 {
     public String Bite(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -22,13 +20,14 @@ public class DarkMoves
 
     public String Assurance(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(duel.lastDamage > 0) move.setPower(move.getPower() * 2);
+        if(duel.data(user.getUUID()).lastDamageTaken > 0) move.setPower(move.getPower() * 2);
 
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String Taunt(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        duel.data(user.getUUID()).tauntTurns = 3;
         return opponent.getName() + " is now unable to use Status moves for 3 turns!";
     }
 
@@ -61,7 +60,7 @@ public class DarkMoves
         opponent.changeStatMultiplier(Stat.ATK, -3);
         opponent.changeStatMultiplier(Stat.SPATK, -3);
 
-        user.damage(user.getHealth(), duel);
+        user.damage(user.getHealth());
 
         return user.getName() + " fainted and " + opponent.getName() + "'s Attack and Special Attack lowered by 3 stages!";
     }
@@ -71,7 +70,7 @@ public class DarkMoves
         user.setCrit(3);
 
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         user.setCrit(1);
 

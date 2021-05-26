@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game.moves;
 
 import com.calculusmaster.pokecord.game.Duel;
+import com.calculusmaster.pokecord.game.DuelHelper;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
@@ -12,8 +13,8 @@ public class ElectricMoves
 {
     public String ElectricTerrain(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.electricTerrainActive = true;
-        duel.electricTerrainTurns = 5;
+        duel.terrain = DuelHelper.Terrain.ELECRIC_TERRAIN;
+        duel.terrainTurns = 5;
 
         return user.getName() + " generated an Electric Field!";
     }
@@ -68,6 +69,8 @@ public class ElectricMoves
 
     public String MagnetRise(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        duel.data(user.getUUID()).magnetRiseTurns = 5;
+
         return user.getName() + " is now immune to Ground type moves for 5 turns!";
     }
 
@@ -96,6 +99,8 @@ public class ElectricMoves
     {
         user.changeStatMultiplier(Stat.SPDEF, 1);
 
+        duel.data(user.getUUID()).chargeUsed = true;
+
         return user.getName() + "'s Special Defense was raised by 1 stage! " + user.getName() + " is charged up!";
     }
 
@@ -104,8 +109,8 @@ public class ElectricMoves
         int damage = move.getDamage(user, opponent);
         boolean paralyze = new Random().nextInt(100) < 10;
 
-        opponent.damage(damage, duel);
-        user.damage(damage / 3, duel);
+        opponent.damage(damage);
+        user.damage(damage / 3);
 
         if(paralyze) opponent.addStatusCondition(StatusCondition.PARALYZED);
 

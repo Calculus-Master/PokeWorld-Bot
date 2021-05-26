@@ -13,7 +13,7 @@ public class FlyingMoves
     public String AirSlash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         if(new Random().nextInt(100) < 30)
         {

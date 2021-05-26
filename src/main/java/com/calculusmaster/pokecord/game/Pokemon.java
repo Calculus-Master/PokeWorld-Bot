@@ -409,7 +409,7 @@ public class Pokemon
         this.health = num;
     }
 
-    public void damage(int amount, Duel duel)
+    public void damage(int amount)
     {
         this.health -= amount;
 
@@ -422,11 +422,6 @@ public class Pokemon
 
         DuelHelper.instance(this.getUUID()).addDamage(amount, this.getUUID());
         //if(!duel.getPokemon()[duel.turn].getUUID().equals(this.getUUID())) duel.lastDamage = amount;
-    }
-
-    public void damage(int amount)
-    {
-        this.health -= amount;
     }
 
     public void heal(int amount)

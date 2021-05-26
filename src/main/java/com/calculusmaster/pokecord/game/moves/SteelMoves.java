@@ -19,7 +19,7 @@ public class SteelMoves
     public String FlashCannon(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         if(new Random().nextInt(100) < 10)
         {
@@ -32,8 +32,8 @@ public class SteelMoves
 
     public String MetalBurst(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = (int)(duel.lastDamage * 1.5);
-        opponent.damage(damage, duel);
+        int damage = (int)(duel.data(user.getUUID()).lastDamageTaken * 1.5);
+        opponent.damage(damage);
 
         return move.getDamageResult(opponent, damage);
     }
@@ -41,7 +41,7 @@ public class SteelMoves
     public String MetalClaw(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         if(new Random().nextInt(100) < 10)
         {

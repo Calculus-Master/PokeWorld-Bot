@@ -22,7 +22,7 @@ public class PsychicMoves
     public String Psyshock(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         return move.getDamageResult(opponent, damage);
     }
@@ -30,7 +30,7 @@ public class PsychicMoves
     public String Confusion(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         if(new Random().nextInt(100) < 10)
         {
@@ -98,7 +98,7 @@ public class PsychicMoves
         user.setCrit(3);
 
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         user.setCrit(1);
 
@@ -116,7 +116,7 @@ public class PsychicMoves
         {
             int damage = move.getDamage(user, opponent);
 
-            opponent.damage(damage, duel);
+            opponent.damage(damage);
             user.heal(damage / 2);
 
             return move.getDamageResult(opponent, damage) + " " + user.getName() + " healed for " + (damage / 2) + " HP!";
@@ -126,6 +126,8 @@ public class PsychicMoves
 
     public String FutureSight(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        duel.data(user.getUUID()).futureSightUsed = true;
+        duel.data(user.getUUID()).futureSightTurns = 2;
         return "The move will strike in 2 turns!";
     }
 
@@ -141,7 +143,7 @@ public class PsychicMoves
         if(opponent.isType(Type.DARK)) return move.getNoEffectResult(opponent);
         else
         {
-            opponent.damage(damage, duel);
+            opponent.damage(damage);
 
             return move.getDamageResult(opponent, damage);
         }

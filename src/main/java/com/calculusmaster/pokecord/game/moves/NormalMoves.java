@@ -26,7 +26,7 @@ public class NormalMoves
 
     public String Growth(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        boolean harshSun = duel.getDuelWeather().equals(Weather.HARSH_SUNLIGHT);
+        boolean harshSun = duel.weather.equals(Weather.HARSH_SUNLIGHT);
         user.changeStatMultiplier(Stat.ATK, harshSun ? 2 : 1);
         user.changeStatMultiplier(Stat.SPATK, harshSun ? 2 : 1);
         return "It increased " + user.getName() + "'s Attack and Special Attack by " + (harshSun ? 2 : 1) + " stage" + (harshSun ? "s" : "") + "!";
@@ -67,7 +67,7 @@ public class NormalMoves
         move.setType(t);
 
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         return move.getDamageResult(opponent, damage) + "Hidden Power's type was " + Global.normalCase(t.toString()) + "! ";
     }
@@ -90,8 +90,8 @@ public class NormalMoves
     {
         int damage = move.getDamage(user, opponent);
 
-        opponent.damage(damage, duel);
-        user.damage(damage / 4, duel);
+        opponent.damage(damage);
+        user.damage(damage / 4);
 
         return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 4);
     }
@@ -106,8 +106,8 @@ public class NormalMoves
     {
         int damage = move.getDamage(user, opponent);
 
-        opponent.damage(damage, duel);
-        user.damage(damage / 3, duel);
+        opponent.damage(damage);
+        user.damage(damage / 3);
 
         return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 3);
     }
@@ -115,7 +115,7 @@ public class NormalMoves
     public String Scratch(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         return move.getDamageResult(opponent, damage);
     }
@@ -137,7 +137,7 @@ public class NormalMoves
     {
         user.setCrit(3);
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
         user.setCrit(1);
 
         return move.getDamageResult(opponent, damage);
@@ -153,7 +153,7 @@ public class NormalMoves
     public String RapidSpin(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         user.changeStatMultiplier(Stat.SPD, 1);
 
@@ -169,7 +169,7 @@ public class NormalMoves
     public String SkullBash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         user.changeStatMultiplier(Stat.DEF, 1);
 
@@ -190,6 +190,8 @@ public class NormalMoves
     public String DefenseCurl(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         user.changeStatMultiplier(Stat.DEF, 1);
+
+        duel.data(user.getUUID()).defenseCurlUsed = true;
 
         return user.getName() + "'s Defense rose by 1 stage!";
     }
@@ -261,13 +263,14 @@ public class NormalMoves
             }
         }
 
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         return move.getDamageResult(opponent, damage) + " Icicle Spear hit " + times + " time" + (times > 1 ? "s!" : "!");
     }
 
     public String Rage(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        duel.data(user.getUUID()).rageUsed = true;
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
@@ -284,7 +287,7 @@ public class NormalMoves
 
         if(damage > 0)
         {
-            opponent.damage(damage, duel);
+            opponent.damage(damage);
             return move.getDamageResult(opponent, damage);
         }
         else return move.getNothingResult();
@@ -324,7 +327,7 @@ public class NormalMoves
         if(opponent.isType(Type.GHOST)) return move.getNoEffectResult(opponent);
         else
         {
-            opponent.damage(20, duel);
+            opponent.damage(20);
 
             return move.getDamageResult(opponent, 20);
         }
@@ -454,7 +457,7 @@ public class NormalMoves
 
     public String MorningSun(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int HP = switch(duel.getDuelWeather())
+        int HP = switch(duel.weather)
                 {
                     case CLEAR -> user.getStat(Stat.HP) / 2;
                     case HARSH_SUNLIGHT -> user.getStat(Stat.HP) * 2 / 3;

@@ -4,12 +4,12 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.DuelHelper;
-import com.calculusmaster.pokecord.game.TeamDuel;
+import com.calculusmaster.pokecord.game.Duel;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 /**Temporary, will replace CommandDuel if complete
- * @see com.calculusmaster.pokecord.game.TeamDuel
+ * @see Duel
  */
 public class CommandDuel extends Command
 {
@@ -41,7 +41,7 @@ public class CommandDuel extends Command
         {
             if(accept)
             {
-                TeamDuel d = DuelHelper.instance(this.player.getId());
+                Duel d = DuelHelper.instance(this.player.getId());
 
                 if(d.getSize() > this.playerData.getTeam().length())
                 {
@@ -110,7 +110,7 @@ public class CommandDuel extends Command
             return this;
         }
 
-        TeamDuel d = TeamDuel.create(this.player.getId(), opponentID, size, this.event);
+        Duel d = Duel.create(this.player.getId(), opponentID, size, this.event);
 
         this.event.getChannel().sendMessage("<@" + opponentID + "> ! " + this.player.getName() + " has challenged you to a duel! Type `p!duel accept` to accept!").queue();
         this.embed = null;

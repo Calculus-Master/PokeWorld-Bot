@@ -13,7 +13,7 @@ public class FireMoves
     public String Ember(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         if((!opponent.getType()[0].equals(Type.FIRE) && !opponent.getType()[1].equals(Type.FIRE)) && new Random().nextInt(100) < 10)
         {
@@ -27,7 +27,7 @@ public class FireMoves
     public String FireFang(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         String burned = "";
         String flinched = "";
@@ -50,7 +50,7 @@ public class FireMoves
     public String FlameBurst(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         return move.getDamageResult(opponent, damage);
     }
@@ -64,7 +64,7 @@ public class FireMoves
     {
         //TODO: Does damage per turn
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         return move.getDamageResult(opponent, damage);
     }
@@ -72,7 +72,7 @@ public class FireMoves
     public String Inferno(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
         opponent.addStatusCondition(StatusCondition.BURNED);
 
@@ -87,9 +87,9 @@ public class FireMoves
     public String FlareBlitz(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
-        opponent.damage(damage, duel);
+        opponent.damage(damage);
 
-        user.damage(damage / 3, duel);
+        user.damage(damage / 3);
 
         if((!opponent.getType()[0].equals(Type.FIRE) && !opponent.getType()[1].equals(Type.FIRE)) && new Random().nextInt(100) < 10)
         {
