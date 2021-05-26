@@ -5,8 +5,6 @@ import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.config.CommandPrefix;
 import com.calculusmaster.pokecord.commands.config.CommandSpawnChannel;
 import com.calculusmaster.pokecord.commands.duel.CommandDuel;
-import com.calculusmaster.pokecord.commands.duel.CommandTeamDuel;
-import com.calculusmaster.pokecord.commands.duel.CommandTeamUse;
 import com.calculusmaster.pokecord.commands.duel.CommandUse;
 import com.calculusmaster.pokecord.commands.economy.*;
 import com.calculusmaster.pokecord.commands.misc.CommandHelp;
@@ -20,22 +18,12 @@ import com.calculusmaster.pokecord.game.enums.items.XPBooster;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.mongodb.client.model.Filters;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.OffsetDateTime;
 import java.util.*;
 
@@ -137,19 +125,11 @@ public class Listener extends ListenerAdapter
             }
             else if(Command.DUEL.contains(msg[0]))
             {
-                try {
-                    c = new CommandDuel(event, msg).runCommand();
-                } catch (IOException e) {
-                    c = new CommandInvalid(event, msg).runCommand();
-                }
+                c = new CommandDuel(event, msg).runCommand();
             }
             else if(Command.USE.contains(msg[0]))
             {
-                try {
-                    c = new CommandUse(event, msg).runCommand();
-                } catch(IOException e) {
-                    c = new CommandInvalid(event, msg).runCommand();
-                }
+                c = new CommandUse(event, msg).runCommand();
             }
             else if(Command.SHOP.contains(msg[0]))
             {
@@ -206,22 +186,6 @@ public class Listener extends ListenerAdapter
             else if(Command.TEAM.contains(msg[0]))
             {
                 c = new CommandTeam(event, msg).runCommand();
-            }
-            else if(msg[0].equals("teamduel"))
-            {
-                try {
-                    c = new CommandTeamDuel(event, msg).runCommand();
-                } catch (Exception e) {
-                    c = new CommandInvalid(event, msg).runCommand();
-                }
-            }
-            else if(msg[0].equals("teamuse"))
-            {
-                try {
-                    c = new CommandTeamUse(event, msg).runCommand();
-                } catch (IOException e) {
-                    c = new CommandInvalid(event, msg).runCommand();
-                }
             }
             else if(msg[0].equals("ness"))
             {

@@ -2,64 +2,88 @@ package com.calculusmaster.pokecord.commands.duel;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
-import com.calculusmaster.pokecord.game.Duel;
+import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
+import com.calculusmaster.pokecord.game.DuelHelper;
+import com.calculusmaster.pokecord.game.TeamDuel;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
-
+/**Temporary, will replace CommandDuel if complete
+ * @see com.calculusmaster.pokecord.game.TeamDuel
+ */
 public class CommandDuel extends Command
 {
     public CommandDuel(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg, "duel <player:accept>");
+        super(event, msg);
     }
 
+    //p!duel @player <size>
+
     @Override
-    public Command runCommand() throws IOException
+    public Command runCommand()
     {
-        if(this.msg.length != 2)
+        if(this.msg.length != 3 && this.msg.length != 2)
         {
             this.embed.setDescription(CommandInvalid.getShort());
             return this;
         }
-        else if(Duel.isInDuel(this.player.getId()) && (this.msg[1].toLowerCase().equals("accept") || this.msg[1].toLowerCase().equals("deny")))
+        else if(this.msg.length == 3 && (!isNumeric(2) || this.getInt(2) > CommandTeam.MAX_TEAM_SIZE || this.getInt(2) > this.playerData.getTeam().length()))
         {
-            boolean accept = this.msg[1].toLowerCase().equals("accept");
+            this.embed.setDescription("Error with size. Either it isn't a number, larger than the max of " + CommandTeam.MAX_TEAM_SIZE + ", or larger than your team's size!");
+            return this;
+        }
+
+        boolean accept = this.msg[1].equals("accept");
+        boolean deny = this.msg[1].equals("deny");
+
+        if(DuelHelper.isInDuel(this.player.getId()) && (accept || deny))
+        {
             if(accept)
             {
-                Duel d = Duel.getInstance(this.player.getId());
-                d.start();
-                d.sendInitialTurnEmbed(this.event);
+                TeamDuel d = DuelHelper.instance(this.player.getId());
+
+                if(d.getSize() > this.playerData.getTeam().length())
+                {
+                    this.embed.setDescription("Your team needs to contain at least " + d.getSize() + " to participate! Deleting duel request!");
+                    DuelHelper.delete(this.player.getId());
+                    return this;
+                }
+
+                d.sendTurnEmbed();
                 this.embed = null;
             }
             else
             {
-                Duel.remove(this.player.getId());
-                this.embed.setDescription(this.player.getName() + " denied the duel!");
+                DuelHelper.delete(this.player.getId());
+                this.embed.setDescription(this.player.getName() + " denied the duel request!");
             }
 
-            //Duel.printAllDuels();
             return this;
         }
-        else if(Duel.isInDuel(this.player.getId()) && Duel.getInstance(this.player.getId()).getStatus().equals(Duel.DuelStatus.WAITING) && this.msg[1].equals("cancel"))
-        {
-            Duel.remove(this.player.getId());
 
+        int size = 3;
+
+        if(this.msg.length == 3) size = this.getInt(2);
+
+        //Player wants to start a duel with the mention, check all necessary things
+        if(DuelHelper.isInDuel(this.player.getId()) && this.msg[1].equals("cancel") && DuelHelper.instance(this.player.getId()).getStatus().equals(DuelHelper.DuelStatus.WAITING))
+        {
+            DuelHelper.delete(this.player.getId());
             this.embed.setDescription("Duel canceled!");
             return this;
         }
-        else if(Duel.isInDuel(this.player.getId()))
+        else if(this.msg[1].equals("cancel")) return this;
+
+        if(DuelHelper.isInDuel(this.player.getId()))
         {
-            this.embed.setDescription("You are already in a duel!");
+            this.embed.setDescription("You're already in a duel!");
             return this;
         }
 
         if(this.mentions.size() == 0)
         {
-            this.embed.setDescription("You need to mention someone to challenge them to a duel!");
+            this.embed.setDescription("You need to mention someone to duel them!");
             return this;
         }
 
@@ -70,7 +94,12 @@ public class CommandDuel extends Command
             this.embed.setDescription(this.event.getGuild().getMemberById(opponentID).getEffectiveName() + " is not registered! Use p!start <starter> to begin!");
             return this;
         }
-        else if(Duel.isInDuel(opponentID))
+        else if(new PlayerDataQuery(opponentID).getTeam() == null)
+        {
+            this.embed.setDescription(this.mentions.get(0).getEffectiveName() + " needs to create a Pokemon team!");
+            return this;
+        }
+        else if(DuelHelper.isInDuel(opponentID))
         {
             this.embed.setDescription(this.event.getGuild().getMemberById(opponentID).getEffectiveName() + " is already in a Duel!");
             return this;
@@ -80,43 +109,11 @@ public class CommandDuel extends Command
             this.embed.setDescription("You cannot duel yourself!");
             return this;
         }
-        else
-        {
-            Duel d = Duel.initiate(this.player.getId(), opponentID, this.event);
 
-            Timer timer = new Timer();
-            timer.schedule(new CancelTask(this.player.getId(), this.event, d.getDuelID()), 3 * 60 * 1000);
+        TeamDuel d = TeamDuel.create(this.player.getId(), opponentID, size, this.event);
 
-            this.event.getChannel().sendMessage("<@" + opponentID + "> ! " + this.player.getName() + " has challenged you to a duel! Type `p!duel accept` to accept!").queue();
-            this.embed = null;
-            d.setDuelImage();
-            return this;
-        }
-    }
-
-    static class CancelTask extends TimerTask
-    {
-        private String id;
-        private MessageReceivedEvent event;
-        private String duelID;
-
-        CancelTask(String id, MessageReceivedEvent event, String duelID)
-        {
-            this.id = id;
-            this.event = event;
-            this.duelID = duelID;
-        }
-
-        @Override
-        public void run()
-        {
-            Duel d = Duel.isInDuel(this.id) ? Duel.getInstance(this.id) : null;
-
-            if(d != null && !d.getDuelID().equals(this.duelID) && d.getStatus().equals(Duel.DuelStatus.WAITING))
-            {
-                Duel.remove(this.id);
-                this.event.getChannel().sendMessage("<@" + this.id + ">: Duel request expired!").queue();
-            }
-        }
+        this.event.getChannel().sendMessage("<@" + opponentID + "> ! " + this.player.getName() + " has challenged you to a duel! Type `p!duel accept` to accept!").queue();
+        this.embed = null;
+        return this;
     }
 }

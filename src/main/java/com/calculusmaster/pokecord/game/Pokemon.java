@@ -420,8 +420,8 @@ public class Pokemon
         }
         else if(this.endure) this.endure = false;
 
-        //TODO: Instead of making the parameter duel, just search the hashmap
-        if(!duel.getPokemon()[duel.turn].getUUID().equals(this.getUUID())) duel.lastDamage = amount;
+        DuelHelper.instance(this.getUUID()).addDamage(amount, this.getUUID());
+        //if(!duel.getPokemon()[duel.turn].getUUID().equals(this.getUUID())) duel.lastDamage = amount;
     }
 
     public void damage(int amount)

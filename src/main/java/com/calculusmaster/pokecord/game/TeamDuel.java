@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game;
 
+import com.calculusmaster.pokecord.commands.duel.CommandDuel;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.XPBooster;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -18,7 +19,7 @@ import java.util.List;
 import static com.calculusmaster.pokecord.game.DuelHelper.*;
 
 /**Temporary, will replace Duel if complete
- * @see com.calculusmaster.pokecord.commands.duel.CommandTeamDuel
+ * @see CommandDuel
  */
 public class TeamDuel
 {
@@ -234,6 +235,11 @@ public class TeamDuel
         {
             turnHandler();
         }
+    }
+
+    public void addDamage(int damage, String UUID)
+    {
+        //TODO: Pokemon Duel-Specific Data Objects
     }
 
     public boolean hasPlayerSubmittedMove(String id)
