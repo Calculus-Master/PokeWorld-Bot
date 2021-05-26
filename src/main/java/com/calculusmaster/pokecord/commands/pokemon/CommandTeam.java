@@ -52,10 +52,18 @@ public class CommandTeam extends Command
             StringBuilder team = new StringBuilder();
 
             Pokemon p;
-            for(int i = 0; i < this.playerData.getTeam().length(); i++)
+            for(int i = 0; i < MAX_TEAM_SIZE; i++)
             {
-                p = Pokemon.buildCore(this.playerData.getTeam().getString(i), -1);
-                team.append(i + 1).append(": ").append("Level ").append(p.getLevel()).append(" ").append(p.getName()).append("\n");
+                team.append(i + 1).append(": ");
+
+                if(i < this.playerData.getTeam().length())
+                {
+                    p = Pokemon.buildCore(this.playerData.getTeam().getString(i), -1);
+                    team.append("Level ").append(p.getLevel()).append(" ").append(p.getName());
+                }
+                else team.append("None");
+
+                team.append("\n");
             }
 
             this.embed.setDescription(team.toString());

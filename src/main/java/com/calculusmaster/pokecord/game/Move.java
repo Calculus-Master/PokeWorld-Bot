@@ -26,6 +26,7 @@ public class Move
     private int power;
     private int accuracy;
     private boolean isZMove;
+    private int priority;
 
     private boolean hitCrit;
 
@@ -50,6 +51,7 @@ public class Move
         this.power = power;
         this.accuracy = 100;
         this.isZMove = true;
+        this.setPriority();
     }
 
     public String logic(Pokemon user, Pokemon opponent, Duel duel)
@@ -292,6 +294,30 @@ public class Move
         this.accuracy = a;
     }
 
+    public void setPriority(int p)
+    {
+        this.priority = p;
+    }
+
+    public void setPriority()
+    {
+        this.priority = switch(this.getName())
+                {
+                    case "Helping Hand" -> 5;
+                    case "Baneful Bunker", "Detect", "Endure", "King's Shield", "Magic Coat", "Protect", "Spiky Shield", "Snatch" -> 4;
+                    case "Crafty Shield", "Fake Out", "Quick Guard", "Wide Guard", "Spotlight" -> 3;
+                    case "Ally Switch", "Extreme Speed", "Feint", "First Impression", "Follow Me", "Rage Powder" -> 2;
+                    case "Accelerock", "Aqua Jet", "Baby Doll Eyes", "Bide", "Bullet Punch", "Ice Shard", "Iron Deluge", "Mach Punch", "Powder", "Quick Attack", "Shadow Sneak", "Sucker Punch", "Vacuum Wave", "Water Shuriken" -> 1;
+                    case "Vital Throw" -> -1;
+                    case "Beak Blast", "Focus Punch", "Shell Trap" -> -3;
+                    case "Avalanche", "Revenge" -> -4;
+                    case "Counter", "Mirror Coat" -> -5;
+                    case "Circle Throw", "Dragon Tail", "Roar", "Whirlwind" -> -6;
+                    case "Trick Room" -> -7;
+                    default -> 0;
+                };
+    }
+
     //Getters
 
     public String getName()
@@ -322,6 +348,11 @@ public class Move
     public String getInfo()
     {
         return this.moveData.info;
+    }
+
+    public int getPriority()
+    {
+        return this.priority;
     }
 
     @Override

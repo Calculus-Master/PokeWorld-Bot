@@ -424,6 +424,11 @@ public class Pokemon
         if(!duel.getPokemon()[duel.turn].getUUID().equals(this.getUUID())) duel.lastDamage = amount;
     }
 
+    public void damage(int amount)
+    {
+        this.health -= amount;
+    }
+
     public void heal(int amount)
     {
         this.health = Math.min(this.getStat(Stat.HP), this.health + amount);
@@ -979,5 +984,14 @@ public class Pokemon
     public double getWeight()
     {
         return Double.parseDouble(this.genericJSON.getString("info").split("-")[2]);
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pokemon pokemon = (Pokemon) o;
+        return UUID.equals(pokemon.UUID);
     }
 }

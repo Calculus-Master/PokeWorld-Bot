@@ -5,6 +5,8 @@ import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.config.CommandPrefix;
 import com.calculusmaster.pokecord.commands.config.CommandSpawnChannel;
 import com.calculusmaster.pokecord.commands.duel.CommandDuel;
+import com.calculusmaster.pokecord.commands.duel.CommandTeamDuel;
+import com.calculusmaster.pokecord.commands.duel.CommandTeamUse;
 import com.calculusmaster.pokecord.commands.duel.CommandUse;
 import com.calculusmaster.pokecord.commands.economy.*;
 import com.calculusmaster.pokecord.commands.misc.CommandHelp;
@@ -204,6 +206,22 @@ public class Listener extends ListenerAdapter
             else if(Command.TEAM.contains(msg[0]))
             {
                 c = new CommandTeam(event, msg).runCommand();
+            }
+            else if(msg[0].equals("teamduel"))
+            {
+                try {
+                    c = new CommandTeamDuel(event, msg).runCommand();
+                } catch (Exception e) {
+                    c = new CommandInvalid(event, msg).runCommand();
+                }
+            }
+            else if(msg[0].equals("teamuse"))
+            {
+                try {
+                    c = new CommandTeamUse(event, msg).runCommand();
+                } catch (IOException e) {
+                    c = new CommandInvalid(event, msg).runCommand();
+                }
             }
             else if(msg[0].equals("ness"))
             {
