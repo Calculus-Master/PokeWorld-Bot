@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.Duel;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
+import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -52,6 +53,13 @@ public class CommandUse extends Command
             if(d.data(d.indexOf(this.player.getId()) == 0 ? 1 : 0).thousandWavesUsed)
             {
                 this.event.getChannel().sendMessage(mention + "You are unable to swap out right now!").queue();
+                this.embed = null;
+                return this;
+            }
+
+            if(d.getPlayers()[d.indexOf(this.player.getId())].active.hasStatusCondition(StatusCondition.BOUND))
+            {
+                this.event.getChannel().sendMessage(mention + "You are unable to swap out right now because of the binding!").queue();
                 this.embed = null;
                 return this;
             }
