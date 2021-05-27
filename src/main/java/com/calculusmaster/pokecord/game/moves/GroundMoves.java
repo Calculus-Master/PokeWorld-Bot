@@ -57,11 +57,12 @@ public class GroundMoves
 
     public String ThousandArrows(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        //TODO: Secondary effect (raised pokemon become grounded)
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String ThousandWaves(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return Move.simpleDamageMove(user, opponent, duel, move) + " " + opponent.getName() + " cannot flee!";
     }
 }

@@ -64,6 +64,7 @@ public class DuelHelper
         public boolean futureSightUsed;
         public int futureSightTurns;
         public boolean lockOnUsed;
+        public boolean thousandWavesUsed;
 
         public DuelPokemon(String UUID)
         {
@@ -92,6 +93,7 @@ public class DuelHelper
             this.futureSightUsed = false;
             this.futureSightTurns = 0;
             this.lockOnUsed = false;
+            this.thousandWavesUsed = false;
         }
     }
 

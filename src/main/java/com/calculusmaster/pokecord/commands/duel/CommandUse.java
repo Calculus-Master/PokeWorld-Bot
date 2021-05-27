@@ -30,16 +30,18 @@ public class CommandUse extends Command
 
         Duel d = DuelHelper.instance(this.player.getId());
 
+        String mention = this.playerData.getMention() + ": ";
+
         if(d.hasPlayerSubmittedMove(this.player.getId()))
         {
-            this.event.getChannel().sendMessage("You already used a move!").queue();
+            this.event.getChannel().sendMessage(mention + "You already used a move!").queue();
             this.embed = null;
             return this;
         }
 
         if(d.getPlayers()[d.indexOf(this.player.getId())].active.isFainted() && !this.msg[1].equals("swap") && !d.isComplete())
         {
-            this.event.getChannel().sendMessage("Your pokemon has fainted! You have to swap to another!").queue();
+            this.event.getChannel().sendMessage(mention + "Your pokemon has fainted! You have to swap to another!").queue();
             this.embed = null;
             return this;
         }
@@ -47,6 +49,13 @@ public class CommandUse extends Command
         //Swap
         if(this.msg.length == 3 && this.msg[1].equals("swap") && this.isNumeric(2) && this.getInt(2) > 0 && this.getInt(2) < CommandTeam.MAX_TEAM_SIZE + 1)
         {
+            if(d.data(d.indexOf(this.player.getId()) == 0 ? 1 : 0).thousandWavesUsed)
+            {
+                this.event.getChannel().sendMessage(mention + "You are unable to swap out right now!").queue();
+                this.embed = null;
+                return this;
+            }
+
             d.submitMove(this.player.getId(), this.getInt(2));
             this.event.getMessage().delete().queue();
         }
@@ -56,14 +65,14 @@ public class CommandUse extends Command
         {
             if(this.playerData.getEquippedZCrystal() == null)
             {
-                this.event.getChannel().sendMessage(this.playerData.getMention() + ": You don't have an equipped Z-Crystal! Equip one with `p!equip`!").queue();
+                this.event.getChannel().sendMessage(mention + "You don't have an equipped Z-Crystal! Equip one with `p!equip`!").queue();
                 this.embed = null;
                 return this;
             }
 
             if(d.getPlayers()[d.indexOf(this.player.getId())].usedZMove)
             {
-                this.event.getChannel().sendMessage(this.playerData.getMention() + ": You have already used a Z-Move!").queue();
+                this.event.getChannel().sendMessage(mention + "You have already used a Z-Move!").queue();
                 this.embed = null;
                 return this;
             }
@@ -114,14 +123,14 @@ public class CommandUse extends Command
 
             if(move.getCategory().equals(Category.STATUS))
             {
-                this.event.getChannel().sendMessage(this.playerData.getMention() + ": Status Z-Moves are not implemented!").queue();
+                this.event.getChannel().sendMessage(mention + "Status Z-Moves are not implemented!").queue();
                 this.embed = null;
                 return this;
             }
 
             if(!valid)
             {
-                this.event.getChannel().sendMessage(this.playerData.getMention() + ": " + this.playerData.getEquippedZCrystal() + " does not work on " + move.getName() + "!").queue();
+                this.event.getChannel().sendMessage(mention + this.playerData.getEquippedZCrystal() + " does not work on " + move.getName() + "!").queue();
                 this.embed = null;
                 return this;
             }
