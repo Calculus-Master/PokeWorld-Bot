@@ -294,6 +294,13 @@ public class Duel
             }
         }
 
+        if(this.data(this.current).lockOnUsed)
+        {
+            this.data(this.current).lockOnUsed = false;
+
+            accurate = true;
+        }
+
         //Item-based Buffs
         if(this.players[this.current].active.hasItem() && PokeItem.asItem(this.players[this.current].active.getItem()).equals(PokeItem.METAL_COAT))
         {

@@ -341,7 +341,8 @@ public class NormalMoves
 
     public String LockOn(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return move.getNotImplementedResult();
+        duel.data(user.getUUID()).lockOnUsed = true;
+        return user.getName() + " is guaranteed to hit the next attack!";
     }
 
     public String SwordsDance(Pokemon user, Pokemon opponent, Duel duel, Move move)
