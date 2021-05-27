@@ -224,6 +224,9 @@ public class PokemonRarity
         PokemonRarity.add("Marshtomp", Rarity.GOLD);
         PokemonRarity.add("Swampert", Rarity.DIAMOND);
 
+        PokemonRarity.add("Beldum", Rarity.SILVER);
+        PokemonRarity.add("Metang", Rarity.GOLD);
+        PokemonRarity.add("Metagross", Rarity.DIAMOND);
         PokemonRarity.add("Regirock", Rarity.LEGENDARY);
         PokemonRarity.add("Regice", Rarity.LEGENDARY);
         PokemonRarity.add("Registeel", Rarity.LEGENDARY);
