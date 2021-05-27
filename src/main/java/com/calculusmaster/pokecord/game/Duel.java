@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.duel.CommandDuel;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.XPBooster;
+import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -179,6 +180,9 @@ public class Duel
         //Use the result from the Status Conditions to determine whether or not the user can move
         if(!this.data(this.current).canUseMove) return "";
 
+        //Z-Crystal Event
+        this.zcrystalEvent(move);
+
         //Pre-Move Checks
         boolean accurate = move.isAccurate();
         boolean otherImmune = false;
@@ -351,6 +355,20 @@ public class Duel
         }
 
         return turnResult;
+    }
+
+    public void zcrystalEvent(Move move)
+    {
+        ZCrystal earnedZ = ZCrystal.getCrystalOfType(move.getType());
+
+        System.out.println("Z-Crystal Event! " + earnedZ + ", " + move.getName() + " - " + move.getType() + "(" + this.players[this.current].data.getUsername() + ")");
+
+        if(!this.players[this.current].data.hasZCrystal(earnedZ.getStyledName()))
+        {
+            this.players[this.current].data.addZCrystal(earnedZ.getStyledName());
+
+            this.event.getChannel().sendMessage("<@" + this.players[this.current].ID + "> earned a Z-Crystal! You earned " + earnedZ.getStyledName() + "!").queue();
+        }
     }
 
     //Turn Helper Methods

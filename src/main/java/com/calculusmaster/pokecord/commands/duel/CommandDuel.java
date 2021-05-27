@@ -136,6 +136,9 @@ public class CommandDuel extends Command
 
     public boolean isValidTeam(int size)
     {
+        //Temporary disable
+        if(2 > 1) return true;
+
         int legendary = 0;
         int mythical = 0;
         int ub = 0;
