@@ -9,6 +9,7 @@ import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.PokemonRarity;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.bson.Document;
@@ -136,6 +137,26 @@ public class CommandMarket extends Command
                     if (after.equals(">") && validIndex && isNumeric(index + 1)) display = display.stream().filter(m -> m.price > getInt(index + 1)).collect(Collectors.toList());
                     else if (after.equals("<") && validIndex && isNumeric(index + 1)) display = display.stream().filter(m -> m.price < getInt(index + 1)).collect(Collectors.toList());
                     else if (isNumeric(index)) display = display.stream().filter(m -> m.price == getInt(index)).collect(Collectors.toList());
+                }
+
+                if(args.contains("--legendary") || args.contains("--leg"))
+                {
+                    display = display.stream().filter(m -> PokemonRarity.LEGENDARY.contains(m.pokemon.getName())).collect(Collectors.toList());
+                }
+
+                if(args.contains("--mythical"))
+                {
+                    display = display.stream().filter(m -> PokemonRarity.MYTHICAL.contains(m.pokemon.getName())).collect(Collectors.toList());
+                }
+
+                if(args.contains("--ub") || args.contains("--ultrabeast"))
+                {
+                    display = display.stream().filter(m -> PokemonRarity.ULTRA_BEAST.contains(m.pokemon.getName())).collect(Collectors.toList());
+                }
+
+                if(args.contains("--mega"))
+                {
+                    display = display.stream().filter(m -> PokemonRarity.MEGA.contains(m.pokemon.getName())).collect(Collectors.toList());
                 }
 
                 if (args.contains("--order") && (args.indexOf("--order") + 1) < args.size())
