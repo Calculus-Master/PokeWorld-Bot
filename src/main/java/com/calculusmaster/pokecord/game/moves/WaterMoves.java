@@ -90,4 +90,15 @@ public class WaterMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String OriginPulse(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String WaterSpout(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        move.setPower(150 * user.getHealth() / (double)user.getStat(Stat.HP));
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

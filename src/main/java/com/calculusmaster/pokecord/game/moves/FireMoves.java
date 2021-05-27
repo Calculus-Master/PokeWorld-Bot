@@ -127,4 +127,20 @@ public class FireMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + "'s Defense, Special Defense, and Speed";
     }
+
+    public String FireBlast(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 10);
+    }
+
+    public String Eruption(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        move.setPower(150 * user.getHealth() / (double)user.getStat(Stat.HP));
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String LavaPlume(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 30);
+    }
 }
