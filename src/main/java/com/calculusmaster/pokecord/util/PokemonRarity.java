@@ -6,7 +6,11 @@ public class PokemonRarity
 {
     public static final List<String> SPAWNS = new ArrayList<>();
     public static final Map<String, Rarity> POKEMON_RARITIES = new HashMap<>();
-    public static final List<String> LEGENDARIES = new ArrayList<>();
+
+    public static final List<String> LEGENDARY = Arrays.asList("Articuno", "Galarian Articuno", "Moltres", "Galarian Moltres", "Zapdos", "Galarian Zapdos", "Mewtwo", "Mega Mewtwo X", "Mega Mewtwo Y", "Raikou", "Entei", "Suicune", "Lugia", "Ho-Oh", "Regirock", "Regice", "Registeel", "Latias", "Mega Latias", "Latios", "Mega Latios", "Kyogre", "Primal Kyogre", "Groudon", "Primal Groudon", "Rayquaza", "Mega Rayquaza", "Deoxys", "Deoxys Attack", "Deoxys Defense", "Deoxys Speed", "Dialga", "Palkia", "Heatran", "Regigigas", "Giratina", "Origin Giratina", "Cresselia", "Darkrai", "Arceus", "Cobalion", "Terrakion", "Virizion", "Tornadus", "Thundurus", "Zekrom", "Reshiram", "Landorus", "Kyurem", "Black Kyurem", "White Kyurem", "Keldeo", "Xerneas", "Yveltal", "Zygarde", "Zygarde 10", "Zygarde Complete", "Volcanion", "Tapu Koko", "Tapu Lele", "Tapu Bulu", "Tapu Fini", "Solgaleo", "Lunala", "Necrozma", "Dusk Mane Necrozma", "Dawn Wings Necrozma", "Ultra Necrozma", "Meltan", "Melmetal", "Zacian", "Zamazenta", "Eternatus", "Regieleki", "Regidrago", "Glastrier", "Spectrier", "Calyrex", "Ice Rider Calyrex", "Shadow Rider Calyrex");
+    public static final List<String> MYTHICAL = Arrays.asList("Mew", "Celebi", "Jirachi", "Uxie", "Mespirit", "Azelf", "Phione", "Manaphy", "Shaymin", "Shaymin Sky", "Meloetta Pirouette", "Genesect", "Diancie", "Mega Diancie", "Hoopa", "Hoopa Unbound", "Magearna", "Marshadow", "Zeraora", "Zarude");
+    public static final List<String> ULTRA_BEAST = Arrays.asList("Nihilego", "Buzzwole", "Pheromosa", "Xurkitree", "Celesteela", "Kartana", "Guzzlord", "Poipole", "Naganadel", "Stakataka", "Blacephalon");
+    public static final List<String> MEGA = Arrays.asList("Mega Venusaur", "Mega Charizard X", "Mega Charizard Y", "Mega Blastoise", "Mega Alakazam", "Mega Gengar", "Mega Kangaskhan", "Mega Pinsir", "Mega Gyarados", "Mega Aerodactyl", "Mega Ampharos", "Mega Scizor", "Mega Heracross", "Mega Houndoom", "Mega Tyranitar", "Mega Blaziken", "Mega Gardevoir", "Mega Mawile", "Mega Aggron", "Mega Medicham", "Mega Manectric", "Mega Banette", "Mega Absol", "Mega Garchomp", "Mega Lucario", "Mega Abomasnow", "Mega Beedrill", "Mega Pidgeot", "Mega Slowbro", "Mega Steelix", "Mega Sceptile", "Mega Swampert", "Mega Sableye", "Mega Sharpedo", "Mega Camerupt", "Mega Altaria", "Mega Glalie", "Mega Salamence", "Mega Lopunny", "Mega Gallade", "Mega Audino");
 
     public static void init()
     {
@@ -239,6 +243,8 @@ public class PokemonRarity
 
         //Gen 5
 
+        PokemonRarity.add("Victini", Rarity.MYTHICAL);
+
         PokemonRarity.add("Tornadus", Rarity.LEGENDARY);
         PokemonRarity.add("Tornadus Therian", Rarity.EXTREME);
         PokemonRarity.add("Thundurus", Rarity.LEGENDARY);
@@ -284,7 +290,13 @@ public class PokemonRarity
 
     public static String getLegendarySpawn()
     {
-        return LEGENDARIES.get(new Random().nextInt(LEGENDARIES.size()));
+        List<String> combined = new ArrayList<>();
+
+        combined.addAll(LEGENDARY);
+        combined.addAll(MYTHICAL);
+        combined.addAll(ULTRA_BEAST);
+
+        return combined.get(new Random().nextInt(combined.size()));
     }
 
     public static void add(String name, Rarity r)
@@ -292,8 +304,6 @@ public class PokemonRarity
         for(int i = 0; i < r.num; i++) SPAWNS.add(name);
 
         POKEMON_RARITIES.put(name, r);
-
-        if(r.equals(Rarity.LEGENDARY) || r.equals(Rarity.MYTHICAL)) LEGENDARIES.add(name);
     }
 
     public enum Rarity

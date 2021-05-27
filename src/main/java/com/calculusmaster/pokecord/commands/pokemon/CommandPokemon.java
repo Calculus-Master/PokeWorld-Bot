@@ -75,12 +75,22 @@ public class CommandPokemon extends Command
 
         if(msg.contains("--legendary") || msg.contains("--leg"))
         {
-            this.pokemon = this.pokemon.stream().filter(p -> PokemonRarity.LEGENDARIES.contains(p.getName())).collect(Collectors.toList());
+            this.pokemon = this.pokemon.stream().filter(p -> PokemonRarity.LEGENDARY.contains(p.getName())).collect(Collectors.toList());
+        }
+
+        if(msg.contains("--mythical"))
+        {
+            this.pokemon = this.pokemon.stream().filter(p -> PokemonRarity.MYTHICAL.contains(p.getName())).collect(Collectors.toList());
+        }
+
+        if(msg.contains("--ub") || msg.contains("--ultrabeast"))
+        {
+            this.pokemon = this.pokemon.stream().filter(p -> PokemonRarity.ULTRA_BEAST.contains(p.getName())).collect(Collectors.toList());
         }
 
         if(msg.contains("--mega"))
         {
-            this.pokemon = this.pokemon.stream().filter(p -> p.getName().contains("Mega")).collect(Collectors.toList());
+            this.pokemon = this.pokemon.stream().filter(p -> PokemonRarity.MEGA.contains(p.getName())).collect(Collectors.toList());
         }
 
         //TODO: --hpiv, --atkiv, --defiv, --spatkiv, --spdefiv, --spdiv
