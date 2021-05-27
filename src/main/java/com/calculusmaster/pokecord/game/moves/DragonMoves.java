@@ -96,4 +96,9 @@ public class DragonMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String CoreEnforcer(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

@@ -54,4 +54,14 @@ public class GroundMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String ThousandArrows(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String ThousandWaves(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
