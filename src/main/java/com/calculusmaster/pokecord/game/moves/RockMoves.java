@@ -125,4 +125,9 @@ public class RockMoves
 
         return move.getDamageResult(opponent, damage);
     }
+
+    public String DiamondStorm(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.DEF, 2, 50, true);
+    }
 }

@@ -101,4 +101,9 @@ public class FightingMoves
     {
         return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPD, -1, 100, true);
     }
+
+    public String FocusBlast(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPDEF, -1, 10, false);
+    }
 }

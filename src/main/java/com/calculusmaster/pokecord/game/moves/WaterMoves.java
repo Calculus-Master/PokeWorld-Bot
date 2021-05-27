@@ -85,4 +85,9 @@ public class WaterMoves
 
         return user.getName() + " healed for " + heal + " HP!";
     }
+
+    public String MuddyWater(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

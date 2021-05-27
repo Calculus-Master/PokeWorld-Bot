@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.moves;
 import com.calculusmaster.pokecord.game.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 
@@ -116,5 +117,14 @@ public class FireMoves
     public String BlastBurn(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String VCreate(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.changeStatMultiplier(Stat.DEF, -1);
+        user.changeStatMultiplier(Stat.SPDEF, -1);
+        user.changeStatMultiplier(Stat.SPD, -1);
+
+        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + "'s Defense, Special Defense, and Speed";
     }
 }

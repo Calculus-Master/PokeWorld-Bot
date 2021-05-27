@@ -20,4 +20,9 @@ public class FairyMoves
 
         return user.getName() + " healed for " + HP + " HP!";
     }
+
+    public String Moonblast(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPATK, -1, 30, false);
+    }
 }
