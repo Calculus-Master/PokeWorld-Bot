@@ -84,7 +84,7 @@ public class CommandTeam extends Command
 
             this.playerData.swapPokemonInTeam(fromIndex, toIndex);
 
-            this.embed.setDescription("Swapped pokemon number " + (fromIndex + 1) + " and " + (toIndex + 1) + " in your team!");
+            this.embed.setDescription("Swapped pokemon number " + fromIndex + " and " + toIndex + " in your team!");
         }
         else
         {
