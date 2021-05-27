@@ -130,4 +130,9 @@ public class RockMoves
     {
         return Move.statChangeDamageMove(user, opponent, duel, move, Stat.DEF, 2, 50, true);
     }
+
+    public String WideGuard(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
 }

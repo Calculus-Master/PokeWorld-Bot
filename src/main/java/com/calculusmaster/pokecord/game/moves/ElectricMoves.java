@@ -147,4 +147,9 @@ public class ElectricMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BOUND, 100);
     }
+
+    public String ThunderPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 10);
+    }
 }

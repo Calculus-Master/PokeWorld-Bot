@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 
 import java.util.Random;
 
@@ -105,5 +106,11 @@ public class FightingMoves
     public String FocusBlast(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPDEF, -1, 10, false);
+    }
+
+    public String Revenge(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.first.equals(opponent.getUUID())) move.setPower(2 * move.getPower());
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 }

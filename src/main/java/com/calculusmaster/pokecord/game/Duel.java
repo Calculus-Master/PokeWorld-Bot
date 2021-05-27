@@ -36,6 +36,8 @@ public class Duel
     private int current;
     private int other;
 
+    public String first;
+
     private List<String> results;
 
     public Weather weather;
@@ -68,6 +70,8 @@ public class Duel
         this.players[0].move = null;
         this.players[1].move = null;
 
+        this.first = "";
+
         //Status Conditions
         if(!this.players[0].active.isFainted()) this.data(0).canUseMove = this.statusConditionEffects(0);
         if(!this.players[1].active.isFainted()) this.data(1).canUseMove = this.statusConditionEffects(1);
@@ -91,6 +95,8 @@ public class Duel
             else this.current = this.players[0].move.getPriority() > this.players[1].move.getPriority() ? 0 : 1;
 
             this.other = this.current == 0 ? 1 : 0;
+
+            this.first = this.players[this.current].active.getUUID();
 
             //Do moves
             if(!this.players[this.current].active.isFainted())
@@ -313,7 +319,7 @@ public class Duel
 
         //Main Results
         String name = this.players[this.current].active.getName();
-        List<String> rechargeMoves = Arrays.asList("Hyper Beam", "Blast Burn", "Hydro Cannon", "Frenzy Plant", "Roar Of Time", "Prismatic Laser", "Eternabeam");
+        List<String> rechargeMoves = Arrays.asList("Hyper Beam", "Blast Burn", "Hydro Cannon", "Frenzy Plant", "Roar Of Time", "Prismatic Laser", "Eternabeam", "Giga Impact");
 
         //Check if user has to recharge
         if(this.data(this.current).recharge && rechargeMoves.contains(move.getName()))

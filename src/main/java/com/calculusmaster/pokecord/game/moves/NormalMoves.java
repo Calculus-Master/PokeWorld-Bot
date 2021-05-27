@@ -520,4 +520,25 @@ public class NormalMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
     }
+
+    public String CrushGrip(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        move.setPower(120 * opponent.getHealth() / (double)opponent.getStat(Stat.HP));
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String DizzyPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.CONFUSED, 20);
+    }
+
+    public String Foresight(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String GigaImpact(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

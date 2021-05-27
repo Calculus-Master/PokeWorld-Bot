@@ -134,4 +134,10 @@ public class GhostMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String ConfuseRay(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.addStatusCondition(StatusCondition.CONFUSED);
+        return opponent.getName() + " is confused!";
+    }
 }

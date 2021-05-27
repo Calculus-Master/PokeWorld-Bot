@@ -143,4 +143,9 @@ public class FireMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 30);
     }
+
+    public String FirePunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 10);
+    }
 }

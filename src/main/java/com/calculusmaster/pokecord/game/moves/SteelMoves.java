@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 
 import java.util.Random;
 
@@ -104,6 +105,19 @@ public class SteelMoves
 
     public String SunsteelStrike(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String HeavySlam(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        double ratio = user.getWeight() / opponent.getWeight();
+
+        if(ratio >= 5) move.setPower(120);
+        else if(ratio >= 4) move.setPower(100);
+        else if(ratio >= 3) move.setPower(80);
+        else if(ratio >= 2) move.setPower(40);
+        else move.setPower(20);
+
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 }

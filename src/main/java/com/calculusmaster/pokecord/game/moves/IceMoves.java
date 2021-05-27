@@ -138,4 +138,9 @@ public class IceMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move) + (freeze ? " " + opponent.getName() + " is frozen!" : "") + (flinch ? " " + opponent.getName() + " flinched!" : "");
     }
+
+    public String IcePunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FROZEN, 10);
+    }
 }

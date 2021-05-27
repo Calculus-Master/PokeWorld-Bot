@@ -97,4 +97,15 @@ public class DarkMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String KnockOff(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(opponent.hasItem())
+        {
+            move.setPower(1.5 * move.getPower());
+            opponent.removeItem();
+        }
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
