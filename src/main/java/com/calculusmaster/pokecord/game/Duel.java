@@ -728,9 +728,13 @@ public class Duel
         //Background is 800 x 480 -> 400 x 240
 
         int size = 150;
+        int y = 50;
+        int spacing = 25;
+        int backgroundW = 400;
+        int backgroundH = 240;
         int hint = BufferedImage.TYPE_INT_ARGB;
 
-        Image background = ImageIO.read(new URL(BACKGROUND)).getScaledInstance(400, 240, hint);
+        Image background = ImageIO.read(new URL(BACKGROUND)).getScaledInstance(backgroundW, backgroundH, hint);
         BufferedImage combined = new BufferedImage(background.getWidth(null), background.getHeight(null), hint);
 
         combined.getGraphics().drawImage(background, 0, 0, null);
@@ -738,13 +742,13 @@ public class Duel
         if(!this.players[0].active.isFainted())
         {
             Image p1 = ImageIO.read(this.players[0].active.getURL()).getScaledInstance(size, size, hint);
-            combined.getGraphics().drawImage(p1, 50, 70, null);
+            combined.getGraphics().drawImage(p1, spacing, y, null);
         }
 
         if(!this.players[1].active.isFainted())
         {
             Image p2 = ImageIO.read(this.players[1].active.getURL()).getScaledInstance(size, size, hint);
-            combined.getGraphics().drawImage(p2, 350 - size, 70, null);
+            combined.getGraphics().drawImage(p2, (backgroundW - spacing) - size, y, null);
         }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
