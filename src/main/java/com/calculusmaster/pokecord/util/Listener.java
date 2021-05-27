@@ -225,6 +225,7 @@ public class Listener extends ListenerAdapter
                 else if(msg[0].equals("deletebotmarket"))
                 {
                     Mongo.MarketData.deleteMany(Filters.eq("sellerID", "BOT"));
+                    CommandMarket.init();
                     c = null;
                 }
                 else c = new CommandInvalid(event, msg).runCommand();

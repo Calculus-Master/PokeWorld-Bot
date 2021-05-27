@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.util;
 
+import com.calculusmaster.pokecord.commands.economy.CommandMarket;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -68,6 +69,8 @@ public class SpawnEventHandler
     private static void spawnPokemon(Guild g, TextChannel channel, String spawn)
     {
         spawn = Global.normalCase(spawn);
+
+        if(Math.random() < 0.333) new Thread(CommandMarket::addBotEntry).start();
 
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("A wild Pokemon spawned!")
