@@ -256,6 +256,9 @@ public class PokemonRarity
         PokemonRarity.add("Zekrom", Rarity.LEGENDARY);
         PokemonRarity.add("Landorus", Rarity.LEGENDARY);
         PokemonRarity.add("Landorus Therian", Rarity.EXTREME);
+        PokemonRarity.add("Kyurem", Rarity.LEGENDARY);
+        PokemonRarity.add("Black Kyurem", Rarity.EXTREME);
+        PokemonRarity.add("White Kyurem", Rarity.EXTREME);
 
         //Gen 6
 
