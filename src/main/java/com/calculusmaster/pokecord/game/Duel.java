@@ -181,7 +181,7 @@ public class Duel
         if(!this.data(this.current).canUseMove) return "";
 
         //Z-Crystal Event
-        this.zcrystalEvent(move);
+        if(new Random().nextInt(100) < 1) this.zcrystalEvent(move);
 
         //Pre-Move Checks
         boolean accurate = move.isAccurate();
