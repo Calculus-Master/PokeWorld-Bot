@@ -41,8 +41,7 @@ public class Pokecord
         Global.logInfo(Pokecord.class, "main", "Starting Market Init!");
         CommandMarket.init();
         Global.logInfo(Pokecord.class, "main", "Starting CommandPokemon Init!");
-        //CommandPokemon.init();
-        CommandPokemon.threadInit();
+        CommandPokemon.init();
         Global.logInfo(Pokecord.class, "main", "Completed Init!");
 
         //Create Bot
