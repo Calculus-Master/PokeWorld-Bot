@@ -132,4 +132,19 @@ public class ElectricMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move) + (paralyze ? " " + opponent.getName() + " is paralyzed!" : "") + (flinch ? " " + opponent.getName() + " flinched!" : "");
     }
+
+    public String Electroweb(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPD, -1, 100, false);
+    }
+
+    public String ShockWave(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String ThunderCage(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BOUND, 100);
+    }
 }
