@@ -21,6 +21,10 @@ public class CommandTeam extends Command
         boolean set = this.msg.length == 4 && this.msg[1].equals("set") && isNumeric(2) && isNumeric(3);
         //p!team add number
         boolean add = this.msg.length == 3 && this.msg[1].equals("add") && isNumeric(2);
+        //p!team remove index
+        boolean remove = this.msg.length == 3 && this.msg[1].equals("remove") && isNumeric(2);
+        //p!team swap index index
+        boolean swap = this.msg.length == 4 && this.msg[1].equals("swap") && isNumeric(2) && isNumeric(3);
 
         if(set || add)
         {
@@ -50,6 +54,37 @@ public class CommandTeam extends Command
 
             Pokemon p = Pokemon.buildCore(UUID, pokemonIndex);
             this.embed.setDescription("Added " + p.getName() + " to your team!");
+        }
+        else if(remove)
+        {
+            int teamIndex = this.getInt(2);
+
+            if(teamIndex < 1 || teamIndex > MAX_TEAM_SIZE || teamIndex > this.playerData.getTeam().length())
+            {
+                this.embed.setDescription(CommandInvalid.getShort());
+                return this;
+            }
+
+            Pokemon p = Pokemon.buildCore(this.playerData.getTeam().getString(teamIndex - 1), -1);
+
+            this.playerData.removePokemonFromTeam(teamIndex);
+
+            this.embed.setDescription("Removed " + p.getName() + " from your team!");
+        }
+        else if(swap)
+        {
+            int fromIndex = this.getInt(2);
+            int toIndex = this.getInt(3);
+
+            if(fromIndex < 1 || fromIndex > this.playerData.getTeam().length() || toIndex < 1 || toIndex > this.playerData.getTeam().length())
+            {
+                this.embed.setDescription(CommandInvalid.getShort());
+                return this;
+            }
+
+            this.playerData.swapPokemonInTeam(fromIndex, toIndex);
+
+            this.embed.setDescription("Swapped pokemon number " + (fromIndex + 1) + " and " + (toIndex + 1) + " in your team!");
         }
         else
         {

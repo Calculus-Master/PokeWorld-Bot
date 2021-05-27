@@ -210,6 +210,41 @@ public class PlayerDataQuery extends MongoQuery
         this.update();
     }
 
+    public void removePokemonFromTeam(int index)
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.unset("team"));
+
+        List<String> team = new ArrayList<>();
+        if(this.getTeam() != null) for(int i = 0; i < this.getTeam().length(); i++) team.add(this.getTeam().getString(i));
+
+        index--;
+
+        team.remove(index);
+
+        Mongo.PlayerData.updateOne(this.query, Updates.pushEach("team", team));
+
+        this.update();
+    }
+
+    public void swapPokemonInTeam(int from, int to)
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.unset("team"));
+
+        List<String> team = new ArrayList<>();
+        if(this.getTeam() != null) for(int i = 0; i < this.getTeam().length(); i++) team.add(this.getTeam().getString(i));
+
+        from--;
+        to--;
+
+        String temp = team.get(from);
+        team.set(from, team.get(to));
+        team.set(to, temp);
+
+        Mongo.PlayerData.updateOne(this.query, Updates.pushEach("team", team));
+
+        this.update();
+    }
+
     //Sets the selected pokemon
     public void setSelected(int num)
     {
