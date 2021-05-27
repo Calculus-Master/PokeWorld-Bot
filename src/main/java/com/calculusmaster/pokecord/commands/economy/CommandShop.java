@@ -62,26 +62,7 @@ public class CommandShop extends Command
     {
         this.page.append("Rare Candies (Level up Pokemon once per candy) : `p!buy candy <amount>`");
 
-        if(day < this.event.getMessage().getTimeCreated().getDayOfYear())
-        {
-            day = this.event.getMessage().getTimeCreated().getDayOfYear();
-            int num = new Random().nextInt(8) + 3;
-            entriesItem.clear();
-
-            PokeItem item;
-            for(int i = 0; i < num; i++)
-            {
-                item = PokeItem.values()[new Random().nextInt(PokeItem.values().length)];
-
-                if(item.equals(PokeItem.NONE)) i--;
-
-                if(!entriesItem.contains(item) && !item.equals(PokeItem.NONE))
-                {
-                    entriesItem.add(item);
-                    itemPrices.add(item.cost + (new Random().nextInt(item.cost / 2) * (new Random().nextInt(2) == 1 ? 1 : -1)));
-                }
-            }
-        }
+        if(day < this.event.getMessage().getTimeCreated().getDayOfYear()) this.updateDailyShops();
 
         this.page.append("\n\n**Items**:\n");
         for(PokeItem i : entriesItem) this.page.append((entriesItem.indexOf(i) + 1) + ": " + i.getStyledName() + " - " + itemPrices.get(entriesItem.indexOf(i)) + "c\n");
@@ -102,29 +83,7 @@ public class CommandShop extends Command
 
     private void page_tm_tr()
     {
-        System.out.println(this.event.getMessage().getTimeCreated().getDayOfYear());
-        System.out.println(day);
-
-        if(day < this.event.getMessage().getTimeCreated().getDayOfYear())
-        {
-            day = this.event.getMessage().getTimeCreated().getDayOfYear();
-            entriesTM.clear();
-            entriesTR.clear();
-
-            for(int i = 0; i < 10; i++)
-            {
-                if(entriesTM.contains(newTMEntry())) i--;
-                else entriesTM.add(newTMEntry());
-            }
-            for(int i = 0; i < 10; i++)
-            {
-                if(entriesTR.contains(newTREntry())) i--;
-                else entriesTR.add(newTREntry());
-            }
-
-            currentTMPrice = 10000 + new Random().nextInt(5000);
-            currentTRPrice = 10000 + new Random().nextInt(5000);
-        }
+        if(day < this.event.getMessage().getTimeCreated().getDayOfYear()) this.updateDailyShops();
 
         this.page.append("\n**Technical Machines (TMs) for " + currentTMPrice + "c each: **\n");
         for(String s : entriesTM) this.page.append(s).append("\n");
@@ -184,26 +143,67 @@ public class CommandShop extends Command
     {
         this.page.append("Z Crystals: \n\n");
 
-        if(day < this.event.getMessage().getTimeCreated().getDayOfYear())
-        {
-            day = this.event.getMessage().getTimeCreated().getDayOfYear();
-
-            entriesZCrystal.clear();
-
-            String z;
-            for(int i = 0; i < 2; i++)
-            {
-                z = ZCrystal.getRandomUniqueZCrystal().getStyledName();
-                if(entriesZCrystal.contains(z)) i--;
-                else entriesZCrystal.add(z);
-            }
-
-            priceZCrystal = (int)(200000 * (Math.random() * 3 + 1));
-        }
+        if(day < this.event.getMessage().getTimeCreated().getDayOfYear()) this.updateDailyShops();
 
         for(String s : entriesZCrystal) this.page.append(s).append("\n");
 
         this.page.append("Z Crystal Price: ").append(priceZCrystal).append("c!");
+    }
+
+    private void updateDailyShops()
+    {
+        System.out.println("Updating Daily Shops!");
+
+        day = this.event.getMessage().getTimeCreated().getDayOfYear();
+
+        //TMs and TRs
+        entriesTM.clear();
+        entriesTR.clear();
+
+        for(int i = 0; i < 10; i++)
+        {
+            if(entriesTM.contains(newTMEntry())) i--;
+            else entriesTM.add(newTMEntry());
+        }
+        for(int i = 0; i < 10; i++)
+        {
+            if(entriesTR.contains(newTREntry())) i--;
+            else entriesTR.add(newTREntry());
+        }
+
+        currentTMPrice = 10000 + new Random().nextInt(5000);
+        currentTRPrice = 10000 + new Random().nextInt(5000);
+
+        //Items
+        int num = new Random().nextInt(8) + 3;
+        entriesItem.clear();
+
+        PokeItem item;
+        for(int i = 0; i < num; i++)
+        {
+            item = PokeItem.values()[new Random().nextInt(PokeItem.values().length)];
+
+            if(item.equals(PokeItem.NONE)) i--;
+
+            if(!entriesItem.contains(item) && !item.equals(PokeItem.NONE))
+            {
+                entriesItem.add(item);
+                itemPrices.add(item.cost + (new Random().nextInt(item.cost / 2) * (new Random().nextInt(2) == 1 ? 1 : -1)));
+            }
+        }
+
+        //Z-Crystals
+        entriesZCrystal.clear();
+
+        String z;
+        for(int i = 0; i < 2; i++)
+        {
+            z = ZCrystal.getRandomUniqueZCrystal().getStyledName();
+            if(entriesZCrystal.contains(z)) i--;
+            else entriesZCrystal.add(z);
+        }
+
+        priceZCrystal = (int)(200000 * (Math.random() * 3 + 1));
     }
 
     private void page_nature()
