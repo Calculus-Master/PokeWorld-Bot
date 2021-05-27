@@ -210,6 +210,16 @@ public class PokemonRarity
 
         //Gen 3
 
+        PokemonRarity.add("Treecko", Rarity.SILVER);
+        PokemonRarity.add("Grovyle", Rarity.GOLD);
+        PokemonRarity.add("Sceptile", Rarity.DIAMOND);
+        PokemonRarity.add("Torchic", Rarity.SILVER);
+        PokemonRarity.add("Combusken", Rarity.GOLD);
+        PokemonRarity.add("Blaziken", Rarity.DIAMOND);
+        PokemonRarity.add("Mudkip", Rarity.SILVER);
+        PokemonRarity.add("Marshtomp", Rarity.GOLD);
+        PokemonRarity.add("Swampert", Rarity.DIAMOND);
+
         PokemonRarity.add("Regirock", Rarity.LEGENDARY);
         PokemonRarity.add("Regice", Rarity.LEGENDARY);
         PokemonRarity.add("Registeel", Rarity.LEGENDARY);
