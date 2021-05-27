@@ -255,7 +255,13 @@ public class PokemonRarity
 
         //Gen 6
 
+        PokemonRarity.add("Xerneas", Rarity.LEGENDARY);
+        PokemonRarity.add("Yveltal", Rarity.LEGENDARY);
+        PokemonRarity.add("Zygarde", Rarity.LEGENDARY);
+        PokemonRarity.add("Zygarde 10", Rarity.EXTREME);
+        PokemonRarity.add("Zygarde Complete", Rarity.EXTREME);
         PokemonRarity.add("Diancie", Rarity.MYTHICAL);
+
         PokemonRarity.add("Volcanion", Rarity.LEGENDARY);
 
         //Gen 7
