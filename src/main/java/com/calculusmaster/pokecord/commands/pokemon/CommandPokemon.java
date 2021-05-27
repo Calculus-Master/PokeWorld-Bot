@@ -8,8 +8,12 @@ import com.calculusmaster.pokecord.util.PokemonRarity;
 import com.calculusmaster.pokecord.util.TableBuilder;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import org.bson.Document;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class CommandPokemon extends Command
@@ -18,6 +22,31 @@ public class CommandPokemon extends Command
     {
         long i = System.currentTimeMillis();
         Mongo.PlayerData.find(Filters.exists("playerID")).forEach(d -> Global.updatePokemonList(d.getString("playerID")));
+        long f = System.currentTimeMillis();
+        System.out.println((f - i) + "ms");
+    }
+
+    public static void threadInit()
+    {
+        long i = System.currentTimeMillis();
+        List<String> IDs = new ArrayList<>();
+        Mongo.PlayerData.find(Filters.exists("username")).forEach(d -> IDs.add(d.getString("playerID")));
+
+        ExecutorService pool = Executors.newFixedThreadPool(IDs.size() / 3);
+
+        for(String s : IDs)
+        {
+            try {Thread.sleep(100);}
+            catch (Exception e) {System.out.println("Can't Sleep Thread!");}
+
+            pool.execute(() -> Global.updatePokemonList(s));
+        }
+
+        pool.shutdown();
+
+        try { pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS); }
+        catch (Exception e) { System.out.println("CommandPokemon Init failed!"); }
+
         long f = System.currentTimeMillis();
         System.out.println((f - i) + "ms");
     }
