@@ -287,6 +287,7 @@ public class Pokemon
     {
         System.out.println(this.getName());
         PokemonRarity.Rarity rarity = PokemonRarity.POKEMON_RARITIES.get(this.getName());
+        if(rarity == null) rarity = PokemonRarity.Rarity.values()[new Random().nextInt(PokemonRarity.Rarity.values().length)];
 
         int basePrice = switch(rarity)
                 {
@@ -451,6 +452,11 @@ public class Pokemon
         if(this.hasTM()) movesList.add(Global.normalCase(TM.get(this.heldTM).getMoveName()));
         if(this.hasTR()) movesList.add(Global.normalCase(TR.get(this.heldTR).getMoveName()));
 
+        if(this.getName().contains("Zygarde") && this.hasItem() && PokeItem.asItem(this.getItem()).equals(PokeItem.ZYGARDE_CUBE))
+        {
+            Collections.addAll(movesList, "Core Enforcer", "Dragon Dance", "Extreme Speed", "Thousand Arrows", "Thousand Waves");
+        }
+
         return movesList;
     }
 
@@ -459,6 +465,12 @@ public class Pokemon
         JSONArray moves = this.genericJSON.getJSONArray("moves");
         List<String> movesList = new ArrayList<>();
         for(int i = 0; i < moves.length(); i++) movesList.add(moves.getString(i));
+
+        if(this.getName().contains("Zygarde") && this.hasItem() && PokeItem.asItem(this.getItem()).equals(PokeItem.ZYGARDE_CUBE))
+        {
+            Collections.addAll(movesList, "Core Enforcer", "Dragon Dance", "Extreme Speed", "Thousand Arrows", "Thousand Waves");
+        }
+
         return movesList;
     }
 

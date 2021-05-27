@@ -16,7 +16,8 @@ public enum PokeItem
     SUN_STONE(250),
     WATER_STONE(250),
     TRADE_EVOLVER(1000),
-    METAL_COAT(1500);
+    METAL_COAT(1500),
+    ZYGARDE_CUBE(6000);
 
     public int cost;
     PokeItem(int cost)

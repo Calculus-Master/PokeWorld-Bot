@@ -32,7 +32,7 @@ public class CommandMoves extends Command
         if(!inDuel)
         {
             movesList.append("\n**All Moves: **\n");
-            for (String s : selected.getAllMoves()) movesList.append(s + (selected.getAvailableMoves().contains(s) && (Move.isMove(s) && !Move.WIP_MOVES.contains(s)) ? "" : " :lock: ") + "\n");
+            for (String s : selected.getAllMoves()) movesList.append(s).append(selected.getAvailableMoves().contains(s) && (Move.isMove(s) && !Move.WIP_MOVES.contains(s)) ? "" : " :lock: ").append("\n");
         }
 
         this.embed.setDescription(movesList.toString());
