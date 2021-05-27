@@ -255,6 +255,8 @@ public class PokemonRarity
 
         //Gen 6
 
+        PokemonRarity.add("Diancie", Rarity.MYTHICAL);
+
         //Gen 7
 
         PokemonRarity.add("Grubbin", Rarity.COPPER);
@@ -296,7 +298,9 @@ public class PokemonRarity
         combined.addAll(MYTHICAL);
         combined.addAll(ULTRA_BEAST);
 
-        return combined.get(new Random().nextInt(combined.size()));
+        String spawn = combined.get(new Random().nextInt(combined.size()));
+
+        return SPAWNS.contains(spawn) ? spawn : getLegendarySpawn();
     }
 
     public static void add(String name, Rarity r)
