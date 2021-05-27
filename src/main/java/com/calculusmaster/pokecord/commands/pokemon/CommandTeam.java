@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.util.PokemonRarity;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandTeam extends Command
@@ -104,7 +105,7 @@ public class CommandTeam extends Command
                 if(i < this.playerData.getTeam().length())
                 {
                     p = Pokemon.buildCore(this.playerData.getTeam().getString(i), -1);
-                    team.append("Level ").append(p.getLevel()).append(" ").append(p.getName());
+                    team.append("Level ").append(p.getLevel()).append(" ").append(p.getName()).append(this.getTag(p.getName()));
                 }
                 else team.append("None");
 
@@ -115,5 +116,15 @@ public class CommandTeam extends Command
             this.embed.setTitle(this.player.getName() + "'s Pokemon Team");
         }
         return this;
+    }
+
+    private String getTag(String name)
+    {
+        if(PokemonRarity.LEGENDARY.contains(name)) return " (L)";
+        if(PokemonRarity.MYTHICAL.contains(name)) return " (MY)";
+        if(PokemonRarity.ULTRA_BEAST.contains(name)) return " (UB)";
+        if(PokemonRarity.MEGA.contains(name)) return " (M)";
+
+        return "";
     }
 }
