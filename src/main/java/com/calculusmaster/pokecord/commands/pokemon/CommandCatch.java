@@ -41,7 +41,7 @@ public class CommandCatch extends Command
         else
         {
             Pokemon caught = Pokemon.create(spawn);
-            caught.setLevel(new Random().nextInt(42) + 1);
+            caught.setLevel(new Random().nextInt(20) + 1);
 
             new Thread(() -> {
                 Pokemon.uploadPokemon(caught);
