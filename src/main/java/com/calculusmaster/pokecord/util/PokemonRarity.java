@@ -256,6 +256,7 @@ public class PokemonRarity
         //Gen 6
 
         PokemonRarity.add("Diancie", Rarity.MYTHICAL);
+        PokemonRarity.add("Volcanion", Rarity.LEGENDARY);
 
         //Gen 7
 
