@@ -52,7 +52,7 @@ public class CommandStart extends Command
 
             Pokemon starter = Pokemon.create(Global.normalCase(this.msg[1]));
             starter.setLevel(5);
-            starter.setIVs("");
+            starter.setIVs(this.getStarterIVs());
 
             Achievements.grant(this.player.getId(), Achievements.START_JOURNEY, this.event);
 
@@ -63,5 +63,13 @@ public class CommandStart extends Command
         }
 
         return this;
+    }
+
+    private String getStarterIVs()
+    {
+        Random r = new Random();
+        StringBuilder s = new StringBuilder();
+        for(int i = 0; i < 6; i++) s.append(r.nextInt(10) + 22).append("-");
+        return s.deleteCharAt(s.length() - 1).toString().trim();
     }
 }
