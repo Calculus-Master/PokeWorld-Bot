@@ -252,7 +252,8 @@ public class PokemonRarity
         PokemonRarity.add("Tornadus Therian", Rarity.EXTREME);
         PokemonRarity.add("Thundurus", Rarity.LEGENDARY);
         PokemonRarity.add("Thundurus Therian", Rarity.EXTREME);
-
+        PokemonRarity.add("Reshiram", Rarity.LEGENDARY);
+        PokemonRarity.add("Zekrom", Rarity.LEGENDARY);
         PokemonRarity.add("Landorus", Rarity.LEGENDARY);
         PokemonRarity.add("Landorus Therian", Rarity.EXTREME);
 
