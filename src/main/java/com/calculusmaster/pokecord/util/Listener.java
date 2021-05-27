@@ -272,14 +272,6 @@ public class Listener extends ListenerAdapter
             event.getChannel().sendMessage(mention + ": Your " + p.getName() + " leveled up to Level " + p.getLevel() + "!").queue();
         }
 
-//        if(p.canEvolve())
-//        {
-//            String old = p.getName();
-//            p.evolve();
-//
-//            event.getChannel().sendMessage(mention + ": Your " + old + " evolved into a " + p.getName() + "!").queue();
-//        }
-
         Pokemon.updateExperience(p);
     }
 }

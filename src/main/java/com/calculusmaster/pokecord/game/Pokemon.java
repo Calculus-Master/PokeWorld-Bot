@@ -648,18 +648,12 @@ public class Pokemon
         this.exp += exp;
         int required = GrowthRate.getRequiredExp(this.genericJSON.getString("growthrate"), this.level);
 
-        //System.out.println("Initial LVL: " + this.level + ", Initial EXP: " + this.exp);
-
         while(this.exp >= required && this.level < 100)
         {
-            System.out.println("Needs: " + required + ", Has: " + this.exp);
-
             this.level++;
             this.exp -= required;
             required = GrowthRate.getRequiredExp(this.genericJSON.getString("growthrate"), this.level);
         }
-
-        //System.out.println("Final LVL: " + this.level + ", Final EXP: " + this.exp);
     }
 
     public int getDuelExp(Pokemon opponent)
