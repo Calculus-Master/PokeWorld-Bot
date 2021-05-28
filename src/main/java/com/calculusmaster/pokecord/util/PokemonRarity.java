@@ -258,6 +258,9 @@ public class PokemonRarity
         //Gen 5
 
         PokemonRarity.add("Victini", Rarity.MYTHICAL);
+        PokemonRarity.add("Snivy", Rarity.SILVER);
+        PokemonRarity.add("Servine", Rarity.GOLD);
+        PokemonRarity.add("Serperior", Rarity.DIAMOND);
 
         PokemonRarity.add("Tornadus", Rarity.LEGENDARY);
         PokemonRarity.add("Tornadus Therian", Rarity.EXTREME);
