@@ -136,4 +136,9 @@ public class SteelMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String IronHead(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
+    }
 }
