@@ -141,4 +141,14 @@ public class SteelMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
     }
+
+    public String BulletPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String MeteorMash(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.ATK, 1, 20, true);
+    }
 }
