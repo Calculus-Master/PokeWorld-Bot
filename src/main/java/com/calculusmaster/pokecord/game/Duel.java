@@ -114,6 +114,22 @@ public class Duel
             }
             else results.add("\n" + this.players[this.other].active.getName() + " fainted!");
         }
+        //Both players are swapping
+        else if(this.getAction(0).equals(ActionType.SWAP) && this.getAction(1).equals(ActionType.SWAP))
+        {
+            this.data(0).setDefaults();
+            this.data(1).setDefaults();
+
+            int ind = this.queuedMoves.get(this.players[0].ID).swapInd() - 1;
+            this.players[0].swap(ind);
+
+            results.add(this.players[0].data.getUsername() + " brought in " + this.players[0].active.getName() + "!\n");
+
+            ind = this.queuedMoves.get(this.players[1].ID).swapInd() - 1;
+            this.players[1].swap(ind);
+
+            results.add(this.players[1].data.getUsername() + " brought in " + this.players[1].active.getName() + "!\n");
+        }
         //Either player wants to swap out a pokemon
         else
         {
