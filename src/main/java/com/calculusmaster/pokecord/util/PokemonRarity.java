@@ -261,6 +261,9 @@ public class PokemonRarity
         PokemonRarity.add("Snivy", Rarity.SILVER);
         PokemonRarity.add("Servine", Rarity.GOLD);
         PokemonRarity.add("Serperior", Rarity.DIAMOND);
+        PokemonRarity.add("Tepig", Rarity.SILVER);
+        PokemonRarity.add("Pignite", Rarity.GOLD);
+        PokemonRarity.add("Emboar", Rarity.DIAMOND);
 
         PokemonRarity.add("Tornadus", Rarity.LEGENDARY);
         PokemonRarity.add("Tornadus Therian", Rarity.EXTREME);
