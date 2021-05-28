@@ -243,6 +243,9 @@ public class PokemonRarity
         PokemonRarity.add("Chimchar", Rarity.SILVER);
         PokemonRarity.add("Monferno", Rarity.GOLD);
         PokemonRarity.add("Infernape", Rarity.DIAMOND);
+        PokemonRarity.add("Piplup", Rarity.SILVER);
+        PokemonRarity.add("Prinplup", Rarity.GOLD);
+        PokemonRarity.add("Empoleon", Rarity.DIAMOND);
 
 
         PokemonRarity.add("Dialga", Rarity.LEGENDARY);
