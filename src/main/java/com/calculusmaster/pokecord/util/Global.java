@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class Global
 {
-    public static final List<String> STARTERS = Arrays.asList("bulbasaur", "charmander", "squirtle", "chikorita", "quilava", "totodile", "treecko", "torchic", "mudkip"); //TODO: Add the remaining starters and update this list
+    public static final List<String> STARTERS = Arrays.asList("bulbasaur", "charmander", "squirtle", "chikorita", "quilava", "totodile", "treecko", "torchic", "mudkip", "turtwig", "chimchar", "piplup", "snivy", "tepig", "oshawott"); //TODO: Add the remaining starters and update this list
     public static final List<String> POKEMON = new ArrayList<>();
 
     public static final Map<String, List<Pokemon>> POKEMON_LISTS = new HashMap<>();
