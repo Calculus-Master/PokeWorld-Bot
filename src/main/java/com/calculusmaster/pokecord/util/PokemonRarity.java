@@ -236,6 +236,10 @@ public class PokemonRarity
         PokemonRarity.add("Rayquaza", Rarity.LEGENDARY);
 
         //Gen 4
+        PokemonRarity.add("Turtwig", Rarity.SILVER);
+        PokemonRarity.add("Grotle", Rarity.GOLD);
+        PokemonRarity.add("Torterra", Rarity.DIAMOND);
+
 
         PokemonRarity.add("Dialga", Rarity.LEGENDARY);
         PokemonRarity.add("Palkia", Rarity.LEGENDARY);
@@ -259,6 +263,8 @@ public class PokemonRarity
         PokemonRarity.add("Kyurem", Rarity.LEGENDARY);
         PokemonRarity.add("Black Kyurem", Rarity.EXTREME);
         PokemonRarity.add("White Kyurem", Rarity.EXTREME);
+
+        PokemonRarity.add("Genesect", Rarity.MYTHICAL);
 
         //Gen 6
 
