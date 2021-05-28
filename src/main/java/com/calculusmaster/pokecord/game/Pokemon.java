@@ -712,6 +712,7 @@ public class Pokemon
             case "Eevee": return item.equals(PokeItem.WATER_STONE) || item.equals(PokeItem.FIRE_STONE) || item.equals(PokeItem.THUNDER_STONE);
             case "Onix": return item.equals(PokeItem.METAL_COAT);
             case "Haunter": return item.equals(PokeItem.TRADE_EVOLVER);
+            case "Poipole": return this.getLearnedMoves().contains("Dragon Pulse");
             default: return false;
         }
     }
@@ -742,6 +743,7 @@ public class Pokemon
                 case "Onix" -> "Steelix";
                 case "Haunter" -> "Gengar";
                 case "Charjabug" -> "Vikavolt";
+                case "Poipole" -> "Naganadel";
                 default -> "";
             };
 
