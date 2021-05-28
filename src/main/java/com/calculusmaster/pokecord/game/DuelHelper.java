@@ -95,7 +95,7 @@ public class DuelHelper
             this.futureSightTurns = 0;
             this.lockOnUsed = false;
             this.thousandWavesUsed = false;
-            this.imprisonUsed = true;
+            this.imprisonUsed = false;
         }
     }
 
