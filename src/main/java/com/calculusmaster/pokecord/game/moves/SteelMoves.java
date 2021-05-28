@@ -120,4 +120,9 @@ public class SteelMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String DoubleIronBash(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30) + " " + Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
+    }
 }

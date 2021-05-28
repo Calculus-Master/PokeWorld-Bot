@@ -549,4 +549,9 @@ public class NormalMoves
 
         return opponent.getName() + "'s Attack and Special Attack were lowered by 1 stage!";
     }
+
+    public String MegaPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
