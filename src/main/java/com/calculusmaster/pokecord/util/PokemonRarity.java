@@ -236,9 +236,13 @@ public class PokemonRarity
         PokemonRarity.add("Rayquaza", Rarity.LEGENDARY);
 
         //Gen 4
+
         PokemonRarity.add("Turtwig", Rarity.SILVER);
         PokemonRarity.add("Grotle", Rarity.GOLD);
         PokemonRarity.add("Torterra", Rarity.DIAMOND);
+        PokemonRarity.add("Chimchar", Rarity.SILVER);
+        PokemonRarity.add("Monferno", Rarity.GOLD);
+        PokemonRarity.add("Infernape", Rarity.DIAMOND);
 
 
         PokemonRarity.add("Dialga", Rarity.LEGENDARY);
