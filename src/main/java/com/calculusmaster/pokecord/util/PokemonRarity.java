@@ -236,6 +236,7 @@ public class PokemonRarity
         PokemonRarity.add("Groudon", Rarity.LEGENDARY);
         PokemonRarity.add("Kyogre", Rarity.LEGENDARY);
         PokemonRarity.add("Rayquaza", Rarity.LEGENDARY);
+        PokemonRarity.add("Jirachi", Rarity.MYTHICAL);
 
         //Gen 4
 
@@ -250,9 +251,9 @@ public class PokemonRarity
         PokemonRarity.add("Empoleon", Rarity.DIAMOND);
 
 
-        PokemonRarity.add("Uxie", Rarity.LEGENDARY);
-        PokemonRarity.add("Mespirit", Rarity.LEGENDARY);
-        PokemonRarity.add("Azelf", Rarity.LEGENDARY);
+        PokemonRarity.add("Uxie", Rarity.MYTHICAL);
+        PokemonRarity.add("Mespirit", Rarity.MYTHICAL);
+        PokemonRarity.add("Azelf", Rarity.MYTHICAL);
         PokemonRarity.add("Dialga", Rarity.LEGENDARY);
         PokemonRarity.add("Palkia", Rarity.LEGENDARY);
         PokemonRarity.add("Heatran", Rarity.LEGENDARY);
@@ -260,10 +261,10 @@ public class PokemonRarity
         PokemonRarity.add("Giratina", Rarity.LEGENDARY);
         PokemonRarity.add("Origin Giratina", Rarity.EXTREME);
         PokemonRarity.add("Cresselia", Rarity.LEGENDARY);
-        PokemonRarity.add("Phione", Rarity.LEGENDARY);
-        PokemonRarity.add("Manaphy", Rarity.LEGENDARY);
+        PokemonRarity.add("Phione", Rarity.MYTHICAL);
+        PokemonRarity.add("Manaphy", Rarity.MYTHICAL);
         PokemonRarity.add("Darkrai", Rarity.LEGENDARY);
-        PokemonRarity.add("Shaymin", Rarity.LEGENDARY);
+        PokemonRarity.add("Shaymin", Rarity.MYTHICAL);
         PokemonRarity.add("Shaymin Sky", Rarity.EXTREME);
         PokemonRarity.add("Arceus", Rarity.LEGENDARY);
 
@@ -295,7 +296,7 @@ public class PokemonRarity
         PokemonRarity.add("Black Kyurem", Rarity.EXTREME);
         PokemonRarity.add("White Kyurem", Rarity.EXTREME);
         PokemonRarity.add("Keldeo", Rarity.LEGENDARY);
-        PokemonRarity.add("Meloetta", Rarity.LEGENDARY);
+        PokemonRarity.add("Meloetta", Rarity.MYTHICAL);
         PokemonRarity.add("Meloetta Pirouette", Rarity.EXTREME);
         PokemonRarity.add("Genesect", Rarity.MYTHICAL);
 
