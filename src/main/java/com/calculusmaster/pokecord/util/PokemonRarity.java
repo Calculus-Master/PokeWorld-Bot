@@ -248,12 +248,21 @@ public class PokemonRarity
         PokemonRarity.add("Empoleon", Rarity.DIAMOND);
 
 
+        PokemonRarity.add("Uxie", Rarity.LEGENDARY);
+        PokemonRarity.add("Mespirit", Rarity.LEGENDARY);
+        PokemonRarity.add("Azelf", Rarity.LEGENDARY);
         PokemonRarity.add("Dialga", Rarity.LEGENDARY);
         PokemonRarity.add("Palkia", Rarity.LEGENDARY);
         PokemonRarity.add("Heatran", Rarity.LEGENDARY);
         PokemonRarity.add("Regigigas", Rarity.LEGENDARY);
         PokemonRarity.add("Giratina", Rarity.LEGENDARY);
         PokemonRarity.add("Origin Giratina", Rarity.EXTREME);
+        PokemonRarity.add("Cresselia", Rarity.LEGENDARY);
+        PokemonRarity.add("Phione", Rarity.LEGENDARY);
+        PokemonRarity.add("Manaphy", Rarity.LEGENDARY);
+        PokemonRarity.add("Darkrai", Rarity.LEGENDARY);
+        PokemonRarity.add("Shaymin", Rarity.LEGENDARY);
+        PokemonRarity.add("Shaymin Sky", Rarity.EXTREME);
 
         //Gen 5
 
