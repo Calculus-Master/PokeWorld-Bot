@@ -318,13 +318,13 @@ public class PokemonRarity
         PokemonRarity.add("Necrozma", Rarity.LEGENDARY);
         PokemonRarity.add("Dusk Mane Necrozma", Rarity.EXTREME);
         PokemonRarity.add("Dawn Wings Necrozma", Rarity.EXTREME);
-
+        PokemonRarity.add("Magearna", Rarity.MYTHICAL);
         PokemonRarity.add("Marshadow", Rarity.MYTHICAL);
         PokemonRarity.add("Poipole", Rarity.LEGENDARY);
         PokemonRarity.add("Naganadel", Rarity.LEGENDARY);
         PokemonRarity.add("Stakataka", Rarity.LEGENDARY);
         PokemonRarity.add("Blacephalon", Rarity.LEGENDARY);
-        PokemonRarity.add("Zeraora", Rarity.LEGENDARY);
+        PokemonRarity.add("Zeraora", Rarity.MYTHICAL);
         PokemonRarity.add("Meltan", Rarity.PLATINUM);
         PokemonRarity.add("Melmetal", Rarity.MYTHICAL);
 
