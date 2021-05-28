@@ -310,6 +310,7 @@ public class PokemonRarity
         PokemonRarity.add("Lunala", Rarity.LEGENDARY);
         PokemonRarity.add("Nihilego", Rarity.LEGENDARY);
         PokemonRarity.add("Buzzwole", Rarity.LEGENDARY);
+        PokemonRarity.add("Pheromosa", Rarity.LEGENDARY);
 
         PokemonRarity.add("Necrozma", Rarity.LEGENDARY);
         PokemonRarity.add("Dusk Mane Necrozma", Rarity.EXTREME);
