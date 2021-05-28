@@ -541,4 +541,12 @@ public class NormalMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String NobleRoar(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.changeStatMultiplier(Stat.ATK, -1);
+        opponent.changeStatMultiplier(Stat.SPATK, -1);
+
+        return opponent.getName() + "'s Attack and Special Attack were lowered by 1 stage!";
+    }
 }

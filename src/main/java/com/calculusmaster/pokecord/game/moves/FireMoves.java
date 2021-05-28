@@ -148,4 +148,9 @@ public class FireMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 10);
     }
+
+    public String FusionFlare(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

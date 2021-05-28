@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.moves;
 import com.calculusmaster.pokecord.game.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.elements.Weather;
@@ -142,5 +143,25 @@ public class IceMoves
     public String IcePunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FROZEN, 10);
+    }
+
+    public String Glaciate(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPD, -1, 100, false);
+    }
+
+    public String FreezeShock(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
+    }
+
+    public String IceBurn(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 30);
+    }
+
+    public String IcyWind(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPD, -1, 100, false);
     }
 }

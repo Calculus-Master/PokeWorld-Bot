@@ -213,4 +213,10 @@ public class PsychicMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 10);
     }
+
+    public String Imprison(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(user.getUUID()).imprisonUsed = true;
+        return opponent.getName() + " can no longer use moves that " + user.getName() + " knows!";
+    }
 }

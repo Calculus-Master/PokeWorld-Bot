@@ -200,6 +200,8 @@ public class Duel
             this.players[this.current].usedZMove = true;
         }
 
+        if(this.data(this.other).imprisonUsed && this.players[this.other].active.getLearnedMoves().contains(move.getName())) cantUse = true;
+
         if(move.getName().equals("Defense Curl")) this.data(this.current).defenseCurlUsed = true;
 
         if(move.getName().equals("Rollout"))
@@ -310,6 +312,10 @@ public class Duel
 
             accurate = true;
         }
+
+        if(move.getName().equals("Fusion Bolt") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move.getName().equals("Fusion Flare")) move.setPower(move.getPower() * 2);
+
+        if(move.getName().equals("Fusion Flare") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move.getName().equals("Fusion Bolt")) move.setPower(move.getPower() * 2);
 
         //Item-based Buffs
         if(this.players[this.current].active.hasItem() && PokeItem.asItem(this.players[this.current].active.getItem()).equals(PokeItem.METAL_COAT))

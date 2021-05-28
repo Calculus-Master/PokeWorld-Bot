@@ -152,4 +152,9 @@ public class ElectricMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 10);
     }
+
+    public String FusionBolt(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
