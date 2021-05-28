@@ -327,6 +327,9 @@ public class Duel
         String name = this.players[this.current].active.getName();
         List<String> rechargeMoves = Arrays.asList("Hyper Beam", "Blast Burn", "Hydro Cannon", "Frenzy Plant", "Roar Of Time", "Prismatic Laser", "Eternabeam", "Giga Impact");
 
+        //Ensures the recharge occurs when the recharge move isn't used
+        if(this.data(this.current).recharge && !rechargeMoves.contains(move.getName())) this.data(this.current).recharge = false;
+
         //Check if user has to recharge
         if(this.data(this.current).recharge && rechargeMoves.contains(move.getName()))
         {
