@@ -277,6 +277,7 @@ public class Move
         this.hitCrit = false;
         this.isZMove = false;
         this.damageMultiplier = 1.0;
+        this.setPriority();
     }
 
     public void setType(Type t)

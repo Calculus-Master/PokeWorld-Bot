@@ -137,6 +137,8 @@ public class Duel
                 this.current = 1;
                 this.other = 0;
 
+                boolean faintSwap = this.players[0].active.isFainted();
+
                 Move move = new Move(this.players[1].active.getLearnedMoves().get(this.queuedMoves.get(this.players[1].ID).moveInd() - 1));
                 if(this.getAction(1).equals(ActionType.ZMOVE)) move = DuelHelper.getZMove(this.players[1], move);
 
@@ -145,12 +147,14 @@ public class Duel
                 this.players[0].swap(ind);
 
                 results.add(this.players[0].data.getUsername() + " brought in " + this.players[0].active.getName() + "!\n");
-                results.add(this.turn(move));
+                if(!faintSwap) results.add(this.turn(move));
             }
             else //Player 2 wants to swap
             {
                 this.current = 0;
                 this.other = 1;
+
+                boolean faintSwap = this.players[1].active.isFainted();
 
                 Move move = new Move(this.players[0].active.getLearnedMoves().get(this.queuedMoves.get(this.players[0].ID).moveInd() - 1));
                 if(this.getAction(0).equals(ActionType.ZMOVE)) move = DuelHelper.getZMove(this.players[0], move);
@@ -160,7 +164,7 @@ public class Duel
                 this.players[1].swap(ind);
 
                 results.add(this.players[1].data.getUsername() + " brought in " + this.players[1].active.getName() + "!\n");
-                results.add(this.turn(move));
+                if(!faintSwap) results.add(this.turn(move));
             }
         }
 
