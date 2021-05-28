@@ -20,9 +20,6 @@ import java.util.List;
 
 import static com.calculusmaster.pokecord.game.DuelHelper.*;
 
-/**Temporary, will replace Duel if complete
- * @see CommandDuel
- */
 public class Duel
 {
     private DuelStatus status;
@@ -203,7 +200,7 @@ public class Duel
         if(!this.data(this.current).canUseMove) return "";
 
         //Z-Crystal Event
-        if(new Random().nextInt(100) < 1) this.zcrystalEvent(move);
+        if(new Random().nextInt(100) < 5) this.zcrystalEvent(move);
 
         //Pre-Move Checks
         boolean accurate = move.isAccurate();
