@@ -36,7 +36,7 @@ public class Global
 
     public static void updatePokemonList(String playerID)
     {
-        if(playerID.equals("")) throw new IllegalStateException("Player not found");
+        if(playerID.equals("")) return;
         List<Pokemon> list = Global.getPokemonList(playerID);
         POKEMON_LISTS.put(playerID, list);
     }
