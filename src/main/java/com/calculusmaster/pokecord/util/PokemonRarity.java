@@ -277,6 +277,10 @@ public class PokemonRarity
         PokemonRarity.add("Charjabug", Rarity.SILVER);
         PokemonRarity.add("Vikavolt", Rarity.GOLD);
 
+        PokemonRarity.add("Tapu Koko", Rarity.PLATINUM);
+        PokemonRarity.add("Tapu Lele", Rarity.PLATINUM);
+        PokemonRarity.add("Tapu Bulu", Rarity.PLATINUM);
+        PokemonRarity.add("Tapu Fini", Rarity.PLATINUM);
         PokemonRarity.add("Cosmog", Rarity.LEGENDARY);
         PokemonRarity.add("Cosmoem", Rarity.LEGENDARY);
         PokemonRarity.add("Solgaleo", Rarity.LEGENDARY);
