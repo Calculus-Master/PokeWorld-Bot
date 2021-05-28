@@ -237,6 +237,10 @@ public class PokemonRarity
         PokemonRarity.add("Kyogre", Rarity.LEGENDARY);
         PokemonRarity.add("Rayquaza", Rarity.LEGENDARY);
         PokemonRarity.add("Jirachi", Rarity.MYTHICAL);
+        PokemonRarity.add("Deoxys", Rarity.LEGENDARY);
+        PokemonRarity.add("Deoxys Attack", Rarity.EXTREME);
+        PokemonRarity.add("Deoxys Defense", Rarity.EXTREME);
+        PokemonRarity.add("Deoxys Speed", Rarity.EXTREME);
 
         //Gen 4
 
