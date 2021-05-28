@@ -157,7 +157,7 @@ public class Move
                 };
 
         String end = "by " + stage + " stage" + (stage > 1 ? "s" : "") + "!";
-        String statChangeResult = (userChange ? user.getName() : opponent.getName()) + "'s " + stat + (stage > 0 ? "was lowered " : "rose ") + end;
+        String statChangeResult = (userChange ? user.getName() : opponent.getName()) + "'s " + stat + (stage > 0 ? " rose " : " was lowered ") + end;
 
         return Move.simpleDamageMove(user, opponent, duel, move) + (change ? " " + statChangeResult : "");
     }
