@@ -230,6 +230,8 @@ public class PokemonRarity
         PokemonRarity.add("Regirock", Rarity.LEGENDARY);
         PokemonRarity.add("Regice", Rarity.LEGENDARY);
         PokemonRarity.add("Registeel", Rarity.LEGENDARY);
+        PokemonRarity.add("Latias", Rarity.LEGENDARY);
+        PokemonRarity.add("Latios", Rarity.LEGENDARY);
 
         PokemonRarity.add("Groudon", Rarity.LEGENDARY);
         PokemonRarity.add("Kyogre", Rarity.LEGENDARY);
