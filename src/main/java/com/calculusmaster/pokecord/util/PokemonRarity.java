@@ -322,6 +322,7 @@ public class PokemonRarity
         PokemonRarity.add("Marshadow", Rarity.MYTHICAL);
         PokemonRarity.add("Poipole", Rarity.LEGENDARY);
         PokemonRarity.add("Naganadel", Rarity.LEGENDARY);
+        PokemonRarity.add("Stakataka", Rarity.LEGENDARY);
 
         PokemonRarity.add("Meltan", Rarity.PLATINUM);
         PokemonRarity.add("Melmetal", Rarity.MYTHICAL);
