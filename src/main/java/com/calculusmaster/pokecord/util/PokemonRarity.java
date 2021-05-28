@@ -283,6 +283,9 @@ public class PokemonRarity
         PokemonRarity.add("Black Kyurem", Rarity.EXTREME);
         PokemonRarity.add("White Kyurem", Rarity.EXTREME);
         PokemonRarity.add("Keldeo", Rarity.LEGENDARY);
+        PokemonRarity.add("Meloetta", Rarity.LEGENDARY);
+        PokemonRarity.add("Meloetta Pirouette", Rarity.EXTREME);
+
 
         PokemonRarity.add("Genesect", Rarity.MYTHICAL);
 
