@@ -359,6 +359,8 @@ public class PokemonRarity
 
         //Gen 8
 
+        PokemonRarity.add("Zacian", Rarity.LEGENDARY);
+        PokemonRarity.add("Zamazenta", Rarity.LEGENDARY);
         PokemonRarity.add("Eternatus", Rarity.LEGENDARY);
 
         PokemonRarity.add("Regieleki", Rarity.LEGENDARY);
