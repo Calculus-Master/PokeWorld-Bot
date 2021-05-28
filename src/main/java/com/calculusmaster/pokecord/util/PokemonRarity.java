@@ -263,6 +263,7 @@ public class PokemonRarity
         PokemonRarity.add("Darkrai", Rarity.LEGENDARY);
         PokemonRarity.add("Shaymin", Rarity.LEGENDARY);
         PokemonRarity.add("Shaymin Sky", Rarity.EXTREME);
+        PokemonRarity.add("Arceus", Rarity.LEGENDARY);
 
         //Gen 5
 
