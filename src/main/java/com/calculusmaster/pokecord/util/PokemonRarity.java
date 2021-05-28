@@ -277,6 +277,11 @@ public class PokemonRarity
         PokemonRarity.add("Charjabug", Rarity.SILVER);
         PokemonRarity.add("Vikavolt", Rarity.GOLD);
 
+        PokemonRarity.add("Cosmog", Rarity.LEGENDARY);
+        PokemonRarity.add("Cosmoem", Rarity.LEGENDARY);
+        PokemonRarity.add("Solgaleo", Rarity.LEGENDARY);
+        PokemonRarity.add("Lunala", Rarity.LEGENDARY);
+
         PokemonRarity.add("Necrozma", Rarity.LEGENDARY);
         PokemonRarity.add("Dusk Mane Necrozma", Rarity.EXTREME);
         PokemonRarity.add("Dawn Wings Necrozma", Rarity.EXTREME);

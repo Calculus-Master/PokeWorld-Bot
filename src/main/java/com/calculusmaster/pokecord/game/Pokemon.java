@@ -688,6 +688,7 @@ public class Pokemon
         //TODO: Regional evolutions: Exeggcute -> Alolan Exeggutor w/Leaf Stone in Alola, Koffing -> Galarian Weezing in Galar
         //TODO: Other evolutions: Cubone -> Alolan Marowak in Alola Nighttime
         //TODO: Eeveelutions: Espeon (High Friendship, Daytime), Umbreon (High Friendship, Nighttime), Leafeon (Mossy Rock), Glaceon (Icy Rock), Sylveon (Affection/Fairy Move)
+        //TODO: Cosmoem -> Solgaleo and Cosmoem -> Lunala
 
         //Trade evolutions are converted into item based ones
 
