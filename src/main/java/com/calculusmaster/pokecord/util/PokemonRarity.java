@@ -314,6 +314,7 @@ public class PokemonRarity
         PokemonRarity.add("Xurkitree", Rarity.LEGENDARY);
         PokemonRarity.add("Celesteela", Rarity.LEGENDARY);
         PokemonRarity.add("Kartana", Rarity.LEGENDARY);
+        PokemonRarity.add("Guzzlord", Rarity.LEGENDARY);
 
         PokemonRarity.add("Necrozma", Rarity.LEGENDARY);
         PokemonRarity.add("Dusk Mane Necrozma", Rarity.EXTREME);
