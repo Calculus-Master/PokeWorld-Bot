@@ -268,7 +268,8 @@ public class PokemonRarity
         PokemonRarity.add("Zygarde 10", Rarity.EXTREME);
         PokemonRarity.add("Zygarde Complete", Rarity.EXTREME);
         PokemonRarity.add("Diancie", Rarity.MYTHICAL);
-
+        PokemonRarity.add("Hoopa", Rarity.MYTHICAL);
+        PokemonRarity.add("Hoopa Unbound", Rarity.EXTREME);
         PokemonRarity.add("Volcanion", Rarity.LEGENDARY);
 
         //Gen 7
