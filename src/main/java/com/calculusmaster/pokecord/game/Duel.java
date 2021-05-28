@@ -563,6 +563,7 @@ public class Duel
                 pokemon.damage(statusDamage);
 
                 status.append(name).append(" is confused! It hurt itself in its confusion for ").append(statusDamage).append(" damage!\n");
+                results.add(status.toString());
                 return false;
             }
             else if(r.nextInt(100) < 50) pokemon.removeStatusCondition(StatusCondition.CONFUSED);
@@ -579,6 +580,7 @@ public class Duel
             else
             {
                 status.append(name).append(" is frozen and can't use any moves!");
+                results.add(status.toString());
                 return false;
             }
         }
@@ -611,6 +613,7 @@ public class Duel
 
                 status.append(name).append(" is asleep!");
 
+                results.add(status.toString());
                 return false;
             }
         }
@@ -621,6 +624,7 @@ public class Duel
             {
                 status.append(name).append(" is paralyzed and can't move!");
 
+                results.add(status.toString());
                 return false;
             }
         }
@@ -631,9 +635,11 @@ public class Duel
 
             status.append(name).append(" flinched and can't move!");
 
+            results.add(status.toString());
             return false;
         }
 
+        results.add(status.toString());
         return true;
     }
 
