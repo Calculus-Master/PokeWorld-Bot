@@ -31,14 +31,23 @@ public class CommandMarket extends Command
         List<String> IDs = new ArrayList<>();
         Mongo.MarketData.find(Filters.exists("marketID")).forEach(d -> IDs.add(d.getString("marketID")));
 
-        ExecutorService pool = Executors.newFixedThreadPool(IDs.size() / 3);
+        int split = 20;
+        List<List<String>> totalList = new ArrayList<>();
 
-        for(String s : IDs)
+        for (int j = 0; j < IDs.size(); j += split)
+        {
+            totalList.add(IDs.subList(j, j + split >= IDs.size() ? IDs.size() - 1 : j + split));
+        }
+
+
+        ExecutorService pool = Executors.newFixedThreadPool(IDs.size() / split);
+
+        for(List<String> l : totalList)
         {
             try {Thread.sleep(100);}
             catch (Exception e) {System.out.println("Can't Sleep Thread!");}
 
-            pool.execute(() -> marketEntries.add(MarketEntry.build(s)));
+            pool.execute(() -> { for(String s : l) marketEntries.add(MarketEntry.build(s)); });
         }
 
         pool.shutdown();
@@ -292,7 +301,7 @@ public class CommandMarket extends Command
         {
             String digits = "0123456789";
             StringBuilder s = new StringBuilder();
-            for(int i = 0; i < 12; i++) s.append(digits.charAt(new Random().nextInt(digits.length())));
+            for(int i = 0; i < 8; i++) s.append(digits.charAt(new Random().nextInt(digits.length())));
             return s.toString();
         }
 
