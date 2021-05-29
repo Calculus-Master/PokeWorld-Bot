@@ -130,11 +130,11 @@ public class CommandPokemon extends Command
         if(msg.contains("--order") && msg.indexOf("--order") + 1 < msg.size())
         {
             String order = msg.get(msg.indexOf("--order") + 1);
-            boolean asc = msg.indexOf("--order") + 2 < msg.size() && msg.get(msg.indexOf("--order") + 2).equals("a");
+            boolean desc = msg.indexOf("--order") + 2 < msg.size() && msg.get(msg.indexOf("--order") + 2).equals("d");
             OrderSort o = OrderSort.cast(order);
-            if(o != null) this.sortOrder(o, asc);
+            if(o != null) this.sortOrder(o, desc);
         }
-        else this.sortOrder(OrderSort.NUMBER, false);
+        else this.sortOrder(OrderSort.NUMBER, true);
 
         if(!this.pokemon.isEmpty()) this.createListEmbed();
         else this.embed.setDescription("You have no Pokemon with those characteristics!");
@@ -155,7 +155,7 @@ public class CommandPokemon extends Command
         }
     }
 
-    private void sortOrder(OrderSort o, boolean ascending)
+    private void sortOrder(OrderSort o, boolean descending)
     {
         switch (o)
         {
@@ -165,7 +165,7 @@ public class CommandPokemon extends Command
             case NAME -> this.pokemon.sort(Comparator.comparing(Pokemon::getName));
         }
 
-        if(ascending) Collections.reverse(this.pokemon);
+        if(descending) Collections.reverse(this.pokemon);
     }
 
     enum OrderSort
