@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.PokemonRarity;
@@ -94,6 +95,20 @@ public class CommandPokemon extends Command
             else if(isNumeric(index)) this.pokemon = this.pokemon.stream().filter(p -> (int)p.getTotalIVRounded() == getInt(index)).collect(Collectors.toList());
         }
 
+        //TODO: --atkiv, --defiv, --spatkiv, --spdefiv, --spdiv
+
+        this.sortIVs(msg, "--hpiv", Stat.HP);
+
+        this.sortIVs(msg, "--atkiv", Stat.ATK);
+
+        this.sortIVs(msg, "--defiv", Stat.DEF);
+
+        this.sortIVs(msg, "--spatkiv", Stat.SPATK);
+
+        this.sortIVs(msg, "--spdefiv", Stat.SPDEF);
+
+        this.sortIVs(msg, "--spdiv", Stat.SPD);
+
         if(msg.contains("--legendary") || msg.contains("--leg"))
         {
             this.pokemon = this.pokemon.stream().filter(p -> PokemonRarity.LEGENDARY.contains(p.getName())).collect(Collectors.toList());
@@ -114,8 +129,6 @@ public class CommandPokemon extends Command
             this.pokemon = this.pokemon.stream().filter(p -> PokemonRarity.MEGA.contains(p.getName())).collect(Collectors.toList());
         }
 
-        //TODO: --hpiv, --atkiv, --defiv, --spatkiv, --spdefiv, --spdiv
-
         if(msg.contains("--order") && msg.indexOf("--order") + 1 < msg.size())
         {
             String order = msg.get(msg.indexOf("--order") + 1);
@@ -129,6 +142,19 @@ public class CommandPokemon extends Command
         else this.embed.setDescription("You have no Pokemon with those characteristics!");
 
         return this;
+    }
+
+    private void sortIVs(List<String> msg, String tag, Stat iv)
+    {
+        if(msg.contains(tag) && msg.indexOf(tag) + 1 < msg.size())
+        {
+            int index = msg.indexOf(tag) + 1;
+            String after = msg.get(index);
+            boolean validIndex = index + 1 < msg.size();
+            if(after.equals(">") && validIndex && isNumeric(index + 1)) this.pokemon = this.pokemon.stream().filter(p -> p.getIVs().get(iv) > getInt(index + 1)).collect(Collectors.toList());
+            else if(after.equals("<") && validIndex && isNumeric(index + 1)) this.pokemon = this.pokemon.stream().filter(p -> p.getIVs().get(iv) < getInt(index + 1)).collect(Collectors.toList());
+            else if(isNumeric(index)) this.pokemon = this.pokemon.stream().filter(p -> p.getIVs().get(iv) == getInt(index)).collect(Collectors.toList());
+        }
     }
 
     private void sortOrder(OrderSort o, boolean ascending)
