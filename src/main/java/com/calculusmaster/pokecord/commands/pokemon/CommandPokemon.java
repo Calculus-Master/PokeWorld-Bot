@@ -25,7 +25,7 @@ public class CommandPokemon extends Command
         List<String> IDs = new ArrayList<>();
         Mongo.PlayerData.find(Filters.exists("username")).forEach(d -> IDs.add(d.getString("playerID")));
 
-        ExecutorService pool = Executors.newFixedThreadPool(IDs.size() / 3);
+        ExecutorService pool = Executors.newFixedThreadPool(IDs.size() / 2);
 
         for(String s : IDs)
         {
