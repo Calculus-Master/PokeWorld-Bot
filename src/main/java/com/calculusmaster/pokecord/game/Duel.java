@@ -784,6 +784,14 @@ public class Duel
         {
             turnHandler();
         }
+
+        boolean faintSwap1 = this.queuedMoves.containsKey(this.players[0].ID) && this.queuedMoves.get(this.players[0].ID).action().equals(ActionType.SWAP) && this.players[0].active.isFainted();
+        boolean faintSwap2 = this.queuedMoves.containsKey(this.players[1].ID) && this.queuedMoves.get(this.players[1].ID).action().equals(ActionType.SWAP) && this.players[1].active.isFainted();
+
+        if(faintSwap1 || faintSwap2)
+        {
+            turnHandler();
+        }
     }
 
     public void addDamage(int damage, String UUID)
