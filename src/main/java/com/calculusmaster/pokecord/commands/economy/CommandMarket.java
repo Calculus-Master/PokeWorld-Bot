@@ -223,7 +223,7 @@ public class CommandMarket extends Command
         Random r = new Random();
         boolean rare = r.nextInt(100) < 10;
         StringBuilder condensed = new StringBuilder();
-        for(int i = 0; i < 6; i++) condensed.append(rare ? r.nextInt(252) : r.nextInt(100)).append("-");
+        for(int i = 0; i < 6; i++) condensed.append(rare ? r.nextInt(100) : r.nextInt(30)).append("-");
         condensed.deleteCharAt(condensed.length() - 1);
 
         p.setEVs(condensed.toString());
