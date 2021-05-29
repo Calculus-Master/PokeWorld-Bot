@@ -6,7 +6,6 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.PokemonRarity;
-import com.calculusmaster.pokecord.util.TableBuilder;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.commons.collections4.list.TreeList;
@@ -213,44 +212,6 @@ public class CommandPokemon extends Command
         this.embed.setDescription(sb.toString());
         this.embed.setTitle(this.player.getName() + "'s Pokemon");
         this.embed.setFooter("Showing Numbers " + (startIndex + 1) + " to " + (endIndex) + " out of " + this.pokemon.size() + " Pokemon");
-    }
-
-    private void sendListEmbed()
-    {
-        boolean hasPage = this.msg.length >= 2 && this.isNumeric(1);
-        int perPage = 10;
-        int startIndex = hasPage ? ((getInt(1) - 1) * perPage > this.pokemon.size() ? 0 : getInt(1)) : 0;
-        if(startIndex != 0) startIndex--;
-
-        startIndex *= perPage;
-        int endIndex = Math.min(startIndex + perPage, this.pokemon.size());
-
-        String[] pokemonNames = new String[endIndex - startIndex];
-        String[][] pokemonData = new String[endIndex - startIndex][3];
-
-        for(int i = startIndex; i < endIndex; i++)
-        {
-            pokemonNames[i - startIndex] = this.pokemon.get(i).getName();
-
-            pokemonData[i - startIndex][0] = "Number: " + this.pokemon.get(i).getNumber();
-            pokemonData[i - startIndex][1] = "Level: " + this.pokemon.get(i).getLevel();
-            pokemonData[i - startIndex][2] = "Total IV: " + this.pokemon.get(i).getTotalIV();
-        }
-
-        TableBuilder pokemonTable = new TableBuilder()
-                .setAlignment(TableBuilder.Alignment.LEFT)
-                .addHeaders("Number", "Level", "Total IV")
-                .addRowNames(pokemonNames)
-                .setValues(pokemonData)
-                .setBorders(TableBuilder.Borders.HEADER_ROW_FRAME)
-                .frame(false);
-
-        this.embed.setDescription(pokemonTable.build());
-        this.embed.setTitle(this.player.getName() + "'s Pokemon");
-        this.embed.setFooter("Showing Numbers " + (startIndex + 1) + " to " + (endIndex) + " out of " + this.pokemon.size() + " Pokemon");
-
-        this.embed = null;
-        this.event.getChannel().sendMessage("```\n" + pokemonTable.build() + "\n```").queue();
     }
 
 //    @Deprecated
