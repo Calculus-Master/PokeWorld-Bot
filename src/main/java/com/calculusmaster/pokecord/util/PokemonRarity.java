@@ -209,6 +209,17 @@ public class PokemonRarity
         PokemonRarity.add("Totodile", Rarity.SILVER);
         PokemonRarity.add("Croconaw", Rarity.GOLD);
         PokemonRarity.add("Feraligatr", Rarity.DIAMOND);
+        PokemonRarity.add("Sentret", Rarity.COPPER);
+        PokemonRarity.add("Furret", Rarity.SILVER);
+        PokemonRarity.add("Hoothoot", Rarity.COPPER);
+        PokemonRarity.add("Noctowl", Rarity.SILVER);
+        PokemonRarity.add("Ledyba", Rarity.COPPER);
+        PokemonRarity.add("Ledian", Rarity.SILVER);
+        PokemonRarity.add("Spinarak", Rarity.COPPER);
+        PokemonRarity.add("Ariados", Rarity.SILVER);
+        PokemonRarity.add("Crobat", Rarity.GOLD);
+        PokemonRarity.add("Chinchou", Rarity.COPPER);
+        PokemonRarity.add("Lanturn", Rarity.SILVER);
 
         PokemonRarity.add("Steelix", Rarity.GOLD);
 
