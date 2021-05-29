@@ -53,6 +53,11 @@ public class DuelHelper
         public int asleepTurns;
         public int boundTurns;
 
+        public boolean flyUsed;
+        public boolean bounceUsed;
+        public boolean digUsed;
+        public boolean diveUsed;
+
         public boolean defenseCurlUsed;
         public int rolloutTurns;
         public int iceballTurns;
@@ -82,6 +87,11 @@ public class DuelHelper
 
             this.asleepTurns = 0;
             this.boundTurns = 0;
+
+            this.flyUsed = false;
+            this.bounceUsed = false;
+            this.digUsed = false;
+            this.diveUsed = false;
 
             this.defenseCurlUsed = false;
             this.rolloutTurns = 0;

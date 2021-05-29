@@ -56,6 +56,7 @@ public class DragonMoves
 
     public String Twister(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        if(duel.data(opponent.getUUID()).flyUsed || duel.data(opponent.getUUID()).bounceUsed) move.setPower(2 * move.getPower());
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
     }
 

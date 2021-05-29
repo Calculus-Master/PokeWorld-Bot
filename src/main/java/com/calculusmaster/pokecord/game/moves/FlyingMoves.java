@@ -26,6 +26,7 @@ public class FlyingMoves
 
     public String Gust(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        if(duel.data(opponent.getUUID()).flyUsed || duel.data(opponent.getUUID()).bounceUsed) move.setPower(2 * move.getPower());
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
@@ -94,7 +95,29 @@ public class FlyingMoves
 
     public String Fly(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        //TODO: Invulnerable phase, like Dig
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        if(duel.data(user.getUUID()).flyUsed)
+        {
+            duel.data(user.getUUID()).flyUsed = false;
+            return Move.simpleDamageMove(user, opponent, duel, move);
+        }
+        else
+        {
+            duel.data(user.getUUID()).flyUsed = true;
+            return user.getName() + " flew high up!";
+        }
+    }
+
+    public String Bounce(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.data(user.getUUID()).bounceUsed)
+        {
+            duel.data(user.getUUID()).bounceUsed = false;
+            return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
+        }
+        else
+        {
+            duel.data(user.getUUID()).bounceUsed = true;
+            return user.getName() + " sprung up!";
+        }
     }
 }

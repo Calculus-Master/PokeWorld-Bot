@@ -101,4 +101,29 @@ public class WaterMoves
         move.setPower(150 * user.getHealth() / (double)user.getStat(Stat.HP));
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String Dive(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.data(user.getUUID()).diveUsed)
+        {
+            duel.data(user.getUUID()).diveUsed = false;
+            return Move.simpleDamageMove(user, opponent, duel, move);
+        }
+        else
+        {
+            duel.data(user.getUUID()).diveUsed = true;
+            return user.getName() + " hid underwater!";
+        }
+    }
+
+    public String Surf(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String Whirlpool(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.addStatusCondition(StatusCondition.BOUND);
+        return Move.simpleDamageMove(user, opponent, duel, move) + " " + opponent.getName() + " is bound!";
+    }
 }

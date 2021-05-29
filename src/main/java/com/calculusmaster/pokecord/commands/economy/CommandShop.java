@@ -149,6 +149,8 @@ public class CommandShop extends Command
 
     private boolean isUpdateTime()
     {
+        if(time == null) return true;
+
         int lastHours = time.getHour() + time.getDayOfYear() * 24;
         int currentHours = this.event.getMessage().getTimeCreated().getHour() + this.event.getMessage().getTimeCreated().getHour() * 24;
 

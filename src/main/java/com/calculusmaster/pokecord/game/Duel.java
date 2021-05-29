@@ -334,6 +334,25 @@ public class Duel
 
         if(move.getName().equals("Fusion Flare") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move != null && this.players[this.other].move.getName().equals("Fusion Bolt")) move.setPower(move.getPower() * 2);
 
+        //Fly, Bounce, Dig and Dive
+
+        if(this.data(this.current).flyUsed) move = new Move("Fly");
+
+        if(this.data(this.current).bounceUsed) move = new Move("Bounce");
+
+        if(this.data(this.current).digUsed) move = new Move("Dig");
+
+        if(this.data(this.current).diveUsed) move = new Move("Dive");
+
+        List<String> flyMoves = Arrays.asList("Gust", "Twister", "Thunder", "Sky Uppercut", "Smack Down");
+        List<String> digMoves = Arrays.asList("Earthquake", "Magnitude", "Fissure");
+        List<String> diveMoves = Arrays.asList("Surf", "Whirlpool", "Low Kick");
+
+        if((this.data(this.other).flyUsed && !flyMoves.contains(move.getName())) || (this.data(this.other).bounceUsed && !flyMoves.contains(move.getName())) || (this.data(this.other).digUsed && !digMoves.contains(move.getName())) || (this.data(this.other).diveUsed && !diveMoves.contains(move.getName())))
+        {
+            otherImmune = true;
+        }
+
         //Item-based Buffs
         if(this.players[this.current].active.hasItem() && PokeItem.asItem(this.players[this.current].active.getItem()).equals(PokeItem.METAL_COAT))
         {
@@ -478,8 +497,8 @@ public class Duel
         {
             case HAIL -> {
 
-                boolean is1Affected = !this.players[0].active.isType(Type.ICE);
-                boolean is2Affected = !this.players[1].active.isType(Type.ICE);
+                boolean is1Affected = !this.players[0].active.isType(Type.ICE) && !this.data(0).digUsed && !this.data(0).diveUsed;
+                boolean is2Affected = !this.players[1].active.isType(Type.ICE) && !this.data(1).digUsed && !this.data(1).diveUsed;
 
                 if(is1Affected)
                 {
@@ -495,8 +514,8 @@ public class Duel
             }
             case SANDSTORM -> {
 
-                boolean is1Affected = !this.players[0].active.isType(Type.GROUND) && !this.players[0].active.isType(Type.ROCK) && !this.players[0].active.isType(Type.STEEL);
-                boolean is2Affected = !this.players[1].active.isType(Type.GROUND) && !this.players[1].active.isType(Type.ROCK) && !this.players[1].active.isType(Type.STEEL);
+                boolean is1Affected = !this.players[0].active.isType(Type.GROUND) && !this.players[0].active.isType(Type.ROCK) && !this.players[0].active.isType(Type.STEEL) && !this.data(0).digUsed && !this.data(0).diveUsed;
+                boolean is2Affected = !this.players[1].active.isType(Type.GROUND) && !this.players[1].active.isType(Type.ROCK) && !this.players[1].active.isType(Type.STEEL) && !this.data(1).digUsed && !this.data(1).diveUsed;
 
                 if(is1Affected)
                 {
