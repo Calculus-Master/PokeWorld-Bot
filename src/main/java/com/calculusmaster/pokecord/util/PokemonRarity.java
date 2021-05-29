@@ -396,9 +396,17 @@ public class PokemonRarity
         PokemonRarity.add("Genesect", Rarity.MYTHICAL);
 
         //Gen 6
+
         PokemonRarity.add("Chespin", Rarity.SILVER);
         PokemonRarity.add("Quilladin", Rarity.GOLD);
         PokemonRarity.add("Chesnaught", Rarity.DIAMOND);
+        PokemonRarity.add("Fennekin", Rarity.SILVER);
+        PokemonRarity.add("Braixen", Rarity.GOLD);
+        PokemonRarity.add("Delphox", Rarity.DIAMOND);
+        PokemonRarity.add("Froakie", Rarity.SILVER);
+        PokemonRarity.add("Frogadier", Rarity.GOLD);
+        PokemonRarity.add("Greninja", Rarity.DIAMOND);
+        PokemonRarity.add("Ash Greninja", Rarity.PLATINUM);
 
         PokemonRarity.add("Xerneas", Rarity.LEGENDARY);
         PokemonRarity.add("Yveltal", Rarity.LEGENDARY);
