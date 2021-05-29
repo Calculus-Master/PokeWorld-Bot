@@ -210,7 +210,8 @@ public class DuelHelper
                     case "Clanging Scales" -> ZMove.setPower(185);
                     case "Outrage" -> ZMove.setPower(190);
                     case "Draco Meteor" -> ZMove.setPower(195);
-                    case "Roar Of Time" -> ZMove.setPower(200);
+                    case "Roar Of Time", "Dragon Energy" -> ZMove.setPower(200);
+                    case "Eternabeam" -> ZMove.setPower(210);
                     default -> ZMove = fallback;
                 }
             }
@@ -223,7 +224,7 @@ public class DuelHelper
                     case "Charge Beam", "Electroweb", "Nuzzle", "Thunder Shock" -> ZMove.setPower(100);
                     case "Parabolic Charge", "Shock Wave", "Spark", "Thunder Fang" -> ZMove.setPower(120);
                     case "Thunder Punch", "Volt Switch" -> ZMove.setPower(140);
-                    case "Discharge", "Electro Ball", "Zing Zap" -> ZMove.setPower(160);
+                    case "Discharge", "Electro Ball", "Zing Zap", "Thunder Cage" -> ZMove.setPower(160);
                     case "Thunderbolt", "Wild Charge" -> ZMove.setPower(175);
                     case "Fusion Bolt", "Plasma Fists" -> ZMove.setPower(180);
                     case "Thunder" -> ZMove.setPower(185);
@@ -257,7 +258,7 @@ public class DuelHelper
                     case "Brick Break", "Drain Punch", "Vital Throw", "Wake Up Slap" -> ZMove.setPower(140);
                     case "Aura Sphere", "Low Kick", "Reversal", "Secret Sword", "Sky Uppercut", "Submission" -> ZMove.setPower(160);
                     case "Flying Press" -> ZMove.setPower(170);
-                    case "Sacred Sword" -> ZMove.setPower(175);
+                    case "Sacred Sword", "Thunderous Kick" -> ZMove.setPower(175);
                     case "Cross Chop", "Dynamic Punch", "Final Gambit", "Hammer Arm", "Jump Kick" -> ZMove.setPower(180);
                     case "Close Combat", "Focus Blast", "Superpower" -> ZMove.setPower(190);
                     case "High Jump Kick" -> ZMove.setPower(195);
@@ -418,7 +419,7 @@ public class DuelHelper
                     case "Heart Stamp", "Psybeam" -> ZMove.setPower(120);
                     case "Luster Purge", "Mist Ball", "Psycho Cut" -> ZMove.setPower(140);
                     case "Extrasensory", "Hyperspace Hole", "Psychic Fangs", "Psyshock", "Stored Power", "Zen Headbutt" -> ZMove.setPower(160);
-                    case "Psychic" -> ZMove.setPower(175);
+                    case "Psychic", "Freezing Glare" -> ZMove.setPower(175);
                     case "Dream Eater", "Photon Geyser", "Psystrike" -> ZMove.setPower(180);
                     case "Future Sight", "Synchronoise" -> ZMove.setPower(190);
                     case "Prismatic Laser", "Psycho Boost" -> ZMove.setPower(200);
