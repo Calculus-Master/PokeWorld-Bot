@@ -15,9 +15,18 @@ public enum PokeItem
     LEAF_STONE(250),
     SUN_STONE(250),
     WATER_STONE(250),
+    DUSK_STONE(250),
     TRADE_EVOLVER(1000),
     METAL_COAT(1500),
-    ZYGARDE_CUBE(6000);
+    ZYGARDE_CUBE(6000),
+    KINGS_ROCK(250),
+    GALARICA_CUFF(250),
+    GALARICA_WREATH(250),
+    RAZOR_FANG(250),
+    RAZOR_CLAW(250),
+    DRAGON_SCALE(250),
+    UPGRADE(250),
+    DUBIOUS_DISC(250);
 
     public int cost;
     PokeItem(int cost)

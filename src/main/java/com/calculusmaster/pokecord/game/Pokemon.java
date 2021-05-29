@@ -686,7 +686,7 @@ public class Pokemon
         //TODO: Trade evolutions w/item: Slowpoke -> Slowking w/Kings Rock, Seadra -> Kingdra w/Dragon Scale, Scyther -> Scizor w/Metal Coat, Electabuzz -> Electivire w/Elecitrizer, Magmar -> Magmortar w/Magmarizer, Porygon -> Porygon2 w/Upgrade, Porygon2 -> PorygonZ w/Dubious Disc
         //TODO: Item evolutions: Galarian Slowpoke -> Galarian Slowbro (w/Galarica Cuff), Galarian Slowpoke -> Galarian Slowking (w/Galarica Wreath)
         //TODO: Regional evolutions: Exeggcute -> Alolan Exeggutor w/Leaf Stone in Alola, Koffing -> Galarian Weezing in Galar
-        //TODO: Other evolutions: Cubone -> Alolan Marowak in Alola Nighttime
+        //TODO: Other evolutions: Cubone -> Alolan Marowak in Alola Nighttime, Mantyke -> Mantine (w/Remoraid in party)
         //TODO: Eeveelutions: Espeon (High Friendship, Daytime), Umbreon (High Friendship, Nighttime), Leafeon (Mossy Rock), Glaceon (Icy Rock), Sylveon (Affection/Fairy Move)
         //TODO: Cosmoem -> Solgaleo and Cosmoem -> Lunala
 
@@ -710,9 +710,25 @@ public class Pokemon
             case "Shellder":
             case "Staryu": return item.equals(PokeItem.WATER_STONE);
             case "Eevee": return item.equals(PokeItem.WATER_STONE) || item.equals(PokeItem.FIRE_STONE) || item.equals(PokeItem.THUNDER_STONE);
-            case "Onix": return item.equals(PokeItem.METAL_COAT);
+            case "Onix":
+            case "Scyther": return item.equals(PokeItem.METAL_COAT);
             case "Haunter": return item.equals(PokeItem.TRADE_EVOLVER);
             case "Poipole": return this.getLearnedMoves().contains("Dragon Pulse");
+            case "Poliwhirl": return item.equals(PokeItem.WATER_STONE) || item.equals(PokeItem.KINGS_ROCK);
+            case "Aipom": return this.getLearnedMoves().contains("Double Hit");
+            case "Sunkern": return item.equals(PokeItem.SUN_STONE);
+            case "Yanma":
+            case "Piloswine": return this.getLearnedMoves().contains("Ancient Power");
+            case "Murkrow":
+            case "Misdreavus": return item.equals(PokeItem.DUSK_STONE);
+            case "Slowpoke": return item.equals(PokeItem.KINGS_ROCK);
+            case "Galarian Slowpoke": return item.equals(PokeItem.GALARICA_CUFF) || item.equals(PokeItem.GALARICA_WREATH);
+            case "Gligar": return item.equals(PokeItem.RAZOR_FANG);
+            case "Sneasel": return item.equals(PokeItem.RAZOR_CLAW);
+            case "Seadra": return item.equals(PokeItem.DRAGON_SCALE);
+            case "Porygon": return item.equals(PokeItem.UPGRADE);
+            case "Porygon2": return item.equals(PokeItem.DUBIOUS_DISC);
+            case "Tyrogue": return true;
             default: return false;
         }
     }
@@ -744,8 +760,30 @@ public class Pokemon
                 case "Haunter" -> "Gengar";
                 case "Charjabug" -> "Vikavolt";
                 case "Poipole" -> "Naganadel";
+                case "Poliwhirl" -> PokeItem.asItem(this.getItem()).equals(PokeItem.WATER_STONE) ? "Poliwrath" : "Politoed";
+                case "Aipom" -> "Ambipom";
+                case "Sunkern" -> "Sunflora";
+                case "Yanma" -> "Yanmega";
+                case "Murkrow" -> "Honchkrow";
+                case "Slowpoke" -> "Slowking";
+                case "Galarian Slowpoke" -> PokeItem.asItem(this.getItem()).equals(PokeItem.GALARICA_CUFF) ? "Galarian Slowbro" : "Galarian Slowking";
+                case "Misdreavus" -> "Mismagius";
+                case "Gligar" -> "Gliscor";
+                case "Scyther" -> "Scizor";
+                case "Sneasel" -> "Weavile";
+                case "Piloswine" -> "Mamoswine";
+                case "Seadra" -> "Kingdra";
+                case "Porygon" -> "Porygon2";
+                case "Porygon2" -> "PorygonZ";
+                case "Tyrogue" -> this.getStat(Stat.ATK) == this.getStat(Stat.DEF) ? "Hitmontop" : (this.getStat(Stat.ATK) > this.getStat(Stat.DEF) ? "Hitmonlee" : "Hitmonchan");
                 default -> "";
             };
+
+        if(!Global.POKEMON.contains(newEvolution))
+        {
+            System.out.println(newEvolution + " isn't implemented!");
+            return;
+        }
 
         if(newEvolution.isEmpty()) throw new IllegalStateException("Evolution failed - " + this.getName());
 
