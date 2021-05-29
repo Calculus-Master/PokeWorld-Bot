@@ -175,7 +175,7 @@ public class CommandShop extends Command
         currentTRPrice = 10000 + new Random().nextInt(5000);
 
         //Items
-        int num = new Random().nextInt(8) + 3;
+        int num = new Random().nextInt(8) + 6;
         entriesItem.clear();
 
         PokeItem item;
