@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.util;
 
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.TM;
+import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 import org.bson.Document;
@@ -37,7 +38,8 @@ public class CSVHelper
         createCSVLists();
 
         //Write files
-        for(int i = 27; i <= 807; i++) writePokemonJSONFile(i);
+        //for(int i = 27; i <= 807; i++) writePokemonJSONFile(i);
+        writePokemonJSONFile(491);
     }
 
     private static void createCSVLists() throws IOException, CsvException
@@ -100,10 +102,15 @@ public class CSVHelper
         List<String[]> pokemonStatLines = pokemonStatInfo.stream().filter(l -> l[0].equals("" + dex)).collect(Collectors.toList());
 
         //pokemon_id,version_group_id,move_id,pokemon_move_method_id,level,order
-        List<String[]> pokemonTMMoveLines = pokemonMoveInfo.stream().filter(l -> l[0].equals("" + dex)).filter(l -> l[3].equals("4")).collect(Collectors.toList());
+        //Version group 18 is Ultra Sun, 20 is Sword
+        List<String[]> pokemonTMMoveLines = pokemonMoveInfo.stream().filter(l -> l[0].equals("" + dex)).filter(l -> l[3].equals("4")).filter(l -> l[1].equals("18")).collect(Collectors.toList());
+        List<String[]> pokemonTRMoveLines = pokemonMoveInfo.stream().filter(l -> l[0].equals("" + dex)).filter(l -> l[3].equals("4")).filter(l -> l[1].equals("20")).collect(Collectors.toList());
+        List<String[]> pokemonLVLMoveLines = pokemonMoveInfo.stream().filter(l -> l[0].equals("" + dex)).filter(l -> l[3].equals("1")).filter(l -> l[1].equals("18")).collect(Collectors.toList());
 
         //pokemon_id,ability_id,is_hidden,slot
         List<String[]> pokemonAbilityLines = pokemonAbilityInfo.stream().filter(l -> l[0].equals("" + dex)).collect(Collectors.toList());
+
+        String[] movesLVL = movesLVL(pokemonLVLMoveLines);
 
         data.append(keys[0], Global.normalCase(pokemonCSVLine[1]))
                 .append(keys[1], Global.normalCase(pokemonSpeciesCSVLine[1]) + "-" + htwt(pokemonCSVLine[3]) + "-" + htwt(pokemonCSVLine[4]))
@@ -115,10 +122,10 @@ public class CSVHelper
                 .append(keys[7], "[]")
                 .append(keys[8], stats(pokemonStatLines))
                 .append(keys[9], ev(pokemonStatLines))
-                .append(keys[10], "[]")
-                .append(keys[11], "[]")
-                .append(keys[12], "[]"/*movesTM(pokemonTMMoveLines)*/)
-                .append(keys[13], "[]")
+                .append(keys[10], movesLVL[0])
+                .append(keys[11], movesLVL[1])
+                .append(keys[12], movesTM(pokemonTMMoveLines))
+                .append(keys[13], movesTR(pokemonTRMoveLines))
                 .append(keys[14], abilities(pokemonAbilityLines))
                 .append(keys[15], growthrate(Integer.parseInt(pokemonSpeciesCSVLine[14])))
                 .append(keys[16], pokemonCSVLine[5])
@@ -185,6 +192,7 @@ public class CSVHelper
         List<TM> enumTMs = Arrays.asList(TM.values());
         List<Integer> outputList = new ArrayList<>();
         List<String> tmNames = new ArrayList<>();
+        List<String> tmNamesFinal = new ArrayList<>();
 
         for(String[] tmLine : tmLines)
         {
@@ -192,18 +200,107 @@ public class CSVHelper
             tmNames.add(pokemonMoveNames.stream().filter(l -> l[0].equals(tmLine[2])).collect(Collectors.toList()).get(0)[1]);
         }
 
-        for(String s : tmNames)
+        for(String move : tmNames)
+        {
+            tmNamesFinal.add(Global.normalCase(move.replaceAll("-", " ")));
+        }
+
+        for(String s : tmNamesFinal)
         {
             for(TM t : enumTMs)
             {
-                if(t.getMoveName().toLowerCase().equals(s.toLowerCase()) || t.getMoveName().toLowerCase().equals(s.replaceAll("-", " ").toLowerCase())) outputList.add(t.ordinal() + 1);
+                if(t.getMoveName().toLowerCase().equals(s.toLowerCase())) outputList.add(t.ordinal() + 1);
             }
         }
 
         Set<Integer> finalTMList = new HashSet<>(outputList);
         outputList = new ArrayList<>(finalTMList);
         outputList.sort(Comparator.comparingInt(i -> i));
-        return outputList.toString();
+
+        StringBuilder sb = new StringBuilder();
+
+        for(int i : outputList) sb.append(i).append(", ");
+
+        return "[" + sb.deleteCharAt(sb.length() - 1).deleteCharAt(sb.length() - 1).toString().trim() + "]";
+    }
+
+    private static String movesTR(List<String[]> trLines)
+    {
+        if(trLines.isEmpty()) return "[]";
+
+        List<TR> enumTRs = Arrays.asList(TR.values());
+        List<Integer> outputList = new ArrayList<>();
+        List<String> trNames = new ArrayList<>();
+        List<String> trNamesFinal = new ArrayList<>();
+
+        for(String[] trLine : trLines)
+        {
+            //tmLine[2] is the move ID
+            trNames.add(pokemonMoveNames.stream().filter(l -> l[0].equals(trLine[2])).collect(Collectors.toList()).get(0)[1]);
+        }
+
+        for(String move : trNames)
+        {
+            trNamesFinal.add(Global.normalCase(move.replaceAll("-", " ")));
+        }
+
+        for(String s : trNamesFinal)
+        {
+            for(TR t : enumTRs)
+            {
+                if(t.getMoveName().toLowerCase().equals(s.toLowerCase())) outputList.add(t.ordinal());
+            }
+        }
+
+        Set<Integer> finalTMList = new HashSet<>(outputList);
+        outputList = new ArrayList<>(finalTMList);
+        outputList.sort(Comparator.comparingInt(i -> i));
+
+        StringBuilder sb = new StringBuilder();
+
+        for(int i : outputList) sb.append(i).append(", ");
+
+        return "[" + sb.deleteCharAt(sb.length() - 1).deleteCharAt(sb.length() - 1).toString().trim() + "]";
+
+    }
+
+    //pokemon_id,version_group_id,move_id,pokemon_move_method_id,level,order
+    //For input moveLines List ^
+    private static String[] movesLVL(List<String[]> moveLines)
+    {
+        //List<String> names = new ArrayList<>();
+        //List<Integer> levels = new ArrayList<>();
+        Map<String, Integer> nameLevelMap = new HashMap<>();
+
+        String name;
+        for(String[] line : moveLines)
+        {
+            name = pokemonMoveNames.stream().filter(l -> l[0].equals(line[2])).collect(Collectors.toList()).get(0)[1];
+            name = Global.normalCase(name.replaceAll("-", " "));
+            name = "\"" + name + "\"";
+            if(!nameLevelMap.containsKey(name)) nameLevelMap.put(name, Integer.parseInt(line[4]));
+            //names.add(pokemonMoveNames.stream().filter(l -> l[0].equals(line[2])).collect(Collectors.toList()).get(0)[1]);
+            //levels.add(Integer.parseInt(line[4]));
+        }
+
+        List<Map.Entry<String, Integer>> sortedMoves = nameLevelMap.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getValue)).collect(Collectors.toList());
+
+        //List<Map.Entry<String, Integer>> sortableMoves = new ArrayList<>(nameLevelMap.entrySet());
+        //sortableMoves.sort(Comparator.comparingInt(Map.Entry::getValue));
+
+        StringBuilder moveNames = new StringBuilder();
+        StringBuilder moveLevels = new StringBuilder();
+
+        for(Map.Entry<String, Integer> e : sortedMoves)
+        {
+            moveNames.append(e.getKey()).append(", ");
+            moveLevels.append(e.getValue()).append(", ");
+        }
+
+        String moves = moveNames.deleteCharAt(moveNames.length() - 1).deleteCharAt(moveNames.length() - 1).toString().trim();
+        String levels = moveLevels.deleteCharAt(moveLevels.length() - 1).deleteCharAt(moveLevels.length() - 1).toString().trim();
+
+        return new String[]{"[" + moves + "]", "[" + levels + "]"};
     }
 
     private static String abilities(List<String[]> abilityLines)

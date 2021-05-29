@@ -64,7 +64,7 @@ public enum TR
     TR57("Poison Jab"),
     TR58("Dark Pulse"),
     TR59("Seed Bomb"),
-    TR60("X-Scissor"),
+    TR60("X Scissor"),
     TR61("Bug Buzz"),
     TR62("Dragon Pulse"),
     TR63("Power Gem"),
