@@ -422,8 +422,8 @@ public class Duel
             this.players[this.current].active.addExp(this.players[this.current].active.getDuelExp(this.players[this.other].active));
 
             new Thread(() -> {
-                Pokemon.updateEVs(this.players[this.turn].active);
-                Pokemon.updateExperience(this.players[this.turn].active);
+                Pokemon.updateEVs(this.players[this.current].active);
+                Pokemon.updateExperience(this.players[this.current].active);
             }).start();
         }
 
