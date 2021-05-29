@@ -49,6 +49,7 @@ public abstract class Command
     public static final CommandHelp.HelpEntry EVOLVE = new CommandHelp.HelpEntry("evolve");
     public static final CommandHelp.HelpEntry EQUIP = new CommandHelp.HelpEntry("equip");
     public static final CommandHelp.HelpEntry TEAM = new CommandHelp.HelpEntry("team");
+    public static final CommandHelp.HelpEntry MEGA = new CommandHelp.HelpEntry("mega");
 
     public static void init()
     {
@@ -238,6 +239,9 @@ public abstract class Command
                 .addArgDesc("number", "The number of the Z-Crystal, shown in your inventory.");
 
         TEAM.setCategory(CommandHelp.CommandCategory.POKEMON)
+                .addAliases();
+
+        MEGA.setCategory(CommandHelp.CommandCategory.POKEMON)
                 .addAliases();
     }
 
