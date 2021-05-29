@@ -681,7 +681,7 @@ public class Pokemon
     public boolean specialCanEvolve()
     {
         PokeItem item = PokeItem.asItem(this.getItem());
-        //TODO: Friendship evolutions: Alolan Meowth -> Persian, Chansey -> Blissey, Golbat -> Crobat
+        //TODO: Friendship evolutions: Alolan Meowth -> Persian, Chansey -> Blissey, Golbat -> Crobat, Pichu -> Pikachu, Cleffa -> Clefairy, Igglybuff -> Jigglypuff, Togepi -> Togetic
         //TODO: Trade evolutions: Poliwhirl -> Politoed, Kadabra -> Alakazam, Machoke -> Machamp, Graveler -> Golem, Alolan Graveler -> Alolan Golem, Haunter -> Gengar
         //TODO: Trade evolutions w/item: Slowpoke -> Slowking w/Kings Rock, Seadra -> Kingdra w/Dragon Scale, Scyther -> Scizor w/Metal Coat, Electabuzz -> Electivire w/Elecitrizer, Magmar -> Magmortar w/Magmarizer, Porygon -> Porygon2 w/Upgrade, Porygon2 -> PorygonZ w/Dubious Disc
         //TODO: Item evolutions: Galarian Slowpoke -> Galarian Slowbro (w/Galarica Cuff), Galarian Slowpoke -> Galarian Slowking (w/Galarica Wreath)

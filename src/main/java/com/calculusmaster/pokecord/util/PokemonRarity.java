@@ -220,6 +220,13 @@ public class PokemonRarity
         PokemonRarity.add("Crobat", Rarity.GOLD);
         PokemonRarity.add("Chinchou", Rarity.COPPER);
         PokemonRarity.add("Lanturn", Rarity.SILVER);
+        PokemonRarity.add("Pichu", Rarity.SILVER);
+        PokemonRarity.add("Cleffa", Rarity.SILVER);
+        PokemonRarity.add("Igglybuff", Rarity.SILVER);
+        PokemonRarity.add("Togepi", Rarity.SILVER);
+        PokemonRarity.add("Togetic", Rarity.GOLD);
+        PokemonRarity.add("Natu", Rarity.SILVER);
+        PokemonRarity.add("Xatu", Rarity.SILVER);
 
         PokemonRarity.add("Steelix", Rarity.GOLD);
 
