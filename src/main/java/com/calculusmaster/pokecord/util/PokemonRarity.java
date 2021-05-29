@@ -164,7 +164,7 @@ public class PokemonRarity
         PokemonRarity.add("Staryu", Rarity.COPPER);
         PokemonRarity.add("Starmie", Rarity.SILVER);
         PokemonRarity.add("Mr Mime", Rarity.COPPER);
-        PokemonRarity.add("Galarian MrMime", Rarity.SILVER);
+        PokemonRarity.add("Galarian Mr Mime", Rarity.SILVER);
         PokemonRarity.add("Scyther", Rarity.COPPER);
         PokemonRarity.add("Jynx", Rarity.SILVER);
         PokemonRarity.add("Electabuzz", Rarity.SILVER);
