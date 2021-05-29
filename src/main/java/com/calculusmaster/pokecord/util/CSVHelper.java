@@ -94,7 +94,7 @@ public class CSVHelper
 
         //pokemon_species_id,local_language_id,name,genus
         //local_language_id = 9 for English (index 8 since there are 9 entries per dex number)
-        String[] pokemonSpeciesNameCSVLine = pokemonSpeciesNames.stream().filter(l -> l[0].equals(dex + "")).collect(Collectors.toList()).get(8);
+        String[] pokemonSpeciesNameCSVLine = pokemonSpeciesNames.stream().filter(l -> l[0].equals(dex + "")).filter(l -> l[1].equals("9")).collect(Collectors.toList()).get(0);
 
         //id,identifier,generation_id,evolves_from_species_id,evolution_chain_id,color_id,shape_id,habitat_id,gender_rate,capture_rate,base_happiness,is_baby,hatch_counter,has_gender_differences,growth_rate_id,forms_switchable,is_legendary,is_mythical,order,conquest_order
         String[] pokemonSpeciesCSVLine = pokemonSpeciesInfo.stream().filter(l -> l[0].equals("" + dex)).collect(Collectors.toList()).get(0);
