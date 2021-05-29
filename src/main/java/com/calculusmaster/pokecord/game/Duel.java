@@ -414,11 +414,17 @@ public class Duel
             if(rechargeMoves.contains(move.getName())) this.data(this.current).recharge = true;
         }
 
-        //Give EVs if opponent has fainted
+        //Give EVs and EXP if opponent has fainted
         if(this.players[this.other].active.isFainted())
         {
-            this.players[this.turn].active.gainEVs(this.players[this.other].active);
-            new Thread(() -> Pokemon.updateEVs(this.players[this.turn].active)).start();
+            this.players[this.current].active.gainEVs(this.players[this.other].active);
+
+            this.players[this.current].active.addExp(this.players[this.current].active.getDuelExp(this.players[this.other].active));
+
+            new Thread(() -> {
+                Pokemon.updateEVs(this.players[this.turn].active);
+                Pokemon.updateExperience(this.players[this.turn].active);
+            }).start();
         }
 
         return turnResult;
@@ -559,7 +565,7 @@ public class Duel
     {
         StringBuilder status = new StringBuilder();
         Random r = new Random();
-        int statusDamage = 0;
+        int statusDamage;
 
         String name = this.players[p].active.getName();
         Pokemon pokemon = this.players[p].active;
@@ -732,26 +738,12 @@ public class Duel
         EmbedBuilder embed = new EmbedBuilder();
 
         int c = this.giveWinCredits();
-        int exp = this.giveWinExp();
 
-        embed.setDescription(this.getWinner().data.getUsername() + " has won!\nThey earned " + c + " credits and no exp (WIP)!");
+        embed.setDescription(this.getWinner().data.getUsername() + " has won!\nThey earned " + c + " credits!");
 
         this.event.getChannel().sendMessage(embed.build()).queue();
 
         DuelHelper.delete(this.players[0].ID);
-    }
-
-    private int giveWinExp()
-    {
-        double booster = this.getWinner().data.hasXPBooster() ? XPBooster.getInstance(this.getWinner().data.getXPBoosterLength()).boost : 1.0;
-
-        //int winExp = (int)(booster * win.getDuelExp(this.playerPokemon[winner == 0 ? 1 : 0]));
-        //win.addExp(this.winExp);
-        //win.gainEVs(this.playerPokemon[winner == 0 ? 1 : 0]);
-
-        //Pokemon.updateExperience(win);
-        //Pokemon.updateEVs(win);
-        return 0;
     }
 
     private int giveWinCredits()
