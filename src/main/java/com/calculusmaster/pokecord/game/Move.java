@@ -139,6 +139,8 @@ public class Move
     {
         boolean change = new Random().nextInt(100) < percent;
 
+        String results = Move.simpleDamageMove(user, opponent, duel, move);
+
         if(change)
         {
             if(userChange) user.changeStatMultiplier(s, stage);
@@ -158,7 +160,7 @@ public class Move
         String end = "by " + Math.abs(stage) + " stage" + (stage > 1 ? "s" : "") + "!";
         String statChangeResult = (userChange ? user.getName() : opponent.getName()) + "'s " + stat + (stage > 0 ? " rose " : " was lowered ") + end;
 
-        return Move.simpleDamageMove(user, opponent, duel, move) + (change ? " " + statChangeResult : "");
+        return results + (change ? " " + statChangeResult : "");
     }
 
     //Different Move Results

@@ -61,8 +61,9 @@ public class DragonMoves
 
     public String DracoMeteor(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        String results = Move.simpleDamageMove(user, opponent, duel, move);
         user.changeStatMultiplier(Stat.SPATK, -2);
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + "'s Special Attack was lowered by 2 stages!";
+        return results + " " + user.getName() + "'s Special Attack was lowered by 2 stages!";
     }
 
     public String RoarOfTime(Pokemon user, Pokemon opponent, Duel duel, Move move)

@@ -116,9 +116,10 @@ public class FightingMoves
 
     public String Superpower(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        String results = Move.simpleDamageMove(user, opponent, duel, move);
         user.changeStatMultiplier(Stat.ATK, -1);
         user.changeStatMultiplier(Stat.DEF, -1);
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + "'s Attack and Defense were lowered by 1 stage!";
+        return results + " " + user.getName() + "'s Attack and Defense were lowered by 1 stage!";
     }
 
     public String DynamicPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
