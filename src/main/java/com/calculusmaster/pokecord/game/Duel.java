@@ -386,6 +386,13 @@ public class Duel
             if(rechargeMoves.contains(move.getName())) this.data(this.current).recharge = true;
         }
 
+        //Give EVs if opponent has fainted
+        if(this.players[this.other].active.isFainted())
+        {
+            this.players[this.turn].active.gainEVs(this.players[this.other].active);
+            new Thread(() -> Pokemon.updateEVs(this.players[this.turn].active)).start();
+        }
+
         return turnResult;
     }
 
