@@ -340,6 +340,34 @@ public class Duel
             if(move.getType().equals(Type.STEEL)) move.setPower((int)(move.getPower() * 1.2));
         }
 
+        if(this.players[this.current].active.hasItem() && this.players[this.current].active.getItem().toLowerCase().contains("plate"))
+        {
+            PokeItem item = PokeItem.asItem(this.players[this.current].active.getItem());
+
+            boolean buff = switch(item) {
+                case DRACO_PLATE -> move.getType().equals(Type.DRAGON);
+                case DREAD_PLATE -> move.getType().equals(Type.DARK);
+                case EARTH_PLATE -> move.getType().equals(Type.GROUND);
+                case FIST_PLATE -> move.getType().equals(Type.FIGHTING);
+                case FLAME_PLATE -> move.getType().equals(Type.FIRE);
+                case ICICLE_PLATE -> move.getType().equals(Type.ICE);
+                case INSECT_PLATE -> move.getType().equals(Type.BUG);
+                case IRON_PLATE -> move.getType().equals(Type.STEEL);
+                case MEADOW_PLATE -> move.getType().equals(Type.GRASS);
+                case MIND_PLATE -> move.getType().equals(Type.PSYCHIC);
+                case PIXIE_PLATE -> move.getType().equals(Type.FAIRY);
+                case SKY_PLATE -> move.getType().equals(Type.FLYING);
+                case SPLASH_PLATE -> move.getType().equals(Type.WATER);
+                case SPOOKY_PLATE -> move.getType().equals(Type.GHOST);
+                case STONE_PLATE -> move.getType().equals(Type.ROCK);
+                case TOXIC_PLATE -> move.getType().equals(Type.POISON);
+                case ZAP_PLATE -> move.getType().equals(Type.ELECTRIC);
+                default -> false;
+            };
+
+            if(buff) move.setPower(move.getPower() * 1.2);
+        }
+
         //Main Results
         String name = this.players[this.current].active.getName();
         List<String> rechargeMoves = Arrays.asList("Hyper Beam", "Blast Burn", "Hydro Cannon", "Frenzy Plant", "Roar Of Time", "Prismatic Laser", "Eternabeam", "Giga Impact");
