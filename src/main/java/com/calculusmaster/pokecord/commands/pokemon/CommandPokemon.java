@@ -95,17 +95,17 @@ public class CommandPokemon extends Command
             else if(isNumeric(index)) this.pokemon = this.pokemon.stream().filter(p -> (int)p.getTotalIVRounded() == getInt(index)).collect(Collectors.toList());
         }
 
-        this.sortIVs(msg, "--hpiv", Stat.HP);
+        this.sortIVs(msg, "--hpiv", "--healthiv", Stat.HP);
 
-        this.sortIVs(msg, "--atkiv", Stat.ATK);
+        this.sortIVs(msg, "--atkiv", "-attackiv", Stat.ATK);
 
-        this.sortIVs(msg, "--defiv", Stat.DEF);
+        this.sortIVs(msg, "--defiv", "defenseiv", Stat.DEF);
 
-        this.sortIVs(msg, "--spatkiv", Stat.SPATK);
+        this.sortIVs(msg, "--spatkiv", "specialattackiv", Stat.SPATK);
 
-        this.sortIVs(msg, "--spdefiv", Stat.SPDEF);
+        this.sortIVs(msg, "--spdefiv", "specialdefenseiv", Stat.SPDEF);
 
-        this.sortIVs(msg, "--spdiv", Stat.SPD);
+        this.sortIVs(msg, "--spdiv", "speediv", Stat.SPD);
 
         if(msg.contains("--legendary") || msg.contains("--leg"))
         {
@@ -142,11 +142,14 @@ public class CommandPokemon extends Command
         return this;
     }
 
-    private void sortIVs(List<String> msg, String tag, Stat iv)
+    private void sortIVs(List<String> msg, String tag1, String tag2, Stat iv)
     {
-        if(msg.contains(tag) && msg.indexOf(tag) + 1 < msg.size())
+        boolean hasTag1 = msg.contains(tag1) && msg.indexOf(tag1) + 1 < msg.size();
+        boolean hasTag2 = msg.contains(tag2) && msg.indexOf(tag2) + 1 < msg.size();
+
+        if(hasTag1 || hasTag2)
         {
-            int index = msg.indexOf(tag) + 1;
+            int index = msg.indexOf(hasTag1 ? tag1 : tag2) + 1;
             String after = msg.get(index);
             boolean validIndex = index + 1 < msg.size();
             if(after.equals(">") && validIndex && isNumeric(index + 1)) this.pokemon = this.pokemon.stream().filter(p -> p.getIVs().get(iv) > getInt(index + 1)).collect(Collectors.toList());
