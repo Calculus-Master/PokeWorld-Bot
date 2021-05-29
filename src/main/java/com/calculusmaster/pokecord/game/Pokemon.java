@@ -935,7 +935,7 @@ public class Pokemon
             int IV = this.IV.get(s);
             int EV = this.EV.get(s);
             double stat = nature * (5 + ((this.level * (2 * base + IV + EV / 4.0)) / 100));
-            return (int)(stat * this.getStatMultiplier(s)); //TODO: This might break something
+            return (int)(stat * this.getStatMultiplier(s));
         }
     }
 

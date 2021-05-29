@@ -40,7 +40,7 @@ public class CSVHelper
         List<Integer> skip = Arrays.asList(208, 243, 244, 245, 249, 250, 251);
 
         //Write files
-        for(int i = 161; i <= 251; i++)
+        for(int i = 722; i <= 784; i++)
         {
             if(!skip.contains(i)) writePokemonJSONFile(i);
         }

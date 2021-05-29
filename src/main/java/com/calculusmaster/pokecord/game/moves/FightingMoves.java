@@ -125,4 +125,9 @@ public class FightingMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.CONFUSED, 100);
     }
+
+    public String SacredSword(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
