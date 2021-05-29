@@ -420,6 +420,16 @@ public class PokemonRarity
 
         //Gen 7
 
+        PokemonRarity.add("Rowlet", Rarity.SILVER);
+        PokemonRarity.add("Dartrix", Rarity.GOLD);
+        PokemonRarity.add("Decidueye", Rarity.DIAMOND);
+        PokemonRarity.add("Litten", Rarity.SILVER);
+        PokemonRarity.add("Torracat", Rarity.GOLD);
+        PokemonRarity.add("Incineroar", Rarity.DIAMOND);
+        PokemonRarity.add("Popplio", Rarity.SILVER);
+        PokemonRarity.add("Brionne", Rarity.GOLD);
+        PokemonRarity.add("Primarina", Rarity.DIAMOND);
+
         PokemonRarity.add("Grubbin", Rarity.COPPER);
         PokemonRarity.add("Charjabug", Rarity.SILVER);
         PokemonRarity.add("Vikavolt", Rarity.GOLD);
