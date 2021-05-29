@@ -896,7 +896,8 @@ public class Pokemon
 
     public double getTotalIVRounded()
     {
-        return Double.parseDouble(this.getTotalIV().substring(0, 5));
+        String iv = this.getTotalIV();
+        return Double.parseDouble(iv.substring(0, iv.indexOf("%")));
     }
 
     //Nature

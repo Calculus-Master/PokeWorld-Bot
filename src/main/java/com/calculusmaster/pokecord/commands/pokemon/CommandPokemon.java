@@ -119,10 +119,11 @@ public class CommandPokemon extends Command
         if(msg.contains("--order") && msg.indexOf("--order") + 1 < msg.size())
         {
             String order = msg.get(msg.indexOf("--order") + 1);
+            boolean asc = msg.indexOf("--order") + 2 < msg.size() && msg.get(msg.indexOf("--order") + 2).equals("a");
             OrderSort o = OrderSort.cast(order);
-            if(o != null) this.sortOrder(o);
+            if(o != null) this.sortOrder(o, asc);
         }
-        else this.sortOrder(OrderSort.NUMBER);
+        else this.sortOrder(OrderSort.NUMBER, false);
 
         if(!this.pokemon.isEmpty()) this.createListEmbed();
         else this.embed.setDescription("You have no Pokemon with those characteristics!");
@@ -130,15 +131,17 @@ public class CommandPokemon extends Command
         return this;
     }
 
-    private void sortOrder(OrderSort o)
+    private void sortOrder(OrderSort o, boolean ascending)
     {
         switch (o)
         {
             case NUMBER -> this.pokemon.sort(Comparator.comparingInt(Pokemon::getNumber));
-            case IV -> this.pokemon.sort((o1, o2) -> (int)(Double.parseDouble(o2.getTotalIV().substring(0, 5)) * 100 - Double.parseDouble(o1.getTotalIV().substring(0, 5)) * 100));
-            case LEVEL -> this.pokemon.sort((o1, o2) -> o2.getLevel() - o1.getLevel());
+            case IV -> this.pokemon.sort((o1, o2) -> (int)(o1.getTotalIVRounded() - o2.getTotalIVRounded()));
+            case LEVEL -> this.pokemon.sort(Comparator.comparingInt(Pokemon::getLevel));
             case NAME -> this.pokemon.sort(Comparator.comparing(Pokemon::getName));
         }
+
+        if(ascending) Collections.reverse(this.pokemon);
     }
 
     enum OrderSort
