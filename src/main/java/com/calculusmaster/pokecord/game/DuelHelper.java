@@ -453,7 +453,7 @@ public class DuelHelper
                     case "Smart Strike", "Steel Wing" -> ZMove.setPower(140);
                     case "Anchor Shot", "Flash Cannon", "Gyro Ball", "Heavy Slam", "Iron Head" -> ZMove.setPower(160);
                     case "Meteor Mash" -> ZMove.setPower(175);
-                    case "Gear Grind", "Iron Tail", "Sunsteel Strike" -> ZMove.setPower(180);
+                    case "Gear Grind", "Iron Tail", "Sunsteel Strike", "Behemoth Bash", "Behemoth Blade" -> ZMove.setPower(180);
                     case "Doom Desire" -> ZMove.setPower(200);
                     default -> ZMove = fallback;
                 }
