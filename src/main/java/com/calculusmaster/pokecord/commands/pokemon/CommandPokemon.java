@@ -95,8 +95,6 @@ public class CommandPokemon extends Command
             else if(isNumeric(index)) this.pokemon = this.pokemon.stream().filter(p -> (int)p.getTotalIVRounded() == getInt(index)).collect(Collectors.toList());
         }
 
-        //TODO: --atkiv, --defiv, --spatkiv, --spdefiv, --spdiv
-
         this.sortIVs(msg, "--hpiv", Stat.HP);
 
         this.sortIVs(msg, "--atkiv", Stat.ATK);
