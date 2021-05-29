@@ -113,7 +113,7 @@ public class CSVHelper
         String[] movesLVL = movesLVL(pokemonLVLMoveLines);
 
         data.append(keys[0], Global.normalCase(pokemonCSVLine[1]))
-                .append(keys[1], Global.normalCase(pokemonSpeciesCSVLine[1]) + "-" + htwt(pokemonCSVLine[3]) + "-" + htwt(pokemonCSVLine[4]))
+                .append(keys[1], pokemonSpeciesNameCSVLine[3].replaceAll("-", " ") + "-" + htwt(pokemonCSVLine[3]) + "-" + htwt(pokemonCSVLine[4]))
                 .append(keys[2], dex)
                 .append(keys[3], type(pokemonTypeCSVLine))
                 .append(keys[4], "[]")
