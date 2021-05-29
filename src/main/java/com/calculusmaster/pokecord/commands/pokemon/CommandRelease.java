@@ -44,28 +44,28 @@ public class CommandRelease extends Command
             Pokemon.deletePokemon(p);
             releaseRequests.remove(this.player.getId());
 
-            this.embed.setDescription("Released Level " + p.getLevel() + " " + p.getName());
+            this.embed = null;
+            this.event.getChannel().sendMessage(this.playerData.getMention() + ": Released Level " + p.getLevel() + " " + p.getName()).queue();
         }
         else if(releaseRequests.containsKey(this.player.getId()) && this.msg[1].equals("deny"))
         {
-            Pokemon p = Pokemon.build(this.playerData.getPokemonList().getString(releaseRequests.get(this.player.getId()) - 1));
-
             releaseRequests.remove(this.player.getId());
 
-            this.embed.setDescription("Cancelled releasing Level " + p.getLevel() + " " + p.getName());
+            this.embed = null;
+            this.event.getChannel().sendMessage(this.playerData.getMention() + ": Cancelled release!").queue();
         }
         else
         {
             if(this.playerData.getPokemonList().length() == 1)
             {
-                this.embed.setDescription("You can't release your last Pokemon!");
+                this.event.getChannel().sendMessage(this.playerData.getMention() + ": You can't release only Pokemon!").queue();
                 return this;
             }
 
-            releaseRequests.put(this.player.getId(), Integer.parseInt(this.msg[1]));
-            Pokemon p = Pokemon.build(this.playerData.getPokemonList().getString(releaseRequests.get(this.player.getId()) - 1));
+            releaseRequests.put(this.player.getId(), this.getInt(1));
+            Pokemon p = Pokemon.buildCore(this.playerData.getPokemonList().getString(releaseRequests.get(this.player.getId()) - 1), -1);
 
-            this.embed.setDescription("Do you want to release your Level " + p.getLevel() + " " + p.getName() + "? (Type `p!release confirm` or `p!release deny` to continue)");
+            this.event.getChannel().sendMessage("Do you want to release your Level " + p.getLevel() + " " + p.getName() + "? (Type `p!release confirm` or `p!release deny` to continue)").queue();
         }
         return this;
     }
