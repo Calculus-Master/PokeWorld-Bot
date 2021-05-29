@@ -788,8 +788,11 @@ public class Duel
         boolean faintSwap1 = this.queuedMoves.containsKey(this.players[0].ID) && this.queuedMoves.get(this.players[0].ID).action().equals(ActionType.SWAP) && this.players[0].active.isFainted();
         boolean faintSwap2 = this.queuedMoves.containsKey(this.players[1].ID) && this.queuedMoves.get(this.players[1].ID).action().equals(ActionType.SWAP) && this.players[1].active.isFainted();
 
-        if(faintSwap1 || faintSwap2)
+        if((faintSwap1 || faintSwap2) && !(faintSwap1 && faintSwap2))
         {
+            if(faintSwap1) this.submitMove(this.players[1].ID, 1, false);
+            else this.submitMove(this.players[0].ID, 1, false);
+
             turnHandler();
         }
     }
