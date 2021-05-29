@@ -9,7 +9,7 @@ import com.calculusmaster.pokecord.util.PokemonRarity;
 import com.calculusmaster.pokecord.util.TableBuilder;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import org.bson.Document;
+import org.apache.commons.collections4.list.TreeList;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -49,7 +49,7 @@ public class CommandPokemon extends Command
     {
         super(event, msg);
         //this.buildList();
-        this.pokemon = new LinkedList<>(Global.POKEMON_LISTS.get(this.player.getId()));
+        this.pokemon = new TreeList<>(Global.POKEMON_LISTS.get(this.player.getId()));
     }
 
     @Override
@@ -134,7 +134,7 @@ public class CommandPokemon extends Command
             OrderSort o = OrderSort.cast(order);
             if(o != null) this.sortOrder(o, desc);
         }
-        else this.sortOrder(OrderSort.NUMBER, true);
+        else this.sortOrder(OrderSort.NUMBER, false);
 
         if(!this.pokemon.isEmpty()) this.createListEmbed();
         else this.embed.setDescription("You have no Pokemon with those characteristics!");
@@ -163,7 +163,7 @@ public class CommandPokemon extends Command
         switch (o)
         {
             case NUMBER -> this.pokemon.sort(Comparator.comparingInt(Pokemon::getNumber));
-            case IV -> this.pokemon.sort((o1, o2) -> (int)(o1.getTotalIVRounded() - o2.getTotalIVRounded()));
+            case IV -> this.pokemon.sort(Comparator.comparingDouble(Pokemon::getTotalIVRounded));
             case LEVEL -> this.pokemon.sort(Comparator.comparingInt(Pokemon::getLevel));
             case NAME -> this.pokemon.sort(Comparator.comparing(Pokemon::getName));
         }
