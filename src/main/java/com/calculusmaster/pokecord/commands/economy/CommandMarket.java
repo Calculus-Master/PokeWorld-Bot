@@ -44,7 +44,7 @@ public class CommandMarket extends Command
         pool.shutdown();
 
         try { pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS); }
-        catch (Exception e) { System.out.println("CommandPokemon Init failed!"); }
+        catch (Exception e) { System.out.println("CommandMarket Init failed!"); }
 
         long f = System.currentTimeMillis();
         System.out.println((f - i) + "ms");

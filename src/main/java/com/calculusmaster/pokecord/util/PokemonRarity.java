@@ -474,7 +474,6 @@ public class PokemonRarity
         Collections.shuffle(SPAWNS);
 
         System.out.println("Spawn Master List Size: " + SPAWNS.size());
-        //System.out.println(SPAWNS.stream().map(n -> n.substring(0, 2)).toString());
     }
 
     public static String getSpawn()
