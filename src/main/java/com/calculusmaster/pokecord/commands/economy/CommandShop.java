@@ -11,6 +11,7 @@ import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.json.JSONObject;
 
+import java.time.OffsetDateTime;
 import java.util.*;
 
 public class CommandShop extends Command
@@ -31,6 +32,8 @@ public class CommandShop extends Command
             this.embed.setTitle("Pokecord Shop");
             return this;
         }
+
+        if(this.isUpdateTime()) this.updateDailyShops();
 
         this.page = new StringBuilder();
 
@@ -62,8 +65,6 @@ public class CommandShop extends Command
     {
         this.page.append("Rare Candies (Level up Pokemon once per candy) : `p!buy candy <amount>`");
 
-        if(day < this.event.getMessage().getTimeCreated().getDayOfYear()) this.updateDailyShops();
-
         this.page.append("\n\n**Items**:\n");
         for(PokeItem i : entriesItem) this.page.append((entriesItem.indexOf(i) + 1) + ": " + i.getStyledName() + " - " + itemPrices.get(entriesItem.indexOf(i)) + "c\n");
     }
@@ -74,7 +75,7 @@ public class CommandShop extends Command
         for(XPBooster xp : XPBooster.values()) this.page.append("`" + xp.timeForShop() + ":` (" + xp.boost + "x) " + xp.price + "c\n");
     }
 
-    private static int day = 0;
+    private static OffsetDateTime time;
     public static int currentTMPrice = 10000;
     public static int currentTRPrice = 10000;
 
@@ -83,8 +84,6 @@ public class CommandShop extends Command
 
     private void page_tm_tr()
     {
-        if(day < this.event.getMessage().getTimeCreated().getDayOfYear()) this.updateDailyShops();
-
         this.page.append("\n**Technical Machines (TMs) for " + currentTMPrice + "c each: **\n");
         for(String s : entriesTM) this.page.append(s).append("\n");
         this.page.append("\n**Technical Records (TRs) for " + currentTRPrice + "c each: **\n");
@@ -143,18 +142,25 @@ public class CommandShop extends Command
     {
         this.page.append("Z Crystals: \n\n");
 
-        if(day < this.event.getMessage().getTimeCreated().getDayOfYear()) this.updateDailyShops();
-
         for(String s : entriesZCrystal) this.page.append(s).append("\n");
 
         this.page.append("Z Crystal Price: ").append(priceZCrystal).append("c!");
+    }
+
+    private boolean isUpdateTime()
+    {
+        int lastHours = time.getHour() + time.getDayOfYear() * 24;
+        int currentHours = this.event.getMessage().getTimeCreated().getHour() + this.event.getMessage().getTimeCreated().getHour() * 24;
+
+        int interval = 4; //Every <interval> hours, shop updates
+        return currentHours - lastHours >= interval;
     }
 
     private void updateDailyShops()
     {
         System.out.println("Updating Daily Shops!");
 
-        day = this.event.getMessage().getTimeCreated().getDayOfYear();
+        time = this.event.getMessage().getTimeCreated();
 
         //TMs and TRs
         entriesTM.clear();
