@@ -137,7 +137,7 @@ public class Move
 
     public static String statChangeDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move, Stat s, int stage, int percent, boolean userChange)
     {
-        boolean change = new Random().nextInt(100) > percent;
+        boolean change = new Random().nextInt(100) < percent;
 
         if(change)
         {
@@ -155,7 +155,7 @@ public class Move
                     case SPD -> "Speed";
                 };
 
-        String end = "by " + stage + " stage" + (stage > 1 ? "s" : "") + "!";
+        String end = "by " + Math.abs(stage) + " stage" + (stage > 1 ? "s" : "") + "!";
         String statChangeResult = (userChange ? user.getName() : opponent.getName()) + "'s " + stat + (stage > 0 ? " rose " : " was lowered ") + end;
 
         return Move.simpleDamageMove(user, opponent, duel, move) + (change ? " " + statChangeResult : "");
