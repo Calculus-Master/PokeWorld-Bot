@@ -97,15 +97,15 @@ public class CommandPokemon extends Command
 
         this.sortIVs(msg, "--hpiv", "--healthiv", Stat.HP);
 
-        this.sortIVs(msg, "--atkiv", "-attackiv", Stat.ATK);
+        this.sortIVs(msg, "--atkiv", "--attackiv", Stat.ATK);
 
-        this.sortIVs(msg, "--defiv", "defenseiv", Stat.DEF);
+        this.sortIVs(msg, "--defiv", "--defenseiv", Stat.DEF);
 
-        this.sortIVs(msg, "--spatkiv", "specialattackiv", Stat.SPATK);
+        this.sortIVs(msg, "--spatkiv", "--specialattackiv", Stat.SPATK);
 
-        this.sortIVs(msg, "--spdefiv", "specialdefenseiv", Stat.SPDEF);
+        this.sortIVs(msg, "--spdefiv", "--specialdefenseiv", Stat.SPDEF);
 
-        this.sortIVs(msg, "--spdiv", "speediv", Stat.SPD);
+        this.sortIVs(msg, "--spdiv", "--speediv", Stat.SPD);
 
         if(msg.contains("--legendary") || msg.contains("--leg"))
         {
