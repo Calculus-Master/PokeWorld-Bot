@@ -29,6 +29,7 @@ public class Pokecord
         ((LoggerContext) LoggerFactory.getILoggerFactory()).getLogger("org.mongodb.driver.protocol.update").setLevel(Level.OFF);
 
         //Initializations
+        long start = System.currentTimeMillis();
 
         Global.logInfo(Pokecord.class, "main", "Starting Pokemon Init!");
         Pokemon.init();
@@ -44,12 +45,18 @@ public class Pokecord
         CommandPokemon.init();
         Global.logInfo(Pokecord.class, "main", "Completed Init!");
 
+        long end = System.currentTimeMillis();
+        System.out.println("Initialization finished in " + (end - start) + "ms!");
+
         //Create Bot
         JDABuilder bot = JDABuilder.createDefault(PrivateInfo.TOKEN);
         bot.setActivity(Activity.playing("Pokemon"));
         bot.addEventListeners(new Listener());
 
         JDA botJDA = bot.build().awaitReady();
+
+        end = System.currentTimeMillis();
+        System.out.println("Loading finished in " + (end - start) + "ms!");
 
         for(Guild g : botJDA.getGuilds())
         {
