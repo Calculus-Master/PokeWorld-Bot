@@ -19,7 +19,7 @@ public class CommandShop extends Command
 
     public CommandShop(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg, "shop <page>");
+        super(event, msg);
     }
 
     @Override

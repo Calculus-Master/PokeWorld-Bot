@@ -11,7 +11,7 @@ public class CommandSelect extends Command
 {
     public CommandSelect(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg, "select:pick <number>");
+        super(event, msg);
     }
 
     @Override

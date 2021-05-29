@@ -10,7 +10,7 @@ public class CommandReport extends Command
 {
     public CommandReport(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg, "bugreport <command> <problem>");
+        super(event, msg);
     }
 
     @Override

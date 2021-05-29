@@ -14,7 +14,7 @@ public class CommandDex extends Command
 {
     public CommandDex(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg, "dex <name>");
+        super(event, msg);
     }
 
     @Override

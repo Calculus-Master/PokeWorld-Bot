@@ -2,14 +2,13 @@ package com.calculusmaster.pokecord.commands.economy;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
-import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandInventory extends Command
 {
     public CommandInventory(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg, "inventory <page>");
+        super(event, msg);
     }
 
     @Override

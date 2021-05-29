@@ -12,7 +12,7 @@ public class CommandMoveInfo extends Command
 {
     public CommandMoveInfo(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg, "moveinfo <move>");
+        super(event, msg);
     }
 
     @Override

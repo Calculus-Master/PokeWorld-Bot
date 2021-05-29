@@ -7,7 +7,7 @@ public class CommandBalance extends Command
 {
     public CommandBalance(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg, "credits:c:bal");
+        super(event, msg);
     }
 
     @Override

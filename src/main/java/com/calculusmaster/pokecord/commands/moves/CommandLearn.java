@@ -16,7 +16,7 @@ public class CommandLearn extends Command
 
     public CommandLearn(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg, "learn <move>");
+        super(event, msg);
     }
 
     @Override

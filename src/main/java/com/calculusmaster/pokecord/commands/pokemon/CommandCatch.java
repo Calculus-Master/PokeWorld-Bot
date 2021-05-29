@@ -13,7 +13,7 @@ public class CommandCatch extends Command
 {
     public CommandCatch(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg, "catch <name>");
+        super(event, msg);
     }
 
     @Override

@@ -6,7 +6,7 @@ public class CommandInvalid extends Command
 {
     public CommandInvalid(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg, "invalid");
+        super(event, msg);
     }
 
     @Override

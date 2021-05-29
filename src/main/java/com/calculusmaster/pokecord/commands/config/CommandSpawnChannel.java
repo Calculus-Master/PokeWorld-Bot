@@ -7,7 +7,7 @@ public class CommandSpawnChannel extends Command
 {
     public CommandSpawnChannel(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg, "setspawnchannel");
+        super(event, msg);
     }
 
     @Override

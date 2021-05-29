@@ -14,7 +14,7 @@ public class CommandStart extends Command
     //Command Format: p!start <starter>
     public CommandStart(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg, "start <starter>");
+        super(event, msg);
     }
 
     @Override

@@ -278,12 +278,6 @@ public abstract class Command
         this.timeI = System.currentTimeMillis();
     }
 
-    @Deprecated
-    public Command(MessageReceivedEvent event, String[] msg, String format)
-    {
-        this(event, msg);
-    }
-
     public abstract Command runCommand() throws IOException;
 
     //Useful Methods for other Commands

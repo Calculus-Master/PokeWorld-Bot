@@ -9,7 +9,7 @@ public class CommandReplace extends Command
 {
     public CommandReplace(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg, "replace <number>");
+        super(event, msg);
     }
 
     @Override

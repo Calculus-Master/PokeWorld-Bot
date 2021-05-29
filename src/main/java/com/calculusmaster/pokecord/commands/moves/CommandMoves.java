@@ -11,7 +11,7 @@ public class CommandMoves extends Command
 {
     public CommandMoves(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg, "moves");
+        super(event, msg);
     }
 
     @Override

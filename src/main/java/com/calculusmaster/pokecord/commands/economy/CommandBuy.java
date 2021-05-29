@@ -25,7 +25,7 @@ public class CommandBuy extends Command
 
     public CommandBuy(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg, "buy <item>");
+        super(event, msg);
     }
 
     @Override

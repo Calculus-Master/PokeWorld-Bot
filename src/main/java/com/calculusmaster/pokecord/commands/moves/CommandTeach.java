@@ -12,7 +12,7 @@ public class CommandTeach extends Command
 {
     public CommandTeach(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg, "p!teach <tm:tr> <number>");
+        super(event, msg);
     }
 
     @Override

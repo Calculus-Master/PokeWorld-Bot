@@ -18,7 +18,7 @@ public class CommandHelp extends Command
 
     public CommandHelp(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg, "help <page>");
+        super(event, msg);
     }
 
     @Override
