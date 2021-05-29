@@ -37,9 +37,13 @@ public class CSVHelper
         //Read data from CSVs into Objects
         createCSVLists();
 
+        List<Integer> skip = Arrays.asList(208, 243, 244, 245, 249, 250, 251);
+
         //Write files
-        //for(int i = 27; i <= 807; i++) writePokemonJSONFile(i);
-        writePokemonJSONFile(491);
+        for(int i = 161; i <= 251; i++)
+        {
+            if(!skip.contains(i)) writePokemonJSONFile(i);
+        }
     }
 
     private static void createCSVLists() throws IOException, CsvException
@@ -113,7 +117,7 @@ public class CSVHelper
         String[] movesLVL = movesLVL(pokemonLVLMoveLines);
 
         data.append(keys[0], Global.normalCase(pokemonCSVLine[1]))
-                .append(keys[1], pokemonSpeciesNameCSVLine[3].replaceAll("-", " ") + "-" + htwt(pokemonCSVLine[3]) + "-" + htwt(pokemonCSVLine[4]))
+                .append(keys[1], pokemonSpeciesNameCSVLine[3].replaceAll("-", " ").replaceAll("é", "e") + "-" + htwt(pokemonCSVLine[3]) + "-" + htwt(pokemonCSVLine[4]))
                 .append(keys[2], dex)
                 .append(keys[3], type(pokemonTypeCSVLine))
                 .append(keys[4], "[]")
@@ -189,6 +193,8 @@ public class CSVHelper
 
     private static String movesTM(List<String[]> tmLines)
     {
+        if(tmLines.isEmpty()) return "[]";
+
         List<TM> enumTMs = Arrays.asList(TM.values());
         List<Integer> outputList = new ArrayList<>();
         List<String> tmNames = new ArrayList<>();
