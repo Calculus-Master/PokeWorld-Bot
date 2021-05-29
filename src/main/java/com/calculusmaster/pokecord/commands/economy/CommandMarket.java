@@ -16,6 +16,9 @@ import org.bson.Document;
 import org.json.JSONObject;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class CommandMarket extends Command
@@ -24,7 +27,27 @@ public class CommandMarket extends Command
 
     public static void init()
     {
-        Mongo.MarketData.find(Filters.exists("marketID")).forEach(d -> marketEntries.add(MarketEntry.build(d.getString("marketID"))));
+        long i = System.currentTimeMillis();
+        List<String> IDs = new ArrayList<>();
+        Mongo.MarketData.find(Filters.exists("marketID")).forEach(d -> IDs.add(d.getString("marketID")));
+
+        ExecutorService pool = Executors.newFixedThreadPool(IDs.size() / 3);
+
+        for(String s : IDs)
+        {
+            try {Thread.sleep(100);}
+            catch (Exception e) {System.out.println("Can't Sleep Thread!");}
+
+            pool.execute(() -> marketEntries.add(MarketEntry.build(s)));
+        }
+
+        pool.shutdown();
+
+        try { pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS); }
+        catch (Exception e) { System.out.println("CommandPokemon Init failed!"); }
+
+        long f = System.currentTimeMillis();
+        System.out.println((f - i) + "ms");
     }
 
     public CommandMarket(MessageReceivedEvent event, String[] msg) {
