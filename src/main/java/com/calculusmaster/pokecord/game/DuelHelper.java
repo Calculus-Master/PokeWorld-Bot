@@ -157,7 +157,7 @@ public class DuelHelper
     {
         ZCrystal z = ZCrystal.cast(p.data.getEquippedZCrystal());
 
-        Move fallback = new Move("Z Tackle (THIS IS A BUG)"); fallback.setPower(80);
+        Move fallback = new Move("Tackle"); fallback.setPower(80);
         if(z == null) return fallback;
 
         Move ZMove = new Move("", baseMove.getType(), null, 0);
