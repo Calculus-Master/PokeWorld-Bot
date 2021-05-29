@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
@@ -82,11 +83,13 @@ public class SpawnEventHandler
         {
             URL url = new URL(Pokemon.genericJSON(spawn).getString("normalURL"));
             BufferedImage img = ImageIO.read(url);
-            File file = new File("pokemon.png");
-            ImageIO.write(img, "png", file);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            ImageIO.write(img, "png", out);
 
-            channel.sendFile(file, "pkmn.png").embed(embed.build()).queue();
-            if(g.getId().equals(PrivateInfo.SERVER_ID_MAIN)) g.getTextChannelById("843996103639695360").sendFile(file, "pkmn.png").embed(embed.build()).queue();
+            byte[] bytes = out.toByteArray();
+
+            channel.sendFile(bytes, "pkmn.png").embed(embed.build()).queue();
+            if(g.getId().equals(PrivateInfo.SERVER_ID_MAIN)) g.getTextChannelById("843996103639695360").sendFile(bytes, "pkmn.png").embed(embed.build()).queue();
         }
         catch (Exception e)
         {
