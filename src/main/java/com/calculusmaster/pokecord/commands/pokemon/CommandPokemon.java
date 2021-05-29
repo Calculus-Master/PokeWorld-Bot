@@ -59,17 +59,17 @@ public class CommandPokemon extends Command
 
         if(msg.contains("--name") && msg.indexOf("--name") + 1 < msg.size())
         {
-            String name = "";
+            StringBuilder name = new StringBuilder();
 
             for(int i = msg.indexOf("--name") + 1; i < msg.size(); i++)
             {
-                if(!msg.get(i).contains("--")) name += msg.get(i) + " ";
+                if(!msg.get(i).contains("--")) name.append(msg.get(i)).append(" ");
                 else i = msg.size();
             }
 
-            name = Global.normalCase(name.trim());
+            name = new StringBuilder(Global.normalCase(name.toString().trim()));
 
-            String searchName = name;
+            String searchName = name.toString();
 
             //String name = msg.get(msg.indexOf("--name") + 1);
             if(isPokemon(searchName)) this.pokemon = this.pokemon.stream().filter(p -> p.getName().equals(searchName)).collect(Collectors.toList());
