@@ -2,9 +2,15 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.Duel;
+import com.calculusmaster.pokecord.game.DuelHelper;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.util.PokemonRarity;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CommandTeam extends Command
 {
@@ -97,19 +103,32 @@ public class CommandTeam extends Command
 
             StringBuilder team = new StringBuilder();
 
-            Pokemon p;
-            for(int i = 0; i < MAX_TEAM_SIZE; i++)
+            if(DuelHelper.isInDuel(this.player.getId()))
             {
-                team.append(i + 1).append(": ");
+                Duel d = DuelHelper.instance(this.player.getId());
+                List<Pokemon> teamPokemon = d.getPlayers()[d.indexOf(this.player.getId())].team;
 
-                if(i < this.playerData.getTeam().length())
+                for(int i = 0; i < teamPokemon.size(); i++)
                 {
-                    p = Pokemon.buildCore(this.playerData.getTeam().getString(i), -1);
-                    team.append("Level ").append(p.getLevel()).append(" ").append(p.getName()).append(this.getTag(p.getName()));
+                    team.append(i + 1).append(": ").append(teamPokemon.get(i).getName()).append(teamPokemon.get(i).isFainted() ? " (Fainted)" : " (" + teamPokemon.get(i).getHealth() + " / " + teamPokemon.get(i).getStat(Stat.HP) + " HP)").append("\n");
                 }
-                else team.append("None");
+            }
+            else
+            {
+                Pokemon p;
+                for(int i = 0; i < MAX_TEAM_SIZE; i++)
+                {
+                    team.append(i + 1).append(": ");
 
-                team.append("\n");
+                    if(i < this.playerData.getTeam().length())
+                    {
+                        p = Pokemon.buildCore(this.playerData.getTeam().getString(i), -1);
+                        team.append("Level ").append(p.getLevel()).append(" ").append(p.getName()).append(this.getTag(p.getName()));
+                    }
+                    else team.append("None");
+
+                    team.append("\n");
+                }
             }
 
             this.embed.setDescription(team.toString());
@@ -120,6 +139,13 @@ public class CommandTeam extends Command
 
     private String getTag(String name)
     {
+        if(DuelHelper.isInDuel(this.player.getId()))
+        {
+            Duel d = DuelHelper.instance(this.player.getId());
+            List<Pokemon> team = d.getPlayers()[d.indexOf(this.player.getId())].team;
+            if(team.stream().filter(p -> p.getName().equals(name)).collect(Collectors.toList()).get(0).isFainted()) return " (Fainted)";
+        }
+
         if(PokemonRarity.LEGENDARY.contains(name)) return " (L)";
         if(PokemonRarity.MYTHICAL.contains(name)) return " (MY)";
         if(PokemonRarity.ULTRA_BEAST.contains(name)) return " (UB)";
