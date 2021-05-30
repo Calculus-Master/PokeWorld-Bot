@@ -135,6 +135,17 @@ public class WildDuel extends Duel
     }
 
     @Override
+    protected String getHB(int p)
+    {
+        StringBuilder sb = new StringBuilder().append(this.players[p].data.getUsername()).append(": ");
+
+        if(this.players[p].active.isFainted()) sb.append("FAINTED");
+        else sb.append(this.players[p].active.getHealth()).append(" / ").append(this.players[p].active.getStat(Stat.HP)).append(" HP ").append(this.players[p].active.getActiveStatusConditions());
+
+        return sb.toString();
+    }
+
+    @Override
     public boolean isComplete()
     {
         return this.players[0].active.isFainted() || this.players[1].active.isFainted();

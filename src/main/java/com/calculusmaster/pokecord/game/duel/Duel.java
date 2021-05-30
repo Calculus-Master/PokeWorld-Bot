@@ -893,7 +893,7 @@ public class Duel
         return this.isComplete() ? "" : healthBarP1 + "\n" + healthBarP2;
     }
 
-    private String getHB(int p)
+    protected String getHB(int p)
     {
         StringBuilder sb = new StringBuilder().append(this.players[p].data.getUsername()).append("'s ").append(this.players[p].active.getName()).append(": ");
 

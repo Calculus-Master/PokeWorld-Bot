@@ -125,27 +125,13 @@ public class DuelHelper
     {
         public WildPokemon()
         {
-            super();
-
-            Pokemon p = Pokemon.create(Global.POKEMON.get(new Random().nextInt(Global.POKEMON.size())));
-            //TODO: Need to randomize Level, EV, Moves, Item
-
-            this.team = List.of(p);
-            this.active = this.team.get(0);
-            this.move = null;
-
-            this.data = new PlayerDataQuery("BOT")
-            {
-                @Override
-                public String getUsername()
-                {
-                    return "The Wild " + p.getName();
-                }
-            };
+            this(Global.POKEMON.get(new Random().nextInt(Global.POKEMON.size())));
         }
 
         public WildPokemon(String specific)
         {
+            super();
+
             Pokemon p = Pokemon.create(specific);
 
             this.team = List.of(p);
