@@ -44,7 +44,9 @@ public class WildDuel extends Duel
         {
             //Get moves - [1] is the bot so get a random move
             this.players[0].move = new Move(this.players[0].active.getLearnedMoves().get(this.queuedMoves.get(this.players[0].ID).moveInd() - 1));
-            this.players[1].move = new Move(this.players[1].active.getLearnedMoves().get(new Random().nextInt(this.players[1].active.getLearnedMoves().size())));
+
+            String botMove = this.players[1].active.getLearnedMoves().get(new Random().nextInt(this.players[1].active.getLearnedMoves().size()));
+            this.players[1].move = new Move(!Move.isMove(botMove) || Move.WIP_MOVES.contains(botMove) ? "Tackle" : botMove);
 
             //Set who goes first
             int speed1 = this.players[0].active.getStat(Stat.SPD);
