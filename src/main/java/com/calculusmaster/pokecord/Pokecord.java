@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.commands.duel.CommandWildDuel;
 import com.calculusmaster.pokecord.commands.economy.CommandMarket;
 import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.game.Move;
@@ -33,6 +34,8 @@ public class Pokecord
 
         Global.logInfo(Pokecord.class, "main", "Starting Pokemon Init!");
         Pokemon.init();
+        Global.logInfo(Pokecord.class, "main", "Starting CommandWildDuel EV Lists Init!");
+        CommandWildDuel.init();
         Global.logInfo(Pokecord.class, "main", "Starting Move Init!");
         Move.init();
         Global.logInfo(Pokecord.class, "main", "Starting PokemonRarity Init!");

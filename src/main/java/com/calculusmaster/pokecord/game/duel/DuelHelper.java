@@ -6,10 +6,10 @@ import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.PokemonRarity;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DuelHelper
@@ -120,6 +120,49 @@ public class DuelHelper
         SWAP;
     }
 
+    //Singular Pokemon
+    public static class WildPokemon extends Player
+    {
+        public WildPokemon()
+        {
+            super();
+
+            Pokemon p = Pokemon.create(Global.POKEMON.get(new Random().nextInt(Global.POKEMON.size())));
+            //TODO: Need to randomize Level, EV, Moves, Item
+
+            this.team = List.of(p);
+            this.active = this.team.get(0);
+            this.move = null;
+
+            this.data = new PlayerDataQuery("BOT")
+            {
+                @Override
+                public String getUsername()
+                {
+                    return "The Wild " + p.getName();
+                }
+            };
+        }
+
+        public WildPokemon(String specific)
+        {
+            Pokemon p = Pokemon.create(specific);
+
+            this.team = List.of(p);
+            this.active = this.team.get(0);
+            this.move = null;
+
+            this.data = new PlayerDataQuery("BOT")
+            {
+                @Override
+                public String getUsername()
+                {
+                    return "The Wild " + p.getName();
+                }
+            };
+        }
+    }
+
     public static class Player
     {
         public String ID;
@@ -142,6 +185,13 @@ public class DuelHelper
             this.team = Collections.unmodifiableList(teamBuilder);
             this.active = this.team.get(0);
             this.move = null;
+            this.usedZMove = false;
+        }
+
+        public Player()
+        {
+            this.ID = "BOT";
+            this.data = null;
             this.usedZMove = false;
         }
 

@@ -50,6 +50,7 @@ public abstract class Command
     public static final CommandHelp.HelpEntry EQUIP = new CommandHelp.HelpEntry("equip");
     public static final CommandHelp.HelpEntry TEAM = new CommandHelp.HelpEntry("team");
     public static final CommandHelp.HelpEntry MEGA = new CommandHelp.HelpEntry("mega");
+    public static final CommandHelp.HelpEntry WILDDUEL = new CommandHelp.HelpEntry("wildduel");
 
     public static void init()
     {
@@ -243,6 +244,9 @@ public abstract class Command
 
         MEGA.setCategory(CommandHelp.CommandCategory.POKEMON)
                 .addAliases();
+
+        WILDDUEL.setCategory(CommandHelp.CommandCategory.DUEL)
+                .addAliases("wild");
     }
 
     protected MessageReceivedEvent event;

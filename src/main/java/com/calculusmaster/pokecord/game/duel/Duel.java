@@ -20,22 +20,23 @@ import java.util.List;
 
 import static com.calculusmaster.pokecord.game.duel.DuelHelper.*;
 
+//PVP Duel - Infinitely Scalable
 public class Duel
 {
-    private DuelStatus status;
-    private MessageReceivedEvent event;
-    private int size;
-    private Player[] players;
-    private Map<String, TurnAction> queuedMoves = new HashMap<>();
-    private Map<String, DuelPokemon> pokemonAttributes = new HashMap<>();
+    protected DuelStatus status;
+    protected MessageReceivedEvent event;
+    protected int size;
+    protected Player[] players;
+    protected Map<String, TurnAction> queuedMoves = new HashMap<>();
+    protected Map<String, DuelPokemon> pokemonAttributes = new HashMap<>();
 
     private int turn;
-    private int current;
-    private int other;
+    protected int current;
+    protected int other;
 
     public String first;
 
-    private List<String> results;
+    protected List<String> results;
 
     public Weather weather;
     public int weatherTurns;
@@ -60,14 +61,7 @@ public class Duel
     //Main Duel Logic
     public void turnHandler()
     {
-        this.setStatus(DuelStatus.DUELING);
-
-        this.results = new ArrayList<>();
-
-        this.players[0].move = null;
-        this.players[1].move = null;
-
-        this.first = "";
+        this.turnSetup();
 
         //Status Conditions
         if(!this.players[0].active.isFainted()) this.data(0).canUseMove = this.statusConditionEffects(0);
@@ -725,6 +719,18 @@ public class Duel
         for(Pokemon p : this.players[player].team) this.pokemonAttributes.put(p.getUUID(), new DuelPokemon(p.getUUID()));
     }
 
+    protected void turnSetup()
+    {
+        this.setStatus(DuelStatus.DUELING);
+
+        this.results = new ArrayList<>();
+
+        this.players[0].move = null;
+        this.players[1].move = null;
+
+        this.first = "";
+    }
+
     //Response Embeds
 
     public void sendTurnEmbed()
@@ -765,7 +771,7 @@ public class Duel
         DuelHelper.delete(this.players[0].ID);
     }
 
-    private int giveWinCredits()
+    protected int giveWinCredits()
     {
         int winCredits = new Random().nextInt(501) + 500;
         this.getWinner().data.changeCredits(winCredits);
@@ -909,7 +915,7 @@ public class Duel
         return this.status;
     }
 
-    private void setEvent(MessageReceivedEvent event)
+    protected void setEvent(MessageReceivedEvent event)
     {
         this.event = event;
     }

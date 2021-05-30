@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.duel.WildDuel;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
@@ -43,6 +44,20 @@ public class CommandUse extends Command
         if(d.getPlayers()[d.indexOf(this.player.getId())].active.isFainted() && !this.msg[1].equals("swap") && !d.isComplete())
         {
             this.event.getChannel().sendMessage(mention + "Your pokemon has fainted! You have to swap to another!").queue();
+            this.embed = null;
+            return this;
+        }
+
+        //Normal Move
+        if(this.msg.length == 2 && this.isNumeric(1) && this.getInt(1) > 0 && this.getInt(1) < 5)
+        {
+            d.submitMove(this.player.getId(), this.getInt(1), false);
+            this.event.getMessage().delete().queue();
+        }
+        //WildDuel only accepts p!use, so if execution has made it this far in a WildDuel, invalid message
+        else if(d instanceof WildDuel)
+        {
+            this.event.getChannel().sendMessage(mention + "You cannot swap or use a Z-Move in a Wild Pokemon duel!").queue();
             this.embed = null;
             return this;
         }
@@ -144,13 +159,6 @@ public class CommandUse extends Command
             }
 
             d.submitMove(this.player.getId(), this.getInt(2), true);
-            this.event.getMessage().delete().queue();
-        }
-
-        //Normal Move
-        if(this.msg.length == 2 && this.isNumeric(1) && this.getInt(1) > 0 && this.getInt(1) < 5)
-        {
-            d.submitMove(this.player.getId(), this.getInt(1), false);
             this.event.getMessage().delete().queue();
         }
 

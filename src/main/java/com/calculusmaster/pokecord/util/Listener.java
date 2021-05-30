@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.commands.config.CommandPrefix;
 import com.calculusmaster.pokecord.commands.config.CommandSpawnChannel;
 import com.calculusmaster.pokecord.commands.duel.CommandDuel;
 import com.calculusmaster.pokecord.commands.duel.CommandUse;
+import com.calculusmaster.pokecord.commands.duel.CommandWildDuel;
 import com.calculusmaster.pokecord.commands.economy.*;
 import com.calculusmaster.pokecord.commands.misc.CommandHelp;
 import com.calculusmaster.pokecord.commands.misc.CommandReport;
@@ -205,6 +206,10 @@ public class Listener extends ListenerAdapter
             else if(Command.MEGA.contains(msg[0]))
             {
                 c = new CommandMega(event, msg).runCommand();
+            }
+            else if(Command.WILDDUEL.contains(msg[0]))
+            {
+                c = new CommandWildDuel(event, msg).runCommand();
             }
             else if(msg[0].equals("ness"))
             {
