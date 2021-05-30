@@ -50,6 +50,9 @@ public class CommandWildDuel extends Command
         boolean randomSTAT = this.msg.length == 2 && Stat.cast(this.msg[1]) != null;
         boolean specific = this.msg.length >= 2 && Global.POKEMON.contains(this.getPokemon());
 
+        int specificPrice = 300;
+        int statSpecificPrice = 100;
+
         if(DuelHelper.isInDuel(this.player.getId()))
         {
             this.event.getMessage().getChannel().sendMessage(this.playerData.getMention() + ": You are already in a duel!").queue();
@@ -57,18 +60,36 @@ public class CommandWildDuel extends Command
         }
         else if(specific)
         {
+            if(this.playerData.getCredits() < specificPrice)
+            {
+                this.event.getMessage().getChannel().sendMessage(this.playerData.getMention() + ": You don't have enough credits! Price: " + specificPrice).queue();
+                this.embed = null;
+                return this;
+            }
+
             Duel d = WildDuel.create(this.player.getId(), this.event, this.getPokemon());
             this.event.getMessage().getChannel().sendMessage(this.playerData.getMention() + ": A wild Pokemon appeared, and it wants to challenge you!").queue();
             this.embed = null;
+
+            this.playerData.changeCredits(-1 * specificPrice);
 
             d.sendTurnEmbed();
         }
         else if(randomSTAT)
         {
+            if(this.playerData.getCredits() < statSpecificPrice)
+            {
+                this.event.getMessage().getChannel().sendMessage(this.playerData.getMention() + ": You don't have enough credits! Price: " + statSpecificPrice).queue();
+                this.embed = null;
+                return this;
+            }
+
             String pokemon = EV_LISTS.get(Stat.cast(this.msg[1]).ordinal()).get(new Random().nextInt(EV_LISTS.get(Stat.cast(this.msg[1]).ordinal()).size()));
             Duel d = WildDuel.create(this.player.getId(), this.event, pokemon);
             this.event.getMessage().getChannel().sendMessage(this.playerData.getMention() + ": A wild Pokemon appeared, and it wants to challenge you!").queue();
             this.embed = null;
+
+            this.playerData.changeCredits(-1 * statSpecificPrice);
 
             d.sendTurnEmbed();
         }
