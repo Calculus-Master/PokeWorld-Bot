@@ -205,7 +205,6 @@ public class CommandPokemon extends Command
         int endIndex = Math.min(startIndex + perPage, this.pokemon.size());
         for(int i = startIndex; i < endIndex; i++)
         {
-            if(i > this.pokemon.size() - 1) break;
             sb.append(this.getLine(this.pokemon.get(i)));
         }
 
@@ -224,6 +223,7 @@ public class CommandPokemon extends Command
 
     private String getLine(Pokemon p)
     {
+        //TODO: Slowest part of the Command is this.playerData.isInTeam -> Cache teams!
         return "**" + p.getName() + "** " + (this.playerData.isInTeam(p.getUUID()) ? "(T) " : "") + "| Number: " + p.getNumber() + " | Level " + p.getLevel() + " | Total IV: " + p.getTotalIV() + "\n";
     }
 }

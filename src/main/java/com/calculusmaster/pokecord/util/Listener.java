@@ -19,6 +19,7 @@ import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -26,9 +27,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class Listener extends ListenerAdapter
 {
+    private final Map<String, Long> cooldowns = new HashMap<>();
+    int cooldown = 4; //Seconds
+
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event)
     {
@@ -67,7 +72,17 @@ public class Listener extends ListenerAdapter
         //If the message starts with the right prefix, continue, otherwise skip the listener
         if(msg[0].startsWith(serverQuery.getPrefix()))
         {
-            //event.getChannel().sendTyping().queue();
+            //Check cooldown
+            if(this.cooldowns.containsKey(player.getId()))
+            {
+                if(System.currentTimeMillis() - this.cooldowns.get(player.getId()) <= this.cooldown * 1000L)
+                {
+                    event.getMessage().getChannel().sendMessage("<@" + player.getId() + ">: You're sending commands too quickly!").flatMap(Message::delete).delay(10, TimeUnit.SECONDS).queue();
+                    return;
+                }
+                else this.cooldowns.put(player.getId(), System.currentTimeMillis());
+            }
+            else this.cooldowns.put(player.getId(), System.currentTimeMillis());
 
             Global.logInfo(this.getClass(), "getResponseEmbed", "Parsing: " + Arrays.toString(msg));
 
