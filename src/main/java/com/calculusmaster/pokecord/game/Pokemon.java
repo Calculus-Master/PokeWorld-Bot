@@ -693,13 +693,15 @@ public class Pokemon
         //TODO: Burmy -> Mothim (Male) or Wormadam (Male) at Level 20
         //TODO: Karrablast -> Escaliver & Shelmet -> Accelgor w/Trade
         //TODO: Crabrawler -> Crabominable at Mount Lanakila
-        //TODO: Rockruff -> Lycanroc Midday/Midnight/Dusk
+        //TODO: Galarian Yamask -> Runerigus (near Dusty Bowl)
+
+        //TODO: Forms: Castform, Zacian/Zamazenta, Wormadam, Rotom, Basculin, Darmanitan Zen (Galarian Darmanitan is added), Meowstic, Pumpkaboo, Gourgeist, Oricorio
 
         //Trade evolutions are converted into item based ones
 
         return switch (this.getName()) {
             case "Pikachu", "Charjabug", "Eelektrik" -> item.equals(PokeItem.THUNDER_STONE);
-            case "Alolan Sandshrew", "Alolan Vulpix" -> item.equals(PokeItem.ICE_STONE);
+            case "Alolan Sandshrew", "Alolan Vulpix", "Galarian Darumaka" -> item.equals(PokeItem.ICE_STONE);
             case "Nidorina", "Nidorino", "Clefairy", "Jigglypuff", "Skitty", "Munna" -> item.equals(PokeItem.MOON_STONE);
             case "Vulpix", "Growlithe", "Pansear" -> item.equals(PokeItem.FIRE_STONE);
             case "Gloom" -> item.equals(PokeItem.LEAF_STONE) || item.equals(PokeItem.SUN_STONE);
@@ -816,6 +818,7 @@ public class Pokemon
                 case "Swirlix" -> "Slurpuff";
                 case "Helioptil" -> "Heliolisk";
                 case "Steenee" -> "Tsareena";
+                case "Galarian Darumaka" -> "Galarian Darmanitan";
                 default -> "";
             };
 

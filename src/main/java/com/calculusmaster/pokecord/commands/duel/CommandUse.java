@@ -114,7 +114,7 @@ public class CommandUse extends Command
                 case DECIDIUM_Z -> s.getName().equals("Decidueye") && move.getName().equals("Spirit Shackle");
                 case EEVIUM_Z -> s.getName().equals("Eevee") && move.getName().equals("Last Resort");
                 case INCINIUM_Z -> s.getName().equals("Incineroar") && move.getName().equals("Darkest Lariat");
-                case KOMMOIUM_Z -> s.getName().equals("Kommo-o") && move.getName().equals("Clanging Scales");
+                case KOMMOIUM_Z -> s.getName().equals("Kommo O") && move.getName().equals("Clanging Scales");
                 case LUNALIUM_Z -> (s.getName().equals("Lunala") || s.getName().equals("Dawn Wings Necrozma")) && move.getName().equals("Moongeist Beam");
                 case LYCANIUM_Z -> (s.getName().equals("Lycanroc") || s.getName().equals("Lycanroc Day") || s.getName().equals("Lycanroc Night")) && move.getName().equals("Stone Edge");
                 case MARSHADIUM_Z -> s.getName().equals("Marshadow") && move.getName().equals("Spectral Thief");
