@@ -77,7 +77,16 @@ public class CommandTrade extends Command
             {
                 if(this.msg[1].equals("credits") || this.msg[1].equals("c"))
                 {
-                    if(this.msg[2].equals("add")) t.addCredits(this.player.getId(), Integer.parseInt(this.msg[3]));
+                    if(this.msg[2].equals("add"))
+                    {
+                        if(this.playerData.getCredits() >= this.getInt(3)) t.addCredits(this.player.getId(), Integer.parseInt(this.msg[3]));
+                        else
+                        {
+                            this.event.getChannel().sendMessage(this.playerData.getMention() + ": You don't have that many credits!").queue();
+                            this.embed = null;
+                            return this;
+                        }
+                    }
                     else if(this.msg[2].equals("remove")) t.removeCredits(this.player.getId(), Integer.parseInt(this.msg[3]));
 
                     this.embed = t.getTradeEmbed();
@@ -95,7 +104,16 @@ public class CommandTrade extends Command
                 }
                 else if(this.msg[1].equals("redeems") || this.msg[1].equals("r"))
                 {
-                    if(this.msg[2].equals("add")) t.addRedeems(this.player.getId(), Integer.parseInt(this.msg[3]));
+                    if(this.msg[2].equals("add"))
+                    {
+                        if(this.playerData.getRedeems() >= this.getInt(3)) t.addRedeems(this.player.getId(), Integer.parseInt(this.msg[3]));
+                        else
+                        {
+                            this.event.getChannel().sendMessage(this.playerData.getMention() + ": You don't have that many redeems!").queue();
+                            this.embed = null;
+                            return this;
+                        }
+                    }
                     else if(this.msg[2].equals("remove")) t.removeRedeems(this.player.getId(), Integer.parseInt(this.msg[3]));
 
                     this.embed = t.getTradeEmbed();
