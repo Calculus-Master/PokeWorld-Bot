@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
+import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -123,16 +124,22 @@ public class DuelHelper
     //Singular Pokemon
     public static class WildPokemon extends Player
     {
-        public WildPokemon()
+        public WildPokemon(int level)
         {
-            this(Global.POKEMON.get(new Random().nextInt(Global.POKEMON.size())));
+            this(Global.POKEMON.get(new Random().nextInt(Global.POKEMON.size())), level);
         }
 
-        public WildPokemon(String specific)
+        public WildPokemon(String specific, int level)
         {
             super();
 
             Pokemon p = Pokemon.create(specific);
+            p.setLevel(level);
+            p.setHealth(p.getStat(Stat.HP));
+            for(int i = 0; i < 4; i++)
+            {
+                p.learnMove(p.getAvailableMoves().get(new Random().nextInt(p.getAvailableMoves().size())), i + 1);
+            }
 
             this.team = List.of(p);
             this.active = this.team.get(0);
