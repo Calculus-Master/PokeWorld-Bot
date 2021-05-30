@@ -64,7 +64,7 @@ public class Mongo
         }
         catch (FileNotFoundException e) { e.printStackTrace(); }
 
-        Mongo.PerformanceData.insertMany(toInsert);
+        Mongo.PokemonInfo.insertMany(toInsert);
     }
 
     private static Document getDocumentFromJSON(JSONObject j)
