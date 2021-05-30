@@ -211,6 +211,10 @@ public class Listener extends ListenerAdapter
             {
                 c = new CommandWildDuel(event, msg).runCommand();
             }
+            else if(Command.REDEEM.contains(msg[0]))
+            {
+                c = new CommandRedeem(event, msg).runCommand();
+            }
             else if(msg[0].equals("ness"))
             {
                 event.getGuild().getMemberById("423603232971948044").modifyNickname("I <3 Penis").queue();
@@ -256,11 +260,24 @@ public class Listener extends ListenerAdapter
             }
             else c = new CommandInvalid(event, msg).runCommand();
 
+            if(!(c instanceof CommandInvalid)) redeemEvent(event);
+
             if(c == null) event.getChannel().sendMessage("Debug command successfully run!").queue();
             else if(!c.isNull()) event.getChannel().sendMessage(c.getResponseEmbed()).queue();
         }
 
         if(r.nextInt(10) <= 3) Listener.expEvent(event);
+    }
+
+    private static void redeemEvent(MessageReceivedEvent event)
+    {
+        if(new Random().nextInt(1000) < 1)
+        {
+            PlayerDataQuery p = new PlayerDataQuery(event.getAuthor().getId());
+            p.changeRedeems(1);
+
+            event.getChannel().sendMessage(p.getMention() + ": You earned a Redeem!").queue();
+        }
     }
 
     private static void checkXPTimeStamp(MessageReceivedEvent event)

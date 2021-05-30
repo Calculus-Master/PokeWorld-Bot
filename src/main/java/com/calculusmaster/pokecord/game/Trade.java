@@ -129,6 +129,18 @@ public class Trade
         this.unconfirmTrade();
     }
 
+    public void addRedeems(String id, int r)
+    {
+        this.offers[this.p(id)].addRedeems(r);
+        this.unconfirmTrade();
+    }
+
+    public void removeRedeems(String id, int r)
+    {
+        this.offers[this.p(id)].removeRedeems(r);
+        this.unconfirmTrade();
+    }
+
     //Getters
     private int p(String id)
     {
@@ -204,6 +216,7 @@ public class Trade
     {
         public int credits;
         public List<String> pokemon = new ArrayList<>();
+        public int redeems;
 
         void giveToPlayer(PlayerDataQuery giver, PlayerDataQuery receiver)
         {
@@ -219,6 +232,11 @@ public class Trade
                     giver.removePokemon(s);
                     receiver.addPokemon(s);
                 }
+            }
+            if(this.redeems > 0)
+            {
+                giver.changeRedeems(-1 * this.redeems);
+                receiver.changeRedeems(this.redeems);
             }
         }
 
@@ -240,6 +258,16 @@ public class Trade
         void removePokemon(String UUID)
         {
             this.pokemon.remove(UUID);
+        }
+
+        void addRedeems(int r)
+        {
+            this.redeems += r;
+        }
+
+        void removeRedeems(int r)
+        {
+            this.redeems -= r;
         }
     }
 

@@ -44,6 +44,7 @@ public class PlayerDataQuery extends MongoQuery
                 .append("username", player.getName())
                 .append("credits", 1000)
                 .append("selected", 1)
+                .append("redeems", 0)
                 .append("tms", TM.values()[new Random().nextInt(TM.values().length)].toString())
                 .append("trs", TR.values()[new Random().nextInt(TR.values().length)].toString());
 
@@ -153,6 +154,16 @@ public class PlayerDataQuery extends MongoQuery
 
         for(int i = 0; i < list.length(); i++) if(list.getString(i).equals(z)) return true;
         return false;
+    }
+
+    public int getRedeems()
+    {
+        if(!this.json().has("redeems"))
+        {
+            this.changeRedeems(0);
+            return 0;
+        }
+        else return this.json().has("redeems") ? this.json().getInt("redeems") : 0;
     }
 
     public JSONArray getAchievements()
@@ -344,6 +355,16 @@ public class PlayerDataQuery extends MongoQuery
     public void equipZCrystal(String z)
     {
         Mongo.PlayerData.updateOne(this.query, Updates.set("active_zcrystal", z));
+
+        this.update();
+    }
+
+    public void changeRedeems(int amount)
+    {
+        if(!this.json().has("redeems")) Mongo.PlayerData.updateOne(this.query, Updates.set("redeems", 0));
+
+        int newAmount = this.json().has("redeems") ? this.json().getInt("redeems") + amount : amount;
+        Mongo.PlayerData.updateOne(this.query, Updates.set("redeems", Math.max(newAmount, 0)));
 
         this.update();
     }

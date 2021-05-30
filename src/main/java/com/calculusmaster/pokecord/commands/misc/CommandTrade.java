@@ -86,12 +86,19 @@ public class CommandTrade extends Command
                 else if(this.msg[1].equals("pokemon") || this.msg[1].equals("p"))
                 {
                     int[] rest = this.getPokemonNumbers(this.msg);
-                    System.out.println(Arrays.toString(rest));
+                    //System.out.println(Arrays.toString(rest));
                     if(this.msg[2].equals("add")) t.addPokemon(this.player.getId(), rest);
                     else if(this.msg[2].equals("remove")) t.removePokemon(this.player.getId(), rest);
 
                     this.embed = t.getTradeEmbed();
                     //this.event.getChannel().editMessageById(t.getMessageID(), t.getTradeEmbed().build()).queue();
+                }
+                else if(this.msg[1].equals("redeems") || this.msg[1].equals("r"))
+                {
+                    if(this.msg[2].equals("add")) t.addRedeems(this.player.getId(), Integer.parseInt(this.msg[3]));
+                    else if(this.msg[2].equals("remove")) t.removeRedeems(this.player.getId(), Integer.parseInt(this.msg[3]));
+
+                    this.embed = t.getTradeEmbed();
                 }
             }
             else this.embed.setDescription(CommandInvalid.getShort());
