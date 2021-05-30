@@ -445,6 +445,9 @@ public class Duel
 
     public void zcrystalEvent(Move move)
     {
+        //Z-Crystals can't be earned from 1v1 Wild Pokemon Duels
+        if(this instanceof WildDuel) return;
+
         ZCrystal earnedZ = ZCrystal.getCrystalOfType(move.getType());
 
         System.out.println("Z-Crystal Event! " + earnedZ + ", " + move.getName() + " - " + move.getType() + "(" + this.players[this.current].data.getUsername() + ")");
