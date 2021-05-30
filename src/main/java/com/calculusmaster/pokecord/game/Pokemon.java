@@ -681,56 +681,63 @@ public class Pokemon
     public boolean specialCanEvolve()
     {
         PokeItem item = PokeItem.asItem(this.getItem());
-        //TODO: Friendship evolutions: Alolan Meowth -> Persian, Chansey -> Blissey, Golbat -> Crobat, Pichu -> Pikachu, Cleffa -> Clefairy, Igglybuff -> Jigglypuff, Togepi -> Togetic
-        //TODO: Trade evolutions: Poliwhirl -> Politoed, Kadabra -> Alakazam, Machoke -> Machamp, Graveler -> Golem, Alolan Graveler -> Alolan Golem, Haunter -> Gengar
-        //TODO: Trade evolutions w/item: Slowpoke -> Slowking w/Kings Rock, Seadra -> Kingdra w/Dragon Scale, Scyther -> Scizor w/Metal Coat, Electabuzz -> Electivire w/Elecitrizer, Magmar -> Magmortar w/Magmarizer, Porygon -> Porygon2 w/Upgrade, Porygon2 -> PorygonZ w/Dubious Disc
-        //TODO: Item evolutions: Galarian Slowpoke -> Galarian Slowbro (w/Galarica Cuff), Galarian Slowpoke -> Galarian Slowking (w/Galarica Wreath)
+        //TODO: Friendship evolutions: Alolan Meowth -> Persian, Chansey -> Blissey, Golbat -> Crobat, Pichu -> Pikachu, Cleffa -> Clefairy, Igglybuff -> Jigglypuff, Togepi -> Togetic, Azurill -> Marill, Budew -> Roselia, Chingling -> Chimecho, Buneary -> Lopunny, Munchlax -> Snorlax, Riolu -> Lucario, Woobat -> Swoobat, Swadloon -> Leavanny
+        //TODO: Friendship evolutions pt2: Type Null -> Silvally
+        //TODO: Trade evolutions: Poliwhirl -> Politoed, Kadabra -> Alakazam, Machoke -> Machamp, Graveler -> Golem, Alolan Graveler -> Alolan Golem, Haunter -> Gengar, Boldore -> Gigalith, Gurdurr -> Conkeldurr, Phantump -> Trevenant, Pumpkaboo -> Gourgeist
         //TODO: Regional evolutions: Exeggcute -> Alolan Exeggutor w/Leaf Stone in Alola, Koffing -> Galarian Weezing in Galar
         //TODO: Other evolutions: Cubone -> Alolan Marowak in Alola Nighttime, Mantyke -> Mantine (w/Remoraid in party)
         //TODO: Eeveelutions: Espeon (High Friendship, Daytime), Umbreon (High Friendship, Nighttime), Leafeon (Mossy Rock), Glaceon (Icy Rock), Sylveon (Affection/Fairy Move)
         //TODO: Cosmoem -> Solgaleo and Cosmoem -> Lunala
+        //TODO: Wurmple -> Cascoon/Silcoon
+        //TODO: Magnetic Field evolutions: Magneton -> Magnezone, Nosepass -> Probopass
+        //TODO: Burmy -> Mothim (Male) or Wormadam (Male) at Level 20
+        //TODO: Karrablast -> Escaliver & Shelmet -> Accelgor w/Trade
+        //TODO: Crabrawler -> Crabominable at Mount Lanakila
+        //TODO: Rockruff -> Lycanroc Midday/Midnight/Dusk
 
         //Trade evolutions are converted into item based ones
 
-        switch(this.getName())
-        {
-            case "Pikachu":
-            case "Charjabug": return item.equals(PokeItem.THUNDER_STONE);
-            case "Alolan Sandshrew":
-            case "Alolan Vulpix": return item.equals(PokeItem.ICE_STONE);
-            case "Nidorina":
-            case "Nidorino":
-            case "Clefairy":
-            case "Jigglypuff": return item.equals(PokeItem.MOON_STONE);
-            case "Vulpix":
-            case "Growlithe": return item.equals(PokeItem.FIRE_STONE);
-            case "Gloom": return item.equals(PokeItem.LEAF_STONE) || item.equals(PokeItem.SUN_STONE);
-            case "Weepinbell":
-            case "Exeggcute": return item.equals(PokeItem.LEAF_STONE);
-            case "Shellder":
-            case "Staryu": return item.equals(PokeItem.WATER_STONE);
-            case "Eevee": return item.equals(PokeItem.WATER_STONE) || item.equals(PokeItem.FIRE_STONE) || item.equals(PokeItem.THUNDER_STONE);
-            case "Onix":
-            case "Scyther": return item.equals(PokeItem.METAL_COAT);
-            case "Haunter": return item.equals(PokeItem.TRADE_EVOLVER);
-            case "Poipole": return this.getLearnedMoves().contains("Dragon Pulse");
-            case "Poliwhirl": return item.equals(PokeItem.WATER_STONE) || item.equals(PokeItem.KINGS_ROCK);
-            case "Aipom": return this.getLearnedMoves().contains("Double Hit");
-            case "Sunkern": return item.equals(PokeItem.SUN_STONE);
-            case "Yanma":
-            case "Piloswine": return this.getLearnedMoves().contains("Ancient Power");
-            case "Murkrow":
-            case "Misdreavus": return item.equals(PokeItem.DUSK_STONE);
-            case "Slowpoke": return item.equals(PokeItem.KINGS_ROCK);
-            case "Galarian Slowpoke": return item.equals(PokeItem.GALARICA_CUFF) || item.equals(PokeItem.GALARICA_WREATH);
-            case "Gligar": return item.equals(PokeItem.RAZOR_FANG);
-            case "Sneasel": return item.equals(PokeItem.RAZOR_CLAW);
-            case "Seadra": return item.equals(PokeItem.DRAGON_SCALE);
-            case "Porygon": return item.equals(PokeItem.UPGRADE);
-            case "Porygon2": return item.equals(PokeItem.DUBIOUS_DISC);
-            case "Tyrogue": return true;
-            default: return false;
-        }
+        return switch (this.getName()) {
+            case "Pikachu", "Charjabug", "Eelektrik" -> item.equals(PokeItem.THUNDER_STONE);
+            case "Alolan Sandshrew", "Alolan Vulpix" -> item.equals(PokeItem.ICE_STONE);
+            case "Nidorina", "Nidorino", "Clefairy", "Jigglypuff", "Skitty", "Munna" -> item.equals(PokeItem.MOON_STONE);
+            case "Vulpix", "Growlithe", "Pansear" -> item.equals(PokeItem.FIRE_STONE);
+            case "Gloom" -> item.equals(PokeItem.LEAF_STONE) || item.equals(PokeItem.SUN_STONE);
+            case "Weepinbell", "Exeggcute", "Nuzleaf", "Pansage" -> item.equals(PokeItem.LEAF_STONE);
+            case "Shellder", "Staryu", "Lombre", "Panpour" -> item.equals(PokeItem.WATER_STONE);
+            case "Eevee" -> item.equals(PokeItem.WATER_STONE) || item.equals(PokeItem.FIRE_STONE) || item.equals(PokeItem.THUNDER_STONE);
+            case "Onix", "Scyther" -> item.equals(PokeItem.METAL_COAT);
+            case "Haunter" -> item.equals(PokeItem.TRADE_EVOLVER);
+            case "Poipole" -> this.getLearnedMoves().contains("Dragon Pulse");
+            case "Poliwhirl" -> item.equals(PokeItem.WATER_STONE) || item.equals(PokeItem.KINGS_ROCK);
+            case "Aipom" -> this.getLearnedMoves().contains("Double Hit");
+            case "Sunkern", "Cottonee", "Petilil", "Helioptile" -> item.equals(PokeItem.SUN_STONE);
+            case "Yanma", "Piloswine", "Tangela" -> this.getLearnedMoves().contains("Ancient Power");
+            case "Murkrow", "Misdreavus", "Lampent", "Doublade" -> item.equals(PokeItem.DUSK_STONE);
+            case "Slowpoke" -> item.equals(PokeItem.KINGS_ROCK);
+            case "Galarian Slowpoke" -> item.equals(PokeItem.GALARICA_CUFF) || item.equals(PokeItem.GALARICA_WREATH);
+            case "Gligar" -> item.equals(PokeItem.RAZOR_FANG);
+            case "Sneasel" -> item.equals(PokeItem.RAZOR_CLAW);
+            case "Seadra" -> item.equals(PokeItem.DRAGON_SCALE);
+            case "Porygon" -> item.equals(PokeItem.UPGRADE);
+            case "Porygon2" -> item.equals(PokeItem.DUBIOUS_DISC);
+            case "Tyrogue" -> true;
+            case "Kirlia", "Glalie" -> item.equals(PokeItem.DAWN_STONE);
+            case "Roselia", "Togetic", "Minccino", "Floette" -> item.equals(PokeItem.SHINY_STONE);
+            case "Feebas" -> item.equals(PokeItem.PRISM_SCALE);
+            case "Dusclops" -> item.equals(PokeItem.REAPER_CLOTH);
+            case "Clamperl" -> item.equals(PokeItem.DEEP_SEA_TOOTH) || item.equals(PokeItem.DEEP_SEA_SCALE);
+            case "Bonsly", "Mime Jr" -> this.getLearnedMoves().contains("Mimic");
+            case "Happiny" -> item.equals(PokeItem.OVAL_STONE);
+            case "Lickitung" -> this.getLearnedMoves().contains("Rollout");
+            case "Rhydon" -> item.equals(PokeItem.PROTECTOR);
+            case "Electabuzz" -> item.equals(PokeItem.ELECTIRIZER);
+            case "Magmar" -> item.equals(PokeItem.MAGMARIZER);
+            case "Spritzee" -> item.equals(PokeItem.SACHET);
+            case "Swirlix" -> item.equals(PokeItem.WHIPPED_DREAM);
+            case "Steenee" -> this.getLearnedMoves().contains("Stomp");
+            default -> false;
+        };
     }
 
     public void evolve()
@@ -776,6 +783,39 @@ public class Pokemon
                 case "Porygon" -> "Porygon2";
                 case "Porygon2" -> "PorygonZ";
                 case "Tyrogue" -> this.getStat(Stat.ATK) == this.getStat(Stat.DEF) ? "Hitmontop" : (this.getStat(Stat.ATK) > this.getStat(Stat.DEF) ? "Hitmonlee" : "Hitmonchan");
+                case "Lombre" -> "Ludicolo";
+                case "Nuzleaf" -> "Shiftry";
+                case "Kirlia" -> "Gallade";
+                case "Skitty" -> "Delcatty";
+                case "Roselia" -> "Roserade";
+                case "Feebas" -> "Milotic";
+                case "Dusclops" -> "Dusknoir";
+                case "Snorunt" -> "Froslass";
+                case "Clamperl" -> PokeItem.asItem(this.getItem()).equals(PokeItem.DEEP_SEA_TOOTH) ? "Huntail" : "Gorebyss";
+                case "Bonsly" -> "Sudowoodo";
+                case "Mime Jr" -> "Mr Mime";
+                case "Happiny" -> "Chansey";
+                case "Lickitung" -> "Lickilicky";
+                case "Rhydon" -> "Rhyperior";
+                case "Tangela" -> "Tangrowth";
+                case "Electabuzz" -> "Electivire";
+                case "Magmar" -> "Magmortar";
+                case "Togetic" -> "Togekiss";
+                case "Pansage" -> "Simisage";
+                case "Pansear" -> "Simisear";
+                case "Panpour" -> "Simipour";
+                case "Munna" -> "Musharna";
+                case "Cottonee" -> "Whimsicott";
+                case "Petilil" -> "Lilligant";
+                case "Minccino" -> "Cinccino";
+                case "Eelektrik" -> "Eelektross";
+                case "Lampent" -> "Chandelure";
+                case "Floette" -> "Florges";
+                case "Doublade" -> "Aegislash";
+                case "Spritzee" -> "Aromatisse";
+                case "Swirlix" -> "Slurpuff";
+                case "Helioptil" -> "Heliolisk";
+                case "Steenee" -> "Tsareena";
                 default -> "";
             };
 

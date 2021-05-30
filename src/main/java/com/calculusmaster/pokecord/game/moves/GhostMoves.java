@@ -79,6 +79,7 @@ public class GhostMoves
 
     public String ShadowForce(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        //TODO: Invulnerability Phase
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
