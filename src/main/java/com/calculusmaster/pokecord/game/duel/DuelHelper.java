@@ -1,5 +1,7 @@
-package com.calculusmaster.pokecord.game;
+package com.calculusmaster.pokecord.game.duel;
 
+import com.calculusmaster.pokecord.game.Move;
+import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;

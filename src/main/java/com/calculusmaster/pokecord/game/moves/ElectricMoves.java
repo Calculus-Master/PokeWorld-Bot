@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.game.moves;
 
-import com.calculusmaster.pokecord.game.Duel;
-import com.calculusmaster.pokecord.game.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;

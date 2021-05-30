@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game;
 
+import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;

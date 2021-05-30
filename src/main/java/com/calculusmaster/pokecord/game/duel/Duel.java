@@ -1,9 +1,9 @@
-package com.calculusmaster.pokecord.game;
+package com.calculusmaster.pokecord.game.duel;
 
-import com.calculusmaster.pokecord.commands.duel.CommandDuel;
+import com.calculusmaster.pokecord.game.Move;
+import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
-import com.calculusmaster.pokecord.game.enums.items.XPBooster;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -18,7 +18,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.List;
 
-import static com.calculusmaster.pokecord.game.DuelHelper.*;
+import static com.calculusmaster.pokecord.game.duel.DuelHelper.*;
 
 public class Duel
 {

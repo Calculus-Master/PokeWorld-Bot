@@ -3,14 +3,13 @@ package com.calculusmaster.pokecord.commands.duel;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
-import com.calculusmaster.pokecord.game.DuelHelper;
-import com.calculusmaster.pokecord.game.Duel;
+import com.calculusmaster.pokecord.game.duel.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.PokemonRarity;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**Temporary, will replace CommandDuel if complete

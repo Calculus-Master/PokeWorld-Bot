@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
-import com.calculusmaster.pokecord.game.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandEquip extends Command
