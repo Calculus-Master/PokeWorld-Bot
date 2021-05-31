@@ -42,14 +42,14 @@ public class TrainerDuel extends Duel
 
             this.uploadEVs(0);
 
-            embed.setDescription("You won and earned " + c + " credits! Your " + this.players[0].active.getName() + " earned some EVs!");
+            embed.setDescription("You defeated " + ((Trainer)this.players[1]).info.name + "!");
         }
         //Player lost
         else
         {
             this.uploadEVs(0);
 
-            embed.setDescription("You lost! Your " + this.players[0].active.getName() + " didn't earn any EVs...");
+            embed.setDescription("You were defeated by " + ((Trainer)this.players[1]).info.name + "!");
         }
 
         this.event.getChannel().sendMessage(embed.build()).queue();

@@ -47,6 +47,8 @@ public class Trainer extends Player
 
     }
 
+    public TrainerInfo info;
+
     public static Trainer create(TrainerInfo info)
     {
         Trainer t = new Trainer();
@@ -54,6 +56,7 @@ public class Trainer extends Player
         t.setTeam(info.pokemonLevel, info.pokemon);
         t.move = null;
         t.usedZMove = false;
+        t.info = info;
 
         t.data = new PlayerDataQuery(t.ID)
         {
