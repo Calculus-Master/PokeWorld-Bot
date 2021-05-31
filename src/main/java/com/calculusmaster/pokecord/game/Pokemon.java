@@ -854,11 +854,6 @@ public class Pokemon
         return this.EV;
     }
 
-    public void changeIV(Stat s, int amount)
-    {
-        this.IV.put(s, this.IV.get(s) + amount);
-    }
-
     public void addEV(Stat s, int amount)
     {
         this.EV.put(s, this.EV.get(s) + amount);
@@ -1034,7 +1029,6 @@ public class Pokemon
         this.type = new Type[]{Type.cast(this.genericJSON.getJSONArray("type").getString(0)), Type.cast(this.genericJSON.getJSONArray("type").getString(1))};
     }
 
-    //TODO: Use this everywhere
     public boolean isType(Type t)
     {
         return this.getType()[0].equals(t) || this.getType()[1].equals(t);

@@ -13,16 +13,7 @@ public class FireMoves
 {
     public String Ember(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        if((!opponent.getType()[0].equals(Type.FIRE) && !opponent.getType()[1].equals(Type.FIRE)) && new Random().nextInt(100) < 10)
-        {
-            opponent.addStatusCondition(StatusCondition.BURNED);
-            return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " is burned!";
-        }
-
-        return move.getDamageResult(opponent, damage);
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 10);
     }
 
     public String FireFang(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -50,39 +41,28 @@ public class FireMoves
 
     public String FlameBurst(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage);
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String Flamethrower(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Ember(user, opponent, duel, move);
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 10);
     }
 
     public String FireSpin(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         //TODO: Does damage per turn
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage);
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String Inferno(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        opponent.addStatusCondition(StatusCondition.BURNED);
-
-        return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " is burned!";
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 100);
     }
 
     public String HeatWave(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Ember(user, opponent, duel, move);
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 10);
     }
 
     public String FlareBlitz(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -92,7 +72,7 @@ public class FireMoves
 
         user.damage(damage / 3);
 
-        if((!opponent.getType()[0].equals(Type.FIRE) && !opponent.getType()[1].equals(Type.FIRE)) && new Random().nextInt(100) < 10)
+        if(!opponent.isType(Type.FIRE) && new Random().nextInt(100) < 10)
         {
             opponent.addStatusCondition(StatusCondition.BURNED);
             return move.getDamageResult(opponent, damage) + move.getRecoilDamageResult(user, damage / 3) + " " + opponent.getName() + " is burned!";
