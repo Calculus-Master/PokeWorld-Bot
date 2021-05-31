@@ -38,7 +38,7 @@ public class CommandTrainerDuel extends Command
         {
             StringBuilder sb = new StringBuilder();
 
-            for(int i = 0; i < Trainer.DAILY_TRAINERS.size(); i++) sb.append(i + 1).append(": ").append(Trainer.DAILY_TRAINERS.get(i).name).append("\n");
+            for(int i = 0; i < Trainer.DAILY_TRAINERS.size(); i++) sb.append(i + 1).append(": ").append(Trainer.DAILY_TRAINERS.get(i).name).append(Trainer.PLAYER_TRAINERS_DEFEATED.get(Trainer.DAILY_TRAINERS.get(i).name).contains(this.player.getId()) ? " (Defeated)" : "").append("\n");
 
             this.embed.setDescription(sb.toString());
             this.embed.setTitle("Daily Trainers");
