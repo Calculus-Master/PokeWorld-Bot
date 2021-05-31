@@ -23,7 +23,7 @@ public class Mongo
     private static final ConnectionString CONNECT_MAIN = new ConnectionString(PrivateInfo.MAIN_USER);
     private static final MongoClient CLIENT_MAIN = MongoClients.create(MongoClientSettings.builder().applyConnectionString(CONNECT_MAIN).retryReads(true).retryWrites(true).build());
 
-    //Collections
+    //Databases
     private static final MongoDatabase ImmutableDB = CLIENT_MAIN.getDatabase("Immutable");
     private static final MongoDatabase MutableDB = CLIENT_MAIN.getDatabase("Mutable");
 
@@ -38,6 +38,7 @@ public class Mongo
     public static final MongoCollection<Document> ReportData = MutableDB.getCollection("ReportData");
     public static final MongoCollection<Document> PerformanceData = MutableDB.getCollection("PerformanceData");
     public static final MongoCollection<Document> MarketData = MutableDB.getCollection("MarketData");
+    public static final MongoCollection<Document> GymData = MutableDB.getCollection("GymData");
 
     public static void main(String[] args)
     {

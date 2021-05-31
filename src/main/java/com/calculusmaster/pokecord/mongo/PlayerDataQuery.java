@@ -43,7 +43,7 @@ public class PlayerDataQuery extends MongoQuery
                 .append("zcrystals", new JSONArray())
                 .append("active_zcrystal", "")
                 .append("achievements", new JSONArray())
-                .append("gym_level", 0)
+                .append("gym_level", 1)
                 .append("gym_progress", new JSONArray());
 
         Mongo.PlayerData.insertOne(data);

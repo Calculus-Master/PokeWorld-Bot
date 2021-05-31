@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.commands.economy.CommandMarket;
 import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.duel.elements.GymLeader;
 import com.calculusmaster.pokecord.game.duel.elements.Trainer;
 import com.calculusmaster.pokecord.util.*;
 import net.dv8tion.jda.api.JDA;
@@ -45,6 +46,8 @@ public class Pokecord
         PokemonRarity.init();
         Global.logInfo(Pokecord.class, "main", "Starting Command Init!");
         Command.init();
+        Global.logInfo(Pokecord.class, "main", "Starting Gym Leader Init!");
+        GymLeader.init();
         Global.logInfo(Pokecord.class, "main", "Starting Market Init!");
         CommandMarket.init();
         Global.logInfo(Pokecord.class, "main", "Starting CommandPokemon Init!");

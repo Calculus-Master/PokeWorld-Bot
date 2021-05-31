@@ -13,7 +13,8 @@ public enum Achievements
     WON_FIRST_TRAINER_DUEL(500, "Defeating a Trainer for the first time!"),
     DEFEATED_DAILY_TRAINERS(5000, "Defeated all daily Trainers for the first time!"),
     COMPLETED_FIRST_TRADE(500, "Completed your first trade!"),
-    SUBMITTED_BUG_REPORT(500, "Submitted a bug report/suggestion! Thank you!");
+    SUBMITTED_BUG_REPORT(500, "Submitted a bug report/suggestion! Thank you!"),
+    DEFEATED_FIRST_GYM_LEADER(1000, "Defeated your first Gym Leader!");
 
     public int credits;
     public String desc;

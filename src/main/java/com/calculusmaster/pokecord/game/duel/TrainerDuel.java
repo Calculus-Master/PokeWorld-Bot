@@ -1,10 +1,11 @@
 package com.calculusmaster.pokecord.game.duel;
 
 import com.calculusmaster.pokecord.game.Achievements;
-import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.duel.elements.Trainer;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -125,12 +126,19 @@ public class TrainerDuel extends Duel
             this.queuedMoves.put(this.players[1].ID, new TurnAction(ActionType.SWAP, -1, ind));
         }
         //Z-Move
-        else if(this.players[1].data.hasZCrystal("") && !this.players[1].usedZMove) this.queuedMoves.put(this.players[1].ID, new TurnAction(ActionType.ZMOVE, new Random().nextInt(4) + 1, -1));
+        else if(!this.players[1].usedZMove)
+        {
+            int index = new Random().nextInt(4);
+            Move move = new Move(this.players[1].active.getLearnedMoves().get(index));
+            if(this.players[1].data.hasZCrystal(ZCrystal.getCrystalOfType(move.getType()).getStyledName())) this.queuedMoves.put(this.players[1].ID, new TurnAction(ActionType.ZMOVE, index + 1, -1));
+            else this.queuedMoves.put(this.players[1].ID, new TurnAction(ActionType.MOVE, index + 1, -1));
+
+        }
         //Normal Move
         else this.queuedMoves.put(this.players[1].ID, new TurnAction(ActionType.MOVE, new Random().nextInt(4) + 1, -1));
     }
 
-    private void limitPlayerPokemon(int level)
+    protected void limitPlayerPokemon(int level)
     {
         for(int i = 0; i < this.players[0].team.size(); i++)
         {

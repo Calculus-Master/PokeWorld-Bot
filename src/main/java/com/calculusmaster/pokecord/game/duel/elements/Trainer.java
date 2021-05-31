@@ -14,8 +14,6 @@ public class Trainer extends Player
     public static final List<TrainerInfo> DAILY_TRAINERS = new ArrayList<>();
     public static final Map<String, List<String>> PLAYER_TRAINERS_DEFEATED = new HashMap<>();
     public static final int DAILY_TRAINER_COUNT = 4;
-    //Gym Leaders - (mostly) fixed trainers that offer PvE progression
-    public static final List<List<TrainerInfo>> GYM_LEADERS = new ArrayList<>();
 
     public static void setDailyTrainers()
     {
@@ -81,7 +79,13 @@ public class Trainer extends Player
             @Override
             public boolean hasZCrystal(String z)
             {
-                return info.zcrystal != null;
+                return info.zcrystal != null && z.equals(this.getEquippedZCrystal());
+            }
+
+            @Override
+            public String getEquippedZCrystal()
+            {
+                return info.zcrystal.getStyledName();
             }
         };
 

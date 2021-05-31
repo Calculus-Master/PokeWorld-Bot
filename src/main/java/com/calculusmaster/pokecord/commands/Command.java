@@ -53,6 +53,7 @@ public abstract class Command
     public static final CommandHelp.HelpEntry WILDDUEL = new CommandHelp.HelpEntry("wildduel");
     public static final CommandHelp.HelpEntry REDEEM = new CommandHelp.HelpEntry("redeem");
     public static final CommandHelp.HelpEntry TRAINERDUEL = new CommandHelp.HelpEntry("trainerduel");
+    public static final CommandHelp.HelpEntry GYMDUEL = new CommandHelp.HelpEntry("gymduel");
 
     public static void init()
     {
@@ -255,6 +256,9 @@ public abstract class Command
 
         TRAINERDUEL.setCategory(CommandHelp.CommandCategory.DUEL)
                 .addAliases("fight", "trainer");
+
+        GYMDUEL.setCategory(CommandHelp.CommandCategory.DUEL)
+                .addAliases("challenge", "gym", "leader");
     }
 
     protected MessageReceivedEvent event;
