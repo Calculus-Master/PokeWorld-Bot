@@ -109,8 +109,11 @@ public class TrainerDuel extends Duel
     {
         for(int i = 0; i < this.players[0].team.size(); i++)
         {
-            this.players[0].team.get(0).setLevel(level);
-            this.players[0].team.get(0).setHealth(this.players[0].team.get(0).getStat(Stat.HP));
+            if(this.players[0].team.get(i).getLevel() >= level + 5)
+            {
+                this.players[0].team.get(i).setLevel(level);
+                this.players[0].team.get(i).setHealth(this.players[0].team.get(0).getStat(Stat.HP));
+            }
         }
 
         this.players[0].active = this.players[0].team.get(0);
