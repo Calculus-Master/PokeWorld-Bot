@@ -2,21 +2,16 @@ package com.calculusmaster.pokecord.mongo;
 
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Pokemon;
-import com.calculusmaster.pokecord.game.enums.items.TM;
-import com.calculusmaster.pokecord.game.enums.items.TR;
-import com.calculusmaster.pokecord.game.enums.items.XPBooster;
-import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.CacheHelper;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.bson.Document;
 import org.json.JSONArray;
 
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.stream.Collectors;
 
 public class PlayerDataQuery extends MongoQuery
 {
@@ -25,12 +20,7 @@ public class PlayerDataQuery extends MongoQuery
         super("playerID", playerID, Mongo.PlayerData);
     }
 
-    //Core
-
-    public static boolean isRegistered(User player)
-    {
-        return PlayerDataQuery.isRegistered(player.getId());
-    }
+    //Registered
 
     public static boolean isRegistered(String id)
     {
@@ -39,177 +29,146 @@ public class PlayerDataQuery extends MongoQuery
 
     public static void register(User player)
     {
-        Document playerData = new Document()
+        Document data = new Document()
                 .append("playerID", player.getId())
                 .append("username", player.getName())
                 .append("credits", 1000)
-                .append("selected", 1)
                 .append("redeems", 0)
-                .append("tms", TM.values()[new Random().nextInt(TM.values().length)].toString())
-                .append("trs", TR.values()[new Random().nextInt(TR.values().length)].toString());
+                .append("selected", 1)
+                .append("pokemon", new JSONArray())
+                .append("team", new JSONArray())
+                .append("items", new JSONArray())
+                .append("tms", new JSONArray())
+                .append("trs", new JSONArray())
+                .append("zcrystals", new JSONArray())
+                .append("active_zcrystal", "")
+                .append("achievements", new JSONArray())
+                .append("gym_level", 0)
+                .append("gym_progress", new JSONArray());
 
-        Mongo.PlayerData.insertOne(playerData);
+        Mongo.PlayerData.insertOne(data);
     }
 
     private void update()
     {
         this.document = Mongo.PlayerData.find(this.query).first();
-        this.updatePokemonList();
     }
 
-    private void updatePokemonList()
+    //key: "playerID"
+    public String getID()
     {
-        new Thread(() -> Global.updatePokemonList(this.json().getString("playerID"))).start();
+        return this.json().getString("playerID");
     }
 
-    //Gets
+    public String getMention()
+    {
+        return "<@" + this.getID() + ">";
+    }
 
+    //key: "username"
     public String getUsername()
     {
         return this.json().getString("username");
     }
 
-    public String getMention()
-    {
-        return "<@" + this.json().getString("playerID") + ">";
-    }
-
+    //key: "credits"
     public int getCredits()
     {
         return this.json().getInt("credits");
     }
 
-    public JSONArray getPokemonList()
+    public void changeCredits(int amount)
     {
-        return !this.json().has("pokemon") ? null : this.json().getJSONArray("pokemon");
+        Mongo.PlayerData.updateOne(this.query, Updates.set("credits", this.getCredits() + amount));
+
+        this.update();
     }
 
+    //key: "redeems"
+    public int getRedeems()
+    {
+        return this.json().getInt("redeems");
+    }
+
+    public void changeRedeems(int amount)
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.set("redeems", this.getRedeems() + amount));
+
+        this.update();
+    }
+
+    //key: "selected"
     public int getSelected()
     {
         return this.json().getInt("selected") - 1;
     }
 
-    public JSONArray getTeam()
+    public void setSelected(int num)
     {
-        return !this.json().has("team") ? null : this.json().getJSONArray("team");
+        Mongo.PlayerData.updateOne(this.query, Updates.set("selected", num));
+
+        this.update();
     }
 
-    public boolean isInTeam(String UUID)
+    public void updateSelected()
     {
-        if(this.getTeam() == null) return false;
-
-        for(int i = 0; i < this.getTeam().length(); i++) if(this.getTeam().getString(i).equals(UUID)) return true;
-        return false;
+        if(this.getSelected() >= this.getPokemonList().size()) this.setSelected(this.getPokemonList().size());
     }
 
     public Pokemon getSelectedPokemon()
     {
-        return Pokemon.build(this.getPokemonList().getString(this.getSelected()));
+        return Pokemon.build(this.getPokemonList().get(this.getSelected()));
     }
 
-    public JSONArray getOwnedTMs()
+    //key: "pokemon"
+    public List<String> getPokemonList()
     {
-        return !this.json().has("tms") ? null : this.json().getJSONArray("tms");
+        return CacheHelper.UUID_LISTS.get(this.getID());
     }
 
-    public JSONArray getOwnedTRs()
-    {
-        return !this.json().has("trs") ? null : this.json().getJSONArray("trs");
-    }
-
-    public boolean hasXPBooster()
-    {
-        return this.json().has("xp");
-    }
-
-    public int getXPBoosterLength()
-    {
-        return this.json().getJSONObject("xp").getInt("length");
-    }
-
-    public String getXPBoosterTimeStamp()
-    {
-        return this.json().getJSONObject("xp").getString("timestamp");
-    }
-
-    public JSONArray getItemList()
-    {
-        return !this.json().has("items") ? null : this.json().getJSONArray("items");
-    }
-
-    public JSONArray getZCrystalList()
-    {
-        return !this.json().has("zcrystals") ? null : this.json().getJSONArray("zcrystals");
-    }
-
-    public String getEquippedZCrystal()
-    {
-        return !this.json().has("active_zcrystal") ? null : this.json().getString("active_zcrystal");
-    }
-
-    public boolean hasZCrystal(String z)
-    {
-        JSONArray list = this.getZCrystalList();
-        if(list == null) return false;
-
-        for(int i = 0; i < list.length(); i++) if(list.getString(i).equals(z)) return true;
-        return false;
-    }
-
-    public int getRedeems()
-    {
-        if(!this.json().has("redeems"))
-        {
-            this.changeRedeems(0);
-            return 0;
-        }
-        else return this.json().has("redeems") ? this.json().getInt("redeems") : 0;
-    }
-
-    public JSONArray getAchievements()
-    {
-        return this.json().getJSONArray("achievements");
-    }
-
-    //Updates - run this.update() after each method so the query is up to date
-
-    public void changeCredits(int amount)
-    {
-        Mongo.PlayerData.updateOne(this.query, Updates.set("credits", this.json().getInt("credits") + amount));
-
-        this.update();
-    }
-
-    //This is to add a pokemon to the player's list, assumes that the pokemon has been added to the Pokemon database already
     public void addPokemon(String UUID)
     {
-        if(this.getPokemonList() != null && this.getPokemonList().toList().contains(UUID)) throw new IllegalStateException("Pokemon already in Player's List!");
         Mongo.PlayerData.updateOne(this.query, Updates.push("pokemon", UUID));
+        CacheHelper.addPokemon(this.getID(), UUID);
 
         this.update();
     }
 
-    //Removes all instances (should be 1 instance only) of the UUID from the player's list, but does not delete the pokemon from the database (to allow for trading)
     public void removePokemon(String UUID)
     {
         Mongo.PlayerData.updateOne(this.query, Updates.pull("pokemon", UUID));
+        CacheHelper.removePokemon(this.getID(), UUID);
 
         this.update();
     }
 
-    //Assumes index is given counted from 1, so the method will decrement the argument
     public void removePokemon(int index)
     {
-        index--;
-        this.removePokemon(this.getPokemonList().getString(index));
+        removePokemon(this.getPokemonList().get(index - 1));
+    }
+
+    //key: "team"       TODO: Team Caching
+    public List<String> getTeam()
+    {
+        return this.json().getJSONArray("team").toList().stream().map(o -> (String)o).collect(Collectors.toList());
+    }
+
+    public boolean isInTeam(String UUID)
+    {
+        return this.getTeam().contains(UUID);
+    }
+
+    public void clearTeam()
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.set("team", new JSONArray()));
+
+        this.update();
     }
 
     public void addPokemonToTeam(String UUID, int index)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.unset("team"));
-
-        List<String> team = new ArrayList<>();
-        if(this.getTeam() != null) for(int i = 0; i < this.getTeam().length(); i++) team.add(this.getTeam().getString(i));
+        this.clearTeam();
+        List<String> team = new ArrayList<>(this.getTeam());
 
         index--;
 
@@ -217,32 +176,26 @@ public class PlayerDataQuery extends MongoQuery
         else team.set(index, UUID);
 
         Mongo.PlayerData.updateOne(this.query, Updates.pushEach("team", team));
-
         this.update();
     }
 
     public void removePokemonFromTeam(int index)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.unset("team"));
-
-        List<String> team = new ArrayList<>();
-        if(this.getTeam() != null) for(int i = 0; i < this.getTeam().length(); i++) team.add(this.getTeam().getString(i));
+        this.clearTeam();
+        List<String> team = new ArrayList<>(this.getTeam());
 
         index--;
 
         team.remove(index);
 
         Mongo.PlayerData.updateOne(this.query, Updates.pushEach("team", team));
-
         this.update();
     }
 
     public void swapPokemonInTeam(int from, int to)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.unset("team"));
-
-        List<String> team = new ArrayList<>();
-        if(this.getTeam() != null) for(int i = 0; i < this.getTeam().length(); i++) team.add(this.getTeam().getString(i));
+        this.clearTeam();
+        List<String> team = new ArrayList<>(this.getTeam());
 
         from--;
         to--;
@@ -252,83 +205,13 @@ public class PlayerDataQuery extends MongoQuery
         team.set(to, temp);
 
         Mongo.PlayerData.updateOne(this.query, Updates.pushEach("team", team));
-
         this.update();
     }
 
-    //Sets the selected pokemon
-    public void setSelected(int num)
+    //key: "items"
+    public List<String> getItemList()
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.set("selected", num));
-
-        this.update();
-    }
-
-    //Updates the 'selected' field to avoid IndexOutOfBounds errors
-    public void updateSelected()
-    {
-        if(this.getSelected() >= this.getPokemonList().length()) this.setSelected(this.getPokemonList().length());
-    }
-
-    //Adds a TM to the player's owned TMs
-    public void addTM(String TM)
-    {
-        Mongo.PlayerData.updateOne(this.query, Updates.push("tms", TM));
-
-        this.update();
-    }
-
-    //Removes a TM from the player's owned TMs
-    public void removeTM(String TM)
-    {
-        int counts = 0;
-        for (int i = 0; i < this.getOwnedTMs().length(); i++) if(this.getOwnedTMs().getString(i).equals(TM)) counts++;
-
-        Mongo.PlayerData.updateOne(this.query, Updates.pull("tms", TM));
-
-        for(int i = 0; i < counts - 1; i++) this.addTM(TM);
-
-        this.update();
-    }
-
-    //Adds a TR to the player's owned TRs
-    public void addTR(String TR)
-    {
-        Mongo.PlayerData.updateOne(this.query, Updates.push("trs", TR));
-
-        this.update();
-    }
-
-    //Removes a TR from the player's owned TRs
-    public void removeTR(String TR)
-    {
-        int counts = 0;
-        for (int i = 0; i < this.getOwnedTRs().length(); i++) if(this.getOwnedTRs().getString(i).equals(TR)) counts++;
-
-        Mongo.PlayerData.updateOne(this.query, Updates.pull("trs", TR));
-
-        for(int i = 0; i < counts - 1; i++) this.addTR(TR);
-
-        this.update();
-    }
-
-    public void addXPBooster(XPBooster booster, MessageReceivedEvent event)
-    {
-        if(this.hasXPBooster()) this.removeXPBooster();
-
-        OffsetDateTime t = event.getMessage().getTimeCreated();
-        String msgTime = t.getDayOfYear() + "-" + t.getHour() + "-" + t.getMinute();
-        Document xpBooster = new Document("length", booster.time()).append("timestamp", msgTime);
-        Mongo.PlayerData.updateOne(this.query, Updates.set("xp", xpBooster));
-
-        this.update();
-    }
-
-    public void removeXPBooster()
-    {
-        Mongo.PlayerData.updateOne(this.query, Updates.unset("xp"));
-
-        this.update();
+        return this.json().getJSONArray("items").toList().stream().map(o -> (String)o).collect(Collectors.toList());
     }
 
     public void addItem(String item)
@@ -345,11 +228,79 @@ public class PlayerDataQuery extends MongoQuery
         this.update();
     }
 
+    //key: "tms"
+    public List<String> getTMList()
+    {
+        return this.json().getJSONArray("tms").toList().stream().map(o -> (String)o).collect(Collectors.toList());
+    }
+
+    public void addTM(String TM)
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.push("tms", TM));
+
+        this.update();
+    }
+
+    public void removeTM(String TM)
+    {
+        int counts = 0;
+        for (int i = 0; i < this.getTMList().size(); i++) if(this.getTMList().get(i).equals(TM)) counts++;
+
+        Mongo.PlayerData.updateOne(this.query, Updates.pull("tms", TM));
+
+        for(int i = 0; i < counts - 1; i++) this.addTM(TM);
+
+        this.update();
+    }
+
+    //key: "trs"
+    public List<String> getTRList()
+    {
+        return this.json().getJSONArray("trs").toList().stream().map(o -> (String)o).collect(Collectors.toList());
+    }
+
+    public void addTR(String TR)
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.push("trs", TR));
+
+        this.update();
+    }
+
+    //Removes a TR from the player's owned TRs
+    public void removeTR(String TR)
+    {
+        int counts = 0;
+        for (int i = 0; i < this.getTRList().size(); i++) if(this.getTRList().get(i).equals(TR)) counts++;
+
+        Mongo.PlayerData.updateOne(this.query, Updates.pull("trs", TR));
+
+        for(int i = 0; i < counts - 1; i++) this.addTR(TR);
+
+        this.update();
+    }
+
+    //key: "zcrystals"
+    public List<String> getZCrystalList()
+    {
+        return this.json().getJSONArray("zcrystals").toList().stream().map(o -> (String)o).collect(Collectors.toList());
+    }
+
+    public boolean hasZCrystal(String z)
+    {
+        return this.getZCrystalList().contains(z);
+    }
+
     public void addZCrystal(String z)
     {
         Mongo.PlayerData.updateOne(this.query, Updates.push("zcrystals", z));
 
         this.update();
+    }
+
+    //key: "active_zcrystal"
+    public String getEquippedZCrystal()
+    {
+        return this.json().getString("active_zcrystal");
     }
 
     public void equipZCrystal(String z)
@@ -359,14 +310,10 @@ public class PlayerDataQuery extends MongoQuery
         this.update();
     }
 
-    public void changeRedeems(int amount)
+    //key: "achievements"
+    public List<String> getAchievementsList()
     {
-        if(!this.json().has("redeems")) Mongo.PlayerData.updateOne(this.query, Updates.set("redeems", 0));
-
-        int newAmount = this.json().has("redeems") ? this.json().getInt("redeems") + amount : amount;
-        Mongo.PlayerData.updateOne(this.query, Updates.set("redeems", Math.max(newAmount, 0)));
-
-        this.update();
+        return this.json().getJSONArray("achievements").toList().stream().map(o -> (String)o).collect(Collectors.toList());
     }
 
     public void addAchievement(Achievements a)
@@ -374,5 +321,22 @@ public class PlayerDataQuery extends MongoQuery
         Mongo.PlayerData.updateOne(this.query, Updates.push("achievements", a.toString()));
 
         this.update();
+    }
+
+    //key: "gym_level"
+    public int getGymLevel()
+    {
+        return this.json().getInt("gym_level");
+    }
+
+    public void increaseGymLevel()
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.set("gym_level", this.getGymLevel() + 1));
+    }
+
+    //key: "gym_progress"       //TODO: Use a separate Database
+    public List<Boolean> getGymProgress()
+    {
+        return this.json().getJSONArray("gym_progress").toList().stream().map(o -> (boolean)o).collect(Collectors.toList());
     }
 }

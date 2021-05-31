@@ -16,7 +16,6 @@ import com.calculusmaster.pokecord.commands.misc.CommandTrade;
 import com.calculusmaster.pokecord.commands.moves.*;
 import com.calculusmaster.pokecord.commands.pokemon.*;
 import com.calculusmaster.pokecord.game.Pokemon;
-import com.calculusmaster.pokecord.game.enums.items.XPBooster;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.mongodb.client.model.Filters;
@@ -27,7 +26,6 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -62,14 +60,11 @@ public class Listener extends ListenerAdapter
         serverQuery = new ServerDataQuery(server.getId());
 
         //Set a boolean if the player is registered or not
-        boolean isPlayerRegistered = PlayerDataQuery.isRegistered(player);
+        boolean isPlayerRegistered = PlayerDataQuery.isRegistered(player.getId());
         //System.out.println(player.getName() + " Registered? : " + isPlayerRegistered);
 
         //If the 'selected' field is out of bounds, force it into bounds to avoid errors
         if(isPlayerRegistered) new PlayerDataQuery(player.getId()).updateSelected();
-
-        //Check the xp booster timestamp of the player who sent the message
-        if(isPlayerRegistered) Listener.checkXPTimeStamp(event);
 
         //If the message starts with the right prefix, continue, otherwise skip the listener
         if(msg[0].startsWith(serverQuery.getPrefix()))
@@ -285,23 +280,6 @@ public class Listener extends ListenerAdapter
         }
     }
 
-    private static void checkXPTimeStamp(MessageReceivedEvent event)
-    {
-        PlayerDataQuery data = new PlayerDataQuery(event.getAuthor().getId());
-        if(!data.hasXPBooster()) return;
-
-        String[] ts = data.getXPBoosterTimeStamp().split("-");
-        int timestamp = Integer.parseInt(ts[0]) * 24 * 60 + Integer.parseInt(ts[1]) * 60 + Integer.parseInt(ts[2]);
-        int length = XPBooster.getInstance(data.getXPBoosterLength()).time();
-
-        OffsetDateTime t = event.getMessage().getTimeCreated();
-        int timeNow = t.getDayOfYear() * 24 * 60 + t.getHour() * 60 + t.getMinute();
-
-        //System.out.println(timeNow - timestamp);
-        //System.out.println(length);
-        if(timeNow - timestamp >= length) data.removeXPBooster();
-    }
-
     private static void expEvent(MessageReceivedEvent event)
     {
         PlayerDataQuery data = new PlayerDataQuery(event.getAuthor().getId());
@@ -309,9 +287,8 @@ public class Listener extends ListenerAdapter
         Pokemon p = data.getSelectedPokemon();
 
         int initL = p.getLevel();
-        double booster = data.hasXPBooster() ? XPBooster.getInstance(data.getXPBoosterLength()).boost : 1.0;
 
-        p.addExp((int)(booster * new Random().nextInt(100)));
+        p.addExp(new Random().nextInt(100));
 
         if(p.getLevel() != initL)
         {

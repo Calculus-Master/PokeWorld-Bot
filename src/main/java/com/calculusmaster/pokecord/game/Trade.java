@@ -119,13 +119,13 @@ public class Trade
     public void addPokemon(String id, int... ints)
     {
         System.out.println(Arrays.toString(ints));
-        for(int n : ints) this.offers[this.p(id)].addPokemon(this.playerData[this.p(id)].getPokemonList().getString(n - 1));
+        for(int n : ints) this.offers[this.p(id)].addPokemon(this.playerData[this.p(id)].getPokemonList().get(n - 1));
         this.unconfirmTrade();
     }
 
     public void removePokemon(String id, int... ints)
     {
-        for(int n : ints) this.offers[this.p(id)].removePokemon(this.playerData[this.p(id)].getPokemonList().getString(n - 1));
+        for(int n : ints) this.offers[this.p(id)].removePokemon(this.playerData[this.p(id)].getPokemonList().get(n - 1));
         this.unconfirmTrade();
     }
 

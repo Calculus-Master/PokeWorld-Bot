@@ -32,7 +32,7 @@ public class CommandDuel extends Command
             this.embed.setDescription(CommandInvalid.getShort());
             return this;
         }
-        else if(this.msg.length >= 3 && (!isNumeric(2) || this.getInt(2) > CommandTeam.MAX_TEAM_SIZE || this.getInt(2) > this.playerData.getTeam().length()))
+        else if(this.msg.length >= 3 && (!isNumeric(2) || this.getInt(2) > CommandTeam.MAX_TEAM_SIZE || this.getInt(2) > this.playerData.getTeam().size()))
         {
             this.embed.setDescription("Error with size. Either it isn't a number, larger than the max of " + CommandTeam.MAX_TEAM_SIZE + ", or larger than your team's size!");
             return this;
@@ -49,7 +49,7 @@ public class CommandDuel extends Command
             {
                 Duel d = DuelHelper.instance(this.player.getId());
 
-                if(d.getSize() > this.playerData.getTeam().length())
+                if(d.getSize() > this.playerData.getTeam().size())
                 {
                     this.embed.setDescription("Your team needs to contain at least " + d.getSize() + " to participate! Deleting duel request!");
                     DuelHelper.delete(this.player.getId());
@@ -146,9 +146,9 @@ public class CommandDuel extends Command
         int mega = 0;
 
         String name = "";
-        for(int i = 0; i < this.playerData.getTeam().length(); i++)
+        for(int i = 0; i < this.playerData.getTeam().size(); i++)
         {
-            name = Pokemon.buildCore(this.playerData.getTeam().getString(i), -1).getName();
+            name = Pokemon.buildCore(this.playerData.getTeam().get(i), -1).getName();
 
             if(PokemonRarity.LEGENDARY.contains(name)) legendary++;
             if(PokemonRarity.MYTHICAL.contains(name)) mythical++;

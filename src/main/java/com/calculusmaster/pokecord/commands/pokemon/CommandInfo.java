@@ -23,12 +23,12 @@ public class CommandInfo extends Command
         int index = this.playerData.getSelected();
         if(this.msg.length == 2)
         {
-            if(this.msg[1].equals("latest") || this.msg[1].equals("lat")) index = this.playerData.getPokemonList().length() - 1;
+            if(this.msg[1].equals("latest") || this.msg[1].equals("lat")) index = this.playerData.getPokemonList().size() - 1;
             else if(!this.msg[1].chars().allMatch(Character::isDigit)) this.embed.setDescription("Use p!dex instead!");
-            else if(Integer.parseInt(this.msg[1]) <= this.playerData.getPokemonList().length()) index = Integer.parseInt(this.msg[1]) - 1;
+            else if(Integer.parseInt(this.msg[1]) <= this.playerData.getPokemonList().size()) index = Integer.parseInt(this.msg[1]) - 1;
         }
 
-        String UUID = this.playerData.getPokemonList().getString(index);
+        String UUID = this.playerData.getPokemonList().get(index);
         Pokemon chosen = Pokemon.build(UUID);
 
         String title = "**Level " + chosen.getLevel() + " " + chosen.getName() + "**" + (chosen.isShiny() ? " :star2:" : "");
@@ -44,7 +44,7 @@ public class CommandInfo extends Command
         this.embed.setDescription(exp + "\n" + type + "\n" + nature + "\n" + item + "\n" + tm + "\n" + tr + "\n\n" + stats);
         this.color = chosen.getType()[0].getColor();
         this.embed.setImage(chosen.getImage());
-        this.embed.setFooter("Showing Pokemon " + (index + 1) + " / " + this.playerData.getPokemonList().length());
+        this.embed.setFooter("Showing Pokemon " + (index + 1) + " / " + this.playerData.getPokemonList().size());
 
         return this;
     }

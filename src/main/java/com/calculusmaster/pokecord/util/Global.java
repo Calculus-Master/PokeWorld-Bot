@@ -22,15 +22,7 @@ public class Global
     {
         PlayerDataQuery p = new PlayerDataQuery(playerID);
         List<Pokemon> list = new LinkedList<>();
-        for(int i = 0; i < p.getPokemonList().length(); i++) list.add(Pokemon.buildCore(p.getPokemonList().getString(i), i));
-        return list;
-    }
-
-    public static List<Pokemon.Base> getBaseList(String playerID)
-    {
-        PlayerDataQuery p = new PlayerDataQuery(playerID);
-        List<Pokemon.Base> list = new LinkedList<>();
-        for(int i = 0; i < p.getPokemonList().length(); i++) list.add(Pokemon.build(p.getPokemonList().getString(i), i));
+        for(int i = 0; i < p.getPokemonList().size(); i++) list.add(Pokemon.buildCore(p.getPokemonList().get(i), i));
         return list;
     }
 

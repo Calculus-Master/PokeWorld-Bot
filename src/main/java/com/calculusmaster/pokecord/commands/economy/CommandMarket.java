@@ -66,10 +66,10 @@ public class CommandMarket extends Command
     @Override
     public Command runCommand()
     {
-        if (this.msg.length >= 4 && (this.msg[1].equals("list") || this.msg[1].equals("sell")) && isNumeric(2) && isNumeric(3) && Integer.parseInt(this.msg[2]) <= this.playerData.getPokemonList().length() && Integer.parseInt(this.msg[3]) > 0)
+        if (this.msg.length >= 4 && (this.msg[1].equals("list") || this.msg[1].equals("sell")) && isNumeric(2) && isNumeric(3) && Integer.parseInt(this.msg[2]) <= this.playerData.getPokemonList().size() && Integer.parseInt(this.msg[3]) > 0)
         {
             //Add pokemon to the market
-            MarketEntry newMarketEntry = MarketEntry.create(this.player.getId(), this.player.getName(), this.playerData.getPokemonList().getString(Integer.parseInt(this.msg[2]) - 1), Integer.parseInt(this.msg[3]));
+            MarketEntry newMarketEntry = MarketEntry.create(this.player.getId(), this.player.getName(), this.playerData.getPokemonList().get(Integer.parseInt(this.msg[2]) - 1), Integer.parseInt(this.msg[3]));
             marketEntries.add(newMarketEntry);
             this.playerData.removePokemon(newMarketEntry.pokemonID);
 

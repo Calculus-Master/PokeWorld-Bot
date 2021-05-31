@@ -38,18 +38,18 @@ public class CommandTeam extends Command
             int teamIndex = add ? MAX_TEAM_SIZE : this.getInt(2);
             int pokemonIndex = this.getInt(add ? 2 : 3);
 
-            if((teamIndex < 1 || (set && teamIndex > MAX_TEAM_SIZE)) || (pokemonIndex < 1 || pokemonIndex > this.playerData.getPokemonList().length()))
+            if((teamIndex < 1 || (set && teamIndex > MAX_TEAM_SIZE)) || (pokemonIndex < 1 || pokemonIndex > this.playerData.getPokemonList().size()))
             {
                 this.embed.setDescription(CommandInvalid.getShort());
                 return this;
             }
-            else if(add && this.playerData.getTeam().length() == MAX_TEAM_SIZE)
+            else if(add && this.playerData.getTeam().size() == MAX_TEAM_SIZE)
             {
                 this.embed.setDescription("Your team is full! Use p!team set to change certain slots!");
                 return this;
             }
 
-            String UUID = this.playerData.getPokemonList().getString(pokemonIndex - 1);
+            String UUID = this.playerData.getPokemonList().get(pokemonIndex - 1);
 
             if(this.playerData.isInTeam(UUID))
             {
@@ -66,13 +66,13 @@ public class CommandTeam extends Command
         {
             int teamIndex = this.getInt(2);
 
-            if(teamIndex < 1 || teamIndex > MAX_TEAM_SIZE || teamIndex > this.playerData.getTeam().length())
+            if(teamIndex < 1 || teamIndex > MAX_TEAM_SIZE || teamIndex > this.playerData.getTeam().size())
             {
                 this.embed.setDescription(CommandInvalid.getShort());
                 return this;
             }
 
-            Pokemon p = Pokemon.buildCore(this.playerData.getTeam().getString(teamIndex - 1), -1);
+            Pokemon p = Pokemon.buildCore(this.playerData.getTeam().get(teamIndex - 1), -1);
 
             this.playerData.removePokemonFromTeam(teamIndex);
 
@@ -83,7 +83,7 @@ public class CommandTeam extends Command
             int fromIndex = this.getInt(2);
             int toIndex = this.getInt(3);
 
-            if(fromIndex < 1 || fromIndex > this.playerData.getTeam().length() || toIndex < 1 || toIndex > this.playerData.getTeam().length())
+            if(fromIndex < 1 || fromIndex > this.playerData.getTeam().size() || toIndex < 1 || toIndex > this.playerData.getTeam().size())
             {
                 this.embed.setDescription(CommandInvalid.getShort());
                 return this;
@@ -120,9 +120,9 @@ public class CommandTeam extends Command
                 {
                     team.append(i + 1).append(": ");
 
-                    if(i < this.playerData.getTeam().length())
+                    if(i < this.playerData.getTeam().size())
                     {
-                        p = Pokemon.buildCore(this.playerData.getTeam().getString(i), -1);
+                        p = Pokemon.buildCore(this.playerData.getTeam().get(i), -1);
                         team.append("Level ").append(p.getLevel()).append(" ").append(p.getName()).append(this.getTag(p.getName()));
                     }
                     else team.append("None");

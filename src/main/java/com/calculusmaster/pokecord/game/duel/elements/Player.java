@@ -25,7 +25,7 @@ public class Player
         List<Pokemon> teamBuilder = new ArrayList<>();
 
         if(numPokemon == 1) teamBuilder.add(this.data.getSelectedPokemon());
-        else for(int i = 0; i < numPokemon; i++) teamBuilder.add(Pokemon.build(this.data.getTeam().getString(i)));
+        else for(int i = 0; i < numPokemon; i++) teamBuilder.add(Pokemon.build(this.data.getTeam().get(i)));
 
         this.team = Collections.unmodifiableList(teamBuilder);
         this.active = this.team.get(0);

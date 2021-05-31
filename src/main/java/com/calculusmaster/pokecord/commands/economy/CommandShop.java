@@ -46,7 +46,6 @@ public class CommandShop extends Command
             case "tm", "tr" -> page_tm_tr();
             case "movetutor", "mt", "tutor" -> page_movetutor();
             case "zcrystals", "zcrystal", "z" -> page_zcrystals();
-            case "xp" -> page_xp();
             default -> this.embed.setDescription(CommandInvalid.getShort());
         }
 
@@ -67,12 +66,6 @@ public class CommandShop extends Command
 
         this.page.append("\n\n**Items**:\n");
         for(PokeItem i : entriesItem) this.page.append((entriesItem.indexOf(i) + 1) + ": " + i.getStyledName() + " - " + itemPrices.get(entriesItem.indexOf(i)) + "c\n");
-    }
-
-    private void page_xp()
-    {
-        this.page.append("**XP Boosters:**\n");
-        for(XPBooster xp : XPBooster.values()) this.page.append("`" + xp.timeForShop() + ":` (" + xp.boost + "x) " + xp.price + "c\n");
     }
 
     private static OffsetDateTime time;

@@ -6,7 +6,6 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Nature;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
-import com.calculusmaster.pokecord.game.enums.items.XPBooster;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -212,26 +211,6 @@ public class CommandBuy extends Command
             this.playerData.changeCredits(-1 * CommandShop.priceZCrystal);
 
             this.embed.setDescription("Successfully bought " + z.getStyledName() + "!");
-        }
-        else if(this.msg[1].equals("xp") && this.msg.length == 3 && this.msg[2].chars().allMatch(Character::isDigit))
-        {
-            int val = Integer.parseInt(this.msg[2]) - 1;
-            if(val >= 0 && val < XPBooster.values().length)
-            {
-                XPBooster xp = XPBooster.values()[val];
-                if(xp.price <= this.playerData.getCredits())
-                {
-                    if(this.playerData.hasXPBooster()) this.embed.setDescription("You already have an active xp booster!");
-                    else
-                    {
-                        this.playerData.addXPBooster(xp, this.event);
-                        this.playerData.changeCredits(-1 * xp.price);
-                        this.embed.setDescription("Successfully started `" + xp.timeForShop() + " " + xp.boost + "x ` Booster!");
-                    }
-                }
-                else this.embed.setDescription("You don't have enough money!");
-            }
-            else this.embed.setDescription(CommandInvalid.getShort());
         }
         else
         {

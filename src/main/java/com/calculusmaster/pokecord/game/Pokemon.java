@@ -26,6 +26,7 @@ public class Pokemon
     private JSONObject specificJSON;
 
     private String UUID;
+    private int num;
     private boolean shiny;
     private Nature nature;
     private Map<Stat, Double> natureMap;
@@ -61,6 +62,7 @@ public class Pokemon
     {
         Pokemon p = new Pokemon();
         p.setUUID(UUID);
+        p.setNumber(-1);
 
         p.linkSpecificJSON(UUID);
         p.linkGenericJSON(p.getSpecificJSON().getString("name"));
@@ -94,6 +96,7 @@ public class Pokemon
     {
         Pokemon p = new Pokemon();
         p.setUUID();
+        p.setNumber(-1);
 
         p.linkGenericJSON(Global.normalCase(name));
 
@@ -124,7 +127,7 @@ public class Pokemon
     //WILL CRASH IF ANY OTHER GETTERS ARE USED
     public static Pokemon buildCore(String UUID, int num)
     {
-        JSONObject specific = Pokemon.specificJSON(UUID);
+        Document d = Mongo.PokemonData.find(Filters.eq("UUID", UUID)).first();
 
         Pokemon p = new Pokemon()
         {
@@ -135,52 +138,30 @@ public class Pokemon
 
             @Override
             public int getLevel() {
-                return specific.getInt("level");
+                return d.getInteger("level");
             }
 
             @Override
             public String getName() {
-                return specific.getString("name");
-            }
-
-            @Override
-            public int getNumber()
-            {
-                return num + 1;
+                return d.getString("name");
             }
         };
 
-        p.setIVs(specific.getString("ivs"));
+        p.setNumber(num + 1);
+
+        p.setIVs(d.getString("ivs"));
 
         return p;
     }
 
-    public record Base(String name, String UUID, int level, int number, Map<Stat, Integer> IVs)
-    {
-        public String getTotalIV()
-        {
-            return String.format("%.2f", this.IVs().values().stream().mapToDouble(iv -> iv / 31D).sum() * 100 / 6D) + "%";
-        }
-
-        public Double getTotalIVRounded()
-        {
-            return Double.parseDouble(this.getTotalIV().substring(0, 5));
-        }
-    }
-
-    public static Base build(String UUID, int num)
-    {
-        JSONObject specific = Pokemon.specificJSON(UUID);
-
-        Map<Stat, Integer> IV = new HashMap<>();
-        for(int i = 0; i < 6; i++) IV.put(Stat.values()[i], Integer.parseInt(specific.getString("ivs").split("-")[i]));
-
-        return new Base(specific.getString("name"), UUID, specific.getInt("level"), num, IV);
-    }
-
     public int getNumber()
     {
-        return -1;
+        return this.num;
+    }
+
+    public void setNumber(int n)
+    {
+        this.num = n;
     }
 
     //JSONs

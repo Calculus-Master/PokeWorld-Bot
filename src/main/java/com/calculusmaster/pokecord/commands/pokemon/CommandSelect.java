@@ -17,13 +17,13 @@ public class CommandSelect extends Command
     @Override
     public Command runCommand()
     {
-        if(this.msg.length != 2 || (!this.msg[1].equals("latest") && (!this.isNumeric(1) || Integer.parseInt(this.msg[1]) > this.playerData.getPokemonList().length())))
+        if(this.msg.length != 2 || (!this.msg[1].equals("latest") && (!this.isNumeric(1) || Integer.parseInt(this.msg[1]) > this.playerData.getPokemonList().size())))
         {
             this.embed.setDescription(CommandInvalid.getShort());
         }
         else
         {
-            int selected = this.msg[1].equals("latest") ? this.playerData.getPokemonList().length() : this.getInt(1);
+            int selected = this.msg[1].equals("latest") ? this.playerData.getPokemonList().size() : this.getInt(1);
             this.playerData.setSelected(selected);
             Pokemon p = this.playerData.getSelectedPokemon();
 

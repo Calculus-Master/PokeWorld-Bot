@@ -21,7 +21,7 @@ public class CommandStart extends Command
     @Override
     public Command runCommand()
     {
-        boolean isRegistered = PlayerDataQuery.isRegistered(this.player);
+        boolean isRegistered = PlayerDataQuery.isRegistered(this.player.getId());
 
         if(isRegistered)
         {
