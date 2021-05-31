@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.duel;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.duel.elements.Trainer;
+import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -20,6 +21,7 @@ public class TrainerDuel extends Duel
         duel.setEvent(event);
         duel.setPlayers(playerID, trainer.name, trainer.pokemon.size());
         duel.setTrainer(trainer);
+        duel.limitPlayerPokemon(trainer.pokemonLevel);
         duel.setDefaults();
         duel.setDuelPokemonObjects(0);
         duel.setDuelPokemonObjects(1);
@@ -101,6 +103,17 @@ public class TrainerDuel extends Duel
         else if(this.players[1].data.hasZCrystal("") && !this.players[1].usedZMove) this.queuedMoves.put(this.players[1].ID, new TurnAction(ActionType.ZMOVE, new Random().nextInt(4) + 1, -1));
         //Normal Move
         else this.queuedMoves.put(this.players[1].ID, new TurnAction(ActionType.MOVE, new Random().nextInt(4) + 1, -1));
+    }
+
+    private void limitPlayerPokemon(int level)
+    {
+        for(int i = 0; i < this.players[0].team.size(); i++)
+        {
+            this.players[0].team.get(0).setLevel(level);
+            this.players[0].team.get(0).setHealth(this.players[0].team.get(0).getStat(Stat.HP));
+        }
+
+        this.players[0].active = this.players[0].team.get(0);
     }
 
     @Override
