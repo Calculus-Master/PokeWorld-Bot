@@ -17,13 +17,6 @@ public class CacheHelper
     //Key: playerID     Value: Team
     public static final Map<String, List<Pokemon>> TEAM_LISTS = new HashMap<>();
 
-    public static void main(String[] args)
-    {
-        long i = System.currentTimeMillis();
-        initPokemonLists();
-        System.out.println("New Init: " + (System.currentTimeMillis() - i) + "ms");
-    }
-
     //Pokemon List Updates
     public static void addPokemon(String player, String UUID)
     {

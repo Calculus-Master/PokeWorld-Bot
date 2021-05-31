@@ -1,45 +1,16 @@
 package com.calculusmaster.pokecord.util;
 
-import com.calculusmaster.pokecord.game.Pokemon;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
-import com.mongodb.client.model.Filters;
 import org.bson.Document;
 import org.slf4j.LoggerFactory;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Global
 {
     public static final List<String> STARTERS = Arrays.asList("bulbasaur", "charmander", "squirtle", "chikorita", "quilava", "totodile", "treecko", "torchic", "mudkip", "turtwig", "chimchar", "piplup", "snivy", "tepig", "oshawott", "chespin", "fennekin", "froakie", "rowlet", "litten", "popplio"); //TODO: Add the remaining starters and update this list
     public static final List<String> POKEMON = new ArrayList<>();
-
-    public static final Map<String, List<Pokemon>> POKEMON_LISTS = new HashMap<>();
-
-    public static List<Pokemon> getPokemonList(String playerID)
-    {
-        PlayerDataQuery p = new PlayerDataQuery(playerID);
-        List<Pokemon> list = new LinkedList<>();
-        for(int i = 0; i < p.getPokemonList().size(); i++) list.add(Pokemon.buildCore(p.getPokemonList().get(i), i));
-        return list;
-    }
-
-    public static void updatePokemonList(String playerID)
-    {
-        if(playerID.equals("")) return;
-        List<Pokemon> list = Global.getPokemonList(playerID);
-        POKEMON_LISTS.put(playerID, list);
-    }
-
-    public static void updatePokemonInList(String UUID)
-    {
-        String playerID = "";
-        //System.out.println(POKEMON_LISTS);
-        for(String s : POKEMON_LISTS.keySet()) if(POKEMON_LISTS.get(s).stream().anyMatch(p -> p.getUUID().equals(UUID))) playerID = s;
-        updatePokemonList(playerID);
-    }
 
     public static void logInfo(Class<?> clazz, String method, String msg)
     {

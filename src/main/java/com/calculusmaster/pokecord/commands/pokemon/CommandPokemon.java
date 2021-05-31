@@ -3,53 +3,24 @@ package com.calculusmaster.pokecord.commands.pokemon;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.util.CacheHelper;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.PokemonRarity;
-import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.commons.collections4.list.TreeList;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CommandPokemon extends Command
 {
-    public static void init()
-    {
-        long i = System.currentTimeMillis();
-        List<String> IDs = new ArrayList<>();
-        Mongo.PlayerData.find(Filters.exists("username")).forEach(d -> IDs.add(d.getString("playerID")));
-
-        ExecutorService pool = Executors.newFixedThreadPool(IDs.size() / 2);
-
-        for(String s : IDs)
-        {
-            try {Thread.sleep(100);}
-            catch (Exception e) {System.out.println("Can't Sleep Thread!");}
-
-            pool.execute(() -> Global.updatePokemonList(s));
-        }
-
-        pool.shutdown();
-
-        try { pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS); }
-        catch (Exception e) { System.out.println("CommandPokemon Init failed!"); }
-
-        long f = System.currentTimeMillis();
-        System.out.println((f - i) + "ms");
-    }
-
     List<Pokemon> pokemon;
     public CommandPokemon(MessageReceivedEvent event, String[] msg)
     {
         super(event, msg);
         //this.buildList();
-        this.pokemon = new TreeList<>(Global.POKEMON_LISTS.get(this.player.getId()));
+        this.pokemon = new TreeList<>(CacheHelper.POKEMON_LISTS.get(this.player.getId()));
     }
 
     @Override

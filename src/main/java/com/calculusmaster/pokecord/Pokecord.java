@@ -48,7 +48,7 @@ public class Pokecord
         Global.logInfo(Pokecord.class, "main", "Starting Market Init!");
         CommandMarket.init();
         Global.logInfo(Pokecord.class, "main", "Starting CommandPokemon Init!");
-        CommandPokemon.init();
+        CacheHelper.initPokemonLists();
         Global.logInfo(Pokecord.class, "main", "Completed Init!");
 
         long end = System.currentTimeMillis();
