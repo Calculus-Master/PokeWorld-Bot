@@ -49,6 +49,8 @@ public class Trainer extends Player
 
             DAILY_TRAINERS.add(new TrainerInfo(name, level, z, team));
         }
+
+        for(TrainerInfo t : DAILY_TRAINERS) PLAYER_TRAINERS_DEFEATED.put(t.name, new ArrayList<>());
     }
 
     //TODO: Make sure Trainer battles work first then work on these

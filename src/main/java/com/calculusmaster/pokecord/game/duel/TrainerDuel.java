@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -48,7 +49,7 @@ public class TrainerDuel extends Duel
             embed.setDescription("You defeated " + ((Trainer)this.players[1]).info.name + "!");
 
             String bot = ((Trainer)this.players[1]).info.name;
-            List<String> playersDefeatedBot = Trainer.PLAYER_TRAINERS_DEFEATED.get(bot);
+            List<String> playersDefeatedBot = new ArrayList<>(Trainer.PLAYER_TRAINERS_DEFEATED.get(bot));
             if(!playersDefeatedBot.contains(this.players[0].ID))
             {
                 playersDefeatedBot.add(this.players[0].ID);
