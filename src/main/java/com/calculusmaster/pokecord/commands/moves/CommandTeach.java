@@ -27,7 +27,7 @@ public class CommandTeach extends Command
         boolean tm = this.msg[1].equals("tm");
         int number = Integer.parseInt(this.msg[2]);
 
-        if((tm && number > 0 && number <= 100 && this.JSONArrayContains(this.playerData.getOwnedTMs(), TM.get(number).toString())) || (!tm && number >= 0 && number < 100 && this.JSONArrayContains(this.playerData.getOwnedTRs(), TR.get(number).toString())))
+        if((tm && number > 0 && number <= 100 && this.playerData.getTMList().contains(TM.get(number).toString())) || (!tm && number >= 0 && number < 100 && this.playerData.getTRList().contains(TR.get(number).toString())))
         {
             Pokemon selected = this.playerData.getSelectedPokemon();
             int held;

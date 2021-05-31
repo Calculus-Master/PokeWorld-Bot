@@ -66,9 +66,7 @@ public class CacheHelper
 
     public static void setUUIDLists()
     {
-        long i = System.currentTimeMillis();
         Mongo.PlayerData.find(Filters.exists("playerID")).forEach(d -> UUID_LISTS.put(d.getString("playerID"), d.getList("pokemon", String.class)));
-        System.out.println("UUID List Init: " + (System.currentTimeMillis() - i) + "ms!");
     }
 
     public static void initPokemonLists()
@@ -94,6 +92,6 @@ public class CacheHelper
 
         long finalTime = System.currentTimeMillis();
 
-        System.out.println("Pokemon List Init: " + (initialTime - finalTime) + "ms!");
+        System.out.println("Pokemon List Init: " + (finalTime - initialTime) + "ms!");
     }
 }

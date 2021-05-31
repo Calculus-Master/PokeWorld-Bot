@@ -20,38 +20,33 @@ public class CommandGive extends Command
         {
             this.embed.setDescription("Specify the item you want to give! Use p!inventory to check what items you have.");
         }
-        else if(!isNumeric(1) || this.playerData.getItemList().length() <= (Integer.parseInt(this.msg[1]) - 1))
+        else if(!isNumeric(1) || this.playerData.getItemList().size() <= (Integer.parseInt(this.msg[1]) - 1))
         {
             this.embed.setDescription(CommandInvalid.getShort());
             return this;
         }
 
-        String itemRaw = this.playerData.getItemList().getString(Integer.parseInt(this.msg[1]) - 1);
-        PokeItem item = PokeItem.isItem(itemRaw) ? PokeItem.asItem(itemRaw) : null;
+        PokeItem item = PokeItem.asItem(this.playerData.getItemList().get(this.getInt(1) - 1));
         Pokemon s = this.playerData.getSelectedPokemon();
 
-        if(item != null && this.playerHasItem(item.getName()))
+        if(item != null)
         {
             if(s.hasItem()) this.playerData.addItem(s.getItem());
             s.setItem(item);
 
             Pokemon.updateItem(s);
 
-            this.embed.setDescription("Gave " + s.getName() + " a `" + item.getStyledName() + "`!");
+            this.event.getChannel().sendMessage(this.playerData.getMention() + ": Gave " + s.getName() + " a `" + item.getStyledName() + "`!").queue();
+            this.embed = null;
 
             if(s.specialCanEvolve()) s.evolve();
         }
-        else this.embed.setDescription(item == null ? "Invalid item name!" : "You don't have any `" + item.getStyledName() + "`!");
+        else
+        {
+            this.event.getChannel().sendMessage(this.playerData.getMention() + ": You don't have any `" + item.getStyledName() + "`!").queue();
+            this.embed = null;
+        }
 
         return this;
-    }
-
-    public boolean playerHasItem(String name)
-    {
-        for(int i = 0; i < this.playerData.getItemList().length(); i++)
-        {
-            if(this.playerData.getItemList().getString(i).toLowerCase().equals(name.toLowerCase())) return true;
-        }
-        return false;
     }
 }

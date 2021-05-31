@@ -20,7 +20,7 @@ public class CommandEquip extends Command
             this.embed.setDescription(CommandInvalid.getShort());
             return this;
         }
-        else if(this.getInt(1) > this.playerData.getZCrystalList().length() || this.getInt(1) <= 0)
+        else if(this.getInt(1) > this.playerData.getZCrystalList().size() || this.getInt(1) <= 0)
         {
             this.embed.setDescription(CommandInvalid.getShort());
             return this;
@@ -32,7 +32,7 @@ public class CommandEquip extends Command
             return this;
         }
 
-        String z = this.playerData.getZCrystalList().getString(this.getInt(1) - 1);
+        String z = this.playerData.getZCrystalList().get(this.getInt(1) - 1);
 
         this.playerData.equipZCrystal(z);
 
