@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.PrivateInfo;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Random;
@@ -58,6 +59,14 @@ public class CommandStart extends Command
 
             Pokemon.uploadPokemon(starter);
             p.addPokemon(starter.getUUID());
+
+            if(!PrivateInfo.getPlayerMythical(this.player.getId()).equals(""))
+            {
+                Pokemon mythical = Pokemon.create(PrivateInfo.getPlayerMythical(this.player.getId()));
+                Pokemon.uploadPokemon(mythical);
+                p.addPokemon(mythical.getUUID());
+                this.event.getChannel().sendMessage("You also acquired a " + mythical.getName() + "!").queue();
+            }
 
             this.embed.setDescription("You started your journey with " + starter.getName() + "!");
         }

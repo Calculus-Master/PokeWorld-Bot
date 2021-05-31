@@ -29,6 +29,7 @@ public class CommandTrainerDuel extends Command
             Trainer.TrainerInfo trainer = Trainer.DAILY_TRAINERS.get(this.getInt(1) - 1);
             Duel d = TrainerDuel.create(this.player.getId(), this.event, trainer);
 
+            //TODO: Valid Team Check
             this.event.getMessage().getChannel().sendMessage(this.playerData.getMention() + ": You challenged " + trainer.name + " !").queue();
             this.embed = null;
 

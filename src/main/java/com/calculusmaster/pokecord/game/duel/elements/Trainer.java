@@ -19,7 +19,7 @@ public class Trainer extends Player
 
     public static void setDailyTrainers()
     {
-        List<String> trainerNames = new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"));
+        List<String> trainerNames = new ArrayList<>(Arrays.asList("Team Rocket Grunt", "Team Aqua Grunt", "Team Magma Grunt", "Team Galactic Grunt", "Team Plasma Grunt", "Team Flare Grunt", "Team Skull Grunt", "Team Yell Grunt"));
 
         DAILY_TRAINERS.clear();
         PLAYER_TRAINERS_DEFEATED.clear();
