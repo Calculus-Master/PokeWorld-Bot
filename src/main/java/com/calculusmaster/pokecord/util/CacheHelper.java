@@ -23,6 +23,13 @@ public class CacheHelper
         List<Pokemon> pokemon = POKEMON_LISTS.get(player);
         List<String> uuids = UUID_LISTS.get(player);
 
+        if(pokemon == null)
+        {
+            initialList(player);
+            pokemon = POKEMON_LISTS.get(player);
+            uuids = UUID_LISTS.get(player);
+        }
+
         pokemon.add(Pokemon.buildCore(UUID, pokemon.size()));
         uuids.add(UUID);
 
@@ -34,6 +41,13 @@ public class CacheHelper
     {
         List<Pokemon> pokemon = POKEMON_LISTS.get(player);
         List<String> uuids = UUID_LISTS.get(player);
+
+        if(pokemon == null)
+        {
+            initialList(player);
+            pokemon = POKEMON_LISTS.get(player);
+            uuids = UUID_LISTS.get(player);
+        }
 
         int index = uuids.indexOf(UUID);
         pokemon.remove(index);
@@ -55,6 +69,12 @@ public class CacheHelper
         pokemon.set(index, Pokemon.buildCore(UUID, index + 1));
 
         POKEMON_LISTS.put(player, pokemon);
+    }
+
+    private static void initialList(String player)
+    {
+        POKEMON_LISTS.put(player, new ArrayList<>());
+        UUID_LISTS.put(player, new ArrayList<>());
     }
 
     public static void createPokemonList(String player)
