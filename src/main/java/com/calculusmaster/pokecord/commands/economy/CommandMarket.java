@@ -32,6 +32,8 @@ public class CommandMarket extends Command
         List<String> IDs = new ArrayList<>();
         Mongo.MarketData.find(Filters.exists("marketID")).forEach(d -> IDs.add(d.getString("marketID")));
 
+        if(IDs.size() == 0) return;
+
         int split = 20;
         List<List<String>> totalList = new ArrayList<>();
 

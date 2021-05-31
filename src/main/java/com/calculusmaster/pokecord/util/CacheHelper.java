@@ -76,6 +76,8 @@ public class CacheHelper
         List<String> players = new ArrayList<>();
         Mongo.PlayerData.find(Filters.exists("username")).forEach(d -> players.add(d.getString("playerID")));
 
+        if(players.size() == 0) return;
+
         setUUIDLists();
 
         ExecutorService pool = Executors.newFixedThreadPool(players.size() / 2);
