@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.config.CommandPrefix;
 import com.calculusmaster.pokecord.commands.config.CommandSpawnChannel;
 import com.calculusmaster.pokecord.commands.duel.CommandDuel;
+import com.calculusmaster.pokecord.commands.duel.CommandTrainerDuel;
 import com.calculusmaster.pokecord.commands.duel.CommandUse;
 import com.calculusmaster.pokecord.commands.duel.CommandWildDuel;
 import com.calculusmaster.pokecord.commands.economy.*;
@@ -214,6 +215,10 @@ public class Listener extends ListenerAdapter
             else if(Command.REDEEM.contains(msg[0]))
             {
                 c = new CommandRedeem(event, msg).runCommand();
+            }
+            else if(Command.TRAINERDUEL.contains(msg[0]))
+            {
+                c = new CommandTrainerDuel(event, msg).runCommand();
             }
             else if(msg[0].equals("ness"))
             {

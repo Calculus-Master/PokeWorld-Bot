@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.game.duel;
 
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
@@ -433,11 +434,6 @@ public class Duel
             this.players[this.current].active.gainEVs(this.players[this.other].active);
 
             this.players[this.current].active.addExp(this.players[this.current].active.getDuelExp(this.players[this.other].active));
-
-            new Thread(() -> {
-                Pokemon.updateEVs(this.players[this.current].active);
-                Pokemon.updateExperience(this.players[this.current].active);
-            }).start();
         }
 
         return turnResult;
@@ -771,7 +767,19 @@ public class Duel
 
         this.event.getChannel().sendMessage(embed.build()).queue();
 
+        this.uploadEVs(0);
+        this.uploadEVs(1);
+
         DuelHelper.delete(this.players[0].ID);
+    }
+
+    protected void uploadEVs(int player)
+    {
+        for(Pokemon p : this.players[player].team)
+        {
+            Pokemon.updateEVs(p);
+            Pokemon.updateExperience(p);
+        }
     }
 
     protected int giveWinCredits()

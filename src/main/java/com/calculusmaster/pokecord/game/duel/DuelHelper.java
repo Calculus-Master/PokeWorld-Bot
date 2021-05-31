@@ -1,14 +1,10 @@
 package com.calculusmaster.pokecord.game.duel;
 
 import com.calculusmaster.pokecord.game.Move;
-import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
-import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
-import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.PokemonRarity;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,15 +30,6 @@ public class DuelHelper
         int index = -1;
         for(Duel d : DUELS) if(d.hasPlayer(id)) index = DUELS.indexOf(d);
         DUELS.remove(index);
-    }
-
-    public enum Terrain
-    {
-        NORMAL_TERRAIN,
-        ELECRIC_TERRAIN,
-        GRASSY_TERRAIN,
-        MISTY_TERRAIN,
-        PSYCHIC_TERRAIN;
     }
 
     public static class DuelPokemon
@@ -114,91 +101,20 @@ public class DuelHelper
 
     public record TurnAction(ActionType action, int moveInd, int swapInd) {}
 
+    public enum Terrain
+    {
+        NORMAL_TERRAIN,
+        ELECRIC_TERRAIN,
+        GRASSY_TERRAIN,
+        MISTY_TERRAIN,
+        PSYCHIC_TERRAIN;
+    }
+
     public enum ActionType
     {
         MOVE,
         ZMOVE,
         SWAP;
-    }
-
-    //Singular Pokemon
-    public static class WildPokemon extends Player
-    {
-        public WildPokemon(int level)
-        {
-            this(Global.POKEMON.get(new Random().nextInt(Global.POKEMON.size())), level);
-        }
-
-        public WildPokemon(String specific, int level)
-        {
-            super();
-
-            Pokemon p = Pokemon.create(specific);
-            p.setLevel(level);
-            p.setHealth(p.getStat(Stat.HP));
-            for(int i = 0; i < 4; i++)
-            {
-                p.learnMove(p.getAvailableMoves().get(new Random().nextInt(p.getAvailableMoves().size())), i + 1);
-            }
-
-            this.team = List.of(p);
-            this.active = this.team.get(0);
-            this.move = null;
-
-            this.data = new PlayerDataQuery("BOT")
-            {
-                @Override
-                public String getUsername()
-                {
-                    return "The Wild " + p.getName();
-                }
-            };
-        }
-    }
-
-    public static class Player
-    {
-        public String ID;
-        public PlayerDataQuery data;
-        public Pokemon active;
-        public Move move;
-        public boolean usedZMove;
-        public List<Pokemon> team;
-
-        public Player(String id, int numPokemon)
-        {
-            this.ID = id;
-            this.data = new PlayerDataQuery(id);
-
-            List<Pokemon> teamBuilder = new ArrayList<>();
-
-            if(numPokemon == 1) teamBuilder.add(this.data.getSelectedPokemon());
-            else for(int i = 0; i < numPokemon; i++) teamBuilder.add(Pokemon.build(this.data.getTeam().getString(i)));
-
-            this.team = Collections.unmodifiableList(teamBuilder);
-            this.active = this.team.get(0);
-            this.move = null;
-            this.usedZMove = false;
-        }
-
-        public Player()
-        {
-            this.ID = "BOT";
-            this.data = null;
-            this.usedZMove = false;
-        }
-
-        public void swap(int index)
-        {
-            this.active = this.team.get(index);
-        }
-
-        public boolean lost()
-        {
-            boolean lost = true;
-            for(Pokemon p : this.team) lost = lost && p.isFainted();
-            return lost;
-        }
     }
 
     public enum DuelStatus

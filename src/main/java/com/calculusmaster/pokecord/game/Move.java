@@ -38,6 +38,8 @@ public class Move
 
     public Move(String name)
     {
+        if(!MOVES.containsKey(name) || WIP_MOVES.contains(name)) name = "Tackle";
+
         this.moveData = MOVES.get(name);
         this.name = this.moveData.name;
         this.setDefaultValues();

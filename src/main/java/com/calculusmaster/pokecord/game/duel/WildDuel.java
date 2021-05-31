@@ -2,11 +2,12 @@ package com.calculusmaster.pokecord.game.duel;
 
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.duel.elements.Player;
+import com.calculusmaster.pokecord.game.duel.elements.WildPokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import static com.calculusmaster.pokecord.game.duel.DuelHelper.*;

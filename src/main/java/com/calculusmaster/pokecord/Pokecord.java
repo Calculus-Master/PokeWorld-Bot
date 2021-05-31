@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.commands.economy.CommandMarket;
 import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.duel.elements.Trainer;
 import com.calculusmaster.pokecord.util.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -36,6 +37,8 @@ public class Pokecord
         Pokemon.init();
         Global.logInfo(Pokecord.class, "main", "Starting CommandWildDuel EV Lists Init!");
         CommandWildDuel.init();
+        Global.logInfo(Pokecord.class, "main", "Starting setDailyTrainers!");
+        Trainer.setDailyTrainers();
         Global.logInfo(Pokecord.class, "main", "Starting Move Init!");
         Move.init();
         Global.logInfo(Pokecord.class, "main", "Starting PokemonRarity Init!");

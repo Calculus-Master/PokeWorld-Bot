@@ -52,6 +52,7 @@ public abstract class Command
     public static final CommandHelp.HelpEntry MEGA = new CommandHelp.HelpEntry("mega");
     public static final CommandHelp.HelpEntry WILDDUEL = new CommandHelp.HelpEntry("wildduel");
     public static final CommandHelp.HelpEntry REDEEM = new CommandHelp.HelpEntry("redeem");
+    public static final CommandHelp.HelpEntry TRAINERDUEL = new CommandHelp.HelpEntry("trainerduel");
 
     public static void init()
     {
@@ -251,6 +252,9 @@ public abstract class Command
 
         REDEEM.setCategory(CommandHelp.CommandCategory.POKEMON)
                 .addAliases("r");
+
+        TRAINERDUEL.setCategory(CommandHelp.CommandCategory.DUEL)
+                .addAliases();
     }
 
     protected MessageReceivedEvent event;
