@@ -5,12 +5,14 @@ import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.Duel;
-import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.PokemonRarity;
+import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**Temporary, will replace CommandDuel if complete
  * @see Duel
@@ -55,9 +57,9 @@ public class CommandDuel extends Command
                     DuelHelper.delete(this.player.getId());
                     return this;
                 }
-                else if(checkTeam && !this.isValidTeam(d.getSize()))
+                else if(checkTeam && this.isInvalidTeam(d.getSize()))
                 {
-                    this.embed.setDescription("Your team exceeds either the Legendary, Mythical or Mega limits! For a size " + d.getSize() + " duel, you can have a maximum of " + (1 + d.getSize() / 3) + " legendaries, " + (1 + d.getSize() / 3) + " mythicals and ultra beasts, and " + (1 + d.getSize() / 2) + " Mega-Evolved Pokemon!");
+                    this.embed.setDescription("Your team exceeds either the Legendary or Mythical limits! For a size " + d.getSize() + " duel, you can have a maximum of " + this.getLegendaryCap(d.getSize()) + " legendaries and " + this.getMythicalUBCap(d.getSize()) + " mythicals/ultra beasts!");
                     return this;
                 }
 
@@ -120,9 +122,9 @@ public class CommandDuel extends Command
             this.embed.setDescription("You cannot duel yourself!");
             return this;
         }
-        else if(checkTeam && !this.isValidTeam(size))
+        else if(checkTeam && this.isInvalidTeam(size))
         {
-            this.embed.setDescription("Your team exceeds either the Legendary, Mythical or Mega limits! For a size " + size + " duel, you can have a maximum of " + (1 + size / 3) + " legendaries, " + (1 + size / 3) + " mythicals and ultra beasts, and " + (1 + size / 2) + " Mega-Evolved Pokemon!");
+            this.embed.setDescription("Your team exceeds either the Legendary or Mythical limits! For a size " + size + " duel, you can have a maximum of " + this.getLegendaryCap(size) + " legendaries and " + this.getMythicalUBCap(size) + " mythicals/ultra beasts!");
             return this;
         }
 
@@ -133,33 +135,36 @@ public class CommandDuel extends Command
         return this;
     }
 
-    public boolean isValidTeam(int size)
+    private int getLegendaryCap(int size)
     {
-        //Temporary disable
-        if(2 > 1) return true;
+        return 1 + (size - 1) / 4;
+    }
 
-        if(size < 3) return true;
+    private int getMythicalUBCap(int size)
+    {
+        return 2 + (size - 1) / 4;
+    }
+
+    public boolean isInvalidTeam(int size)
+    {
+        if(size < 3) return false;
 
         int legendary = 0;
         int mythical = 0;
         int ub = 0;
-        int mega = 0;
 
-        String name = "";
+        String name;
+        List<String> team = this.playerData.getTeam();
+
         for(int i = 0; i < this.playerData.getTeam().size(); i++)
         {
-            name = Pokemon.buildCore(this.playerData.getTeam().get(i), -1).getName();
+            name = Mongo.PokemonData.find(Filters.eq("UUID", team.get(i))).first().getString("name");
 
             if(PokemonRarity.LEGENDARY.contains(name)) legendary++;
             if(PokemonRarity.MYTHICAL.contains(name)) mythical++;
             if(PokemonRarity.ULTRA_BEAST.contains(name)) ub++;
-            if(PokemonRarity.MEGA.contains(name)) mega++;
         }
 
-        int legendaryMax = 1 + size / 3;
-        int mythicalMax = 1 + size / 3;
-        int megaMax = 1 + size / 2;
-
-        return legendary <= legendaryMax && (mythical + ub) <= mythicalMax && mega <= megaMax;
+        return legendary > this.getLegendaryCap(size) || (mythical + ub) > this.getMythicalUBCap(size);
     }
 }
