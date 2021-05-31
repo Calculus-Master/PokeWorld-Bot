@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game.duel;
 
+import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.elements.Player;
@@ -766,6 +767,8 @@ public class Duel
         embed.setDescription(this.getWinner().data.getUsername() + " has won!\nThey earned " + c + " credits!");
 
         this.event.getChannel().sendMessage(embed.build()).queue();
+
+        Achievements.grant(this.getWinner().ID, Achievements.WON_FIRST_PVP_DUEL, this.event);
 
         this.uploadEVs(0);
         this.uploadEVs(1);

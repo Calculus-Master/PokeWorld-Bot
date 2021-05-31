@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.misc;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Trade;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -47,6 +48,9 @@ public class CommandTrade extends Command
                 {
                     t.onComplete();
                     this.embed.setDescription("Trade complete!");
+
+                    Achievements.grant(t.getPlayers().get(0), Achievements.COMPLETED_FIRST_TRADE, this.event);
+                    Achievements.grant(t.getPlayers().get(1), Achievements.COMPLETED_FIRST_TRADE, this.event);
                 }
             }
             else if(this.mentions.size() > 0)

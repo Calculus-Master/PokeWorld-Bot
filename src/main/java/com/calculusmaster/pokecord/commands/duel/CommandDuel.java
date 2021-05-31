@@ -14,9 +14,6 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import java.util.Arrays;
 import java.util.List;
 
-/**Temporary, will replace CommandDuel if complete
- * @see Duel
- */
 public class CommandDuel extends Command
 {
     public CommandDuel(MessageReceivedEvent event, String[] msg)

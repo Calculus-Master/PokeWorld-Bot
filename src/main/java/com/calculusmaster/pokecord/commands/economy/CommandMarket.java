@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.economy;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.pokemon.CommandInfo;
+import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
@@ -87,6 +88,8 @@ public class CommandMarket extends Command
                 this.playerData.changeCredits(-1 * entry.price);
                 this.playerData.addPokemon(entry.pokemonID);
                 if(!entry.sellerID.equals("BOT")) new PlayerDataQuery(entry.sellerID).changeCredits(entry.price);
+
+                Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_POKEMON_MARKET, this.event);
 
                 this.embed.setDescription("Purchased a Level " + entry.pokemon.getLevel() + " " + entry.pokemon.getName() + " for " + entry.price + "c!");
             }

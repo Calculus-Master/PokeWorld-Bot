@@ -5,8 +5,15 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public enum Achievements
 {
-    //TODO: Add more Achievements
-    START_JOURNEY(250, "Started your journey!");
+    START_JOURNEY(250, "Started your journey!"),
+    CAUGHT_FIRST_POKEMON(500, "Caught your first Pokemon!"),
+    BOUGHT_FIRST_POKEMON_MARKET(500, "Bought your first Pokemon from the market!"),
+    WON_FIRST_PVP_DUEL(500, "Won your first PVP (Player vs Player) duel!"),
+    WON_FIRST_WILD_DUEL(500, "Defeated a Wild Pokemon for the first time!"),
+    WON_FIRST_TRAINER_DUEL(500, "Defeating a Trainer for the first time!"),
+    DEFEATED_DAILY_TRAINERS(5000, "Defeated all daily Trainers for the first time!"),
+    COMPLETED_FIRST_TRADE(500, "Completed your first trade!"),
+    SUBMITTED_BUG_REPORT(500, "Submitted a bug report/suggestion! Thank you!");
 
     public int credits;
     public String desc;

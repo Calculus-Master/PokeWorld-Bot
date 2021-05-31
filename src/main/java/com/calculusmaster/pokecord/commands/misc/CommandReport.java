@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.misc;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.util.Mongo;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.bson.Document;
@@ -24,6 +25,8 @@ public class CommandReport extends Command
 
             Mongo.ReportData.insertOne(reportInfo);
             this.embed.setDescription("Successfully submitted!");
+
+            Achievements.grant(this.player.getId(), Achievements.SUBMITTED_BUG_REPORT, this.event);
         }
         else this.embed.setDescription(CommandInvalid.getFull());
 

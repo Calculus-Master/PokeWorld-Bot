@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game.duel;
 
+import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.duel.elements.Trainer;
@@ -48,6 +49,8 @@ public class TrainerDuel extends Duel
 
             embed.setDescription("You defeated " + ((Trainer)this.players[1]).info.name + "!");
 
+            Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_TRAINER_DUEL, this.event);
+
             String bot = ((Trainer)this.players[1]).info.name;
             List<String> playersDefeatedBot = new ArrayList<>(Trainer.PLAYER_TRAINERS_DEFEATED.get(bot));
             if(!playersDefeatedBot.contains(this.players[0].ID))
@@ -63,6 +66,8 @@ public class TrainerDuel extends Duel
                     int winCredits = 5000;
                     this.players[0].data.changeCredits(winCredits);
                     this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated all of today's trainers! You earned a bonus " + winCredits + " credits!").queue();
+
+                    Achievements.grant(this.players[0].ID, Achievements.DEFEATED_DAILY_TRAINERS, this.event);
                 }
             }
         }

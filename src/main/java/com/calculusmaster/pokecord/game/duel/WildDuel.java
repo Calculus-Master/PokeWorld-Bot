@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game.duel;
 
+import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.elements.Player;
@@ -109,6 +110,8 @@ public class WildDuel extends Duel
 
             Pokemon.updateEVs(this.players[this.current].active);
             Pokemon.updateExperience(this.players[this.current].active);
+
+            Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_WILD_DUEL, this.event);
 
             embed.setDescription("You won and earned " + c + " credits! Your " + this.players[0].active.getName() + " earned some EVs!");
         }
