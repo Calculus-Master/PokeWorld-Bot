@@ -254,7 +254,7 @@ public abstract class Command
                 .addAliases("r");
 
         TRAINERDUEL.setCategory(CommandHelp.CommandCategory.DUEL)
-                .addAliases();
+                .addAliases("fight", "trainer");
     }
 
     protected MessageReceivedEvent event;
