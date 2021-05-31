@@ -57,6 +57,18 @@ public class TrainerDuel extends Duel
     }
 
     @Override
+    public void sendTurnEmbed()
+    {
+        super.sendTurnEmbed();
+
+        if(!this.isComplete() && this.players[1].active.isFainted())
+        {
+            this.submitMove(this.players[1].ID, 1, false);
+            this.checkReady();
+        }
+    }
+
+    @Override
     public void checkReady()
     {
         if(this.queuedMoves.containsKey(this.players[0].ID))
