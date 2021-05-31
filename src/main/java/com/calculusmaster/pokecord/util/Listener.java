@@ -71,7 +71,7 @@ public class Listener extends ListenerAdapter
             {
                 if(System.currentTimeMillis() - this.cooldowns.get(player.getId()) <= this.cooldown * 1000L)
                 {
-                    event.getMessage().getChannel().sendMessage("<@" + player.getId() + ">: You're sending commands too quickly!").flatMap(Message::delete).delay(10, TimeUnit.SECONDS).queue();
+                    event.getMessage().getChannel().sendMessage("<@" + player.getId() + ">: You're sending commands too quickly!").queue();
                     return;
                 }
                 else this.cooldowns.put(player.getId(), System.currentTimeMillis());
