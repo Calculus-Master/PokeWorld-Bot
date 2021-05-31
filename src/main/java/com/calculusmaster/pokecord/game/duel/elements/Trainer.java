@@ -13,14 +13,13 @@ public class Trainer extends Player
     //Daily Trainers - randomized trainers that players can challenge for rewards
     public static final List<TrainerInfo> DAILY_TRAINERS = new ArrayList<>();
     public static final Map<String, List<String>> PLAYER_TRAINERS_DEFEATED = new HashMap<>();
+    public static final int DAILY_TRAINER_COUNT = 4;
     //Gym Leaders - (mostly) fixed trainers that offer PvE progression
     public static final List<List<TrainerInfo>> GYM_LEADERS = new ArrayList<>();
 
     public static void setDailyTrainers()
     {
-        List<String> trainerNames = new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H"));
-        List<Integer> levels = Arrays.asList(25, 50, 75, 100);
-        List<Integer> sizes = Arrays.asList(2, 4, 4, 6);
+        List<String> trainerNames = new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"));
 
         DAILY_TRAINERS.clear();
         PLAYER_TRAINERS_DEFEATED.clear();
@@ -29,7 +28,9 @@ public class Trainer extends Player
         String name;
         ZCrystal z;
         String[] team;
-        for(int i = 0; i < levels.size(); i++)
+        int level;
+        int size;
+        for(int i = 0; i < DAILY_TRAINER_COUNT; i++)
         {
             name = trainerNames.get(r.nextInt(trainerNames.size()));
             trainerNames.remove(name);
@@ -37,10 +38,16 @@ public class Trainer extends Player
             if(r.nextInt(10) < 1) z = ZCrystal.values()[r.nextInt(18)]; //Only type Z Crystals
             else z = null;
 
-            team = new String[sizes.get(i)];
+            if(i == 0) size = 2;
+            else if(i == DAILY_TRAINER_COUNT - 1) size = 6;
+            else size = 4;
+
+            level = 20 + ((100 - 20) * (i + 1) / DAILY_TRAINER_COUNT);
+
+            team = new String[size];
             for(int j = 0; j < team.length; j++) team[j] = Global.POKEMON.get(r.nextInt(Global.POKEMON.size()));
 
-            DAILY_TRAINERS.add(new TrainerInfo(name, levels.get(i), z, team));
+            DAILY_TRAINERS.add(new TrainerInfo(name, level, z, team));
         }
     }
 
