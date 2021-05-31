@@ -12,6 +12,7 @@ public class Trainer extends Player
 {
     //Daily Trainers - randomized trainers that players can challenge for rewards
     public static final List<TrainerInfo> DAILY_TRAINERS = new ArrayList<>();
+    public static final Map<String, List<String>> PLAYER_TRAINERS_DEFEATED = new HashMap<>();
     //Gym Leaders - (mostly) fixed trainers that offer PvE progression
     public static final List<List<TrainerInfo>> GYM_LEADERS = new ArrayList<>();
 
@@ -20,7 +21,9 @@ public class Trainer extends Player
         List<String> trainerNames = new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H"));
         List<Integer> levels = Arrays.asList(25, 50, 75, 100);
         List<Integer> sizes = Arrays.asList(2, 4, 4, 6);
+
         DAILY_TRAINERS.clear();
+        PLAYER_TRAINERS_DEFEATED.clear();
 
         Random r = new Random();
         String name;

@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.util.List;
 import java.util.Random;
 
 import static com.calculusmaster.pokecord.game.duel.DuelHelper.*;
@@ -38,13 +39,31 @@ public class TrainerDuel extends Duel
         //Player won
         if(this.getWinner().ID.equals(this.players[0].ID))
         {
-            //TODO: Should Players get credits?
+            //TODO: Trainer Duel per battle credits? (Bonus for defeating all is already a thing)
             //int c = this.giveWinCredits();
             int c = 0;
 
             this.uploadEVs(0);
 
             embed.setDescription("You defeated " + ((Trainer)this.players[1]).info.name + "!");
+
+            String bot = ((Trainer)this.players[1]).info.name;
+            List<String> playersDefeatedBot = Trainer.PLAYER_TRAINERS_DEFEATED.get(bot);
+            if(!playersDefeatedBot.contains(this.players[0].ID))
+            {
+                playersDefeatedBot.add(this.players[0].ID);
+                Trainer.PLAYER_TRAINERS_DEFEATED.put(bot, playersDefeatedBot);
+
+                boolean dailyComplete = true;
+                for(Trainer.TrainerInfo ti : Trainer.DAILY_TRAINERS) if(!Trainer.PLAYER_TRAINERS_DEFEATED.get(ti.name).contains(this.players[0].ID)) dailyComplete = false;
+
+                if(dailyComplete)
+                {
+                    int winCredits = 5000;
+                    this.players[0].data.changeCredits(winCredits);
+                    this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated all of today's trainers! You earned a bonus " + winCredits + " credits!").queue();
+                }
+            }
         }
         //Player lost
         else
