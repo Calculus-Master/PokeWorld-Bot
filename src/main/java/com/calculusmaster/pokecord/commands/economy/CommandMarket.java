@@ -42,7 +42,9 @@ public class CommandMarket extends Command
             totalList.add(IDs.subList(j, Math.min(j + split, IDs.size())));
         }
 
-        ExecutorService pool = Executors.newFixedThreadPool(IDs.size() / split);
+        int threads = IDs.size() < split ? 1 : IDs.size() / split;
+
+        ExecutorService pool = Executors.newFixedThreadPool(threads);
 
         for(List<String> l : totalList)
         {
