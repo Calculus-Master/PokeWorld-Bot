@@ -170,7 +170,7 @@ public class GymLeader extends Player
                 }
                 else
                 {
-                    m = moveListCopy.get(new Random().nextInt(this.forcedMoves.get(p.getName()).size()));
+                    m = moveListCopy.get(new Random().nextInt(moveListCopy.size()));
                     moveListCopy.remove(m);
                 }
 
