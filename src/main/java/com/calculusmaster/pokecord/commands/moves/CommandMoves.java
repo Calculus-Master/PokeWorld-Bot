@@ -35,9 +35,9 @@ public class CommandMoves extends Command
             String emote;
             for (String s : selected.getAllMoves())
             {
-                if(!Move.isMove(s) || !Move.WIP_MOVES.contains(s)) emote = " :no_entry_sign:";
-                else if(selected.getAvailableMoves().contains(s)) emote = " ";
-                else emote = " :lock:";
+                if(selected.getAvailableMoves().contains(s) && Move.isMove(s) && !Move.WIP_MOVES.contains(s)) emote = " ";
+                else if(!selected.getAvailableMoves().contains(s) && Move.isMove(s) && !Move.WIP_MOVES.contains(s)) emote = " :lock:";
+                else emote = " :no_entry_sign:";
 
                 movesList.append(s).append(emote).append("\n");
             }
