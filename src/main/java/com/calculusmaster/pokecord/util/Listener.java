@@ -67,7 +67,7 @@ public class Listener extends ListenerAdapter
         if(msg[0].startsWith(serverQuery.getPrefix()))
         {
             //Check cooldown
-            if(this.cooldowns.containsKey(player.getId()))
+            if(this.cooldowns.containsKey(player.getId()) && !msg[0].contains("catch"))
             {
                 if(System.currentTimeMillis() - this.cooldowns.get(player.getId()) <= this.cooldown * 1000L)
                 {

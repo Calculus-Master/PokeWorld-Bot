@@ -33,6 +33,13 @@ public class CommandTrainerDuel extends Command
 
             Trainer.TrainerInfo trainer = Trainer.DAILY_TRAINERS.get(this.getInt(1) - 1);
 
+            if(this.playerData.getTeam().size() < trainer.pokemon.size())
+            {
+                this.event.getMessage().getChannel().sendMessage(this.playerData.getMention() + ": Your team is too small! It needs to be of size " + trainer.pokemon.size() + "!").queue();
+                this.embed = null;
+                return this;
+            }
+
             if(this.isInvalidTeam(trainer.pokemon.size()))
             {
                 this.event.getMessage().getChannel().sendMessage(this.playerData.getMention() + ": Your team is invalid! You can have a maximum of " + this.getLegendaryCap(trainer.pokemon.size()) + " legendaries and " + this.getMythicalUBCap(trainer.pokemon.size()) + " mythicals/ultra beasts!").queue();

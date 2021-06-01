@@ -103,7 +103,7 @@ public class Pokemon
 
         p.setLevel(1);
         p.setExp(0);
-        p.setShiny(new Random().nextInt(1000000) == 1);
+        p.setShiny(new Random().nextInt(4096) == 1);
         p.setIVs();
         p.setEVs();
         p.setNature();

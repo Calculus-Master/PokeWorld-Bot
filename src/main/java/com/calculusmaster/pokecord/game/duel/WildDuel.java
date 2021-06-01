@@ -9,6 +9,8 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static com.calculusmaster.pokecord.game.duel.DuelHelper.*;
@@ -47,8 +49,15 @@ public class WildDuel extends Duel
             //Get moves - [1] is the bot so get a random move
             this.players[0].move = new Move(this.players[0].active.getLearnedMoves().get(this.queuedMoves.get(this.players[0].ID).moveInd() - 1));
 
-            String botMove = this.players[1].active.getLearnedMoves().get(new Random().nextInt(this.players[1].active.getLearnedMoves().size()));
-            this.players[1].move = new Move(!Move.isMove(botMove) || Move.WIP_MOVES.contains(botMove) ? "Tackle" : botMove);
+            List<Move> botMoves = new ArrayList<>();
+            for(String s : this.players[1].active.getLearnedMoves()) botMoves.add(new Move(s));
+
+            //TODO: Better AI
+            Move mostDamage = botMoves.get(0);
+            for(Move m : botMoves) if(m.getPower() > mostDamage.getPower()) mostDamage = m;
+
+            if(this.players[0].active.getHealth() <= this.players[0].active.getStat(Stat.HP)) this.players[0].move = mostDamage;
+            else this.players[0].move = botMoves.get(new Random().nextInt(botMoves.size()));
 
             //Set who goes first
             int speed1 = this.players[0].active.getStat(Stat.SPD);
@@ -101,11 +110,6 @@ public class WildDuel extends Duel
         //Player won
         if(this.getWinner().ID.equals(this.players[0].ID))
         {
-            //TODO: Should Players get credits?
-            //int c = this.giveWinCredits();
-            int c = 0;
-
-            this.players[0].active.gainEVs(this.players[1].active);
             this.players[0].active.addExp(this.players[0].active.getDuelExp(this.players[1].active));
 
             Pokemon.updateEVs(this.players[this.current].active);
@@ -113,7 +117,7 @@ public class WildDuel extends Duel
 
             Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_WILD_DUEL, this.event);
 
-            embed.setDescription("You won and earned " + c + " credits! Your " + this.players[0].active.getName() + " earned some EVs!");
+            embed.setDescription("You won! Your " + this.players[0].active.getName() + " earned some EVs!");
         }
         //Player lost
         else

@@ -33,6 +33,8 @@ public class CacheHelper
         pokemon.add(Pokemon.buildCore(UUID, pokemon.size()));
         uuids.add(UUID);
 
+        updateNumbers(player);
+
         POKEMON_LISTS.put(player, pokemon);
         UUID_LISTS.put(player, uuids);
     }
@@ -53,7 +55,7 @@ public class CacheHelper
         pokemon.remove(index);
         uuids.remove(index);
 
-        for(Pokemon p : pokemon) p.setNumber(uuids.indexOf(p.getUUID()) + 1);
+        updateNumbers(player);
 
         POKEMON_LISTS.put(player, pokemon);
         UUID_LISTS.put(player, uuids);
@@ -68,7 +70,14 @@ public class CacheHelper
         int index = UUID_LISTS.get(player).indexOf(UUID);
         pokemon.set(index, Pokemon.buildCore(UUID, index + 1));
 
+        updateNumbers(player);
+
         POKEMON_LISTS.put(player, pokemon);
+    }
+
+    public static void updateNumbers(String player)
+    {
+        for(Pokemon p : POKEMON_LISTS.get(player)) p.setNumber(UUID_LISTS.get(player).indexOf(p.getUUID()) + 1);
     }
 
     private static void initialList(String player)

@@ -58,7 +58,7 @@ public class CommandTrade extends Command
                 String otherID = this.mentions.get(0).getId();
                 if(!Trade.isInTrade(otherID) && !this.player.getId().equals(otherID))
                 {
-                    if(this.playerData.getPokemonList().size() < 50)
+                    if(this.playerData.getPokemonList().size() < 50 || new PlayerDataQuery(otherID).getPokemonList().size() < 50)
                     {
                         this.event.getChannel().sendMessage("You don't have enough Pokemon to trade!").queue();
                         this.embed = null;
