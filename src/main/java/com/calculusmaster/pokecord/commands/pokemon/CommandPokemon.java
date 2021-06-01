@@ -42,10 +42,10 @@ public class CommandPokemon extends Command
 
             name = new StringBuilder(Global.normalCase(name.toString().trim()));
 
-            String searchName = name.toString();
+            String searchName = name.toString().toLowerCase();
 
             //String name = msg.get(msg.indexOf("--name") + 1);
-            if(isPokemon(searchName)) stream = stream.filter(p -> p.getName().equals(searchName));
+            stream = stream.filter(p -> p.getName().toLowerCase().contains(searchName));
         }
 
         if(msg.contains("--level") && msg.indexOf("--level") + 1 < msg.size())

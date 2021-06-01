@@ -65,7 +65,8 @@ public class TrainerDuel extends Duel
 
                 if(dailyComplete)
                 {
-                    int winCredits = 5000;
+                    //TODO: Win Credits
+                    int winCredits = -1;
                     this.players[0].data.changeCredits(winCredits);
                     this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated all of today's trainers! You earned a bonus " + winCredits + " credits!").queue();
 
@@ -162,7 +163,6 @@ public class TrainerDuel extends Duel
     private void setTrainer(Trainer.TrainerInfo info)
     {
         this.players[1] = Trainer.create(info);
-
 
         int highest = this.players[0].team.get(0).getEVTotal();
         String condensed = this.players[0].team.get(0).getVCondensed(this.players[0].team.get(0).getEVs());

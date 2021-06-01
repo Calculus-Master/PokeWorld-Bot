@@ -71,7 +71,7 @@ public class SpawnEventHandler
     {
         spawn = Global.normalCase(spawn);
 
-        //if(Math.random() < 0.333) new Thread(CommandMarket::addBotEntry).start();
+        if(Math.random() < 0.01) new Thread(CommandMarket::addBotEntry).start();
 
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("A wild Pokemon spawned!")
