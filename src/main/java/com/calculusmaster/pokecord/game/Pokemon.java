@@ -132,6 +132,7 @@ public class Pokemon
     public static Pokemon buildCore(String UUID, int num)
     {
         Document d = Mongo.PokemonData.find(Filters.eq("UUID", UUID)).first();
+        if(d == null) return null;
 
         Pokemon p = new Pokemon()
         {

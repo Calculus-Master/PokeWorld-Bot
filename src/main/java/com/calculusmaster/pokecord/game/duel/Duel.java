@@ -795,8 +795,11 @@ public class Duel
         for(String uuid : this.expGains.keySet())
         {
             p = Pokemon.buildCore(uuid, -1);
-            p.addExp(this.expGains.get(uuid));
-            Pokemon.updateExperience(p);
+            if(p != null)
+            {
+                p.addExp(this.expGains.get(uuid));
+                Pokemon.updateExperience(p);
+            }
         }
     }
 
