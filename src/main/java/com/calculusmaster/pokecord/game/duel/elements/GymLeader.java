@@ -32,17 +32,17 @@ public class GymLeader extends Player
 
         LeaderInfo Cress;
             LeaderTeamSlot cress_1 = new LeaderTeamSlot(30, 1.2)
-                    .addPokemon("Panpour", "Water Gun");
+                    .addPokemon("Panpour", "Water Gun", "Scald", "Bite");
             LeaderTeamSlot cress_2 = new LeaderTeamSlot(30, 1.2)
-                    .addPokemon("Wartortle", "Bite", "Water Gun");
+                    .addPokemon("Wartortle", "Bite", "Water Pulse");
         Cress = new LeaderInfo("Cress", 1, 20, ZCrystal.WATERIUM_Z, cress_1, cress_2);
         LEVEL_1.add(Cress);
 
         LeaderInfo Chili;
             LeaderTeamSlot chili_1 = new LeaderTeamSlot(30, 1.2)
-                    .addPokemon("Pansear");
+                    .addPokemon("Pansear", "Flame Burst");
             LeaderTeamSlot chili_2 = new LeaderTeamSlot(30, 1.2)
-                    .addPokemon("Charmeleon");
+                    .addPokemon("Charmeleon", "Dragon Rage");
         Chili = new LeaderInfo("Chili", 1, 20, ZCrystal.FIRIUM_Z, chili_1, chili_2);
         LEVEL_1.add(Chili);
 
