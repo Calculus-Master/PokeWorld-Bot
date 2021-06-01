@@ -57,7 +57,7 @@ public class Trainer extends Player
     {
         Trainer t = new Trainer();
         t.setID(info.name);
-        t.setTeam(info.pokemonLevel, info.pokemon, 6);
+        t.setTeam(info.pokemonLevel, info.pokemon, 1.2);
         t.move = null;
         t.usedZMove = false;
         t.info = info;

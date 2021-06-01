@@ -870,8 +870,7 @@ public class Pokemon
     public void addEV(Stat s, int amount)
     {
         int newEV = this.EV.get(s) + amount;
-        int evTotal = this.EV.keySet().stream().mapToInt(stat -> this.EV.get(stat)).sum();
-        if(evTotal <= 510 && newEV <= 252) this.EV.put(s, this.EV.get(s) + amount);
+        if(this.getEVTotal() <= 510 && newEV <= 252) this.EV.put(s, this.EV.get(s) + amount);
     }
 
     public Map<Stat, Integer> getEVYield()
@@ -886,6 +885,11 @@ public class Pokemon
     public void gainEVs(Pokemon defeated)
     {
         for(Stat s : defeated.getEVYield().keySet()) this.addEV(s, defeated.getEVYield().get(s));
+    }
+
+    public int getEVTotal()
+    {
+        return this.EV.keySet().stream().mapToInt(stat -> this.EV.get(stat)).sum();
     }
 
     public String getVCondensed(Map<Stat, Integer> v)

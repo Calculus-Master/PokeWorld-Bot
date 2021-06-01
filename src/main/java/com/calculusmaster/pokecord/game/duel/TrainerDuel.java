@@ -163,10 +163,22 @@ public class TrainerDuel extends Duel
     {
         this.players[1] = Trainer.create(info);
 
+
+        int highest = this.players[0].team.get(0).getEVTotal();
+        String condensed = this.players[0].team.get(0).getVCondensed(this.players[0].team.get(0).getEVs());
         //Copy EVs
         for(int i = 0; i < this.players[0].team.size(); i++)
         {
-            this.players[1].team.get(i).setEVs(this.players[0].team.get(i).getVCondensed(this.players[0].team.get(i).getEVs()));
+            if(this.players[1].team.get(i).getEVTotal() > highest)
+            {
+                highest = this.players[0].team.get(i).getEVTotal();
+                condensed = this.players[0].team.get(i).getVCondensed(this.players[0].team.get(i).getEVs());
+            }
+        }
+
+        for(int i = 0; i < this.players[1].team.size(); i++)
+        {
+            this.players[1].team.get(i).setEVs(condensed);
             this.players[1].team.get(i).setHealth(this.players[1].team.get(i).getStat(Stat.HP));
         }
 
