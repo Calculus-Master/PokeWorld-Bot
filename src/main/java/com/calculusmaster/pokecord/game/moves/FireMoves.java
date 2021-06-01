@@ -105,7 +105,8 @@ public class FireMoves
         user.changeStatMultiplier(Stat.SPDEF, -1);
         user.changeStatMultiplier(Stat.SPD, -1);
 
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + "'s Defense, Special Defense, and Speed";
+        return "V-Create your mom!";
+        //return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + "'s Defense, Special Defense, and Speed";
     }
 
     public String FireBlast(Pokemon user, Pokemon opponent, Duel duel, Move move)

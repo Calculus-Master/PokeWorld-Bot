@@ -265,7 +265,7 @@ public class NormalMoves
 
         opponent.damage(damage);
 
-        return move.getDamageResult(opponent, damage) + " Icicle Spear hit " + times + " time" + (times > 1 ? "s!" : "!");
+        return move.getDamageResult(opponent, damage) + " Fury Attack hit " + times + " time" + (times > 1 ? "s!" : "!");
     }
 
     public String Rage(Pokemon user, Pokemon opponent, Duel duel, Move move)
