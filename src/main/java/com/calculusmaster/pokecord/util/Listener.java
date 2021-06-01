@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class Listener extends ListenerAdapter
 {
     private final Map<String, Long> cooldowns = new HashMap<>();
-    int cooldown = 4; //Seconds
+    int cooldown = 1; //Seconds
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event)
