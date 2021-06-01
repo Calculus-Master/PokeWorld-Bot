@@ -32,7 +32,15 @@ public class CommandMoves extends Command
         if(!inDuel)
         {
             movesList.append("\n**All Moves: **\n");
-            for (String s : selected.getAllMoves()) movesList.append(s).append(selected.getAvailableMoves().contains(s) && (Move.isMove(s) && !Move.WIP_MOVES.contains(s)) ? "" : " :lock: ").append("\n");
+            String emote;
+            for (String s : selected.getAllMoves())
+            {
+                if(!Move.isMove(s) || !Move.WIP_MOVES.contains(s)) emote = " :no_entry_sign:";
+                else if(selected.getAvailableMoves().contains(s)) emote = " ";
+                else emote = " :lock:";
+
+                movesList.append(s).append(emote).append("\n");
+            }
         }
 
         this.embed.setDescription(movesList.toString());
