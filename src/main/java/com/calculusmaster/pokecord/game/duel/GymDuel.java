@@ -2,15 +2,11 @@ package com.calculusmaster.pokecord.game.duel;
 
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.duel.elements.GymLeader;
-import com.calculusmaster.pokecord.game.duel.elements.Trainer;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.calculusmaster.pokecord.game.duel.DuelHelper.DUELS;
 
@@ -49,6 +45,7 @@ public class GymDuel extends TrainerDuel
             this.players[0].data.changeCredits(c);
 
             this.uploadEVs(0);
+            this.uploadExperience();
 
             embed.setDescription("You defeated " + leader.info.name + "! You earned " + c + " credits!");
 

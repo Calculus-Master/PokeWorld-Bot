@@ -47,6 +47,7 @@ public class TrainerDuel extends Duel
             int c = 0;
 
             this.uploadEVs(0);
+            this.uploadExperience();
 
             embed.setDescription("You defeated " + ((Trainer)this.players[1]).info.name + "!");
 

@@ -31,6 +31,7 @@ public class Duel
     protected Player[] players;
     protected Map<String, TurnAction> queuedMoves = new HashMap<>();
     protected Map<String, DuelPokemon> pokemonAttributes = new HashMap<>();
+    protected Map<String, Integer> expGains = new HashMap<>();
 
     private int turn;
     protected int current;
@@ -434,7 +435,9 @@ public class Duel
         {
             this.players[this.current].active.gainEVs(this.players[this.other].active);
 
-            this.players[this.current].active.addExp(this.players[this.current].active.getDuelExp(this.players[this.other].active));
+            String UUID = this.players[this.current].active.getUUID();
+            int exp = this.players[this.current].active.getDuelExp(this.players[this.other].active);
+            this.expGains.put(UUID, (this.expGains.containsKey(UUID) ? this.expGains.get(UUID) : 0) + exp);
         }
 
         return turnResult;
@@ -773,6 +776,8 @@ public class Duel
         this.uploadEVs(0);
         this.uploadEVs(1);
 
+        this.uploadExperience();
+
         DuelHelper.delete(this.players[0].ID);
     }
 
@@ -781,6 +786,16 @@ public class Duel
         for(Pokemon p : this.players[player].team)
         {
             Pokemon.updateEVs(p);
+        }
+    }
+
+    protected void uploadExperience()
+    {
+        Pokemon p;
+        for(String uuid : this.expGains.keySet())
+        {
+            p = Pokemon.buildCore(uuid, -1);
+            p.addExp(this.expGains.get(uuid));
             Pokemon.updateExperience(p);
         }
     }

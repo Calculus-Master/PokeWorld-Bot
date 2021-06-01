@@ -172,8 +172,8 @@ public class CommandShop extends Command
             else entriesTR.add(newTREntry());
         }
 
-        currentTMPrice = 10000 + new Random().nextInt(5000);
-        currentTRPrice = 10000 + new Random().nextInt(5000);
+        currentTMPrice = 4000 + new Random().nextInt(5000);
+        currentTRPrice = 4000 + new Random().nextInt(5000);
 
         //Items
         int num = new Random().nextInt(8) + 6;

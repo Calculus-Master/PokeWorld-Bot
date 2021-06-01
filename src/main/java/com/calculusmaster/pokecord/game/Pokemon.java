@@ -217,6 +217,12 @@ public class Pokemon
         CacheHelper.updatePokemon(p.getUUID());
     }
 
+    public static void updateExpLevel(Pokemon p)
+    {
+        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("exp", p.getExp()));
+        CacheHelper.updatePokemon(p.getUUID());
+    }
+
     public static void updateMoves(Pokemon p)
     {
         Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("moves", p.getMovesCondensed()));
