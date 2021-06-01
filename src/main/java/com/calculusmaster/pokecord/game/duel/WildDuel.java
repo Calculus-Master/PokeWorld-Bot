@@ -169,7 +169,7 @@ public class WildDuel extends Duel
 
     public void setWildPokemon(String pokemon)
     {
-        int levelBuff = this.players[0].active.getLevel() < 95 ? new Random().nextInt(6) : 0;
+        int levelBuff = this.players[0].active.getLevel() + (new Random().nextInt(5) + 2);
         if(pokemon.equals("")) this.players[1] = new WildPokemon(this.players[0].active.getLevel() + levelBuff);
         else this.players[1] = new WildPokemon(pokemon, this.players[0].active.getLevel() + levelBuff);
 
