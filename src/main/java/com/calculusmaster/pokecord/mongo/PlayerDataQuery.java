@@ -161,8 +161,6 @@ public class PlayerDataQuery extends MongoQuery
     public void clearTeam()
     {
         Mongo.PlayerData.updateOne(this.query, Updates.set("team", new JSONArray()));
-
-        this.update();
     }
 
     public void addPokemonToTeam(String UUID, int index)

@@ -50,14 +50,14 @@ public class WildDuel extends Duel
             this.players[0].move = new Move(this.players[0].active.getLearnedMoves().get(this.queuedMoves.get(this.players[0].ID).moveInd() - 1));
 
             List<Move> botMoves = new ArrayList<>();
-            for(String s : this.players[1].active.getLearnedMoves()) botMoves.add(new Move(s));
+            for(String s : this.players[1].active.getAllMoves()) botMoves.add(new Move(s));
 
             //TODO: Better AI
             Move mostDamage = botMoves.get(0);
             for(Move m : botMoves) if(m.getPower() > mostDamage.getPower()) mostDamage = m;
 
-            if(this.players[0].active.getHealth() <= this.players[0].active.getStat(Stat.HP)) this.players[0].move = mostDamage;
-            else this.players[0].move = botMoves.get(new Random().nextInt(botMoves.size()));
+            if(this.players[1].active.getHealth() <= this.players[1].active.getStat(Stat.HP) / 4) this.players[1].move = mostDamage;
+            else this.players[1].move = botMoves.get(new Random().nextInt(botMoves.size()));
 
             //Set who goes first
             int speed1 = this.players[0].active.getStat(Stat.SPD);

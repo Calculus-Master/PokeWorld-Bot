@@ -100,7 +100,7 @@ public class Trainer extends Player
         {
             Pokemon p = Pokemon.create(s);
             p.setLevel(level);
-            p.statBuff = Math.random() * 1.5 + 1;
+            p.statBuff = 1.1;
             p.setHealth(p.getStat(Stat.HP));
 
             for(int i = 0; i < 4; i++)
