@@ -51,6 +51,7 @@ public class Pokemon
     private Map<Stat, Integer> statMultiplier = new TreeMap<>();
     private boolean statImmune;
     private boolean endure;
+    public double statBuff;
 
     //Init Global List
     public static void init()
@@ -88,6 +89,7 @@ public class Pokemon
         p.setDefaultStatMultipliers();
         p.setStatImmune(false);
         p.setEndure(false);
+        p.statBuff = 1.0;
 
         Global.logInfo(Pokemon.class, "build", "Pokemon Built (UUID: " + UUID + ", Name: " + p.getName() + ")!");
         return p;
@@ -119,6 +121,7 @@ public class Pokemon
         p.setDefaultStatMultipliers();
         p.setStatImmune(false);
         p.setEndure(false);
+        p.statBuff = 1.0;
 
         Global.logInfo(Pokemon.class, "create", "New Pokemon (" + name + ") Created!");
         return p;
@@ -947,7 +950,7 @@ public class Pokemon
             int IV = this.IV.get(s);
             int EV = this.EV.get(s);
             double stat = nature * (5 + ((this.level * (2 * base + IV + EV / 4.0)) / 100));
-            return (int)(stat * this.getStatMultiplier(s));
+            return (int)(stat * this.getStatMultiplier(s) * statBuff);
         }
     }
 
