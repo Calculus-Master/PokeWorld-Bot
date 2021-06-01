@@ -51,19 +51,13 @@ public class Trainer extends Player
         for(TrainerInfo t : DAILY_TRAINERS) PLAYER_TRAINERS_DEFEATED.put(t.name, new ArrayList<>());
     }
 
-    //TODO: Make sure Trainer battles work first then work on these
-    private static void createGymLeaders()
-    {
-
-    }
-
     public TrainerInfo info;
 
     public static Trainer create(TrainerInfo info)
     {
         Trainer t = new Trainer();
         t.setID(info.name);
-        t.setTeam(info.pokemonLevel, info.pokemon, 1.1);
+        t.setTeam(info.pokemonLevel, info.pokemon, 6);
         t.move = null;
         t.usedZMove = false;
         t.info = info;
