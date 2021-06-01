@@ -22,26 +22,26 @@ public class GymLeader extends Player
         final List<LeaderInfo> LEVEL_1 = new ArrayList<>();
 
         LeaderInfo Cilan;
-            LeaderTeamSlot cilan_1 = new LeaderTeamSlot(30)
+            LeaderTeamSlot cilan_1 = new LeaderTeamSlot(30, 1.2)
                     .addPokemon("Pansage", "Fury Swipes", "Bite", "Vine Whip", "Lick");
-            LeaderTeamSlot cilan_2 = new LeaderTeamSlot(30)
+            LeaderTeamSlot cilan_2 = new LeaderTeamSlot(30, 1.2)
                     .addPokemon("Ivysaur", "Sleep Powder", "Vine Whip", "Razor Leaf", "Poison Powder")
                     .addPokemon("Ferrothorn", "Pin Missile", "Flash Cannon", "Power Whip");
         Cilan = new LeaderInfo("Cilan", 1, 20, ZCrystal.GRASSIUM_Z, cilan_1, cilan_2);
         LEVEL_1.add(Cilan);
 
         LeaderInfo Cress;
-            LeaderTeamSlot cress_1 = new LeaderTeamSlot(30)
+            LeaderTeamSlot cress_1 = new LeaderTeamSlot(30, 1.2)
                     .addPokemon("Panpour", "Water Gun");
-            LeaderTeamSlot cress_2 = new LeaderTeamSlot(30)
+            LeaderTeamSlot cress_2 = new LeaderTeamSlot(30, 1.2)
                     .addPokemon("Wartortle", "Bite", "Water Gun");
         Cress = new LeaderInfo("Cress", 1, 20, ZCrystal.WATERIUM_Z, cress_1, cress_2);
         LEVEL_1.add(Cress);
 
         LeaderInfo Chili;
-            LeaderTeamSlot chili_1 = new LeaderTeamSlot(30)
+            LeaderTeamSlot chili_1 = new LeaderTeamSlot(30, 1.2)
                     .addPokemon("Pansear");
-            LeaderTeamSlot chili_2 = new LeaderTeamSlot(30)
+            LeaderTeamSlot chili_2 = new LeaderTeamSlot(30, 1.2)
                     .addPokemon("Charmeleon");
         Chili = new LeaderInfo("Chili", 1, 20, ZCrystal.FIRIUM_Z, chili_1, chili_2);
         LEVEL_1.add(Chili);
@@ -137,12 +137,14 @@ public class GymLeader extends Player
         public int level;
         public List<String> pokemon;
         public Map<String, List<String>> forcedMoves;
+        public double buff;
 
-        LeaderTeamSlot(int level)
+        LeaderTeamSlot(int level, double buff)
         {
             this.level = level;
             this.pokemon = new ArrayList<>();
             this.forcedMoves = new HashMap<>();
+            this.buff = buff;
         }
 
         LeaderTeamSlot addPokemon(String pokemon, String... moveset)
@@ -157,6 +159,7 @@ public class GymLeader extends Player
         {
             Pokemon p = Pokemon.create(this.pokemon.get(new Random().nextInt(this.pokemon.size())));
             p.setLevel(this.level);
+            p.statBuff = this.buff;
             p.setHealth(p.getStat(Stat.HP));
 
             StringBuilder moves = new StringBuilder();
