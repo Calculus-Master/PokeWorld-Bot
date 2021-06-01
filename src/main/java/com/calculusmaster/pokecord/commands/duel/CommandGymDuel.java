@@ -25,7 +25,14 @@ public class CommandGymDuel extends Command
     public Command runCommand()
     {
         int level = this.playerData.getGymLevel();
-        if(this.msg.length == 2 && GymLeader.GYM_LEADERS.get(level - 1).stream().anyMatch(l -> l.name.equals(Global.normalCase(this.msg[1]))))
+
+        if(level - 1 >= GymLeader.GYM_LEADERS.size())
+        {
+            this.embed.setDescription("There are no Gym Leaders at this level. It is still a WIP!");
+            this.embed.setTitle("Level " + level + " Gym Leaders");
+            return this;
+        }
+        else if(this.msg.length == 2 && GymLeader.GYM_LEADERS.get(level - 1).stream().anyMatch(l -> l.name.equals(Global.normalCase(this.msg[1]))))
         {
             GymLeader.LeaderInfo info = GymLeader.GYM_LEADERS.get(level - 1).stream().filter(l -> l.name.equals(Global.normalCase(this.msg[1]))).collect(Collectors.toList()).get(0);
 
