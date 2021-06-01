@@ -283,7 +283,7 @@ public class Duel
         {
             this.data(this.other).detectUsed = false;
 
-            otherImmune = true;
+            otherImmune = !move.getName().equals("Hyperspace Fury") && !move.getName().equals("Hyperspace Hole");
         }
 
         if(this.data(this.current).chargeUsed)
