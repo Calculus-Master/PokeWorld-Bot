@@ -141,4 +141,9 @@ public class GhostMoves
         opponent.addStatusCondition(StatusCondition.CONFUSED);
         return opponent.getName() + " is confused!";
     }
+
+    public String Astonish(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
+    }
 }

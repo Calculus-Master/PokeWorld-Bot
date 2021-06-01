@@ -120,4 +120,13 @@ public class FlyingMoves
             return user.getName() + " sprung up!";
         }
     }
+
+    public String RazorLeaf(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        opponent.damage(damage);
+        user.damage(damage / 3);
+
+        return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 3);
+    }
 }

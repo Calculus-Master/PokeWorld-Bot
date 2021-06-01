@@ -120,4 +120,21 @@ public class GrassMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String Leafage(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String LeafBlade(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.setCrit(3);
+
+        int damage = move.getDamage(user, opponent);
+        opponent.damage(damage);
+
+        user.setCrit(1);
+
+        return move.getDamageResult(opponent, damage);
+    }
 }
