@@ -108,4 +108,9 @@ public class DarkMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String HyperspaceFury(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.DEF, -1, 100, true);
+    }
 }

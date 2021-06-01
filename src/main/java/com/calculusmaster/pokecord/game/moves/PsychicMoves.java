@@ -219,4 +219,9 @@ public class PsychicMoves
         duel.data(user.getUUID()).imprisonUsed = true;
         return opponent.getName() + " can no longer use moves that " + user.getName() + " knows!";
     }
+
+    public String HyperspaceHole(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

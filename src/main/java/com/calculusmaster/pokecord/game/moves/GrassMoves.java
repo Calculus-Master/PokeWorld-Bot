@@ -137,4 +137,9 @@ public class GrassMoves
 
         return move.getDamageResult(opponent, damage);
     }
+
+    public String LeafStorm(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPATK, -2, 100, true);
+    }
 }
