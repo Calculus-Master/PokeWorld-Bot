@@ -63,7 +63,7 @@ public class Trainer extends Player
     {
         Trainer t = new Trainer();
         t.setID(info.name);
-        t.setTeam(info.pokemonLevel, info.pokemon);
+        t.setTeam(info.pokemonLevel, info.pokemon, 1.1);
         t.move = null;
         t.usedZMove = false;
         t.info = info;
@@ -92,7 +92,7 @@ public class Trainer extends Player
         return t;
     }
 
-    private void setTeam(int level, List<String> pokemon)
+    private void setTeam(int level, List<String> pokemon, double statBuff)
     {
         List<Pokemon> teamBuilder = new ArrayList<>();
 
@@ -100,7 +100,7 @@ public class Trainer extends Player
         {
             Pokemon p = Pokemon.create(s);
             p.setLevel(level);
-            p.statBuff = 1.1;
+            p.statBuff = statBuff;
             p.setHealth(p.getStat(Stat.HP));
 
             for(int i = 0; i < 4; i++)

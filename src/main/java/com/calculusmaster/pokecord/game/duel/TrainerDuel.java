@@ -162,5 +162,14 @@ public class TrainerDuel extends Duel
     private void setTrainer(Trainer.TrainerInfo info)
     {
         this.players[1] = Trainer.create(info);
+
+        //Copy EVs
+        for(int i = 0; i < this.players[0].team.size(); i++)
+        {
+            this.players[1].team.get(i).setEVs(this.players[0].team.get(i).getVCondensed(this.players[0].team.get(i).getEVs()));
+            this.players[1].team.get(i).setHealth(this.players[1].team.get(i).getStat(Stat.HP));
+        }
+
+        this.players[1].active = this.players[1].team.get(0);
     }
 }
