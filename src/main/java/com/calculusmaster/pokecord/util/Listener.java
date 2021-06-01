@@ -272,7 +272,7 @@ public class Listener extends ListenerAdapter
 
     private static void redeemEvent(MessageReceivedEvent event)
     {
-        if(new Random().nextInt(1000) < 1)
+        if(new Random().nextInt(10000) < 1)
         {
             PlayerDataQuery p = new PlayerDataQuery(event.getAuthor().getId());
             p.changeRedeems(1);
