@@ -27,6 +27,8 @@ public class WildPokemon extends Player
             p.learnMove(p.getAvailableMoves().get(new Random().nextInt(p.getAvailableMoves().size())), i + 1);
         }
 
+        if(new Random().nextInt(100) < 1) p.setLearnedMoves("Eternabeam-Prismatic Laser-Soul Stealing 7 Star Strike-Close Combat");
+
         this.team = List.of(p);
         this.active = this.team.get(0);
         this.move = null;
