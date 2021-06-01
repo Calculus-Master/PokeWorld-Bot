@@ -151,6 +151,9 @@ public class Pokemon
             }
         };
 
+        p.linkGenericJSON(p.getName());
+        p.linkSpecificJSON(UUID);
+
         p.setNumber(num + 1);
 
         p.setIVs(d.getString("ivs"));
