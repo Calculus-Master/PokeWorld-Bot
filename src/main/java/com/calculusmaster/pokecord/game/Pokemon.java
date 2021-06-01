@@ -859,7 +859,9 @@ public class Pokemon
 
     public void addEV(Stat s, int amount)
     {
-        this.EV.put(s, this.EV.get(s) + amount);
+        int newEV = this.EV.get(s) + amount;
+        int evTotal = this.EV.keySet().stream().mapToInt(stat -> this.EV.get(stat)).sum();
+        if(evTotal <= 510 && newEV <= 252) this.EV.put(s, this.EV.get(s) + amount);
     }
 
     public Map<Stat, Integer> getEVYield()
