@@ -166,4 +166,9 @@ public class WaterMoves
 
         return move.getDamageResult(opponent, damage) + " Water Shuriken hit " + times + " time" + (times > 1 ? "s!" : "!");
     }
+
+    public String Scald(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 30);
+    }
 }
