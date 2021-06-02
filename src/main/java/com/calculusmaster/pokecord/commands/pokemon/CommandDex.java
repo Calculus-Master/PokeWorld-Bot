@@ -6,9 +6,18 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.Mongo;
+import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import org.bson.Document;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class CommandDex extends Command
 {
@@ -20,14 +29,47 @@ public class CommandDex extends Command
     @Override
     public Command runCommand()
     {
-        boolean isShiny = this.msg[1].toLowerCase().equals("shiny");
+        //Pokedex Command
+        if(this.msg.length == 1 || (this.msg.length == 2 && this.isNumeric(2)))
+        {
+            List<String> uniquePokemon = Global.POKEMON.stream().filter(s -> !isForm(s)).collect(Collectors.toList());
+            int total = uniquePokemon.size();
 
-        if(!isLength(2))
+            List<String> collected = new ArrayList<>();
+            Mongo.DexData.find(Filters.exists("name")).forEach(d -> {
+                if(d.containsKey(this.player.getId()) && d.getInteger(this.player.getId()) > 0) collected.add(d.getString("name"));
+            });
+            this.embed.setFooter("Total Pokemon Collected: " + collected.size() + " / " + total);
+
+            int[] indices = {this.msg.length == 1 ? 0 : (this.getInt(1) * 20), this.msg.length == 1 ? 20 : (this.getInt(1) * 20 + 20)};
+            if(indices[1] > total) indices[1] = total;
+
+            StringBuilder list = new StringBuilder();
+            Document d;
+            String name;
+            for(int i = indices[0]; i < indices[1]; i++)
+            {
+                list.append("#").append(i + 1).append(": ");
+
+                name = Mongo.PokemonData.find(Filters.eq("dex", i + 1)).first().getString("name");
+                d = Mongo.DexData.find(Filters.eq("name", name)).first();
+
+                list.append(name).append(d.containsKey(this.player.getId()) && d.getInteger(this.player.getId()) > 0 ? ":white_check_mark:" : ":x:").append("\n");
+            }
+
+            this.embed.setDescription(list.toString());
+            this.embed.setTitle(this.player.getName() + "'s Pokedex");
+        }
+        else if(this.msg.length == 1)
         {
             this.embed.setDescription(CommandInvalid.getShort());
             return this;
         }
-        else if(!isPokemon(this.getPokemonName()))
+
+        //Dex Generic Info Command
+        boolean isShiny = this.msg[1].toLowerCase().equals("shiny");
+
+        if(!isPokemon(this.getPokemonName()))
         {
             this.embed.setDescription(CommandInvalid.getShort());
             return this;
@@ -60,6 +102,12 @@ public class CommandDex extends Command
         this.embed.setImage(image.equals("") ? Pokemon.getWIPImage() : image);
 
         return this;
+    }
+
+    public static boolean isForm(String name)
+    {
+        List<String> twoWordNonForm = Arrays.asList("Mr Mime", "Jangmo O", "Hakamo O", "Kommo O", "Ho Oh");
+        return name.split(" ").length != 1 && !twoWordNonForm.contains(name);
     }
 
     private String getPokemonName()
