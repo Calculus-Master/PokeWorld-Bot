@@ -51,10 +51,20 @@ public class CommandDex extends Command
             {
                 list.append("#").append(i + 1).append(": ");
 
-                name = Mongo.PokemonInfo.find(Filters.eq("dex", i + 1)).first().getString("name");
-                d = Mongo.DexData.find(Filters.eq("name", name)).first();
+                try
+                {
+                    name = Mongo.PokemonInfo.find(Filters.eq("dex", i + 1)).first().getString("name");
+                    d = Mongo.DexData.find(Filters.eq("name", name)).first();
 
-                list.append(name).append(d.containsKey(this.player.getId()) && d.getInteger(this.player.getId()) > 0 ? ":white_check_mark:" : ":x:").append("\n");
+                    list.append(name).append(d.containsKey(this.player.getId()) && d.getInteger(this.player.getId()) > 0 ? ":white_check_mark:" : ":x:").append("\n");
+                }
+                catch (Exception e)
+                {
+                    System.out.println("Error Displaying " + (i + 1));
+                    e.printStackTrace();
+
+                    list.append("\n");
+                }
             }
 
             this.embed.setDescription(list.toString());
