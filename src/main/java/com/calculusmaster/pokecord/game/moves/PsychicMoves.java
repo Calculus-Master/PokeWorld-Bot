@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.moves;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
@@ -131,11 +132,6 @@ public class PsychicMoves
         return "The move will strike in 2 turns!";
     }
 
-    public String TrickRoom(Pokemon user, Pokemon opponent, Duel duel, Move move)
-    {
-        return move.getNotImplementedResult();
-    }
-
     public String Psywave(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = (int)(user.getLevel() * (new Random().nextInt(101) + 50) / 100D);
@@ -223,5 +219,29 @@ public class PsychicMoves
     public String HyperspaceHole(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String TrickRoom(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.room = DuelHelper.Room.TRICK_ROOM;
+        duel.roomTurns = 5;
+
+        return user.getName() + " created a strange area!";
+    }
+
+    public String WonderRoom(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.room = DuelHelper.Room.WONDER_ROOM;
+        duel.roomTurns = 5;
+
+        return user.getName() + " created a strange area! (WIP)";
+    }
+
+    public String MagicRoom(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.room = DuelHelper.Room.MAGIC_ROOM;
+        duel.roomTurns = 5;
+
+        return user.getName() + " created a strange area!";
     }
 }

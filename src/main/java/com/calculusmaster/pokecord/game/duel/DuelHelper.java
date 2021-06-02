@@ -101,6 +101,14 @@ public class DuelHelper
 
     public record TurnAction(ActionType action, int moveInd, int swapInd) {}
 
+    public enum Room
+    {
+        NORMAL_ROOM,
+        TRICK_ROOM,
+        WONDER_ROOM,
+        MAGIC_ROOM;
+    }
+
     public enum Terrain
     {
         NORMAL_TERRAIN,

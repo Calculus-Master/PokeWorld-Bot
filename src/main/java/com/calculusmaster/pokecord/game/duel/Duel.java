@@ -45,6 +45,8 @@ public class Duel
     public int weatherTurns;
     public Terrain terrain;
     public int terrainTurns;
+    public Room room;
+    public int roomTurns;
 
     public static Duel create(String player1ID, String player2ID, int size, MessageReceivedEvent event)
     {
@@ -86,7 +88,12 @@ public class Duel
             int speed2 = this.players[1].active.getStat(Stat.SPD);
 
             if(this.players[0].move.getPriority() == this.players[1].move.getPriority()) this.current = speed1 == speed2 ? (new Random().nextInt(100) < 50 ? 0 : 1) : (speed1 > speed2 ? 0 : 1);
-            else this.current = this.players[0].move.getPriority() > this.players[1].move.getPriority() ? 0 : 1;
+            else
+            {
+                this.current = this.players[0].move.getPriority() > this.players[1].move.getPriority() ? 0 : 1;
+
+                if(this.room.equals(Room.TRICK_ROOM)) this.current = this.current == 0 ? 1 : 0;
+            }
 
             this.other = this.current == 0 ? 1 : 0;
 
@@ -165,7 +172,7 @@ public class Duel
             }
         }
 
-        this.updateWeatherTerrain();
+        this.updateWeatherTerrainRoom();
 
         this.weatherEffects();
 
@@ -362,12 +369,14 @@ public class Duel
         }
 
         //Item-based Buffs
-        if(this.players[this.current].active.hasItem() && PokeItem.asItem(this.players[this.current].active.getItem()).equals(PokeItem.METAL_COAT))
+        boolean itemsOff = this.room.equals(Room.MAGIC_ROOM);
+
+        if(!itemsOff && this.players[this.current].active.hasItem() && PokeItem.asItem(this.players[this.current].active.getItem()).equals(PokeItem.METAL_COAT))
         {
             if(move.getType().equals(Type.STEEL)) move.setPower((int)(move.getPower() * 1.2));
         }
 
-        if(this.players[this.current].active.hasItem() && this.players[this.current].active.getItem().toLowerCase().contains("plate"))
+        if(!itemsOff && this.players[this.current].active.hasItem() && this.players[this.current].active.getItem().toLowerCase().contains("plate"))
         {
             PokeItem item = PokeItem.asItem(this.players[this.current].active.getItem());
 
@@ -476,9 +485,10 @@ public class Duel
     {
         this.weather = Weather.CLEAR;
         this.terrain = Terrain.NORMAL_TERRAIN;
+        this.room = Room.NORMAL_ROOM;
     }
 
-    public void updateWeatherTerrain()
+    public void updateWeatherTerrainRoom()
     {
         if(this.weatherTurns <= 0)
         {
@@ -495,6 +505,14 @@ public class Duel
         }
 
         if(this.terrainTurns > 0) this.terrainTurns--;
+
+        if(this.roomTurns <= 0)
+        {
+            this.roomTurns = 0;
+            this.room = Room.NORMAL_ROOM;
+        }
+
+        if(this.roomTurns > 0) this.roomTurns--;
     }
 
     public void weatherEffects()
