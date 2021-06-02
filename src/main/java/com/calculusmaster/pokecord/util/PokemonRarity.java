@@ -535,7 +535,7 @@ public class PokemonRarity
         PokemonRarity.add("Glaceon", Rarity.SILVER);
         PokemonRarity.add("Gliscor", Rarity.SILVER);
         PokemonRarity.add("Mamoswine", Rarity.GOLD);
-        PokemonRarity.add("PorygonZ", Rarity.GOLD);
+        PokemonRarity.add("Porygonz", Rarity.GOLD);
         PokemonRarity.add("Gallade", Rarity.GOLD);
         PokemonRarity.add("Probopass", Rarity.SILVER);
         PokemonRarity.add("Dusknoir", Rarity.GOLD);
