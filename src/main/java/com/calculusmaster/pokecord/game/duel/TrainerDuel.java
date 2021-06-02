@@ -66,9 +66,10 @@ public class TrainerDuel extends Duel
                 if(dailyComplete)
                 {
                     //TODO: Win Credits
-                    int winCredits = -1;
+                    int winCredits = 1;
                     this.players[0].data.changeCredits(winCredits);
-                    this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated all of today's trainers! You earned a bonus " + winCredits + " credits!").queue();
+                    //TODO: Trainer Duels need to be challenging to players of all levels
+                    this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated all of today's trainers! You earned a bonus " + winCredits + " credits! DAILY BONUS IS CURRENTLY DISABLED!").queue();
 
                     Achievements.grant(this.players[0].ID, Achievements.DEFEATED_DAILY_TRAINERS, this.event);
                 }
