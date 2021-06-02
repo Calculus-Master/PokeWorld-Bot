@@ -72,7 +72,7 @@ public class CommandUse extends Command
                 return this;
             }
 
-            if(d.getPlayers()[d.indexOf(this.player.getId())].active.hasStatusCondition(StatusCondition.BOUND))
+            if(!d.getPlayers()[d.indexOf(this.player.getId())].active.isFainted() && d.getPlayers()[d.indexOf(this.player.getId())].active.hasStatusCondition(StatusCondition.BOUND))
             {
                 this.event.getChannel().sendMessage(mention + "You are unable to swap out right now because of the binding!").queue();
                 this.embed = null;
