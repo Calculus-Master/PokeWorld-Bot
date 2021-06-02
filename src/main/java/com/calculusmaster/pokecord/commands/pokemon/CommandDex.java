@@ -51,7 +51,7 @@ public class CommandDex extends Command
             {
                 list.append("#").append(i + 1).append(": ");
 
-                name = Mongo.PokemonData.find(Filters.eq("dex", i + 1)).first().getString("name");
+                name = Mongo.PokemonInfo.find(Filters.eq("dex", i + 1)).first().getString("name");
                 d = Mongo.DexData.find(Filters.eq("name", name)).first();
 
                 list.append(name).append(d.containsKey(this.player.getId()) && d.getInteger(this.player.getId()) > 0 ? ":white_check_mark:" : ":x:").append("\n");
@@ -59,6 +59,7 @@ public class CommandDex extends Command
 
             this.embed.setDescription(list.toString());
             this.embed.setTitle(this.player.getName() + "'s Pokedex");
+            return this;
         }
         else if(this.msg.length == 1)
         {
