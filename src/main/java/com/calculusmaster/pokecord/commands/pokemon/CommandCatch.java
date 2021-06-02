@@ -5,7 +5,10 @@ import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.SpawnEventHandler;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Random;
@@ -48,6 +51,11 @@ public class CommandCatch extends Command
                 Pokemon.uploadPokemon(caught);
                 this.playerData.addPokemon(caught.getUUID());
             }).start();
+
+            if(!CommandDex.isForm(caught.getName()))
+            {
+                Mongo.DexData.updateOne(Filters.eq("name", caught.getName()), Updates.inc(this.player.getId(), 1));
+            }
 
             Achievements.grant(this.player.getId(), Achievements.CAUGHT_FIRST_POKEMON, this.event);
 
