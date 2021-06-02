@@ -10,6 +10,7 @@ import com.calculusmaster.pokecord.util.SpawnEventHandler;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import org.bson.Document;
 
 import java.util.Random;
 
@@ -45,12 +46,10 @@ public class CommandCatch extends Command
         else
         {
             Pokemon caught = Pokemon.create(spawn);
-            caught.setLevel(new Random().nextInt(20) + 1);
+            caught.setLevel(new Random().nextInt(20 + 5 * (this.playerData.getGymLevel() - 1)) + 1);
 
-            new Thread(() -> {
-                Pokemon.uploadPokemon(caught);
-                this.playerData.addPokemon(caught.getUUID());
-            }).start();
+            Pokemon.uploadPokemon(caught);
+            this.playerData.addPokemon(caught.getUUID());
 
             if(!CommandDex.isForm(caught.getName()))
             {
