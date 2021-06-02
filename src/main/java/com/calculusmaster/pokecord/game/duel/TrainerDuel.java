@@ -187,7 +187,7 @@ public class TrainerDuel extends Duel
             ivs.deleteCharAt(ivs.length() - 1);
 
             StringBuilder evs = new StringBuilder();
-            for(int i = 0; i < 6; i++) ivs.append(r.nextInt(203) + 50).append("-");
+            for(int i = 0; i < 6; i++) evs.append(r.nextInt(203) + 50).append("-");
             evs.deleteCharAt(ivs.length() - 1);
 
             for(int i = 0; i < this.players[1].team.size(); i++)

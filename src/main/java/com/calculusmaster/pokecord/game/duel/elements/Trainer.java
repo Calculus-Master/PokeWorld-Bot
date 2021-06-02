@@ -67,7 +67,7 @@ public class Trainer extends Player
         String[] team = new String[6];
         for(int i = 0; i < 6; i++) team[i] = pool.get(new Random().nextInt(pool.size()));
         TrainerInfo info = new TrainerInfo("Elite", 100, ZCrystal.values()[new Random().nextInt(18)], 1.5, team);
-        info.buff = 1.5;
+        info.buff = 1.25;
         info.elite = true;
 
         return info;

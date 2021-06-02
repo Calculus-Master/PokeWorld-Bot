@@ -22,8 +22,8 @@ public class CommandTrainerDuel extends Command
     @Override
     public Command runCommand()
     {
-        boolean regular = this.isNumeric(1) && this.getInt(1) >= 1 && this.getInt(1) <= Trainer.DAILY_TRAINERS.size();
-        boolean elite = this.msg[1].equals("elite");
+        boolean regular = this.msg.length == 2 && this.isNumeric(1) && this.getInt(1) >= 1 && this.getInt(1) <= Trainer.DAILY_TRAINERS.size();
+        boolean elite = this.msg.length == 2 && this.msg[1].equals("elite");
 
         if(this.msg.length == 2 && (elite || regular))
         {
@@ -43,7 +43,7 @@ public class CommandTrainerDuel extends Command
                 return this;
             }
 
-            if(this.isInvalidTeam(trainer.pokemon.size()))
+            if(!trainer.elite && this.isInvalidTeam(trainer.pokemon.size()))
             {
                 this.event.getMessage().getChannel().sendMessage(this.playerData.getMention() + ": Your team is invalid! You can have a maximum of " + this.getLegendaryCap(trainer.pokemon.size()) + " legendaries and " + this.getMythicalUBCap(trainer.pokemon.size()) + " mythicals/ultra beasts!").queue();
                 this.embed = null;
