@@ -22,7 +22,10 @@ public class CommandTrainerDuel extends Command
     @Override
     public Command runCommand()
     {
-        if(this.msg.length == 2 && this.isNumeric(1) && this.getInt(1) >= 1 && this.getInt(1) <= Trainer.DAILY_TRAINERS.size())
+        boolean regular = this.isNumeric(1) && this.getInt(1) >= 1 && this.getInt(1) <= Trainer.DAILY_TRAINERS.size();
+        boolean elite = this.msg[1].equals("elite");
+
+        if(this.msg.length == 2 && (elite || regular))
         {
             if(DuelHelper.isInDuel(this.player.getId()))
             {
@@ -31,7 +34,7 @@ public class CommandTrainerDuel extends Command
                 return this;
             }
 
-            Trainer.TrainerInfo trainer = Trainer.DAILY_TRAINERS.get(this.getInt(1) - 1);
+            Trainer.TrainerInfo trainer = elite ? Trainer.createElite() : Trainer.DAILY_TRAINERS.get(this.getInt(1) - 1);
 
             if(this.playerData.getTeam().size() < trainer.pokemon.size())
             {
@@ -60,6 +63,7 @@ public class CommandTrainerDuel extends Command
 
             for(int i = 0; i < Trainer.DAILY_TRAINERS.size(); i++) sb.append(i + 1).append(": ").append(Trainer.DAILY_TRAINERS.get(i).name).append(Trainer.PLAYER_TRAINERS_DEFEATED.get(Trainer.DAILY_TRAINERS.get(i).name).contains(this.player.getId()) ? " (Defeated)" : "").append("\n");
 
+            sb.append("\n\nElite Trainer: Use p!trainerduel elite to duel an Elite Trainer!");
             this.embed.setDescription(sb.toString());
             this.embed.setTitle("Daily Trainers");
         }

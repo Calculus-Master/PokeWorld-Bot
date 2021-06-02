@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.PokemonRarity;
 
 import java.util.*;
 
@@ -47,7 +48,7 @@ public class Trainer extends Player
             team = new String[size];
             for(int j = 0; j < team.length; j++) team[j] = Global.POKEMON.get(r.nextInt(Global.POKEMON.size()));
 
-            DAILY_TRAINERS.add(new TrainerInfo(name, level, z, team));
+            DAILY_TRAINERS.add(new TrainerInfo(name, level, z, 1.2, team));
         }
 
         for(TrainerInfo t : DAILY_TRAINERS) PLAYER_TRAINERS_DEFEATED.put(t.name, new ArrayList<>());
@@ -55,11 +56,28 @@ public class Trainer extends Player
 
     public TrainerInfo info;
 
+    public static TrainerInfo createElite()
+    {
+        List<String> pool = new ArrayList<>();
+        pool.addAll(PokemonRarity.LEGENDARY);
+        pool.addAll(PokemonRarity.MYTHICAL);
+        pool.addAll(PokemonRarity.ULTRA_BEAST);
+        pool.addAll(PokemonRarity.MEGA);
+
+        String[] team = new String[6];
+        for(int i = 0; i < 6; i++) team[i] = pool.get(new Random().nextInt(pool.size()));
+        TrainerInfo info = new TrainerInfo("Elite", 100, ZCrystal.values()[new Random().nextInt(18)], 1.5, team);
+        info.buff = 1.5;
+        info.elite = true;
+
+        return info;
+    }
+
     public static Trainer create(TrainerInfo info)
     {
         Trainer t = new Trainer();
         t.setID(info.name);
-        t.setTeam(info.pokemonLevel, info.pokemon, 1.2);
+        t.setTeam(info.pokemonLevel, info.pokemon, info.buff);
         t.move = null;
         t.usedZMove = false;
         t.info = info;
@@ -125,13 +143,17 @@ public class Trainer extends Player
         public List<String> pokemon;
         public ZCrystal zcrystal;
         public int pokemonLevel;
+        public double buff;
+        public boolean elite;
 
-        public TrainerInfo(String name, int level, ZCrystal z, String... pokemon)
+        public TrainerInfo(String name, int level, ZCrystal z, double buff, String... pokemon)
         {
             this.name = name;
             this.pokemonLevel = level;
             this.zcrystal = z;
+            this.buff = buff;
             this.pokemon = Arrays.asList(pokemon);
+            this.elite = false;
         }
     }
 }

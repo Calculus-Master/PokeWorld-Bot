@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.game.duel;
 
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Move;
+import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.duel.elements.Trainer;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
@@ -54,24 +55,37 @@ public class TrainerDuel extends Duel
             Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_TRAINER_DUEL, this.event);
 
             String bot = ((Trainer)this.players[1]).info.name;
-            List<String> playersDefeatedBot = new ArrayList<>(Trainer.PLAYER_TRAINERS_DEFEATED.get(bot));
-            if(!playersDefeatedBot.contains(this.players[0].ID))
+
+            //Elite Trainer
+            if(((Trainer)this.players[1]).info.elite)
             {
-                playersDefeatedBot.add(this.players[0].ID);
-                Trainer.PLAYER_TRAINERS_DEFEATED.put(bot, playersDefeatedBot);
+                int credits = new Random().nextInt(500) + 500;
+                this.players[0].data.changeCredits(credits);
 
-                boolean dailyComplete = true;
-                for(Trainer.TrainerInfo ti : Trainer.DAILY_TRAINERS) if(!Trainer.PLAYER_TRAINERS_DEFEATED.get(ti.name).contains(this.players[0].ID)) dailyComplete = false;
-
-                if(dailyComplete)
+                this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated the Elite Trainer and earned " + credits + " credits!").queue();
+            }
+            //Regular Daily Trainer
+            else
+            {
+                List<String> playersDefeatedBot = new ArrayList<>(Trainer.PLAYER_TRAINERS_DEFEATED.get(bot));
+                if(!playersDefeatedBot.contains(this.players[0].ID))
                 {
-                    //TODO: Win Credits
-                    int winCredits = 1;
-                    this.players[0].data.changeCredits(winCredits);
-                    //TODO: Trainer Duels need to be challenging to players of all levels
-                    this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated all of today's trainers! You earned a bonus " + winCredits + " credits! DAILY BONUS IS CURRENTLY DISABLED!").queue();
+                    playersDefeatedBot.add(this.players[0].ID);
+                    Trainer.PLAYER_TRAINERS_DEFEATED.put(bot, playersDefeatedBot);
 
-                    Achievements.grant(this.players[0].ID, Achievements.DEFEATED_DAILY_TRAINERS, this.event);
+                    boolean dailyComplete = true;
+                    for(Trainer.TrainerInfo ti : Trainer.DAILY_TRAINERS) if(!Trainer.PLAYER_TRAINERS_DEFEATED.get(ti.name).contains(this.players[0].ID)) dailyComplete = false;
+
+                    if(dailyComplete)
+                    {
+                        //TODO: Win Credits
+                        int winCredits = 1;
+                        this.players[0].data.changeCredits(winCredits);
+                        //TODO: Trainer Duels need to be challenging to players of all levels
+                        this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated all of today's trainers! You earned a bonus " + winCredits + " credits! DAILY BONUS IS CURRENTLY DISABLED!").queue();
+
+                        Achievements.grant(this.players[0].ID, Achievements.DEFEATED_DAILY_TRAINERS, this.event);
+                    }
                 }
             }
         }
@@ -164,6 +178,29 @@ public class TrainerDuel extends Duel
     private void setTrainer(Trainer.TrainerInfo info)
     {
         this.players[1] = Trainer.create(info);
+        Random r = new Random();
+
+        if(info.elite)
+        {
+            StringBuilder ivs = new StringBuilder();
+            for(int i = 0; i < 6; i++) ivs.append(r.nextInt(12) + 20).append("-");
+            ivs.deleteCharAt(ivs.length() - 1);
+
+            StringBuilder evs = new StringBuilder();
+            for(int i = 0; i < 6; i++) ivs.append(r.nextInt(203) + 50).append("-");
+            evs.deleteCharAt(ivs.length() - 1);
+
+            for(int i = 0; i < this.players[1].team.size(); i++)
+            {
+                this.players[1].team.get(i).setIVs(ivs.toString());
+                this.players[1].team.get(i).setEVs(evs.toString());
+                this.players[1].team.get(i).setHealth(this.players[1].team.get(i).getStat(Stat.HP));
+            }
+
+            this.players[1].active = this.players[1].team.get(0);
+
+            return;
+        }
 
         int highest = this.players[0].team.get(0).getEVTotal();
         String condensed = this.players[0].team.get(0).getVCondensed(this.players[0].team.get(0).getEVs());
