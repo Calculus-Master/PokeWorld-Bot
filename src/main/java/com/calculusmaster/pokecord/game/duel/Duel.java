@@ -200,6 +200,17 @@ public class Duel
         //Use the result from the Status Conditions to determine whether or not the user can move
         if(!this.data(this.current).canUseMove) return "";
 
+        //Re-Check Certain Status Conditions
+        if(this.players[this.current].active.hasStatusCondition(StatusCondition.ASLEEP))
+        {
+            return this.players[this.current].active.getName() + " is asleep!";
+        }
+
+        if(this.players[this.current].active.hasStatusCondition(StatusCondition.PARALYZED))
+        {
+            if(new Random().nextInt(100) < 20) return this.players[this.current].active.getName() + " is paralyzed!";
+        }
+
         //Z-Crystal Event
         if(new Random().nextInt(100) < 5) this.zcrystalEvent(move);
 
