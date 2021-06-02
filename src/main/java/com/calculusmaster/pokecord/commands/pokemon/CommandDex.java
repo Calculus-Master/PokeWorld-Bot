@@ -30,7 +30,7 @@ public class CommandDex extends Command
     public Command runCommand()
     {
         //Pokedex Command
-        if(this.msg.length == 1 || (this.msg.length == 2 && this.isNumeric(2)))
+        if(this.msg.length == 1 || (this.msg.length == 2 && this.isNumeric(1)))
         {
             List<String> uniquePokemon = Global.POKEMON.stream().filter(s -> !isForm(s)).collect(Collectors.toList());
             int total = uniquePokemon.size();
