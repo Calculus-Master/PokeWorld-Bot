@@ -63,18 +63,6 @@ public class Listener extends ListenerAdapter
         //If the 'selected' field is out of bounds, force it into bounds to avoid errors
         if(isPlayerRegistered) new PlayerDataQuery(player.getId()).updateSelected();
 
-        //Legendary Hour
-        int hr = event.getMessage().getTimeCreated().toLocalTime().getHour();
-        if(hr == 18)
-        {
-            if(new Random().nextInt(100) < 1)
-            {
-                System.out.println("Force Spawning Legendary!");
-                SpawnEventHandler.forceSpawn(server, PokemonRarity.getLegendarySpawn());
-            }
-            System.out.println("Legendary Hour!");
-        }
-
         //If the message starts with the right prefix, continue, otherwise skip the listener
         if(msg[0].startsWith(serverQuery.getPrefix()))
         {

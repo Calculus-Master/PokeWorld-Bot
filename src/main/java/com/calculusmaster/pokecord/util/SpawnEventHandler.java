@@ -13,6 +13,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -70,6 +72,11 @@ public class SpawnEventHandler
     private static void spawnPokemon(Guild g, TextChannel channel, String spawn)
     {
         spawn = Global.normalCase(spawn);
+
+        if(LocalDateTime.now().getHour() == 18)
+        {
+            if(new Random().nextInt(100) < 1) spawn = PokemonRarity.getLegendarySpawn();
+        }
 
         if(Math.random() < 0.01) new Thread(CommandMarket::addBotEntry).start();
 
