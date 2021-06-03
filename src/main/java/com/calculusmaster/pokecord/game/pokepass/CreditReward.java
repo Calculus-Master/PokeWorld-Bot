@@ -15,5 +15,7 @@ public class CreditReward extends TierReward
     public String grantReward(PlayerDataQuery player)
     {
         player.changeCredits(this.amount);
+
+        return "You earned " + this.amount + " credits!";
     }
 }
