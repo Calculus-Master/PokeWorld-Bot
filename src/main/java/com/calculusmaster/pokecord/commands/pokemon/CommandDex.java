@@ -56,7 +56,7 @@ public class CommandDex extends Command
                     name = Mongo.PokemonInfo.find(Filters.eq("dex", i + 1)).first().getString("name");
                     d = Mongo.DexData.find(Filters.eq("name", name)).first();
 
-                    list.append(name).append(d.containsKey(this.player.getId()) && d.getInteger(this.player.getId()) > 0 ? ":white_check_mark:" : ":x:").append(" - Owned: ").append(d.getInteger(this.player.getId()) == null ? 0 : d.getInteger(this.player.getId())).append("\n");
+                    list.append(name).append(d.containsKey(this.player.getId()) && d.getInteger(this.player.getId()) > 0 ? ":white_check_mark:" : ":x:").append(" - Caught: ").append(d.getInteger(this.player.getId()) == null ? 0 : d.getInteger(this.player.getId())).append("\n");
                 }
                 catch (Exception e)
                 {
