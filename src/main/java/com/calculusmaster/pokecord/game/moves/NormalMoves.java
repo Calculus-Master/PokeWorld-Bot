@@ -588,4 +588,10 @@ public class NormalMoves
 
         return user.getName() + " was refreshed!";
     }
+
+    //TODO: Silvally Memory Disc
+    public String MultiAttack(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
