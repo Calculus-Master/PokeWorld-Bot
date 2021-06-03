@@ -161,4 +161,11 @@ public class GrassMoves
 
         return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 3);
     }
+
+    public String CottonGuard(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.changeStatMultiplier(Stat.DEF, 3);
+
+        return user.getName() + "'s Defense rose by 3 stages!";
+    }
 }

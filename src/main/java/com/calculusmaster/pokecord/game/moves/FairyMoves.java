@@ -25,4 +25,9 @@ public class FairyMoves
     {
         return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPATK, -1, 30, false);
     }
+
+    public String DisarmingVoice(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

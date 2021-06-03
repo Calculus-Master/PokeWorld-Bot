@@ -554,4 +554,38 @@ public class NormalMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String PerishSong(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(user.getUUID()).perishSongTurns = 3;
+        duel.data(opponent.getUUID()).perishSongTurns = 3;
+
+        return user.getName() + " sung a Perish Song!";
+    }
+
+    public String Sing(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.addStatusCondition(StatusCondition.ASLEEP);
+
+        return opponent.getName() + " is asleep!";
+    }
+
+    public String Round(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String NaturalGift(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String Refresh(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.removeStatusCondition(StatusCondition.PARALYZED);
+        user.removeStatusCondition(StatusCondition.POISONED);
+        user.removeStatusCondition(StatusCondition.BURNED);
+
+        return user.getName() + " was refreshed!";
+    }
 }

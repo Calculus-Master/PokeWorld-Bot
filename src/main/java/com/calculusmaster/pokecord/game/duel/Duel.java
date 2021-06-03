@@ -221,6 +221,19 @@ public class Duel
             if(new Random().nextInt(100) < 20) return this.players[this.current].active.getName() + " is paralyzed!";
         }
 
+        if(this.data(this.current).perishSongTurns > 0)
+        {
+            this.data(this.current).perishSongTurns--;
+
+            if(this.data(this.current).perishSongTurns <= 0)
+            {
+                this.data(this.current).perishSongTurns = 0;
+
+                this.players[this.current].active.damage(this.players[this.current].active.getHealth());
+                return turnResult + " Perish Song hit! " + this.players[this.current].active.getName() + " fainted!";
+            }
+        }
+
         //Z-Crystal Event
         if(new Random().nextInt(100) < 5) this.zcrystalEvent(move);
 
