@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.moves;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 
 import java.util.Random;
@@ -100,5 +101,11 @@ public class GroundMoves
         if(duel.data(opponent.getUUID()).digUsed) move.setPower(2 * move.getPower());
 
         return Move.simpleDamageMove(user, opponent, duel, move) + " Magnitude " + magnitude + "!";
+    }
+
+    public String Spikes(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(opponent.getUUID()).entryHazards.addHazard(DuelHelper.EntryHazard.SPIKES);
+        return user.getName() + " laid a Spikes trap!";
     }
 }

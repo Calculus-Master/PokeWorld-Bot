@@ -803,13 +803,7 @@ public class Duel
         if(this.data(player).entryHazards.hasHazard(EntryHazard.STEALTH_ROCK))
         {
             double rockEffective = TypeEffectiveness.getCombinedMap(this.players[player].active.getType()[0], this.players[player].active.getType()[1]).get(Type.ROCK);
-
-            double damagePercent = 0.0;
-            if(rockEffective == 0.25) damagePercent = 0.03125;
-            else if(rockEffective == 0.5) damagePercent = 0.0625;
-            else if(rockEffective == 1.0) damagePercent = 0.125;
-            else if(rockEffective == 2.0) damagePercent = 0.25;
-            else if(rockEffective == 4.0) damagePercent = 0.5;
+            double damagePercent = 0.125 * rockEffective;
 
             int damage = (int)(this.players[player].active.getStat(Stat.HP) * damagePercent);
 

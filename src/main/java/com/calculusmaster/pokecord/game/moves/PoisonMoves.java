@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.moves;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 
@@ -36,7 +37,8 @@ public class PoisonMoves
 
     public String ToxicSpikes(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Toxic(user, opponent, duel, move);
+        duel.data(opponent.getUUID()).entryHazards.addHazard(DuelHelper.EntryHazard.TOXIC_SPIKES);
+        return user.getName() + " laid a Toxic Spikes trap!";
     }
 
     public String PoisonJab(Pokemon user, Pokemon opponent, Duel duel, Move move)

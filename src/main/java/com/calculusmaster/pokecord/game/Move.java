@@ -16,8 +16,8 @@ public class Move
 {
     public static Map<String, MoveData> MOVES = new HashMap<>();
     //TODO: Keep checking the custom moves and see if they can function as close to the original as possible
-    public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Sweet Scent", "Smokescreen", "Protect", "Safeguard", "Whirlwind", "Rage Powder", "Tailwind", "Light Screen", "Frustration", "Return", "Mind Reader", "Quick Guard", "Counter", "Magnetic Flux", "After You", "Disable", "Miracle Eye", "Guard Swap", "Power Swap", "Me First", "Yawn", "Gravity", "Stealth Rock", "Spite", "Mean Look", "Foresight", "Wide Guard", "Ingrain", "Forests Curse", "Natural Gift");
-    public static final List<String> CUSTOM_MOVES = Arrays.asList("Leech Seed", "Toxic", "Rapid Spin", "Fell Stinger", "Toxic Spikes", "Mirror Shot");
+    public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Sweet Scent", "Smokescreen", "Protect", "Safeguard", "Whirlwind", "Rage Powder", "Tailwind", "Light Screen", "Frustration", "Return", "Mind Reader", "Quick Guard", "Counter", "Magnetic Flux", "After You", "Disable", "Miracle Eye", "Guard Swap", "Power Swap", "Me First", "Yawn", "Gravity", "Spite", "Mean Look", "Foresight", "Wide Guard", "Ingrain", "Forests Curse", "Natural Gift");
+    public static final List<String> CUSTOM_MOVES = Arrays.asList("Leech Seed", "Toxic", "Rapid Spin", "Fell Stinger", "Mirror Shot");
 
     private String name;
     private MoveData moveData;
@@ -129,6 +129,7 @@ public class Move
                     case CURSED -> " is cursed!";
                     case NIGHTMARE -> " has been afflicted with a Nightmare!";
                     case BOUND -> " is bound!";
+                    case BADLY_POISONED -> "is badly poisoned!";
                 };
 
         boolean statusProc = new Random().nextInt(100) < percent;
