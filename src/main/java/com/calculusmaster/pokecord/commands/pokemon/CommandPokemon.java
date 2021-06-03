@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.util.CacheHelper;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.PokemonRarity;
@@ -72,6 +73,24 @@ public class CommandPokemon extends Command
         {
             List<String> team = this.playerData.getTeam();
             stream = stream.filter(p -> team.contains(p.getUUID()));
+        }
+
+        if(msg.contains("--type") && msg.indexOf("--type") + 1 < msg.size() && Type.cast(msg.get(msg.indexOf("--type") + 1)) != null)
+        {
+            Type t = Type.cast(msg.get(msg.indexOf("--type") + 1));
+            stream = stream.filter(p -> p.isType(t));
+        }
+
+        if(msg.contains("--maintype") && msg.indexOf("--maintype") + 1 < msg.size() && Type.cast(msg.get(msg.indexOf("--maintype") + 1)) != null)
+        {
+            Type t = Type.cast(msg.get(msg.indexOf("--maintype") + 1));
+            stream = stream.filter(p -> p.getType()[0].equals(t));
+        }
+
+        if(msg.contains("--sidetype") && msg.indexOf("--sidetype") + 1 < msg.size() && Type.cast(msg.get(msg.indexOf("--sidetype") + 1)) != null)
+        {
+            Type t = Type.cast(msg.get(msg.indexOf("--sidetype") + 1));
+            stream = stream.filter(p -> p.getType()[1].equals(t));
         }
 
         stream = this.sortIVs(stream, msg, "--hpiv", "--healthiv", Stat.HP);
