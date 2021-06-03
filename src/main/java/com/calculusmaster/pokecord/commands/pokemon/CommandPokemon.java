@@ -68,6 +68,12 @@ public class CommandPokemon extends Command
             else if(isNumeric(index)) stream = stream.filter(p -> (int)p.getTotalIVRounded() == getInt(index));
         }
 
+        if(msg.contains("--team"))
+        {
+            List<String> team = this.playerData.getTeam();
+            stream = stream.filter(p -> team.contains(p.getUUID()));
+        }
+
         stream = this.sortIVs(stream, msg, "--hpiv", "--healthiv", Stat.HP);
 
         stream = this.sortIVs(stream, msg, "--atkiv", "--attackiv", Stat.ATK);
