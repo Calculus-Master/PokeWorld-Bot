@@ -11,11 +11,12 @@ import java.util.Random;
 
 public class PoisonMoves
 {
-    //TODO: Badly Poisoned
     public String Toxic(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.addStatusCondition(StatusCondition.POISONED);
-        return opponent.getName() + " was poisoned!";
+        opponent.addStatusCondition(StatusCondition.BADLY_POISONED);
+        duel.data(opponent.getUUID()).badlyPoisonedTurns++;
+
+        return opponent.getName() + " was badly poisoned!";
     }
 
     public String Venoshock(Pokemon user, Pokemon opponent, Duel duel, Move move)

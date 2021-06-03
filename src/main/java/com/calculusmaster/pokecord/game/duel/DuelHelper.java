@@ -42,6 +42,7 @@ public class DuelHelper
 
         public int asleepTurns;
         public int boundTurns;
+        public int badlyPoisonedTurns;
 
         public EntryHazardHandler entryHazards;
 
@@ -81,6 +82,7 @@ public class DuelHelper
 
             this.asleepTurns = 0;
             this.boundTurns = 0;
+            this.badlyPoisonedTurns = 0;
 
             this.entryHazards = new EntryHazardHandler();
 

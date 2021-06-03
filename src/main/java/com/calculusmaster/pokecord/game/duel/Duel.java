@@ -666,6 +666,14 @@ public class Duel
             status.append(name).append(" is poisoned! The poison dealt ").append(statusDamage).append(" damage!\n");
         }
 
+        if(pokemon.hasStatusCondition(StatusCondition.BADLY_POISONED))
+        {
+            statusDamage = (int)(pokemon.getStat(Stat.HP) / 16.) * this.data(p).badlyPoisonedTurns;
+            pokemon.damage(statusDamage);
+
+            status.append(name).append(" is badly poisoned! The poison dealt ").append(statusDamage).append(" damage!\n");
+        }
+
         if(pokemon.hasStatusCondition(StatusCondition.CURSED))
         {
             statusDamage = pokemon.getStat(Stat.HP) / 4;
@@ -823,6 +831,8 @@ public class Duel
         {
             int level = this.data(player).entryHazards.getHazard(EntryHazard.TOXIC_SPIKES);
             this.players[player].active.addStatusCondition(level == 1 ? StatusCondition.POISONED : StatusCondition.BADLY_POISONED);
+
+            if(level > 1) this.data(player).badlyPoisonedTurns++;
 
             hazardResults += "Toxic Spikes caused " + name + " to be " + (level == 1 ? "poisoned!" : "badly poisoned!") + "\n";
         }
