@@ -63,13 +63,17 @@ public class WildDuel extends Duel
             int speed1 = this.players[0].active.getStat(Stat.SPD);
             int speed2 = this.players[1].active.getStat(Stat.SPD);
 
-            if(this.players[0].move.getPriority() == this.players[1].move.getPriority()) this.current = speed1 == speed2 ? (new Random().nextInt(100) < 50 ? 0 : 1) : (speed1 > speed2 ? 0 : 1);
-            else
+            if(this.players[0].move.getPriority() == this.players[1].move.getPriority())
             {
-                this.current = this.players[0].move.getPriority() > this.players[1].move.getPriority() ? 0 : 1;
+                this.current = speed1 == speed2 ? (new Random().nextInt(100) < 50 ? 0 : 1) : (speed1 > speed2 ? 0 : 1);
 
                 if(this.room.equals(Room.TRICK_ROOM)) this.current = this.current == 0 ? 1 : 0;
             }
+            else
+            {
+                this.current = this.players[0].move.getPriority() > this.players[1].move.getPriority() ? 0 : 1;
+            }
+
             this.other = this.current == 0 ? 1 : 0;
 
             this.first = this.players[this.current].active.getUUID();
