@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.util.CacheHelper;
 import com.calculusmaster.pokecord.util.Mongo;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.User;
 import org.bson.Document;
@@ -329,12 +330,28 @@ public class PlayerDataQuery extends MongoQuery
 
     public void increaseGymLevel()
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.set("gym_level", this.getGymLevel() + 1));
+        Mongo.PlayerData.updateOne(this.query, Updates.inc("gym_level", 1));
     }
 
-    //key: "gym_progress"       //TODO: Use a separate Database
-    public List<Boolean> getGymProgress()
+    //key: "pokepass_exp"
+    public int getPokePassExp()
     {
-        return this.json().getJSONArray("gym_progress").toList().stream().map(o -> (boolean)o).collect(Collectors.toList());
+        return this.json().getInt("pokepass_exp");
+    }
+
+    public void addPokePassExp(int amount)
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.inc("pokepass_exp", amount));
+    }
+
+    //key: "pokepass_tier"
+    public int getPokePassTier()
+    {
+        return this.json().getInt("pokepass_tier");
+    }
+
+    public void increasePokePassTier()
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.inc("pokepass_tier", 1));
     }
 }
