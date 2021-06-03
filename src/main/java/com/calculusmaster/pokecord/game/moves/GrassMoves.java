@@ -168,4 +168,14 @@ public class GrassMoves
 
         return user.getName() + "'s Defense rose by 3 stages!";
     }
+
+    public String HornLeech(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+
+        opponent.damage(damage);
+        user.heal(damage / 2);
+
+        return move.getDamageResult(opponent, damage) + " " + user.getName() + " healed for " + (damage / 2) + " HP!";
+    }
 }
