@@ -319,7 +319,7 @@ public class Move
         this.priority = switch(this.getName())
                 {
                     case "Helping Hand" -> 5;
-                    case "Baneful Bunker", "Detect", "Endure", "King's Shield", "Magic Coat", "Protect", "Spiky Shield", "Snatch" -> 4;
+                    case "Baneful Bunker", "Detect", "Endure", "Kings Shield", "Magic Coat", "Protect", "Spiky Shield", "Snatch" -> 4;
                     case "Crafty Shield", "Fake Out", "Quick Guard", "Wide Guard", "Spotlight" -> 3;
                     case "Ally Switch", "Extreme Speed", "Feint", "First Impression", "Follow Me", "Rage Powder" -> 2;
                     case "Accelerock", "Aqua Jet", "Baby Doll Eyes", "Bide", "Bullet Punch", "Ice Shard", "Iron Deluge", "Mach Punch", "Powder", "Quick Attack", "Shadow Sneak", "Sucker Punch", "Vacuum Wave", "Water Shuriken" -> 1;

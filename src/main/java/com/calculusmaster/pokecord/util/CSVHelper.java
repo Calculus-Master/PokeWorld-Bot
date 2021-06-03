@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
+import com.mongodb.client.model.Filters;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 import org.bson.Document;
@@ -45,6 +46,8 @@ public class CSVHelper
 //        {
 //            if(!skip.contains(i)) writePokemonJSONFile(i);
 //        }
+
+        Mongo.PerformanceData.deleteMany(Filters.exists("name"));
 
         List<String> moves = new ArrayList<>(Arrays.asList("Healing Wish", "Misty Terrain", "Teleport", "Double Team", "Wish", "Magical Leaf", "Draining Kiss", "Fury Cutter", "Retaliate", "Clanging Scales", "Bide", "Belly Drum", "Sky Uppercut", "Dragon Tail", "Accelerock", "Sand Attack", "Quick Attack", "Howl", "Odor Sleuth", "Stealth Rock", "Rock Climb"));
 
@@ -113,7 +116,7 @@ public class CSVHelper
                 .append("type", Global.normalCase(type))
                 .append("category", category)
                 .append("power", line[4].equals("") ? 0 : Integer.parseInt(line[4]))
-                .append("accuracy", line[6].equals("") ? 0 : Integer.parseInt(line[6]))
+                .append("accuracy", line[6].equals("") ? 100 : Integer.parseInt(line[6]))
                 .append("info", "");
 
         return move;
