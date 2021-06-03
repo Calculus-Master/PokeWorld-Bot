@@ -93,6 +93,11 @@ public class CommandPokemon extends Command
             stream = stream.filter(p -> p.getType()[1].equals(t));
         }
 
+        if(msg.contains("--shiny"))
+        {
+            stream = stream.filter(Pokemon::isShiny);
+        }
+
         stream = this.sortIVs(stream, msg, "--hpiv", "--healthiv", Stat.HP);
 
         stream = this.sortIVs(stream, msg, "--atkiv", "--attackiv", Stat.ATK);
