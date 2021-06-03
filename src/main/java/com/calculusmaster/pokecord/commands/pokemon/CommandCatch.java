@@ -54,6 +54,18 @@ public class CommandCatch extends Command
             if(!CommandDex.isForm(caught.getName()))
             {
                 Mongo.DexData.updateOne(Filters.eq("name", caught.getName()), Updates.inc(this.player.getId(), 1));
+
+                Document d = Mongo.DexData.find(Filters.eq("name", caught.getName())).first();
+
+                int numCaught = d != null && d.containsKey(this.playerData.getID()) ? d.getInteger(this.playerData.getID()) : 1;
+
+                if(numCaught % 5 == 0)
+                {
+                    int credits = 100 + 50 * (numCaught / 5 - 1);
+                    this.playerData.changeCredits(credits);
+
+                    this.event.getChannel().sendMessage(this.playerData.getMention() + ": You earned " + credits + " for reaching a Collection Milestone of " + numCaught + " " + caught.getName() + "!").queue();
+                }
             }
 
             Achievements.grant(this.player.getId(), Achievements.CAUGHT_FIRST_POKEMON, this.event);
