@@ -289,7 +289,7 @@ public class Listener extends ListenerAdapter
 
         int initL = p.getLevel();
 
-        p.addExp((int)(new Random().nextInt(100) * (1 + Math.random())));
+        p.addExp((int)(new Random().nextInt(200) * (1 + Math.random())));
 
         if(p.getLevel() != initL)
         {
