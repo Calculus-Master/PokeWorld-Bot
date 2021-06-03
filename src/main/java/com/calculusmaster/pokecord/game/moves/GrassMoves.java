@@ -142,4 +142,23 @@ public class GrassMoves
     {
         return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPATK, -2, 100, true);
     }
+
+    public String Ingrain(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String ForestsCurse(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String WoodHammer(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        opponent.damage(damage);
+        user.damage(damage / 3);
+
+        return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 3);
+    }
 }

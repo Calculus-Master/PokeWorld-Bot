@@ -61,6 +61,7 @@ public class DuelHelper
         public boolean lockOnUsed;
         public boolean thousandWavesUsed;
         public boolean imprisonUsed;
+        public boolean destinyBondUsed;
 
         public DuelPokemon(String UUID)
         {
@@ -96,6 +97,7 @@ public class DuelHelper
             this.lockOnUsed = false;
             this.thousandWavesUsed = false;
             this.imprisonUsed = false;
+            this.destinyBondUsed = false;
         }
     }
 

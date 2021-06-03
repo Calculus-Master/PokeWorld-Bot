@@ -62,11 +62,6 @@ public class GhostMoves
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
-    public String DestinyBond(Pokemon user, Pokemon opponent, Duel duel, Move move)
-    {
-        return move.getNotImplementedResult();
-    }
-
     public String ShadowClaw(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         user.setCrit(3);
@@ -155,6 +150,22 @@ public class GhostMoves
     //TODO: Phantom Force Invulnerability
     public String PhantomForce(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String HornLeech(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+
+        opponent.damage(damage);
+        user.heal(damage / 2);
+
+        return move.getDamageResult(opponent, damage) + " " + user.getName() + " healed for " + (damage / 2) + " HP!";
+    }
+
+    public String DestinyBond(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(user.getUUID()).destinyBondUsed = true;
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 }

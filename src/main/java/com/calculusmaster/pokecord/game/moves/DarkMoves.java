@@ -113,4 +113,9 @@ public class DarkMoves
     {
         return Move.statChangeDamageMove(user, opponent, duel, move, Stat.DEF, -1, 100, true);
     }
+
+    public String FeintAttack(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

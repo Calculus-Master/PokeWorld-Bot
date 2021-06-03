@@ -133,4 +133,11 @@ public class FireMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String WillOWisp(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.addStatusCondition(StatusCondition.BURNED);
+
+        return opponent.getName() + " is burned!";
+    }
 }

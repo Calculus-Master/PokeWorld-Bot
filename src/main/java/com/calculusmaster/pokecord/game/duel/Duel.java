@@ -461,6 +461,14 @@ public class Duel
             String UUID = this.players[this.current].active.getUUID();
             int exp = this.players[this.current].active.getDuelExp(this.players[this.other].active);
             this.expGains.put(UUID, (this.expGains.containsKey(UUID) ? this.expGains.get(UUID) : 0) + exp);
+
+            if(this.data(this.other).destinyBondUsed)
+            {
+                this.data(this.other).destinyBondUsed = false;
+
+                this.players[this.current].active.damage(this.players[this.current].active.getHealth());
+                turnResult += " " + this.players[this.current].active.getName() + " fainted from the Destiny Bond!";
+            }
         }
 
         return turnResult;
