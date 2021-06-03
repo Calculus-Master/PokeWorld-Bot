@@ -28,7 +28,7 @@ public class CommandRedeem extends Command
         {
             if(!this.player.getId().equals("309135641453527040") && this.getPokemon().contains("Necrozma"))
             {
-                this.event.getChannel().sendMessage(this.playerData.getMention() + ": You don't have any redeems!").queue();
+                this.event.getChannel().sendMessage(this.playerData.getMention() + ": Necrozma is too powerful to redeem!").queue();
                 this.embed = null;
                 return this;
             }
