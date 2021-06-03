@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.duel;
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.TypeEffectiveness;
 import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
@@ -33,7 +34,7 @@ public class Duel
     protected Map<String, DuelPokemon> pokemonAttributes = new HashMap<>();
     protected Map<String, Integer> expGains = new HashMap<>();
 
-    private int turn;
+    //private int turn;
     protected int current;
     protected int other;
 
@@ -129,10 +130,14 @@ public class Duel
 
             results.add(this.players[0].data.getUsername() + " brought in " + this.players[0].active.getName() + "!\n");
 
+            this.entryHazardEffects(0);
+
             ind = this.queuedMoves.get(this.players[1].ID).swapInd() - 1;
             this.players[1].swap(ind);
 
             results.add(this.players[1].data.getUsername() + " brought in " + this.players[1].active.getName() + "!\n");
+
+            this.entryHazardEffects(1);
         }
         //Either player wants to swap out a pokemon
         else
@@ -154,6 +159,9 @@ public class Duel
                 this.players[0].swap(ind);
 
                 results.add(this.players[0].data.getUsername() + " brought in " + this.players[0].active.getName() + "!\n");
+
+                this.entryHazardEffects(0);
+
                 if(!faintSwap) results.add(this.turn(move));
             }
             else //Player 2 wants to swap
@@ -171,6 +179,9 @@ public class Duel
                 this.players[1].swap(ind);
 
                 results.add(this.players[1].data.getUsername() + " brought in " + this.players[1].active.getName() + "!\n");
+
+                this.entryHazardEffects(1);
+
                 if(!faintSwap) results.add(this.turn(move));
             }
         }
@@ -768,6 +779,63 @@ public class Duel
 
         results.add(status.toString());
         return true;
+    }
+
+    public void entryHazardEffects(int player)
+    {
+        String hazardResults = "";
+        String name = this.players[player].active.getName();
+
+        if(this.data(player).entryHazards.hasHazard(EntryHazard.SPIKES))
+        {
+            int damage = (int)(this.players[player].active.getStat(Stat.HP) * switch(this.data(player).entryHazards.getHazard(EntryHazard.SPIKES)) {
+                case 1 -> 1 / 8D;
+                case 2 -> 1 / 6D;
+                case 3 -> 1 / 4D;
+                default -> 0;
+            });
+
+            this.players[player].active.damage(damage);
+
+            hazardResults += "Spikes dealt " + damage + " damage to " + name + "!\n";
+        }
+
+        if(this.data(player).entryHazards.hasHazard(EntryHazard.STEALTH_ROCK))
+        {
+            double rockEffective = TypeEffectiveness.getCombinedMap(this.players[player].active.getType()[0], this.players[player].active.getType()[1]).get(Type.ROCK);
+
+            double damagePercent = 0.0;
+            if(rockEffective == 0.25) damagePercent = 0.03125;
+            else if(rockEffective == 0.5) damagePercent = 0.0625;
+            else if(rockEffective == 1.0) damagePercent = 0.125;
+            else if(rockEffective == 2.0) damagePercent = 0.25;
+            else if(rockEffective == 4.0) damagePercent = 0.5;
+
+            int damage = (int)(this.players[player].active.getStat(Stat.HP) * damagePercent);
+
+            this.players[player].active.damage(damage);
+
+            hazardResults += "Stealth Rock dealt " + " damage to " + name + "!\n";
+        }
+
+        if(this.data(player).entryHazards.hasHazard(EntryHazard.STICKY_WEB))
+        {
+            this.players[player].active.changeStatMultiplier(Stat.SPD, -1);
+
+            hazardResults += "Sticky Web lowered " + name + "'s Speed by 1 stage!\n";
+        }
+
+        if(this.data(player).entryHazards.hasHazard(EntryHazard.TOXIC_SPIKES))
+        {
+            int level = this.data(player).entryHazards.getHazard(EntryHazard.TOXIC_SPIKES);
+            this.players[player].active.addStatusCondition(level == 1 ? StatusCondition.POISONED : StatusCondition.BADLY_POISONED);
+
+            hazardResults += "Toxic Spikes caused " + name + " to be " + (level == 1 ? "poisoned!" : "badly poisoned!") + "\n";
+        }
+
+        this.results.add(hazardResults);
+
+        if(this.players[player].active.isFainted()) this.results.add(name + " fainted from the Entry Hazard(s)!");
     }
 
     public void setDuelPokemonObjects(int player)

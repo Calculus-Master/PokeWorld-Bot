@@ -43,6 +43,8 @@ public class DuelHelper
         public int asleepTurns;
         public int boundTurns;
 
+        public EntryHazardHandler entryHazards;
+
         public boolean flyUsed;
         public boolean bounceUsed;
         public boolean digUsed;
@@ -80,6 +82,8 @@ public class DuelHelper
             this.asleepTurns = 0;
             this.boundTurns = 0;
 
+            this.entryHazards = new EntryHazardHandler();
+
             this.flyUsed = false;
             this.bounceUsed = false;
             this.digUsed = false;
@@ -104,6 +108,57 @@ public class DuelHelper
     }
 
     public record TurnAction(ActionType action, int moveInd, int swapInd) {}
+
+    public static class EntryHazardHandler
+    {
+        private Map<EntryHazard, Integer> entryHazards;
+
+        public EntryHazardHandler()
+        {
+            this.entryHazards = new HashMap<>();
+
+            this.clearHazards();
+        }
+
+        public void addHazard(EntryHazard hazard)
+        {
+            int current = this.entryHazards.get(hazard);
+            int hazardLimit = hazard.equals(EntryHazard.SPIKES) ? 3 : (hazard.equals(EntryHazard.TOXIC_SPIKES) ? 2 : 1);
+
+            this.entryHazards.put(hazard, Math.min(hazardLimit, current + 1));
+        }
+
+        public boolean hasHazard(EntryHazard hazard)
+        {
+            return this.entryHazards.get(hazard) > 0;
+        }
+
+        public int getHazard(EntryHazard hazard)
+        {
+            return this.entryHazards.get(hazard);
+        }
+
+        public void removeHazard(EntryHazard hazard)
+        {
+            this.entryHazards.put(hazard, 0);
+        }
+
+        public void clearHazards()
+        {
+            this.removeHazard(EntryHazard.SPIKES);
+            this.removeHazard(EntryHazard.STEALTH_ROCK);
+            this.removeHazard(EntryHazard.STICKY_WEB);
+            this.removeHazard(EntryHazard.TOXIC_SPIKES);
+        }
+    }
+
+    public enum EntryHazard
+    {
+        SPIKES,
+        STEALTH_ROCK,
+        STICKY_WEB,
+        TOXIC_SPIKES;
+    }
 
     public enum Room
     {

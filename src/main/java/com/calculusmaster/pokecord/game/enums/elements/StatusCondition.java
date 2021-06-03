@@ -11,7 +11,8 @@ public enum StatusCondition
     FLINCHED("FLN"),
     CURSED("CRS"),
     NIGHTMARE("NTM"),
-    BOUND("BND");
+    BOUND("BND"),
+    BADLY_POISONED("BPSN");
 
     private final String abbrev;
     StatusCondition(String abbrev)
