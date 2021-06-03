@@ -1055,7 +1055,7 @@ public class Pokemon
 
     public double getWeight()
     {
-        return Double.parseDouble(this.genericJSON.getString("info").split("-")[2]);
+        return Double.parseDouble(this.genericJSON.getString("fillerinfo").split("-")[2]);
     }
 
     @Override
