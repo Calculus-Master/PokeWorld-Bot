@@ -797,7 +797,7 @@ public class Duel
     {
         EmbedBuilder embed = new EmbedBuilder();
 
-        int c = this.giveWinCredits();
+        int c = this.players[0].team.size() >= 6 ? this.giveWinCredits() : 0;
 
         embed.setDescription(this.getWinner().data.getUsername() + " has won!\nThey earned " + c + " credits!");
 
@@ -805,8 +805,11 @@ public class Duel
 
         Achievements.grant(this.getWinner().ID, Achievements.WON_FIRST_PVP_DUEL, this.event);
 
-        this.uploadEVs(0);
-        this.uploadEVs(1);
+        if(new Random().nextInt(100) < 20)
+        {
+            this.uploadEVs(0);
+            this.uploadEVs(1);
+        }
 
         this.uploadExperience();
 
