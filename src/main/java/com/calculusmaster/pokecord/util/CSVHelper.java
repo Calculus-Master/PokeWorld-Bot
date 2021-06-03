@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.util;
 
+import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
@@ -37,13 +38,29 @@ public class CSVHelper
         //Read data from CSVs into Objects
         createCSVLists();
 
-        List<Integer> skip = Arrays.asList(208, 243, 244, 245, 249, 250, 251);
+//        List<Integer> skip = Arrays.asList(208, 243, 244, 245, 249, 250, 251);
+//
+//        //Write files
+//        for(int i = 722; i <= 784; i++)
+//        {
+//            if(!skip.contains(i)) writePokemonJSONFile(i);
+//        }
 
-        //Write files
-        for(int i = 722; i <= 784; i++)
+        List<String> moves = new ArrayList<>(Arrays.asList("Healing Wish", "Misty Terrain", "Teleport", "Double Team", "Wish", "Magical Leaf", "Draining Kiss", "Fury Cutter", "Retaliate", "Clanging Scales", "Bide", "Belly Drum", "Sky Uppercut", "Dragon Tail", "Accelerock", "Sand Attack", "Quick Attack", "Howl", "Odor Sleuth", "Stealth Rock", "Rock Climb"));
+
+        Move.init();
+
+        for(int i = 0; i < moves.size(); i++)
         {
-            if(!skip.contains(i)) writePokemonJSONFile(i);
+            if(Move.isMove(moves.get(i)))
+            {
+                System.out.println("Removed " + moves.get(i));
+                moves.remove(i);
+                i--;
+            }
         }
+
+        for(String s : moves) Mongo.PerformanceData.insertOne(getMoveData(s));
     }
 
     private static void createCSVLists() throws IOException, CsvException
@@ -77,6 +94,29 @@ public class CSVHelper
 
         pokemonAbilityNames = new CSVReader(new FileReader(CSV_PATH + "abilities.csv")).readAll();
         pokemonAbilityNames.remove(0);
+    }
+
+    private static Document getMoveData(String name)
+    {
+        String[] line = pokemonMoveNames.stream().filter(l -> Global.normalCase(l[1].replaceAll("-", " ")).equals(name)).collect(Collectors.toList()).get(0);
+
+        String type = typeFromID(line[3]);
+        String category = switch(Integer.parseInt(line[9])) {
+            case 1 -> "Status";
+            case 2 -> "Physical";
+            case 3 -> "Special";
+            default -> null;
+        };
+
+        Document move = new Document()
+                .append("name", name)
+                .append("type", Global.normalCase(type))
+                .append("category", category)
+                .append("power", line[4].equals("") ? 0 : Integer.parseInt(line[4]))
+                .append("accuracy", line[6].equals("") ? 0 : Integer.parseInt(line[6]))
+                .append("info", "");
+
+        return move;
     }
 
     private static Document getPokemonData(int dex)
