@@ -34,7 +34,7 @@ public class Duel
     protected Map<String, DuelPokemon> pokemonAttributes = new HashMap<>();
     protected Map<String, Integer> expGains = new HashMap<>();
 
-    //private int turn;
+    private int turn;
     protected int current;
     protected int other;
 
@@ -138,6 +138,8 @@ public class Duel
             results.add(this.players[1].data.getUsername() + " brought in " + this.players[1].active.getName() + "!\n");
 
             this.entryHazardEffects(1);
+
+            this.checkWeatherAbilities();
         }
         //Either player wants to swap out a pokemon
         else
@@ -160,6 +162,7 @@ public class Duel
 
                 results.add(this.players[0].data.getUsername() + " brought in " + this.players[0].active.getName() + "!\n");
 
+                this.checkWeatherAbilities(0);
                 this.entryHazardEffects(0);
 
                 if(!faintSwap) results.add(this.turn(move));
@@ -180,6 +183,7 @@ public class Duel
 
                 results.add(this.players[1].data.getUsername() + " brought in " + this.players[1].active.getName() + "!\n");
 
+                this.checkWeatherAbilities(1);
                 this.entryHazardEffects(1);
 
                 if(!faintSwap) results.add(this.turn(move));
@@ -891,6 +895,51 @@ public class Duel
         this.players[1].move = null;
 
         this.first = "";
+
+        if(turn == 0)
+        {
+            this.checkWeatherAbilities();
+        }
+
+        this.turn++;
+    }
+
+    private void checkWeatherAbilities()
+    {
+        int faster = this.players[0].active.getStat(Stat.SPD) > this.players[1].active.getStat(Stat.SPD) ? 0 : 1;
+        int slower = faster == 0 ? 1 : 0;
+
+        this.checkWeatherAbilities(faster);
+        this.checkWeatherAbilities(slower);
+    }
+
+    private void checkWeatherAbilities(int p)
+    {
+        List<String> abilities = this.players[p].active.getAbilities();
+
+        if(abilities.contains("Drought"))
+        {
+            this.weather = Weather.HARSH_SUNLIGHT;
+            this.weatherTurns = 5;
+        }
+
+        if(abilities.contains("Drizzle"))
+        {
+            this.weather = Weather.RAIN;
+            this.weatherTurns = 5;
+        }
+
+        if(abilities.contains("Sand Stream"))
+        {
+            this.weather = Weather.SANDSTORM;
+            this.weatherTurns = 5;
+        }
+
+        if(abilities.contains("Snow Warning"))
+        {
+            this.weather = Weather.HAIL;
+            this.weatherTurns = 5;
+        }
     }
 
     //Response Embeds
@@ -1112,6 +1161,7 @@ public class Duel
     protected void setEvent(MessageReceivedEvent event)
     {
         this.event = event;
+        this.turn = 0;
     }
 
     public void setSize(int size)

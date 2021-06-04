@@ -14,9 +14,13 @@ public class CommandAbilityInfo extends Command
 
     public static void init()
     {
-        ABILITY_INFO.put("Adaptability", "Adaptability increases the effectiveness of STAB moves from the usual 1.5× to 2×.");
+        ABILITY_INFO.put("Adaptability", "Adaptability increases the effectiveness of STAB moves from the usual 1.5x to 2x.");
         ABILITY_INFO.put("Disguise", "Disguise allows the bearer to avoid damage for one attack.");
-        ABILITY_INFO.put("Iron Barbs", "When a Pokémon with Iron Barbs is hit by a move that makes contact, the attacker receives damage equal to 1⁄8 of their maximum HP.");
+        ABILITY_INFO.put("Iron Barbs", "When a Pokemon with Iron Barbs is hit by a move that makes contact, the attacker receives damage equal to 1⁄8 of their maximum HP.");
+        ABILITY_INFO.put("Drought", "Drought creates harsh sunlight when the ability-bearer enters battle. The effect lasts 5 turns.");
+        ABILITY_INFO.put("Drizzle", "Drizzle creates a rain shower when the ability-bearer enters battle. The effect lasts 5 turns.");
+        ABILITY_INFO.put("Sand Stream", "Sand Stream creates a sandstorm when the ability-bearer enters battle. The effect lasts 5 turns.");
+        ABILITY_INFO.put("Snow Warning", "Snow Warning creates a hailstorm when the ability-bearer enters battle. The effect lasts 5 turns.");
     }
 
     public CommandAbilityInfo(MessageReceivedEvent event, String[] msg)
