@@ -228,22 +228,7 @@ public class Listener extends ListenerAdapter
             //Debug Commands
             else if(player.getId().equals("309135641453527040"))
             {
-                if(msg[0].equals("deleteperformance"))
-                {
-                    Mongo.PerformanceData.deleteMany(Filters.exists("command"));
-                    c = null;
-                }
-                else if(msg[0].equals("deletepokemon"))
-                {
-                    Mongo.PokemonData.deleteMany(Filters.exists("name"));
-                    c = null;
-                }
-                else if(msg[0].equals("deleteplayers"))
-                {
-                    Mongo.PlayerData.deleteMany(Filters.exists("name"));
-                    c = null;
-                }
-                else if(msg[0].equals("forcespawn"))
+                if(msg[0].equals("forcespawn"))
                 {
                     String spawn;
 
