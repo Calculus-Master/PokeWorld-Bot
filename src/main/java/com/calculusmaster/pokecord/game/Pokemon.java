@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Pokemon
 {
@@ -1026,6 +1027,10 @@ public class Pokemon
         return (int)maxHP;
     }
 
+    public List<String> getAbilities()
+    {
+        return this.genericJSON.getJSONArray("abilities").toList().stream().map(s -> (String)s).collect(Collectors.toList());
+    }
 
     //Simple Methods
     public String getName()
