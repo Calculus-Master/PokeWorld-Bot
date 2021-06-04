@@ -485,6 +485,14 @@ public class Duel
             if(move.getCategory().equals(Category.STATUS)) this.data(this.other).lastDamageTaken = 0;
 
             if(rechargeMoves.contains(move.getName())) this.data(this.current).recharge = true;
+
+            if(this.players[this.other].active.getAbilities().contains("Iron Barbs") && !move.getCategory().equals(Category.STATUS) && this.data(this.other).lastDamageTaken > 0)
+            {
+                int dmg = this.players[this.current].active.getStat(Stat.HP) / 8;
+                this.players[this.current].active.damage(dmg);
+
+                turnResult += "\n" + this.players[this.current].active.getName() + " took " + dmg + " damage from the Iron Barbs!";
+            }
         }
 
         //Give EVs and EXP if opponent has fainted

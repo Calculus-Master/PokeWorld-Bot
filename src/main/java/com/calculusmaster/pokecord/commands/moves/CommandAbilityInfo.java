@@ -16,6 +16,7 @@ public class CommandAbilityInfo extends Command
     {
         ABILITY_INFO.put("Adaptability", "Adaptability increases the effectiveness of STAB moves from the usual 1.5× to 2×.");
         ABILITY_INFO.put("Disguise", "Disguise allows the bearer to avoid damage for one attack.");
+        ABILITY_INFO.put("Iron Barbs", "When a Pokémon with Iron Barbs is hit by a move that makes contact, the attacker receives damage equal to 1⁄8 of their maximum HP.");
     }
 
     public CommandAbilityInfo(MessageReceivedEvent event, String[] msg)
