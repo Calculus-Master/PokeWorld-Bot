@@ -5,6 +5,7 @@ import ch.qos.logback.classic.LoggerContext;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.duel.CommandWildDuel;
 import com.calculusmaster.pokecord.commands.economy.CommandMarket;
+import com.calculusmaster.pokecord.commands.moves.CommandAbilityInfo;
 import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
@@ -46,6 +47,8 @@ public class Pokecord
         Trainer.setDailyTrainers();
         Global.logInfo(Pokecord.class, "main", "Starting Move Init!");
         Move.init();
+        Global.logInfo(Pokecord.class, "main", "Starting CommandAbilityInfo Init!");
+        CommandAbilityInfo.init();
         Global.logInfo(Pokecord.class, "main", "Starting PokemonRarity Init!");
         PokemonRarity.init();
         Global.logInfo(Pokecord.class, "main", "Starting Command Init!");

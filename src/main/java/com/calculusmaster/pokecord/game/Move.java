@@ -263,6 +263,9 @@ public class Move
         //Freeze Dry
         if(this.name.equals("Freeze Dry")) type = opponent.isType(Type.WATER) || opponent.isType(Type.GRASS) || opponent.isType(Type.GROUND) || opponent.isType(Type.FLYING) || opponent.isType(Type.DRAGON) ? 2.0 : (opponent.isType(Type.FIRE) || opponent.isType(Type.ICE) || opponent.isType(Type.STEEL) ? 0.5 : 1.0);
 
+        //Ability: Adaptability
+        if(stab == 1.5 && user.getAbilities().contains("Adaptability")) stab = 2.0;
+
         double modifier = critical * random * stab * type * burned;
         double damage = (((2 * level / 5.0 + 2) * power * (double)atkStat / (double)defStat) / 50) + 2;
         double finalDMG = damage * modifier;
