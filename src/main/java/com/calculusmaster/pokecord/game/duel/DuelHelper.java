@@ -39,6 +39,7 @@ public class DuelHelper
         public int lastDamageTaken;
         public int statImmuneTurns;
         public boolean recharge;
+        public boolean isRaised;
 
         public int asleepTurns;
         public int boundTurns;
@@ -79,6 +80,7 @@ public class DuelHelper
             this.lastDamageTaken = 0;
             this.statImmuneTurns = 0;
             this.recharge = false;
+            this.isRaised = false;
 
             this.asleepTurns = 0;
             this.boundTurns = 0;

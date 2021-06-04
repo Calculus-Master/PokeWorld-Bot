@@ -27,7 +27,7 @@ public class RockMoves
 
     public String SmackDown(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        //TODO: Raised Pokemon
+        duel.data(opponent.getUUID()).isRaised = false;
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 

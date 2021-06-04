@@ -70,6 +70,7 @@ public class ElectricMoves
     public String MagnetRise(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         duel.data(user.getUUID()).magnetRiseTurns = 5;
+        duel.data(user.getUUID()).isRaised = true;
 
         return user.getName() + " is now immune to Ground type moves for 5 turns!";
     }

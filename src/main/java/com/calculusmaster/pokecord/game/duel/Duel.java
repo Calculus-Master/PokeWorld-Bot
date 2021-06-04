@@ -438,6 +438,9 @@ public class Duel
         //Ensures the recharge occurs when the recharge move isn't used
         if(this.data(this.current).recharge && !rechargeMoves.contains(move.getName())) this.data(this.current).recharge = false;
 
+        //Raised Immunity
+        if(this.data(this.other).isRaised && move.getType().equals(Type.GROUND)) otherImmune = true;
+
         //Check if user has to recharge
         if(this.data(this.current).recharge && rechargeMoves.contains(move.getName()))
         {
@@ -794,7 +797,7 @@ public class Duel
         String hazardResults = "";
         String name = this.players[player].active.getName();
 
-        if(this.data(player).entryHazards.hasHazard(EntryHazard.SPIKES))
+        if(this.data(player).entryHazards.hasHazard(EntryHazard.SPIKES) && !this.data(player).isRaised)
         {
             int damage = (int)(this.players[player].active.getStat(Stat.HP) * switch(this.data(player).entryHazards.getHazard(EntryHazard.SPIKES)) {
                 case 1 -> 1 / 8D;
@@ -806,6 +809,10 @@ public class Duel
             this.players[player].active.damage(damage);
 
             hazardResults += "Spikes dealt " + damage + " damage to " + name + "!\n";
+        }
+        else if(this.data(player).isRaised)
+        {
+            hazardResults += "Spikes does not affect " + name;
         }
 
         if(this.data(player).entryHazards.hasHazard(EntryHazard.STEALTH_ROCK))
@@ -820,14 +827,18 @@ public class Duel
             hazardResults += "Stealth Rock dealt " + " damage to " + name + "!\n";
         }
 
-        if(this.data(player).entryHazards.hasHazard(EntryHazard.STICKY_WEB))
+        if(this.data(player).entryHazards.hasHazard(EntryHazard.STICKY_WEB) && !this.data(player).isRaised)
         {
             this.players[player].active.changeStatMultiplier(Stat.SPD, -1);
 
             hazardResults += "Sticky Web lowered " + name + "'s Speed by 1 stage!\n";
         }
+        else if(this.data(player).isRaised)
+        {
+            hazardResults += "Sticky Web does not affect " + name;
+        }
 
-        if(this.data(player).entryHazards.hasHazard(EntryHazard.TOXIC_SPIKES))
+        if(this.data(player).entryHazards.hasHazard(EntryHazard.TOXIC_SPIKES) && !this.data(player).isRaised)
         {
             int level = this.data(player).entryHazards.getHazard(EntryHazard.TOXIC_SPIKES);
             this.players[player].active.addStatusCondition(level == 1 ? StatusCondition.POISONED : StatusCondition.BADLY_POISONED);
@@ -835,6 +846,10 @@ public class Duel
             if(level > 1) this.data(player).badlyPoisonedTurns++;
 
             hazardResults += "Toxic Spikes caused " + name + " to be " + (level == 1 ? "poisoned!" : "badly poisoned!") + "\n";
+        }
+        else if(this.data(player).isRaised)
+        {
+            hazardResults += "Toxic Spikes does not affect " + name;
         }
 
         this.results.add(hazardResults);
@@ -844,7 +859,11 @@ public class Duel
 
     public void setDuelPokemonObjects(int player)
     {
-        for(Pokemon p : this.players[player].team) this.pokemonAttributes.put(p.getUUID(), new DuelPokemon(p.getUUID()));
+        for(Pokemon p : this.players[player].team)
+        {
+            this.pokemonAttributes.put(p.getUUID(), new DuelPokemon(p.getUUID()));
+            this.data(player).isRaised = p.isType(Type.FLYING);
+        }
     }
 
     protected void turnSetup()
