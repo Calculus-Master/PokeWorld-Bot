@@ -88,9 +88,13 @@ public class CacheHelper
 
     public static void createPokemonList(String player)
     {
+        long init = System.currentTimeMillis();
+
         List<Pokemon> list = new ArrayList<>();
         for(int i = 0; i < UUID_LISTS.get(player).size(); i++) list.add(Pokemon.buildCore(UUID_LISTS.get(player).get(i), i + 1));
         POKEMON_LISTS.put(player, list);
+
+        System.out.println("Initialization for Player: " + player + " took " + (System.currentTimeMillis() - init));
     }
 
     public static void setUUIDLists()
