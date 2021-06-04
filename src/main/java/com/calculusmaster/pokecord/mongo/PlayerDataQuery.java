@@ -12,6 +12,7 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class PlayerDataQuery extends MongoQuery
@@ -222,7 +223,12 @@ public class PlayerDataQuery extends MongoQuery
 
     public void removeItem(String item)
     {
+        int counts = 0;
+        for(String s : this.getItemList()) if(s.equalsIgnoreCase(item)) counts++;
+
         Mongo.PlayerData.updateOne(this.query, Updates.pull("items", item));
+
+        for(int i = 0; i < counts - 1; i++) this.addItem(item);
 
         this.update();
     }

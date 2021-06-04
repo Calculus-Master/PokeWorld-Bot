@@ -8,6 +8,10 @@ import java.util.stream.Collectors;
 public enum PokeItem
 {
     NONE(0),
+    //Non-Pokemon Items (p!activate)
+    EV_REALLOCATOR(0, true),
+    IV_REROLLER(0, true),
+    //Pokemon Items (p!give)
     THUNDER_STONE(250),
     ICE_STONE(250),
     MOON_STONE(250),
@@ -58,9 +62,17 @@ public enum PokeItem
     ZAP_PLATE(1000);
 
     public int cost;
+    public boolean nonPokemon;
+
     PokeItem(int cost)
     {
+        this(cost, false);
+    }
+
+    PokeItem(int cost, boolean nonPokemon)
+    {
         this.cost = cost;
+        this.nonPokemon = nonPokemon;
     }
 
     public String getName()
