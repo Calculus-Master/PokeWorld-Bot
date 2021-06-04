@@ -55,6 +55,7 @@ public abstract class Command
     public static final CommandHelp.HelpEntry TRAINERDUEL = new CommandHelp.HelpEntry("trainerduel");
     public static final CommandHelp.HelpEntry GYMDUEL = new CommandHelp.HelpEntry("gymduel");
     public static final CommandHelp.HelpEntry ABILITYINFO = new CommandHelp.HelpEntry("abilityinfo");
+    public static final CommandHelp.HelpEntry ACTIVATE = new CommandHelp.HelpEntry("activate");
 
     public static void init()
     {
@@ -263,6 +264,9 @@ public abstract class Command
 
         ABILITYINFO.setCategory(CommandHelp.CommandCategory.MOVES)
                 .addAliases("ai");
+
+        ACTIVATE.setCategory(CommandHelp.CommandCategory.POKEMON)
+                .addAliases();
     }
 
     protected MessageReceivedEvent event;
