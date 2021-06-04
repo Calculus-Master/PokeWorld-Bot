@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.mongo;
 
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.SpawnEventHandler;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -25,10 +26,11 @@ public class ServerDataQuery extends MongoQuery
         Document serverData = new Document()
                 .append("serverID", server.getId())
                 .append("prefix", "p!")
-                .append("spawn", "")
                 .append("spawnchannel", channelID);
 
         Mongo.ServerData.insertOne(serverData);
+
+        SpawnEventHandler.start(server);
     }
 
     //Gets
