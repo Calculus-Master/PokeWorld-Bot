@@ -202,6 +202,8 @@ public class CommandPokemon extends Command
         int startIndex = hasPage ? ((getInt(1) - 1) * perPage > this.pokemon.size() ? 0 : getInt(1)) : 0;
         if(startIndex != 0) startIndex--;
 
+        this.team = List.copyOf(this.playerData.getTeam());
+
         startIndex *= perPage;
         int endIndex = Math.min(startIndex + perPage, this.pokemon.size());
         for(int i = startIndex; i < endIndex; i++)
@@ -214,6 +216,8 @@ public class CommandPokemon extends Command
         this.embed.setFooter("Showing Numbers " + (startIndex + 1) + " to " + (endIndex) + " out of " + this.pokemon.size() + " Pokemon");
     }
 
+    private List<String> team;
+
 //    @Deprecated
 //    private void buildList()
 //    {
@@ -225,6 +229,6 @@ public class CommandPokemon extends Command
     private String getLine(Pokemon p)
     {
         //TODO: Slowest part of the Command is this.playerData.isInTeam -> Cache teams!
-        return "**" + p.getName() + "** " + (this.playerData.isInTeam(p.getUUID()) ? "(T) " : "") + "| Number: " + p.getNumber() + " | Level " + p.getLevel() + " | Total IV: " + p.getTotalIV() + "\n";
+        return "**" + p.getName() + "** " + (this.team.contains(p.getUUID()) ? "(T) " : "") + "| Number: " + p.getNumber() + " | Level " + p.getLevel() + " | Total IV: " + p.getTotalIV() + "\n";
     }
 }

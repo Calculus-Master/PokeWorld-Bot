@@ -16,8 +16,6 @@ public class Trainer extends Player
     public static final Map<String, List<String>> PLAYER_TRAINERS_DEFEATED = new HashMap<>();
     public static final int DAILY_TRAINER_COUNT = 4;
 
-    public static final List<TrainerInfo> ELITE_TRAINERS = new ArrayList<>();
-
     public static void setDailyTrainers()
     {
         List<String> trainerNames = new ArrayList<>(Arrays.asList("Team Rocket Grunt", "Team Aqua Grunt", "Team Magma Grunt", "Team Galactic Grunt", "Team Plasma Grunt", "Team Flare Grunt", "Team Skull Grunt", "Team Yell Grunt"));
