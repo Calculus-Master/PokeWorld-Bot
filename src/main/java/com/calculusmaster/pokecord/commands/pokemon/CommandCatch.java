@@ -68,6 +68,13 @@ public class CommandCatch extends Command
                 }
             }
 
+            if(caught.getTotalIVRounded() >= 90)
+            {
+                this.playerData.changeRedeems(1);
+
+                this.event.getChannel().sendMessage(this.playerData.getMention() + ": You earned a redeem for catching a high IV pokemon!").queue();
+            }
+
             Achievements.grant(this.player.getId(), Achievements.CAUGHT_FIRST_POKEMON, this.event);
 
             this.embed = null;
