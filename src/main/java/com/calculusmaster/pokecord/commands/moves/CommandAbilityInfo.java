@@ -15,6 +15,7 @@ public class CommandAbilityInfo extends Command
     public static void init()
     {
         ABILITY_INFO.put("Adaptability", "Adaptability increases the effectiveness of STAB moves from the usual 1.5× to 2×.");
+        ABILITY_INFO.put("Disguise", "Disguise allows the bearer to avoid damage for one attack.");
     }
 
     public CommandAbilityInfo(MessageReceivedEvent event, String[] msg)

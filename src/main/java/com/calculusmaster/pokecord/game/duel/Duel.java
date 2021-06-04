@@ -441,8 +441,15 @@ public class Duel
         //Raised Immunity
         if(this.data(this.other).isRaised && move.getType().equals(Type.GROUND)) otherImmune = true;
 
+        //Ability: Disguise (Mimikyu)
+        if(this.players[this.other].active.getAbilities().contains("Disguise") && !this.data(this.other).disguiseActivated && !move.getCategory().equals(Category.STATUS))
+        {
+            this.data(this.other).disguiseActivated = true;
+
+            turnResult += "Mimikyu's Disguise was activated and absorbed the attack!";
+        }
         //Check if user has to recharge
-        if(this.data(this.current).recharge && rechargeMoves.contains(move.getName()))
+        else if(this.data(this.current).recharge && rechargeMoves.contains(move.getName()))
         {
             turnResult += name + " can't use " + move.getName() + " because it needs to recharge!";
             this.data(this.current).recharge = false;

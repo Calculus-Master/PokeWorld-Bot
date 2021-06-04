@@ -68,6 +68,8 @@ public class DuelHelper
         public boolean destinyBondUsed;
         public int perishSongTurns;
 
+        public boolean disguiseActivated;
+
         public DuelPokemon(String UUID)
         {
             this.UUID = UUID;
@@ -108,6 +110,8 @@ public class DuelHelper
             this.imprisonUsed = false;
             this.destinyBondUsed = false;
             this.perishSongTurns = 0;
+
+            this.disguiseActivated = false;
         }
     }
 
