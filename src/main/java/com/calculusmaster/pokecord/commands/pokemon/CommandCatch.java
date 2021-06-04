@@ -64,7 +64,7 @@ public class CommandCatch extends Command
                     int credits = 200 + 50 * (numCaught / 5 - 1);
                     this.playerData.changeCredits(credits);
 
-                    this.event.getChannel().sendMessage(this.playerData.getMention() + ": You earned " + credits + " for reaching a Collection Milestone of " + numCaught + " " + caught.getName() + "!").queue();
+                    this.event.getChannel().sendMessage(this.playerData.getMention() + ": You earned " + credits + " credits for reaching a Collection Milestone: **" + numCaught + "** " + caught.getName() + "!").queue();
                 }
             }
 
