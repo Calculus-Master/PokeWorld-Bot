@@ -38,6 +38,11 @@ public class CommandRedeem extends Command
             Pokemon p = Pokemon.create(this.getPokemon());
             p.setLevel(new Random().nextInt(100) + 1);
 
+            while(p.getTotalIVRounded() <= 45)
+            {
+                p.setIVs();
+            }
+
             Pokemon.uploadPokemon(p);
             this.playerData.addPokemon(p.getUUID());
 
