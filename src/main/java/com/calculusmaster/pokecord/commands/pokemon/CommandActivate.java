@@ -59,6 +59,12 @@ public class CommandActivate extends Command
                         this.embed = null;
                         return this;
                     }
+                    else if(s.getEVs().get(to) >= 252)
+                    {
+                        this.event.getChannel().sendMessage(this.playerData.getMention() + ": " + s.getName() + " already has max " + to + " EVs!").queue();
+                        this.embed = null;
+                        return this;
+                    }
 
                     int initialFrom = s.getEVs().get(from);
                     int initialTo = s.getEVs().get(to);
