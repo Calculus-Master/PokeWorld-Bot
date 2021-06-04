@@ -40,11 +40,6 @@ public class ServerDataQuery extends MongoQuery
         return this.json().getString("prefix");
     }
 
-    public String getSpawn()
-    {
-        return this.json().getString("spawn");
-    }
-
     public String getSpawnChannelID()
     {
         return this.json().getString("spawnchannel");
@@ -55,11 +50,6 @@ public class ServerDataQuery extends MongoQuery
     public void setPrefix(String prefix)
     {
         Mongo.ServerData.updateOne(this.query, Updates.set("prefix", prefix));
-    }
-
-    public void setSpawn(String spawn)
-    {
-        Mongo.ServerData.updateOne(this.query, Updates.set("spawn", spawn));
     }
 
     public void setSpawnChannel(MessageChannel channel)
