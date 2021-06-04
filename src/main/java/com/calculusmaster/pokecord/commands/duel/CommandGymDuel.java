@@ -90,12 +90,12 @@ public class CommandGymDuel extends Command
 
     private int getLegendaryCap(int size)
     {
-        return 1 + (size - 1) / 4;
+        return 1 + (size - 1) / 6;
     }
 
     private int getMythicalUBCap(int size)
     {
-        return 2 + (size - 1) / 4;
+        return 2 + (size - 1) / 6;
     }
 
     public boolean isInvalidTeam(int size)
