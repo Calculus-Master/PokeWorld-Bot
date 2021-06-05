@@ -357,7 +357,7 @@ public class PlayerDataQuery extends MongoQuery
 
         this.update();
 
-        if(this.getPokePassExp() >= PokePass.TIER_EXP)
+        if(this.getPokePassExp() >= PokePass.TIER_EXP && PokePass.tierExists(this.getPokePassTier() + 1))
         {
             Mongo.PlayerData.updateOne(this.query, Updates.set("pokepass_exp", this.getPokePassExp() - PokePass.TIER_EXP));
             this.increasePokePassTier();
