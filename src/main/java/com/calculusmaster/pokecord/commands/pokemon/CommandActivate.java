@@ -78,6 +78,8 @@ public class CommandActivate extends Command
 
                     //Leftovers
                     s.addEV(from, initialFrom - (s.getEVs().get(to) - initialTo));
+
+                    this.playerData.removeItem(PokeItem.EV_REALLOCATOR.getName());
                 }
                 else
                 {
