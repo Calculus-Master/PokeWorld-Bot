@@ -34,6 +34,7 @@ public class CommandGive extends Command
             if(s.hasItem()) this.playerData.addItem(s.getItem());
             s.setItem(item);
 
+            this.playerData.removeItem(item.getName());
             Pokemon.updateItem(s);
 
             this.event.getChannel().sendMessage(this.playerData.getMention() + ": Gave " + s.getName() + " a `" + item.getStyledName() + "`!").queue();
