@@ -472,6 +472,15 @@ public class Duel
             otherImmune = false;
         }
 
+        //Ability: Stance Change (Aegislash)
+        if(!move.getCategory().equals(Category.STATUS) && this.players[this.current].active.getAbilities().contains("Stance Change"))
+        {
+            if(this.players[this.current].active.getName().equals("Aegislash"))
+            {
+                this.players[this.current].active.changeForm("Aegislash Blade");
+            }
+        }
+
         //Ability: Disguise (Mimikyu)
         if(this.players[this.other].active.getAbilities().contains("Disguise") && !this.data(this.other).disguiseActivated && !move.getCategory().equals(Category.STATUS))
         {

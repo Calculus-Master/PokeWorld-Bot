@@ -156,6 +156,8 @@ public class SteelMoves
     {
         duel.data(user.getUUID()).kingsShieldUsed = true;
 
+        if(user.getName().equals("Aegislash Blade")) user.changeForm("Aegislash");
+
         return user.getName() + " defended itself with its Shield!";
     }
 }
