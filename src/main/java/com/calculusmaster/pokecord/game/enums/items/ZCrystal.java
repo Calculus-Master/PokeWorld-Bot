@@ -52,7 +52,8 @@ public enum ZCrystal
     YVELTIUM_Z,
     DIANCIUM_Z,
     ARCEIUM_Z,
-    RAYQUAZIUM_Z;
+    RAYQUAZIUM_Z,
+    ZYGARDIUM_Z;
 
     public String getStyledName()
     {

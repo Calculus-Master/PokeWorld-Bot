@@ -271,4 +271,27 @@ public class ZMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    //Zygarde (Any Form)
+    public String TectonicZWrath(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    //Zygarde Complete
+    public String TitanicZEnforcer(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String MillionArrowBarrage(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(opponent.getUUID()).isRaised = false;
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String MillionWaveTsunami(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

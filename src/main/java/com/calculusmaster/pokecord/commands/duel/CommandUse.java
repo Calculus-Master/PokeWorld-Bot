@@ -154,6 +154,7 @@ public class CommandUse extends Command
                 case DIANCIUM_Z -> s.getName().contains("Diancie") && move.getName().equals("Diamond Storm");
                 case ARCEIUM_Z -> s.getName().equals("Arceus") && move.getName().equals("Judgement");
                 case RAYQUAZIUM_Z -> s.getName().contains("Rayquaza") && move.getName().equals("Dragon Ascent");
+                case ZYGARDIUM_Z -> (s.getName().contains("Zygarde") && move.getName().equals("Lands Wrath")) || (s.getName().contains("Complete") && (move.getName().equals("Core Enforcer") || move.getName().equals("Thousand Arrows") || move.getName().equals("Thousand Waves")));
             };
 
             List<String> statusBaseMoves = Arrays.asList("Geomancy");

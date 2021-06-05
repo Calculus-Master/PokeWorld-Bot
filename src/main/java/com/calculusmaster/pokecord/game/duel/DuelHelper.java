@@ -558,6 +558,13 @@ public class DuelHelper
             case DIANCIUM_Z -> ZMove = new Move("Dazzling Diamond Barrage", Type.ROCK, Category.PHYSICAL, 180);
             case ARCEIUM_Z -> ZMove = new Move("Decree Of Arceus", Type.NORMAL, Category.PHYSICAL, 260);
             case RAYQUAZIUM_Z -> ZMove = new Move("Draconic Ozone Ascent", Type.DRAGON, Category.PHYSICAL, 200);
+            case ZYGARDIUM_Z -> ZMove = switch (baseMove.getName()) {
+                case "Lands Wrath" -> new Move("Tectonic Z Wrath", Type.GROUND, Category.PHYSICAL, 180);
+                case "Core Enforcer" -> new Move("Titanic Z Enforcer", Type.DRAGON, Category.SPECIAL, 195);
+                case "Thousand Arrows" -> new Move("Million Arrow Barrage", Type.GROUND, Category.PHYSICAL, 190);
+                case "Thousand Waves" -> new Move("Million Wave Tsunami", Type.GROUND, Category.PHYSICAL, 190);
+                default -> new Move("Tackle");
+            };
         }
 
         return ZMove;
