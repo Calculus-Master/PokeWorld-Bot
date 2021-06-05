@@ -135,9 +135,9 @@ public class CommandShop extends Command
     {
         this.page.append("Z Crystals: \n\n");
 
-        for(String s : entriesZCrystal) this.page.append(s).append("\n");
+        for(String s : entriesZCrystal) this.page.append("**").append(s).append("**\n");
 
-        this.page.append("Z Crystal Price: ").append(priceZCrystal).append("c!");
+        this.page.append("\nZ Crystal Price: ").append(priceZCrystal).append("c!");
     }
 
     private boolean isUpdateTime()
@@ -197,7 +197,8 @@ public class CommandShop extends Command
         entriesZCrystal.clear();
 
         String z;
-        for(int i = 0; i < 2; i++)
+        int count = new Random().nextInt(3) + 2;
+        for(int i = 0; i < count; i++)
         {
             z = ZCrystal.getRandomUniqueZCrystal().getStyledName();
             if(entriesZCrystal.contains(z)) i--;
