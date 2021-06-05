@@ -32,7 +32,7 @@ public class CommandPokePass extends Command
 
         this.embed.setDescription(sb.toString());
         this.embed.setTitle("PokePass");
-        this.embed.setFooter("Showing Tiers " + start + " to " + end + "!");
+        this.embed.setFooter("Showing Tiers " + start + " to " + (end - 1) + "!");
         return this;
     }
 }

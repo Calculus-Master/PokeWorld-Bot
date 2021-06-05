@@ -1,12 +1,14 @@
 package com.calculusmaster.pokecord.mongo;
 
 import com.calculusmaster.pokecord.game.Achievements;
+import com.calculusmaster.pokecord.game.PokePass;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.util.CacheHelper;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.bson.Document;
 import org.json.JSONArray;
 
@@ -339,6 +341,8 @@ public class PlayerDataQuery extends MongoQuery
     public void increaseGymLevel()
     {
         Mongo.PlayerData.updateOne(this.query, Updates.inc("gym_level", 1));
+
+        this.update();
     }
 
     //key: "pokepass_exp"
@@ -347,9 +351,21 @@ public class PlayerDataQuery extends MongoQuery
         return this.json().getInt("pokepass_exp");
     }
 
-    public void addPokePassExp(int amount)
+    public void addPokePassExp(int amount, MessageReceivedEvent event)
     {
         Mongo.PlayerData.updateOne(this.query, Updates.inc("pokepass_exp", amount));
+
+        this.update();
+
+        if(this.getPokePassExp() >= PokePass.TIER_EXP)
+        {
+            Mongo.PlayerData.updateOne(this.query, Updates.set("pokepass_exp", this.getPokePassExp() - PokePass.TIER_EXP));
+            this.increasePokePassTier();
+
+            event.getChannel().sendMessage(PokePass.reward(this.getPokePassTier() + 1, this)).queue();
+
+            this.update();
+        }
     }
 
     //key: "pokepass_tier"

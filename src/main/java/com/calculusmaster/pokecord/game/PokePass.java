@@ -43,8 +43,8 @@ public class PokePass
         passTiers.put(tier, reward);
     }
 
-    public static void reward(int tier, PlayerDataQuery player)
+    public static String reward(int tier, PlayerDataQuery player)
     {
-        passTiers.get(tier).grantReward(player);
+        return player.getMention() + ": PokePass Tier Level Up! You are now Tier " + tier + "! " + passTiers.get(tier).grantReward(player);
     }
 }
