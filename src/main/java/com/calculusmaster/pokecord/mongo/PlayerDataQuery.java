@@ -46,7 +46,9 @@ public class PlayerDataQuery extends MongoQuery
                 .append("active_zcrystal", "")
                 .append("achievements", new JSONArray())
                 .append("gym_level", 1)
-                .append("gym_progress", new JSONArray());
+                .append("gym_progress", new JSONArray())
+                .append("pokepass_exp", 0)
+                .append("pokepass_tier", 0);
 
         Mongo.PlayerData.insertOne(data);
     }
