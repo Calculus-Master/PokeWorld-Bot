@@ -549,7 +549,7 @@ public class DuelHelper
             //Custom Uniques
             case RESHIRIUM_Z -> ZMove = new Move("White Hot Inferno", Type.FIRE, Category.SPECIAL, 200);
             case ZEKRIUM_Z -> ZMove = new Move("Supercharged Storm Surge", Type.ELECTRIC, Category.PHYSICAL, 200);
-            case KYUIRIUM_Z -> ZMove = new Move("Eternal Winter", Type.ICE, Category.SPECIAL, 180);
+            case KYURIUM_Z -> ZMove = new Move("Eternal Winter", Type.ICE, Category.SPECIAL, 180);
         }
 
         return ZMove;
