@@ -32,4 +32,10 @@ public class PokemonReward extends TierReward
     {
         return "";
     }
+
+    @Override
+    public String getTierDescription()
+    {
+        return "Pokemon Reward: Level " + this.level + " " + this.names.toString() + "!";
+    }
 }

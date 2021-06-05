@@ -18,4 +18,10 @@ public class RedeemReward extends TierReward
 
         return "You earned " + this.amount + " redeems!";
     }
+
+    @Override
+    public String getTierDescription()
+    {
+        return "Redeem Reward: **" + this.amount + "** Redeems!";
+    }
 }

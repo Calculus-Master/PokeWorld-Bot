@@ -19,4 +19,10 @@ public class ItemReward extends TierReward
 
         return "You got " + this.item.getStyledName() + "!";
     }
+
+    @Override
+    public String getTierDescription()
+    {
+        return "Item Reward: **" + this.item.getStyledName() + "**!";
+    }
 }

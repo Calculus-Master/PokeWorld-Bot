@@ -18,4 +18,10 @@ public class CreditReward extends TierReward
 
         return "You earned " + this.amount + " credits!";
     }
+
+    @Override
+    public String getTierDescription()
+    {
+        return "Credit Reward: **" + this.amount + "** credits!";
+    }
 }
