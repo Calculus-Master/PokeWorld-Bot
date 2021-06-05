@@ -220,4 +220,12 @@ public class ZMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 40);
     }
+
+    //Kyurem
+    public String EternalWinter(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.changeStatMultiplier(Stat.SPD, -2);
+
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FROZEN, 20) + " " + opponent.getName() + "'s Speed was lowered by 2 stages!";
+    }
 }

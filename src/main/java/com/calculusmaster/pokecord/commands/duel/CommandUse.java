@@ -145,6 +145,7 @@ public class CommandUse extends Command
                 //Custom Uniques
                 case RESHIRIUM_Z -> s.getName().equals("Reshiram") && move.getName().equals("Blue Flare");
                 case ZEKRIUM_Z -> s.getName().equals("Zekrom") && move.getName().equals("Bolt Strike");
+                case KYUIRIUM_Z -> s.getName().equals("Kyurem") && move.getName().equals("Glaciate");
             };
 
             if(move.getCategory().equals(Category.STATUS))
