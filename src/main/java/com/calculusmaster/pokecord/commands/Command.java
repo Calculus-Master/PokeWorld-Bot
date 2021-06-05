@@ -56,6 +56,7 @@ public abstract class Command
     public static final CommandHelp.HelpEntry GYMDUEL = new CommandHelp.HelpEntry("gymduel");
     public static final CommandHelp.HelpEntry ABILITYINFO = new CommandHelp.HelpEntry("abilityinfo");
     public static final CommandHelp.HelpEntry ACTIVATE = new CommandHelp.HelpEntry("activate");
+    public static final CommandHelp.HelpEntry POKEPASS = new CommandHelp.HelpEntry("pokepass");
 
     public static void init()
     {
@@ -267,6 +268,9 @@ public abstract class Command
 
         ACTIVATE.setCategory(CommandHelp.CommandCategory.POKEMON)
                 .addAliases();
+
+        POKEPASS.setCategory(MISC)
+                .addAliases("pass", "pp", "bp");
     }
 
     protected MessageReceivedEvent event;

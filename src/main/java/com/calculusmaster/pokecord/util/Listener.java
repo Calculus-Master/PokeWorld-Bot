@@ -6,10 +6,7 @@ import com.calculusmaster.pokecord.commands.config.CommandPrefix;
 import com.calculusmaster.pokecord.commands.config.CommandSpawnChannel;
 import com.calculusmaster.pokecord.commands.duel.*;
 import com.calculusmaster.pokecord.commands.economy.*;
-import com.calculusmaster.pokecord.commands.misc.CommandHelp;
-import com.calculusmaster.pokecord.commands.misc.CommandReport;
-import com.calculusmaster.pokecord.commands.misc.CommandStart;
-import com.calculusmaster.pokecord.commands.misc.CommandTrade;
+import com.calculusmaster.pokecord.commands.misc.*;
 import com.calculusmaster.pokecord.commands.moves.*;
 import com.calculusmaster.pokecord.commands.pokemon.*;
 import com.calculusmaster.pokecord.game.Pokemon;
@@ -223,6 +220,10 @@ public class Listener extends ListenerAdapter
             else if(Command.ACTIVATE.contains(msg[0]))
             {
                 c = new CommandActivate(event, msg).runCommand();
+            }
+            else if(Command.POKEPASS.contains(msg[0]))
+            {
+                c = new CommandPokePass(event, msg).runCommand();
             }
             else if(msg[0].equals("ness"))
             {
