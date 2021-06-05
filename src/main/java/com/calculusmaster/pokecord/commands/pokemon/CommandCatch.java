@@ -66,6 +66,13 @@ public class CommandCatch extends Command
 
                     this.event.getChannel().sendMessage(this.playerData.getMention() + ": You earned " + credits + " credits for reaching a Collection Milestone: **" + numCaught + "** " + caught.getName() + "!").queue();
                 }
+                else if(numCaught == 1)
+                {
+                    int credits = 150;
+                    this.playerData.changeCredits(credits);
+
+                    this.event.getChannel().sendMessage(this.playerData.getMention() + ": You earned " + credits + " credits for unlocking a Collection: " + caught.getName() + "!").queue();
+                }
             }
 
             if(caught.getTotalIVRounded() >= 90)
