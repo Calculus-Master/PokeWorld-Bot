@@ -151,4 +151,11 @@ public class SteelMoves
     {
         return Move.statChangeDamageMove(user, opponent, duel, move, Stat.ATK, 1, 20, true);
     }
+
+    public String KingsShield(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(user.getUUID()).kingsShieldUsed = true;
+
+        return user.getName() + " defended itself with its Shield!";
+    }
 }

@@ -383,6 +383,19 @@ public class Duel
             accurate = true;
         }
 
+        if(this.data(this.other).kingsShieldUsed)
+        {
+            this.data(this.other).kingsShieldUsed = false;
+
+            if(!move.getCategory().equals(Category.STATUS))
+            {
+                this.players[this.current].active.changeStatMultiplier(Stat.ATK, -2);
+                otherImmune = true;
+
+                turnResult += this.players[this.current].active.getName() + "'s Attack was lowered by 2 stages due to the King's Shield!";
+            }
+        }
+
         if(move.getName().equals("Fusion Bolt") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move != null && this.players[this.other].move.getName().equals("Fusion Flare")) move.setPower(move.getPower() * 2);
 
         if(move.getName().equals("Fusion Flare") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move != null && this.players[this.other].move.getName().equals("Fusion Bolt")) move.setPower(move.getPower() * 2);
