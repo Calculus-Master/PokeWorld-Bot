@@ -121,7 +121,7 @@ public class BugMoves
         int damage = move.getDamage(user, opponent);
         opponent.damage(damage);
 
-        if(damage > user.getHealth())
+        if(opponent.isFainted())
         {
             user.changeStatMultiplier(Stat.ATK, 3);
             return move.getDamageResult(opponent, damage) + " " + user.getName() + "'s Attack rose by 3 stages!";
