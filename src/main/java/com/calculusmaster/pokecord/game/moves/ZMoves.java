@@ -265,4 +265,10 @@ public class ZMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    //Ultra Necrozma (Prismatic Laser)
+    public String PrismaticLightBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

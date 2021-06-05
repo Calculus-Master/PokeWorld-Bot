@@ -144,7 +144,7 @@ public class CommandUse extends Command
                 case SNORLIUM_Z -> s.getName().equals("Snorlax") && move.getName().equals("Giga Impact");
                 case SOLGANIUM_Z -> (s.getName().equals("Solgaleo") || s.getName().equals("Dusk Mane Necrozma")) && move.getName().equals("Sunsteel Strike");
                 case TAPUNIUM_Z -> s.getName().contains("Tapu") && move.getName().equals("Natures Madness");
-                case ULTRANECROZIUM_Z -> s.getName().equals("Ultra Necrozma") && move.getName().equals("Photon Geyser");
+                case ULTRANECROZIUM_Z -> s.getName().equals("Ultra Necrozma") && (move.getName().equals("Photon Geyser") || move.getName().equals("Prismatic Laser"));
                 //Custom Uniques
                 case RESHIRIUM_Z -> s.getName().equals("Reshiram") && move.getName().equals("Blue Flare");
                 case ZEKRIUM_Z -> s.getName().equals("Zekrom") && move.getName().equals("Bolt Strike");
