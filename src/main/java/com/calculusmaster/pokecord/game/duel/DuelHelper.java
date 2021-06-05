@@ -546,6 +546,9 @@ public class DuelHelper
             case SOLGANIUM_Z -> ZMove = new Move("Searing Sunraze Smash", Type.STEEL, Category.PHYSICAL, 200);
             case TAPUNIUM_Z -> ZMove = new Move("Guardian of Alola", Type.FAIRY, Category.SPECIAL, 0);
             case ULTRANECROZIUM_Z -> ZMove = new Move("Light That Burns The Sky", Type.PSYCHIC, Category.SPECIAL, 200);
+            //Custom Uniques
+            case RESHIRIUM_Z -> ZMove = new Move("White Hot Inferno", Type.FIRE, Category.SPECIAL, 200);
+            case ZEKRIUM_Z -> ZMove = new Move("Supercharged Bolt Strike", Type.ELECTRIC, Category.PHYSICAL, 200);
         }
 
         return ZMove;

@@ -206,4 +206,18 @@ public class ZMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    //Custom
+
+    //Reshiram
+    public String WhiteHotInferno(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 40);
+    }
+
+    //Zekrom
+    public String SuperchargedBoltStrike(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 40);
+    }
 }
