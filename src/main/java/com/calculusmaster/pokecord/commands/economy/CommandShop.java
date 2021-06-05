@@ -184,9 +184,9 @@ public class CommandShop extends Command
         {
             item = PokeItem.values()[new Random().nextInt(PokeItem.values().length)];
 
-            if(item.equals(PokeItem.NONE)) i--;
+            if(item.equals(PokeItem.NONE) || item.nonPokemon) i--;
 
-            if(!entriesItem.contains(item) && !item.equals(PokeItem.NONE))
+            if(!entriesItem.contains(item) && !item.equals(PokeItem.NONE) && !item.nonPokemon)
             {
                 entriesItem.add(item);
                 itemPrices.add(item.cost + (new Random().nextInt(item.cost / 2) * (new Random().nextInt(2) == 1 ? 1 : -1)));
