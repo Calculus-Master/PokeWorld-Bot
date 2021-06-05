@@ -77,7 +77,7 @@ public enum PokeItem
 
     public String getName()
     {
-        return Global.normalCase(this.toString());
+        return this.toString();
     }
 
     public String getStyledName()

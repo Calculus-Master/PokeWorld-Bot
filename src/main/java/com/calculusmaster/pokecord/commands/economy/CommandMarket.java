@@ -290,6 +290,8 @@ public class CommandMarket extends Command
 
         private String getEntryLine()
         {
+            if(this.pokemon == null) return "ERROR";
+
             return "ID: " + this.marketID + " | Level " + this.pokemon.getLevel() + " " + this.pokemon.getName() + " | Price: " + this.price + " | Total IV: " + this.pokemon.getTotalIV();
         }
 
