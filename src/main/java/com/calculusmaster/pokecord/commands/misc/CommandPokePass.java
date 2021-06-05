@@ -26,7 +26,7 @@ public class CommandPokePass extends Command
         {
             sb.append("**Tier ").append(i).append("**: ");
 
-            if(!PokePass.tierExists(i)) sb.append("No Reward! Tier has not been added yet!");
+            if(!PokePass.tierExists(i)) sb.append("No Reward! Tier has not been added yet!\n");
             else sb.append(PokePass.getTierDescription(i)).append("\n");
         }
 

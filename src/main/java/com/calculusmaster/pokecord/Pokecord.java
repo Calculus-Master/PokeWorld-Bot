@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.commands.economy.CommandMarket;
 import com.calculusmaster.pokecord.commands.moves.CommandAbilityInfo;
 import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.game.Move;
+import com.calculusmaster.pokecord.game.PokePass;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.elements.GymLeader;
 import com.calculusmaster.pokecord.game.duel.elements.Trainer;
@@ -55,6 +56,8 @@ public class Pokecord
         Command.init();
         Global.logInfo(Pokecord.class, "main", "Starting Gym Leader Init!");
         GymLeader.init();
+        Global.logInfo(Pokecord.class, "main", "Starting PokePass Init!");
+        PokePass.init();
         Global.logInfo(Pokecord.class, "main", "Starting Market Init!");
         CommandMarket.init();
         Global.logInfo(Pokecord.class, "main", "Starting CommandPokemon Init!");
