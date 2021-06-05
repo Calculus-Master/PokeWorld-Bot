@@ -257,4 +257,12 @@ public class ZMoves
     {
         return Move.statChangeDamageMove(user, opponent, duel, move, Stat.DEF, 3, 50, true);
     }
+
+    //Rayquaza and Mega Rayquaza
+    public String DraconicOzoneAscent(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(user.getName().contains("Mega") && (opponent.getName().contains("Kyogre") || opponent.getName().contains("Groudon"))) move.setPower(move.getPower() * 1.25);
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

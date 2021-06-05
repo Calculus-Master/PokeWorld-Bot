@@ -554,6 +554,7 @@ public class DuelHelper
             case YVELTIUM_Z -> ZMove = new Move("Cocoon Of Destruction", Type.DARK, Category.SPECIAL, 185);
             case DIANCIUM_Z -> ZMove = new Move("Dazzling Diamond Barrage", Type.ROCK, Category.PHYSICAL, 180);
             case ARCEIUM_Z -> ZMove = new Move("Decree Of Arceus", Type.NORMAL, Category.PHYSICAL, 260);
+            case RAYQUAZIUM_Z -> ZMove = new Move("Draconic Ozone Ascent", Type.DRAGON, Category.PHYSICAL, 200);
         }
 
         return ZMove;
