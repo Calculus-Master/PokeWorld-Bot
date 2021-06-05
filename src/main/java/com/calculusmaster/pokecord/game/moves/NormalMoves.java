@@ -162,8 +162,9 @@ public class NormalMoves
 
     public String Protect(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        //TODO: Protect!
-        return move.getNotImplementedResult();
+        duel.data(user.getUUID()).protectUsed = true;
+
+        return user.getName() + " is now protected!";
     }
 
     public String SkullBash(Pokemon user, Pokemon opponent, Duel duel, Move move)

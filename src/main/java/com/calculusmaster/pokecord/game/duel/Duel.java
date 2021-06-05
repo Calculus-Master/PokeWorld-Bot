@@ -332,7 +332,14 @@ public class Duel
         {
             this.data(this.other).detectUsed = false;
 
-            otherImmune = !move.getName().equals("Hyperspace Fury") && !move.getName().equals("Hyperspace Hole");
+            otherImmune = true;
+        }
+
+        if(this.data(this.other).protectUsed)
+        {
+            this.data(this.other).protectUsed = false;
+
+            otherImmune = true;
         }
 
         if(this.data(this.current).chargeUsed)
@@ -444,6 +451,13 @@ public class Duel
 
         //Raised Immunity
         if(this.data(this.other).isRaised && move.getType().equals(Type.GROUND)) otherImmune = true;
+
+        //Hyperspace Fury and Hyperspace Hole bypass immunities and always hit
+        if(move.getName().equals("Hyperspace Fury") || move.getName().equals("Hyperspace Hole"))
+        {
+            accurate = true;
+            otherImmune = false;
+        }
 
         //Ability: Disguise (Mimikyu)
         if(this.players[this.other].active.getAbilities().contains("Disguise") && !this.data(this.other).disguiseActivated && !move.getCategory().equals(Category.STATUS))

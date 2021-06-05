@@ -59,6 +59,7 @@ public class DuelHelper
         public int magnetRiseTurns;
         public int tauntTurns;
         public boolean detectUsed;
+        public boolean protectUsed;
         public boolean chargeUsed;
         public boolean futureSightUsed;
         public int futureSightTurns;
@@ -102,6 +103,7 @@ public class DuelHelper
             this.magnetRiseTurns = 0;
             this.tauntTurns = 0;
             this.detectUsed = false;
+            this.protectUsed = false;
             this.chargeUsed = false;
             this.futureSightUsed = false;
             this.futureSightTurns = 0;
