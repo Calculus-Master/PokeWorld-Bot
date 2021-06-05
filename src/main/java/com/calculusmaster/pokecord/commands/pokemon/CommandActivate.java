@@ -7,6 +7,8 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.util.Random;
+
 public class CommandActivate extends Command
 {
     public CommandActivate(MessageReceivedEvent event, String[] msg)
@@ -69,8 +71,10 @@ public class CommandActivate extends Command
                     int initialFrom = s.getEVs().get(from);
                     int initialTo = s.getEVs().get(to);
 
-                    s.addEV(to, s.getEVs().get(from));
-                    s.addEV(from, -1 * s.getEVs().get(from));
+                    int transferEVs = (int)((new Random().nextInt(100) < 20 ? (new Random().nextInt(26) + 75) / 100D : 1D) * s.getEVs().get(from));
+
+                    s.addEV(to, transferEVs);
+                    s.addEV(from, -1 * transferEVs);
 
                     //Leftovers
                     s.addEV(from, initialFrom - (s.getEVs().get(to) - initialTo));
