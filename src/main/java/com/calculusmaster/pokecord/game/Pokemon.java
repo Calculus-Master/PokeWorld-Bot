@@ -832,27 +832,19 @@ public class Pokemon
         return this.genericJSON.getJSONArray("forms").length() > 0;
     }
 
-    private List<String> getListStringFromJSONArray(String key)
-    {
-        List<String> list = new ArrayList<>();
-        for(int i = 0; i < this.genericJSON.getJSONArray(key).length(); i++) list.add(this.genericJSON.getJSONArray(key).getString(i));
-        return list;
-    }
-
     public List<String> getMegaList()
     {
-        return this.getListStringFromJSONArray("mega");
+        return this.genericJSON.getJSONArray("mega").toList().stream().map(s -> (String)s).collect(Collectors.toList());
     }
 
     public List<String> getFormsList()
     {
-        return this.getListStringFromJSONArray("forms");
+        return this.genericJSON.getJSONArray("forms").toList().stream().map(s -> (String)s).collect(Collectors.toList());
     }
 
     public void changeForm(String form)
     {
         form = Global.normalCase(form);
-        System.out.println(this.getName() + " is being transformed into " + form);
         this.linkGenericJSON(form);
         Pokemon.updateName(this, form);
     }
