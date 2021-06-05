@@ -172,8 +172,8 @@ public class CommandShop extends Command
             else entriesTR.add(newTREntry());
         }
 
-        currentTMPrice = 4000 + new Random().nextInt(5000);
-        currentTRPrice = 4000 + new Random().nextInt(5000);
+        currentTMPrice = 3000 + new Random().nextInt(4000);
+        currentTRPrice = 3000 + new Random().nextInt(4000);
 
         //Items
         int num = new Random().nextInt(8) + 6;
@@ -204,7 +204,7 @@ public class CommandShop extends Command
             else entriesZCrystal.add(z);
         }
 
-        priceZCrystal = (int)(50000 * (Math.random() * 3 + 1));
+        priceZCrystal = (int)(15000 * (Math.random() * 3 + 1));
     }
 
     private void page_nature()

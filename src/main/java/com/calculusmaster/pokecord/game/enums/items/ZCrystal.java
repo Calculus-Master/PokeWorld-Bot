@@ -44,6 +44,7 @@ public enum ZCrystal
     SOLGANIUM_Z,
     TAPUNIUM_Z,
     ULTRANECROZIUM_Z,
+    //Custom Z-Crystals
     RESHIRIUM_Z,
     ZEKRIUM_Z,
     KYURIUM_Z,
