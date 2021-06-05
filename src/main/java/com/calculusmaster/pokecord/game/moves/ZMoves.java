@@ -216,7 +216,7 @@ public class ZMoves
     }
 
     //Zekrom
-    public String SuperchargedBoltStrike(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    public String SuperchargedStormSurge(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 40);
     }
