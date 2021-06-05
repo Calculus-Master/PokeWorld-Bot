@@ -565,6 +565,7 @@ public class DuelHelper
                 case "Thousand Waves" -> new Move("Million Wave Tsunami", Type.GROUND, Category.PHYSICAL, 190);
                 default -> new Move("Tackle");
             };
+            case VOLCANIUM_Z -> ZMove = new Move("Volcanic Steam Geyser", Type.WATER, Category.SPECIAL, 195);
         }
 
         return ZMove;

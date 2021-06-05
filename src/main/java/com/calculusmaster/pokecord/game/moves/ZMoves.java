@@ -1,10 +1,12 @@
 package com.calculusmaster.pokecord.game.moves;
 
+import com.calculusmaster.pokecord.game.TypeEffectiveness;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 
 public class ZMoves
 {
@@ -293,5 +295,18 @@ public class ZMoves
     public String MillionWaveTsunami(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    //Volcanion
+    public String VolcanicSteamGeyser(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        move.setType(Type.FIRE);
+        int fireDamage = move.getDamage(user, opponent);
+        move.setType(Type.WATER);
+        int waterDamage = move.getDamage(user, opponent);
+
+        move.setType(fireDamage > waterDamage ? Type.FIRE : Type.WATER);
+
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 60);
     }
 }
