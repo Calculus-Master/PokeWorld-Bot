@@ -251,4 +251,10 @@ public class ZMoves
 
         return move.getDamageResult(opponent, damage) + " " + user.getName() + " recovered " + damage + " HP!";
     }
+
+    //Diancie and Mega Diancie
+    public String DazzlingDiamondBarrage(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.DEF, 3, 50, true);
+    }
 }
