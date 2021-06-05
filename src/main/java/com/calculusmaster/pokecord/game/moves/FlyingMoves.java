@@ -121,7 +121,7 @@ public class FlyingMoves
         }
     }
 
-    public String RazorLeaf(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    public String BraveBird(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
         opponent.damage(damage);

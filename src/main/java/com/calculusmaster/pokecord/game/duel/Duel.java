@@ -392,7 +392,7 @@ public class Duel
                 this.players[this.current].active.changeStatMultiplier(Stat.ATK, -2);
                 otherImmune = true;
 
-                turnResult += this.players[this.current].active.getName() + "'s Attack was lowered by 2 stages due to the King's Shield!";
+                turnResult += this.players[this.current].active.getName() + "'s Attack was lowered by 2 stages due to the King's Shield!\n";
             }
         }
 
