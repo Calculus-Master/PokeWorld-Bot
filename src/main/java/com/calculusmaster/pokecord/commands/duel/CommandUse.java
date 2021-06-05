@@ -14,6 +14,9 @@ import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class CommandUse extends Command
 {
     public CommandUse(MessageReceivedEvent event, String[] msg)
@@ -146,9 +149,13 @@ public class CommandUse extends Command
                 case RESHIRIUM_Z -> s.getName().equals("Reshiram") && move.getName().equals("Blue Flare");
                 case ZEKRIUM_Z -> s.getName().equals("Zekrom") && move.getName().equals("Bolt Strike");
                 case KYURIUM_Z -> s.getName().equals("Kyurem") && move.getName().equals("Glaciate");
+                case XERNIUM_Z -> s.getName().equals("Xerneas") && move.getName().equals("Geomancy");
+                case YVELTIUM_Z -> s.getName().equals("Yveltal") && move.getName().equals("Oblivion Wing");
             };
 
-            if(move.getCategory().equals(Category.STATUS))
+            List<String> statusBaseMoves = Arrays.asList("Geomancy");
+
+            if(!statusBaseMoves.contains(move.getName()) && move.getCategory().equals(Category.STATUS))
             {
                 this.event.getChannel().sendMessage(mention + "Status Z-Moves are not implemented!").queue();
                 this.embed = null;

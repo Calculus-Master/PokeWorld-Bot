@@ -46,7 +46,9 @@ public enum ZCrystal
     ULTRANECROZIUM_Z,
     RESHIRIUM_Z,
     ZEKRIUM_Z,
-    KYURIUM_Z;
+    KYURIUM_Z,
+    XERNIUM_Z,
+    YVELTIUM_Z;
 
     public String getStyledName()
     {

@@ -228,4 +228,27 @@ public class ZMoves
 
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FROZEN, 20) + " " + opponent.getName() + "'s Speed was lowered by 2 stages!";
     }
+
+    //Xerneas
+    public String TreeOfLife(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.changeStatMultiplier(Stat.SPATK, 2);
+        user.changeStatMultiplier(Stat.SPDEF, 2);
+        user.changeStatMultiplier(Stat.SPD, 2);
+
+        int amount = user.getHealth() * 3 / 4;
+        user.heal(amount);
+
+        return user.getName() + "'s Special Attack, Special Defense and Speed rose by 2 stages! " + user.getName() + " healed for " + amount + " HP!";
+    }
+
+    //Yveltal
+    public String CocoonOfDestruction(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        opponent.damage(damage);
+        user.heal(damage);
+
+        return move.getDamageResult(opponent, damage) + " " + user.getName() + " recovered " + damage + " HP!";
+    }
 }

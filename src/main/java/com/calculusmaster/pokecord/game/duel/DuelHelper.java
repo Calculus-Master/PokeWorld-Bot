@@ -550,6 +550,8 @@ public class DuelHelper
             case RESHIRIUM_Z -> ZMove = new Move("White Hot Inferno", Type.FIRE, Category.SPECIAL, 200);
             case ZEKRIUM_Z -> ZMove = new Move("Supercharged Storm Surge", Type.ELECTRIC, Category.PHYSICAL, 200);
             case KYURIUM_Z -> ZMove = new Move("Eternal Winter", Type.ICE, Category.SPECIAL, 180);
+            case XERNIUM_Z -> ZMove = new Move("Tree of Life", Type.FAIRY, Category.STATUS, 0);
+            case YVELTIUM_Z -> ZMove = new Move("Cocoon of Destruction", Type.DARK, Category.SPECIAL, 185);
         }
 
         return ZMove;
