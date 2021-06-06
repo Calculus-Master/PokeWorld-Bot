@@ -91,7 +91,7 @@ public class CommandCatch extends Command
             Achievements.grant(this.player.getId(), Achievements.CAUGHT_FIRST_POKEMON, this.event);
 
             this.embed = null;
-            this.event.getChannel().sendMessage("<@" + this.player.getId() + ">: You caught a **Level " + caught.getLevel() + " " + caught.getName() + "** (Caught: " + (Math.max(numCaught - 1, 0)) + ")!").queue();
+            this.event.getChannel().sendMessage("<@" + this.player.getId() + ">: You caught a **Level " + caught.getLevel() + " " + caught.getName() + "** (Caught: " + numCaught + ")!").queue();
 
             SpawnEventHandler.clearSpawn(this.server.getId());
         }
