@@ -12,6 +12,7 @@ import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.bson.Document;
 
+import javax.sound.sampled.EnumControl;
 import java.util.Random;
 
 public class CommandCatch extends Command
@@ -55,13 +56,14 @@ public class CommandCatch extends Command
             Pokemon.uploadPokemon(caught);
             this.playerData.addPokemon(caught.getUUID());
 
+            int numCaught = 0;
             if(!CommandDex.isForm(caught.getName()))
             {
                 Mongo.DexData.updateOne(Filters.eq("name", caught.getName()), Updates.inc(this.player.getId(), 1));
 
                 Document d = Mongo.DexData.find(Filters.eq("name", caught.getName())).first();
 
-                int numCaught = d != null && d.containsKey(this.playerData.getID()) ? d.getInteger(this.playerData.getID()) : 1;
+                numCaught = d != null && d.containsKey(this.playerData.getID()) ? d.getInteger(this.playerData.getID()) : 1;
 
                 if(numCaught % 5 == 0)
                 {
@@ -89,7 +91,7 @@ public class CommandCatch extends Command
             Achievements.grant(this.player.getId(), Achievements.CAUGHT_FIRST_POKEMON, this.event);
 
             this.embed = null;
-            this.event.getChannel().sendMessage("<@" + this.player.getId() + ">: You caught a **Level " + caught.getLevel() + " " + caught.getName() + "**!").queue();
+            this.event.getChannel().sendMessage("<@" + this.player.getId() + ">: You caught a **Level " + caught.getLevel() + " " + caught.getName() + "** (Caught: " + (numCaught - 1) + ")!").queue();
 
             SpawnEventHandler.clearSpawn(this.server.getId());
         }
