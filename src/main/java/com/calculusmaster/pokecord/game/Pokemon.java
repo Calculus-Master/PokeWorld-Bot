@@ -605,11 +605,6 @@ public class Pokemon
         return image.equals("") ? Pokemon.getWIPImage() : image;
     }
 
-    public URL getURL() throws MalformedURLException
-    {
-        return new URL(this.getImage());
-    }
-
     public static String getWIPImage()
     {
         return "http://clipart-library.com/img/1657818.png";

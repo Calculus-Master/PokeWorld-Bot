@@ -1165,7 +1165,7 @@ public class Duel
         return new ByteArrayInputStream(bytes);
     }
 
-    private String getPokemonURL(int player) throws MalformedURLException
+    private String getPokemonURL(int player)
     {
         Pokemon p = this.players[player].active;
         Move m = this.players[player].move;
