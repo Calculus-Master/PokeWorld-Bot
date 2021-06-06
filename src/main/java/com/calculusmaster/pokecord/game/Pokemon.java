@@ -164,6 +164,7 @@ public class Pokemon
         p.setNumber(num + 1);
 
         p.setIVs(d.getString("ivs"));
+        p.setType();
 
         return p;
     }
