@@ -86,7 +86,7 @@ public class CommandBuy extends Command
             for(int i = 2; i < this.msg.length; i++) formBuilder.append(this.msg[i]).append(" ");
             String form = Global.normalCase(formBuilder.toString().trim());
 
-            if(selected.hasForms() && this.playerData.getCredits() >= CommandBuy.COST_FORM && selected.getFormsList().contains(form))
+            if(!selected.getName().contains("Aegislash") && selected.hasForms() && this.playerData.getCredits() >= CommandBuy.COST_FORM && selected.getFormsList().contains(form))
             {
                 this.embed.setDescription(selected.getName() + " transformed into " + form);
                 selected.changeForm(form);

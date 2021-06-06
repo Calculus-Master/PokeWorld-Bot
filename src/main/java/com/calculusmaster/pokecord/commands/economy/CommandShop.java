@@ -110,7 +110,12 @@ public class CommandShop extends Command
 
         this.page.append("Forms: \n\n").append("Selected Pokemon: ").append(selected.getName()).append("\n\n");
 
-        for(int i = 0; i < selected.getGenericJSON().getJSONArray("forms").length(); i++) this.page.append(selected.getGenericJSON().getJSONArray("forms").getString(i)).append("\n");
+        if(!selected.getName().contains("Aegislash"))
+        {
+            for(int i = 0; i < selected.getGenericJSON().getJSONArray("forms").length(); i++) this.page.append(selected.getGenericJSON().getJSONArray("forms").getString(i)).append("\n");
+        }
+        else this.page.append("Aegislash Forms automatically change during a duel! They are not purchasable separately!");
+
         if(!selected.hasForms()) this.page.append(selected.getName()).append(" has no forms.");
 
         this.page.append("\nBuy forms with p!buy form <form> where <form> is the name of the form. All forms cost " + CommandBuy.COST_FORM + "c.");
