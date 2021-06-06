@@ -190,7 +190,7 @@ public abstract class Command
 
         INVENTORY.setCategory(ECONOMY)
                 .addShortDescription("View your inventory!")
-                .addAliases("items", "tms", "trs");
+                .addAliases("inv", "items", "tms", "trs");
 
         HELP.setCategory(MISC)
                 .addShortDescription("View all possible commands and what they do!")
