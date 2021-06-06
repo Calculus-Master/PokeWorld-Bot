@@ -22,6 +22,7 @@ public class CommandActivate extends Command
         if(this.msg.length == 1)
         {
             this.embed.setDescription("Specify the item you want to activate! Use p!inventory to check what items you have.");
+            return this;
         }
         else if(!isNumeric(1) || this.playerData.getItemList().size() <= (Integer.parseInt(this.msg[1]) - 1))
         {
@@ -79,7 +80,11 @@ public class CommandActivate extends Command
                     //Leftovers
                     s.addEV(from, initialFrom - (s.getEVs().get(to) - initialTo));
 
+                    Pokemon.updateEVs(s);
+
                     this.playerData.removeItem(PokeItem.EV_REALLOCATOR.getName());
+
+                    this.embed.setDescription("Transferred " + transferEVs + " " + from.toString() + " EVs to " + s.getName() + "'s " + to.toString() + "!");
                 }
                 else
                 {
