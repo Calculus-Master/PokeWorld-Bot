@@ -49,6 +49,7 @@ public class Duel
     public int terrainTurns;
     public Room room;
     public int roomTurns;
+    public EntryHazardHandler[] entryHazards;
 
     public static Duel create(String player1ID, String player2ID, int size, MessageReceivedEvent event)
     {
@@ -580,6 +581,7 @@ public class Duel
         this.weather = Weather.CLEAR;
         this.terrain = Terrain.NORMAL_TERRAIN;
         this.room = Room.NORMAL_ROOM;
+        this.entryHazards = new EntryHazardHandler[]{new EntryHazardHandler(), new EntryHazardHandler()};
     }
 
     public void updateWeatherTerrainRoom()
@@ -853,9 +855,9 @@ public class Duel
         String hazardResults = "";
         String name = this.players[player].active.getName();
 
-        if(this.data(player).entryHazards.hasHazard(EntryHazard.SPIKES) && !this.data(player).isRaised)
+        if(this.entryHazards[player].hasHazard(EntryHazard.SPIKES) && !this.data(player).isRaised)
         {
-            int damage = (int)(this.players[player].active.getStat(Stat.HP) * switch(this.data(player).entryHazards.getHazard(EntryHazard.SPIKES)) {
+            int damage = (int)(this.players[player].active.getStat(Stat.HP) * switch(this.entryHazards[player].getHazard(EntryHazard.SPIKES)) {
                 case 1 -> 1 / 8D;
                 case 2 -> 1 / 6D;
                 case 3 -> 1 / 4D;
@@ -871,7 +873,7 @@ public class Duel
             hazardResults += "Spikes does not affect " + name;
         }
 
-        if(this.data(player).entryHazards.hasHazard(EntryHazard.STEALTH_ROCK))
+        if(this.entryHazards[player].hasHazard(EntryHazard.STEALTH_ROCK))
         {
             double rockEffective = TypeEffectiveness.getCombinedMap(this.players[player].active.getType()[0], this.players[player].active.getType()[1]).get(Type.ROCK);
             double damagePercent = 0.125 * rockEffective;
@@ -883,7 +885,7 @@ public class Duel
             hazardResults += "Stealth Rock dealt " + " damage to " + name + "!\n";
         }
 
-        if(this.data(player).entryHazards.hasHazard(EntryHazard.STICKY_WEB) && !this.data(player).isRaised)
+        if(this.entryHazards[player].hasHazard(EntryHazard.STICKY_WEB) && !this.data(player).isRaised)
         {
             this.players[player].active.changeStatMultiplier(Stat.SPD, -1);
 
@@ -894,9 +896,9 @@ public class Duel
             hazardResults += "Sticky Web does not affect " + name;
         }
 
-        if(this.data(player).entryHazards.hasHazard(EntryHazard.TOXIC_SPIKES) && !this.data(player).isRaised)
+        if(this.entryHazards[player].hasHazard(EntryHazard.TOXIC_SPIKES) && !this.data(player).isRaised)
         {
-            int level = this.data(player).entryHazards.getHazard(EntryHazard.TOXIC_SPIKES);
+            int level = this.entryHazards[player].getHazard(EntryHazard.TOXIC_SPIKES);
             this.players[player].active.addStatusCondition(level == 1 ? StatusCondition.POISONED : StatusCondition.BADLY_POISONED);
 
             if(level > 1) this.data(player).badlyPoisonedTurns++;
@@ -1122,6 +1124,11 @@ public class Duel
     public DuelPokemon data(int player)
     {
         return this.data(this.players[player].active.getUUID());
+    }
+
+    public EntryHazardHandler hazardData(String UUID)
+    {
+        return this.entryHazards[this.players[0].active.getUUID().equals(UUID) ? 0 : 1];
     }
 
     public Player getWinner()

@@ -38,7 +38,7 @@ public class PoisonMoves
 
     public String ToxicSpikes(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.data(opponent.getUUID()).entryHazards.addHazard(DuelHelper.EntryHazard.TOXIC_SPIKES);
+        duel.hazardData(opponent.getUUID()).addHazard(DuelHelper.EntryHazard.TOXIC_SPIKES);
         return user.getName() + " laid a Toxic Spikes trap!";
     }
 

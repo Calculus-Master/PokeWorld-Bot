@@ -45,8 +45,6 @@ public class DuelHelper
         public int boundTurns;
         public int badlyPoisonedTurns;
 
-        public EntryHazardHandler entryHazards;
-
         public boolean flyUsed;
         public boolean bounceUsed;
         public boolean digUsed;
@@ -89,8 +87,6 @@ public class DuelHelper
             this.asleepTurns = 0;
             this.boundTurns = 0;
             this.badlyPoisonedTurns = 0;
-
-            this.entryHazards = new EntryHazardHandler();
 
             this.flyUsed = false;
             this.bounceUsed = false;

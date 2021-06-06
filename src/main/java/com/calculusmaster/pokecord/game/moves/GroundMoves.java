@@ -105,7 +105,7 @@ public class GroundMoves
 
     public String Spikes(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.data(opponent.getUUID()).entryHazards.addHazard(DuelHelper.EntryHazard.SPIKES);
+        duel.hazardData(opponent.getUUID()).addHazard(DuelHelper.EntryHazard.SPIKES);
         return user.getName() + " laid a Spikes trap!";
     }
 }

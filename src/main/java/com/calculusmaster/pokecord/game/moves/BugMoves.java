@@ -141,7 +141,7 @@ public class BugMoves
 
     public String StickyWeb(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.data(opponent.getUUID()).entryHazards.addHazard(DuelHelper.EntryHazard.STICKY_WEB);
+        duel.hazardData(opponent.getUUID()).addHazard(DuelHelper.EntryHazard.STICKY_WEB);
         return user.getName() + " laid a Sticky Web trap!";
     }
 }

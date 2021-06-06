@@ -96,7 +96,7 @@ public class RockMoves
 
     public String StealthRock(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.data(opponent.getUUID()).entryHazards.addHazard(DuelHelper.EntryHazard.STEALTH_ROCK);
+        duel.hazardData(opponent.getUUID()).addHazard(DuelHelper.EntryHazard.STEALTH_ROCK);
         return user.getName() + " laid a Stealth Rock trap!";
     }
 
