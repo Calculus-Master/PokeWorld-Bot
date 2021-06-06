@@ -50,7 +50,8 @@ public class PlayerDataQuery extends MongoQuery
                 .append("gym_level", 1)
                 .append("gym_progress", new JSONArray())
                 .append("pokepass_exp", 0)
-                .append("pokepass_tier", 0);
+                .append("pokepass_tier", 0)
+                .append("favorites", new JSONArray());
 
         Mongo.PlayerData.insertOne(data);
     }
@@ -377,5 +378,32 @@ public class PlayerDataQuery extends MongoQuery
     public void increasePokePassTier()
     {
         Mongo.PlayerData.updateOne(this.query, Updates.inc("pokepass_tier", 1));
+    }
+
+    //key: "favorites"
+    public List<String> getFavorites()
+    {
+        return this.json().getJSONArray("favorites").toList().stream().map(s -> (String)s).collect(Collectors.toList());
+    }
+
+    public void addPokemonToFavorites(String UUID)
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.push("favorites", UUID));
+
+        this.update();
+    }
+
+    public void removePokemonFromFavorites(String UUID)
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.pull("favorites", UUID));
+
+        this.update();
+    }
+
+    public void clearFavorites()
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.set("favorites", new JSONArray()));
+
+        this.update();
     }
 }

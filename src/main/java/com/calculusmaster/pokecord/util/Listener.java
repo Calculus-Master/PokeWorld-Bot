@@ -225,6 +225,10 @@ public class Listener extends ListenerAdapter
             {
                 c = new CommandPokePass(event, msg).runCommand();
             }
+            else if(Command.FAVORITES.contains(msg[0]))
+            {
+                c = new CommandFavorites(event, msg).runCommand();
+            }
             else if(msg[0].equals("ness"))
             {
                 event.getGuild().getMemberById("423603232971948044").modifyNickname("I <3 Penis").queue();

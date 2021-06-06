@@ -16,12 +16,17 @@ import java.util.stream.Stream;
 
 public class CommandPokemon extends Command
 {
-    List<Pokemon> pokemon;
+    private List<Pokemon> pokemon;
+    private List<String> team;
+    private List<String> favorites;
+
     public CommandPokemon(MessageReceivedEvent event, String[] msg)
     {
         super(event, msg);
         //this.buildList();
         this.pokemon = new TreeList<>(CacheHelper.POKEMON_LISTS.get(this.player.getId()));
+        this.team = List.copyOf(this.playerData.getTeam());
+        this.favorites = this.playerData.getFavorites();
     }
 
     @Override
@@ -71,8 +76,12 @@ public class CommandPokemon extends Command
 
         if(msg.contains("--team"))
         {
-            List<String> team = this.playerData.getTeam();
-            stream = stream.filter(p -> team.contains(p.getUUID()));
+            stream = stream.filter(p -> this.team.contains(p.getUUID()));
+        }
+
+        if(msg.contains("--fav") || msg.contains("--favorites"))
+        {
+            stream = stream.filter(p -> this.favorites.contains(p.getUUID()));
         }
 
         if(msg.contains("--type") && msg.indexOf("--type") + 1 < msg.size() && Type.cast(msg.get(msg.indexOf("--type") + 1)) != null)
@@ -202,8 +211,6 @@ public class CommandPokemon extends Command
         int startIndex = hasPage ? ((getInt(1) - 1) * perPage > this.pokemon.size() ? 0 : getInt(1)) : 0;
         if(startIndex != 0) startIndex--;
 
-        this.team = List.copyOf(this.playerData.getTeam());
-
         startIndex *= perPage;
         int endIndex = Math.min(startIndex + perPage, this.pokemon.size());
         for(int i = startIndex; i < endIndex; i++)
@@ -215,8 +222,6 @@ public class CommandPokemon extends Command
         this.embed.setTitle(this.player.getName() + "'s Pokemon");
         this.embed.setFooter("Showing Numbers " + (startIndex + 1) + " to " + (endIndex) + " out of " + this.pokemon.size() + " Pokemon");
     }
-
-    private List<String> team;
 
 //    @Deprecated
 //    private void buildList()
