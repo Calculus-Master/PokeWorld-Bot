@@ -32,6 +32,8 @@ public class CommandTeam extends Command
         boolean remove = this.msg.length == 3 && this.msg[1].equals("remove") && isNumeric(2);
         //p!team swap index index
         boolean swap = this.msg.length == 4 && this.msg[1].equals("swap") && isNumeric(2) && isNumeric(3);
+        //p!team clear
+        boolean clear = this.msg.length == 2 && this.msg[1].equals("clear");
 
         if(set || add)
         {
@@ -92,6 +94,14 @@ public class CommandTeam extends Command
             this.playerData.swapPokemonInTeam(fromIndex, toIndex);
 
             this.embed.setDescription("Swapped pokemon number " + fromIndex + " and " + toIndex + " in your team!");
+        }
+        else if(clear)
+        {
+            this.playerData.clearTeam();
+
+            this.event.getChannel().sendMessage(this.playerData.getMention() + ": Your team was successfully cleared!").queue();
+            this.embed = null;
+            return this;
         }
         else
         {
