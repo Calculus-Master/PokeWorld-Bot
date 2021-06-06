@@ -106,6 +106,7 @@ public class SpawnEventHandler
             e.printStackTrace();
         }
 
+        System.out.println("Spawn Event in " + g.getId() + ": " + spawn + " Shiny: " + shiny);
         SERVER_SPAWNS.put(g.getId(), (shiny ? "Shiny " : "") + spawn);
     }
 }
