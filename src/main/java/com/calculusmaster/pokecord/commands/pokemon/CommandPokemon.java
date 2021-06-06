@@ -136,9 +136,9 @@ public class CommandPokemon extends Command
         if(msg.contains("--order") && msg.indexOf("--order") + 1 < msg.size())
         {
             String order = msg.get(msg.indexOf("--order") + 1);
-            boolean desc = msg.indexOf("--order") + 2 < msg.size() && msg.get(msg.indexOf("--order") + 2).equals("d");
+            boolean asc = msg.indexOf("--order") + 2 < msg.size() && msg.get(msg.indexOf("--order") + 2).equals("a");
             OrderSort o = OrderSort.cast(order);
-            if(o != null) this.sortOrder(o, desc);
+            if(o != null) this.sortOrder(o, !asc);
         }
         else this.sortOrder(OrderSort.NUMBER, false);
 
@@ -228,7 +228,6 @@ public class CommandPokemon extends Command
 
     private String getLine(Pokemon p)
     {
-        //TODO: Slowest part of the Command is this.playerData.isInTeam -> Cache teams!
         return "**" + p.getName() + "**" + (p.isShiny() ? ":star2:" : "") + " " + (this.team.contains(p.getUUID()) ? "(T) " : "") + "| Number: " + p.getNumber() + " | Level " + p.getLevel() + " | Total IV: " + p.getTotalIV() + "\n";
     }
 }
