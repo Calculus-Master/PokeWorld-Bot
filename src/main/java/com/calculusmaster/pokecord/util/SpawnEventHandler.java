@@ -72,6 +72,7 @@ public class SpawnEventHandler
     private static void spawnPokemon(Guild g, TextChannel channel, String spawn)
     {
         spawn = Global.normalCase(spawn);
+        boolean shiny = new Random().nextInt(4096) < 1;
 
         if(LocalDateTime.now().getHour() == 18)
         {
@@ -88,7 +89,8 @@ public class SpawnEventHandler
 
         try
         {
-            URL url = new URL(Pokemon.genericJSON(spawn).getString("normalURL"));
+            String urlString = Pokemon.genericJSON(spawn).getString(shiny ? "shinyURL" : "normalURL");
+            URL url = new URL(urlString.equals("") ? Pokemon.getWIPImage() : urlString);
             BufferedImage img = ImageIO.read(url);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             ImageIO.write(img, "png", out);
@@ -104,6 +106,6 @@ public class SpawnEventHandler
             e.printStackTrace();
         }
 
-        SERVER_SPAWNS.put(g.getId(), spawn);
+        SERVER_SPAWNS.put(g.getId(), (shiny ? "Shiny " : "") + spawn);
     }
 }

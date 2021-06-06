@@ -45,8 +45,12 @@ public class CommandCatch extends Command
         }
         else
         {
-            Pokemon caught = Pokemon.create(spawn);
+            String poke = spawn;
+            if(spawn.contains("Shiny")) poke = spawn.substring("Shiny ".length() + 1);
+
+            Pokemon caught = Pokemon.create(poke);
             caught.setLevel(new Random().nextInt(20 + 5 * (this.playerData.getGymLevel() - 1)) + 1);
+            caught.setShiny(spawn.contains("Shiny"));
 
             Pokemon.uploadPokemon(caught);
             this.playerData.addPokemon(caught.getUUID());
