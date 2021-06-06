@@ -229,6 +229,6 @@ public class CommandPokemon extends Command
     private String getLine(Pokemon p)
     {
         //TODO: Slowest part of the Command is this.playerData.isInTeam -> Cache teams!
-        return "**" + p.getName() + "** " + (this.team.contains(p.getUUID()) ? "(T) " : "") + "| Number: " + p.getNumber() + " | Level " + p.getLevel() + " | Total IV: " + p.getTotalIV() + "\n";
+        return "**" + p.getName() + "**" + (p.isShiny() ? ":star2:" : "") + " " + (this.team.contains(p.getUUID()) ? "(T) " : "") + "| Number: " + p.getNumber() + " | Level " + p.getLevel() + " | Total IV: " + p.getTotalIV() + "\n";
     }
 }
