@@ -33,11 +33,11 @@ public class CommandInfo extends Command
 
         String title = "**Level " + chosen.getLevel() + " " + chosen.getName() + "**" + (chosen.isShiny() ? " :star2:" : "");
         String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getGenericJSON().getString("growthrate"), chosen.getLevel()) + " XP";
-        String type = "Type: " + (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalCase(chosen.getType()[0].toString()) : Global.normalCase(chosen.getType()[0].toString()) + " | " + Global.normalCase(chosen.getType()[1].toString()));
-        String nature = "Nature: " + Global.normalCase(chosen.getNature().toString());
-        String item = "Held Item: " + PokeItem.asItem(chosen.getItem()).getStyledName();
-        String tm = chosen.hasTM() ? "TM: TM" + (chosen.getTM() < 10 ? "0" : "") + chosen.getTM()  + " - " + TM.get(chosen.getTM()).getMoveName() : "TM: None";
-        String tr = chosen.hasTR() ? "TR: TR" + (chosen.getTR() < 10 ? "0" : "") + chosen.getTR()  + " - " + TR.get(chosen.getTR()).getMoveName() : "TR: None";
+        String type = "**Type**: " + (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalCase(chosen.getType()[0].toString()) : Global.normalCase(chosen.getType()[0].toString()) + " | " + Global.normalCase(chosen.getType()[1].toString()));
+        String nature = "**Nature**: " + Global.normalCase(chosen.getNature().toString());
+        String item = "**Held Item**: " + PokeItem.asItem(chosen.getItem()).getStyledName();
+        String tm = "**TM**: " + (chosen.hasTM() ? "TM" + (chosen.getTM() < 10 ? "0" : "") + chosen.getTM()  + " - " + TM.get(chosen.getTM()).getMoveName() : "None");
+        String tr = "**TR**: " + (chosen.hasTR() ? "TR" + (chosen.getTR() < 10 ? "0" : "") + chosen.getTR()  + " - " + TR.get(chosen.getTR()).getMoveName() : "None");
         String stats = getStatsFormatted(chosen);
 
         this.embed.setTitle(title);
@@ -57,7 +57,7 @@ public class CommandInfo extends Command
         String SPATK = formatStat(p, Stat.SPATK, "Sp. Attack");
         String SPDEF = formatStat(p, Stat.SPDEF, "Sp. Defense");
         String SPD = formatStat(p, Stat.SPD, "Speed");
-        String total = "Total IV %: " + p.getTotalIV();
+        String total = "**Total IV %:** " + p.getTotalIV();
 
         return HP + ATK + DEF + SPATK + SPDEF + SPD + total;
     }
