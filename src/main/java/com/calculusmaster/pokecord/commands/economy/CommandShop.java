@@ -202,7 +202,7 @@ public class CommandShop extends Command
         entriesZCrystal.clear();
 
         String z;
-        int count = new Random().nextInt(3) + 2;
+        int count = new Random().nextInt(5) + 5;
         for(int i = 0; i < count; i++)
         {
             z = ZCrystal.getRandomUniqueZCrystal().getStyledName();
