@@ -17,6 +17,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
@@ -1146,13 +1147,13 @@ public class Duel
 
         if(!this.players[0].active.isFainted())
         {
-            Image p1 = ImageIO.read(this.players[0].active.getURL()).getScaledInstance(size, size, hint);
+            Image p1 = ImageIO.read(new URL(this.getPokemonURL(this.players[0].active))).getScaledInstance(size, size, hint);
             combined.getGraphics().drawImage(p1, spacing, y, null);
         }
 
         if(!this.players[1].active.isFainted())
         {
-            Image p2 = ImageIO.read(this.players[1].active.getURL()).getScaledInstance(size, size, hint);
+            Image p2 = ImageIO.read(new URL(this.getPokemonURL(this.players[1].active))).getScaledInstance(size, size, hint);
             combined.getGraphics().drawImage(p2, (backgroundW - spacing) - size, y, null);
         }
 
@@ -1162,6 +1163,15 @@ public class Duel
         byte[] bytes = out.toByteArray(); //This is the slow line
 
         return new ByteArrayInputStream(bytes);
+    }
+
+    private String getPokemonURL(Pokemon p) throws MalformedURLException
+    {
+        if(p.getName().equals("Marshadow"))
+        {
+            return !p.isShiny() ? "https://archives.bulbagarden.net/media/upload/thumb/1/11/802Marshadow-Alt.png/600px-802Marshadow-Alt.png" : "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/e48d6b9d-3b1d-46a0-a254-3a448ec3a8a5/ddn43ra-94a76142-591e-4f64-917a-3659635d4bff.png";
+        }
+        else return p.getImage();
     }
 
     private String getHealthBars()
