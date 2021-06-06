@@ -53,7 +53,7 @@ public class CommandTeam extends Command
 
             String UUID = this.playerData.getPokemonList().get(pokemonIndex - 1);
 
-            if(this.playerData.isInTeam(UUID))
+            if(this.playerData.getTeam().contains(UUID))
             {
                 this.embed.setDescription("This Pokemon is already in your team!");
                 return this;

@@ -146,6 +146,9 @@ public class PlayerDataQuery extends MongoQuery
         Mongo.PlayerData.updateOne(this.query, Updates.pull("pokemon", UUID));
         CacheHelper.removePokemon(this.getID(), UUID);
 
+        if(this.getTeam().contains(UUID)) this.removePokemonFromTeam(this.getTeam().indexOf(UUID));
+        if(this.getFavorites().contains(UUID)) this.removePokemonFromFavorites(UUID);
+
         this.update();
     }
 
@@ -158,11 +161,6 @@ public class PlayerDataQuery extends MongoQuery
     public List<String> getTeam()
     {
         return this.json().getJSONArray("team").toList().stream().map(o -> (String)o).collect(Collectors.toList());
-    }
-
-    public boolean isInTeam(String UUID)
-    {
-        return this.getTeam().contains(UUID);
     }
 
     public void clearTeam()
