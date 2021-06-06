@@ -1147,13 +1147,13 @@ public class Duel
 
         if(!this.players[0].active.isFainted())
         {
-            Image p1 = ImageIO.read(new URL(this.getPokemonURL(this.players[0].active))).getScaledInstance(size, size, hint);
+            Image p1 = ImageIO.read(new URL(this.getPokemonURL(0))).getScaledInstance(size, size, hint);
             combined.getGraphics().drawImage(p1, spacing, y, null);
         }
 
         if(!this.players[1].active.isFainted())
         {
-            Image p2 = ImageIO.read(new URL(this.getPokemonURL(this.players[1].active))).getScaledInstance(size, size, hint);
+            Image p2 = ImageIO.read(new URL(this.getPokemonURL(1))).getScaledInstance(size, size, hint);
             combined.getGraphics().drawImage(p2, (backgroundW - spacing) - size, y, null);
         }
 
@@ -1165,11 +1165,18 @@ public class Duel
         return new ByteArrayInputStream(bytes);
     }
 
-    private String getPokemonURL(Pokemon p) throws MalformedURLException
+    private String getPokemonURL(int player) throws MalformedURLException
     {
+        Pokemon p = this.players[player].active;
+        Move m = this.players[player].move;
+
         if(p.getName().equals("Marshadow"))
         {
             return !p.isShiny() ? "https://archives.bulbagarden.net/media/upload/thumb/1/11/802Marshadow-Alt.png/600px-802Marshadow-Alt.png" : "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/e48d6b9d-3b1d-46a0-a254-3a448ec3a8a5/ddn43ra-94a76142-591e-4f64-917a-3659635d4bff.png";
+        }
+        else if(p.getName().equals("Solgaleo") && (m.getName().equals("Sunsteel Strike") || m.getName().equals("Searing Sunraze Smash")))
+        {
+            return "https://archives.bulbagarden.net/media/upload/thumb/5/58/791Solgaleo-RadiantSunPhase.png/600px-791Solgaleo-RadiantSunPhase.png";
         }
         else return p.getImage();
     }
