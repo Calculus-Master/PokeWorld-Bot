@@ -566,6 +566,8 @@ public class DuelHelper
                 default -> new Move("Tackle");
             };
             case VOLCANIUM_Z -> ZMove = new Move("Volcanic Steam Geyser", Type.WATER, Category.SPECIAL, 195);
+            case KYOGRIUM_Z -> ZMove = new Move("Primordial Tsunami", Type.WATER, Category.SPECIAL, 195);
+            case GROUDONIUM_Z -> ZMove = new Move("Primordial Landslide", Type.GROUND, Category.PHYSICAL, 195);
         }
 
         return ZMove;

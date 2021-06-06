@@ -309,4 +309,16 @@ public class ZMoves
 
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 60);
     }
+
+    //Kyogre and Primal Kyogre
+    public String PrimordialTsunami(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    //Groudon and Primal Groudon
+    public String PrimordialLandslide(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
