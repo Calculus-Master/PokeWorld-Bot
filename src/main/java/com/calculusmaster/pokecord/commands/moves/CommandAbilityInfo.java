@@ -22,6 +22,7 @@ public class CommandAbilityInfo extends Command
         ABILITY_INFO.put("Sand Stream", "Sand Stream creates a sandstorm when the ability-bearer enters battle. The effect lasts 5 turns.");
         ABILITY_INFO.put("Snow Warning", "Snow Warning creates a hailstorm when the ability-bearer enters battle. The effect lasts 5 turns.");
         ABILITY_INFO.put("Stance Change", "Stance Change is exclusive to Aegislash. When using a damage-dealing move, Aegislash switches to its Blade Forme. When using the move King's Shield, Aegislash switches to its Shield Forme.");
+        ABILITY_INFO.put("Technician", "Technician increases the power of moves - that are usually base power 60 or below - by 50%.");
     }
 
     public CommandAbilityInfo(MessageReceivedEvent event, String[] msg)
