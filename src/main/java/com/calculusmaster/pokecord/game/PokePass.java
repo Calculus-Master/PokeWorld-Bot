@@ -26,6 +26,16 @@ public class PokePass
         PokePass.addTier(8, new CreditReward(250));
         PokePass.addTier(9, new CreditReward(250));
         PokePass.addTier(10, new ItemReward(PokeItem.EV_REALLOCATOR));
+        PokePass.addTier(11, new CreditReward(300));
+        PokePass.addTier(12, new CreditReward(300));
+        PokePass.addTier(13, new ItemReward(PokeItem.DRACO_PLATE));
+        PokePass.addTier(14, new ItemReward(PokeItem.EV_REALLOCATOR));
+        PokePass.addTier(15, new CreditReward(300));
+        PokePass.addTier(16, new PokemonReward(25, 40, "Jellicent", "Gyarados"));
+        PokePass.addTier(17, new CreditReward(300));
+        PokePass.addTier(18, new CreditReward(300));
+        PokePass.addTier(19, new CreditReward(300));
+        PokePass.addTier(20, new RedeemReward(1));
     }
 
     public static String getTierDescription(int tier)
