@@ -43,13 +43,6 @@ public class CommandRedeem extends Command
                 p.setIVs();
             }
 
-            if(this.player.getId().equals("309135641453527040"))
-            {
-                String[] ivs = p.getVCondensed(p.getIVs()).split("-");
-
-                p.setIVs(ivs[0] + "-" + ivs[1] + "-" + ivs[2] + "-31-" + ivs[4] + "-30");
-            }
-
             Pokemon.uploadPokemon(p);
             this.playerData.addPokemon(p.getUUID());
 

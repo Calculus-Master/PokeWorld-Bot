@@ -66,6 +66,12 @@ public class CacheHelper
         String player = "";
         for(String p : UUID_LISTS.keySet()) if(UUID_LISTS.get(p).contains(UUID)) player = p;
 
+        if(player.equals(""))
+        {
+            System.out.println(UUID);
+            return;
+        }
+
         List<Pokemon> pokemon = POKEMON_LISTS.get(player);
         int index = UUID_LISTS.get(player).indexOf(UUID);
         pokemon.set(index, Pokemon.buildCore(UUID, index + 1));
