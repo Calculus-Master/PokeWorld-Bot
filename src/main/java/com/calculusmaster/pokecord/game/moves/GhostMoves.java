@@ -156,6 +156,6 @@ public class GhostMoves
     public String DestinyBond(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         duel.data(user.getUUID()).destinyBondUsed = true;
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return "";
     }
 }
