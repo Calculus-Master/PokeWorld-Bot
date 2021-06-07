@@ -1024,9 +1024,6 @@ public class Duel
         try
         {
             this.event.getChannel().sendFile(this.getImage(), "duel.png").embed(embed.build()).queue();
-
-            this.players[0].data.addPokePassExp(500, this.event);
-            this.players[1].data.addPokePassExp(500, this.event);
         }
         catch (Exception e)
         {
@@ -1052,6 +1049,9 @@ public class Duel
             this.uploadEVs(0);
             this.uploadEVs(1);
         }
+
+        this.players[0].data.addPokePassExp(500, this.event);
+        this.players[1].data.addPokePassExp(500, this.event);
 
         this.uploadExperience();
 

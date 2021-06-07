@@ -50,6 +50,7 @@ public class GymDuel extends TrainerDuel
             embed.setDescription("You defeated " + leader.info.name + "! You earned " + c + " credits!");
 
             Achievements.grant(this.players[0].ID, Achievements.DEFEATED_FIRST_GYM_LEADER, this.event);
+            this.players[0].data.addPokePassExp(500, this.event);
 
             Mongo.GymData.updateOne(Filters.eq("name", this.info.name), Updates.push("defeated", this.players[0].ID));
         }

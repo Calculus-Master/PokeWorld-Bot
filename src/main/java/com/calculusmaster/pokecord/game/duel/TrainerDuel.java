@@ -56,6 +56,8 @@ public class TrainerDuel extends Duel
 
             String bot = ((Trainer)this.players[1]).info.name;
 
+            this.players[0].data.addPokePassExp(500, this.event);
+
             //Elite Trainer
             if(((Trainer)this.players[1]).info.elite)
             {
