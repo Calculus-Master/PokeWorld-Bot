@@ -244,4 +244,15 @@ public class PsychicMoves
 
         return user.getName() + " created a strange area!";
     }
+
+    public String StoredPower(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int power = 20;
+
+        for(Stat s : Stat.values()) if(user.getStatMultiplier(s) > 0) power += 20 * user.getStatMultiplier(s);
+
+        move.setPower(power);
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
