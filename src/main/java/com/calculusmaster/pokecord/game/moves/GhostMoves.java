@@ -108,8 +108,12 @@ public class GhostMoves
 
     public String Nightmare(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(opponent.hasStatusCondition(StatusCondition.ASLEEP)) opponent.addStatusCondition(StatusCondition.NIGHTMARE);
-        return user.getName() + " cast a Nightmare on " + opponent.getName() + "!";
+        if(opponent.hasStatusCondition(StatusCondition.ASLEEP))
+        {
+            opponent.addStatusCondition(StatusCondition.NIGHTMARE);
+            return user.getName() + " cast a Nightmare on " + opponent.getName() + "!";
+        }
+        else return move.getNoEffectResult(opponent);
     }
 
     public String SpectralThief(Pokemon user, Pokemon opponent, Duel duel, Move move)
