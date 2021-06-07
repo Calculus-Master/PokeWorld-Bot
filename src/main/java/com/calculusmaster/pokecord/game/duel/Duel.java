@@ -402,6 +402,16 @@ public class Duel
 
         if(move.getName().equals("Fusion Flare") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move != null && this.players[this.other].move.getName().equals("Fusion Bolt")) move.setPower(move.getPower() * 2);
 
+        if(this.data(this.other).bideTurns <= 0 && this.data(this.other).bideDamage != 0)
+        {
+            this.players[this.current].active.damage(this.data(this.other).bideDamage);
+
+            turnResult += this.players[this.other].active.getName() + " unleashed stored energy and dealt " + this.data(this.other).bideDamage + " damage!\n";
+
+            this.data(this.other).bideTurns = 0;
+            this.data(this.other).bideDamage = 0;
+        }
+
         //Fly, Bounce, Dig and Dive
 
         if(this.data(this.current).flyUsed) move = new Move("Fly");
@@ -483,6 +493,11 @@ public class Duel
             }
         }
 
+        //Bide
+        if(this.data(this.current).bideTurns > 0)
+        {
+            turnResult += this.players[this.current].active.getName() + " is storing energy!";
+        }
         //Ability: Disguise (Mimikyu)
         if(this.players[this.other].active.getAbilities().contains("Disguise") && !this.data(this.other).disguiseActivated && !move.getCategory().equals(Category.STATUS))
         {
@@ -522,6 +537,8 @@ public class Duel
         //Do main move logic
         else
         {
+            int preMoveHP = this.players[this.other].active.getHealth();
+
             turnResult += move.logic(this.players[this.current].active, this.players[this.other].active, this);
 
             if(move.getCategory().equals(Category.STATUS)) this.data(this.other).lastDamageTaken = 0;
@@ -534,6 +551,13 @@ public class Duel
                 this.players[this.current].active.damage(dmg);
 
                 turnResult += "\n" + this.players[this.current].active.getName() + " took " + dmg + " damage from the Iron Barbs!";
+            }
+
+            if(this.data(this.other).bideTurns > 0)
+            {
+                this.data(this.other).bideTurns--;
+
+                this.data(this.other).bideDamage += Math.max(preMoveHP - this.players[this.other].active.getHealth(), 0);
             }
         }
 

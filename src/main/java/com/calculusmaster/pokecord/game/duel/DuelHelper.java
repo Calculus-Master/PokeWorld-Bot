@@ -67,6 +67,8 @@ public class DuelHelper
         public boolean destinyBondUsed;
         public int perishSongTurns;
         public boolean kingsShieldUsed;
+        public int bideTurns;
+        public int bideDamage;
 
         public boolean disguiseActivated;
 
@@ -110,6 +112,8 @@ public class DuelHelper
             this.destinyBondUsed = false;
             this.perishSongTurns = 0;
             this.kingsShieldUsed = false;
+            this.bideTurns = 0;
+            this.bideDamage = 0;
 
             this.disguiseActivated = false;
         }

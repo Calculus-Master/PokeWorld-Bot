@@ -595,4 +595,21 @@ public class NormalMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String Bide(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(user.getUUID()).bideTurns = 2;
+
+        return user.getName() + " is storing energy!";
+    }
+
+    public String BellyDrum(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = user.getStat(Stat.HP) / 2;
+        user.damage(damage);
+
+        user.changeStatMultiplier(Stat.ATK, 12);
+
+        return user.getName() + " sacrificed " + damage + " HP! " + user.getName() + "'s Attack rose to its maximum!";
+    }
 }
