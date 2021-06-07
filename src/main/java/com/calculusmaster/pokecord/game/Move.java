@@ -132,7 +132,7 @@ public class Move
                     case BADLY_POISONED -> "is badly poisoned!";
                 };
 
-        boolean statusProc = new Random().nextInt(100) < percent;
+        boolean statusProc = new Random().nextInt(100) < (user.getAbilities().contains("Serene Grace") ? percent * 2 : percent);
 
         if(statusProc) opponent.addStatusCondition(status);
 
@@ -141,7 +141,7 @@ public class Move
 
     public static String statChangeDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move, Stat s, int stage, int percent, boolean userChange)
     {
-        boolean change = new Random().nextInt(100) < percent;
+        boolean change = new Random().nextInt(100) < (user.getAbilities().contains("Serene Grace") ? 2 * percent : percent);
 
         String results = Move.simpleDamageMove(user, opponent, duel, move);
 
