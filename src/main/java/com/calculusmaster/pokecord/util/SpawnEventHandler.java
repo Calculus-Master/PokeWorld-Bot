@@ -14,6 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -74,7 +75,7 @@ public class SpawnEventHandler
         spawn = Global.normalCase(spawn);
         boolean shiny = new Random().nextInt(4096) < 1;
 
-        if(LocalDateTime.now().getHour() == 18)
+        if(LocalDateTime.now(ZoneId.of("America/Los_Angeles")).getHour() == 20)
         {
             if(new Random().nextInt(100) < 1) spawn = PokemonRarity.getLegendarySpawn();
         }

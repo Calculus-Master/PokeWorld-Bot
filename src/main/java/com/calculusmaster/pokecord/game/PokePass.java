@@ -21,7 +21,7 @@ public class PokePass
         PokePass.addTier(3, new ItemReward(PokeItem.TRADE_EVOLVER));
         PokePass.addTier(4, new CreditReward(250));
         PokePass.addTier(5, new CreditReward(250));
-        PokePass.addTier(6, new PokemonReward(15, "Mudkip", "Oshawott", "Squirtle", "Totodile", "Popplio", "Piplup", "Froakie"));
+        PokePass.addTier(6, new PokemonReward(15, 40,"Mudkip", "Oshawott", "Squirtle", "Totodile", "Popplio", "Piplup", "Froakie"));
         PokePass.addTier(7, new CreditReward(250));
         PokePass.addTier(8, new CreditReward(250));
         PokePass.addTier(9, new CreditReward(250));
