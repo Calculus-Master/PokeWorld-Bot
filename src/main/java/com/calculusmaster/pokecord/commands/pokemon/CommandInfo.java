@@ -46,6 +46,7 @@ public class CommandInfo extends Command
         this.embed.setImage(chosen.getImage());
         this.embed.setFooter("Showing Pokemon " + (index + 1) + " / " + this.playerData.getPokemonList().size());
 
+        this.playerData.addPokePassExp(50, this.event);
         return this;
     }
 

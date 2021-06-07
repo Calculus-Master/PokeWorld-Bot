@@ -89,6 +89,7 @@ public class CommandCatch extends Command
             }
 
             Achievements.grant(this.player.getId(), Achievements.CAUGHT_FIRST_POKEMON, this.event);
+            this.playerData.addPokePassExp(100, this.event);
 
             this.embed = null;
             this.event.getMessage().reply("You caught a **Level " + caught.getLevel() + " " + caught.getName() + "** (Caught: " + numCaught + ")!").queue();

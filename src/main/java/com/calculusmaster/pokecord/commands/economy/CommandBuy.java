@@ -218,6 +218,7 @@ public class CommandBuy extends Command
             return this;
         }
 
+        this.playerData.addPokePassExp(200, this.event);
         Pokemon.uploadPokemon(selected);
         this.embed.setTitle(this.player.getName());
         this.color = selected.getType()[0].getColor();

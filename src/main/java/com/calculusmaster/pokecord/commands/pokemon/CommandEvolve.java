@@ -22,6 +22,7 @@ public class CommandEvolve extends Command
             String old = selected.getName();
             selected.evolve();
 
+            this.playerData.addPokePassExp(1000, this.event);
             this.event.getChannel().sendMessage(this.playerData.getMention() + ": Your " + old + " evolved into a " + selected.getName() + "!").queue();
         }
         else this.event.getChannel().sendMessage(this.playerData.getMention() + ": Your " + selected.getName() + " cannot evolve right now!").queue();

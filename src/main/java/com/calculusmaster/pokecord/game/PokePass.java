@@ -10,13 +10,13 @@ import java.util.Map;
 public class PokePass
 {
     public static Map<Integer, TierReward> passTiers = new HashMap<>();
-    public static final int TIER_EXP = 50000;
+    public static final int TIER_EXP = 30000;
 
     public static void init()
     {
         //TODO: Complete PokePass, Limit Certain Rewards based on Gym Level
         PokePass.addTier(0, new EmptyReward());
-        PokePass.addTier(1, new CreditReward(250));
+        PokePass.addTier(1, new RedeemReward(1));
         PokePass.addTier(2, new CreditReward(250));
         PokePass.addTier(3, new ItemReward(PokeItem.TRADE_EVOLVER));
         PokePass.addTier(4, new CreditReward(250));

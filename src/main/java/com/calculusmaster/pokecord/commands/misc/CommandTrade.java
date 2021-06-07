@@ -51,6 +51,9 @@ public class CommandTrade extends Command
 
                     Achievements.grant(t.getPlayers().get(0), Achievements.COMPLETED_FIRST_TRADE, this.event);
                     Achievements.grant(t.getPlayers().get(1), Achievements.COMPLETED_FIRST_TRADE, this.event);
+
+                    new PlayerDataQuery(t.getPlayers().get(0)).addPokePassExp(400, this.event);
+                    new PlayerDataQuery(t.getPlayers().get(0)).addPokePassExp(400, this.event);
                 }
             }
             else if(this.mentions.size() > 0)
