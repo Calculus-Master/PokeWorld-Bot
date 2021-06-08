@@ -58,6 +58,7 @@ public abstract class Command
     public static final CommandHelp.HelpEntry ACTIVATE = new CommandHelp.HelpEntry("activate");
     public static final CommandHelp.HelpEntry POKEPASS = new CommandHelp.HelpEntry("pokepass");
     public static final CommandHelp.HelpEntry FAVORITES = new CommandHelp.HelpEntry("favorites");
+    public static final CommandHelp.HelpEntry FORM = new CommandHelp.HelpEntry("form");
 
     public static void init()
     {
@@ -275,6 +276,9 @@ public abstract class Command
 
         FAVORITES.setCategory(CommandHelp.CommandCategory.POKEMON)
                 .addAliases("fav");
+
+        FORM.setCategory(CommandHelp.CommandCategory.POKEMON)
+                .addAliases();
     }
 
     protected MessageReceivedEvent event;

@@ -88,6 +88,7 @@ public class CommandBuy extends Command
 
             if(!selected.getName().contains("Aegislash") && selected.hasForms() && this.playerData.getCredits() >= CommandBuy.COST_FORM && selected.getFormsList().contains(form))
             {
+                this.playerData.addOwnedForm(form);
                 this.embed.setDescription(selected.getName() + " transformed into " + form);
                 selected.changeForm(form);
                 this.playerData.changeCredits(-1 * CommandBuy.COST_FORM);
