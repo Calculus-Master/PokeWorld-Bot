@@ -530,7 +530,7 @@ public class Duel
         //Check if opponent is immune
         else if(otherImmune)
         {
-            turnResult += this.players[this.other].active.getName() + " is immune to the attack!";
+            turnResult += move.getMoveUsedResult(this.players[this.current].active) + " " + this.players[this.other].active.getName() + " is immune to the attack!";
 
             this.data(this.other).lastDamageTaken = 0;
         }
