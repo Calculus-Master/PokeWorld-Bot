@@ -587,6 +587,9 @@ public class Duel
         //Z-Crystals can't be earned from 1v1 Wild Pokemon Duels
         if(this instanceof WildDuel) return;
 
+        //AI Trainers can't earn Z Crystals
+        if(this instanceof TrainerDuel && this.indexOf(this.players[this.current].ID) == 1) return;
+
         ZCrystal earnedZ = ZCrystal.getCrystalOfType(move.getType());
 
         System.out.println("Z-Crystal Event! " + earnedZ + ", " + move.getName() + " - " + move.getType() + "(" + this.players[this.current].data.getUsername() + ")");
