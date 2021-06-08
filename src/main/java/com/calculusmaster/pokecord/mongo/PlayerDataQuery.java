@@ -51,7 +51,9 @@ public class PlayerDataQuery extends MongoQuery
                 .append("gym_progress", new JSONArray())
                 .append("pokepass_exp", 0)
                 .append("pokepass_tier", 0)
-                .append("favorites", new JSONArray());
+                .append("favorites", new JSONArray())
+                .append("owned_forms", new JSONArray())
+                .append("owned_megas", new JSONArray());
 
         Mongo.PlayerData.insertOne(data);
     }
@@ -401,6 +403,32 @@ public class PlayerDataQuery extends MongoQuery
     public void clearFavorites()
     {
         Mongo.PlayerData.updateOne(this.query, Updates.set("favorites", new JSONArray()));
+
+        this.update();
+    }
+
+    //key: "owned_forms"
+    public List<String> getOwnedForms()
+    {
+        return this.json().getJSONArray("owned_forms").toList().stream().map(s -> (String)s).collect(Collectors.toList());
+    }
+
+    public void addOwnedForm(String form)
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.push("owned_forms", form));
+
+        this.update();
+    }
+
+    //key: "owned_megas"
+    public List<String> getOwnedMegas()
+    {
+        return this.json().getJSONArray("owned_megas").toList().stream().map(s -> (String)s).collect(Collectors.toList());
+    }
+
+    public void addOwnedMegas(String mega)
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.push("owned_megas", mega));
 
         this.update();
     }
