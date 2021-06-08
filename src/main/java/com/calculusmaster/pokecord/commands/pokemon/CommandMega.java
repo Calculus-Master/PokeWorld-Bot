@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandMega extends Command
@@ -30,8 +31,39 @@ public class CommandMega extends Command
         }
         else
         {
-            this.embed.setDescription("Your Pokemon isn't a mega or primal!");
+            if(selected.getMegaList().size() == 1)
+            {
+                String mega = selected.getMegaList().get(0);
+
+                if(this.playerData.getOwnedMegas().contains(mega))
+                {
+                    this.embed.setDescription(selected.getName() + " mega evolved into " + selected.getMegaList().get(0) + "!");
+                    selected.changeForm(selected.getMegaList().get(0));
+                }
+                else this.embed.setDescription("You don't own this Mega-Evolved form!");
+            }
+            else if(selected.getMegaList().size() == 2)
+            {
+                if(this.msg.length != 2)
+                {
+                    this.embed.setDescription("You need to specific which Mega to evolve into! Either use p!mega x or p!mega y");
+                }
+
+                String chosenMega = selected.getMegaList().get(this.msg[1].equals("x") ? 0 : 1);
+
+                if(this.playerData.getOwnedMegas().contains(chosenMega))
+                {
+                    this.embed.setDescription(selected.getName() + " mega evolved into " + chosenMega + "!");
+                    selected.changeForm(chosenMega);
+                }
+                else this.embed.setDescription("You don't own this Mega-Evolved form!");
+            }
+            else
+            {
+                this.embed.setDescription("Either your Pokemon cannot mega evolve, or you do not own the Mega-Evolved Form!");
+            }
         }
+
         return this;
     }
 }
