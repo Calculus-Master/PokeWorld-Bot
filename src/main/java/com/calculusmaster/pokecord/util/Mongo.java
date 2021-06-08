@@ -6,6 +6,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import org.bson.Document;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -15,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Mongo
@@ -66,7 +68,8 @@ public class Mongo
         }
         catch (FileNotFoundException e) { e.printStackTrace(); }
 
-        Mongo.PokemonInfo.insertMany(toInsert);
+        toInsert.sort(Comparator.comparingInt(d2 -> d2.getInteger("dex")));
+        for(Document doc : toInsert) Mongo.PokemonInfo.insertOne(doc);
     }
 
     private static Document getDocumentFromJSON(JSONObject j)
