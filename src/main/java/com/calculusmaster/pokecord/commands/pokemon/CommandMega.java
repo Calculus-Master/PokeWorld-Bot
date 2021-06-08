@@ -20,7 +20,9 @@ public class CommandMega extends Command
         if(selected.getName().contains("Mega") || selected.getName().contains("Primal"))
         {
             String mega = selected.getName();
-            String original = mega.substring("Mega ".length(), mega.contains(" X") || mega.contains(" Y") ? mega.length() - 2 : mega.length());
+            String original = "";
+            if(selected.getName().contains("Mega")) original = mega.substring("Mega ".length(), mega.contains(" X") || mega.contains(" Y") ? mega.length() - 2 : mega.length());
+            else if(selected.getName().contains("Primal")) original = mega.substring("Primal ".length());
 
             selected.changeForm(original);
             Pokemon.uploadPokemon(selected);
