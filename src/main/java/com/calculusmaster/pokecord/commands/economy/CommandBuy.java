@@ -106,10 +106,16 @@ public class CommandBuy extends Command
             {
                 if(selected.getMegaList().size() == 1)
                 {
+                    if(this.playerData.getOwnedMegas().contains(selected.getMegaList().get(0)))
+                    {
+                        this.embed.setDescription("You already own this Mega Evolution!");
+                        return this;
+                    }
+
                     this.embed.setDescription(selected.getName() + " mega evolved into " + selected.getMegaList().get(0) + "!");
 
-                    selected.changeForm(selected.getMegaList().get(0));
                     this.playerData.addOwnedMegas(selected.getMegaList().get(0));
+                    selected.changeForm(selected.getMegaList().get(0));
 
                     this.playerData.changeCredits(-1 * CommandBuy.COST_MEGA);
                 }
@@ -120,10 +126,17 @@ public class CommandBuy extends Command
                 if(selected.getMegaList().size() == 2)
                 {
                     String chosen = Global.normalCase(selected.getMegaList().get(this.msg[2].contains("x") ? 0 : 1));
+
+                    if(this.playerData.getOwnedMegas().contains(chosen))
+                    {
+                        this.embed.setDescription("You already own this Mega Evolution!");
+                        return this;
+                    }
+
                     this.embed.setDescription(selected.getName() + " mega evolved into " + chosen + "!");
 
-                    selected.changeForm(selected.getMegaList().get(this.msg[2].contains("x") ? 0 : 1));
                     this.playerData.addOwnedMegas(selected.getMegaList().get(this.msg[2].contains("x") ? 0 : 1));
+                    selected.changeForm(selected.getMegaList().get(this.msg[2].contains("x") ? 0 : 1));
 
                     this.playerData.changeCredits(-1 * CommandBuy.COST_MEGA);
                 }
