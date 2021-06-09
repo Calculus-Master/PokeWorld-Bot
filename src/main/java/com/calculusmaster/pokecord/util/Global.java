@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.util;
 
 import com.calculusmaster.pokecord.game.Pokemon;
 import org.bson.Document;
+import org.jetbrains.annotations.Nls;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
@@ -64,6 +65,7 @@ public class Global
         return null;
     }
 
+    @Nls(capitalization = Nls.Capitalization.Title)
     public static String normalCase(String s)
     {
         if(s.toLowerCase().startsWith("nidoran"))

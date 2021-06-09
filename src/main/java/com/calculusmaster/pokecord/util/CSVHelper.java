@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.util;
 
+import ch.qos.logback.core.util.FileUtil;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.TM;
@@ -7,10 +8,12 @@ import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.mongodb.client.model.Filters;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.bson.Document;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -32,6 +35,9 @@ public class CSVHelper
     private static final String CSV_PATH = PrivateInfo.CSV_PATH;
     private static final String WRITE_PATH = PrivateInfo.OUTPUT_PATH;
 
+    private static Map<Integer, String> NORMAL_URL = new HashMap<>();
+    private static Map<Integer, String> SHINY_URL = new HashMap<>();
+
     private static final String[] keys = {"name", "fillerinfo", "dex", "type", "evolutions", "evolutionsLVL", "forms", "mega", "stats", "ev", "moves", "movesLVL", "movesTM", "movesTR", "abilities", "growthrate", "exp", "normalURL", "shinyURL"};
 
     public static void main(String[] args) throws IOException, CsvException
@@ -39,31 +45,56 @@ public class CSVHelper
         //Read data from CSVs into Objects
         createCSVLists();
 
-//        List<Integer> skip = Arrays.asList(208, 243, 244, 245, 249, 250, 251);
-//
-//        //Write files
-//        for(int i = 722; i <= 784; i++)
-//        {
-//            if(!skip.contains(i)) writePokemonJSONFile(i);
-//        }
+        String[] fileNames = new File(PrivateInfo.JSON_SRC_PATH).list();
 
-        Mongo.PerformanceData.deleteMany(Filters.exists("name"));
+        File f;
+        Document d;
+        JSONObject j;
 
-        List<String> moves = new ArrayList<>(Arrays.asList("Healing Wish", "Misty Terrain", "Teleport", "Double Team", "Wish", "Magical Leaf", "Draining Kiss", "Fury Cutter", "Retaliate", "Clanging Scales", "Bide", "Belly Drum", "Sky Uppercut", "Dragon Tail", "Accelerock", "Sand Attack", "Quick Attack", "Howl", "Odor Sleuth", "Stealth Rock", "Rock Climb"));
+        List<Integer> skip = Arrays.asList(888, 889, 890, 894, 895);
 
-        Move.init();
-
-        for(int i = 0; i < moves.size(); i++)
+        //Write files
+        for(int i = 810; i <= 898; i++)
         {
-            if(Move.isMove(moves.get(i)))
+            if(!skip.contains(i))
             {
-                System.out.println("Removed " + moves.get(i));
-                moves.remove(i);
-                i--;
+                try
+                {
+                    for (String name : fileNames)
+                    {
+                        if(name.contains(i + "") && name.charAt(name.indexOf(i + "") + 1) != '.')
+                        {
+                            System.out.println("Name: " + name);
+                            f = new File(PrivateInfo.JSON_SRC_PATH + name);
+                            j = new JSONObject(new JSONTokener(new FileInputStream(f)));
+                            NORMAL_URL.put(i, j.getString("normalURL"));
+                            SHINY_URL.put(i, j.getString("shinyURL"));
+                        }
+                    }
+                }
+                catch (FileNotFoundException e) { e.printStackTrace(); }
+
+                writePokemonJSONFile(i);
             }
         }
 
-        for(String s : moves) Mongo.PerformanceData.insertOne(getMoveData(s));
+//        Mongo.PerformanceData.deleteMany(Filters.exists("name"));
+//
+//        List<String> moves = new ArrayList<>(Arrays.asList("Healing Wish", "Misty Terrain", "Teleport", "Double Team", "Wish", "Magical Leaf", "Draining Kiss", "Fury Cutter", "Retaliate", "Clanging Scales", "Bide", "Belly Drum", "Sky Uppercut", "Dragon Tail", "Accelerock", "Sand Attack", "Quick Attack", "Howl", "Odor Sleuth", "Stealth Rock", "Rock Climb"));
+//
+//        Move.init();
+//
+//        for(int i = 0; i < moves.size(); i++)
+//        {
+//            if(Move.isMove(moves.get(i)))
+//            {
+//                System.out.println("Removed " + moves.get(i));
+//                moves.remove(i);
+//                i--;
+//            }
+//        }
+//
+//        for(String s : moves) Mongo.PerformanceData.insertOne(getMoveData(s));
     }
 
     private static void createCSVLists() throws IOException, CsvException
@@ -152,7 +183,9 @@ public class CSVHelper
         //Version group 18 is Ultra Sun, 20 is Sword
         List<String[]> pokemonTMMoveLines = pokemonMoveInfo.stream().filter(l -> l[0].equals("" + dex)).filter(l -> l[3].equals("4")).filter(l -> l[1].equals("18")).collect(Collectors.toList());
         List<String[]> pokemonTRMoveLines = pokemonMoveInfo.stream().filter(l -> l[0].equals("" + dex)).filter(l -> l[3].equals("4")).filter(l -> l[1].equals("20")).collect(Collectors.toList());
-        List<String[]> pokemonLVLMoveLines = pokemonMoveInfo.stream().filter(l -> l[0].equals("" + dex)).filter(l -> l[3].equals("1")).filter(l -> l[1].equals("18")).collect(Collectors.toList());
+        //USUM: List<String[]> pokemonLVLMoveLines = pokemonMoveInfo.stream().filter(l -> l[0].equals("" + dex)).filter(l -> l[3].equals("1")).filter(l -> l[1].equals("18")).collect(Collectors.toList());
+        //SS:
+        List<String[]> pokemonLVLMoveLines = pokemonMoveInfo.stream().filter(l -> l[0].equals("" + dex)).filter(l -> l[3].equals("1")).filter(l -> l[1].equals("20")).collect(Collectors.toList());
 
         //pokemon_id,ability_id,is_hidden,slot
         List<String[]> pokemonAbilityLines = pokemonAbilityInfo.stream().filter(l -> l[0].equals("" + dex)).collect(Collectors.toList());
@@ -309,6 +342,7 @@ public class CSVHelper
 
         for(int i : outputList) sb.append(i).append(", ");
 
+        if(outputList.isEmpty()) return "[]";
         return "[" + sb.deleteCharAt(sb.length() - 1).deleteCharAt(sb.length() - 1).toString().trim() + "]";
 
     }
@@ -367,6 +401,9 @@ public class CSVHelper
     private static void writePokemonJSONFile(int dex) throws IOException
     {
         Document data = getPokemonData(dex);
+        data.put("normalURL", NORMAL_URL.get(dex));
+        data.put("shinyURL", SHINY_URL.get(dex));
+
         String fileName = dex + " " + data.getString("name") + ".json";
 
         Files.write(Paths.get(WRITE_PATH + fileName), getJSONString(data).getBytes());

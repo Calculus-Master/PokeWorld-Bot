@@ -72,7 +72,7 @@ public class Mongo
         for(Document doc : toInsert) Mongo.PokemonInfo.insertOne(doc);
     }
 
-    private static Document getDocumentFromJSON(JSONObject j)
+    public static Document getDocumentFromJSON(JSONObject j)
     {
         Document data = new Document();
         final String[] keys = {"name", "fillerinfo", "dex", "type", "evolutions", "evolutionsLVL", "forms", "mega", "stats", "ev", "moves", "movesLVL", "movesTM", "movesTR", "abilities", "growthrate", "exp", "normalURL", "shinyURL"};
