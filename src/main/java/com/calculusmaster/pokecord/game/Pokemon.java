@@ -674,7 +674,7 @@ public class Pokemon
     {
         PokeItem item = PokeItem.asItem(this.getItem());
         //TODO: Friendship evolutions: Alolan Meowth -> Persian, Chansey -> Blissey, Golbat -> Crobat, Pichu -> Pikachu, Cleffa -> Clefairy, Igglybuff -> Jigglypuff, Togepi -> Togetic, Azurill -> Marill, Budew -> Roselia, Chingling -> Chimecho, Buneary -> Lopunny, Munchlax -> Snorlax, Riolu -> Lucario, Woobat -> Swoobat, Swadloon -> Leavanny
-        //TODO: Friendship evolutions pt2: Type Null -> Silvally
+        //TODO: Friendship evolutions pt2: Type Null -> Silvally, Snom -> Frosmoth
         //TODO: Trade evolutions: Poliwhirl -> Politoed, Kadabra -> Alakazam, Machoke -> Machamp, Graveler -> Golem, Alolan Graveler -> Alolan Golem, Haunter -> Gengar, Boldore -> Gigalith, Gurdurr -> Conkeldurr, Phantump -> Trevenant, Pumpkaboo -> Gourgeist
         //TODO: Regional evolutions: Exeggcute -> Alolan Exeggutor w/Leaf Stone in Alola, Koffing -> Galarian Weezing in Galar
         //TODO: Other evolutions: Cubone -> Alolan Marowak in Alola Nighttime, Mantyke -> Mantine (w/Remoraid in party)
@@ -686,6 +686,13 @@ public class Pokemon
         //TODO: Karrablast -> Escaliver & Shelmet -> Accelgor w/Trade
         //TODO: Crabrawler -> Crabominable at Mount Lanakila
         //TODO: Galarian Yamask -> Runerigus (near Dusty Bowl)
+        //TODO: Applin -> Flapple (Tart Apple), Applin -> Appletun (Sweet Apple)
+        //TODO: Toxel -> Toxtricity (Amped Nature and Low Key Nature)
+        //TODO: Clobbopus -> Grapploct (after Taunt learned)
+        //TODO: Sinistea -> Polteageist (Cracked Pot)
+        //TODO: G. Farfetchd -> Sirfetchd (3 critical hits in a battle)
+        //TODO: Milcery -> Alcremie (Sweet)
+        //TODO: Kubfu -> Urshifu (Tower of Darkness) and Kubfu -> Urshifu Rapid Strike (Tower of Water)
 
         //TODO: Forms: Castform, Zacian/Zamazenta, Wormadam, Rotom, Basculin, Darmanitan Zen (Galarian Darmanitan is added), Meowstic, Pumpkaboo, Gourgeist, Oricorio
 
