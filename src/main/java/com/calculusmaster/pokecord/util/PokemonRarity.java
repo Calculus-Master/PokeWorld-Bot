@@ -907,7 +907,7 @@ public class PokemonRarity
         //Gen 8
 
         PokemonRarity.add("Grookey", Rarity.SILVER);
-        PokemonRarity.add("Thwacker", Rarity.GOLD);
+        PokemonRarity.add("Thwackey", Rarity.GOLD);
         PokemonRarity.add("Rillaboom", Rarity.DIAMOND);
         PokemonRarity.add("Scorbunny", Rarity.SILVER);
         PokemonRarity.add("Raboot", Rarity.GOLD);
