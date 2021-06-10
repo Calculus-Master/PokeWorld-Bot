@@ -1090,7 +1090,7 @@ public class Pokemon
             int EV = this.EV.get(Stat.HP);
             double maxHP = this.level + 10 + ((this.level * (2 * base + IV + EV / 4.0)) / 100);
 
-            double dynamaxBoost = this.isDynamaxed ? this.getDynamaxLevel() * 0.05 + 0.5 : 1.0;
+            double dynamaxBoost = this.isDynamaxed ? 1.0 + (this.getDynamaxLevel() * 0.05 + 0.5) : 1.0;
             return (int)(maxHP * dynamaxBoost);
         }
         else
