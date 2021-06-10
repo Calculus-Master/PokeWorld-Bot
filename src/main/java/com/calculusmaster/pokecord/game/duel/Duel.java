@@ -649,16 +649,12 @@ public class Duel
         switch(this.weather)
         {
             case HAIL -> {
-
-                boolean is1Affected = !this.players[0].active.isType(Type.ICE) && !this.data(0).digUsed && !this.data(0).diveUsed && !this.data(0).phantomForceUsed;
-                boolean is2Affected = !this.players[1].active.isType(Type.ICE) && !this.data(1).digUsed && !this.data(1).diveUsed && !this.data(1).phantomForceUsed;
-
-                if(is1Affected)
+                if(this.isAffectedByHail(0))
                 {
                     this.players[0].active.damage(this.players[0].active.getStat(Stat.HP) / 16);
                     weatherResult.append(this.players[0].active.getName()).append(" took damage from the hailstorm!\n");
                 }
-                if(is2Affected)
+                if(this.isAffectedByHail(1))
                 {
                     this.players[1].active.damage(this.players[1].active.getStat(Stat.HP) / 16);
                     weatherResult.append(this.players[1].active.getName()).append(" took damage from the hailstorm!\n");
@@ -666,16 +662,12 @@ public class Duel
 
             }
             case SANDSTORM -> {
-
-                boolean is1Affected = !this.players[0].active.isType(Type.GROUND) && !this.players[0].active.isType(Type.ROCK) && !this.players[0].active.isType(Type.STEEL) && !this.data(0).digUsed && !this.data(0).diveUsed && !this.data(0).phantomForceUsed;
-                boolean is2Affected = !this.players[1].active.isType(Type.GROUND) && !this.players[1].active.isType(Type.ROCK) && !this.players[1].active.isType(Type.STEEL) && !this.data(1).digUsed && !this.data(1).diveUsed && !this.data(1).phantomForceUsed;
-
-                if(is1Affected)
+                if(this.isAffectedBySandstorm(0))
                 {
                     this.players[0].active.damage(this.players[0].active.getStat(Stat.HP) / 16);
                     weatherResult.append(this.players[0].active.getName()).append(" took damage from the sandstorm!\n");
                 }
-                if(is2Affected)
+                if(this.isAffectedBySandstorm(1))
                 {
                     this.players[1].active.damage(this.players[1].active.getStat(Stat.HP) / 16);
                     weatherResult.append(this.players[1].active.getName()).append(" took damage from the sandstorm!\n");
@@ -684,6 +676,16 @@ public class Duel
         }
 
         this.results.add(weatherResult.toString());
+    }
+
+    private boolean isAffectedByHail(int p)
+    {
+        return !this.players[p].active.isType(Type.ICE) && !this.data(p).digUsed && !this.data(p).diveUsed && !this.data(p).phantomForceUsed;
+    }
+
+    private boolean isAffectedBySandstorm(int p)
+    {
+        return !this.players[p].active.isType(Type.GROUND) && !this.players[p].active.isType(Type.ROCK) && !this.players[p].active.isType(Type.STEEL) && !this.data(p).digUsed && !this.data(p).diveUsed && !this.data(p).phantomForceUsed;
     }
 
     public void moveWeatherEffects(Move move)
