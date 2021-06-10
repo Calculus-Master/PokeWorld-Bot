@@ -204,7 +204,7 @@ public class CommandUse extends Command
                 return this;
             }
 
-            if(d.getPlayers()[d.indexOf(this.player.getId())].active.getName().contains("Mega") || d.getPlayers()[d.indexOf(this.player.getId())].active.getName().contains("Primal"))
+            if(d.getPlayers()[d.indexOf(this.player.getId())].active.getName().contains("Mega") || d.getPlayers()[d.indexOf(this.player.getId())].active.getName().contains("Primal") || d.getPlayers()[d.indexOf(this.player.getId())].active.getName().contains("Ultra"))
             {
                 this.event.getChannel().sendMessage(mention + "Mega-Evolved Pokemon can't Dynamax!").queue();
                 this.embed = null;
