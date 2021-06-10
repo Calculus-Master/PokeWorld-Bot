@@ -1352,6 +1352,11 @@ public class Duel
         return this.players[0].ID.equals(id) ? 0 : 1;
     }
 
+    public int playerIndexFromUUID(String UUID)
+    {
+        return this.players[0].active.getUUID().equals(UUID) ? 0 : 1;
+    }
+
     public boolean hasPlayer(String id)
     {
         return this.players[0].ID.equals(id) || this.players[1].ID.equals(id);
