@@ -197,7 +197,31 @@ public class CommandUse extends Command
         //Dynamax (Entering the form only, using moves in Dynamax form are handled by p!use <num>)
         if(this.msg.length == 3 && this.msg[1].equals("d") && isNumeric(2) && this.getInt(2) > 0 && this.getInt(2) < 5)
         {
+            if(d.getPlayers()[d.indexOf(this.player.getId())].usedDynamax)
+            {
+                this.event.getChannel().sendMessage(mention + "You have already Dynamaxed!").queue();
+                this.embed = null;
+                return this;
+            }
 
+            if(d.getPlayers()[d.indexOf(this.player.getId())].active.getName().contains("Mega") || d.getPlayers()[d.indexOf(this.player.getId())].active.getName().contains("Primal"))
+            {
+                this.event.getChannel().sendMessage(mention + "Mega-Evolved Pokemon can't Dynamax!").queue();
+                this.embed = null;
+                return this;
+            }
+
+            List<String> dynamaxBanList = Arrays.asList("Zamazenta", "Zacian", "Eternatus");
+
+            if(dynamaxBanList.stream().anyMatch(s -> d.getPlayers()[d.indexOf(this.player.getId())].active.getName().contains(s)))
+            {
+                this.event.getChannel().sendMessage(mention + d.getPlayers()[d.indexOf(this.player.getId())].active.getName() + " is not allowed to Dynamax!").queue();
+                this.embed = null;
+                return this;
+            }
+
+            d.submitMove(this.player.getId(), this.getInt(2), 'd');
+            this.event.getMessage().delete().queue();
         }
 
         d.checkReady();

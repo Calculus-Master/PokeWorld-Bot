@@ -86,6 +86,24 @@ public class Duel
             if(this.getAction(0).equals(ActionType.ZMOVE)) this.players[0].move = DuelHelper.getZMove(this.players[0], this.players[0].move);
             if(this.getAction(1).equals(ActionType.ZMOVE)) this.players[1].move = DuelHelper.getZMove(this.players[1], this.players[1].move);
 
+            //Check if Entering Dynamax
+            if(this.getAction(0).equals(ActionType.DYNAMAX))
+            {
+                this.players[0].active.enterDynamax();
+                this.players[0].dynamaxTurns = 3;
+                this.players[0].usedDynamax = true;
+            }
+            if(this.getAction(1).equals(ActionType.DYNAMAX))
+            {
+                this.players[1].active.enterDynamax();
+                this.players[1].dynamaxTurns = 3;
+                this.players[1].usedDynamax = true;
+            }
+
+            //Check if Max Move (Dynamaxed)
+            if(this.players[0].active.isDynamaxed()) this.players[0].move = DuelHelper.getMaxMove(this.players[0].active, this.players[0].move);
+            if(this.players[1].active.isDynamaxed()) this.players[1].move = DuelHelper.getMaxMove(this.players[1].active, this.players[1].move);
+
             //Set who attacks first
             int speed1 = this.players[0].active.getStat(Stat.SPD);
             int speed2 = this.players[1].active.getStat(Stat.SPD);
@@ -157,6 +175,14 @@ public class Duel
 
                 Move move = new Move(this.players[1].active.getLearnedMoves().get(this.queuedMoves.get(this.players[1].ID).moveInd() - 1));
                 if(this.getAction(1).equals(ActionType.ZMOVE)) move = DuelHelper.getZMove(this.players[1], move);
+                if(this.getAction(1).equals(ActionType.DYNAMAX))
+                {
+                    this.players[1].active.enterDynamax();
+                    this.players[1].dynamaxTurns = 3;
+                    this.players[1].usedDynamax = true;
+                }
+
+                if(this.players[1].active.isDynamaxed()) move = DuelHelper.getMaxMove(this.players[1].active, this.players[1].move);
 
                 int ind = this.queuedMoves.get(this.players[0].ID).swapInd() - 1;
                 this.data(0).setDefaults();
@@ -178,6 +204,14 @@ public class Duel
 
                 Move move = new Move(this.players[0].active.getLearnedMoves().get(this.queuedMoves.get(this.players[0].ID).moveInd() - 1));
                 if(this.getAction(0).equals(ActionType.ZMOVE)) move = DuelHelper.getZMove(this.players[0], move);
+                if(this.getAction(0).equals(ActionType.DYNAMAX))
+                {
+                    this.players[0].active.enterDynamax();
+                    this.players[0].dynamaxTurns = 3;
+                    this.players[0].usedDynamax = true;
+                }
+
+                if(this.players[0].active.isDynamaxed()) move = DuelHelper.getMaxMove(this.players[0].active, this.players[0].move);
 
                 int ind = this.queuedMoves.get(this.players[1].ID).swapInd() - 1;
                 this.data(1).setDefaults();
@@ -195,6 +229,9 @@ public class Duel
         this.updateWeatherTerrainRoom();
 
         this.weatherEffects();
+
+        this.checkDynamax(0);
+        this.checkDynamax(1);
 
         if(this.isComplete())
         {
@@ -263,6 +300,12 @@ public class Duel
         {
             accurate = true;
             this.players[this.current].usedZMove = true;
+        }
+
+        if(move.isMaxMove)
+        {
+            accurate = true;
+            this.players[this.current].usedDynamax = true;
         }
 
         if(this.data(this.other).imprisonUsed && this.players[this.other].active.getLearnedMoves().contains(move.getName())) cantUse = true;
@@ -613,6 +656,16 @@ public class Duel
         this.terrain = Terrain.NORMAL_TERRAIN;
         this.room = Room.NORMAL_ROOM;
         this.entryHazards = new EntryHazardHandler[]{new EntryHazardHandler(), new EntryHazardHandler()};
+    }
+
+    public void checkDynamax(int p)
+    {
+        if(this.players[p].active.isDynamaxed())
+        {
+            this.players[p].dynamaxTurns--;
+
+            if(this.players[p].dynamaxTurns <= 0) this.players[p].active.exitDynamax();
+        }
     }
 
     public void updateWeatherTerrainRoom()
@@ -1097,6 +1150,7 @@ public class Duel
     }
 
     //Useful Getters/Setters
+    @Deprecated
     public void submitMove(String id, int moveIndex, boolean z)
     {
         this.queuedMoves.put(id, new TurnAction(z ? ActionType.ZMOVE : ActionType.MOVE, moveIndex, -1));
@@ -1104,6 +1158,7 @@ public class Duel
 
     public void submitMove(String id, int moveIndex, char type)
     {
+        type = Character.toLowerCase(type);
         this.queuedMoves.put(id, new TurnAction(type == 'z' ? ActionType.ZMOVE : (type == 'd' ? ActionType.DYNAMAX : ActionType.MOVE), moveIndex, -1));
     }
 

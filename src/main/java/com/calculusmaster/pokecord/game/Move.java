@@ -26,6 +26,7 @@ public class Move
     private int power;
     private int accuracy;
     public boolean isZMove;
+    public boolean isMaxMove;
     private int priority;
     private double damageMultiplier;
 
@@ -54,6 +55,7 @@ public class Move
         this.power = power;
         this.accuracy = 100;
         this.isZMove = true;
+        this.isMaxMove = false;
         this.setPriority();
         this.damageMultiplier = 1.0;
     }
@@ -83,6 +85,7 @@ public class Move
         };
 
         if(this.isZMove) typeClass = ZMoves.class;
+        if(this.isMaxMove) typeClass = MaxMoves.class;
 
         String results = this.getMoveUsedResult(user);
         String moveName = this.name;
@@ -287,6 +290,7 @@ public class Move
         this.accuracy = this.moveData.accuracy;
         this.hitCrit = false;
         this.isZMove = false;
+        this.isMaxMove = false;
         this.damageMultiplier = 1.0;
         this.setPriority();
     }

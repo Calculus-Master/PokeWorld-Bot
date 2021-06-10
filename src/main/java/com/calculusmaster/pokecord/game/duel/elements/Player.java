@@ -15,6 +15,8 @@ public class Player
     public Pokemon active;
     public Move move;
     public boolean usedZMove;
+    public boolean usedDynamax;
+    public int dynamaxTurns;
     public List<Pokemon> team;
 
     public Player(String id, int numPokemon)
@@ -31,12 +33,16 @@ public class Player
         this.active = this.team.get(0);
         this.move = null;
         this.usedZMove = false;
+        this.usedDynamax = false;
+        this.dynamaxTurns = 0;
     }
 
     public Player()
     {
         this.ID = "BOT";
         this.usedZMove = false;
+        this.usedDynamax = false;
+        this.dynamaxTurns = 0;
     }
 
     public void swap(int index)

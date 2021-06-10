@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game.duel;
 
 import com.calculusmaster.pokecord.game.Move;
+import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
@@ -574,5 +575,54 @@ public class DuelHelper
         }
 
         return ZMove;
+    }
+
+    public static Move getMaxMove(Pokemon p, Move baseMove)
+    {
+        //Fallback
+        Move maxMove;
+
+        String maxName;
+        Type maxType = baseMove.getType();
+        Category maxCategory = baseMove.getCategory();
+        int maxPower = baseMove.getPower(); //Temporary - TODO: Add the base power -> max power conversions
+
+        if(baseMove.getCategory().equals(Category.STATUS))
+        {
+            maxName = "Max Guard";
+            maxType = Type.NORMAL;
+        }
+        else if(p.canGigantamax())
+        {
+            Pokemon.GigantamaxData data = Pokemon.GIGANTAMAX_DATA.get(p.getName());
+            maxName = data.move();
+            maxType = data.moveType();
+        }
+        else maxName = "Max " + switch(baseMove.getType()) {
+            case BUG -> "Flutterby";
+            case DARK -> "Darkness";
+            case DRAGON -> "Wyrmwind";
+            case ELECTRIC -> "Lightning";
+            case FAIRY -> "Starfall";
+            case FIGHTING -> "Knuckle";
+            case FIRE -> "Flare";
+            case FLYING -> "Airstream";
+            case GHOST -> "Phantasm";
+            case GRASS -> "Overgrowth";
+            case GROUND -> "Quake";
+            case ICE -> "Hailstorm";
+            case NORMAL -> "Strike";
+            case POISON -> "Ooze";
+            case PSYCHIC -> "Mindstorm";
+            case ROCK -> "Rockfall";
+            case STEEL -> "Steelspike";
+            case WATER -> "Geyser";
+        };
+
+        maxMove = new Move(maxName, maxType, maxCategory, maxPower);
+        maxMove.isZMove = false;
+        maxMove.isMaxMove = true;
+
+        return maxMove;
     }
 }
