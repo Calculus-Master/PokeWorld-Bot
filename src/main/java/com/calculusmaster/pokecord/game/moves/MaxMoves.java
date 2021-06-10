@@ -329,4 +329,23 @@ public class MaxMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    //Custom
+    //TODO: Changes weather to Delta Stream
+    public String GMaxStratoblast(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    //TODO: Changes weather to Primordial Sea
+    public String GMaxOceanize(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    //TODO: Changes weather to Desolate Land
+    public String GMaxEvaporation(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
