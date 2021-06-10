@@ -182,7 +182,7 @@ public class Duel
                     this.players[1].usedDynamax = true;
                 }
 
-                if(this.players[1].active.isDynamaxed()) move = DuelHelper.getMaxMove(this.players[1].active, this.players[1].move);
+                if(!faintSwap && this.players[1].active.isDynamaxed()) move = DuelHelper.getMaxMove(this.players[1].active, this.players[1].move);
 
                 int ind = this.queuedMoves.get(this.players[0].ID).swapInd() - 1;
                 this.data(0).setDefaults();
@@ -201,6 +201,8 @@ public class Duel
                 this.other = 1;
 
                 boolean faintSwap = this.players[1].active.isFainted();
+                //TODO: move to methods, also remove the entire zmove and dynamax check if this is an AI duel & the trainer swaps
+                //TODO: Add TurnAction: Idle - player does nothing on that turn and Item - usable items (maybe????)
 
                 Move move = new Move(this.players[0].active.getLearnedMoves().get(this.queuedMoves.get(this.players[0].ID).moveInd() - 1));
                 if(this.getAction(0).equals(ActionType.ZMOVE)) move = DuelHelper.getZMove(this.players[0], move);
@@ -211,7 +213,7 @@ public class Duel
                     this.players[0].usedDynamax = true;
                 }
 
-                if(this.players[0].active.isDynamaxed()) move = DuelHelper.getMaxMove(this.players[0].active, this.players[0].move);
+                if(!faintSwap && this.players[0].active.isDynamaxed()) move = DuelHelper.getMaxMove(this.players[0].active, this.players[0].move);
 
                 int ind = this.queuedMoves.get(this.players[1].ID).swapInd() - 1;
                 this.data(1).setDefaults();
