@@ -1180,8 +1180,7 @@ public class Duel
     public InputStream getImage() throws Exception
     {
         //Background is 800 x 480 -> 400 x 240
-
-        int size = 150;
+        int baseSize = 150;
         int y = 50;
         int spacing = 25;
         int backgroundW = 400;
@@ -1195,12 +1194,16 @@ public class Duel
 
         if(!this.players[0].active.isFainted())
         {
+            int size = this.players[0].active.isDynamaxed() ? (int)(baseSize * 1.25) : baseSize;
+
             Image p1 = ImageIO.read(new URL(this.getPokemonURL(0))).getScaledInstance(size, size, hint);
             combined.getGraphics().drawImage(p1, spacing, y, null);
         }
 
         if(!this.players[1].active.isFainted())
         {
+            int size = this.players[1].active.isDynamaxed() ? (int)(baseSize * 1.25) : baseSize;
+
             Image p2 = ImageIO.read(new URL(this.getPokemonURL(1))).getScaledInstance(size, size, hint);
             combined.getGraphics().drawImage(p2, (backgroundW - spacing) - size, y, null);
         }
