@@ -592,7 +592,7 @@ public class DuelHelper
             maxName = "Max Guard";
             maxType = Type.NORMAL;
         }
-        else if(p.canGigantamax())
+        else if(p.canGigantamax() && Pokemon.GIGANTAMAX_DATA.get(p.getName()).moveType().equals(baseMove.getType()))
         {
             Pokemon.GigantamaxData data = Pokemon.GIGANTAMAX_DATA.get(p.getName());
             maxName = data.move();
