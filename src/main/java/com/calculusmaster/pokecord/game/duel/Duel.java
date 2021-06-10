@@ -1102,6 +1102,11 @@ public class Duel
         this.queuedMoves.put(id, new TurnAction(z ? ActionType.ZMOVE : ActionType.MOVE, moveIndex, -1));
     }
 
+    public void submitMove(String id, int moveIndex, char type)
+    {
+        this.queuedMoves.put(id, new TurnAction(type == 'z' ? ActionType.ZMOVE : (type == 'd' ? ActionType.DYNAMAX : ActionType.MOVE), moveIndex, -1));
+    }
+
     public void submitMove(String id, int swapIndex)
     {
         if(this.players[this.indexOf(id)].team.get(swapIndex - 1).isFainted())

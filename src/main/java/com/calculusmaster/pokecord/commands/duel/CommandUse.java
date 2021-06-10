@@ -60,7 +60,7 @@ public class CommandUse extends Command
         //WildDuel only accepts p!use, so if execution has made it this far in a WildDuel, invalid message
         else if(d instanceof WildDuel)
         {
-            this.event.getChannel().sendMessage(mention + "You cannot swap or use a Z-Move in a Wild Pokemon duel!").queue();
+            this.event.getChannel().sendMessage(mention + "You cannot swap, use a Z-Move, or Dynamax in a Wild Pokemon duel!").queue();
             this.embed = null;
             return this;
         }
@@ -82,6 +82,13 @@ public class CommandUse extends Command
                 return this;
             }
 
+            if(!d.getPlayers()[d.indexOf(this.player.getId())].active.isFainted() && d.getPlayers()[d.indexOf(this.player.getId())].active.isDynamaxed())
+            {
+                this.event.getChannel().sendMessage(mention + "You cannot swap out a Dynamaxed Pokemon!").queue();
+                this.embed = null;
+                return this;
+            }
+
             d.submitMove(this.player.getId(), this.getInt(2));
             this.event.getMessage().delete().queue();
         }
@@ -99,6 +106,13 @@ public class CommandUse extends Command
             if(d.getPlayers()[d.indexOf(this.player.getId())].usedZMove)
             {
                 this.event.getChannel().sendMessage(mention + "You have already used a Z-Move!").queue();
+                this.embed = null;
+                return this;
+            }
+
+            if(d.getPlayers()[d.indexOf(this.player.getId())].active.isDynamaxed())
+            {
+                this.event.getChannel().sendMessage(mention + "Dynamaxed Pokemon can't use Z-Moves!").queue();
                 this.embed = null;
                 return this;
             }
@@ -164,7 +178,7 @@ public class CommandUse extends Command
 
             if(!statusBaseMoves.contains(move.getName()) && move.getCategory().equals(Category.STATUS))
             {
-                this.event.getChannel().sendMessage(mention + "Status Z-Moves are not implemented!").queue();
+                this.event.getChannel().sendMessage(mention + "Most Status Z-Moves are not implemented! Implemented Status Z-Moves are: " + statusBaseMoves.toString()).queue();
                 this.embed = null;
                 return this;
             }
@@ -178,6 +192,12 @@ public class CommandUse extends Command
 
             d.submitMove(this.player.getId(), this.getInt(2), true);
             this.event.getMessage().delete().queue();
+        }
+
+        //Dynamax (Entering the form only, using moves in Dynamax form are handled by p!use <num>)
+        if(this.msg.length == 3 && this.msg[1].equals("d") && isNumeric(2) && this.getInt(2) > 0 && this.getInt(2) < 5)
+        {
+
         }
 
         d.checkReady();

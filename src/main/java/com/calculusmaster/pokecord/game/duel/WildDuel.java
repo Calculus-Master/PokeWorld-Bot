@@ -141,12 +141,6 @@ public class WildDuel extends Duel
     }
 
     @Override
-    public void submitMove(String id, int moveIndex, boolean z)
-    {
-        super.submitMove(id, moveIndex, false);
-    }
-
-    @Override
     public void checkReady()
     {
         if(this.queuedMoves.containsKey(this.players[0].ID))

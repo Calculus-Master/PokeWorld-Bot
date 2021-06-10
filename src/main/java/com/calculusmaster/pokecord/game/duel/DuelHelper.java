@@ -195,7 +195,8 @@ public class DuelHelper
     {
         MOVE,
         ZMOVE,
-        SWAP;
+        SWAP,
+        DYNAMAX;
     }
 
     public enum DuelStatus
