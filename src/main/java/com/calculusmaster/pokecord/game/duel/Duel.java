@@ -953,7 +953,7 @@ public class Duel
         for(Pokemon p : this.players[player].team)
         {
             this.pokemonAttributes.put(p.getUUID(), new DuelPokemon(p.getUUID()));
-            this.data(player).isRaised = p.isType(Type.FLYING);
+            this.data(player).isRaised = p.isType(Type.FLYING) || p.getAbilities().contains("Levitate");
         }
     }
 
