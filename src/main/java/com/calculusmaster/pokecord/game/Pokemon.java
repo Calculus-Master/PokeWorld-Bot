@@ -217,7 +217,8 @@ public class Pokemon
                 .append("moves", p.getMovesCondensed())
                 .append("tm", p.getTM())
                 .append("tr", p.getTR())
-                .append("item", p.getItem());
+                .append("item", p.getItem())
+                .append("dynamax_level", p.getDynamaxLevel());
 
         Mongo.PokemonData.insertOne(pokeData);
     }
