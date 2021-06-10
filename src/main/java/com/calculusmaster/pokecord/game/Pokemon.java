@@ -33,15 +33,13 @@ public class Pokemon
 
     private int level;
     private int exp;
-
     private Map<Stat, Integer> IV = new TreeMap<>();
     private Map<Stat, Integer> EV = new TreeMap<>();
-
     private List<String> learnedMoves = new ArrayList<>();
     private int heldTM;
     private int heldTR;
-
     private String heldItem;
+    private int dynamaxLevel;
 
     private int health;
     private Type[] type;
@@ -81,6 +79,7 @@ public class Pokemon
         p.setTM(specific.getInt("tm"));
         p.setTR(specific.getInt("tr"));
         p.setItem(specific.has("item") ? specific.getString("item") : PokeItem.NONE.getName());
+        p.setDynamaxLevel(specific.getInt("dynamax_level"));
 
         p.setHealth(p.getStat(Stat.HP));
         p.setType();
@@ -114,6 +113,7 @@ public class Pokemon
         p.setTM(-1);
         p.setTR(-1);
         p.setItem(PokeItem.NONE);
+        p.setDynamaxLevel(0);
 
         p.setHealth(p.getStat(Stat.HP));
         p.setType();
@@ -260,6 +260,11 @@ public class Pokemon
     public static void updateItem(Pokemon p)
     {
         Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("item", p.getItem()));
+    }
+
+    public static void updateDynamaxLevel(Pokemon p)
+    {
+        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("dynamax_level", p.getDynamaxLevel()));
     }
 
     public static void deletePokemon(Pokemon p)
@@ -875,6 +880,43 @@ public class Pokemon
         this.isDynamaxed = dynamaxed;
     }
 
+    public int getDynamaxLevel()
+    {
+        return this.dynamaxLevel;
+    }
+
+    public void increaseDynamaxLevel()
+    {
+        if(this.dynamaxLevel <= 9)
+        {
+            this.dynamaxLevel++;
+            Pokemon.updateDynamaxLevel(this);
+        }
+    }
+
+    public void setDynamaxLevel(int level)
+    {
+        this.dynamaxLevel = level;
+    }
+
+    public void enterDynamax()
+    {
+        double healthRatio = (double)this.getHealth() / this.getStat(Stat.HP);
+
+        this.setDynamax(true);
+
+        this.setHealth((int)(healthRatio * this.getStat(Stat.HP)));
+    }
+
+    public void exitDynamax()
+    {
+        double healthRatio = (double)this.getHealth() / this.getStat(Stat.HP);
+
+        this.setDynamax(false);
+
+        this.setHealth((int)(healthRatio * this.getStat(Stat.HP)));
+    }
+
     public boolean canGigantamax()
     {
         return GIGANTAMAX_DATA.keySet().stream().anyMatch(s -> s.equals(this.getName()));
@@ -1033,7 +1075,17 @@ public class Pokemon
     //Stat
     public int getStat(Stat s)
     {
-        if(s.equals(Stat.HP)) return this.getMaxHP();
+        if(s.equals(Stat.HP))
+        {
+            //HP = Level + 10 + [((2 * Base + IV + EV / 4) * Level) / 100]
+            double base = this.genericJSON.getJSONArray("stats").getInt(0);
+            int IV = this.IV.get(Stat.HP);
+            int EV = this.EV.get(Stat.HP);
+            double maxHP = this.level + 10 + ((this.level * (2 * base + IV + EV / 4.0)) / 100);
+
+            double dynamaxBoost = this.isDynamaxed ? this.getDynamaxLevel() * 0.05 + 0.5 : 1.0;
+            return (int)(maxHP * dynamaxBoost);
+        }
         else
         {
             //Stat = Nature * [5 + ((2 * Base + IV + EV / 4) * Level) / 100]
@@ -1090,16 +1142,6 @@ public class Pokemon
     public int getCrit()
     {
         return this.crit;
-    }
-
-    private int getMaxHP()
-    {
-        //HP = Level + 10 + [((2 * Base + IV + EV / 4) * Level) / 100]
-        double base = this.genericJSON.getJSONArray("stats").getInt(0);
-        int IV = this.IV.get(Stat.HP);
-        int EV = this.EV.get(Stat.HP);
-        double maxHP = this.level + 10 + ((this.level * (2 * base + IV + EV / 4.0)) / 100);
-        return (int)maxHP;
     }
 
     public List<String> getAbilities()
