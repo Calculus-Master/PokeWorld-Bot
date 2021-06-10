@@ -151,10 +151,18 @@ public class GhostMoves
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
-    //TODO: Phantom Force Invulnerability
     public String PhantomForce(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        if(duel.data(user.getUUID()).phantomForceUsed)
+        {
+            duel.data(user.getUUID()).bounceUsed = false;
+            return Move.simpleDamageMove(user, opponent, duel, move);
+        }
+        else
+        {
+            duel.data(user.getUUID()).phantomForceUsed = true;
+            return user.getName() + " disappeared from sight!";
+        }
     }
 
     public String DestinyBond(Pokemon user, Pokemon opponent, Duel duel, Move move)

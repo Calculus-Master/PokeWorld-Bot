@@ -330,18 +330,20 @@ public class Duel
             accurate = move.isAccurate();
         }
 
+        boolean phantomForceBypass = move.getName().equals("Phantom Force") && this.data(this.current).phantomForceUsed;
+
         if(this.data(this.other).detectUsed)
         {
             this.data(this.other).detectUsed = false;
 
-            otherImmune = true;
+            otherImmune = !phantomForceBypass;
         }
 
         if(this.data(this.other).protectUsed)
         {
             this.data(this.other).protectUsed = false;
 
-            otherImmune = true;
+            otherImmune = !phantomForceBypass;
         }
 
         if(this.data(this.current).chargeUsed)
@@ -422,11 +424,13 @@ public class Duel
 
         if(this.data(this.current).diveUsed) move = new Move("Dive");
 
+        if(this.data(this.current).phantomForceUsed) move = new Move("Phantom Force");
+
         List<String> flyMoves = Arrays.asList("Gust", "Twister", "Thunder", "Sky Uppercut", "Smack Down");
         List<String> digMoves = Arrays.asList("Earthquake", "Magnitude", "Fissure");
         List<String> diveMoves = Arrays.asList("Surf", "Whirlpool", "Low Kick");
 
-        if((this.data(this.other).flyUsed && !flyMoves.contains(move.getName())) || (this.data(this.other).bounceUsed && !flyMoves.contains(move.getName())) || (this.data(this.other).digUsed && !digMoves.contains(move.getName())) || (this.data(this.other).diveUsed && !diveMoves.contains(move.getName())))
+        if((this.data(this.other).flyUsed && !flyMoves.contains(move.getName())) || (this.data(this.other).bounceUsed && !flyMoves.contains(move.getName())) || (this.data(this.other).digUsed && !digMoves.contains(move.getName())) || (this.data(this.other).diveUsed && !diveMoves.contains(move.getName())) || this.data(this.other).phantomForceUsed)
         {
             otherImmune = true;
         }
@@ -646,8 +650,8 @@ public class Duel
         {
             case HAIL -> {
 
-                boolean is1Affected = !this.players[0].active.isType(Type.ICE) && !this.data(0).digUsed && !this.data(0).diveUsed;
-                boolean is2Affected = !this.players[1].active.isType(Type.ICE) && !this.data(1).digUsed && !this.data(1).diveUsed;
+                boolean is1Affected = !this.players[0].active.isType(Type.ICE) && !this.data(0).digUsed && !this.data(0).diveUsed && !this.data(0).phantomForceUsed;
+                boolean is2Affected = !this.players[1].active.isType(Type.ICE) && !this.data(1).digUsed && !this.data(1).diveUsed && !this.data(1).phantomForceUsed;
 
                 if(is1Affected)
                 {
@@ -663,8 +667,8 @@ public class Duel
             }
             case SANDSTORM -> {
 
-                boolean is1Affected = !this.players[0].active.isType(Type.GROUND) && !this.players[0].active.isType(Type.ROCK) && !this.players[0].active.isType(Type.STEEL) && !this.data(0).digUsed && !this.data(0).diveUsed;
-                boolean is2Affected = !this.players[1].active.isType(Type.GROUND) && !this.players[1].active.isType(Type.ROCK) && !this.players[1].active.isType(Type.STEEL) && !this.data(1).digUsed && !this.data(1).diveUsed;
+                boolean is1Affected = !this.players[0].active.isType(Type.GROUND) && !this.players[0].active.isType(Type.ROCK) && !this.players[0].active.isType(Type.STEEL) && !this.data(0).digUsed && !this.data(0).diveUsed && !this.data(0).phantomForceUsed;
+                boolean is2Affected = !this.players[1].active.isType(Type.GROUND) && !this.players[1].active.isType(Type.ROCK) && !this.players[1].active.isType(Type.STEEL) && !this.data(1).digUsed && !this.data(1).diveUsed && !this.data(1).phantomForceUsed;
 
                 if(is1Affected)
                 {

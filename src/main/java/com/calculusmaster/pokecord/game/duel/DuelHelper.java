@@ -49,6 +49,7 @@ public class DuelHelper
         public boolean bounceUsed;
         public boolean digUsed;
         public boolean diveUsed;
+        public boolean phantomForceUsed;
 
         public boolean defenseCurlUsed;
         public int rolloutTurns;
@@ -94,6 +95,7 @@ public class DuelHelper
             this.bounceUsed = false;
             this.digUsed = false;
             this.diveUsed = false;
+            this.phantomForceUsed = false;
 
             this.defenseCurlUsed = false;
             this.rolloutTurns = 0;
