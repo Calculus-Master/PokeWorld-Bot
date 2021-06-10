@@ -585,7 +585,7 @@ public class DuelHelper
         String maxName;
         Type maxType = baseMove.getType();
         Category maxCategory = baseMove.getCategory();
-        int maxPower = baseMove.getPower(); //Temporary - TODO: Add the base power -> max power conversions
+        int maxPower = baseMove.getPower();
 
         if(baseMove.getCategory().equals(Category.STATUS))
         {
@@ -618,6 +618,15 @@ public class DuelHelper
             case STEEL -> "Steelspike";
             case WATER -> "Geyser";
         };
+
+        boolean isDecreased = Arrays.asList("Max Knuckle", "Max Ooze").contains(maxName);
+        if(baseMove.getPower() <= 40) maxPower = isDecreased ? 70 : 90;
+        else if(baseMove.getPower() <= 50) maxPower = isDecreased ? 75 : 100;
+        else if(baseMove.getPower() <= 60) maxPower = isDecreased ? 80 : 110;
+        else if(baseMove.getPower() <= 70) maxPower = isDecreased ? 85 : 120;
+        else if(baseMove.getPower() <= 100) maxPower = isDecreased ? 90 : 130;
+        else if(baseMove.getPower() <= 140) maxPower = isDecreased ? 95 : 140;
+        else maxPower = isDecreased ? 100 : 150;
 
         maxMove = new Move(maxName, maxType, maxCategory, maxPower);
         maxMove.isZMove = false;
