@@ -96,7 +96,7 @@ public class CommandUse extends Command
         //Z Move
         if(this.msg.length == 3 && this.msg[1].equals("z") && isNumeric(2) && this.getInt(2) > 0 && this.getInt(2) < 5)
         {
-            if(this.playerData.getEquippedZCrystal() == null)
+            if(ZCrystal.cast(this.playerData.getEquippedZCrystal()) == null)
             {
                 this.event.getChannel().sendMessage(mention + "You don't have an equipped Z-Crystal! Equip one with `p!equip`!").queue();
                 this.embed = null;
