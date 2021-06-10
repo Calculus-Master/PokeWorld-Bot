@@ -666,6 +666,7 @@ public class Duel
         {
             this.players[p].dynamaxTurns--;
 
+            if(this.players[p].active.isFainted()) this.players[p].dynamaxTurns = 0;
             if(this.players[p].dynamaxTurns <= 0) this.players[p].active.exitDynamax();
         }
     }
