@@ -19,18 +19,33 @@ public class CommandMoves extends Command
     {
         Pokemon selected = this.playerData.getSelectedPokemon();
         boolean inDuel = DuelHelper.isInDuel(this.player.getId());
+        StringBuilder movesList = new StringBuilder();
 
         if(inDuel)
         {
             Duel d = DuelHelper.instance(this.player.getId());
             selected = d.getPlayers()[d.indexOf(this.player.getId())].active;
-        }
 
-        StringBuilder movesList = new StringBuilder().append("**Learned Moves: **\n");
-        for(int i = 0; i < 4; i++) movesList.append("Move " + (i + 1) + ": " + selected.getLearnedMoves().get(i) + "\n");
+            movesList.append("**Learned Moves: **\n");
+            Move m;
+            for(int i = 0; i < 4; i++)
+            {
+                movesList.append(i + 1).append(": ");
+
+                m = new Move(selected.getLearnedMoves().get(i));
+
+                if(selected.isDynamaxed()) movesList.append(DuelHelper.getMaxMove(selected, m).getName());
+                else movesList.append(m.getName()).append(" (Max Move: ").append(DuelHelper.getMaxMove(selected, m).getName()).append(")");
+
+                movesList.append("\n");
+            }
+        }
 
         if(!inDuel)
         {
+            movesList.append("**Learned Moves: **\n");
+            for(int i = 0; i < 4; i++) movesList.append("Move ").append(i + 1).append(": ").append(selected.getLearnedMoves().get(i)).append("\n");
+
             movesList.append("\n**All Moves: **\n");
             String emote;
             for (String s : selected.getAllMoves())
