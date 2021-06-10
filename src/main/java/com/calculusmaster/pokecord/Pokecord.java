@@ -42,6 +42,8 @@ public class Pokecord
 
         Global.logInfo(Pokecord.class, "main", "Starting Pokemon Init!");
         Pokemon.init();
+        Global.logInfo(Pokecord.class, "main", "Starting Gigantamax Init!");
+        Pokemon.gigantamaxInit();
         Global.logInfo(Pokecord.class, "main", "Starting CommandWildDuel EV Lists Init!");
         CommandWildDuel.init();
         Global.logInfo(Pokecord.class, "main", "Starting setDailyTrainers!");

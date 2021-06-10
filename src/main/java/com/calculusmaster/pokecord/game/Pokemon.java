@@ -17,9 +17,6 @@ import org.bson.conversions.Bson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -54,6 +51,7 @@ public class Pokemon
     private boolean statImmune;
     private boolean endure;
     public double statBuff;
+    private boolean isDynamaxed;
 
     //Init Global List
     public static void init()
@@ -92,6 +90,7 @@ public class Pokemon
         p.setStatImmune(false);
         p.setEndure(false);
         p.statBuff = 1.0;
+        p.setDynamax(false);
 
         Global.logInfo(Pokemon.class, "build", "Pokemon Built (UUID: " + UUID + ", Name: " + p.getName() + ")!");
         return p;
@@ -124,6 +123,7 @@ public class Pokemon
         p.setStatImmune(false);
         p.setEndure(false);
         p.statBuff = 1.0;
+        p.setDynamax(false);
 
         Global.logInfo(Pokemon.class, "create", "New Pokemon (" + name + ") Created!");
         return p;
@@ -605,6 +605,9 @@ public class Pokemon
         if(this.getName().equals("Deerling")) return Global.getDeerlingImage(this.isShiny());
         else if(this.getName().equals("Sawsbuck")) return Global.getSawsbuckImage(this.isShiny());
 
+        //TODO: Basic Dynamax Image
+        if(this.isDynamaxed && this.canGigantamax()) return this.isShiny() ? GIGANTAMAX_DATA.get(this.getName()).shinyImage() : GIGANTAMAX_DATA.get(this.getName()).normalImage();
+
         String image = this.genericJSON.getString(this.isShiny() ? "shinyURL" : "normalURL");
         return image.equals("") ? Pokemon.getWIPImage() : image;
     }
@@ -859,6 +862,74 @@ public class Pokemon
         form = Global.normalCase(form);
         this.linkGenericJSON(form);
         Pokemon.updateName(this, form);
+    }
+
+    //Dynamax and Gigantamax
+    public boolean isDynamaxed()
+    {
+        return this.isDynamaxed;
+    }
+
+    public void setDynamax(boolean dynamaxed)
+    {
+        this.isDynamaxed = dynamaxed;
+    }
+
+    public boolean canGigantamax()
+    {
+        return GIGANTAMAX_DATA.keySet().stream().anyMatch(s -> s.equals(this.getName()));
+    }
+
+    public static final Map<String, GigantamaxData> GIGANTAMAX_DATA = new HashMap<>();
+
+    public record GigantamaxData(String pokemon, String move, Type moveType, String normalImage, String shinyImage) {};
+
+    public static void gigantamaxInit()
+    {
+        Pokemon.addGigantamaxData("Charizard", "Wildfire", Type.FIRE, "", "");
+        Pokemon.addGigantamaxData("Butterfree", "Befuddle", Type.BUG, "", "");
+        Pokemon.addGigantamaxData("Pikachu", "Volt Crash", Type.ELECTRIC, "", "");
+        Pokemon.addGigantamaxData("Meowth", "Gold Rush", Type.NORMAL, "", "");
+        Pokemon.addGigantamaxData("Machamp", "Chi Strike", Type.FIGHTING, "", "");
+        Pokemon.addGigantamaxData("Gengar", "Terror", Type.GHOST, "", "");
+        Pokemon.addGigantamaxData("Kingler", "Foam Burst", Type.WATER, "", "");
+        Pokemon.addGigantamaxData("Lapras", "Resonance", Type.ICE, "", "");
+        Pokemon.addGigantamaxData("Eevee", "Cuddle", Type.NORMAL, "", "");
+        Pokemon.addGigantamaxData("Snorlax", "Replenish", Type.NORMAL, "", "");
+        Pokemon.addGigantamaxData("Garbodor", "Malodor", Type.POISON, "", "");
+        Pokemon.addGigantamaxData("Melmetal", "Meltdown", Type.STEEL, "", "");
+        Pokemon.addGigantamaxData("Corviknight", "Wind Rage", Type.FLYING, "", "");
+        Pokemon.addGigantamaxData("Orbeetle", "Gravitas", Type.PSYCHIC, "", "");
+        Pokemon.addGigantamaxData("Drednaw", "Stonesurge", Type.WATER, "", "");
+        Pokemon.addGigantamaxData("Coalossal", "Volcalith", Type.ROCK, "", "");
+        Pokemon.addGigantamaxData("Flapple", "Tartness", Type.GRASS, "", "");
+        Pokemon.addGigantamaxData("Appletun", "Sweetness", Type.GRASS, "", "");
+        Pokemon.addGigantamaxData("Sandaconda", "Sandblast", Type.GROUND, "", "");
+        Pokemon.addGigantamaxData("Toxtricity Low Key", "Stunshock", Type.ELECTRIC, "", "");
+        Pokemon.addGigantamaxData("Toxtricity Amped", "Stunshock", Type.ELECTRIC, "", "");
+        Pokemon.addGigantamaxData("Centiskorch", "Centiferno", Type.FIRE, "", "");
+        Pokemon.addGigantamaxData("Hatterene", "Smite", Type.FAIRY, "", "");
+        Pokemon.addGigantamaxData("Grimmsnarl", "Snooze", Type.DARK, "", "");
+        Pokemon.addGigantamaxData("Alcremie", "Finale", Type.FAIRY, "", "");
+        Pokemon.addGigantamaxData("Copperajah", "Steelsurge", Type.STEEL, "", "");
+        Pokemon.addGigantamaxData("Duraludon", "Depletion", Type.DRAGON, "", "");
+        Pokemon.addGigantamaxData("Venusaur", "Vine Lash", Type.GRASS, "", "");
+        Pokemon.addGigantamaxData("Blastoise", "Cannonade", Type.WATER, "", "");
+        Pokemon.addGigantamaxData("Rillaboom", "Drum Solo", Type.GRASS, "", "");
+        Pokemon.addGigantamaxData("Cinderace", "Fireball", Type.FIRE, "", "");
+        Pokemon.addGigantamaxData("Inteleon", "Hydrosnipe", Type.WATER, "", "");
+        Pokemon.addGigantamaxData("Urshifu", "One Blow", Type.DARK, "", "");
+        Pokemon.addGigantamaxData("Urshifu Rapid Strike", "Rapid Flow", Type.WATER, "", "");
+    }
+
+    private static void addGigantamaxData(String name, String move, Type type, String normal, String shiny)
+    {
+        GIGANTAMAX_DATA.put(name, new GigantamaxData(name, "G Max " + move, type, normal, shiny));
+    }
+
+    private static void addGigantamaxData(String name, String move, Type type, String normal)
+    {
+        addGigantamaxData(name, move, type, normal, normal);
     }
 
     //IVs and EVs
