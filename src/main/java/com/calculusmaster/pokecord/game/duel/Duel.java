@@ -915,7 +915,7 @@ public class Duel
 
             this.players[player].active.damage(damage);
 
-            hazardResults += "Stealth Rock dealt " + " damage to " + name + "!\n";
+            hazardResults += "Stealth Rock dealt " + damage + " damage to " + name + "!\n";
         }
 
         if(this.entryHazards[player].hasHazard(EntryHazard.STICKY_WEB) && !this.data(player).isRaised)
