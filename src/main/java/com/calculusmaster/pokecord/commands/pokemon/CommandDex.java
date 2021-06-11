@@ -80,8 +80,9 @@ public class CommandDex extends Command
 
         //Dex Generic Info Command
         boolean isShiny = this.msg[1].toLowerCase().equals("shiny");
+        boolean isGigantamax = this.msg[isShiny ? 2 : 1].toLowerCase().equals("gigantamax");
 
-        if(!isPokemon(this.getPokemonName()))
+        if(!isPokemon(this.getPokemonName()) || (isGigantamax && !Pokemon.GIGANTAMAX_DATA.containsKey(Global.normalCase(this.getPokemonName()))))
         {
             this.embed.setDescription(CommandInvalid.getShort());
             return this;
@@ -105,7 +106,7 @@ public class CommandDex extends Command
         String trs = "**TRs**: " + (info.getJSONArray("movesTR").length() == 0 ? "None" : info.getJSONArray("movesTR").toString());
         String baseStats = "**Base Stats:** \n" + this.getStatsFormatted(info.getJSONArray("stats"));
 
-        String image = info.getString((isShiny ? "shiny" : "normal") + "URL");
+        String image = isGigantamax ? (isShiny ? Pokemon.GIGANTAMAX_DATA.get(pokemon).shinyImage() : Pokemon.GIGANTAMAX_DATA.get(pokemon).normalImage()) : (info.getString((isShiny ? "shiny" : "normal") + "URL"));
 
         this.embed.setTitle(title);
         this.embed.setDescription(filler + "\n" + type + "\n" + abilities + "\n" + growth + "" +
@@ -127,7 +128,7 @@ public class CommandDex extends Command
     {
         StringBuilder sb = new StringBuilder();
         for(int i = 1; i < this.msg.length; i++) sb.append(this.msg[i] + " ");
-        return sb.toString().replaceAll("shiny", "").trim();
+        return sb.toString().replaceAll("shiny", "").replaceAll("gigantamax", "").trim();
     }
 
     private String getJSONArrayFormatted(JSONArray arr)
