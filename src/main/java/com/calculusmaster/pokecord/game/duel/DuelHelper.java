@@ -301,7 +301,7 @@ public class DuelHelper
             case GROUDONIUM_Z -> ZMove = new Move("Primordial Landslide", Type.GROUND, Category.PHYSICAL, 195);
         }
 
-        ZMove.setPower(ZPower);
+        if(z.ordinal() <= 17) ZMove.setPower(ZPower);
 
         return ZMove;
     }
