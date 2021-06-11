@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.util.ListPokemon;
 import com.calculusmaster.pokecord.util.PokemonRarity;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -125,14 +126,16 @@ public class CommandTeam extends Command
             }
             else
             {
-                Pokemon p;
+                List<String> teamUUIDs = List.copyOf(this.playerData.getTeam());
+
+                ListPokemon p;
                 for(int i = 0; i < MAX_TEAM_SIZE; i++)
                 {
                     team.append(i + 1).append(": ");
 
-                    if(i < this.playerData.getTeam().size())
+                    if(i < teamUUIDs.size())
                     {
-                        p = Pokemon.buildCore(this.playerData.getTeam().get(i), -1);
+                        p = new ListPokemon(teamUUIDs.get(i), -1);
                         team.append("Level ").append(p.getLevel()).append(" ").append(p.getName()).append(this.getTag(p.getName()));
                     }
                     else team.append("None");
