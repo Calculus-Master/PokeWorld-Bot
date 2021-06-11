@@ -115,14 +115,15 @@ public class SteelMoves
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30) + " " + Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
     }
 
-    //TODO: Double power if Dynamaxed, for both of these
     public String BehemothBash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        if(opponent.isDynamaxed()) move.setPower(move.getPower() * 2);
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String BehemothBlade(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        if(opponent.isDynamaxed()) move.setPower(move.getPower() * 2);
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
