@@ -25,6 +25,7 @@ public class CommandAbilityInfo extends Command
         ABILITY_INFO.put("Technician", "Technician increases the power of moves - that are usually base power 60 or below - by 50%.");
         ABILITY_INFO.put("Serene Grace", "Serene Grace doubles the chance of moves' secondary effects occurring - specifically stat changes, status ailments, or flinching.");
         ABILITY_INFO.put("Levitate", "Levitate causes the Pokemon to be raised (like Flying-type Pokemon).");
+        ABILITY_INFO.put("Multitype", "Multitype changes the ability-bearer's type if it is holding one of the Type Plate items.");
     }
 
     public CommandAbilityInfo(MessageReceivedEvent event, String[] msg)

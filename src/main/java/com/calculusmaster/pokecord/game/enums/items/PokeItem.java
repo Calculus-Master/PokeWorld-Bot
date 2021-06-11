@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game.enums.items;
 
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.util.Global;
 
 import java.util.Arrays;
@@ -93,5 +94,34 @@ public enum PokeItem
     public static boolean isItem(String s)
     {
         return Arrays.stream(values()).anyMatch(i -> i.toString().equals(s.toUpperCase()));
+    }
+
+    public static Type getArceusPlateType(PokeItem item)
+    {
+        return switch(item) {
+            case DRACO_PLATE -> Type.DRAGON;
+            case DREAD_PLATE -> Type.DARK;
+            case EARTH_PLATE -> Type.GROUND;
+            case FIST_PLATE -> Type.FIGHTING;
+            case FLAME_PLATE -> Type.FIRE;
+            case ICICLE_PLATE -> Type.ICE;
+            case INSECT_PLATE -> Type.BUG;
+            case IRON_PLATE -> Type.STEEL;
+            case MEADOW_PLATE -> Type.GRASS;
+            case MIND_PLATE -> Type.PSYCHIC;
+            case PIXIE_PLATE -> Type.FAIRY;
+            case SKY_PLATE -> Type.FLYING;
+            case SPLASH_PLATE -> Type.WATER;
+            case SPOOKY_PLATE -> Type.GHOST;
+            case STONE_PLATE -> Type.ROCK;
+            case TOXIC_PLATE -> Type.POISON;
+            case ZAP_PLATE -> Type.ELECTRIC;
+            default -> null;
+        };
+    }
+
+    public boolean isPlateItem()
+    {
+        return PokeItem.getArceusPlateType(this) != null;
     }
 }

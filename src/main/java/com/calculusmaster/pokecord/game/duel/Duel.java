@@ -257,6 +257,22 @@ public class Duel
     {
         String turnResult = "";
 
+        //Arceus Plate
+        if(this.players[this.current].active.getAbilities().contains("Multitype"))
+        {
+            PokeItem item = PokeItem.asItem(this.players[this.current].active.getItem());
+
+            if(item.isPlateItem())
+            {
+                Type t = PokeItem.getArceusPlateType(item);
+
+                this.players[this.current].active.setType(t, 0);
+                this.players[this.current].active.setType(t, 1);
+
+                if(move.getName().equals("Judgement")) move.setType(t);
+            }
+        }
+
         //Weather-based Move Changes
         this.moveWeatherEffects(move);
 
@@ -500,26 +516,7 @@ public class Duel
         {
             PokeItem item = PokeItem.asItem(this.players[this.current].active.getItem());
 
-            boolean buff = switch(item) {
-                case DRACO_PLATE -> move.getType().equals(Type.DRAGON);
-                case DREAD_PLATE -> move.getType().equals(Type.DARK);
-                case EARTH_PLATE -> move.getType().equals(Type.GROUND);
-                case FIST_PLATE -> move.getType().equals(Type.FIGHTING);
-                case FLAME_PLATE -> move.getType().equals(Type.FIRE);
-                case ICICLE_PLATE -> move.getType().equals(Type.ICE);
-                case INSECT_PLATE -> move.getType().equals(Type.BUG);
-                case IRON_PLATE -> move.getType().equals(Type.STEEL);
-                case MEADOW_PLATE -> move.getType().equals(Type.GRASS);
-                case MIND_PLATE -> move.getType().equals(Type.PSYCHIC);
-                case PIXIE_PLATE -> move.getType().equals(Type.FAIRY);
-                case SKY_PLATE -> move.getType().equals(Type.FLYING);
-                case SPLASH_PLATE -> move.getType().equals(Type.WATER);
-                case SPOOKY_PLATE -> move.getType().equals(Type.GHOST);
-                case STONE_PLATE -> move.getType().equals(Type.ROCK);
-                case TOXIC_PLATE -> move.getType().equals(Type.POISON);
-                case ZAP_PLATE -> move.getType().equals(Type.ELECTRIC);
-                default -> false;
-            };
+            boolean buff = PokeItem.getArceusPlateType(item) != null && PokeItem.getArceusPlateType(item).equals(move.getType());
 
             if(buff) move.setPower(move.getPower() * 1.2);
         }
