@@ -74,8 +74,16 @@ public class GhostMoves
 
     public String ShadowForce(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        //TODO: Invulnerability Phase
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        if(duel.data(user.getUUID()).shadowForceUsed)
+        {
+            duel.data(user.getUUID()).shadowForceUsed = false;
+            return Move.simpleDamageMove(user, opponent, duel, move);
+        }
+        else
+        {
+            duel.data(user.getUUID()).shadowForceUsed = true;
+            return user.getName() + " disappeared from sight!";
+        }
     }
 
     public String Hex(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -155,7 +163,7 @@ public class GhostMoves
     {
         if(duel.data(user.getUUID()).phantomForceUsed)
         {
-            duel.data(user.getUUID()).bounceUsed = false;
+            duel.data(user.getUUID()).phantomForceUsed = false;
             return Move.simpleDamageMove(user, opponent, duel, move);
         }
         else

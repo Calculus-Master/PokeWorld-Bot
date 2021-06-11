@@ -381,20 +381,20 @@ public class Duel
             accurate = move.isAccurate();
         }
 
-        boolean phantomForceBypass = move.getName().equals("Phantom Force") && this.data(this.current).phantomForceUsed;
+        boolean bypass = (move.getName().equals("Phantom Force") && this.data(this.current).phantomForceUsed) || (move.getName().equals("Shadow Force") && this.data(this.current).shadowForceUsed);
 
         if(this.data(this.other).detectUsed)
         {
             this.data(this.other).detectUsed = false;
 
-            otherImmune = !phantomForceBypass;
+            otherImmune = !bypass;
         }
 
         if(this.data(this.other).protectUsed)
         {
             this.data(this.other).protectUsed = false;
 
-            otherImmune = !phantomForceBypass;
+            otherImmune = !bypass;
         }
 
         if(this.data(this.current).chargeUsed)
@@ -477,11 +477,13 @@ public class Duel
 
         if(this.data(this.current).phantomForceUsed) move = new Move("Phantom Force");
 
+        if(this.data(this.current).shadowForceUsed) move = new Move("Shadow Force");
+
         List<String> flyMoves = Arrays.asList("Gust", "Twister", "Thunder", "Sky Uppercut", "Smack Down");
         List<String> digMoves = Arrays.asList("Earthquake", "Magnitude", "Fissure");
         List<String> diveMoves = Arrays.asList("Surf", "Whirlpool", "Low Kick");
 
-        if((this.data(this.other).flyUsed && !flyMoves.contains(move.getName())) || (this.data(this.other).bounceUsed && !flyMoves.contains(move.getName())) || (this.data(this.other).digUsed && !digMoves.contains(move.getName())) || (this.data(this.other).diveUsed && !diveMoves.contains(move.getName())) || this.data(this.other).phantomForceUsed)
+        if((this.data(this.other).flyUsed && !flyMoves.contains(move.getName())) || (this.data(this.other).bounceUsed && !flyMoves.contains(move.getName())) || (this.data(this.other).digUsed && !digMoves.contains(move.getName())) || (this.data(this.other).diveUsed && !diveMoves.contains(move.getName())) || this.data(this.other).phantomForceUsed || this.data(this.other).shadowForceUsed)
         {
             otherImmune = true;
         }
@@ -744,12 +746,12 @@ public class Duel
 
     private boolean isAffectedByHail(int p)
     {
-        return !this.players[p].active.isType(Type.ICE) && !this.data(p).digUsed && !this.data(p).diveUsed && !this.data(p).phantomForceUsed;
+        return !this.players[p].active.isType(Type.ICE) && !this.data(p).digUsed && !this.data(p).diveUsed && !this.data(p).phantomForceUsed && !this.data(p).shadowForceUsed;
     }
 
     private boolean isAffectedBySandstorm(int p)
     {
-        return !this.players[p].active.isType(Type.GROUND) && !this.players[p].active.isType(Type.ROCK) && !this.players[p].active.isType(Type.STEEL) && !this.data(p).digUsed && !this.data(p).diveUsed && !this.data(p).phantomForceUsed;
+        return !this.players[p].active.isType(Type.GROUND) && !this.players[p].active.isType(Type.ROCK) && !this.players[p].active.isType(Type.STEEL) && !this.data(p).digUsed && !this.data(p).diveUsed && !this.data(p).phantomForceUsed && !this.data(p).shadowForceUsed;
     }
 
     public void moveWeatherEffects(Move move)
