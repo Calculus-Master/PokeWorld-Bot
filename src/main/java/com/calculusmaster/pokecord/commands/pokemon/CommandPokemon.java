@@ -124,19 +124,19 @@ public class CommandPokemon extends Command
             stream = stream.filter(p -> PokemonRarity.LEGENDARY.contains(p.getName()));
         }
 
-        if(msg.contains("--mythical"))
+        if(msg.contains("--mythical") || msg.contains("--myth"))
         {
             stream = stream.filter(p -> PokemonRarity.MYTHICAL.contains(p.getName()));
         }
 
-        if(msg.contains("--ub") || msg.contains("--ultrabeast"))
+        if(msg.contains("--ub") || msg.contains("--ultrabeast") || msg.contains("--ultra") || msg.contains("--beast"))
         {
             stream = stream.filter(p -> PokemonRarity.ULTRA_BEAST.contains(p.getName()));
         }
 
         if(msg.contains("--mega"))
         {
-            stream = stream.filter(p -> PokemonRarity.MEGA.contains(p.getName()));
+            stream = stream.filter(p -> p.getName().toLowerCase().contains("mega") || p.getName().toLowerCase().contains("primal"));
         }
 
         //Convert Stream to List
