@@ -88,10 +88,38 @@ public class CommandActivate extends Command
                 }
                 else
                 {
-                    this.event.getChannel().sendMessage(this.playerData.getMention() + ": You have to specific the source stat and destination stat! The command is p!activate <number> <source> <destination>").queue();
+                    this.event.getChannel().sendMessage(this.playerData.getMention() + ": You have to specify the source stat and destination stat! The command is p!activate <number> <source> <destination>").queue();
                     this.embed = null;
                     return this;
                 }
+           }
+           else if(item.equals(PokeItem.EV_CLEARER))
+           {
+               if(this.msg.length == 3 && Stat.cast(this.msg[2]) != null)
+               {
+                   Stat target = Stat.cast(this.msg[2]);
+
+                   if(s.getEVs().get(target) == 0)
+                   {
+                       this.event.getChannel().sendMessage(this.playerData.getMention() + ": " + s.getName() + " doesn't have any " + target + " EVs!").queue();
+                       this.embed = null;
+                       return this;
+                   }
+
+                   s.addEV(target, -1 * s.getEVs().get(target));
+
+                   Pokemon.updateEVs(s);
+
+                   this.playerData.removeItem(PokeItem.EV_CLEARER.getName());
+
+                   this.embed.setDescription("Succesfully cleared all of " + s.getName() + "'s " + target + " EVs!");
+               }
+               else
+               {
+                   this.event.getChannel().sendMessage(this.playerData.getMention() + ": You have to specify the stat! The command is p!activate <number> <stat>").queue();
+                   this.embed = null;
+                   return this;
+               }
            }
         }
         else if(item != null && !item.nonPokemon)

@@ -12,6 +12,7 @@ public enum PokeItem
     //Non-Pokemon Items (p!activate)
     EV_REALLOCATOR(0, true),
     IV_REROLLER(0, true),
+    EV_CLEARER(0, true),
     //Pokemon Items (p!give)
     THUNDER_STONE(250),
     ICE_STONE(250),

@@ -26,7 +26,7 @@ public class CommandPokemon extends Command
         //this.buildList();
         this.pokemon = new TreeList<>(CacheHelper.POKEMON_LISTS.get(this.player.getId()));
         this.team = List.copyOf(this.playerData.getTeam());
-        this.favorites = this.playerData.getFavorites();
+        this.favorites = List.copyOf(this.playerData.getFavorites());
     }
 
     @Override
