@@ -92,12 +92,16 @@ public class Duel
                 this.players[0].active.enterDynamax();
                 this.players[0].dynamaxTurns = 3;
                 this.players[0].usedDynamax = true;
+
+                this.results.add(this.players[0].active.getName() + " dynamaxed!\n");
             }
             if(this.getAction(1).equals(ActionType.DYNAMAX))
             {
                 this.players[1].active.enterDynamax();
                 this.players[1].dynamaxTurns = 3;
                 this.players[1].usedDynamax = true;
+
+                this.results.add(this.players[1].active.getName() + " dynamaxed!\n");
             }
 
             //Check if Max Move (Dynamaxed)
@@ -180,6 +184,7 @@ public class Duel
                     this.players[1].active.enterDynamax();
                     this.players[1].dynamaxTurns = 3;
                     this.players[1].usedDynamax = true;
+                    this.results.add(this.players[1].active.getName() + " dynamaxed!\n");
                 }
 
                 if(!faintSwap && this.players[1].active.isDynamaxed()) move = DuelHelper.getMaxMove(this.players[1].active, this.players[1].move);
@@ -211,6 +216,7 @@ public class Duel
                     this.players[0].active.enterDynamax();
                     this.players[0].dynamaxTurns = 3;
                     this.players[0].usedDynamax = true;
+                    this.results.add(this.players[0].active.getName() + " dynamaxed!\n");
                 }
 
                 if(!faintSwap && this.players[0].active.isDynamaxed()) move = DuelHelper.getMaxMove(this.players[0].active, this.players[0].move);
@@ -668,6 +674,8 @@ public class Duel
 
             if(this.players[p].active.isFainted()) this.players[p].dynamaxTurns = 0;
             if(this.players[p].dynamaxTurns <= 0) this.players[p].active.exitDynamax();
+
+            this.results.add(this.players[p].active.getName() + " reverted to its original size!\n");
         }
     }
 
