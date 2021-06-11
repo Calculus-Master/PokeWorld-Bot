@@ -1291,6 +1291,10 @@ public class Duel
         {
             return "https://archives.bulbagarden.net/media/upload/thumb/6/64/792Lunala-FullMoonPhase.png/600px-792Lunala-FullMoonPhase.png";
         }
+        else if(m != null && p.getName().equals("Eternatus") && m.getName().equals("Eternabeam"))
+        {
+            return "https://static.wikia.nocookie.net/villains/images/7/76/HOME890E.png/revision/latest/scale-to-width-down/512?cb=20200221025522";
+        }
         else return p.getImage();
     }
 
