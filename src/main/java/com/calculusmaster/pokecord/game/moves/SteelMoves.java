@@ -149,4 +149,11 @@ public class SteelMoves
 
         return user.getName() + " defended itself with its Shield!";
     }
+
+    public String SteelBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int userDamage = user.getHealth() / 2;
+        user.damage(userDamage);
+        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + " lost " + userDamage + " HP!";
+    }
 }

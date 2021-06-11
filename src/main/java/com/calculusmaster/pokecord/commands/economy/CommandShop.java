@@ -122,7 +122,7 @@ public class CommandShop extends Command
         this.embed.setFooter("This page is dynamically updated based on your selected Pokemon.");
     }
 
-    public static List<String> MOVE_TUTOR_MOVES = Arrays.asList("Blast Burn", "Hydro Cannon", "Frenzy Plant", "Draco Meteor", "Volt Tackle", "Dragon Ascent", "Secret Sword", "Relic Song");
+    public static List<String> MOVE_TUTOR_MOVES = Arrays.asList("Blast Burn", "Hydro Cannon", "Frenzy Plant", "Draco Meteor", "Steel Beam", "Volt Tackle", "Dragon Ascent", "Secret Sword", "Relic Song");
 
     private void page_movetutor()
     {

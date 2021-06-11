@@ -190,6 +190,7 @@ public class CommandBuy extends Command
                 boolean hydroCannon = move.equals("Hydro Cannon") && hydroCannonPokemon.contains(selected.getName());
                 boolean frenzyPlant = move.equals("Frenzy Plant") && frenzyPlantPokemon.contains(selected.getName());
                 boolean dracoMeteor = move.equals("Draco Meteor") && selected.getType()[0].equals(Type.DRAGON);
+                boolean steelBeam = move.equals("Steel Beam") && selected.getType()[0].equals(Type.STEEL);
                 boolean voltTackle = move.equals("Volt Tackle") && selected.getName().equals("Pikachu");
                 boolean dragonAscent = move.equals("Dragon Ascent") && (selected.getName().equals("Rayquaza") || selected.getName().equals("Mega Rayquaza"));
                 boolean secretSword = move.equals("Secret Sword") && selected.getName().equals("Keldeo");
