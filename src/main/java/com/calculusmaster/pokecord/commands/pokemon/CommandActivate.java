@@ -112,7 +112,7 @@ public class CommandActivate extends Command
 
                    this.playerData.removeItem(PokeItem.EV_CLEARER.getName());
 
-                   this.embed.setDescription("Succesfully cleared all of " + s.getName() + "'s " + target + " EVs!");
+                   this.embed.setDescription("Successfully cleared all of " + s.getName() + "'s " + target + " EVs!");
                }
                else
                {
