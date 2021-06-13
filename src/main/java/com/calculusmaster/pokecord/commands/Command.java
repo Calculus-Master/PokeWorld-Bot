@@ -282,7 +282,7 @@ public abstract class Command
                 .addAliases();
     }
 
-    protected CommandDispatcher<Command> dispatcher;
+    protected CommandDispatcher<Object> dispatcher;
 
     protected MessageReceivedEvent event;
     protected String[] msg;
