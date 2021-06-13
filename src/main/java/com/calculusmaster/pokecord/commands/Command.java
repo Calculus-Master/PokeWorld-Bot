@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.misc.CommandHelp;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
+import com.mojang.brigadier.CommandDispatcher;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -281,6 +282,8 @@ public abstract class Command
                 .addAliases();
     }
 
+    protected CommandDispatcher<Command> dispatcher;
+
     protected MessageReceivedEvent event;
     protected String[] msg;
     protected List<Member> mentions;
@@ -298,6 +301,9 @@ public abstract class Command
 
     public Command(MessageReceivedEvent event, String[] msg)
     {
+        this.dispatcher = new CommandDispatcher<>();
+        this.createCommandDispatcher();
+
         this.event = event;
         this.msg = msg;
         this.mentions = event.getMessage().getMentionedMembers();
@@ -315,6 +321,8 @@ public abstract class Command
     }
 
     public abstract Command runCommand() throws IOException;
+
+    public void createCommandDispatcher() {}
 
     //Useful Methods for other Commands
     //TODO: Roll these out to all of the commands
