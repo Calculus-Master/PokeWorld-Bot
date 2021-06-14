@@ -346,6 +346,12 @@ public abstract class Command
         return Integer.parseInt(this.msg[index]);
     }
 
+    protected void sendMsg(String msg)
+    {
+        this.embed = null;
+        this.event.getChannel().sendMessage(this.playerData.getMention() + ": " + msg).queue();
+    }
+
     //Embed-Related
 
     protected void setAuthor()

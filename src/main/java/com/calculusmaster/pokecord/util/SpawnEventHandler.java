@@ -40,7 +40,7 @@ public class SpawnEventHandler
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-        ScheduledFuture<?> spawnEvent = scheduler.scheduleWithFixedDelay(() -> spawnPokemon(g, channel), initDelay, 150, TimeUnit.SECONDS);
+        ScheduledFuture<?> spawnEvent = scheduler.scheduleWithFixedDelay(() -> spawnPokemon(g, channel), initDelay, 250, TimeUnit.SECONDS);
 
         SCHEDULERS.put(g.getId(), spawnEvent);
     }

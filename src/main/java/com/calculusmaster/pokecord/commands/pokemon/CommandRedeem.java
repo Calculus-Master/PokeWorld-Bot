@@ -26,13 +26,6 @@ public class CommandRedeem extends Command
         }
         else if(this.msg.length >= 2 && Global.POKEMON.contains(this.getPokemon()))
         {
-            if(!this.player.getId().equals("309135641453527040") && this.getPokemon().contains("Necrozma"))
-            {
-                this.event.getChannel().sendMessage(this.playerData.getMention() + ": Necrozma is too powerful to redeem!").queue();
-                this.embed = null;
-                return this;
-            }
-
             this.playerData.changeRedeems(-1);
 
             Pokemon p = Pokemon.create(this.getPokemon());

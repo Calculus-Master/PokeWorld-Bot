@@ -642,17 +642,15 @@ public class Duel
         if(this instanceof WildDuel) return;
 
         //AI Trainers can't earn Z Crystals
-        if(this instanceof TrainerDuel && this.indexOf(this.players[this.current].ID) == 1) return;
+        if(this instanceof TrainerDuel && this.current == 1) return;
 
         ZCrystal earnedZ = ZCrystal.getCrystalOfType(move.getType());
-
-        System.out.println("Z-Crystal Event! " + earnedZ + ", " + move.getName() + " - " + move.getType() + "(" + this.players[this.current].data.getUsername() + ")");
 
         if(!this.players[this.current].data.hasZCrystal(earnedZ.getStyledName()))
         {
             this.players[this.current].data.addZCrystal(earnedZ.getStyledName());
 
-            this.event.getChannel().sendMessage("<@" + this.players[this.current].ID + "> earned a Z-Crystal! You earned " + earnedZ.getStyledName() + "!").queue();
+            this.event.getChannel().sendMessage(this.players[this.current].data.getMention() + ": earned a Z-Crystal – " + earnedZ.getStyledName() + "!").queue();
         }
     }
 
