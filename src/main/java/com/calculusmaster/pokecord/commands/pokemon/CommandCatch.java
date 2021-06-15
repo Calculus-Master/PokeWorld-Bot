@@ -34,16 +34,8 @@ public class CommandCatch extends Command
         String spawn = SpawnEventHelper.getSpawn(this.server.getId());
         String guess = this.getPokemon();
 
-        if(spawn.isEmpty())
-        {
-            this.event.getChannel().sendMessage("<@" + this.player.getId() + ">: Nothing has spawned yet in this server!").queue();
-            this.embed = null;
-        }
-        else if(!guess.equals(spawn))
-        {
-            this.event.getChannel().sendMessage("<@" + this.player.getId() + ">: Incorrect name!").queue();
-            this.embed = null;
-        }
+        if(spawn.isEmpty()) this.sendMsg("Nothing has spawned yet in this server!");
+        else if(!guess.equals(spawn)) this.sendMsg("Incorrect name!");
         else
         {
             String poke = spawn.contains("Shiny") ? spawn.substring("Shiny ".length()) : spawn;
@@ -67,14 +59,14 @@ public class CommandCatch extends Command
                 int credits = 200 + 100 * (amount / 5 - 1);
                 this.playerData.changeCredits(credits);
 
-                this.sendMsg("You earned " + credits + " credits for reaching a Collection Milestone: **" + amount + "** " + caught.getName() + "!");
+                this.sendMsg("Reached Collection Milestone: **" + amount + "** " + caught.getName() + " - Earned " + credits + "c!");
             }
             else if(amount == 1)
             {
                 int credits = 150;
                 this.playerData.changeCredits(credits);
 
-                this.sendMsg("You earned " + credits + " credits for unlocking a Collection: " + caught.getName() + "!");
+                this.sendMsg("Unlocked Collection: " + caught.getName() + " - Earned " + credits + "c!");
             }
 
             if(caught.getTotalIVRounded() >= 90 || (caught.getTotalIVRounded() >= 80 && new Random().nextInt(100) < 20))
@@ -91,6 +83,7 @@ public class CommandCatch extends Command
 
             SpawnEventHelper.clearSpawn(this.server.getId());
         }
+
         return this;
     }
 
