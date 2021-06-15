@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.util;
 
+import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.config.CommandPrefix;
@@ -9,6 +10,7 @@ import com.calculusmaster.pokecord.commands.economy.*;
 import com.calculusmaster.pokecord.commands.misc.*;
 import com.calculusmaster.pokecord.commands.moves.*;
 import com.calculusmaster.pokecord.commands.pokemon.*;
+import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
@@ -253,6 +255,14 @@ public class Listener extends ListenerAdapter
                 {
                     Mongo.MarketData.deleteMany(Filters.eq("sellerID", "BOT"));
                     CommandMarket.init();
+                    c = null;
+                }
+                else if(msg[0].equals("randommoves"))
+                {
+                    StringBuilder sb = new StringBuilder();
+                    for(int i = 0; i < 5; i++) sb.append(Pokecord.INCOMPLETE_MOVES.get(new Random().nextInt(Pokecord.INCOMPLETE_MOVES.size()))).append("   ");
+                    event.getChannel().sendMessage("Moves: " + sb.toString()).queue();
+                    Move.init();
                     c = null;
                 }
                 else c = new CommandInvalid(event, msg).runCommand();

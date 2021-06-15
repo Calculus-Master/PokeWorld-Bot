@@ -21,9 +21,15 @@ import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Pokecord
 {
+    public static List<String> INCOMPLETE_MOVES = new ArrayList<>();
+
     public static void main(String[] args) throws InterruptedException, LoginException
     {
         //Disable MongoDB Logging
@@ -47,6 +53,7 @@ public class Pokecord
         Trainer.setDailyTrainers();
         Global.logInfo(Pokecord.class, "main", "Starting Move Init!");
         Move.init();
+        Pokecord.initIncompleteMoves();
         Global.logInfo(Pokecord.class, "main", "Starting CommandAbilityInfo Init!");
         CommandAbilityInfo.init();
         Global.logInfo(Pokecord.class, "main", "Starting PokemonRarity Init!");
@@ -81,5 +88,17 @@ public class Pokecord
             Thread.sleep(1000);
             SpawnEventHelper.start(g);
         }
+    }
+
+    private static void initIncompleteMoves()
+    {
+        Mongo.PokemonInfo.find().forEach(d -> {
+            for(String s : d.getList("moves", String.class)) if(!Move.isMove(s)) addMoves(s);
+        });
+    }
+
+    private static void addMoves(String s)
+    {
+        INCOMPLETE_MOVES.add(s);
     }
 }
