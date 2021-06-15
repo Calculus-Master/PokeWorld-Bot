@@ -92,7 +92,7 @@ public class CommandDex extends Command
         JSONObject info = Pokemon.genericJSON(pokemon);
         String[] fillerINFO = info.getString("fillerinfo").split("-");
 
-        String title = "**" + info.getString("name") + " #" + info.getInt("dex") + "**";
+        String title = "**" + info.getString("name") + (isShiny ? ":star2:" : "") + " (#" + info.getInt("dex") + ")**";
         String filler = "*" + fillerINFO[0] + "*\nHeight: " + fillerINFO[1] + "m     Weight: " + fillerINFO[2] + "kg";
         String type = "**Type:** " + (info.getJSONArray("type").getString(0).equals(info.getJSONArray("type").getString(1)) ? info.getJSONArray("type").getString(0) : this.getJSONArrayFormatted(info.getJSONArray("type")));
         String abilities = "**Abilities:** " + this.getJSONArrayFormatted(info.getJSONArray("abilities"));
