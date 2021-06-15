@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.mongo.CollectionsQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.SpawnEventHelper;
@@ -55,46 +56,38 @@ public class CommandCatch extends Command
             this.playerData.addPokemon(caught.getUUID());
 
             //Collections
-            int numCaught = 0;
+            CollectionsQuery collection = new CollectionsQuery(caught.getName(), this.player.getId());
 
-            Mongo.DexData.updateOne(Filters.eq("name", caught.getName()), Updates.inc(this.player.getId(), 1));
+            collection.increase();
+            int amount = collection.getCaughtAmount();
 
-            Document d = Mongo.DexData.find(Filters.eq("name", caught.getName())).first();
-
-            numCaught = d != null && d.containsKey(this.playerData.getID()) ? d.getInteger(this.playerData.getID()) : -1;
-
-            if(numCaught == -1)
+            if(amount == -1) this.sendMsg("An error has occurred with collections!");
+            else if(amount % 5 == 0)
             {
-                this.sendMsg("An error has occurred with collections!");
-                return this;
-            }
-            else if(numCaught % 5 == 0)
-            {
-                int credits = 200 + 75 * (numCaught / 5 - 1);
+                int credits = 200 + 100 * (amount / 5 - 1);
                 this.playerData.changeCredits(credits);
 
-                this.event.getChannel().sendMessage(this.playerData.getMention() + ": You earned " + credits + " credits for reaching a Collection Milestone: **" + numCaught + "** " + caught.getName() + "!").queue();
+                this.sendMsg("You earned " + credits + " credits for reaching a Collection Milestone: **" + amount + "** " + caught.getName() + "!");
             }
-            else if(numCaught == 1)
+            else if(amount == 1)
             {
                 int credits = 150;
                 this.playerData.changeCredits(credits);
 
-                this.event.getChannel().sendMessage(this.playerData.getMention() + ": You earned " + credits + " credits for unlocking a Collection: " + caught.getName() + "!").queue();
+                this.sendMsg("You earned " + credits + " credits for unlocking a Collection: " + caught.getName() + "!");
             }
 
-            if(caught.getTotalIVRounded() >= 90)
+            if(caught.getTotalIVRounded() >= 90 || (caught.getTotalIVRounded() >= 80 && new Random().nextInt(100) < 20))
             {
                 this.playerData.changeRedeems(1);
 
-                this.event.getChannel().sendMessage(this.playerData.getMention() + ": You earned a redeem for catching a high IV pokemon!").queue();
+                this.sendMsg("You earned a redeem for catching a Pokemon with high IVs!");
             }
 
             Achievements.grant(this.player.getId(), Achievements.CAUGHT_FIRST_POKEMON, this.event);
             this.playerData.addPokePassExp(100, this.event);
 
-            this.embed = null;
-            this.event.getMessage().reply("You caught a **Level " + caught.getLevel() + " " + caught.getName() + "** (Caught: " + numCaught + ")!").queue();
+            this.sendMsg("You caught a **Level " + caught.getLevel() + " " + caught.getName() + "** (Collection: " + amount + ")!");
 
             SpawnEventHelper.clearSpawn(this.server.getId());
         }
