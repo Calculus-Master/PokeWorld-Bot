@@ -33,8 +33,7 @@ public class CommandDex extends Command
         //Pokedex Command
         if(this.msg.length == 1 || (this.msg.length == 2 && this.isNumeric(1)))
         {
-            List<String> uniquePokemon = Global.POKEMON.stream().filter(s -> !isForm(s)).collect(Collectors.toList());
-            int total = uniquePokemon.size();
+            int total = Global.POKEMON.size();
 
             List<String> collected = new ArrayList<>();
             Mongo.DexData.find(Filters.exists("name")).forEach(d -> {
@@ -116,12 +115,6 @@ public class CommandDex extends Command
 
         this.playerData.addPokePassExp(50, this.event);
         return this;
-    }
-
-    public static boolean isForm(String name)
-    {
-        List<String> twoWordNonForm = Arrays.asList("Mr Mime", "Jangmo O", "Hakamo O", "Kommo O", "Ho Oh");
-        return name.split(" ").length != 1 && !twoWordNonForm.contains(name);
     }
 
     private String getPokemonName()

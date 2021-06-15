@@ -55,29 +55,33 @@ public class CommandCatch extends Command
             Pokemon.uploadPokemon(caught);
             this.playerData.addPokemon(caught.getUUID());
 
+            //Collections
             int numCaught = 0;
-            if(!CommandDex.isForm(caught.getName()))
+
+            Mongo.DexData.updateOne(Filters.eq("name", caught.getName()), Updates.inc(this.player.getId(), 1));
+
+            Document d = Mongo.DexData.find(Filters.eq("name", caught.getName())).first();
+
+            numCaught = d != null && d.containsKey(this.playerData.getID()) ? d.getInteger(this.playerData.getID()) : -1;
+
+            if(numCaught == -1)
             {
-                Mongo.DexData.updateOne(Filters.eq("name", caught.getName()), Updates.inc(this.player.getId(), 1));
+                this.sendMsg("An error has occurred with collections!");
+                return this;
+            }
+            else if(numCaught % 5 == 0)
+            {
+                int credits = 200 + 75 * (numCaught / 5 - 1);
+                this.playerData.changeCredits(credits);
 
-                Document d = Mongo.DexData.find(Filters.eq("name", caught.getName())).first();
+                this.event.getChannel().sendMessage(this.playerData.getMention() + ": You earned " + credits + " credits for reaching a Collection Milestone: **" + numCaught + "** " + caught.getName() + "!").queue();
+            }
+            else if(numCaught == 1)
+            {
+                int credits = 150;
+                this.playerData.changeCredits(credits);
 
-                numCaught = d != null && d.containsKey(this.playerData.getID()) ? d.getInteger(this.playerData.getID()) : 1;
-
-                if(numCaught % 5 == 0)
-                {
-                    int credits = 200 + 75 * (numCaught / 5 - 1);
-                    this.playerData.changeCredits(credits);
-
-                    this.event.getChannel().sendMessage(this.playerData.getMention() + ": You earned " + credits + " credits for reaching a Collection Milestone: **" + numCaught + "** " + caught.getName() + "!").queue();
-                }
-                else if(numCaught == 1)
-                {
-                    int credits = 150;
-                    this.playerData.changeCredits(credits);
-
-                    this.event.getChannel().sendMessage(this.playerData.getMention() + ": You earned " + credits + " credits for unlocking a Collection: " + caught.getName() + "!").queue();
-                }
+                this.event.getChannel().sendMessage(this.playerData.getMention() + ": You earned " + credits + " credits for unlocking a Collection: " + caught.getName() + "!").queue();
             }
 
             if(caught.getTotalIVRounded() >= 90)
