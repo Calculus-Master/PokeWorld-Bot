@@ -113,4 +113,13 @@ public class DragonMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String DragonDarts(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        damage += move.getDamage(user, opponent);
+        opponent.damage(damage);
+
+        return move.getDamageResult(opponent, damage);
+    }
 }

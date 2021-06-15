@@ -53,7 +53,7 @@ public class Listener extends ListenerAdapter
         serverQuery = new ServerDataQuery(server.getId());
 
         //If bot is mentioned, send the server prefix
-        if(event.getMessage().getMentionedMembers().stream().anyMatch(m -> m.getId().equals("718169293904281610"))) event.getChannel().sendMessage("<@" + player.getId() + ">: My bot prefix is `" + serverQuery.getPrefix() + "`!").queue();
+        if(event.getMessage().getMentionedMembers().stream().anyMatch(m -> m.getId().equals("718169293904281610"))) event.getChannel().sendMessage("<@" + player.getId() + ">: My prefix is `" + serverQuery.getPrefix() + "`!").queue();
 
         //Set a boolean if the player is registered or not
         boolean isPlayerRegistered = PlayerDataQuery.isRegistered(player.getId());

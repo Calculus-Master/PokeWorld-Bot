@@ -144,4 +144,18 @@ public class BugMoves
         duel.hazardData(opponent.getUUID()).addHazard(DuelHelper.EntryHazard.STICKY_WEB);
         return user.getName() + " laid a Sticky Web trap!";
     }
+
+    public String Infestation(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.addStatusCondition(StatusCondition.BOUND);
+        duel.data(opponent.getUUID()).boundTurns = 5;
+
+        return Move.simpleDamageMove(user, opponent, duel, move) + " " + opponent.getName() + " was bound!";
+    }
+
+    //TODO: Switch out immediately after attacking
+    public String UTurn(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

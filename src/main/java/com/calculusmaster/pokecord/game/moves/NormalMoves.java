@@ -612,4 +612,18 @@ public class NormalMoves
 
         return user.getName() + " sacrificed " + damage + " HP! " + user.getName() + "'s Attack rose to its maximum!";
     }
+
+    public String DoubleHit(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        damage += move.getDamage(user, opponent);
+        opponent.damage(damage);
+
+        return move.getDamageResult(opponent, damage);
+    }
+
+    public String LastResort(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
 }
