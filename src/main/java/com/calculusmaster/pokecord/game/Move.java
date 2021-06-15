@@ -18,6 +18,7 @@ public class Move
     //TODO: Keep checking the custom moves and see if they can function as close to the original as possible
     public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Sweet Scent", "Smokescreen", "Safeguard", "Whirlwind", "Rage Powder", "Tailwind", "Light Screen", "Frustration", "Return", "Mind Reader", "Quick Guard", "Counter", "Magnetic Flux", "After You", "Disable", "Miracle Eye", "Guard Swap", "Power Swap", "Me First", "Yawn", "Gravity", "Spite", "Mean Look", "Foresight", "Wide Guard", "Ingrain", "Forests Curse", "Natural Gift", "Last Resort", "Sand Attack", "Teleport", "Odor Sleuth", "Helping Hand");
     public static final List<String> CUSTOM_MOVES = Arrays.asList("Leech Seed", "Rapid Spin", "Mirror Shot", "Stockpile");
+    public static final List<String> INCOMPLETE_MOVES = new ArrayList<>();
 
     private String name;
     private MoveData moveData;
@@ -34,7 +35,11 @@ public class Move
 
     public static void init()
     {
-        Mongo.MoveInfo.find(Filters.exists("name")).forEach(d -> MOVES.put(d.getString("name"), new MoveData(d.getString("name"), d.getString("type"), d.getString("category"), d.getInteger("power"), d.getInteger("accuracy"), d.getString("info"))));
+        Mongo.MoveInfo.find().forEach(d -> MOVES.put(d.getString("name"), new MoveData(d.getString("name"), d.getString("type"), d.getString("category"), d.getInteger("power"), d.getInteger("accuracy"), d.getString("info"))));
+
+        Mongo.PokemonInfo.find().forEach(d -> {
+            for(String s : d.getList("moves", String.class)) if(!Move.isMove(s)) INCOMPLETE_MOVES.add(s);
+        });
     }
 
     public Move(String name)

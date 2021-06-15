@@ -260,8 +260,9 @@ public class Listener extends ListenerAdapter
                 else if(msg[0].equals("randommoves"))
                 {
                     StringBuilder sb = new StringBuilder();
-                    for(int i = 0; i < 5; i++) sb.append(Pokecord.INCOMPLETE_MOVES.get(new Random().nextInt(Pokecord.INCOMPLETE_MOVES.size()))).append("   ");
-                    event.getChannel().sendMessage("Moves: " + sb.toString()).queue();
+                    int count = Move.INCOMPLETE_MOVES.size();
+                    for(int i = 0; i < 5; i++) sb.append(Move.INCOMPLETE_MOVES.get(new Random().nextInt(count))).append("   ");
+                    event.getChannel().sendMessage("Moves: " + sb.toString() + "\nTotal Remaining: " + count).queue();
                     Move.init();
                     c = null;
                 }
