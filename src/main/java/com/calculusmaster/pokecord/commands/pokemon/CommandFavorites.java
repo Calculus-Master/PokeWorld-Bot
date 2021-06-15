@@ -36,43 +36,28 @@ public class CommandFavorites extends Command
         {
             Pokemon p = Pokemon.build(this.playerData.getPokemonList().get(this.getInt(2) - 1));
 
-            if(favorites.contains(p.getUUID()))
+            if(favorites.contains(p.getUUID())) this.sendMsg(p.getName() + " is already in your favorites!");
+            else
             {
-                this.event.getChannel().sendMessage(this.playerData.getMention() + ": " + p.getName() + " is already in your favorites!").queue();
-                this.embed = null;
-                return this;
+                this.playerData.addPokemonToFavorites(p.getUUID());
+                this.sendMsg("Added **Level " + p.getLevel() + " " + p.getName() + "** to your favorites!");
             }
-
-            this.playerData.addPokemonToFavorites(p.getUUID());
-
-            this.event.getChannel().sendMessage(this.playerData.getMention() + ": Added **Level " + p.getLevel() + " " + p.getName() + "** to your favorites!").queue();
-            this.embed = null;
-            return this;
         }
         else if(remove)
         {
             Pokemon p = Pokemon.build(this.playerData.getPokemonList().get(this.getInt(2) - 1));
 
-            if(!favorites.contains(p.getUUID()))
+            if(!favorites.contains(p.getUUID())) this.sendMsg(p.getName() + " is not in your favorites!");
+            else
             {
-                this.event.getChannel().sendMessage(this.playerData.getMention() + ": " + p.getName() + " is not in your favorites!").queue();
-                this.embed = null;
-                return this;
+                this.playerData.removePokemonFromFavorites(p.getUUID());
+                this.sendMsg("Removed **Level " + p.getLevel() + " " + p.getName() + "** from your favorites!");
             }
-
-            this.playerData.removePokemonFromFavorites(p.getUUID());
-
-            this.event.getChannel().sendMessage(this.playerData.getMention() + ": Removed **Level " + p.getLevel() + " " + p.getName() + "** from your favorites!").queue();
-            this.embed = null;
-            return this;
         }
         else if(clear)
         {
             this.playerData.clearFavorites();
-
-            this.event.getChannel().sendMessage(this.playerData.getMention() + ": Your Favorites list was successfully cleared!").queue();
-            this.embed = null;
-            return this;
+            this.sendMsg("Your Favorites list was successfully cleared!");
         }
         else this.embed.setDescription(CommandInvalid.getShort());
 
