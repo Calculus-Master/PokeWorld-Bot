@@ -397,6 +397,12 @@ public class Duel
             accurate = move.isAccurate();
         }
 
+        if(move.getName().equals("Horn Drill"))
+        {
+            move.setAccuracy(30 + (this.players[this.current].active.getLevel() - this.players[this.other].active.getLevel()));
+            accurate = move.isAccurate();
+        }
+
         boolean bypass = (move.getName().equals("Phantom Force") && this.data(this.current).phantomForceUsed) || (move.getName().equals("Shadow Force") && this.data(this.current).shadowForceUsed) || move.getName().equals("Feint");
 
         if(this.data(this.other).detectUsed)

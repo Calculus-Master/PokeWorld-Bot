@@ -6,6 +6,9 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DarkMoves
 {
     public String Bite(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -117,5 +120,23 @@ public class DarkMoves
     public String FeintAttack(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String BeatUp(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        List<Pokemon> team = List.copyOf(duel.getPlayers()[duel.playerIndexFromUUID(user.getUUID())].team);
+
+        List<Integer> basePowers = new ArrayList<>();
+        for(Pokemon p : team) if(!p.hasAnyStatusCondition() && !p.isFainted()) basePowers.add(p.getBaseStat(Stat.ATK) / 10 + 5);
+
+        int damage = 0;
+        for(int p : basePowers)
+        {
+            move.setPower(p);
+            damage += move.getDamage(user, opponent);
+        }
+
+        opponent.damage(damage);
+        return move.getDamageResult(opponent, damage);
     }
 }

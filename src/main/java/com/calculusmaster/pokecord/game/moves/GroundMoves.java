@@ -113,4 +113,10 @@ public class GroundMoves
     {
         return move.getNotImplementedResult();
     }
+
+    //TODO: Lowers Accuracy by 1 stage
+    public String MudSlap(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

@@ -694,4 +694,21 @@ public class NormalMoves
 
         return opponent.getName() + "'s Attack and Defense were lowered by 1 stage!";
     }
+
+    public String HornDrill(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(opponent.getLevel() > user.getLevel()) return move.getNoEffectResult(opponent);
+        else
+        {
+            int damage = opponent.getHealth();
+            opponent.damage(damage);
+
+            return move.getDamageResult(opponent, damage);
+        }
+    }
+
+    public String StuffCheeks(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
 }

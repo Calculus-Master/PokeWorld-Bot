@@ -378,6 +378,11 @@ public class Pokemon
         return this.status.get(s);
     }
 
+    public boolean hasAnyStatusCondition()
+    {
+        return Arrays.stream(StatusCondition.values()).noneMatch(this::hasStatusCondition);
+    }
+
     public Map<StatusCondition, Boolean> getStatusConditionMap()
     {
         return this.status;
@@ -1086,7 +1091,7 @@ public class Pokemon
         if(s.equals(Stat.HP))
         {
             //HP = Level + 10 + [((2 * Base + IV + EV / 4) * Level) / 100]
-            double base = this.genericJSON.getJSONArray("stats").getInt(0);
+            double base = this.getBaseStat(Stat.HP);
             int IV = this.IV.get(Stat.HP);
             int EV = this.EV.get(Stat.HP);
             double maxHP = this.level + 10 + ((this.level * (2 * base + IV + EV / 4.0)) / 100);
@@ -1098,12 +1103,17 @@ public class Pokemon
         {
             //Stat = Nature * [5 + ((2 * Base + IV + EV / 4) * Level) / 100]
             double nature = this.natureMap.get(s);
-            double base = this.genericJSON.getJSONArray("stats").getInt(s.ordinal());
+            double base = this.getBaseStat(s);
             int IV = this.IV.get(s);
             int EV = this.EV.get(s);
             double stat = nature * (5 + ((this.level * (2 * base + IV + EV / 4.0)) / 100));
             return (int)(stat * this.getStatMultiplier(s) * statBuff);
         }
+    }
+
+    public int getBaseStat(Stat s)
+    {
+        return this.genericJSON.getJSONArray("stats").getInt(s.ordinal());
     }
 
     public void setDefaultStatMultipliers()

@@ -30,4 +30,12 @@ public class FairyMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String NaturesMadness(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = opponent.getHealth() / 2;
+        opponent.damage(damage);
+
+        return move.getDamageResult(opponent, damage);
+    }
 }
