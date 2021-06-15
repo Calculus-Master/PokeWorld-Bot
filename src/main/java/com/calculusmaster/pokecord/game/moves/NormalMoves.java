@@ -679,4 +679,19 @@ public class NormalMoves
     {
         return move.getNotImplementedResult();
     }
+
+    public String Confide(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.changeStatMultiplier(Stat.SPATK, -1);
+
+        return opponent.getName() + "'s Special Attack was lowered by 1 stage!";
+    }
+
+    public String Tickle(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.changeStatMultiplier(Stat.ATK, -1);
+        opponent.changeStatMultiplier(Stat.DEF, -1);
+
+        return opponent.getName() + "'s Attack and Defense were lowered by 1 stage!";
+    }
 }

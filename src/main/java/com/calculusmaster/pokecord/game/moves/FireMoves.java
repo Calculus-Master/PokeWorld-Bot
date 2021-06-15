@@ -140,4 +140,9 @@ public class FireMoves
 
         return opponent.getName() + " is burned!";
     }
+
+    public String Overheat(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPATK, -2, 100, true);
+    }
 }

@@ -158,4 +158,9 @@ public class BugMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String Lunge(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.ATK, -1, 100, false);
+    }
 }

@@ -140,4 +140,10 @@ public class FlyingMoves
 
         return "All Entry Hazards were removed!";
     }
+
+    //TODO: Copies last move
+    public String MirrorMove(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
 }
