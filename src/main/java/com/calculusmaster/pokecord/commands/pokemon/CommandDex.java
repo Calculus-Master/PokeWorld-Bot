@@ -98,7 +98,7 @@ public class CommandDex extends Command
         String abilities = "**Abilities:** " + this.getJSONArrayFormatted(info.getJSONArray("abilities"));
         String growth = "**Growth Rate:** " + info.getString("growthrate").replaceAll("_", " ") + "\n**Base EXP Yield:** " + info.getInt("exp") + " XP";
         String evYield = "**EV Yield:** " + this.getEVYieldFormatted(info.getJSONArray("ev"));
-        //String evolutions = "**" + this.getEvolutionsFormatted(info.getJSONArray("evolutions"), info.getJSONArray("evolutionsLVL")) + "**";
+        String evolutions = "**" + this.getEvolutionsFormatted(info.getJSONArray("evolutions"), info.getJSONArray("evolutionsLVL")) + "**";
         String forms = "**Forms:** " + this.getFormsFormatted(info.getJSONArray("forms"));
         String megas = "**Megas:** " + this.getMegasFormatted(info.getJSONArray("mega"));
         String tms = "**TMs**: " + (info.getJSONArray("movesTM").length() == 0 ? "None" : info.getJSONArray("movesTM").toString());
@@ -109,7 +109,7 @@ public class CommandDex extends Command
 
         this.embed.setTitle(title);
         this.embed.setDescription(filler + "\n" + type + "\n" + abilities + "\n" + growth + "" +
-                "\n" + evYield + "\n" + forms + "\n" + megas + "\n" + tms + "\n" + trs + "\n\n" + baseStats);
+                "\n" + evYield + "\n" + evolutions + "\n" + forms + "\n" + megas + "\n" + tms + "\n" + trs + "\n\n" + baseStats);
         this.color = Type.cast(info.getJSONArray("type").getString(0)).getColor();
         this.embed.setImage(image.equals("") ? Pokemon.getWIPImage() : image);
 
@@ -146,7 +146,7 @@ public class CommandDex extends Command
         StringBuilder s = new StringBuilder();
         switch(evos.length())
         {
-            case 0: s.append("Does not evolve"); break;
+            case 0: s.append("Either does not evolve or has a special evolution"); break;
             case 1: s.append("Evolves into ").append(evos.getString(0)).append(" at Level ").append(evosLVL.getInt(0)); break;
             case 2: s.append("Evolves into ").append(evos.getString(0)).append(" at Level ").append(evosLVL.getInt(0)).append(" and ").append(evos.getString(1)).append(" at level ").append(evosLVL.getInt(1)); break;
             default: s.append("ERROR – REPORT"); break;
