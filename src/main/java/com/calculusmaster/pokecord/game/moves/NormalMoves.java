@@ -649,4 +649,34 @@ public class NormalMoves
 
         return user.getName() + "'s Defense and Special Defense rose by 1 stage!";
     }
+
+    public String Feint(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String Flail(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        double N = 48.0 * user.getHealth() / user.getStat(Stat.HP);
+
+        if(N < 2) move.setPower(200);
+        else if(N < 4) move.setPower(150);
+        else if(N < 9) move.setPower(100);
+        else if(N < 16) move.setPower(80);
+        else if(N < 32) move.setPower(40);
+        else if(N <= 48) move.setPower(20);
+        else move.setPower(5); //Fallback if somehow user health is greater than max
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String OdorSleuth(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String HelpingHand(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
 }

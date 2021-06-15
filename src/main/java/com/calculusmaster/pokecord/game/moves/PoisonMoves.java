@@ -62,4 +62,9 @@ public class PoisonMoves
         user.changeStatMultiplier(Stat.DEF, 2);
         return user.getName() + "'s Defense rose by 2 stages!";
     }
+
+    public String PoisonFang(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BADLY_POISONED, 50);
+    }
 }
