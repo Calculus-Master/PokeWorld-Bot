@@ -87,9 +87,9 @@ public class CommandDex extends Command
             return this;
         }
 
-        String pokemon = this.getPokemonName();
+        String pokemon = Global.normalCase(this.getPokemonName());
 
-        JSONObject info = Pokemon.genericJSON(Global.normalCase(pokemon));
+        JSONObject info = Pokemon.genericJSON(pokemon);
         String[] fillerINFO = info.getString("fillerinfo").split("-");
 
         String title = "**" + info.getString("name") + " #" + info.getInt("dex") + "**";
