@@ -20,53 +20,70 @@ public class CommandRelease extends Command
     @Override
     public Command runCommand()
     {
-        if(!isLength(2))
-        {
-            this.embed.setDescription(CommandInvalid.getShort());
-            return this;
-        }
-        else if(!isNumeric(1) && !this.msg[1].equals("confirm") && !this.msg[1].equals("deny"))
-        {
-            this.embed.setDescription(CommandInvalid.getShort());
-            return this;
-        }
-        else if(!isNumeric(1) && !this.msg[1].equals("confirm") && !this.msg[1].equals("deny") && this.playerData.getPokemonList().size() <= Integer.parseInt(this.msg[1]))
-        {
-            this.embed.setDescription(CommandInvalid.getShort());
-            return this;
-        }
+        boolean hasActiveRequest = releaseRequests.containsKey(this.player.getId());
 
-        if(releaseRequests.containsKey(this.player.getId()) && this.msg[1].equals("confirm"))
-        {
-            Pokemon p = Pokemon.build(this.playerData.getPokemonList().get(releaseRequests.get(this.player.getId()) - 1));
+        boolean confirm = this.msg.length == 2 && this.msg[1].equals("confirm");
+        boolean deny = this.msg.length == 2 && this.msg[1].equals("deny");
+        boolean requestRelease = this.msg.length == 2 && (this.isNumeric(1) || "latest".contains(this.msg[1]));
 
-            this.playerData.removePokemon(releaseRequests.get(this.player.getId()));
-            Pokemon.deletePokemon(p);
-            releaseRequests.remove(this.player.getId());
-
-            this.embed = null;
-            this.event.getChannel().sendMessage(this.playerData.getMention() + ": Released Level " + p.getLevel() + " " + p.getName() + "!").queue();
-        }
-        else if(releaseRequests.containsKey(this.player.getId()) && this.msg[1].equals("deny"))
+        if(confirm || deny)
         {
-            releaseRequests.remove(this.player.getId());
-
-            this.embed = null;
-            this.event.getChannel().sendMessage(this.playerData.getMention() + ": Cancelled release!").queue();
-        }
-        else
-        {
-            if(this.playerData.getPokemonList().size() == 1)
+            if(!hasActiveRequest)
             {
-                this.event.getChannel().sendMessage(this.playerData.getMention() + ": You can't release only Pokemon!").queue();
+                this.sendMsg("You don't have any active release requests!");
                 return this;
             }
 
-            releaseRequests.put(this.player.getId(), this.getInt(1));
-            Pokemon p = Pokemon.buildCore(this.playerData.getPokemonList().get(releaseRequests.get(this.player.getId()) - 1), -1);
+            String UUID = this.playerData.getPokemonList().get(releaseRequests.get(this.player.getId()) - 1);
+            Pokemon p = Pokemon.build(UUID);
+            String label = "**Level " + p.getLevel() + " " + p.getName() + "**";
 
-            this.embed = null;
-            this.event.getChannel().sendMessage(this.playerData.getMention() + ": Do you want to release your Level " + p.getLevel() + " " + p.getName() + "? (Type `p!release confirm` or `p!release deny` to continue)").queue();
+            if(confirm)
+            {
+                this.playerData.removePokemon(UUID);
+                Pokemon.deletePokemon(p);
+                releaseRequests.remove(this.player.getId());
+
+                this.sendMsg("Released your " + label + "!");
+                return this;
+            }
+            else if(deny)
+            {
+                releaseRequests.remove(this.player.getId());
+
+                this.sendMsg("Cancelled release of your " + label + "!");
+                return this;
+            }
+        }
+        else if(requestRelease)
+        {
+            if(this.playerData.getPokemonList().size() == 1)
+            {
+                this.sendMsg("You can't release your last Pokemon!");
+                return this;
+            }
+            else if(hasActiveRequest)
+            {
+                this.sendMsg("You already have an active release request (Type `p!release deny` to remove it)!");
+                return this;
+            }
+            else
+            {
+                int index = "latest".contains(this.msg[1]) ? this.playerData.getPokemonList().size() : this.getInt(1);
+                releaseRequests.put(this.player.getId(), index);
+
+                String UUID = this.playerData.getPokemonList().get(releaseRequests.get(this.player.getId()) - 1);
+                Pokemon p = Pokemon.build(UUID);
+                String label = "**Level " + p.getLevel() + " " + p.getName() + "**";
+
+                this.sendMsg("Do you want to release your " + label + "? Type `p!release confirm` or `p!release deny` to continue!");
+                return this;
+            }
+        }
+        else
+        {
+            this.embed.setDescription(CommandInvalid.getShort());
+            return this;
         }
         return this;
     }
