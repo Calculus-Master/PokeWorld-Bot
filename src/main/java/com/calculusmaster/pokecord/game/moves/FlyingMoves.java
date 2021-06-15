@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.moves;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 
@@ -128,5 +129,15 @@ public class FlyingMoves
         user.damage(damage / 3);
 
         return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 3);
+    }
+
+    //TODO: Removes barriers and lowers evasion by one stage
+    //TODO: barrier moves: mist, light screen, reflect, safeguard
+    public String Defog(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.entryHazards[duel.playerIndexFromUUID(user.getUUID())] = new DuelHelper.EntryHazardHandler();
+        duel.entryHazards[duel.playerIndexFromUUID(opponent.getUUID())] = new DuelHelper.EntryHazardHandler();
+
+        return "All Entry Hazards were removed!";
     }
 }
