@@ -59,14 +59,14 @@ public class CommandCatch extends Command
                 int credits = 200 + 100 * (amount / 5 - 1);
                 this.playerData.changeCredits(credits);
 
-                this.sendMsg("Reached Collection Milestone: **" + amount + "** " + caught.getName() + " - Earned " + credits + "c!");
+                this.sendMsg("Reached Collection Milestone for " + caught.getName() + ": **" + amount + "** (**" + credits + "**c)!");
             }
             else if(amount == 1)
             {
                 int credits = 150;
                 this.playerData.changeCredits(credits);
 
-                this.sendMsg("Unlocked Collection: " + caught.getName() + " - Earned " + credits + "c!");
+                this.sendMsg("Unlocked Collection for " + caught.getName() + " (**" + credits + "**c)!");
             }
 
             if(caught.getTotalIVRounded() >= 90 || (caught.getTotalIVRounded() >= 80 && new Random().nextInt(100) < 20))
