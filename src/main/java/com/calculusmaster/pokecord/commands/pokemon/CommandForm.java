@@ -24,27 +24,16 @@ public class CommandForm extends Command
         String form = this.getForm();
         Pokemon s = this.playerData.getSelectedPokemon();
 
-        if(!Global.POKEMON.contains(form))
-        {
-            this.embed.setDescription("That is not a valid form!");
-            return this;
-        }
-        else if(!this.playerData.getOwnedForms().contains(form))
-        {
-            this.embed.setDescription("You don't own that form!");
-            return this;
-        }
-        else if(!s.getFormsList().contains(form))
-        {
-            this.embed.setDescription(s.getName() + " cannot transform into " + form);
-            return this;
-        }
+        if(!Global.POKEMON.contains(form)) this.sendMsg("`" + form + "` is not a valid form!");
+        else if(!this.playerData.getOwnedForms().contains(form)) this.sendMsg("You don't own `" + form + "`! (Buy forms in the shop!)");
+        else if(!s.getFormsList().contains(form)) this.sendMsg(s.getName() + " can't transform into `" + form + "`!");
         else
         {
-            this.embed.setDescription(s.getName() + " transformed into " + form + "!");
+            this.sendMsg(s.getName() + " transformed into `" + form + "`!");
             s.changeForm(form);
-            return this;
         }
+
+        return this;
     }
 
     private String getForm()
