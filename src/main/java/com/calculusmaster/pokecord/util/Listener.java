@@ -52,9 +52,11 @@ public class Listener extends ListenerAdapter
         //Create a query object for server data
         serverQuery = new ServerDataQuery(server.getId());
 
+        //If bot is mentioned, send the server prefix
+        if(event.getMessage().getMentionedMembers().stream().anyMatch(m -> m.getId().equals("718169293904281610"))) event.getChannel().sendMessage("<@" + player.getId() + ">: My bot prefix is `" + serverQuery.getPrefix() + "`!").queue();
+
         //Set a boolean if the player is registered or not
         boolean isPlayerRegistered = PlayerDataQuery.isRegistered(player.getId());
-        //System.out.println(player.getName() + " Registered? : " + isPlayerRegistered);
 
         //If the 'selected' field is out of bounds, force it into bounds to avoid errors
         if(isPlayerRegistered) new PlayerDataQuery(player.getId()).updateSelected();
