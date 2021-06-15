@@ -1,7 +1,8 @@
-package com.calculusmaster.pokecord.util;
+package com.calculusmaster.pokecord.util.helpers;
 
 import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 
 import java.util.*;

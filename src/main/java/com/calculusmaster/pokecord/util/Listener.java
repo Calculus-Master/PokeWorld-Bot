@@ -12,16 +12,15 @@ import com.calculusmaster.pokecord.commands.pokemon.*;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
+import com.calculusmaster.pokecord.util.helpers.SpawnEventHelper;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class Listener extends ListenerAdapter
 {
@@ -244,7 +243,7 @@ public class Listener extends ListenerAdapter
                     else if(msg[1].equals("legendary")) spawn = PokemonRarity.getLegendarySpawn();
                     else spawn = msg.length > 2 ? msg[1] + " " + msg[2] : msg[1];
 
-                    SpawnEventHandler.forceSpawn(server, spawn);
+                    SpawnEventHelper.forceSpawn(server, spawn);
 
                     c = null;
                 }

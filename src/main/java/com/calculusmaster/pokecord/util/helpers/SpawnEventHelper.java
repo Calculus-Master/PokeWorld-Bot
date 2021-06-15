@@ -1,8 +1,11 @@
-package com.calculusmaster.pokecord.util;
+package com.calculusmaster.pokecord.util.helpers;
 
 import com.calculusmaster.pokecord.commands.economy.CommandMarket;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
+import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.PokemonRarity;
+import com.calculusmaster.pokecord.util.PrivateInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -24,7 +27,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-public class SpawnEventHandler
+public class SpawnEventHelper
 {
     private static final Map<String, String> SERVER_SPAWNS = new HashMap<>();
     private static final Map<String, ScheduledFuture<?>> SCHEDULERS = new HashMap<>();

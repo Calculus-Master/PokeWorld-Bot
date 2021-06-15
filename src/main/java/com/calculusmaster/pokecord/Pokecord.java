@@ -6,14 +6,14 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.duel.CommandWildDuel;
 import com.calculusmaster.pokecord.commands.economy.CommandMarket;
 import com.calculusmaster.pokecord.commands.moves.CommandAbilityInfo;
-import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.PokePass;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.elements.GymLeader;
 import com.calculusmaster.pokecord.game.duel.elements.Trainer;
 import com.calculusmaster.pokecord.util.*;
-import com.mongodb.client.model.Filters;
+import com.calculusmaster.pokecord.util.helpers.CacheHelper;
+import com.calculusmaster.pokecord.util.helpers.SpawnEventHelper;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -21,9 +21,6 @@ import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class Pokecord
 {
@@ -82,7 +79,7 @@ public class Pokecord
         for(Guild g : botJDA.getGuilds())
         {
             Thread.sleep(1000);
-            SpawnEventHandler.start(g);
+            SpawnEventHelper.start(g);
         }
     }
 }

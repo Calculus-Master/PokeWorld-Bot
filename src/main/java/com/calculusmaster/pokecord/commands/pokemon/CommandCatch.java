@@ -6,13 +6,12 @@ import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
-import com.calculusmaster.pokecord.util.SpawnEventHandler;
+import com.calculusmaster.pokecord.util.helpers.SpawnEventHelper;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.bson.Document;
 
-import javax.sound.sampled.EnumControl;
 import java.util.Random;
 
 public class CommandCatch extends Command
@@ -31,7 +30,7 @@ public class CommandCatch extends Command
             return this;
         }
 
-        String spawn = SpawnEventHandler.getSpawn(this.server.getId());
+        String spawn = SpawnEventHelper.getSpawn(this.server.getId());
         String guess = this.getPokemon();
 
         if(spawn.isEmpty())
@@ -97,7 +96,7 @@ public class CommandCatch extends Command
             this.embed = null;
             this.event.getMessage().reply("You caught a **Level " + caught.getLevel() + " " + caught.getName() + "** (Caught: " + numCaught + ")!").queue();
 
-            SpawnEventHandler.clearSpawn(this.server.getId());
+            SpawnEventHelper.clearSpawn(this.server.getId());
         }
         return this;
     }

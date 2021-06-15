@@ -3,9 +3,8 @@ package com.calculusmaster.pokecord.mongo;
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.PokePass;
 import com.calculusmaster.pokecord.game.Pokemon;
-import com.calculusmaster.pokecord.util.CacheHelper;
+import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.Mongo;
-import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -14,7 +13,6 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class PlayerDataQuery extends MongoQuery
