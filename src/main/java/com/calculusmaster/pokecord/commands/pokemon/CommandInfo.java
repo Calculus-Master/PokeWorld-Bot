@@ -23,9 +23,13 @@ public class CommandInfo extends Command
         int index = this.playerData.getSelected();
         if(this.msg.length == 2)
         {
-            if(this.msg[1].equals("latest") || this.msg[1].equals("lat")) index = this.playerData.getPokemonList().size() - 1;
-            else if(!this.msg[1].chars().allMatch(Character::isDigit)) this.embed.setDescription("Use p!dex instead!");
-            else if(Integer.parseInt(this.msg[1]) <= this.playerData.getPokemonList().size()) index = Integer.parseInt(this.msg[1]) - 1;
+            if("latest".contains(this.msg[1])) index = this.playerData.getPokemonList().size() - 1;
+            else if(!this.isNumeric(1))
+            {
+                this.embed.setDescription("Use p!dex instead!");
+                return this;
+            }
+            else if(this.getInt(1) <= this.playerData.getPokemonList().size()) index = this.getInt(1) - 1;
         }
 
         String UUID = this.playerData.getPokemonList().get(index);
