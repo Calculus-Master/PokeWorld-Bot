@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.moves;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
@@ -625,5 +626,27 @@ public class NormalMoves
     public String LastResort(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return move.getNotImplementedResult();
+    }
+
+    //TODO: Affects more things than just entry hazards: https://bulbapedia.bulbagarden.net/wiki/Court_Change_(move)
+    public String CourtChange(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int current = duel.playerIndexFromUUID(user.getUUID());
+        int other = current == 0 ? 1 : 0;
+
+        DuelHelper.EntryHazardHandler temp = duel.entryHazards[current];
+        duel.entryHazards[current] = duel.entryHazards[other];
+        duel.entryHazards[other] = temp;
+
+        return "Entry Hazards were swapped!";
+    }
+
+    //TODO: Companion Moves
+    public String Stockpile(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.changeStatMultiplier(Stat.DEF, 1);
+        user.changeStatMultiplier(Stat.SPDEF, 1);
+
+        return user.getName() + "'s Defense and Special Defense rose by 1 stage!";
     }
 }

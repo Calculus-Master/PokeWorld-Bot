@@ -108,4 +108,9 @@ public class GroundMoves
         duel.hazardData(opponent.getUUID()).addHazard(DuelHelper.EntryHazard.SPIKES);
         return user.getName() + " laid a Spikes trap!";
     }
+
+    public String SandAttack(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
 }
