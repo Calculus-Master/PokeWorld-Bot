@@ -301,6 +301,7 @@ public class DuelHelper
             case VOLCANIUM_Z -> ZMove = new Move("Volcanic Steam Geyser", Type.WATER, Category.SPECIAL, 195);
             case KYOGRIUM_Z -> ZMove = new Move("Primordial Tsunami", Type.WATER, Category.SPECIAL, 195);
             case GROUDONIUM_Z -> ZMove = new Move("Primordial Landslide", Type.GROUND, Category.PHYSICAL, 195);
+            case GENESECTIUM_Z -> ZMove = new Move("Elemental Techno Overdrive", Type.NORMAL, Category.SPECIAL, 195);
         }
 
         if(z.ordinal() <= 17) ZMove.setPower(ZPower);

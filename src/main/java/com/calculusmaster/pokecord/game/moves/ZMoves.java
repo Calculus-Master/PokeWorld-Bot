@@ -324,4 +324,10 @@ public class ZMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    //Genesect
+    public String ElementalTechnoOverdrive(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

@@ -56,7 +56,8 @@ public enum ZCrystal
     ZYGARDIUM_Z,
     VOLCANIUM_Z,
     KYOGRIUM_Z,
-    GROUDONIUM_Z;
+    GROUDONIUM_Z,
+    GENESECTIUM_Z;
 
     public String getStyledName()
     {
