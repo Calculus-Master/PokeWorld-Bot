@@ -210,7 +210,7 @@ public class CommandShop extends Command
             else entriesZCrystal.add(z);
         }
 
-        priceZCrystal = (int)(15000 * (Math.random() * 1.5 + 1));
+        priceZCrystal = 17500;
     }
 
     private void page_nature()
