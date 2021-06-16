@@ -260,4 +260,11 @@ public class PsychicMoves
     {
         return move.getNotImplementedResult();
     }
+
+    public String Meditate(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.changeStatMultiplier(Stat.ATK, 1);
+
+        return user.getName() + "'s Attack rose by 1 stage!";
+    }
 }

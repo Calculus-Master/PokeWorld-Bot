@@ -145,4 +145,9 @@ public class FireMoves
     {
         return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPATK, -2, 100, true);
     }
+
+    public String MysticalFire(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPATK, -1, 100, false);
+    }
 }
