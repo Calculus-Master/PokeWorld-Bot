@@ -280,7 +280,7 @@ public class DuelHelper
             case TAPUNIUM_Z -> ZMove = new Move("Guardian of Alola", Type.FAIRY, Category.SPECIAL, 0);
             case ULTRANECROZIUM_Z -> {
                 if(baseMove.getName().equals("Photon Geyser")) ZMove = new Move("Light That Burns The Sky", Type.PSYCHIC, Category.SPECIAL, 200);
-                else if(baseMove.getName().equals("Prismatic Laser")) ZMove = new Move("TheBlindingOne", Type.PSYCHIC, Category.SPECIAL, 220);
+                else if(baseMove.getName().equals("Prismatic Laser")) ZMove = new Move("The Blinding One", Type.PSYCHIC, Category.SPECIAL, 220);
             }
             //Custom Uniques
             case RESHIRIUM_Z -> ZMove = new Move("White Hot Inferno", Type.FIRE, Category.SPECIAL, 200);
