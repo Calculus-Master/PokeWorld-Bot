@@ -262,6 +262,21 @@ public class ZMoves
         return Move.statChangeDamageMove(user, opponent, duel, move, Stat.DEF, 3, 50, true);
     }
 
+    //Arceus
+    public String DecreeOfArceus(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        double healthRatio = user.getHealth() / user.getStat(Stat.HP);
+
+        if(healthRatio <= 0.01) move.setPower(500);
+        else if(healthRatio <= 0.25) move.setPower(280);
+        else if(healthRatio <= 0.5) move.setPower(200);
+        else if((int)(healthRatio * 100) == 69) move.setPower(690);
+        else if(healthRatio <= 0.75) move.setPower(180);
+        else move.setPower(150);
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
     //Rayquaza and Mega Rayquaza
     public String DraconicOzoneAscent(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {

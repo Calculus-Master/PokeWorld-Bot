@@ -289,7 +289,7 @@ public class DuelHelper
             case XERNIUM_Z -> ZMove = new Move("Tree Of Life", Type.FAIRY, Category.STATUS, 0);
             case YVELTIUM_Z -> ZMove = new Move("Cocoon Of Destruction", Type.DARK, Category.SPECIAL, 185);
             case DIANCIUM_Z -> ZMove = new Move("Dazzling Diamond Barrage", Type.ROCK, Category.PHYSICAL, 180);
-            case ARCEIUM_Z -> ZMove = new Move("Decree Of Arceus", Type.NORMAL, Category.PHYSICAL, 260);
+            case ARCEIUM_Z -> ZMove = new Move("Decree Of Arceus", Type.NORMAL, Category.PHYSICAL, 150);
             case RAYQUAZIUM_Z -> ZMove = new Move("Draconic Ozone Ascent", Type.DRAGON, Category.PHYSICAL, 200);
             case ZYGARDIUM_Z -> ZMove = switch (baseMove.getName()) {
                 case "Lands Wrath" -> new Move("Tectonic Z Wrath", Type.GROUND, Category.PHYSICAL, 180);
