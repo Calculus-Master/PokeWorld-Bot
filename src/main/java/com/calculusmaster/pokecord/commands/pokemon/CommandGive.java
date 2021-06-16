@@ -44,7 +44,7 @@ public class CommandGive extends Command
         }
         else if(item != null && item.nonPokemon)
         {
-            this.event.getChannel().sendMessage(this.playerData.getMention() + ": `" + item.getStyledName() + "` cannot be given to a Pokemon!").queue();
+            this.event.getChannel().sendMessage(this.playerData.getMention() + ": `" + item.getStyledName() + "` cannot be given to a Pokemon! Use p!activate instead!").queue();
             this.embed = null;
         }
         else

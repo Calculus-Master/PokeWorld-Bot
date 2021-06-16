@@ -196,7 +196,7 @@ public class CommandBuy extends Command
                 boolean secretSword = move.equals("Secret Sword") && selected.getName().equals("Keldeo");
                 boolean relicSong = move.equals("Relic Song") && selected.getName().contains("Meloetta");
 
-                if(blastBurn || hydroCannon || frenzyPlant || dracoMeteor || voltTackle || dragonAscent || secretSword || relicSong)
+                if(blastBurn || hydroCannon || frenzyPlant || steelBeam || dracoMeteor || voltTackle || dragonAscent || secretSword || relicSong)
                 {
                     this.playerData.changeCredits(-1 * COST_MOVETUTOR);
 
