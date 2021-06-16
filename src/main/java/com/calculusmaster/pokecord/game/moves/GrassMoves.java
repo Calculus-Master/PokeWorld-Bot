@@ -188,4 +188,9 @@ public class GrassMoves
     {
         return Move.statChangeDamageMove(user, opponent, duel, move, Stat.DEF, -1, 100, false);
     }
+
+    public String BulletSeed(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.multihitDamageMove(user, opponent, duel, move);
+    }
 }

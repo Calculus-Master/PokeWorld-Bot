@@ -127,4 +127,12 @@ public class DragonMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 20);
     }
+
+    public String ScaleShot(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.changeStatMultiplier(Stat.SPD, 1);
+        user.changeStatMultiplier(Stat.DEF, -1);
+
+        return Move.multihitDamageMove(user, opponent, duel, move) + " " + user.getName() + "'s Speed rose by 1 stage and " + user.getName() + "'s Defense was lowered by 1 stage!";
+    }
 }

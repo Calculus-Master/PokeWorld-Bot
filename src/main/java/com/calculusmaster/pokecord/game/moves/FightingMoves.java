@@ -154,4 +154,9 @@ public class FightingMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String ArmThrust(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.multihitDamageMove(user, opponent, duel, move);
+    }
 }
