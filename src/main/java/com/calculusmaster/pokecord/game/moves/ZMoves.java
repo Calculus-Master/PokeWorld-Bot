@@ -286,8 +286,10 @@ public class ZMoves
     }
 
     //Ultra Necrozma (Prismatic Laser)
-    public String PrismaticLightBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    public String TheBlindingOne(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        if(opponent.getName().contains("Mega") || opponent.getName().contains("Primal")) move.setPower(move.getPower() * 2);
+
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
