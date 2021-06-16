@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class CommandRelease extends Command
 {
@@ -24,7 +25,7 @@ public class CommandRelease extends Command
 
         boolean confirm = this.msg.length == 2 && this.msg[1].equals("confirm");
         boolean deny = this.msg.length == 2 && this.msg[1].equals("deny");
-        boolean requestRelease = this.msg.length == 2 && (this.isNumeric(1) || "latest".contains(this.msg[1]));
+        boolean requestRelease = this.msg.length == 2 && (this.isNumeric(1) || "latest".contains(this.msg[1]) || this.msg[1].equals("random"));
 
         if(confirm || deny)
         {
@@ -69,7 +70,7 @@ public class CommandRelease extends Command
             }
             else
             {
-                int index = "latest".contains(this.msg[1]) ? this.playerData.getPokemonList().size() : this.getInt(1);
+                int index = "latest".contains(this.msg[1]) ? this.playerData.getPokemonList().size() : (this.msg[1].equals("random") ? new Random().nextInt(this.playerData.getPokemonList().size()) + 1 : this.getInt(1));
                 releaseRequests.put(this.player.getId(), index);
 
                 String UUID = this.playerData.getPokemonList().get(releaseRequests.get(this.player.getId()) - 1);
