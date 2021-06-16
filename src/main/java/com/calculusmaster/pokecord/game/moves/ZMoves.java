@@ -305,8 +305,10 @@ public class ZMoves
         int fireDamage = move.getDamage(user, opponent);
         move.setType(Type.WATER);
         int waterDamage = move.getDamage(user, opponent);
+        move.setType(Type.GROUND);
+        int groundDamage = move.getDamage(user, opponent);
 
-        move.setType(fireDamage > waterDamage ? Type.FIRE : Type.WATER);
+        move.setType(fireDamage > waterDamage && fireDamage > groundDamage ? Type.FIRE : (waterDamage > fireDamage && waterDamage > groundDamage ? Type.WATER : Type.GROUND));
 
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 60);
     }
