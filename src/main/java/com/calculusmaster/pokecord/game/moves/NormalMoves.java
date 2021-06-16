@@ -10,7 +10,8 @@ import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.elements.Weather;
 import com.calculusmaster.pokecord.util.Global;
 
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class NormalMoves
 {
@@ -729,5 +730,41 @@ public class NormalMoves
         opponent.damage(damage);
 
         return move.getDamageResult(opponent, damage);
+    }
+
+    public String Assist(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        List<String> banned = Arrays.asList("Assist", "Baneful Bunker", "Beak Blast", "Belch", "Bestow", "Bounce", "Chatter", "Circle Throw", "Copycat", "Counter", "Covet", "Destiny Bond", "Detect", "Dig", "Dive", "Dragon Tail", "Endure", "Feint", "Fly", "Focus Punch", "Follow Me", "Helping Hand", "Hold Hands", "Kings Shield", "Mat Block", "Me First", "Metronome", "Mimic", "Mirror Coat", "Mirror Move", "Nature Power", "Phantom Force", "Protect", "Rage Powder", "Roar", "Shadow Force", "Shell Trap", "Sketch", "Sky Drop", "Sleep Talk", "Snatch", "Spiky Shield", "Spotlight", "Struggle", "Switcheroo", "Thief", "Transform", "Trick", "Whirlwind");
+        List<String> pool = new ArrayList<>();
+        List<Pokemon> team = List.copyOf(duel.getPlayers()[duel.playerIndexFromUUID(user.getUUID())].team);
+
+        for(Pokemon p : team) pool.addAll(p.getLearnedMoves());
+
+        pool = pool.stream().distinct().filter(s -> !banned.contains(s)).collect(Collectors.toList());
+
+        move = new Move(pool.get(new Random().nextInt(pool.size())));
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String PlayNice(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.changeStatMultiplier(Stat.ATK, -1);
+        return opponent.getName() + "'s Attack was lowered by 1 stage!";
+    }
+
+    public String Explosion(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.damage(user.getHealth());
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String Conversion(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        Type t = new Move(user.getLearnedMoves().get(0)).getType();
+        user.setType(t, 0);
+        user.setType(t, 1);
+
+        return user.getName() + " transformed into a " + Global.normalCase(t.toString()) + " Type!";
     }
 }

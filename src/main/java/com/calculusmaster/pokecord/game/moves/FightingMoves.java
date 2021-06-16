@@ -149,4 +149,9 @@ public class FightingMoves
 
         return move.getDamageResult(opponent, damage);
     }
+
+    public String MeteorAssault(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
