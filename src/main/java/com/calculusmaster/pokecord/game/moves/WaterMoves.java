@@ -133,42 +133,7 @@ public class WaterMoves
 
     public String WaterShuriken(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        int times = 1;
-
-        Random r = new Random();
-
-        if(r.nextInt(8) < 3)
-        {
-            move.setPower(30);
-            damage += move.getDamage(user, opponent);
-            times++;
-
-            if(r.nextInt(8) < 3)
-            {
-                move.setPower(45);
-                damage += move.getDamage(user, opponent);
-                times++;
-
-                if(r.nextInt(8) < 1)
-                {
-                    move.setPower(60);
-                    damage += move.getDamage(user, opponent);
-                    times++;
-
-                    if(r.nextInt(8) < 1)
-                    {
-                        move.setPower(75);
-                        damage += move.getDamage(user, opponent);
-                        times++;
-                    }
-                }
-            }
-        }
-
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage) + " Water Shuriken hit " + times + " time" + (times > 1 ? "s!" : "!");
+        return Move.multihitDamageMove(user, opponent, duel, move);
     }
 
     public String Scald(Pokemon user, Pokemon opponent, Duel duel, Move move)

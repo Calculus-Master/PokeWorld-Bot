@@ -78,42 +78,7 @@ public class BugMoves
 
     public String PinMissile(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        int times = 1;
-
-        Random r = new Random();
-
-        if(r.nextInt(8) < 3)
-        {
-            move.setPower(50);
-            damage += move.getDamage(user, opponent);
-            times++;
-
-            if(r.nextInt(8) < 3)
-            {
-                move.setPower(75);
-                damage += move.getDamage(user, opponent);
-                times++;
-
-                if(r.nextInt(8) < 1)
-                {
-                    move.setPower(100);
-                    damage += move.getDamage(user, opponent);
-                    times++;
-
-                    if(r.nextInt(8) < 1)
-                    {
-                        move.setPower(125);
-                        damage += move.getDamage(user, opponent);
-                        times++;
-                    }
-                }
-            }
-        }
-
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage) + " Pin Missile hit " + times + " time" + (times > 1 ? "s!" : "!");
+        return Move.multihitDamageMove(user, opponent, duel, move);
     }
 
     public String FellStinger(Pokemon user, Pokemon opponent, Duel duel, Move move)

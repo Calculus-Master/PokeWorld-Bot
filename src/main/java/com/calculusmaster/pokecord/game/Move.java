@@ -177,6 +177,24 @@ public class Move
         return results + (change ? " " + statChangeResult : "");
     }
 
+    public static String multihitDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int times = switch(new Random().nextInt(8)) {
+            case 0, 1, 2 -> 2;
+            case 3, 4, 5 -> 3;
+            case 6 -> 4;
+            case 7 -> 5;
+            default -> 2;
+        };
+
+        int damage = 0;
+        for(int i = 0; i < times; i++) damage += move.getDamage(user, opponent);
+
+        opponent.damage(damage);
+
+        return move.getDamageResult(opponent, damage) + " " + move.getName() + " hit " + times + " times!";
+    }
+
     //Different Move Results
 
     public String getMoveUsedResult(Pokemon user)
