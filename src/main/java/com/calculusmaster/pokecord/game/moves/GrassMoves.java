@@ -183,4 +183,9 @@ public class GrassMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String GravApple(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.DEF, -1, 100, false);
+    }
 }

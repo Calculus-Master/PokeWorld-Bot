@@ -767,4 +767,45 @@ public class NormalMoves
 
         return user.getName() + " transformed into a " + Global.normalCase(t.toString()) + " Type!";
     }
+
+    //TODO: Fix multi hit attacks (Comet Punch, Fury Attack, Water Shuriken, Icicle Crash)
+    public String CometPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+        int times = 1;
+
+        Random r = new Random();
+
+        if(r.nextInt(8) < 3)
+        {
+            move.setPower(36);
+            damage += move.getDamage(user, opponent);
+            times++;
+
+            if(r.nextInt(8) < 3)
+            {
+                move.setPower(54);
+                damage += move.getDamage(user, opponent);
+                times++;
+
+                if(r.nextInt(8) < 1)
+                {
+                    move.setPower(72);
+                    damage += move.getDamage(user, opponent);
+                    times++;
+
+                    if(r.nextInt(8) < 1)
+                    {
+                        move.setPower(90);
+                        damage += move.getDamage(user, opponent);
+                        times++;
+                    }
+                }
+            }
+        }
+
+        opponent.damage(damage);
+
+        return move.getDamageResult(opponent, damage) + " Comet Punch hit " + times + " time" + (times > 1 ? "s!" : "!");
+    }
 }

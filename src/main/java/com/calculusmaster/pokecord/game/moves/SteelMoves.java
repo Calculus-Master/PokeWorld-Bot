@@ -163,4 +163,12 @@ public class SteelMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String ShiftGear(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.changeStatMultiplier(Stat.ATK, 1);
+        user.changeStatMultiplier(Stat.SPD, 2);
+
+        return user.getName() + "'s Attack rose by 1 stage and Speed rose by 2 stages!";
+    }
 }

@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 
 public class FairyMoves
 {
@@ -37,5 +38,10 @@ public class FairyMoves
         opponent.damage(damage);
 
         return move.getDamageResult(opponent, damage);
+    }
+
+    public String StrangeSteam(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.CONFUSED, 20);
     }
 }

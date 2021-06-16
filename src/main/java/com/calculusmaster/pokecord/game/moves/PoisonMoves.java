@@ -67,4 +67,12 @@ public class PoisonMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BADLY_POISONED, 50);
     }
+
+    public String PoisonTail(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.setCrit(3);
+        String result = Move.statusDamageMove(user, opponent, duel, move, StatusCondition.POISONED, 10);
+        user.setCrit(1);
+        return result;
+    }
 }
