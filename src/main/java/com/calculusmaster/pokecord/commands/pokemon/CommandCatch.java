@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.mongo.CollectionsQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.PokemonRarity;
 import com.calculusmaster.pokecord.util.helpers.SpawnEventHelper;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;

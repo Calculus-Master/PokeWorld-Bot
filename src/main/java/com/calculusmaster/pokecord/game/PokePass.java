@@ -10,7 +10,7 @@ import java.util.Map;
 public class PokePass
 {
     public static Map<Integer, TierReward> passTiers = new HashMap<>();
-    public static final int TIER_EXP = 30000;
+    public static final int TIER_EXP = 15000;
 
     public static void init()
     {

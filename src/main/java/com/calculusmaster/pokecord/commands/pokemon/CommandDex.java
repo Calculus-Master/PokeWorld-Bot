@@ -144,12 +144,12 @@ public class CommandDex extends Command
     private String getEvolutionsFormatted(JSONArray evos, JSONArray evosLVL)
     {
         StringBuilder s = new StringBuilder();
-        switch(evos.length())
+        switch (evos.length())
         {
-            case 0: s.append("Either does not evolve or has a special evolution"); break;
-            case 1: s.append("Evolves into ").append(evos.getString(0)).append(" at Level ").append(evosLVL.getInt(0)); break;
-            case 2: s.append("Evolves into ").append(evos.getString(0)).append(" at Level ").append(evosLVL.getInt(0)).append(" and ").append(evos.getString(1)).append(" at level ").append(evosLVL.getInt(1)); break;
-            default: s.append("ERROR – REPORT"); break;
+            case 0 -> s.append("Either does not evolve or has a special evolution");
+            case 1 -> s.append("Evolves into ").append(evos.getString(0)).append(" at Level ").append(evosLVL.getInt(0));
+            case 2 -> s.append("Evolves into ").append(evos.getString(0)).append(" at Level ").append(evosLVL.getInt(0)).append(" and ").append(evos.getString(1)).append(" at level ").append(evosLVL.getInt(1));
+            default -> s.append("ERROR – REPORT");
         }
         return s.toString();
     }
