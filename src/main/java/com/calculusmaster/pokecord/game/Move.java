@@ -5,12 +5,15 @@ import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.enums.items.TM;
+import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.moves.*;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Move
 {
@@ -18,7 +21,7 @@ public class Move
     //TODO: Keep checking the custom moves and see if they can function as close to the original as possible
     public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Sweet Scent", "Smokescreen", "Safeguard", "Whirlwind", "Rage Powder", "Tailwind", "Light Screen", "Frustration", "Return", "Mind Reader", "Quick Guard", "Counter", "Magnetic Flux", "After You", "Disable", "Miracle Eye", "Guard Swap", "Power Swap", "Me First", "Yawn", "Gravity", "Spite", "Mean Look", "Foresight", "Wide Guard", "Ingrain", "Forests Curse", "Natural Gift", "Last Resort", "Sand Attack", "Teleport", "Odor Sleuth", "Helping Hand", "Mirror Move", "Stuff Cheeks");
     public static final List<String> CUSTOM_MOVES = Arrays.asList("Leech Seed", "Rapid Spin", "Mirror Shot", "Stockpile");
-    public static final List<String> INCOMPLETE_MOVES = new ArrayList<>();
+    public static List<String> INCOMPLETE_MOVES = new ArrayList<>();
 
     private String name;
     private MoveData moveData;
@@ -42,6 +45,11 @@ public class Move
         Mongo.PokemonInfo.find().forEach(d -> {
             for(String s : d.getList("moves", String.class)) if(!Move.isMove(s) && !INCOMPLETE_MOVES.contains(s)) INCOMPLETE_MOVES.add(s);
         });
+
+        for(TM tm : TM.values()) if(!Move.isMove(tm.getMoveName())) INCOMPLETE_MOVES.add(tm.getMoveName());
+        for(TR tr : TR.values()) if(!Move.isMove(tr.getMoveName())) INCOMPLETE_MOVES.add(tr.getMoveName());
+
+        INCOMPLETE_MOVES = INCOMPLETE_MOVES.stream().distinct().collect(Collectors.toList());
     }
 
     public Move(String name)
