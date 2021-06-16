@@ -283,6 +283,7 @@ public class ZMoves
     //Zygarde Complete
     public String TitanicZEnforcer(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        if(opponent.getName().contains("Zygarde")) move.setPower(move.getPower() * 2);
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
