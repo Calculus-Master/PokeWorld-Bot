@@ -122,4 +122,9 @@ public class DragonMoves
 
         return move.getDamageResult(opponent, damage);
     }
+
+    public String DragonRush(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 20);
+    }
 }

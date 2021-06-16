@@ -139,4 +139,11 @@ public class DarkMoves
         opponent.damage(damage);
         return move.getDamageResult(opponent, damage);
     }
+
+    public String DarkVoid(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.addStatusCondition(StatusCondition.ASLEEP);
+
+        return opponent.getName() + " is asleep!";
+    }
 }

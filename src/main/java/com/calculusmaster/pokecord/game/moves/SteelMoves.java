@@ -157,4 +157,10 @@ public class SteelMoves
         user.damage(userDamage);
         return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + " lost " + userDamage + " HP!";
     }
+
+    //TODO: Opponent unable to flee
+    public String AnchorShot(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

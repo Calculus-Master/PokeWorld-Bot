@@ -141,4 +141,12 @@ public class FightingMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String SeismicToss(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = user.getLevel();
+        opponent.damage(damage);
+
+        return move.getDamageResult(opponent, damage);
+    }
 }
