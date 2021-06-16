@@ -51,8 +51,8 @@ public class FireMoves
 
     public String FireSpin(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        //TODO: Does damage per turn
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        duel.data(opponent.getUUID()).boundTurns = 5;
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BOUND, 100);
     }
 
     public String Inferno(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -105,7 +105,7 @@ public class FireMoves
         user.changeStatMultiplier(Stat.SPDEF, -1);
         user.changeStatMultiplier(Stat.SPD, -1);
 
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + "'s Defense, Special Defense, and Speed";
+        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + "'s Defense, Special Defense, and Speed were lowered by 1 stage!";
     }
 
     public String FireBlast(Pokemon user, Pokemon opponent, Duel duel, Move move)
