@@ -195,6 +195,11 @@ public class Move
             default -> 2;
         };
 
+        return Move.multihitDamageMove(user, opponent, duel, move, times);
+    }
+
+    public static String multihitDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move, int times)
+    {
         int damage = 0;
         for(int i = 0; i < times; i++) damage += move.getDamage(user, opponent);
 

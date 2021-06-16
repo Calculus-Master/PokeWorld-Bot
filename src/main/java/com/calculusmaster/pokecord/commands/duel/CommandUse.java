@@ -173,6 +173,7 @@ public class CommandUse extends Command
                 case KYOGRIUM_Z -> s.getName().contains("Kyogre") && move.getName().equals("Origin Pulse");
                 case GROUDONIUM_Z -> s.getName().contains("Groudon") && move.getName().equals("Precipice Blades");
                 case GENESECTIUM_Z -> s.getName().equals("Genesect") && move.getName().equals("Techno Blast");
+                case MELMETALIUM_Z -> s.getName().equals("Melmetal") && move.getName().equals("Double Iron Bash");
             };
 
             List<String> statusBaseMoves = Arrays.asList("Geomancy");
