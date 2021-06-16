@@ -8,6 +8,8 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 
+import java.util.Random;
+
 public class ZMoves
 {
     public String SavageSpinOut(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -335,5 +337,26 @@ public class ZMoves
     public String QuadrupleSteelSmash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return Move.multihitDamageMove(user, opponent, duel, move, 4);
+    }
+
+    //Dialga
+    public String TimelineShatter(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    //Palkia
+    public String UltraSpaceHypernova(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    //Giratina and Origin Giratina
+    public String DarkMatterExplosion(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int recoil = new Random().nextInt(user.getHealth() / 4) + user.getHealth() / 4;
+        user.damage(recoil);
+
+        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + " took " + recoil + " damage from the blast!";
     }
 }
