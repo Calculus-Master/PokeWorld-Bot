@@ -177,6 +177,7 @@ public class CommandUse extends Command
                 case DIALGIUM_Z -> s.getName().equals("Dialga") && move.getName().equals("Roar Of Time");
                 case PALKIUM_Z -> s.getName().equals("Palkia") && move.getName().equals("Spacial Rend");
                 case GIRATINIUM_Z -> s.getName().contains("Giratina") && move.getName().equals("Shadow Force");
+                case ETERNIUM_Z -> s.getName().contains("Eternatus") && move.getName().equals("Eternabeam");
             };
 
             List<String> statusBaseMoves = Arrays.asList("Geomancy");

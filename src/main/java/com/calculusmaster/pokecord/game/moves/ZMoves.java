@@ -374,4 +374,13 @@ public class ZMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + " took " + recoil + " damage from the blast!";
     }
+
+    //Eternatus and Eternamax Eternatus
+    public String TheDarkestDay(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(opponent.isDynamaxed()) move.setPower(move.getPower() * 2);
+        if(user.getName().contains("Eternamax")) move.setPower(Math.pow(move.getPower(), 2));
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
