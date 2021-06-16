@@ -289,12 +289,12 @@ public class ZMoves
     public String MillionArrowBarrage(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         duel.data(opponent.getUUID()).isRaised = false;
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return Move.multihitDamageMove(user, opponent, duel, move);
     }
 
     public String MillionWaveTsunami(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return Move.multihitDamageMove(user, opponent, duel, move);
     }
 
     //Volcanion
