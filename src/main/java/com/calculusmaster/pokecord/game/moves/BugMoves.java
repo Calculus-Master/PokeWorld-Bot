@@ -163,4 +163,9 @@ public class BugMoves
     {
         return Move.statChangeDamageMove(user, opponent, duel, move, Stat.ATK, -1, 100, false);
     }
+
+    public String Steamroller(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
+    }
 }

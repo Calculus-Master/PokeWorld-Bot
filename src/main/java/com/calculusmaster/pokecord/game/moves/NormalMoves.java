@@ -722,4 +722,12 @@ public class NormalMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String SuperFang(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = opponent.getHealth() / 2;
+        opponent.damage(damage);
+
+        return move.getDamageResult(opponent, damage);
+    }
 }

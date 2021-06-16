@@ -35,8 +35,10 @@ public class Move
 
     public static void init()
     {
+        MOVES.clear();
         Mongo.MoveInfo.find().forEach(d -> MOVES.put(d.getString("name"), new MoveData(d.getString("name"), d.getString("type"), d.getString("category"), d.getInteger("power"), d.getInteger("accuracy"), d.getString("info"))));
 
+        INCOMPLETE_MOVES.clear();
         Mongo.PokemonInfo.find().forEach(d -> {
             for(String s : d.getList("moves", String.class)) if(!Move.isMove(s) && !INCOMPLETE_MOVES.contains(s)) INCOMPLETE_MOVES.add(s);
         });

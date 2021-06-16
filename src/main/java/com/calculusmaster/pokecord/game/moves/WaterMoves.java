@@ -175,4 +175,16 @@ public class WaterMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 30);
     }
+
+    //TODO: 50% chance to lower accuracy
+    public String Octazooka(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    //TODO: Increased crit ratio
+    public String SnipeShot(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
