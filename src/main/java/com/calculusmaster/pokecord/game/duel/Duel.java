@@ -628,7 +628,7 @@ public class Duel
 
             String UUID = this.players[this.current].active.getUUID();
             int exp = this.players[this.current].active.getDuelExp(this.players[this.other].active);
-            this.expGains.put(UUID, (this.expGains.containsKey(UUID) ? this.expGains.get(UUID) : 0) + exp);
+            this.expGains.put(UUID, (this.expGains.getOrDefault(UUID, 0)) + exp);
 
             if(this.players[this.current].active.isDynamaxed() && this.players[this.current].active.getDynamaxLevel() < 10 && new Random().nextInt(100) < 40)
             {

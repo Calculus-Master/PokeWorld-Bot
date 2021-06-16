@@ -304,6 +304,9 @@ public class Move
         //Freeze Dry
         if(this.name.equals("Freeze Dry")) type = opponent.isType(Type.WATER) || opponent.isType(Type.GRASS) || opponent.isType(Type.GROUND) || opponent.isType(Type.FLYING) || opponent.isType(Type.DRAGON) ? 2.0 : (opponent.isType(Type.FIRE) || opponent.isType(Type.ICE) || opponent.isType(Type.STEEL) ? 0.5 : 1.0);
 
+        //Gensect Z-Move: Elemental Techno Overdrive
+        if(this.name.equals("Elemental Techno Overdrive")) stab = Math.random() + 1;
+
         //Ability: Adaptability
         if(stab == 1.5 && user.getAbilities().contains("Adaptability")) stab = 2.0;
 

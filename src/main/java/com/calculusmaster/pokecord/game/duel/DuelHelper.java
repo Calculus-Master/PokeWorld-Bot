@@ -301,7 +301,7 @@ public class DuelHelper
             case VOLCANIUM_Z -> ZMove = new Move("Volcanic Steam Geyser", Type.WATER, Category.SPECIAL, 195);
             case KYOGRIUM_Z -> ZMove = new Move("Primordial Tsunami", Type.WATER, Category.SPECIAL, 195);
             case GROUDONIUM_Z -> ZMove = new Move("Primordial Landslide", Type.GROUND, Category.PHYSICAL, 195);
-            case GENESECTIUM_Z -> ZMove = new Move("Elemental Techno Overdrive", Type.NORMAL, Category.SPECIAL, 195);
+            case GENESECTIUM_Z -> ZMove = new Move("Elemental Techno Overdrive", Type.NORMAL, Category.SPECIAL, 160);
             case MELMETALIUM_Z -> ZMove = new Move("Quadruple Steel Smash", Type.STEEL, Category.PHYSICAL, 75);
             case DIALGIUM_Z -> ZMove = new Move("Timeline Shatter", Type.DRAGON, Category.SPECIAL, 200);
             case PALKIUM_Z -> ZMove = new Move("Ultra Space Hypernova", Type.DRAGON, Category.SPECIAL, 200);
