@@ -6,6 +6,8 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
+import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 
 import java.util.Random;
 
@@ -13,45 +15,36 @@ public class DragonMoves
 {
     public String DragonClaw(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-        return move.getDamageResult(opponent, damage);
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String DragonRage(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.damage(40);
-
-        return move.getDamageResult(opponent, 40);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFixedDamageEffect(40)
+                .execute();
     }
 
     public String DragonBreath(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        if(!opponent.getType()[0].equals(Type.ELECTRIC) && !opponent.getType()[1].equals(Type.ELECTRIC) && new Random().nextInt(100) < 30)
-        {
-            opponent.addStatusCondition(StatusCondition.PARALYZED);
-            return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " is paralyzed!";
-        }
-
-        return move.getDamageResult(opponent, damage);
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
     }
 
     public String DragonDance(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.ATK, 1);
-        user.changeStatMultiplier(Stat.SPD, 1);
-
-        return user.getName() + "'s Attack and Speed rose by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.ATK, 1, 100, true)
+                                .add(Stat.SPD, 1))
+                .execute();
     }
 
     public String Outrage(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.addStatusCondition(StatusCondition.CONFUSED);
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + " is confused!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.CONFUSED, 100, true)
+                .execute();
     }
 
     public String Twister(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -62,9 +55,10 @@ public class DragonMoves
 
     public String DracoMeteor(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        String results = Move.simpleDamageMove(user, opponent, duel, move);
-        user.changeStatMultiplier(Stat.SPATK, -2);
-        return results + " " + user.getName() + "'s Special Attack was lowered by 2 stages!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPATK, -2, 100, true)
+                .execute();
     }
 
     public String RoarOfTime(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -74,12 +68,9 @@ public class DragonMoves
 
     public String SpacialRend(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.setCrit(3);
-        int damage = move.getDamage(user, opponent);
-        user.setCrit(1);
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .execute();
     }
 
     public String DragonEnergy(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -116,11 +107,9 @@ public class DragonMoves
 
     public String DragonDarts(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        damage += move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFixedMultiStrikeEffect(2)
+                .execute();
     }
 
     public String DragonRush(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -130,9 +119,10 @@ public class DragonMoves
 
     public String ScaleShot(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.SPD, 1);
-        user.changeStatMultiplier(Stat.DEF, -1);
-
-        return Move.multihitDamageMove(user, opponent, duel, move) + " " + user.getName() + "'s Speed rose by 1 stage and " + user.getName() + "'s Defense was lowered by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFixedMultiStrikeEffect(2)
+                .addStatChangeEffect(Stat.SPD, 1, 100, true)
+                .addStatChangeEffect(Stat.DEF, -1, 100, true)
+                .execute();
     }
 }

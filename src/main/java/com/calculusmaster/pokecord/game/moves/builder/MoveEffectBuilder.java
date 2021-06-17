@@ -45,10 +45,15 @@ public class MoveEffectBuilder
         return this;
     }
 
+    public MoveEffectBuilder addStatusEffect(StatusCondition status, int percent, boolean userChange)
+    {
+        this.moveEffects.add(new StatusConditionEffect(status, percent, userChange));
+        return this;
+    }
+
     public MoveEffectBuilder addStatusEffect(StatusCondition status, int percent)
     {
-        this.moveEffects.add(new StatusConditionEffect(status, percent));
-        return this;
+        return this.addStatusEffect(status, percent, false);
     }
 
     //For single stat changed
