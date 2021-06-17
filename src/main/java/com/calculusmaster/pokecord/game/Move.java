@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.moves.*;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
@@ -127,8 +128,45 @@ public class Move
     }
 
     //Move logic
-    //TODO: Propagate this method
     public static String simpleDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
+    }
+
+    public static String statusDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move, StatusCondition status, int percent)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(status, percent)
+                .execute();
+    }
+
+    public static String statChangeDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move, Stat s, int stage, int percent, boolean userChange)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(s, stage, percent, userChange)
+                .execute();
+    }
+
+    public static String multihitDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addVariableMultiStrikeEffect()
+                .execute();
+    }
+
+    public static String multihitDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move, int times)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFixedMultiStrikeEffect(times)
+                .execute();
+    }
+
+    @Deprecated
+    public static String LEGACYsimpleDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int damage = move.getDamage(user, opponent);
         opponent.damage(damage);
@@ -136,7 +174,8 @@ public class Move
         return move.getDamageResult(opponent, damage);
     }
 
-    public static String statusDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move, StatusCondition status, int percent)
+    @Deprecated
+    public static String LEGACYstatusDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move, StatusCondition status, int percent)
     {
         String statusUpdate = switch(status) {
                     case BURNED -> "is burned!";
@@ -156,14 +195,15 @@ public class Move
 
         if(statusProc) opponent.addStatusCondition(status);
 
-        return Move.simpleDamageMove(user, opponent, duel, move) + (statusProc ? " " + opponent.getName() + " " + statusUpdate : "");
+        return Move.LEGACYsimpleDamageMove(user, opponent, duel, move) + (statusProc ? " " + opponent.getName() + " " + statusUpdate : "");
     }
 
-    public static String statChangeDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move, Stat s, int stage, int percent, boolean userChange)
+    @Deprecated
+    public static String LEGACYstatChangeDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move, Stat s, int stage, int percent, boolean userChange)
     {
         boolean change = new Random().nextInt(100) < (user.getAbilities().contains("Serene Grace") ? 2 * percent : percent);
 
-        String results = Move.simpleDamageMove(user, opponent, duel, move);
+        String results = Move.LEGACYsimpleDamageMove(user, opponent, duel, move);
 
         if(change)
         {
@@ -186,7 +226,8 @@ public class Move
         return results + (change ? " " + statChangeResult : "");
     }
 
-    public static String multihitDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    @Deprecated
+    public static String LEGACYmultihitDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int times = switch(new Random().nextInt(8)) {
             case 0, 1, 2 -> 2;
@@ -196,10 +237,11 @@ public class Move
             default -> 2;
         };
 
-        return Move.multihitDamageMove(user, opponent, duel, move, times);
+        return Move.LEGACYmultihitDamageMove(user, opponent, duel, move, times);
     }
 
-    public static String multihitDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move, int times)
+    @Deprecated
+    public static String LEGACYmultihitDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move, int times)
     {
         int damage = 0;
         for(int i = 0; i < times; i++) damage += move.getDamage(user, opponent);
