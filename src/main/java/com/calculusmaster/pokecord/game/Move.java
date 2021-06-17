@@ -34,6 +34,7 @@ public class Move
     private int priority;
     private double damageMultiplier;
 
+    public int critChance;
     private boolean hitCrit;
 
     public static void init()
@@ -73,6 +74,7 @@ public class Move
         this.isMaxMove = false;
         this.setPriority();
         this.damageMultiplier = 1.0;
+        this.critChance = 1;
     }
 
     public String logic(Pokemon user, Pokemon opponent, Duel duel)
@@ -284,7 +286,7 @@ public class Move
         //Modifier = Targets * Weather * Badge * Critical * Random * STAB * Type * Burn * Other
         //Ignored Components: Targets, Badge, Other
         //Weather component is done in the Harsh Sunlight section in Duel
-        double critical = user.isCrit() ? 1.5 : 1.0;
+        double critical = (new Random().nextInt(24) < this.critChance) ? 1.5 : 1.0;
         double random = (r.nextInt(16) + 85.0) / 100.0;
         double stab = user.isType(this.type) ? 1.5 : 1.0;
         double type = TypeEffectiveness.getCombinedMap(opponent.getType()[0], opponent.getType()[1]).get(this.type);
@@ -329,6 +331,7 @@ public class Move
         this.power = this.moveData.power;
         this.accuracy = this.moveData.accuracy;
         this.hitCrit = false;
+        this.critChance = 1;
         this.isZMove = false;
         this.isMaxMove = false;
         this.damageMultiplier = 1.0;

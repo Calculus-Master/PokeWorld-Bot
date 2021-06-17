@@ -374,7 +374,7 @@ public class NormalMoves
 
     public String LaserFocus(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.setCrit(24);
+        move.critChance = 24;
         return user.getName() + " has guaranteed critical hits!";
     }
 
