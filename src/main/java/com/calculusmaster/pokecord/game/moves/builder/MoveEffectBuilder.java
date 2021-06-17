@@ -3,8 +3,10 @@ package com.calculusmaster.pokecord.game.moves.builder;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.enums.elements.Weather;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -110,6 +112,24 @@ public class MoveEffectBuilder
     public MoveEffectBuilder addCritDamageEffect()
     {
         return this.addCritDamageEffect(3);
+    }
+
+    public MoveEffectBuilder addWeatherEffect(Weather weather)
+    {
+        this.moveEffects.add(new WeatherEffect(weather));
+        return this;
+    }
+
+    public MoveEffectBuilder addTerrainEffect(DuelHelper.Terrain terrain)
+    {
+        this.moveEffects.add(new TerrainEffect(terrain));
+        return this;
+    }
+
+    public MoveEffectBuilder addRoomEffect(DuelHelper.Room room)
+    {
+        this.moveEffects.add(new RoomEffect(room));
+        return this;
     }
 
     public String execute()
