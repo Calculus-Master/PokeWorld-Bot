@@ -193,4 +193,11 @@ public class GrassMoves
     {
         return Move.multihitDamageMove(user, opponent, duel, move);
     }
+
+    public String Spore(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.addStatusCondition(StatusCondition.ASLEEP);
+
+        return opponent.getName() + " is asleep!";
+    }
 }
