@@ -1,11 +1,11 @@
 package com.calculusmaster.pokecord.game.moves.builder;
 
-public class RecoilEffect extends MoveEffect
+public class LeechHealEffect extends FixedHealEffect
 {
     private double fraction;
     private int damageDealt;
 
-    public RecoilEffect(double fraction)
+    public LeechHealEffect(double fraction)
     {
         this.fraction = fraction;
     }
@@ -18,10 +18,8 @@ public class RecoilEffect extends MoveEffect
     @Override
     public String get()
     {
-        int recoilDamage = (int)(this.fraction * this.damageDealt);
+        super.set((int)(this.fraction * this.damageDealt));
 
-        this.user.damage(recoilDamage);
-
-        return this.user.getName() + " took " + recoilDamage + " damage in recoil!";
+        return super.get();
     }
 }

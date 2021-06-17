@@ -89,7 +89,7 @@ public class MoveEffectBuilder
         int damageDealt = 0;
         for(MoveEffect e : this.moveEffects)
         {
-            if(!(e instanceof RecoilEffect)) results.append(e.get());
+            if(!(e instanceof RecoilEffect) && !(e instanceof LeechHealEffect)) results.append(e.get());
 
             if(e instanceof FixedDamageEffect)
             {
@@ -99,6 +99,12 @@ public class MoveEffectBuilder
             if(e instanceof RecoilEffect)
             {
                 ((RecoilEffect)e).set(damageDealt);
+                results.append(e.get());
+            }
+
+            if(e instanceof LeechHealEffect)
+            {
+                ((LeechHealEffect)e).set(damageDealt);
                 results.append(e.get());
             }
 
