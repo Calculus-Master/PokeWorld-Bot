@@ -267,4 +267,12 @@ public class PsychicMoves
 
         return user.getName() + "'s Attack rose by 1 stage!";
     }
+
+    public String Rest(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.addStatusCondition(StatusCondition.ASLEEP);
+        user.heal(user.getStat(Stat.HP));
+
+        return user.getName() + " is asleep but is fully healed!";
+    }
 }
