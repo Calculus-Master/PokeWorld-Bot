@@ -38,6 +38,12 @@ public class MoveEffectBuilder
         return this;
     }
 
+    public MoveEffectBuilder addFixedDamageEffect(int damage)
+    {
+        this.moveEffects.add(new FixedDamageEffect(damage));
+        return this;
+    }
+
     public MoveEffectBuilder addStatusEffect(StatusCondition status, int percent)
     {
         this.moveEffects.add(new StatusConditionEffect(status, percent));
@@ -55,6 +61,18 @@ public class MoveEffectBuilder
     public MoveEffectBuilder addStatChangeEffect(StatChangeEffect e)
     {
         this.moveEffects.add(e);
+        return this;
+    }
+
+    public MoveEffectBuilder addVariableMultiStrikeEffect()
+    {
+        this.moveEffects.add(new VariableMultiStrikeDamageEffect());
+        return this;
+    }
+
+    public MoveEffectBuilder addFixedMultiStrikeEffect(int times)
+    {
+        this.moveEffects.add(new FixedMultiStrikeDamageEffect(times));
         return this;
     }
 
