@@ -5,6 +5,8 @@ import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
+import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +38,7 @@ public class DarkMoves
 
     public String Payback(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(user.getStat(Stat.SPD) < opponent.getStat(Stat.SPD)) move.setPower(move.getPower() * 2);
+        if(duel.first.equals(opponent.getUUID())) move.setPower(move.getPower() * 2);
 
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
@@ -53,31 +55,25 @@ public class DarkMoves
 
     public String NastyPlot(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.SPATK, 2);
-
-        return user.getName() + "'s Special Attack rose by 2 stages!";
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPATK, 2, 100, true);
     }
 
     public String Memento(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.changeStatMultiplier(Stat.ATK, -3);
-        opponent.changeStatMultiplier(Stat.SPATK, -3);
-
         user.damage(user.getHealth());
 
-        return user.getName() + " fainted and " + opponent.getName() + "'s Attack and Special Attack lowered by 3 stages!";
+        return user.getName() + " fainted and " + MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.ATK, -3, 100, false)
+                                .add(Stat.SPATK, -3))
+                .execute();
     }
 
     public String NightSlash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.setCrit(3);
-
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        user.setCrit(1);
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .execute();
     }
 
     public String DarkPulse(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -142,9 +138,9 @@ public class DarkMoves
 
     public String DarkVoid(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.addStatusCondition(StatusCondition.ASLEEP);
-
-        return opponent.getName() + " is asleep!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.ASLEEP, 100)
+                .execute();
     }
 
     //TODO: 40% Lower Accuracy
