@@ -150,4 +150,10 @@ public class FireMoves
     {
         return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPATK, -1, 100, false);
     }
+
+    //TODO: Increased crit chance
+    public String BlazeKick(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 10);
+    }
 }

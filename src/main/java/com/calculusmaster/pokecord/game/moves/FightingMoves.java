@@ -159,4 +159,10 @@ public class FightingMoves
     {
         return Move.multihitDamageMove(user, opponent, duel, move);
     }
+
+    //TODO: Increased crit chance (add a new method in Move)
+    public String KarateChop(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
