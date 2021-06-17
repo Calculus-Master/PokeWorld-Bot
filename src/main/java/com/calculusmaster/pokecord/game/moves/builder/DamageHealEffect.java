@@ -1,11 +1,11 @@
 package com.calculusmaster.pokecord.game.moves.builder;
 
-public class LeechHealEffect extends FixedHealEffect
+public class DamageHealEffect extends FixedHealEffect
 {
     private double fraction;
     private int damageDealt;
 
-    public LeechHealEffect(double fraction)
+    public DamageHealEffect(double fraction)
     {
         this.fraction = fraction;
     }
