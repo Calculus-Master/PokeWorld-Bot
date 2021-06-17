@@ -44,4 +44,14 @@ public class FairyMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.CONFUSED, 20);
     }
+
+    public String DrainingKiss(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = move.getDamage(user, opponent);
+
+        opponent.damage(damage);
+        user.heal(damage * 3 / 4);
+
+        return move.getDamageResult(opponent, damage) + " " + user.getName() + " healed for " + (damage * 3 / 4) + " HP!";
+    }
 }

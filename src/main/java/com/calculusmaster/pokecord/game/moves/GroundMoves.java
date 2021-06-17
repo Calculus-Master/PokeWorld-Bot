@@ -124,4 +124,10 @@ public class GroundMoves
     {
         return Move.multihitDamageMove(user, opponent, duel, move);
     }
+
+    //TODO: 30% Lower Accuracy
+    public String MudBomb(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

@@ -146,4 +146,10 @@ public class DarkMoves
 
         return opponent.getName() + " is asleep!";
     }
+
+    //TODO: 40% Lower Accuracy
+    public String NightDaze(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
