@@ -200,4 +200,16 @@ public class GrassMoves
 
         return opponent.getName() + " is asleep!";
     }
+
+    public String GrassKnot(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(opponent.getWeight() < 10) move.setPower(20);
+        else if(opponent.getWeight() < 25) move.setPower(40);
+        else if(opponent.getWeight() < 50) move.setPower(60);
+        else if(opponent.getWeight() < 100) move.setPower(80);
+        else if(opponent.getWeight() < 200) move.setPower(100);
+        else move.setPower(120);
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
