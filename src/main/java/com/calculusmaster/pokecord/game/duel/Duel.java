@@ -585,6 +585,13 @@ public class Duel
         {
             turnResult += move.getMissedResult(this.players[this.current].active);
 
+            if(move.getName().equals("Jump Kick"))
+            {
+                turnResult += " " + this.players[this.current].active.getName() + " kept going and crashed!";
+
+                this.players[this.current].active.damage(this.players[this.current].active.getStat(Stat.HP));
+            }
+
             this.data(this.other).lastDamageTaken = 0;
         }
         //Check if opponent is immune
