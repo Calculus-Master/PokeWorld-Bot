@@ -133,4 +133,12 @@ public class BugMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
     }
+
+    public String DefendOrder(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.changeStatMultiplier(Stat.DEF, 1);
+        user.changeStatMultiplier(Stat.SPDEF, 1);
+
+        return user.getName() + "'s Defense and Special Defense rose by 1 stage!";
+    }
 }
