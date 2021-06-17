@@ -144,9 +144,9 @@ public class Move
                     case CONFUSED -> "is confused!";
                     case POISONED -> "is poisoned!";
                     case FLINCHED -> "flinched!";
-                    case CURSED -> " is cursed!";
-                    case NIGHTMARE -> " has been afflicted with a Nightmare!";
-                    case BOUND -> " is bound!";
+                    case CURSED -> "is cursed!";
+                    case NIGHTMARE -> "has been afflicted with a Nightmare!";
+                    case BOUND -> "is bound!";
                     case BADLY_POISONED -> "is badly poisoned!";
                 };
 
@@ -165,8 +165,7 @@ public class Move
 
         if(change)
         {
-            if(userChange) user.changeStatMultiplier(s, stage);
-            else opponent.changeStatMultiplier(s, stage);
+            (userChange ? user : opponent).changeStatMultiplier(s, stage);
         }
 
         String stat = switch(s)
