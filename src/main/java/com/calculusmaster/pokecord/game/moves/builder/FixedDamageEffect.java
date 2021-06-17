@@ -9,6 +9,21 @@ public class FixedDamageEffect extends MoveEffect
         this.damage = damage;
     }
 
+    public FixedDamageEffect()
+    {
+        this(0);
+    }
+
+    public void set(int damage)
+    {
+        this.damage = damage;
+    }
+
+    public int getDamage()
+    {
+        return this.damage;
+    }
+
     @Override
     public String get()
     {

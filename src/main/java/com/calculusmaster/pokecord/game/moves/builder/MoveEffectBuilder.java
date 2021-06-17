@@ -84,7 +84,26 @@ public class MoveEffectBuilder
         //Execution
         StringBuilder results = new StringBuilder();
 
-        for(MoveEffect e : this.moveEffects) results.append(e.get()).append(" ");
+        //TODO: Sort MoveEffects in order starting from Damage to StatChanges
+
+        int damageDealt = 0;
+        for(MoveEffect e : this.moveEffects)
+        {
+            if(!(e instanceof RecoilEffect)) results.append(e.get());
+
+            if(e instanceof FixedDamageEffect)
+            {
+                damageDealt = ((FixedDamageEffect)e).getDamage();
+            }
+
+            if(e instanceof RecoilEffect)
+            {
+                ((RecoilEffect)e).set(damageDealt);
+                results.append(e.get());
+            }
+
+            results.append(" ");
+        }
 
         return results.toString().trim();
     }

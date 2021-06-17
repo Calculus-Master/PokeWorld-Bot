@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.game.moves.builder;
 
-public class FixedMultiStrikeDamageEffect extends MoveEffect
+public class FixedMultiStrikeDamageEffect extends FixedDamageEffect
 {
     private int times;
 
@@ -15,8 +15,7 @@ public class FixedMultiStrikeDamageEffect extends MoveEffect
         int totalDamage = 0;
         for(int i = 0; i < this.times; i++) totalDamage += this.move.getDamage(this.user, this.opponent);
 
-        this.opponent.damage(totalDamage);
-
-        return this.move.getDamageResult(this.opponent, totalDamage) + " " + this.move.getName() + " hit " + this.times + " times!";
+        this.set(totalDamage);
+        return super.get() + " " + this.move.getName() + " hit " + this.times + " times!";
     }
 }
