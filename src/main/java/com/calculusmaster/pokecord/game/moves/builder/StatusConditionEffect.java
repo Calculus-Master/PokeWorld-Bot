@@ -22,7 +22,7 @@ public class StatusConditionEffect extends MoveEffect
         {
             this.opponent.addStatusCondition(status);
 
-            return this.opponent + " " + switch(status) {
+            return this.opponent.getName() + " " + switch(status) {
                 case BURNED -> "is burned!";
                 case FROZEN -> "is frozen!";
                 case PARALYZED -> "is paralyzed!";
