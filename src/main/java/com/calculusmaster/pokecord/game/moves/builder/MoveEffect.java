@@ -19,4 +19,14 @@ public abstract class MoveEffect
     }
 
     public abstract String get();
+
+    //Lower values mean they go first
+    public int getPriority()
+    {
+        if(this instanceof FixedDamageEffect) return 0;
+        else if(this instanceof FixedHealEffect || this instanceof RecoilEffect) return 1;
+        else if(this instanceof StatChangeEffect) return 2;
+        else if(this instanceof StatusConditionEffect) return 3;
+        else return 100;
+    }
 }

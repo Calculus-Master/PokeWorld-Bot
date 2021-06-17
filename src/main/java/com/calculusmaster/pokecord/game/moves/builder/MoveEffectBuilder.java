@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class MoveEffectBuilder
@@ -114,7 +115,7 @@ public class MoveEffectBuilder
         //Execution
         StringBuilder results = new StringBuilder();
 
-        //TODO: Sort MoveEffects in order starting from Damage to StatChanges
+        this.moveEffects.sort(Comparator.comparingInt(MoveEffect::getPriority));
 
         int damageDealt = 0;
         for(MoveEffect e : this.moveEffects)
