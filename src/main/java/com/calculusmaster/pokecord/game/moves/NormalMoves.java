@@ -762,4 +762,12 @@ public class NormalMoves
     {
         return Move.multihitDamageMove(user, opponent, duel, move);
     }
+
+    public String MilkDrink(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int health = user.getStat(Stat.HP) / 2;
+        user.heal(health);
+
+        return user.getName() + " healed for " + health + " HP!";
+    }
 }
