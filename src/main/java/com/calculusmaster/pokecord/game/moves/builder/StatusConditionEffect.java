@@ -22,6 +22,8 @@ public class StatusConditionEffect extends MoveEffect
         {
             this.opponent.addStatusCondition(status);
 
+            if(status.equals(StatusCondition.BOUND)) this.duel.data(opponent.getUUID()).boundTurns = 5;
+
             return this.opponent.getName() + " " + switch(status) {
                 case BURNED -> "is burned!";
                 case FROZEN -> "is frozen!";

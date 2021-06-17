@@ -7,6 +7,8 @@ import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
+import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 
 import java.util.Random;
 
@@ -14,35 +16,22 @@ public class BugMoves
 {
     public String SilverWind(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        if(new Random().nextInt(100) < 10)
-        {
-            user.changeStatMultiplier(Stat.ATK, 1);
-            user.changeStatMultiplier(Stat.DEF, 1);
-            user.changeStatMultiplier(Stat.SPATK, 1);
-            user.changeStatMultiplier(Stat.SPDEF, 1);
-
-            return move.getDamageResult(opponent, damage) + " " + user.getName() + "'s Attack, Defense, Special Attack and Special Defense rose by 1 stage!";
-        }
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.ATK, 1, 10, true)
+                                .add(Stat.DEF, 1)
+                                .add(Stat.SPATK, 1)
+                                .add(Stat.SPDEF, 1))
+                .execute();
     }
 
     public String BugBuzz(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        if(new Random().nextInt(100) < 10)
-        {
-            opponent.changeStatMultiplier(Stat.SPDEF, -1);
-
-            return move.getDamageResult(opponent, damage) + " " + opponent.getName() + "'s Special Defense was lowered by 1 stage!";
-        }
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPDEF, -1, 10, false)
+                .execute();
     }
 
     public String RagePowder(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -52,28 +41,20 @@ public class BugMoves
 
     public String QuiverDance(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.SPATK, 1);
-        user.changeStatMultiplier(Stat.SPDEF, 1);
-        user.changeStatMultiplier(Stat.SPD, 1);
-
-        return user.getName() + "'s Special Attack, Special Defense and Speed rose by 1 stage";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.SPATK, 1, 100, true)
+                                .add(Stat.SPDEF, 1)
+                                .add(Stat.SPD, 1))
+                .execute();
     }
 
     public String Twineedle(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        damage += move.getDamage(user, opponent);
-
-        if(!opponent.getType()[0].equals(Type.STEEL) && !opponent.getType()[1].equals(Type.STEEL) && !opponent.getType()[0].equals(Type.POISON) && !opponent.getType()[1].equals(Type.POISON))
-        {
-            if(new Random().nextInt(100) < 20)
-            {
-                opponent.addStatusCondition(StatusCondition.POISONED);
-                return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " is poisoned!";
-            }
-        }
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFixedMultiStrikeEffect(2)
+                .addStatusEffect(StatusCondition.POISONED, 20)
+                .execute();
     }
 
     public String PinMissile(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -83,25 +64,23 @@ public class BugMoves
 
     public String FellStinger(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
+        String result = MoveEffectBuilder.make(user, opponent, duel, move).addDamageEffect().execute();
 
         if(opponent.isFainted())
         {
             user.changeStatMultiplier(Stat.ATK, 3);
-            return move.getDamageResult(opponent, damage) + " " + user.getName() + "'s Attack rose by 3 stages!";
+            result += " " + user.getName() + "'s Attack rose by 3 stages!";
         }
 
-        return move.getDamageResult(opponent, damage);
+        return result;
     }
 
     public String LeechLife(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-        user.heal(damage / 2);
-
-        return move.getDamageResult(opponent, damage) + " " + user.getName() + " healed " + (damage / 2) + " HP!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addDamageHealEffect(1 / 2D)
+                .execute();
     }
 
     public String StickyWeb(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -112,10 +91,9 @@ public class BugMoves
 
     public String Infestation(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.addStatusCondition(StatusCondition.BOUND);
-        duel.data(opponent.getUUID()).boundTurns = 5;
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + opponent.getName() + " was bound!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.BOUND, 100)
+                .execute();
     }
 
     //TODO: Switch out immediately after attacking
@@ -136,9 +114,10 @@ public class BugMoves
 
     public String DefendOrder(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.DEF, 1);
-        user.changeStatMultiplier(Stat.SPDEF, 1);
-
-        return user.getName() + "'s Defense and Special Defense rose by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.DEF, 1, 100, true)
+                                .add(Stat.SPDEF, 1))
+                .execute();
     }
 }
