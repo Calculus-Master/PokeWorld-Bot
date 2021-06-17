@@ -76,6 +76,36 @@ public class MoveEffectBuilder
         return this;
     }
 
+    public MoveEffectBuilder addRecoilEffect(double fraction)
+    {
+        this.moveEffects.add(new RecoilEffect(fraction));
+        return this;
+    }
+
+    public MoveEffectBuilder addFractionHealEffect(double fraction)
+    {
+        this.moveEffects.add(new FractionHealEffect(fraction));
+        return this;
+    }
+
+    public MoveEffectBuilder addDamageHealEffect(double fraction)
+    {
+        this.moveEffects.add(new DamageHealEffect(fraction));
+        return this;
+    }
+
+    public MoveEffectBuilder addCritDamageEffect(int crit)
+    {
+        this.moveEffects.add(new IncreasedCritDamageEffect(crit));
+        return this;
+    }
+
+    //A lot of moves default to increased crit chance of 1/8 = 3/24
+    public MoveEffectBuilder addCritDamageEffect()
+    {
+        return this.addCritDamageEffect(3);
+    }
+
     public String execute()
     {
         //Initialization
