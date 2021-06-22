@@ -5,21 +5,19 @@ import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 
 public class FairyMoves
 {
     public String Moonlight(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int HP = switch(duel.weather)
-                {
-                    case CLEAR -> user.getStat(Stat.HP) / 2;
-                    case HARSH_SUNLIGHT -> user.getStat(Stat.HP) * 2 / 3;
-                    default -> user.getStat(Stat.HP) / 4;
-                };
-
-        user.heal(HP);
-
-        return user.getName() + " healed for " + HP + " HP!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFractionHealEffect(switch(duel.weather) {
+                    case CLEAR -> 1 / 2D;
+                    case HARSH_SUNLIGHT -> 2 / 3D;
+                    default -> 1 / 4D;
+                })
+                .execute();
     }
 
     public String Moonblast(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -34,10 +32,9 @@ public class FairyMoves
 
     public String NaturesMadness(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = opponent.getHealth() / 2;
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFixedDamageEffect(opponent.getHealth() / 2)
+                .execute();
     }
 
     public String StrangeSteam(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -47,11 +44,9 @@ public class FairyMoves
 
     public String DrainingKiss(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-
-        opponent.damage(damage);
-        user.heal(damage * 3 / 4);
-
-        return move.getDamageResult(opponent, damage) + " " + user.getName() + " healed for " + (damage * 3 / 4) + " HP!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addDamageHealEffect(3 / 4D)
+                .execute();
     }
 }
