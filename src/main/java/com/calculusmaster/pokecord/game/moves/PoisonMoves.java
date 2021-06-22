@@ -65,4 +65,11 @@ public class PoisonMoves
                 .addCritDamageEffect()
                 .execute();
     }
+
+    public String BanefulBunker(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(user.getUUID()).banefulBunkerUsed = true;
+
+        return user.getName() + " defended itself with its Bunker!";
+    }
 }

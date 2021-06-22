@@ -75,6 +75,7 @@ public class DuelHelper
         public boolean focusEnergyUsed;
         public boolean laserFocusUsed;
         public boolean endureUsed;
+        public boolean banefulBunkerUsed;
 
         public boolean disguiseActivated;
 
@@ -125,6 +126,7 @@ public class DuelHelper
             this.focusEnergyUsed = false;
             this.laserFocusUsed = false;
             this.endureUsed = false;
+            this.banefulBunkerUsed = false;
 
             this.disguiseActivated = false;
         }

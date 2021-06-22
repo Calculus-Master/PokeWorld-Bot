@@ -474,6 +474,19 @@ public class Duel
             }
         }
 
+        if(this.data(this.other).banefulBunkerUsed)
+        {
+            this.data(this.other).banefulBunkerUsed = false;
+
+            if(!move.getCategory().equals(Category.STATUS))
+            {
+                this.players[this.current].active.addStatusCondition(StatusCondition.POISONED);
+                otherImmune = !bypass;
+
+                turnResult += this.players[this.current].active.getName() + " was poisoned due to the Baneful Bunker!";
+            }
+        }
+
         if(move.getName().equals("Fusion Bolt") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move != null && this.players[this.other].move.getName().equals("Fusion Flare")) move.setPower(move.getPower() * 2);
 
         if(move.getName().equals("Fusion Flare") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move != null && this.players[this.other].move.getName().equals("Fusion Bolt")) move.setPower(move.getPower() * 2);
