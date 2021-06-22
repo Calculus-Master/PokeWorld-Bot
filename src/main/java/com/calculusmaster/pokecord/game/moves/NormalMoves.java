@@ -779,4 +779,15 @@ public class NormalMoves
                 .addCritDamageEffect()
                 .execute();
     }
+
+    public String Block(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String FollowMe(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
 }

@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Weather;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 
 import java.util.Random;
 
@@ -101,5 +102,13 @@ public class RockMoves
     public String WideGuard(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return move.getNotImplementedResult();
+    }
+
+    public String HeadSmash(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addRecoilEffect(1 / 2D)
+                .execute();
     }
 }

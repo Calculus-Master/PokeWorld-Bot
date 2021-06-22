@@ -11,7 +11,6 @@ import com.calculusmaster.pokecord.game.moves.*;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
-import com.mongodb.client.model.Filters;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,7 +19,7 @@ public class Move
 {
     public static Map<String, MoveData> MOVES = new HashMap<>();
     //TODO: Keep checking the custom moves and see if they can function as close to the original as possible
-    public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Sweet Scent", "Smokescreen", "Safeguard", "Whirlwind", "Rage Powder", "Tailwind", "Light Screen", "Frustration", "Return", "Mind Reader", "Quick Guard", "Counter", "Magnetic Flux", "After You", "Disable", "Miracle Eye", "Guard Swap", "Power Swap", "Me First", "Yawn", "Gravity", "Spite", "Mean Look", "Foresight", "Wide Guard", "Ingrain", "Forests Curse", "Natural Gift", "Last Resort", "Sand Attack", "Teleport", "Odor Sleuth", "Helping Hand", "Mirror Move", "Stuff Cheeks", "Copycat", "Entrainment");
+    public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Sweet Scent", "Smokescreen", "Safeguard", "Whirlwind", "Rage Powder", "Tailwind", "Light Screen", "Frustration", "Return", "Mind Reader", "Quick Guard", "Counter", "Magnetic Flux", "After You", "Disable", "Miracle Eye", "Guard Swap", "Power Swap", "Me First", "Yawn", "Gravity", "Spite", "Mean Look", "Foresight", "Wide Guard", "Ingrain", "Forests Curse", "Natural Gift", "Last Resort", "Sand Attack", "Teleport", "Odor Sleuth", "Helping Hand", "Mirror Move", "Stuff Cheeks", "Copycat", "Entrainment", "Block", "Follow Me");
     public static final List<String> CUSTOM_MOVES = Arrays.asList("Leech Seed", "Rapid Spin", "Mirror Shot", "Stockpile", "Worry Seed", "Aromatic Mist");
     public static List<String> INCOMPLETE_MOVES = new ArrayList<>();
 

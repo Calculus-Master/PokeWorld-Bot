@@ -148,4 +148,21 @@ public class DarkMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String FakeTears(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.SPDEF, -2, 100, false)
+                .execute();
+    }
+
+    public String TopsyTurvy(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        for(Stat s : Stat.values())
+        {
+            opponent.changeStatMultiplier(s, opponent.getStageChange(s) * -1 * 2);
+        }
+
+        return opponent.getName() + "'s Stat Changes were reversed!";
+    }
 }
