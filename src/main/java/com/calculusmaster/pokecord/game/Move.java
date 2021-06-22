@@ -188,7 +188,7 @@ public class Move
         else if(e == 0.0) effective = this.getNoEffectResult(opponent);
         else throw new IllegalStateException("Effectiveness multiplier is a strange value: " + e);
 
-        return "It dealt **" + dmg + "** damage to " + opponent.getName() + "! " + effective + (this.hitCrit ? " It was a critical hit!" : "");
+        return "It dealt **" + dmg + "** damage to " + opponent.getName() + "! " + (dmg > 0 ? effective + (this.hitCrit ? " It was a critical hit!" : "") : "");
     }
 
     public String getRecoilDamageResult(Pokemon user, int dmg)
