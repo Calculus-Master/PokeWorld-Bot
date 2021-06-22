@@ -6,6 +6,8 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
+import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 
 import java.util.Random;
 
@@ -13,16 +15,10 @@ public class FlyingMoves
 {
     public String AirSlash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        if(new Random().nextInt(100) < 30)
-        {
-            opponent.addStatusCondition(StatusCondition.FLINCHED);
-            return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " flinched!";
-        }
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.FLINCHED, 30)
+                .execute();
     }
 
     public String Gust(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -38,9 +34,9 @@ public class FlyingMoves
 
     public String Roost(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.heal(user.getStat(Stat.HP) / 2);
-
-        return user.getName() + " healed " + (user.getStat(Stat.HP) / 2) + " HP!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFractionHealEffect(1 / 2D)
+                .execute();
     }
 
     public String Hurricane(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -70,23 +66,27 @@ public class FlyingMoves
 
     public String SkyAttack(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.setCrit(3);
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .addStatusEffect(StatusCondition.FLINCHED, 30)
+                .execute();
     }
 
     public String FeatherDance(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.changeStatMultiplier(Stat.ATK, -2);
-
-        return opponent.getName() + "'s Attack was lowered by 2 stages!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.ATK, -2, 100, false)
+                .execute();
     }
 
     public String DragonAscent(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.DEF, -1);
-        user.changeStatMultiplier(Stat.SPDEF, -1);
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + "'s Defense and Special Defense were lowered by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.DEF, -1, 100, true)
+                                .add(Stat.SPDEF, -1))
+                .execute();
     }
 
     public String AerialAce(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -124,11 +124,10 @@ public class FlyingMoves
 
     public String BraveBird(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-        user.damage(damage / 3);
-
-        return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 3);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addRecoilEffect(1 / 3D)
+                .execute();
     }
 
     //TODO: Removes barriers and lowers evasion by one stage
