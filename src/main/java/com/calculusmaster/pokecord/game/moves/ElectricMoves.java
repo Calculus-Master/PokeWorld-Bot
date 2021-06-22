@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 
 import java.util.Random;
 
@@ -13,40 +14,32 @@ public class ElectricMoves
 {
     public String ElectricTerrain(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.terrain = DuelHelper.Terrain.ELECRIC_TERRAIN;
-        duel.terrainTurns = 5;
-
-        return user.getName() + " generated an Electric Field!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addTerrainEffect(DuelHelper.Terrain.ELECRIC_TERRAIN)
+                .execute();
     }
 
     public String ThunderShock(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        boolean paralyzed = new Random().nextInt(100) < 10;
-
-        if(paralyzed) opponent.addStatusCondition(StatusCondition.PARALYZED);
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + (paralyzed ? " " + opponent.getName() + " is paralyzed!" : "");
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.PARALYZED, 10)
+                .execute();
     }
 
     public String ThunderWave(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.addStatusCondition(StatusCondition.PARALYZED);
-
-        return opponent.getName() + " is paralyzed!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.PARALYZED)
+                .execute();
     }
 
     public String Spark(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        boolean paralyzed = new Random().nextInt(100) < 30;
-        String s = "";
-
-        if(paralyzed)
-        {
-            opponent.addStatusCondition(StatusCondition.PARALYZED);
-            s = " " + opponent.getName() + " is paralyzed!";
-        }
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + s;
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.PARALYZED, 30)
+                .execute();
     }
 
     public String ElectroBall(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -64,7 +57,10 @@ public class ElectricMoves
 
     public String Discharge(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Spark(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.PARALYZED, 30)
+                .execute();
     }
 
     public String MagnetRise(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -77,8 +73,10 @@ public class ElectricMoves
 
     public String ZapCannon(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.addStatusCondition(StatusCondition.PARALYZED);
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + opponent.getName() + " is paralyzed!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.PARALYZED)
+                .execute();
     }
 
     public String Thunderbolt(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -98,24 +96,18 @@ public class ElectricMoves
 
     public String Charge(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.SPDEF, 1);
-
-        duel.data(user.getUUID()).chargeUsed = true;
-
-        return user.getName() + "'s Special Defense was raised by 1 stage! " + user.getName() + " is charged up!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.SPDEF, 1, 100, true)
+                .execute() + " " + user.getName() + " is charged up!";
     }
 
     public String VoltTackle(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        boolean paralyze = new Random().nextInt(100) < 10;
-
-        opponent.damage(damage);
-        user.damage(damage / 3);
-
-        if(paralyze) opponent.addStatusCondition(StatusCondition.PARALYZED);
-
-        return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 3) + (paralyze ? " " + opponent.getName() + " is paralyzed!" : "");
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.PARALYZED, 10)
+                .addRecoilEffect(1 / 3D)
+                .execute();
     }
 
     public String ChargeBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -125,13 +117,11 @@ public class ElectricMoves
 
     public String ThunderFang(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        boolean paralyze = new Random().nextInt(100) < 10;
-        boolean flinch = new Random().nextInt(100) < 10;
-
-        if(paralyze) opponent.addStatusCondition(StatusCondition.PARALYZED);
-        if(flinch) opponent.addStatusCondition(StatusCondition.FLINCHED);
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + (paralyze ? " " + opponent.getName() + " is paralyzed!" : "") + (flinch ? " " + opponent.getName() + " flinched!" : "");
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.PARALYZED, 10)
+                .addStatusEffect(StatusCondition.FLINCHED, 10)
+                .execute();
     }
 
     public String Electroweb(Pokemon user, Pokemon opponent, Duel duel, Move move)

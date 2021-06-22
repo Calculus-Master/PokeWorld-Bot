@@ -58,6 +58,11 @@ public class MoveEffectBuilder
         return this.addStatusEffect(status, percent, false);
     }
 
+    public MoveEffectBuilder addStatusEffect(StatusCondition status)
+    {
+        return this.addStatusEffect(status, 100, false);
+    }
+
     //For single stat changed
     public MoveEffectBuilder addStatChangeEffect(Stat s, int stage, int percent, boolean userChange)
     {
