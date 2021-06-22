@@ -6,6 +6,9 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.enums.elements.Weather;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
+import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 
 import java.util.Random;
 
@@ -18,25 +21,11 @@ public class FireMoves
 
     public String FireFang(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        String burned = "";
-        String flinched = "";
-
-        if((!opponent.getType()[0].equals(Type.FIRE) && !opponent.getType()[1].equals(Type.FIRE)) && new Random().nextInt(100) < 10)
-        {
-            opponent.addStatusCondition(StatusCondition.BURNED);
-            burned = " " + opponent.getName() + " is burned!";
-        }
-
-        if(new Random().nextInt(100) < 10)
-        {
-            opponent.addStatusCondition(StatusCondition.FLINCHED);
-            flinched = " " + opponent.getName() + " flinched!";
-        }
-
-        return move.getDamageResult(opponent, damage) + burned + flinched;
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.BURNED, 10)
+                .addStatusEffect(StatusCondition.FLINCHED, 10)
+                .execute();
     }
 
     public String FlameBurst(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -51,7 +40,6 @@ public class FireMoves
 
     public String FireSpin(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.data(opponent.getUUID()).boundTurns = 5;
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BOUND, 100);
     }
 
@@ -67,23 +55,18 @@ public class FireMoves
 
     public String FlareBlitz(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        user.damage(damage / 3);
-
-        if(!opponent.isType(Type.FIRE) && new Random().nextInt(100) < 10)
-        {
-            opponent.addStatusCondition(StatusCondition.BURNED);
-            return move.getDamageResult(opponent, damage) + move.getRecoilDamageResult(user, damage / 3) + " " + opponent.getName() + " is burned!";
-        }
-
-        return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 3);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.BURNED, 10)
+                .addRecoilEffect(1 / 3D)
+                .execute();
     }
 
     public String SunnyDay(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return user.getName() + " caused harsh sunlight!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addWeatherEffect(Weather.HARSH_SUNLIGHT)
+                .execute();
     }
 
     public String BurnUp(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -101,11 +84,13 @@ public class FireMoves
 
     public String VCreate(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.DEF, -1);
-        user.changeStatMultiplier(Stat.SPDEF, -1);
-        user.changeStatMultiplier(Stat.SPD, -1);
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + "'s Defense, Special Defense, and Speed were lowered by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.DEF, -1, 100, true)
+                                .add(Stat.SPDEF, -1)
+                                .add(Stat.SPD, -1))
+                .execute();
     }
 
     public String FireBlast(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -136,9 +121,9 @@ public class FireMoves
 
     public String WillOWisp(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.addStatusCondition(StatusCondition.BURNED);
-
-        return opponent.getName() + " is burned!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.BURNED, 100)
+                .execute();
     }
 
     public String Overheat(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -151,9 +136,11 @@ public class FireMoves
         return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPATK, -1, 100, false);
     }
 
-    //TODO: Increased crit chance
     public String BlazeKick(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 10);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .addStatusEffect(StatusCondition.BURNED, 10)
+                .execute();
     }
 }

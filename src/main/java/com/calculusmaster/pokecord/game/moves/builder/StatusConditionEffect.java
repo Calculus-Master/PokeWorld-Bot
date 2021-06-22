@@ -18,11 +18,6 @@ public class StatusConditionEffect extends MoveEffect
         this.userChange = userChange;
     }
 
-    public StatusConditionEffect(StatusCondition status, int percent)
-    {
-        this(status, percent, false);
-    }
-
     @Override
     public String get()
     {
