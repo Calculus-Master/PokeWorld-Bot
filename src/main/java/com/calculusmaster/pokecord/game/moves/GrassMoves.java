@@ -6,27 +6,20 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 
 public class GrassMoves
 {
     public String RazorLeaf(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.setCrit(3);
-
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        user.setCrit(1);
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .execute();
     }
 
     public String VineWhip(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage);
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String LeechSeed(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -47,33 +40,25 @@ public class GrassMoves
 
     public String SleepPowder(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.addStatusCondition(StatusCondition.ASLEEP);
-
-        return opponent.getName() + " is asleep!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.ASLEEP)
+                .execute();
     }
 
     public String SeedBomb(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage);
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String Synthesis(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int healAmount = user.getStat(Stat.HP);
-
-        switch (duel.weather)
-        {
-            case CLEAR -> healAmount /= 2;
-            case HARSH_SUNLIGHT -> healAmount = healAmount * 2 / 3;
-            default -> healAmount /= 4;
-        }
-
-        user.heal(healAmount);
-
-        return user.getName() + " healed " + healAmount + " HP!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFractionHealEffect(switch(duel.weather) {
+                    case CLEAR -> 1 / 2D;
+                    case HARSH_SUNLIGHT -> 2 / 3D;
+                    default -> 1 / 4D;
+                })
+                .execute();
     }
 
     public String WorrySeed(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -93,27 +78,22 @@ public class GrassMoves
 
     public String PetalBlizzard(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage);
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String PetalDance(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        opponent.addStatusCondition(StatusCondition.CONFUSED);
-
-        return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " is now confused!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.CONFUSED, 100, true)
+                .execute();
     }
 
     public String StunSpore(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.addStatusCondition(StatusCondition.PARALYZED);
-
-        return opponent.getName() + " is paralyzed!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.PARALYZED)
+                .execute();
     }
 
     public String FrenzyPlant(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -128,14 +108,9 @@ public class GrassMoves
 
     public String LeafBlade(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.setCrit(3);
-
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        user.setCrit(1);
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .execute();
     }
 
     public String LeafStorm(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -155,28 +130,25 @@ public class GrassMoves
 
     public String WoodHammer(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-        user.damage(damage / 3);
-
-        return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 3);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addRecoilEffect(1 / 3D)
+                .execute();
     }
 
     public String CottonGuard(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.DEF, 3);
-
-        return user.getName() + "'s Defense rose by 3 stages!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.DEF, 3, 100, true)
+                .execute();
     }
 
     public String HornLeech(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-
-        opponent.damage(damage);
-        user.heal(damage / 2);
-
-        return move.getDamageResult(opponent, damage) + " " + user.getName() + " healed for " + (damage / 2) + " HP!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addDamageHealEffect(1 / 2D)
+                .execute();
     }
 
     public String SolarBlade(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -196,9 +168,9 @@ public class GrassMoves
 
     public String Spore(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.addStatusCondition(StatusCondition.ASLEEP);
-
-        return opponent.getName() + " is asleep!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.ASLEEP)
+                .execute();
     }
 
     public String GrassKnot(Pokemon user, Pokemon opponent, Duel duel, Move move)
