@@ -12,7 +12,7 @@ public class IncreasedCritDamageEffect extends DamageEffect
     @Override
     public String get()
     {
-        this.move.critChance = crit;
+        this.move.critChance = Math.max(this.move.critChance, this.crit);
         return super.get();
     }
 }

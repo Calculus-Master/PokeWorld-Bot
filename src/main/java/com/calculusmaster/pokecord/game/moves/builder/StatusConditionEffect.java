@@ -43,6 +43,11 @@ public class StatusConditionEffect extends MoveEffect
                 return this.move.getNoEffectResult(p);
             }
 
+            if(this.status.equals(StatusCondition.BADLY_POISONED))
+            {
+                this.duel.data(opponent.getUUID()).badlyPoisonedTurns++;
+            }
+
             return p.getName() + " " + switch(this.status) {
                 case BURNED -> "is burned!";
                 case FROZEN -> "is frozen!";

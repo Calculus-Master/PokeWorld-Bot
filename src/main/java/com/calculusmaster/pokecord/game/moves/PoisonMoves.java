@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 
 import java.util.Random;
 
@@ -13,54 +14,44 @@ public class PoisonMoves
 {
     public String Toxic(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.addStatusCondition(StatusCondition.BADLY_POISONED);
-        duel.data(opponent.getUUID()).badlyPoisonedTurns++;
-
-        return opponent.getName() + " was badly poisoned!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.BADLY_POISONED)
+                .execute();
     }
 
     public String Venoshock(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-
-        if(opponent.hasStatusCondition(StatusCondition.POISONED)) damage *= 2;
-
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage);
+        if(opponent.hasStatusCondition(StatusCondition.POISONED)) move.setDamageMultiplier(2);
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String PoisonPowder(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.addStatusCondition(StatusCondition.POISONED);
-        return opponent.getName() + " is poisoned";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.POISONED)
+                .execute();
     }
 
     public String ToxicSpikes(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.hazardData(opponent.getUUID()).addHazard(DuelHelper.EntryHazard.TOXIC_SPIKES);
-        return user.getName() + " laid a Toxic Spikes trap!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addEntryHazardEffect(DuelHelper.EntryHazard.TOXIC_SPIKES)
+                .execute();
     }
 
     public String PoisonJab(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        if(new Random().nextInt(100) < 30)
-        {
-            opponent.addStatusCondition(StatusCondition.POISONED);
-
-            return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " was poisoned!";
-        }
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.POISONED, 30)
+                .execute();
     }
 
     public String AcidArmor(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.DEF, 2);
-        return user.getName() + "'s Defense rose by 2 stages!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.DEF, 2, 100, true)
+                .execute();
     }
 
     public String PoisonFang(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -70,9 +61,8 @@ public class PoisonMoves
 
     public String PoisonTail(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.setCrit(3);
-        String result = Move.statusDamageMove(user, opponent, duel, move, StatusCondition.POISONED, 10);
-        user.setCrit(1);
-        return result;
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .execute();
     }
 }
