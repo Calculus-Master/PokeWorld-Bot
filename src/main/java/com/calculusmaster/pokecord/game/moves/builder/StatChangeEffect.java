@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class StatChangeEffect extends MoveEffect
 {
@@ -32,19 +33,22 @@ public class StatChangeEffect extends MoveEffect
         //TODO: Combine multiple stat changes with "and"
         StringBuilder result = new StringBuilder();
 
-        for(Stat s : this.statChanges.keySet())
+        if(new Random().nextInt(100) < this.percent)
         {
-            if(this.statChanges.containsKey(s))
+            for(Stat s : this.statChanges.keySet())
             {
-                (this.userChange ? this.user : this.opponent).changeStatMultiplier(s, this.statChanges.get(s));
-                result.append((this.userChange ? this.user : this.opponent).getName()).append("'s ").append(switch (s) {
-                    case HP -> "HP";
-                    case ATK -> "Attack";
-                    case DEF -> "Defense";
-                    case SPATK -> "Special Attack";
-                    case SPDEF -> "Special Defense";
-                    case SPD -> "Speed";
-                }).append(this.statChanges.get(s) > 0 ? " rose " : " was lowered ").append("by ").append(Math.abs(this.statChanges.get(s))).append(" stage").append(this.statChanges.get(s) > 1 ? "s" : "").append("! ");
+                if(this.statChanges.containsKey(s))
+                {
+                    (this.userChange ? this.user : this.opponent).changeStatMultiplier(s, this.statChanges.get(s));
+                    result.append((this.userChange ? this.user : this.opponent).getName()).append("'s ").append(switch (s) {
+                        case HP -> "HP";
+                        case ATK -> "Attack";
+                        case DEF -> "Defense";
+                        case SPATK -> "Special Attack";
+                        case SPDEF -> "Special Defense";
+                        case SPD -> "Speed";
+                    }).append(this.statChanges.get(s) > 0 ? " rose " : " was lowered ").append("by ").append(Math.abs(this.statChanges.get(s))).append(" stage").append(this.statChanges.get(s) > 1 ? "s" : "").append("! ");
+                }
             }
         }
 
