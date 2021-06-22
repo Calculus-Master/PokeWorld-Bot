@@ -125,4 +125,11 @@ public class DragonMoves
                 .addStatChangeEffect(Stat.DEF, -1, 100, true)
                 .execute();
     }
+
+    public String DynamaxCannon(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(opponent.isDynamaxed()) move.setPower(move.getPower() * 2);
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }
