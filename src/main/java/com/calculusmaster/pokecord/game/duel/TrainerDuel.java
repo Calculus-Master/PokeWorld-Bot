@@ -204,6 +204,7 @@ public class TrainerDuel extends Duel
                 this.players[1].team.get(i).setIVs(ivs.toString());
                 this.players[1].team.get(i).setEVs(evs.toString());
                 this.players[1].team.get(i).setHealth(this.players[1].team.get(i).getStat(Stat.HP));
+                this.players[1].team.get(i).setShiny(r.nextInt(100) < 33);
             }
 
             this.players[1].active = this.players[1].team.get(0);
