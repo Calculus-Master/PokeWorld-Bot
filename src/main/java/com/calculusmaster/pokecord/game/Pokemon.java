@@ -45,7 +45,6 @@ public class Pokemon
     private Type[] type;
     private Map<StatusCondition, Boolean> status;
     private Map<Stat, Integer> statMultiplier = new TreeMap<>();
-    private boolean statImmune;
     private boolean endure;
     public double statBuff;
     private boolean isDynamaxed;
@@ -84,7 +83,6 @@ public class Pokemon
         p.setType();
         p.setStatusConditions();
         p.setDefaultStatMultipliers();
-        p.setStatImmune(false);
         p.setEndure(false);
         p.statBuff = 1.0;
         p.setDynamax(false);
@@ -117,7 +115,6 @@ public class Pokemon
         p.setType();
         p.setStatusConditions();
         p.setDefaultStatMultipliers();
-        p.setStatImmune(false);
         p.setEndure(false);
         p.statBuff = 1.0;
         p.setDynamax(false);
@@ -1120,8 +1117,7 @@ public class Pokemon
 
     public void changeStatMultiplier(Stat s, int stageChange)
     {
-        if(this.isStatImmune() && stageChange < 0) return;
-        else this.statMultiplier.put(s, (this.statMultiplier.get(s) == -6 && stageChange < 0) || (this.statMultiplier.get(s) == 6 && stageChange > 0) ? this.statMultiplier.get(s) : this.statMultiplier.get(s) + stageChange);
+        this.statMultiplier.put(s, (this.statMultiplier.get(s) == -6 && stageChange < 0) || (this.statMultiplier.get(s) == 6 && stageChange > 0) ? this.statMultiplier.get(s) : this.statMultiplier.get(s) + stageChange);
     }
 
     public double getStatMultiplier(Stat s)
@@ -1132,16 +1128,6 @@ public class Pokemon
     public int getStageChange(Stat s)
     {
         return this.statMultiplier.get(s);
-    }
-
-    public boolean isStatImmune()
-    {
-        return this.statImmune;
-    }
-
-    public void setStatImmune(boolean statImmune)
-    {
-        this.statImmune = statImmune;
     }
 
     public void setEndure(boolean endure)

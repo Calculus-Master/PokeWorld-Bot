@@ -6,7 +6,10 @@ import java.util.Arrays;
 
 public enum Stat
 {
-    HP, ATK, DEF, SPATK, SPDEF, SPD;
+    HP("HP"), ATK("Attack"), DEF("Defense"), SPATK("Special Attack"), SPDEF("Special Defense"), SPD("Speed");
+
+    public String name;
+    Stat(String fullName) {this.name = fullName;}
 
     public int index()
     {

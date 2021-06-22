@@ -39,15 +39,15 @@ public class StatChangeEffect extends MoveEffect
             {
                 if(this.statChanges.containsKey(s))
                 {
-                    (this.userChange ? this.user : this.opponent).changeStatMultiplier(s, this.statChanges.get(s));
-                    result.append((this.userChange ? this.user : this.opponent).getName()).append("'s ").append(switch (s) {
-                        case HP -> "HP";
-                        case ATK -> "Attack";
-                        case DEF -> "Defense";
-                        case SPATK -> "Special Attack";
-                        case SPDEF -> "Special Defense";
-                        case SPD -> "Speed";
-                    }).append(this.statChanges.get(s) > 0 ? " rose " : " was lowered ").append("by ").append(Math.abs(this.statChanges.get(s))).append(" stage").append(this.statChanges.get(s) > 1 ? "s" : "").append("! ");
+                    if(this.statChanges.get(s) < 0 && this.duel.data(this.opponent.getUUID()).statImmuneTurns > 0)
+                    {
+                        result.append(this.opponent.getName()).append(" is immune to the change in ").append(s.name);
+                    }
+                    else
+                    {
+                        (this.userChange ? this.user : this.opponent).changeStatMultiplier(s, this.statChanges.get(s));
+                        result.append((this.userChange ? this.user : this.opponent).getName()).append("'s ").append(s.name).append(this.statChanges.get(s) > 0 ? " rose " : " was lowered ").append("by ").append(Math.abs(this.statChanges.get(s))).append(" stage").append(this.statChanges.get(s) > 1 ? "s" : "").append("! ");
+                    }
                 }
             }
         }
