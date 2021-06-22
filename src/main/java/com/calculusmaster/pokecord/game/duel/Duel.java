@@ -39,6 +39,8 @@ public class Duel
     protected int current;
     protected int other;
 
+    private Map<Integer, String[]> moveLog;
+
     public String first;
 
     protected List<String> results;
@@ -656,6 +658,8 @@ public class Duel
             }
         }
 
+        this.moveLog.get(this.turn)[this.current] = move.getName();
+
         return turnResult;
     }
 
@@ -1063,6 +1067,8 @@ public class Duel
         }
 
         this.turn++;
+
+        this.moveLog.put(this.turn, new String[2]);
     }
 
     private void checkWeatherAbilities()
@@ -1367,6 +1373,7 @@ public class Duel
     {
         this.event = event;
         this.turn = 0;
+        this.moveLog = new HashMap<>();
     }
 
     public void setSize(int size)
