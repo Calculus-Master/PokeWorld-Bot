@@ -322,7 +322,11 @@ public class DuelHelper
             case DIALGIUM_Z -> ZMove = new Move("Timeline Shatter", Type.DRAGON, Category.SPECIAL, 200);
             case PALKIUM_Z -> ZMove = new Move("Ultra Space Hypernova", Type.DRAGON, Category.SPECIAL, 200);
             case GIRATINIUM_Z -> ZMove = new Move("Dark Matter Explosion", Type.DRAGON, Category.SPECIAL, 270);
-            case ETERNIUM_Z -> ZMove = new Move("The Darkest Day", Type.DRAGON, Category.SPECIAL, 220);
+            case ETERNIUM_Z -> ZMove = switch (baseMove.getName()) {
+                case "Eternabeam" -> new Move("The Darkest Day", Type.DRAGON, Category.SPECIAL, 220);
+                case "Dynamax Cannon" -> new Move("Max Particle Beam", Type.DRAGON, Category.SPECIAL, 200);
+                default -> new Move("Tackle");
+            };
             case DARKRAIUM_Z -> ZMove = new Move("Nightmare Void", Type.DARK, Category.STATUS, 0);
         }
 

@@ -207,6 +207,8 @@ public class ZMoves
 
     public String LightThatBurnsTheSky(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        //Custom Addition
+        if(opponent.isDynamaxed()) move.setPower(move.getPower() * 2);
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
@@ -400,6 +402,12 @@ public class ZMoves
         if(opponent.isDynamaxed()) move.setPower(move.getPower() * 2);
         if(user.getName().contains("Eternamax")) move.setPower(Math.pow(move.getPower(), 2));
 
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String MaxParticleBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(opponent.isDynamaxed()) move.setPower(move.getPower() * 2);
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
