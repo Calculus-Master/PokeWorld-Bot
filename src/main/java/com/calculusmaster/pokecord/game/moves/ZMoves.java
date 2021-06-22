@@ -7,6 +7,8 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
+import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 
 import java.util.Random;
 
@@ -104,9 +106,10 @@ public class ZMoves
 
     public String StokedSparksurfer(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.addStatusCondition(StatusCondition.PARALYZED);
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + opponent.getName() + " is paralyzed!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.PARALYZED)
+                .execute();
     }
 
     public String SinisterArrowRaid(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -116,13 +119,14 @@ public class ZMoves
 
     public String ExtremeEvoboost(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.ATK, 2);
-        user.changeStatMultiplier(Stat.DEF, 2);
-        user.changeStatMultiplier(Stat.SPATK, 2);
-        user.changeStatMultiplier(Stat.SPDEF, 2);
-        user.changeStatMultiplier(Stat.SPD, 2);
-
-        return user.getName() + "'s stats were all raised by 2 stages!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.ATK, 2, 100, true)
+                                .add(Stat.DEF, 2)
+                                .add(Stat.SPATK, 2)
+                                .add(Stat.SPDEF, 2)
+                                .add(Stat.SPD, 2))
+                .execute();
     }
 
     public String MaliciousMoonsault(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -132,13 +136,14 @@ public class ZMoves
 
     public String ClangorousSoulblaze(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.ATK, 1);
-        user.changeStatMultiplier(Stat.DEF, 1);
-        user.changeStatMultiplier(Stat.SPATK, 1);
-        user.changeStatMultiplier(Stat.SPDEF, 1);
-        user.changeStatMultiplier(Stat.SPD, 1);
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + "'s stats were all raised by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.ATK, 1, 100, true)
+                                .add(Stat.DEF, 1)
+                                .add(Stat.SPATK, 1)
+                                .add(Stat.SPDEF, 1)
+                                .add(Stat.SPD, 1))
+                .execute();
     }
 
     public String MenacingMoonrazeMaelstrom(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -173,14 +178,9 @@ public class ZMoves
 
     public String TenMillionVoltThunderbolt(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.setCrit(12);
-
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        user.setCrit(12);
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect(12)
+                .execute();
     }
 
     public String OceanicOperetta(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -200,10 +200,9 @@ public class ZMoves
 
     public String GuardianOfAlola(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = opponent.getStat(Stat.HP) * 3 / 4;
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFixedDamageEffect(opponent.getHealth() * 3 / 4)
+                .execute();
     }
 
     public String LightThatBurnsTheSky(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -228,32 +227,32 @@ public class ZMoves
     //Kyurem
     public String EternalWinter(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.changeStatMultiplier(Stat.SPD, -2);
-
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FROZEN, 20) + " " + opponent.getName() + "'s Speed was lowered by 2 stages!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPD, -2, 100, false)
+                .addStatusEffect(StatusCondition.FROZEN, 20)
+                .execute();
     }
 
     //Xerneas
     public String TreeOfLife(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.SPATK, 2);
-        user.changeStatMultiplier(Stat.SPDEF, 2);
-        user.changeStatMultiplier(Stat.SPD, 2);
-
-        int amount = user.getHealth() * 3 / 4;
-        user.heal(amount);
-
-        return user.getName() + "'s Special Attack, Special Defense and Speed rose by 2 stages! " + user.getName() + " healed for " + amount + " HP!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.SPATK, 2, 100, true)
+                                .add(Stat.SPDEF, 2)
+                                .add(Stat.SPD, 2))
+                .addFractionHealEffect(3 / 4D)
+                .execute();
     }
 
     //Yveltal
     public String CocoonOfDestruction(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-        user.heal(damage);
-
-        return move.getDamageResult(opponent, damage) + " " + user.getName() + " recovered " + damage + " HP!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addDamageHealEffect(1)
+                .execute();
     }
 
     //Diancie and Mega Diancie
@@ -303,12 +302,14 @@ public class ZMoves
     public String TitanicZEnforcer(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         if(opponent.getName().contains("Zygarde")) move.setPower(move.getPower() * 2);
+
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String MillionArrowBarrage(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         duel.data(opponent.getUUID()).isRaised = false;
+
         return Move.multihitDamageMove(user, opponent, duel, move);
     }
 
@@ -371,10 +372,10 @@ public class ZMoves
     //Giratina and Origin Giratina
     public String DarkMatterExplosion(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int recoil = new Random().nextInt(user.getHealth() / 4) + user.getHealth() / 4;
-        user.damage(recoil);
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + " took " + recoil + " damage from the blast!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addRecoilEffect(1 / 4D)
+                .execute();
     }
 
     //Eternatus and Eternamax Eternatus
