@@ -184,4 +184,9 @@ public class GrassMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String PowerWhip(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

@@ -49,4 +49,11 @@ public class FairyMoves
                 .addDamageHealEffect(3 / 4D)
                 .execute();
     }
+
+    public String AromaticMist(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.SPDEF, 1, 100, true)
+                .execute();
+    }
 }
