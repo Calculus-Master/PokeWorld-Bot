@@ -487,6 +487,21 @@ public class Duel
             }
         }
 
+        if(this.data(this.other).spikyShieldUsed)
+        {
+            this.data(this.other).spikyShieldUsed = false;
+
+            if(!move.getCategory().equals(Category.STATUS))
+            {
+                int damage = this.players[this.current].active.getStat(Stat.HP) / 8;
+                this.players[this.current].active.damage(damage);
+
+                otherImmune = !bypass;
+
+                turnResult += this.players[this.current].active.getName() + " took " + damage + " damage due to the Spiky Shield!";
+            }
+        }
+
         if(move.getName().equals("Fusion Bolt") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move != null && this.players[this.other].move.getName().equals("Fusion Flare")) move.setPower(move.getPower() * 2);
 
         if(move.getName().equals("Fusion Flare") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move != null && this.players[this.other].move.getName().equals("Fusion Bolt")) move.setPower(move.getPower() * 2);

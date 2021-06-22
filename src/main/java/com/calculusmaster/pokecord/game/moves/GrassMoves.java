@@ -189,4 +189,11 @@ public class GrassMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String SpikyShield(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(user.getUUID()).spikyShieldUsed = true;
+
+        return user.getName() + " defended itself with its Shield!";
+    }
 }
