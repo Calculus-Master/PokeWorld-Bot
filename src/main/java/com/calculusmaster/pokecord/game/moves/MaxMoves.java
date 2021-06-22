@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Weather;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -31,18 +32,18 @@ public class MaxMoves
 
     public String MaxLightning(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.terrain = DuelHelper.Terrain.ELECRIC_TERRAIN;
-        duel.terrainTurns = 5;
-
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addTerrainEffect(DuelHelper.Terrain.ELECRIC_TERRAIN)
+                .execute();
     }
 
     public String MaxStarfall(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.terrain = DuelHelper.Terrain.MISTY_TERRAIN;
-        duel.terrainTurns = 5;
-
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addTerrainEffect(DuelHelper.Terrain.MISTY_TERRAIN)
+                .execute();
     }
 
     public String MaxKnuckle(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -52,10 +53,10 @@ public class MaxMoves
 
     public String MaxFlare(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.weather = Weather.HARSH_SUNLIGHT;
-        duel.weatherTurns = 5;
-
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addWeatherEffect(Weather.HARSH_SUNLIGHT)
+                .execute();
     }
 
     public String MaxAirstream(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -70,10 +71,10 @@ public class MaxMoves
 
     public String MaxOvergrowth(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.terrain = DuelHelper.Terrain.GRASSY_TERRAIN;
-        duel.terrainTurns = 5;
-
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addTerrainEffect(DuelHelper.Terrain.GRASSY_TERRAIN)
+                .execute();
     }
 
     public String MaxQuake(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -83,10 +84,10 @@ public class MaxMoves
 
     public String MaxHailstorm(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.weather = Weather.HAIL;
-        duel.weatherTurns = 5;
-
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addWeatherEffect(Weather.HAIL)
+                .execute();
     }
 
     public String MaxStrike(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -102,18 +103,18 @@ public class MaxMoves
 
     public String MaxMindstorm(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.terrain = DuelHelper.Terrain.PSYCHIC_TERRAIN;
-        duel.terrainTurns = 5;
-
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addTerrainEffect(DuelHelper.Terrain.PSYCHIC_TERRAIN)
+                .execute();
     }
 
     public String MaxRockfall(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.weather = Weather.SANDSTORM;
-        duel.weatherTurns = 5;
-
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addWeatherEffect(Weather.SANDSTORM)
+                .execute();
     }
 
     public String MaxSteelspike(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -123,10 +124,10 @@ public class MaxMoves
 
     public String MaxGeyser(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.weather = Weather.RAIN;
-        duel.weatherTurns = 5;
-
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addWeatherEffect(Weather.RAIN)
+                .execute();
     }
 
     //G-Max Moves
