@@ -5,6 +5,8 @@ import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
+import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 
 import java.util.Random;
 
@@ -12,18 +14,19 @@ public class FightingMoves
 {
     public String BulkUp(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.ATK, 1);
-        user.changeStatMultiplier(Stat.DEF, 1);
-        return "It raised " + user.getName() + "'s Attack and Defense by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.ATK, 1, 100, true)
+                                .add(Stat.DEF, 1))
+                .execute();
     }
 
     public String RockSmash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        boolean lower = new Random().nextInt(100) < 50;
-
-        if(lower) opponent.changeStatMultiplier(Stat.DEF, -1);
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + (lower ? " " + opponent.getName() + "'s Defense was lowered by 1 stage!" : "");
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.DEF, -1, 50, false)
+                .execute();
     }
 
     public String BrickBreak(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -38,8 +41,10 @@ public class FightingMoves
 
     public String ThunderousKick(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.changeStatMultiplier(Stat.DEF, -1);
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + opponent.getName() + "'s Defense was lowered by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.DEF, -1, 100, false)
+                .execute();
     }
 
     public String Counter(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -56,10 +61,12 @@ public class FightingMoves
 
     public String CloseCombat(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.DEF, -1);
-        user.changeStatMultiplier(Stat.SPDEF, -1);
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + "'s Defense and Special Defense were lowered by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.DEF, -1, 100, true)
+                                .add(Stat.SPDEF, -1))
+                .execute();
     }
 
     public String Reversal(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -116,10 +123,12 @@ public class FightingMoves
 
     public String Superpower(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        String results = Move.simpleDamageMove(user, opponent, duel, move);
-        user.changeStatMultiplier(Stat.ATK, -1);
-        user.changeStatMultiplier(Stat.DEF, -1);
-        return results + " " + user.getName() + "'s Attack and Defense were lowered by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.ATK, -1, 100, true)
+                                .add(Stat.DEF, -1))
+                .execute();
     }
 
     public String DynamicPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -144,10 +153,9 @@ public class FightingMoves
 
     public String SeismicToss(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = user.getLevel();
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFixedDamageEffect(user.getLevel())
+                .execute();
     }
 
     public String MeteorAssault(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -160,10 +168,11 @@ public class FightingMoves
         return Move.multihitDamageMove(user, opponent, duel, move);
     }
 
-    //TODO: Increased crit chance (add a new method in Move)
     public String KarateChop(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .execute();
     }
 
     public String JumpKick(Pokemon user, Pokemon opponent, Duel duel, Move move)
