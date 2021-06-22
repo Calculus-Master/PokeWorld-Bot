@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Weather;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 
 import java.util.Random;
 
@@ -18,62 +19,42 @@ public class WaterMoves
 
     public String Withdraw(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.DEF, 1);
-
-        return user.getName() + "'s Defense rose by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.DEF, 1, 100, true)
+                .execute();
     }
 
     public String Bubble(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        if(new Random().nextInt(100) < 10)
-        {
-            opponent.changeStatMultiplier(Stat.SPD, -1);
-
-            return move.getDamageResult(opponent, damage) + " " + opponent.getName() + "'s Speed was lowered by 1 stage!";
-        }
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPD, -1, 10, false)
+                .execute();
     }
 
     public String WaterPulse(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        if(new Random().nextInt(100) < 20)
-        {
-            opponent.addStatusCondition(StatusCondition.CONFUSED);
-            return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " is confused!";
-        }
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.CONFUSED, 20)
+                .execute();
     }
 
     public String AquaTail(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage);
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String RainDance(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.weather = Weather.RAIN;
-        duel.weatherTurns = 5;
-
-        return user.getName() + " caused a rain shower!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addWeatherEffect(Weather.RAIN)
+                .execute();
     }
 
     public String HydroPump(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage);
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String HydroCannon(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -81,13 +62,12 @@ public class WaterMoves
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
+    //TODO: Heals 1/16 each turn
     public String AquaRing(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int heal = user.getStat(Stat.HP) / 16;
-
-        user.heal(heal);
-
-        return user.getName() + " healed for " + heal + " HP!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFractionHealEffect(1 / 16D)
+                .execute();
     }
 
     public String MuddyWater(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -127,8 +107,10 @@ public class WaterMoves
 
     public String Whirlpool(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.addStatusCondition(StatusCondition.BOUND);
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + opponent.getName() + " is bound!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.BOUND)
+                .execute();
     }
 
     public String WaterShuriken(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -147,9 +129,10 @@ public class WaterMoves
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
-    //TODO: Increased crit ratio
     public String SnipeShot(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .execute();
     }
 }
