@@ -137,6 +137,18 @@ public class MoveEffectBuilder
         return this;
     }
 
+    public MoveEffectBuilder addOHKOEffect()
+    {
+        this.moveEffects.add(new OHKODamageEffect());
+        return this;
+    }
+
+    public MoveEffectBuilder addEntryHazardEffect(DuelHelper.EntryHazard hazard)
+    {
+        this.moveEffects.add(new EntryHazardEffect(hazard));
+        return this;
+    }
+
     public String execute()
     {
         //Initialization

@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 
 import java.util.Random;
 
@@ -18,11 +19,7 @@ public class GroundMoves
 
     public String EarthPower(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        boolean lower = new Random().nextInt(100) < 10;
-
-        if(lower) opponent.changeStatMultiplier(Stat.SPDEF, -1);
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + (lower ? " " + opponent.getName() + "'s Special Defense was lowered by 1 stage!" : "");
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPDEF, -1, 20, false);
     }
 
     public String Dig(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -41,21 +38,14 @@ public class GroundMoves
 
     public String Bulldoze(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.changeStatMultiplier(Stat.SPD, -1);
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + opponent.getName() + "'s Speed was lowered by 1 stage!";
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPD, -1, 100, false);
     }
 
     public String Fissure(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(opponent.getLevel() > user.getLevel()) return move.getNoEffectResult(opponent);
-        else
-        {
-            int damage = opponent.getHealth();
-            opponent.damage(damage);
-
-            return move.getDamageResult(opponent, damage);
-        }
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addOHKOEffect()
+                .execute();
     }
 
     public String PrecipiceBlades(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -105,8 +95,9 @@ public class GroundMoves
 
     public String Spikes(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.hazardData(opponent.getUUID()).addHazard(DuelHelper.EntryHazard.SPIKES);
-        return user.getName() + " laid a Spikes trap!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addEntryHazardEffect(DuelHelper.EntryHazard.SPIKES)
+                .execute();
     }
 
     public String SandAttack(Pokemon user, Pokemon opponent, Duel duel, Move move)
