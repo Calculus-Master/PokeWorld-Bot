@@ -153,6 +153,13 @@ public class TrainerDuel extends Duel
             else this.queuedMoves.put(this.players[1].ID, new TurnAction(ActionType.MOVE, index + 1, -1));
 
         }
+        //Dynamax
+        else if(!this.players[1].usedDynamax && new Random().nextInt(100) < 33)
+        {
+            int index = new Random().nextInt(4);
+
+            this.queuedMoves.put(this.players[1].ID, new TurnAction(ActionType.DYNAMAX, index + 1, -1));
+        }
         //Normal Move
         else this.queuedMoves.put(this.players[1].ID, new TurnAction(ActionType.MOVE, new Random().nextInt(4) + 1, -1));
     }
