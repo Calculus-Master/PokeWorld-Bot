@@ -319,6 +319,7 @@ public class DuelHelper
             case PALKIUM_Z -> ZMove = new Move("Ultra Space Hypernova", Type.DRAGON, Category.SPECIAL, 200);
             case GIRATINIUM_Z -> ZMove = new Move("Dark Matter Explosion", Type.DRAGON, Category.SPECIAL, 270);
             case ETERNIUM_Z -> ZMove = new Move("The Darkest Day", Type.DRAGON, Category.SPECIAL, 220);
+            case DARKRAIUM_Z -> ZMove = new Move("Nightmare Void", Type.DARK, Category.STATUS, 0);
         }
 
         if(z.ordinal() <= 17) ZMove.setPower(ZPower);

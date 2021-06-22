@@ -386,4 +386,15 @@ public class ZMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    //Darkrai
+    public String NightmareVoid(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.ASLEEP)
+                .addStatusEffect(StatusCondition.NIGHTMARE)
+                .addStatusEffect(StatusCondition.CURSED)
+                .addFractionHealEffect(1 / 2D)
+                .execute();
+    }
 }

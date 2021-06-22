@@ -62,7 +62,8 @@ public enum ZCrystal
     DIALGIUM_Z,
     PALKIUM_Z,
     GIRATINIUM_Z,
-    ETERNIUM_Z;
+    ETERNIUM_Z,
+    DARKRAIUM_Z;
 
     public String getStyledName()
     {
