@@ -515,6 +515,19 @@ public class Duel
             otherImmune = true;
         }
 
+        //Lowered Accuracy of Defensive Moves
+        List<String> defensiveMoves = Arrays.asList("Endure", "Protect", "Detect", "Wide Guard", "Quick Guard", "Spiky Shield", "Kings Shield", "Baneful Bunker");
+
+        if(defensiveMoves.contains(move.getName()))
+        {
+            int i = this.turn - 1;
+            while(this.moveLog.containsKey(i) && defensiveMoves.contains(this.moveLog.get(i)[this.current]))
+            {
+                move.setAccuracy(move.getAccuracy() / 3);
+                i--;
+            }
+        }
+
         //Item-based Buffs
         boolean itemsOff = this.room.equals(Room.MAGIC_ROOM);
 
