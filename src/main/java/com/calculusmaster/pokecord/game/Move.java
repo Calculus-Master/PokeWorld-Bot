@@ -241,7 +241,7 @@ public class Move
         //Modifier = Targets * Weather * Badge * Critical * Random * STAB * Type * Burn * Other
         //Ignored Components: Targets, Badge, Other
         //Weather component is done in the Harsh Sunlight section in Duel
-        double critical = (new Random().nextInt(24) < this.critChance) ? 1.5 : 1.0;
+        double critical = (r.nextInt(24) < this.critChance) ? 1.5 : 1.0;
         double random = (r.nextInt(16) + 85.0) / 100.0;
         double stab = user.isType(this.type) ? 1.5 : 1.0;
         double type = TypeEffectiveness.getCombinedMap(opponent.getType()[0], opponent.getType()[1]).get(this.type);

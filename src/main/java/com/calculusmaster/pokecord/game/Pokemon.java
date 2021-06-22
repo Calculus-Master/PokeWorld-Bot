@@ -44,7 +44,6 @@ public class Pokemon
     private int health;
     private Type[] type;
     private Map<StatusCondition, Boolean> status;
-    private int crit;
     private Map<Stat, Integer> statMultiplier = new TreeMap<>();
     private boolean statImmune;
     private boolean endure;
@@ -84,7 +83,6 @@ public class Pokemon
         p.setHealth(p.getStat(Stat.HP));
         p.setType();
         p.setStatusConditions();
-        p.setCrit(1);
         p.setDefaultStatMultipliers();
         p.setStatImmune(false);
         p.setEndure(false);
@@ -118,7 +116,6 @@ public class Pokemon
         p.setHealth(p.getStat(Stat.HP));
         p.setType();
         p.setStatusConditions();
-        p.setCrit(1);
         p.setDefaultStatMultipliers();
         p.setStatImmune(false);
         p.setEndure(false);
@@ -1150,21 +1147,6 @@ public class Pokemon
     public void setEndure(boolean endure)
     {
         this.endure = endure;
-    }
-
-    public boolean isCrit()
-    {
-        return (new Random().nextInt(24) + 1) <= this.crit;
-    }
-
-    public void setCrit(int crit)
-    {
-        this.crit = crit;
-    }
-
-    public int getCrit()
-    {
-        return this.crit;
     }
 
     public List<String> getAbilities()
