@@ -38,19 +38,30 @@ public class CommandPokemon extends Command
 
         if(msg.contains("--name") && msg.indexOf("--name") + 1 < msg.size())
         {
-            StringBuilder name = new StringBuilder();
+            int start = msg.indexOf("--name") + 1;
+            int end = msg.size() - 1;
 
-            for(int i = msg.indexOf("--name") + 1; i < msg.size(); i++)
+            for(int i = start; i < msg.size(); i++)
             {
-                if(!msg.get(i).contains("--")) name.append(msg.get(i)).append(" ");
-                else i = msg.size();
+                if(msg.get(i).contains("--"))
+                {
+                    end = i - 1;
+                    i = msg.size();
+                }
             }
 
-            name = new StringBuilder(Global.normalCase(name.toString().trim()));
+            StringBuilder names = new StringBuilder();
 
-            String searchName = name.toString().toLowerCase();
+            for(int i = start; i <= end; i++)
+            {
+                names.append(msg.get(i)).append(" ");
+            }
 
-            stream = stream.filter(p -> p.getName().toLowerCase().contains(searchName));
+            String delimiter = "\\|"; //Currently the OR delimiter is |
+
+            List<String> searchNames = new ArrayList<>(Arrays.asList(names.toString().trim().split(delimiter))).stream().map(String::trim).map(String::toLowerCase).collect(Collectors.toList());
+
+            stream = stream.filter(p -> searchNames.stream().anyMatch(s -> p.getName().toLowerCase().contains(s)));
         }
 
         if(msg.contains("--move") && msg.indexOf("--move") + 1 < msg.size())
