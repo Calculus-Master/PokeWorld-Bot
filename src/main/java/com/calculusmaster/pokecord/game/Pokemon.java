@@ -515,16 +515,24 @@ public class Pokemon
         return this.heldTR;
     }
 
+    public List<Integer> getAllValidTMs()
+    {
+        return this.genericJSON.getJSONArray("movesTM").toList().stream().map(i -> (int)i).collect(Collectors.toList());
+    }
+
+    public List<Integer> getAllValidTRs()
+    {
+        return this.genericJSON.getJSONArray("movesTR").toList().stream().map(i -> (int)i).collect(Collectors.toList());
+    }
+
     public boolean canLearnTM(int tm)
     {
-        for(int i = 0; i < this.genericJSON.getJSONArray("movesTM").length(); i++) if(this.genericJSON.getJSONArray("movesTM").getInt(i) == tm) return true;
-        return false;
+        return this.getAllValidTMs().stream().anyMatch(i -> tm == i);
     }
 
     public boolean canLearnTR(int tr)
     {
-        for(int i = 0; i < this.genericJSON.getJSONArray("movesTR").length(); i++) if(this.genericJSON.getJSONArray("movesTR").getInt(i) == tr) return true;
-        return false;
+        return this.getAllValidTRs().stream().anyMatch(i -> tr == i);
     }
 
     //Items

@@ -90,6 +90,34 @@ public class CommandPokemon extends Command
             else if(isNumeric(index)) stream = stream.filter(p -> (int)p.getTotalIVRounded() == getInt(index));
         }
 
+        if(msg.contains("--tm") && msg.indexOf("--tm") + 1 < msg.size())
+        {
+            int index = msg.indexOf("--tm") + 1;
+            String input = msg.get(index);
+
+            if(input.startsWith("tm") && input.length() > "tm".length()) input = input.substring("tm".length());
+
+            if(!input.equals("") && input.chars().allMatch(Character::isDigit))
+            {
+                int tm = Integer.parseInt(input);
+                if(tm >= 1 && tm <= 100) stream = stream.filter(p -> p.getAllValidTMs().contains(tm));
+            }
+        }
+
+        if(msg.contains("--tr") && msg.indexOf("--tr") + 1 < msg.size())
+        {
+            int index = msg.indexOf("--tr") + 1;
+            String input = msg.get(index);
+
+            if(input.startsWith("tr") && input.length() > "tr".length()) input = input.substring("tr".length());
+
+            if(!input.equals("") && input.chars().allMatch(Character::isDigit))
+            {
+                int tr = Integer.parseInt(input);
+                if(tr >= 0 && tr <= 99) stream = stream.filter(p -> p.getAllValidTRs().contains(tr));
+            }
+        }
+
         if(msg.contains("--team"))
         {
             stream = stream.filter(p -> this.team.contains(p.getUUID()));
