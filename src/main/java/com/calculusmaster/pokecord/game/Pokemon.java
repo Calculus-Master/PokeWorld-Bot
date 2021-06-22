@@ -1132,6 +1132,11 @@ public class Pokemon
         return this.statMultiplier.get(s) == 0 ? 1.0 : (double)(this.statMultiplier.get(s) < 0 ? 2 : 2 + Math.abs(this.statMultiplier.get(s))) / (this.statMultiplier.get(s) < 0 ? 2 + Math.abs(this.statMultiplier.get(s)) : 2);
     }
 
+    public int getStageChange(Stat s)
+    {
+        return this.statMultiplier.get(s);
+    }
+
     public boolean isStatImmune()
     {
         return this.statImmune;

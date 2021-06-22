@@ -6,6 +6,8 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
+import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 
 import java.util.Random;
 
@@ -13,48 +15,42 @@ public class GhostMoves
 {
     public String ShadowBall(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        boolean lower = new Random().nextInt(100) < 20;
-
-        if(lower) opponent.changeStatMultiplier(Stat.SPDEF, -1);
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + (lower ? " " + opponent.getName() + "'s Special Defense was lowered by 1 stage!" : "");
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPDEF, -1, 20, false)
+                .execute();
     }
 
     public String Curse(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         if(user.isType(Type.GHOST))
         {
-            opponent.addStatusCondition(StatusCondition.CURSED);
-
-            int curseDamage = user.getStat(Stat.HP) / 2;
-            user.damage(curseDamage);
-
-            return user.getName() + " sacrificed " + curseDamage + " HP to curse " + opponent.getName() + "!";
+            return MoveEffectBuilder.make(user, opponent, duel, move)
+                    .addStatusEffect(StatusCondition.CURSED)
+                    .execute();
         }
         else
         {
-            user.changeStatMultiplier(Stat.ATK, 1);
-            user.changeStatMultiplier(Stat.DEF, 1);
-            user.changeStatMultiplier(Stat.SPD, -1);
-
-            return user.getName() + "s Attack and Defense rose by 1 stage and Speed lowered by 1 stage!";
+            return MoveEffectBuilder.make(user, opponent, duel, move)
+                    .addStatChangeEffect(
+                            new StatChangeEffect(Stat.ATK, 1, 100, true)
+                                    .add(Stat.DEF, 1)
+                                    .add(Stat.SPD, -1))
+                    .execute();
         }
     }
 
     public String OminousWind(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        boolean raise = new Random().nextInt(100) < 10;
-
-        if(raise)
-        {
-            user.changeStatMultiplier(Stat.ATK, 1);
-            user.changeStatMultiplier(Stat.DEF, 1);
-            user.changeStatMultiplier(Stat.SPATK, 1);
-            user.changeStatMultiplier(Stat.SPDEF, 1);
-            user.changeStatMultiplier(Stat.SPD, 1);
-        }
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + (raise ? " " + user.getName() + "'s stats all rose by 1 stage!" : "");
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.ATK, 1, 10, true)
+                                .add(Stat.DEF, 1)
+                                .add(Stat.SPATK, 1)
+                                .add(Stat.SPDEF, 1)
+                                .add(Stat.SPD, 1))
+                .execute();
     }
 
     public String ShadowSneak(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -64,12 +60,9 @@ public class GhostMoves
 
     public String ShadowClaw(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.setCrit(3);
-        int damage = move.getDamage(user, opponent);
-        user.setCrit(1);
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .execute();
     }
 
     public String ShadowForce(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -88,7 +81,7 @@ public class GhostMoves
 
     public String Hex(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(!opponent.getActiveStatusConditions().equals("")) move.setPower(130);
+        if(opponent.hasAnyStatusCondition()) move.setPower(130);
 
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
@@ -110,32 +103,30 @@ public class GhostMoves
 
     public String NightShade(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.damage(user.getLevel());
-        return move.getDamageResult(opponent, user.getLevel());
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFixedDamageEffect(user.getLevel())
+                .execute();
     }
 
     public String Nightmare(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(opponent.hasStatusCondition(StatusCondition.ASLEEP))
-        {
-            opponent.addStatusCondition(StatusCondition.NIGHTMARE);
-            return user.getName() + " cast a Nightmare on " + opponent.getName() + "!";
-        }
-        else return move.getNoEffectResult(opponent);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.NIGHTMARE)
+                .execute();
     }
 
     public String SpectralThief(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.setDefaultStatMultipliers();
-        int change;
-
         for(Stat s : Stat.values())
         {
-            change = (int)(2 * opponent.getStatMultiplier(s))  + (opponent.getStat(s) > 0 ? -2 : 2);
-            user.changeStatMultiplier(s, change);
+            if(opponent.getStageChange(s) > 0)
+            {
+                user.changeStatMultiplier(s, opponent.getStageChange(s));
+                opponent.changeStatMultiplier(s, opponent.getStageChange(s) * -1);
+            }
         }
 
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + " transferred all Status Conditions to " + opponent.getName() + "!";
+        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + " copied all of " + opponent.getName() + "'s Stat Boosts!";
     }
 
     public String MoongeistBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -145,8 +136,9 @@ public class GhostMoves
 
     public String ConfuseRay(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.addStatusCondition(StatusCondition.CONFUSED);
-        return opponent.getName() + " is confused!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.CONFUSED)
+                .execute();
     }
 
     public String Astonish(Pokemon user, Pokemon opponent, Duel duel, Move move)

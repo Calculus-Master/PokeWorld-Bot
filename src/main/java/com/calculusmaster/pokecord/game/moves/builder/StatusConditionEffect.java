@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game.moves.builder;
 
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 
 import java.util.Random;
@@ -28,6 +29,19 @@ public class StatusConditionEffect extends MoveEffect
             p.addStatusCondition(this.status);
 
             if(this.status.equals(StatusCondition.BOUND)) this.duel.data(p.getUUID()).boundTurns = 5;
+
+            if(this.status.equals(StatusCondition.CURSED))
+            {
+                Pokemon other = this.userChange ? this.opponent : this.user;
+                p.damage(p.getStat(Stat.HP) / 2);
+
+                return p.getName() + " sacrificed " + (p.getStat(Stat.HP) / 2) + " HP to curse " + other.getName() + "!";
+            }
+
+            if(this.status.equals(StatusCondition.NIGHTMARE) && !p.hasStatusCondition(StatusCondition.ASLEEP))
+            {
+                return this.move.getNoEffectResult(p);
+            }
 
             return p.getName() + " " + switch(this.status) {
                 case BURNED -> "is burned!";
