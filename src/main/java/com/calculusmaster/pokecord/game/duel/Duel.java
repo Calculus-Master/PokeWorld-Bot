@@ -693,10 +693,15 @@ public class Duel
         {
             this.players[p].dynamaxTurns--;
 
-            if(this.players[p].active.isFainted()) this.players[p].dynamaxTurns = 0;
-            if(this.players[p].dynamaxTurns <= 0) this.players[p].active.exitDynamax();
-
-            this.results.add(this.players[p].active.getName() + " reverted to its original size!\n");
+            if(this.players[p].active.isFainted())
+            {
+                this.players[p].dynamaxTurns = 0;
+            }
+            else if(this.players[p].dynamaxTurns <= 0)
+            {
+                this.players[p].active.exitDynamax();
+                this.results.add(this.players[p].active.getName() + " reverted to its original size!\n");
+            }
         }
     }
 
