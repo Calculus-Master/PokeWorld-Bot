@@ -7,6 +7,8 @@ import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
+import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 
 import java.util.Random;
 
@@ -14,45 +16,39 @@ public class PsychicMoves
 {
     public String CalmMind(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.SPATK, 1);
-        user.changeStatMultiplier(Stat.SPDEF, 1);
-
-        return "It raised " + user.getName() + "'s Special Attack and Special Defense by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.SPATK, 1, 100, true)
+                                .add(Stat.SPDEF, 1))
+                .execute();
     }
 
     public String Psyshock(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage);
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String Confusion(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        if(new Random().nextInt(100) < 10)
-        {
-            opponent.addStatusCondition(StatusCondition.CONFUSED);
-
-            return move.getDamageResult(opponent, damage) + " " + opponent.getName() + " is confused!";
-        }
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.CONFUSED, 10)
+                .execute();
     }
 
     public String Psybeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Confusion(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.CONFUSED, 10)
+                .execute();
     }
 
     public String Agility(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.SPD, 2);
-
-        return user.getName() + "'s Speed rose by 2 stages!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.SPD, 2, 100, true)
+                .execute();
     }
 
     public String LightScreen(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -62,16 +58,15 @@ public class PsychicMoves
 
     public String Psychic(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        boolean lower = new Random().nextInt(100) < 10;
-
-        if(lower) opponent.changeStatMultiplier(Stat.SPDEF, -1);
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + (lower ? " " + opponent.getName() + "'s Special Defense lowered by 1 stage!" : "");
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPDEF, -1, 10, false)
+                .execute();
     }
 
     public String PsychoShift(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(user.getActiveStatusConditions().isEmpty()) return move.getNothingResult();
+        if(!user.hasAnyStatusCondition()) return move.getNothingResult();
         else
         {
             for(StatusCondition s : user.getStatusConditionMap().keySet())
@@ -89,21 +84,16 @@ public class PsychicMoves
 
     public String Hypnosis(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.addStatusCondition(StatusCondition.ASLEEP);
-
-        return opponent.getName() + " is asleep!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.ASLEEP)
+                .execute();
     }
 
     public String PsychoCut(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.setCrit(3);
-
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        user.setCrit(1);
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .execute();
     }
 
     public String FreezingGlare(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -115,12 +105,10 @@ public class PsychicMoves
     {
         if(opponent.hasStatusCondition(StatusCondition.ASLEEP))
         {
-            int damage = move.getDamage(user, opponent);
-
-            opponent.damage(damage);
-            user.heal(damage / 2);
-
-            return move.getDamageResult(opponent, damage) + " " + user.getName() + " healed for " + (damage / 2) + " HP!";
+            return MoveEffectBuilder.make(user, opponent, duel, move)
+                    .addDamageEffect()
+                    .addDamageHealEffect(1 / 2D)
+                    .execute();
         }
         else return move.getNoEffectResult(opponent);
     }
@@ -129,7 +117,7 @@ public class PsychicMoves
     {
         duel.data(user.getUUID()).futureSightUsed = true;
         duel.data(user.getUUID()).futureSightTurns = 2;
-        return "The move will strike in 2 turns!";
+        return "It will strike in 2 turns!";
     }
 
     public String Psywave(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -139,9 +127,9 @@ public class PsychicMoves
         if(opponent.isType(Type.DARK)) return move.getNoEffectResult(opponent);
         else
         {
-            opponent.damage(damage);
-
-            return move.getDamageResult(opponent, damage);
+            return MoveEffectBuilder.make(user, opponent, duel, move)
+                    .addFixedDamageEffect(damage)
+                    .execute();
         }
     }
 
@@ -162,16 +150,16 @@ public class PsychicMoves
 
     public String Barrier(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.DEF, 2);
-
-        return user.getName() + "'s Defense rose by 2 stages!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.DEF, 2, 100, true)
+                .execute();
     }
 
     public String Amnesia(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.SPDEF, 2);
-
-        return user.getName() + "'s Special Defense rose by 2 stages!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.SPDEF, 2, 100, true)
+                .execute();
     }
 
     public String Psystrike(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -186,8 +174,9 @@ public class PsychicMoves
 
     public String HealPulse(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.heal(user.getStat(Stat.HP) / 2);
-        return user.getName() + " healed for " + (user.getStat(Stat.HP) / 2) + " HP!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFractionHealEffect(1 / 2D)
+                .execute();
     }
 
     public String Gravity(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -223,35 +212,31 @@ public class PsychicMoves
 
     public String TrickRoom(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.room = DuelHelper.Room.TRICK_ROOM;
-        duel.roomTurns = 5;
-
-        return user.getName() + " created a strange area!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addRoomEffect(DuelHelper.Room.TRICK_ROOM)
+                .execute();
     }
 
     public String WonderRoom(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.room = DuelHelper.Room.WONDER_ROOM;
-        duel.roomTurns = 5;
-
-        return user.getName() + " created a strange area! (WIP)";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addRoomEffect(DuelHelper.Room.WONDER_ROOM)
+                .execute() + " (WIP!) ";
     }
 
     public String MagicRoom(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.room = DuelHelper.Room.MAGIC_ROOM;
-        duel.roomTurns = 5;
-
-        return user.getName() + " created a strange area!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addRoomEffect(DuelHelper.Room.MAGIC_ROOM)
+                .execute();
     }
 
     public String StoredPower(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int power = 20;
+        int increases = 0;
+        for(Stat s : Stat.values()) if(user.getStageChange(s) > 0) increases += user.getStageChange(s);
 
-        for(Stat s : Stat.values()) if(user.getStatMultiplier(s) > 0) power += 20 * user.getStatMultiplier(s);
-
-        move.setPower(power);
+        move.setPower(20 + increases * 20);
 
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
@@ -263,16 +248,16 @@ public class PsychicMoves
 
     public String Meditate(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.ATK, 1);
-
-        return user.getName() + "'s Attack rose by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.ATK, 1, 100, true)
+                .execute();
     }
 
     public String Rest(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.addStatusCondition(StatusCondition.ASLEEP);
-        user.heal(user.getStat(Stat.HP));
-
-        return user.getName() + " is asleep but is fully healed!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFractionHealEffect(1)
+                .addStatusEffect(StatusCondition.ASLEEP, 100, true)
+                .execute();
     }
 }
