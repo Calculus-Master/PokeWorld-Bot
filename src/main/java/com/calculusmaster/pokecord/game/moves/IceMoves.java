@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.elements.Weather;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 
 import java.util.Random;
 
@@ -14,10 +15,9 @@ public class IceMoves
 {
     public String Hail(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.weather = Weather.HAIL;
-        duel.weatherTurns = 5;
-
-        return user.getName() + " summoned a hailstorm!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addWeatherEffect(Weather.HAIL)
+                .execute();
     }
 
     public String IceBall(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -27,13 +27,7 @@ public class IceMoves
 
     public String IcicleCrash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(new Random().nextInt(100) < 30)
-        {
-            opponent.addStatusCondition(StatusCondition.FLINCHED);
-            return Move.simpleDamageMove(user, opponent, duel, move) + " " + opponent.getName() + " flinched!";
-        }
-
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
     }
 
     public String IcicleSpear(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -43,32 +37,19 @@ public class IceMoves
 
     public String IceBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        boolean freeze = new Random().nextInt(100) < 10;
-
-        if(freeze) opponent.addStatusCondition(StatusCondition.FROZEN);
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + (freeze ? " " + opponent.getName() + " is now frozen!" : "");
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FROZEN, 10);
     }
 
     public String Blizzard(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        boolean freeze = new Random().nextInt(100) < 10;
-
-        if(freeze) opponent.addStatusCondition(StatusCondition.FROZEN);
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + (freeze ? " " + opponent.getName() + " is now frozen!" : "");
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FROZEN, 10);
     }
 
     public String SheerCold(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(opponent.isType(Type.ICE) || opponent.getLevel() > user.getLevel()) return move.getNoEffectResult(opponent);
-        else
-        {
-            int damage = opponent.getHealth();
-            opponent.damage(damage);
-
-            return move.getDamageResult(opponent, damage);
-        }
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addOHKOEffect()
+                .execute();
     }
 
     public String PowderSnow(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -96,13 +77,11 @@ public class IceMoves
 
     public String IceFang(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        boolean freeze = new Random().nextInt(100) < 10;
-        boolean flinch = new Random().nextInt(100) < 10;
-
-        if(freeze) opponent.addStatusCondition(StatusCondition.FROZEN);
-        if(flinch) opponent.addStatusCondition(StatusCondition.FLINCHED);
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + (freeze ? " " + opponent.getName() + " is frozen!" : "") + (flinch ? " " + opponent.getName() + " flinched!" : "");
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.FROZEN, 10)
+                .addStatusEffect(StatusCondition.FLINCHED, 10)
+                .execute();
     }
 
     public String IcePunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
