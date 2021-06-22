@@ -24,7 +24,9 @@ public class CommandMoves extends Command
         if(inDuel)
         {
             Duel d = DuelHelper.instance(this.player.getId());
-            selected = d.getPlayers()[d.indexOf(this.player.getId())].active;
+            int current = d.indexOf(this.player.getId());
+            int other = current == 0 ? 1 : 0;
+            selected = d.getPlayers()[current].active;
 
             movesList.append("**Learned Moves: **\n");
             Move m;
@@ -33,9 +35,9 @@ public class CommandMoves extends Command
                 movesList.append(i + 1).append(": ");
 
                 m = new Move(selected.getLearnedMoves().get(i));
+                if(selected.isDynamaxed()) m = DuelHelper.getMaxMove(selected, m);
 
-                if(selected.isDynamaxed()) movesList.append(DuelHelper.getMaxMove(selected, m).getName());
-                else movesList.append(m.getName()).append(" (Max Move: ").append(DuelHelper.getMaxMove(selected, m).getName()).append(")");
+                movesList.append(m.getName()).append(" (").append(m.getEffectiveness(d.getPlayers()[other].active)).append(")");
 
                 movesList.append("\n");
             }

@@ -174,7 +174,6 @@ public class Move
     public String getDamageResult(Pokemon opponent, int dmg)
     {
         String effective;
-
         double e = TypeEffectiveness.getCombinedMap(opponent.getType()[0], opponent.getType()[1]).get(this.type);
 
         //Freeze Dry
@@ -188,7 +187,24 @@ public class Move
         else if(e == 0.0) effective = this.getNoEffectResult(opponent);
         else throw new IllegalStateException("Effectiveness multiplier is a strange value: " + e);
 
-        return "It dealt **" + dmg + "** damage to " + opponent.getName() + "! " + (e == 0.0 ? effective : "") + (dmg > 0 ? effective + (this.hitCrit ? " It was a critical hit!" : "") : "");
+
+        return "It dealt **" + dmg + "** damage to " + opponent.getName() + "! " + (dmg > 0 ? effective + (this.hitCrit ? " It was a critical hit!" : "") : "");
+    }
+
+    public String getEffectiveness(Pokemon opponent)
+    {
+        double e = TypeEffectiveness.getCombinedMap(opponent.getType()[0], opponent.getType()[1]).get(this.type);
+
+        //Freeze Dry
+        if(this.name.equals("Freeze Dry")) e = opponent.isType(Type.WATER) || opponent.isType(Type.GRASS) || opponent.isType(Type.GROUND) || opponent.isType(Type.FLYING) || opponent.isType(Type.DRAGON) ? 2.0 : (opponent.isType(Type.FIRE) || opponent.isType(Type.ICE) || opponent.isType(Type.STEEL) ? 0.5 : 1.0);
+
+        if(e == 4.0) return "**Extremely Effective**";
+        else if(e == 2.0) return "**Super Effective**";
+        else if(e == 1.0) return "**Effective**";
+        else if(e == 0.5) return "**Not Very Effective**";
+        else if(e == 0.25) return "**Extremely Ineffective**";
+        else if(e == 0.0) return "**No Effect**";
+        else throw new IllegalStateException("Effectiveness multiplier is a strange value: " + e);
     }
 
     public String getRecoilDamageResult(Pokemon user, int dmg)
