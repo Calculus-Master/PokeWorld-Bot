@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.mongo.CollectionsQuery;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
@@ -112,6 +113,7 @@ public class CommandDex extends Command
                 "\n" + evYield + "\n" + evolutions + "\n" + forms + "\n" + megas + "\n" + tms + "\n" + trs + "\n\n" + baseStats);
         this.color = Type.cast(info.getJSONArray("type").getString(0)).getColor();
         this.embed.setImage(image.equals("") ? Pokemon.getWIPImage() : image);
+        this.embed.setFooter("You have collected " + new CollectionsQuery(pokemon, this.player.getId()).getCaughtAmount() + "!");
 
         this.playerData.addPokePassExp(50, this.event);
         return this;
