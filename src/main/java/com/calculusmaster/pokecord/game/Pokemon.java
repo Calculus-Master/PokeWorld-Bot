@@ -157,6 +157,7 @@ public class Pokemon
 
         p.setIVs(d.getString("ivs"));
         p.setType();
+        p.setItem(d.getString("item"));
 
         return p;
     }

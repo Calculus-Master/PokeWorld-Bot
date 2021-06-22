@@ -50,8 +50,24 @@ public class CommandPokemon extends Command
 
             String searchName = name.toString().toLowerCase();
 
-            //String name = msg.get(msg.indexOf("--name") + 1);
             stream = stream.filter(p -> p.getName().toLowerCase().contains(searchName));
+        }
+
+        if(msg.contains("--move") && msg.indexOf("--move") + 1 < msg.size())
+        {
+            StringBuilder move = new StringBuilder();
+
+            for(int i = msg.indexOf("--move") + 1; i < msg.size(); i++)
+            {
+                if(!msg.get(i).contains("--")) move.append(msg.get(i)).append(" ");
+                else i = msg.size();
+            }
+
+            move = new StringBuilder(Global.normalCase(move.toString().trim()));
+
+            String searchName = move.toString().toLowerCase();
+
+            stream = stream.filter(p -> p.getAllMoves().stream().anyMatch(s -> s.toLowerCase().equals(searchName)));
         }
 
         if(msg.contains("--level") && msg.indexOf("--level") + 1 < msg.size())
