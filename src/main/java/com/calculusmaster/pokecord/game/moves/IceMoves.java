@@ -59,7 +59,6 @@ public class IceMoves
 
     public String Mist(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.setStatImmune(true);
         duel.data(user.getUUID()).statImmuneTurns = 3;
 
         return user.getName() + " is immune to any stat changes for 3 turns!";

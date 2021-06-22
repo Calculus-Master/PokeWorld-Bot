@@ -354,7 +354,7 @@ public class NormalMoves
 
     public String Endure(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.setEndure(true);
+        duel.data(user.getUUID()).endureUsed = true;
         return user.getName() + " braces for the next attack!";
     }
 

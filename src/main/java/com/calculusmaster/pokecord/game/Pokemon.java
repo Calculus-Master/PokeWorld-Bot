@@ -45,7 +45,6 @@ public class Pokemon
     private Type[] type;
     private Map<StatusCondition, Boolean> status;
     private Map<Stat, Integer> statMultiplier = new TreeMap<>();
-    private boolean endure;
     public double statBuff;
     private boolean isDynamaxed;
 
@@ -83,7 +82,6 @@ public class Pokemon
         p.setType();
         p.setStatusConditions();
         p.setDefaultStatMultipliers();
-        p.setEndure(false);
         p.statBuff = 1.0;
         p.setDynamax(false);
 
@@ -115,7 +113,6 @@ public class Pokemon
         p.setType();
         p.setStatusConditions();
         p.setDefaultStatMultipliers();
-        p.setEndure(false);
         p.statBuff = 1.0;
         p.setDynamax(false);
 
@@ -413,15 +410,7 @@ public class Pokemon
     {
         this.health -= amount;
 
-        if(this.health <= 0 && this.endure)
-        {
-            this.health = 1;
-            this.endure = false;
-        }
-        else if(this.endure) this.endure = false;
-
         DuelHelper.instance(this.getUUID()).addDamage(amount, this.getUUID());
-        //if(!duel.getPokemon()[duel.turn].getUUID().equals(this.getUUID())) duel.lastDamage = amount;
     }
 
     public void heal(int amount)
@@ -1128,11 +1117,6 @@ public class Pokemon
     public int getStageChange(Stat s)
     {
         return this.statMultiplier.get(s);
-    }
-
-    public void setEndure(boolean endure)
-    {
-        this.endure = endure;
     }
 
     public List<String> getAbilities()

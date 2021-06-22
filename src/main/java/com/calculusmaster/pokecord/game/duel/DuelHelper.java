@@ -74,6 +74,7 @@ public class DuelHelper
         public int bideDamage;
         public boolean focusEnergyUsed;
         public boolean laserFocusUsed;
+        public boolean endureUsed;
 
         public boolean disguiseActivated;
 
@@ -123,6 +124,7 @@ public class DuelHelper
             this.bideDamage = 0;
             this.focusEnergyUsed = false;
             this.laserFocusUsed = false;
+            this.endureUsed = false;
 
             this.disguiseActivated = false;
         }
