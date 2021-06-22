@@ -5,6 +5,8 @@ import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
+import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 
 import java.util.Random;
 
@@ -12,9 +14,9 @@ public class SteelMoves
 {
     public String IronDefense(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.DEF, 2);
-
-        return user.getName() + "'s Defense rose by 2 stages!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.DEF, 2, 100, true)
+                .execute();
     }
 
     public String FlashCannon(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -24,10 +26,9 @@ public class SteelMoves
 
     public String MetalBurst(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = (int)(duel.data(user.getUUID()).lastDamageTaken * 1.5);
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFixedDamageEffect((int)(duel.data(user.getUUID()).lastDamageTaken * 1.5))
+                .execute();
     }
 
     public String MetalClaw(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -47,8 +48,9 @@ public class SteelMoves
 
     public String MetalSound(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.changeStatMultiplier(Stat.SPDEF, -2);
-        return opponent.getName() + "'s Special Defense was lowered by 2 stages!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.SPDEF, -2, 100, false)
+                .execute();
     }
 
     public String GyroBall(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -60,17 +62,17 @@ public class SteelMoves
 
     public String IronTail(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        boolean lower = new Random().nextInt(100) < 30;
-
-        if(lower) opponent.changeStatMultiplier(Stat.DEF, -1);
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + (lower ? " " + opponent.getName() + "'s Defense was lowered by 1 stage!" : "");
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.DEF, -1, 30, false)
+                .execute();
     }
 
     public String Autotomize(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.SPD, 2);
-        return user.getName() + "'s Speed rose by 2 stages!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.SPD, 2, 100, true)
+                .execute();
     }
 
     public String SunsteelStrike(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -93,7 +95,10 @@ public class SteelMoves
 
     public String DoubleIronBash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30) + " " + Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFixedMultiStrikeEffect(2)
+                .addStatusEffect(StatusCondition.FLINCHED, 30)
+                .execute();
     }
 
     public String BehemothBash(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -147,9 +152,10 @@ public class SteelMoves
 
     public String ShiftGear(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.ATK, 1);
-        user.changeStatMultiplier(Stat.SPD, 2);
-
-        return user.getName() + "'s Attack rose by 1 stage and Speed rose by 2 stages!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.ATK, 1, 100, true)
+                                .add(Stat.SPD, 2))
+                .execute();
     }
 }
