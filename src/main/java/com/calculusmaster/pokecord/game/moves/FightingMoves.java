@@ -36,7 +36,9 @@ public class FightingMoves
 
     public String QuickGuard(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return move.getNotImplementedResult();
+        duel.data(user.getUUID()).quickGuardUsed = true;
+
+        return user.getName() + " defended itself from increased priority moves!";
     }
 
     public String ThunderousKick(Pokemon user, Pokemon opponent, Duel duel, Move move)

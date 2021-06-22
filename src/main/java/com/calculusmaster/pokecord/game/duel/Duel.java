@@ -502,6 +502,13 @@ public class Duel
             }
         }
 
+        if(this.data(this.other).quickGuardUsed)
+        {
+            this.data(this.other).quickGuardUsed = false;
+
+            if(move.getPriority() > 0) otherImmune = !bypass;
+        }
+
         if(move.getName().equals("Fusion Bolt") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move != null && this.players[this.other].move.getName().equals("Fusion Flare")) move.setPower(move.getPower() * 2);
 
         if(move.getName().equals("Fusion Flare") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move != null && this.players[this.other].move.getName().equals("Fusion Bolt")) move.setPower(move.getPower() * 2);
@@ -549,7 +556,7 @@ public class Duel
         if(defensiveMoves.contains(move.getName()))
         {
             int i = this.turn - 1;
-            while(this.moveLog.containsKey(i) && defensiveMoves.contains(this.moveLog.get(i)[this.current]))
+            while(this.moveLog.containsKey(i) && defensiveMoves.contains(this.moveLog.get(i)[this.current]) && (!move.getName().equals("Quick Guard") || !this.moveLog.get(i)[this.current].equals("Quick Guard")))
             {
                 move.setAccuracy(move.getAccuracy() / 3);
                 i--;
