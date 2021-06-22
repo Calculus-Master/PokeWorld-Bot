@@ -189,7 +189,7 @@ public class CommandUse extends Command
             statusBaseMoves.put(ZCrystal.DARKRAIUM_Z, List.of("Dark Void"));
             statusBaseMoves.put(ZCrystal.MELMETALIUM_Z, List.of("Acid Armor"));
 
-            if(!statusBaseMoves.get(z).contains(move.getName()) && move.getCategory().equals(Category.STATUS))
+            if((!statusBaseMoves.containsKey(z) || statusBaseMoves.containsKey(z) && !statusBaseMoves.get(z).contains(move.getName())) && move.getCategory().equals(Category.STATUS))
             {
                 this.event.getChannel().sendMessage(mention + "Most Status Z-Moves are not implemented! Implemented Status Z-Moves for " + z.getStyledName() + " are: " + statusBaseMoves.get(z).toString()).queue();
                 this.embed = null;
