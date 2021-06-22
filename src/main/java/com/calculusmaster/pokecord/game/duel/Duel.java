@@ -487,6 +487,10 @@ public class Duel
             this.data(this.other).bideDamage = 0;
         }
 
+        if(this.data(this.current).focusEnergyUsed) move.critChance *= 3;
+
+        if(this.data(this.current).laserFocusUsed) move.critChance = 24;
+
         //Fly, Bounce, Dig and Dive
 
         if(this.data(this.current).flyUsed) move = new Move("Fly");

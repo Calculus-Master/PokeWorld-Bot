@@ -8,6 +8,8 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.elements.Weather;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
+import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.util.Global;
 
 import java.util.*;
@@ -22,16 +24,20 @@ public class NormalMoves
 
     public String Growl(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.changeStatMultiplier(Stat.ATK, -1);
-        return "It lowered " + opponent.getName() + "'s Attack by one stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.ATK, -1, 100, false)
+                .execute();
     }
 
     public String Growth(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        boolean harshSun = duel.weather.equals(Weather.HARSH_SUNLIGHT);
-        user.changeStatMultiplier(Stat.ATK, harshSun ? 2 : 1);
-        user.changeStatMultiplier(Stat.SPATK, harshSun ? 2 : 1);
-        return "It increased " + user.getName() + "'s Attack and Special Attack by " + (harshSun ? 2 : 1) + " stage" + (harshSun ? "s" : "") + "!";
+        int stage = duel.weather.equals(Weather.HARSH_SUNLIGHT) ? 2 : 1;
+
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.ATK, stage, 100, true)
+                                .add(Stat.SPATK, stage))
+                .execute();
     }
 
     public String HiddenPower(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -45,8 +51,7 @@ public class NormalMoves
 
         int typeVal = (int)((15 * (a + 2 * b + 4 * c + 8 * d + 16 * e + 32 * f)) / 63.0);
 
-        Type t = switch(typeVal)
-                {
+        Type t = switch(typeVal) {
                     case 0 -> Type.FIGHTING;
                     case 1 -> Type.FLYING;
                     case 2 -> Type.POISON;
@@ -68,10 +73,7 @@ public class NormalMoves
 
         move.setType(t);
 
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage) + "Hidden Power's type was " + Global.normalCase(t.toString()) + "! ";
+        return Move.simpleDamageMove(user, opponent, duel, move) + " Hidden Power's type was " + Global.normalCase(t.toString()) + "! ";
     }
 
     //TODO: Come up with a custom idea for it
@@ -82,20 +84,19 @@ public class NormalMoves
 
     public String WorkUp(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.ATK, 1);
-        user.changeStatMultiplier(Stat.SPATK, 1);
-
-        return "It increased " + user.getName() + "'s Attack and Special Attack by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.ATK, 1, 100, true)
+                                .add(Stat.SPATK, 1))
+                .execute();
     }
 
     public String TakeDown(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-
-        opponent.damage(damage);
-        user.damage(damage / 4);
-
-        return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 4);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addRecoilEffect(1 / 4D)
+                .execute();
     }
 
     //TODO: Evasion or custom idea
@@ -106,20 +107,15 @@ public class NormalMoves
 
     public String DoubleEdge(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-
-        opponent.damage(damage);
-        user.damage(damage / 3);
-
-        return move.getDamageResult(opponent, damage) + " " + move.getRecoilDamageResult(user, damage / 3);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addRecoilEffect(1 / 3D)
+                .execute();
     }
 
     public String Scratch(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage);
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     public String Smokescreen(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -130,36 +126,31 @@ public class NormalMoves
 
     public String ScaryFace(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.changeStatMultiplier(Stat.SPD, -2);
-
-        return opponent.getName() + "'s Speed fell by 2 stages!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.SPD, -2, 100, false)
+                .execute();
     }
 
     public String Slash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.setCrit(3);
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-        user.setCrit(1);
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .execute();
     }
 
     public String TailWhip(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.changeStatMultiplier(Stat.DEF, -1);
-
-        return opponent.getName() + "'s Defense was lowered by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.DEF, -1, 100, false)
+                .execute();
     }
 
     public String RapidSpin(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        user.changeStatMultiplier(Stat.SPD, 1);
-
-        return move.getDamageResult(opponent, damage) + " " + user.getName() + "'s Speed rose by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPD, 1, 100, true)
+                .execute();
     }
 
     public String Protect(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -171,39 +162,39 @@ public class NormalMoves
 
     public String SkullBash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        user.changeStatMultiplier(Stat.DEF, 1);
-
-        return move.getDamageResult(opponent, damage) + " " + user.getName() + "'s Defense rose by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.DEF, 1, 100, true)
+                .execute();
     }
 
     public String ShellSmash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.DEF, -1);
-        user.changeStatMultiplier(Stat.SPDEF, -1);
-        user.changeStatMultiplier(Stat.ATK, 2);
-        user.changeStatMultiplier(Stat.SPATK, 2);
-        user.changeStatMultiplier(Stat.SPD, 2);
-
-        return user.getName() + "'s Defense and Special Defense were lowered by 1 stage each! " + user.getName() + "'s Attack, Special Attack and Speed rose by 2 stages each!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.DEF, -1, 100, true)
+                                .add(Stat.SPDEF, -1))
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.ATK, 2, 100, true)
+                                .add(Stat.SPATK, 2)
+                                .add(Stat.SPD, 2))
+                .execute();
     }
 
     public String DefenseCurl(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.DEF, 1);
-
         duel.data(user.getUUID()).defenseCurlUsed = true;
 
-        return user.getName() + "'s Defense rose by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.DEF, 1, 100, true)
+                .execute();
     }
 
     public String Supersonic(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.addStatusCondition(StatusCondition.CONFUSED);
-
-        return opponent.getName() + " is confused!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.CONFUSED)
+                .execute();
     }
 
     public String Safeguard(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -218,17 +209,16 @@ public class NormalMoves
 
     public String Captivate(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        boolean success = new Random().nextInt(100) < 50;
-        if(success) opponent.changeStatMultiplier(Stat.SPATK, -2);
-
-        return success ? opponent.getName() + "'s Special Attack was lowered by 2 stages!" : move.getNothingResult();
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.SPATK, -2, 50, false)
+                .execute();
     }
 
     public String Harden(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.DEF, 1);
-
-        return user.getName() + "'s Defense rose by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.DEF, 1, 100, true)
+                .execute();
     }
 
     public String FuryAttack(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -242,9 +232,10 @@ public class NormalMoves
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
+    //TODO: Temporary: multiplies move crit chance by 3
     public String FocusEnergy(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.setCrit(user.getCrit() * 3);
+        duel.data(user.getUUID()).focusEnergyUsed = true;
 
         return user.getName() + "'s critical ratio was increased!";
     }
@@ -255,8 +246,9 @@ public class NormalMoves
 
         if(damage > 0)
         {
-            opponent.damage(damage);
-            return move.getDamageResult(opponent, damage);
+            return MoveEffectBuilder.make(user, opponent, duel, move)
+                    .addFixedDamageEffect(damage)
+                    .execute();
         }
         else return move.getNothingResult();
     }
@@ -295,16 +287,17 @@ public class NormalMoves
         if(opponent.isType(Type.GHOST)) return move.getNoEffectResult(opponent);
         else
         {
-            opponent.damage(20);
-
-            return move.getDamageResult(opponent, 20);
+            return MoveEffectBuilder.make(user, opponent, duel, move)
+                    .addFixedDamageEffect(20)
+                    .execute();
         }
     }
 
     public String Screech(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.changeStatMultiplier(Stat.DEF, -2);
-        return opponent.getName() + "'s Defense was lowered by 2 stages!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.DEF, -2, 100, false)
+                .execute();
     }
 
     public String LockOn(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -315,9 +308,9 @@ public class NormalMoves
 
     public String SwordsDance(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.ATK, 2);
-
-        return user.getName() + "'s Attack rose by 2 stages!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.ATK, 2, 100, true)
+                .execute();
     }
 
     public String HyperBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -337,11 +330,9 @@ public class NormalMoves
 
     public String Recover(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int heal = new Random().nextInt(user.getStat(Stat.HP) / 2) + 1;
-
-        user.heal(heal);
-
-        return user.getName() + " healed for " + heal + " HP!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFractionHealEffect(1 / 2D)
+                .execute();
     }
 
     public String MindReader(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -351,9 +342,9 @@ public class NormalMoves
 
     public String Leer(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.changeStatMultiplier(Stat.DEF, -1);
-
-        return opponent.getName() + "'s Defense was lowered by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.DEF, -1, 100, false)
+                .execute();
     }
 
     public String AfterYou(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -374,8 +365,7 @@ public class NormalMoves
 
     public String LaserFocus(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        move.critChance = 24;
-        return user.getName() + " has guaranteed critical hits!";
+        return user.getName() + " now has guaranteed critical hits!";
     }
 
     public String Swift(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -387,9 +377,9 @@ public class NormalMoves
     {
         user.setDefaultStatMultipliers();
 
-        for(Stat s : Stat.values()) if(opponent.getStatMultiplier(s) > 0) user.changeStatMultiplier(s, (int)(opponent.getStatMultiplier(s) * 2));
+        for(Stat s : Stat.values()) user.changeStatMultiplier(s, opponent.getStageChange(s));
 
-        return user.getName() + " copied " + opponent.getName() + "'s stat multipliers!";
+        return user.getName() + " copied " + opponent.getName() + "'s Stat Changes!";
     }
 
     public String MeFirst(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -414,9 +404,9 @@ public class NormalMoves
 
     public String SlackOff(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.heal(user.getStat(Stat.HP) / 2);
-
-        return user.getName() + " healed for " + (user.getStat(Stat.HP) / 2) + " HP!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFractionHealEffect(1 / 2D)
+                .execute();
     }
 
     public String Headbutt(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -426,16 +416,13 @@ public class NormalMoves
 
     public String MorningSun(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int HP = switch(duel.weather)
-                {
-                    case CLEAR -> user.getStat(Stat.HP) / 2;
-                    case HARSH_SUNLIGHT -> user.getStat(Stat.HP) * 2 / 3;
-                    default -> user.getStat(Stat.HP) / 4;
-                };
-
-        user.heal(HP);
-
-        return user.getName() + " healed for " + HP + " HP!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFractionHealEffect(switch(duel.weather) {
+                    case CLEAR -> 1 / 2D;
+                    case HARSH_SUNLIGHT -> 2 / 3D;
+                    default -> 1 / 4D;
+                })
+                .execute();
     }
 
     public String WringOut(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -457,16 +444,18 @@ public class NormalMoves
 
     public String Thrash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.addStatusCondition(StatusCondition.CONFUSED);
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + " is confused!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.CONFUSED, 100, true)
+                .execute();
     }
 
     public String Bind(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.addStatusCondition(StatusCondition.BOUND);
-
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + opponent.getName() + " is Bound!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.BOUND)
+                .execute();
     }
 
     public String Slam(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -512,10 +501,11 @@ public class NormalMoves
 
     public String NobleRoar(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.changeStatMultiplier(Stat.ATK, -1);
-        opponent.changeStatMultiplier(Stat.SPATK, -1);
-
-        return opponent.getName() + "'s Attack and Special Attack were lowered by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.ATK, -1, 100, false)
+                                .add(Stat.SPATK, -1))
+                .execute();
     }
 
     public String MegaPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -528,14 +518,14 @@ public class NormalMoves
         duel.data(user.getUUID()).perishSongTurns = 3;
         duel.data(opponent.getUUID()).perishSongTurns = 3;
 
-        return user.getName() + " sung a Perish Song!";
+        return user.getName() + " sang a Perish Song!";
     }
 
     public String Sing(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.addStatusCondition(StatusCondition.ASLEEP);
-
-        return opponent.getName() + " is asleep!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.ASLEEP)
+                .execute();
     }
 
     public String Round(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -582,11 +572,7 @@ public class NormalMoves
 
     public String DoubleHit(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = move.getDamage(user, opponent);
-        damage += move.getDamage(user, opponent);
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage);
+        return Move.multihitDamageMove(user, opponent, duel, move, 2);
     }
 
     public String LastResort(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -610,10 +596,11 @@ public class NormalMoves
     //TODO: Companion Moves
     public String Stockpile(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.changeStatMultiplier(Stat.DEF, 1);
-        user.changeStatMultiplier(Stat.SPDEF, 1);
-
-        return user.getName() + "'s Defense and Special Defense rose by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.DEF, 1, 100, true)
+                                .add(Stat.SPDEF, 1))
+                .execute();
     }
 
     public String Feint(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -648,29 +635,25 @@ public class NormalMoves
 
     public String Confide(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.changeStatMultiplier(Stat.SPATK, -1);
-
-        return opponent.getName() + "'s Special Attack was lowered by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.SPATK, -1, 100, false)
+                .execute();
     }
 
     public String Tickle(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.changeStatMultiplier(Stat.ATK, -1);
-        opponent.changeStatMultiplier(Stat.DEF, -1);
-
-        return opponent.getName() + "'s Attack and Defense were lowered by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.ATK, -1, 100, false)
+                                .add(Stat.DEF, -1))
+                .execute();
     }
 
     public String HornDrill(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(opponent.getLevel() > user.getLevel()) return move.getNoEffectResult(opponent);
-        else
-        {
-            int damage = opponent.getHealth();
-            opponent.damage(damage);
-
-            return move.getDamageResult(opponent, damage);
-        }
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addOHKOEffect()
+                .execute();
     }
 
     public String StuffCheeks(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -691,10 +674,9 @@ public class NormalMoves
 
     public String SuperFang(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = opponent.getHealth() / 2;
-        opponent.damage(damage);
-
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFixedDamageEffect(opponent.getHealth() / 2)
+                .execute();
     }
 
     public String Assist(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -709,13 +691,14 @@ public class NormalMoves
 
         move = new Move(pool.get(new Random().nextInt(pool.size())));
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return move.logic(user, opponent, duel);
     }
 
     public String PlayNice(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.changeStatMultiplier(Stat.ATK, -1);
-        return opponent.getName() + "'s Attack was lowered by 1 stage!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.ATK, -1, 100, false)
+                .execute();
     }
 
     public String Explosion(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -765,10 +748,9 @@ public class NormalMoves
 
     public String MilkDrink(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int health = user.getStat(Stat.HP) / 2;
-        user.heal(health);
-
-        return user.getName() + " healed for " + health + " HP!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFractionHealEffect(1 / 2D)
+                .execute();
     }
 
     public String Metronome(Pokemon user, Pokemon opponent, Duel duel, Move move)

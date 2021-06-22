@@ -72,6 +72,8 @@ public class DuelHelper
         public boolean kingsShieldUsed;
         public int bideTurns;
         public int bideDamage;
+        public boolean focusEnergyUsed;
+        public boolean laserFocusUsed;
 
         public boolean disguiseActivated;
 
@@ -119,6 +121,8 @@ public class DuelHelper
             this.kingsShieldUsed = false;
             this.bideTurns = 0;
             this.bideDamage = 0;
+            this.focusEnergyUsed = false;
+            this.laserFocusUsed = false;
 
             this.disguiseActivated = false;
         }
