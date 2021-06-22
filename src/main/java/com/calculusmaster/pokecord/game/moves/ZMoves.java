@@ -357,6 +357,22 @@ public class ZMoves
         return Move.multihitDamageMove(user, opponent, duel, move, 4);
     }
 
+    public String MetalLiquidation(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        boolean steelRemoval = opponent.isType(Type.STEEL);
+
+        if(steelRemoval)
+        {
+            if(opponent.getType()[0].equals(Type.STEEL)) opponent.setType(Type.NORMAL, 0);
+            if(opponent.getType()[1].equals(Type.STEEL)) opponent.setType(Type.NORMAL, 1);
+        }
+
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.DEF, 2, 100, true)
+                .addStatChangeEffect(Stat.DEF, -2, 100, false)
+                .execute() + (steelRemoval ? " " + opponent.getName() + " is no longer a Steel type!" : "");
+    }
+
     //Dialga
     public String TimelineShatter(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {

@@ -15,7 +15,9 @@ import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CommandUse extends Command
 {
@@ -119,8 +121,9 @@ public class CommandUse extends Command
 
             Pokemon s = d.getPlayers()[d.indexOf(this.player.getId())].active;
             Move move = new Move(s.getLearnedMoves().get(this.getInt(2) - 1));
+            ZCrystal z = ZCrystal.cast(this.playerData.getEquippedZCrystal());
 
-            boolean valid = switch(ZCrystal.cast(this.playerData.getEquippedZCrystal()))
+            boolean valid = switch(z)
             {
                 //Type-based
                 case BUGINIUM_Z -> move.getType().equals(Type.BUG);
@@ -173,7 +176,7 @@ public class CommandUse extends Command
                 case KYOGRIUM_Z -> s.getName().contains("Kyogre") && move.getName().equals("Origin Pulse");
                 case GROUDONIUM_Z -> s.getName().contains("Groudon") && move.getName().equals("Precipice Blades");
                 case GENESECTIUM_Z -> s.getName().equals("Genesect") && move.getName().equals("Techno Blast");
-                case MELMETALIUM_Z -> s.getName().equals("Melmetal") && move.getName().equals("Double Iron Bash");
+                case MELMETALIUM_Z -> s.getName().equals("Melmetal") && (move.getName().equals("Double Iron Bash") || move.getName().equals("Acid Armor"));
                 case DIALGIUM_Z -> s.getName().equals("Dialga") && move.getName().equals("Roar Of Time");
                 case PALKIUM_Z -> s.getName().equals("Palkia") && move.getName().equals("Spacial Rend");
                 case GIRATINIUM_Z -> s.getName().contains("Giratina") && move.getName().equals("Shadow Force");
@@ -181,11 +184,14 @@ public class CommandUse extends Command
                 case DARKRAIUM_Z -> s.getName().contains("Darkrai") && move.getName().equals("Dark Void");
             };
 
-            List<String> statusBaseMoves = Arrays.asList("Geomancy", "Dark Void");
+            Map<ZCrystal, List<String>> statusBaseMoves = new HashMap<>();
+            statusBaseMoves.put(ZCrystal.XERNIUM_Z, List.of("Geomancy"));
+            statusBaseMoves.put(ZCrystal.DARKRAIUM_Z, List.of("Dark Void"));
+            statusBaseMoves.put(ZCrystal.MELMETALIUM_Z, List.of("Acid Armor"));
 
-            if(!statusBaseMoves.contains(move.getName()) && move.getCategory().equals(Category.STATUS))
+            if(!statusBaseMoves.get(z).contains(move.getName()) && move.getCategory().equals(Category.STATUS))
             {
-                this.event.getChannel().sendMessage(mention + "Most Status Z-Moves are not implemented! Implemented Status Z-Moves are: " + statusBaseMoves.toString()).queue();
+                this.event.getChannel().sendMessage(mention + "Most Status Z-Moves are not implemented! Implemented Status Z-Moves for " + z.getStyledName() + " are: " + statusBaseMoves.get(z).toString()).queue();
                 this.embed = null;
                 return this;
             }
