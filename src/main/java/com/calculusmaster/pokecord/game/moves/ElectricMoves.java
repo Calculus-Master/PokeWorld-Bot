@@ -153,4 +153,10 @@ public class ElectricMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 20);
     }
+
+    //TODO: Change to Dark type when Morpeko in Hangry Mode
+    public String AuraWheel(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

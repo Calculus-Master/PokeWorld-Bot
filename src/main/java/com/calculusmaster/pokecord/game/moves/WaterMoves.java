@@ -155,4 +155,9 @@ public class WaterMoves
         }
         else return move.getNothingResult();
     }
+
+    public String AquaJet(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

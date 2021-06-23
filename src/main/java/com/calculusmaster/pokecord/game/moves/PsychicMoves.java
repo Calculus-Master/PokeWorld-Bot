@@ -260,4 +260,12 @@ public class PsychicMoves
                 .addStatusEffect(StatusCondition.ASLEEP, 100, true)
                 .execute();
     }
+
+    public String MagicPowder(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        opponent.setType(Type.PSYCHIC, 0);
+        opponent.setType(Type.PSYCHIC, 1);
+
+        return opponent.getName() + " is now a Psychic Type!";
+    }
 }
