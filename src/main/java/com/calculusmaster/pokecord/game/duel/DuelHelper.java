@@ -297,7 +297,12 @@ public class DuelHelper
             //Custom Uniques
             case RESHIRIUM_Z -> ZMove = new Move("White Hot Inferno", Type.FIRE, Category.SPECIAL, 200);
             case ZEKRIUM_Z -> ZMove = new Move("Supercharged Storm Surge", Type.ELECTRIC, Category.PHYSICAL, 200);
-            case KYURIUM_Z -> ZMove = new Move("Eternal Winter", Type.ICE, Category.SPECIAL, 180);
+            case KYURIUM_Z -> ZMove = switch (baseMove.getName()) {
+                case "Glaciate" -> new Move("Eternal Winter", Type.ICE, Category.SPECIAL, 180);
+                case "Freeze Shock" -> new Move("Freezing Storm Surge", Type.ICE, Category.PHYSICAL, 210);
+                case "Ice Burn" -> new Move("Blazing Iceferno", Type.ICE, Category.SPECIAL, 210);
+                default -> new Move("Tackle");
+            };
             case XERNIUM_Z -> ZMove = new Move("Tree Of Life", Type.FAIRY, Category.STATUS, 0);
             case YVELTIUM_Z -> ZMove = new Move("Cocoon Of Destruction", Type.DARK, Category.SPECIAL, 185);
             case DIANCIUM_Z -> ZMove = new Move("Dazzling Diamond Barrage", Type.ROCK, Category.PHYSICAL, 180);

@@ -165,7 +165,7 @@ public class CommandUse extends Command
                 //Custom Uniques
                 case RESHIRIUM_Z -> s.getName().equals("Reshiram") && move.getName().equals("Blue Flare");
                 case ZEKRIUM_Z -> s.getName().equals("Zekrom") && move.getName().equals("Bolt Strike");
-                case KYURIUM_Z -> s.getName().equals("Kyurem") && move.getName().equals("Glaciate");
+                case KYURIUM_Z -> (s.getName().equals("Kyurem") && move.getName().equals("Glaciate")) || (s.getName().equals("Black Kyurem") && move.getName().equals("Freeze Shock")) || (s.getName().equals("Ice Burn") && move.getName().equals("Ice Burn"));
                 case XERNIUM_Z -> s.getName().equals("Xerneas") && move.getName().equals("Geomancy");
                 case YVELTIUM_Z -> s.getName().equals("Yveltal") && move.getName().equals("Oblivion Wing");
                 case DIANCIUM_Z -> s.getName().contains("Diancie") && move.getName().equals("Diamond Storm");

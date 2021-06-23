@@ -236,6 +236,26 @@ public class ZMoves
                 .execute();
     }
 
+    //Black Kyurem
+    public String FreezingStormSurge(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.FROZEN, 10)
+                .addStatusEffect(StatusCondition.PARALYZED, 50)
+                .execute();
+    }
+
+    //White Kyurem
+    public String BlazingIceferno(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.FROZEN, 10)
+                .addStatusEffect(StatusCondition.BURNED, 50)
+                .execute();
+    }
+
     //Xerneas
     public String TreeOfLife(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
@@ -275,7 +295,7 @@ public class ZMoves
         else if(healthRatio <= 0.75) move.setPower(180);
         else move.setPower(150);
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return ((int)(healthRatio * 100) == 69 ? "Nice! " : "") + Move.simpleDamageMove(user, opponent, duel, move);
     }
 
     //Rayquaza and Mega Rayquaza
