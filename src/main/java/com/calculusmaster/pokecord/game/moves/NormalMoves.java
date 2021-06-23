@@ -847,4 +847,24 @@ public class NormalMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    //TODO: Genesect Drives and Silvally RKS
+    public String TechnoBlast(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String Sketch(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.moveLog.containsKey(duel.turn) && !duel.moveLog.get(duel.turn)[duel.other].equals(""))
+        {
+            String moveToCopy = duel.moveLog.get(duel.turn)[duel.other];
+            int index = user.getLearnedMoves().indexOf("Sketch");
+
+            user.learnMove(moveToCopy, index + 1);
+            Pokemon.updateMoves(user);
+            return user.getName() + " permanently learned " + move + "!";
+        }
+        else return move.getNothingResult();
+    }
 }

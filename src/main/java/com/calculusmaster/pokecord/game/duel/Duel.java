@@ -36,10 +36,10 @@ public class Duel
     protected Map<String, Integer> expGains = new HashMap<>();
 
     public int turn;
-    protected int current;
-    protected int other;
+    public int current;
+    public int other;
 
-    private Map<Integer, String[]> moveLog;
+    public Map<Integer, String[]> moveLog;
 
     public String first;
 

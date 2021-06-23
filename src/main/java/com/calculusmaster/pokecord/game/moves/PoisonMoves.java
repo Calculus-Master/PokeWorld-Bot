@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
+import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 
 import java.util.Random;
 
@@ -83,5 +84,20 @@ public class PoisonMoves
         move.setCategory(specialDamage > physicalDamage ? Category.SPECIAL : Category.PHYSICAL);
 
         return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String VenomDrench(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return opponent.hasStatusCondition(StatusCondition.POISONED) ? MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.ATK, -1, 100, false)
+                                .add(Stat.SPATK, -1)
+                                .add(Stat.SPD, -1))
+                .execute() : move.getNoEffectResult(opponent);
+    }
+
+    public String PoisonSting(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.POISONED, 30);
     }
 }
