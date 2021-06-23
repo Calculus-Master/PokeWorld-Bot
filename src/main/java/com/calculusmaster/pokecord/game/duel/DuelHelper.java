@@ -205,15 +205,6 @@ public class DuelHelper
         MAGIC_ROOM;
     }
 
-    public enum Terrain
-    {
-        NORMAL_TERRAIN,
-        ELECRIC_TERRAIN,
-        GRASSY_TERRAIN,
-        MISTY_TERRAIN,
-        PSYCHIC_TERRAIN;
-    }
-
     public enum ActionType
     {
         MOVE,

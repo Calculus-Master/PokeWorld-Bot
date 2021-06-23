@@ -1,13 +1,13 @@
 package com.calculusmaster.pokecord.game.moves.builder;
 
-import com.calculusmaster.pokecord.game.duel.DuelHelper;
+import com.calculusmaster.pokecord.game.enums.elements.Terrain;
 import com.calculusmaster.pokecord.util.Global;
 
 public class TerrainEffect extends MoveEffect
 {
-    private DuelHelper.Terrain terrain;
+    private Terrain terrain;
 
-    public TerrainEffect(DuelHelper.Terrain terrain)
+    public TerrainEffect(Terrain terrain)
     {
         this.terrain = terrain;
     }

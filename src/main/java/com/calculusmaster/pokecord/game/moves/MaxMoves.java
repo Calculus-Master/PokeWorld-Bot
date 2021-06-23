@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.enums.elements.Terrain;
 import com.calculusmaster.pokecord.game.enums.elements.Weather;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 
@@ -34,7 +35,7 @@ public class MaxMoves
     {
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addDamageEffect()
-                .addTerrainEffect(DuelHelper.Terrain.ELECRIC_TERRAIN)
+                .addTerrainEffect(Terrain.ELECRIC_TERRAIN)
                 .execute();
     }
 
@@ -42,7 +43,7 @@ public class MaxMoves
     {
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addDamageEffect()
-                .addTerrainEffect(DuelHelper.Terrain.MISTY_TERRAIN)
+                .addTerrainEffect(Terrain.MISTY_TERRAIN)
                 .execute();
     }
 
@@ -73,7 +74,7 @@ public class MaxMoves
     {
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addDamageEffect()
-                .addTerrainEffect(DuelHelper.Terrain.GRASSY_TERRAIN)
+                .addTerrainEffect(Terrain.GRASSY_TERRAIN)
                 .execute();
     }
 
@@ -105,7 +106,7 @@ public class MaxMoves
     {
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addDamageEffect()
-                .addTerrainEffect(DuelHelper.Terrain.PSYCHIC_TERRAIN)
+                .addTerrainEffect(Terrain.PSYCHIC_TERRAIN)
                 .execute();
     }
 

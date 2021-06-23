@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.enums.elements.Terrain;
 import com.calculusmaster.pokecord.game.enums.elements.Weather;
 
 import java.util.ArrayList;
@@ -125,7 +126,7 @@ public class MoveEffectBuilder
         return this;
     }
 
-    public MoveEffectBuilder addTerrainEffect(DuelHelper.Terrain terrain)
+    public MoveEffectBuilder addTerrainEffect(Terrain terrain)
     {
         this.moveEffects.add(new TerrainEffect(terrain));
         return this;
