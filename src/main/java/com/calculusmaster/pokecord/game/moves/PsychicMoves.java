@@ -303,4 +303,18 @@ public class PsychicMoves
     {
         return move.getNotImplementedResult();
     }
+
+    public String AllySwitch(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String CosmicPower(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.DEF, 1, 100, true)
+                                .add(Stat.SPDEF, 1))
+                .execute();
+    }
 }

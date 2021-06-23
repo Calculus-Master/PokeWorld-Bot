@@ -150,4 +150,12 @@ public class FlyingMoves
     {
         return move.getNotImplementedResult();
     }
+
+    public String OblivionWing(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addDamageHealEffect(3 / 4D)
+                .execute();
+    }
 }

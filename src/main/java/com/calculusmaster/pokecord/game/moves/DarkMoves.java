@@ -185,4 +185,9 @@ public class DarkMoves
     {
         return move.getNotImplementedResult();
     }
+
+    public String Embargo(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
 }

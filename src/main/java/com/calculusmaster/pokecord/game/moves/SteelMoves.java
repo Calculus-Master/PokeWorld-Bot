@@ -165,4 +165,9 @@ public class SteelMoves
         duel.data(user.getUUID()).doomDesireTurns = 2;
         return "It will strike in 2 turns!";
     }
+
+    public String GearGrind(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.multihitDamageMove(user, opponent, duel, move, 2);
+    }
 }
