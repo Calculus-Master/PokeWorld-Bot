@@ -170,4 +170,9 @@ public class GhostMoves
         duel.data(user.getUUID()).destinyBondUsed = true;
         return "";
     }
+
+    public String AstralBarrage(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

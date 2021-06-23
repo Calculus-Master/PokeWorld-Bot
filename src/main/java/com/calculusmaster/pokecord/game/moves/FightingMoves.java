@@ -210,4 +210,9 @@ public class FightingMoves
                 .addStatusEffect(StatusCondition.FLINCHED, 30)
                 .execute();
     }
+
+    public String NoRetreat(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
 }

@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
+import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
@@ -71,5 +72,16 @@ public class PoisonMoves
         duel.data(user.getUUID()).banefulBunkerUsed = true;
 
         return user.getName() + " defended itself with its Bunker!";
+    }
+
+    public String ShellSideArm(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int specialDamage = move.getDamage(user, opponent);
+        move.setCategory(Category.PHYSICAL);
+        int physicalDamage = move.getDamage(user, opponent);
+
+        move.setCategory(specialDamage > physicalDamage ? Category.SPECIAL : Category.PHYSICAL);
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 }

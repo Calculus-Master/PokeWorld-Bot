@@ -814,4 +814,15 @@ public class NormalMoves
     {
         return move.getNotImplementedResult();
     }
+
+    public String Substitute(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    //TODO: Force opponent to use last used move for 3 turns
+    public String Encore(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
 }
