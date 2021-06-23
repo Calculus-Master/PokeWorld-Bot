@@ -215,4 +215,9 @@ public class FightingMoves
     {
         return move.getNotImplementedResult();
     }
+
+    public String VacuumWave(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

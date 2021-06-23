@@ -158,4 +158,11 @@ public class SteelMoves
                                 .add(Stat.SPD, 2))
                 .execute();
     }
+
+    public String DoomDesire(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(user.getUUID()).doomDesireUsed = true;
+        duel.data(user.getUUID()).doomDesireTurns = 2;
+        return "It will strike in 2 turns!";
+    }
 }

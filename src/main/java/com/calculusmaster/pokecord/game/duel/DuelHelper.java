@@ -80,6 +80,8 @@ public class DuelHelper
         public boolean quickGuardUsed;
         public boolean mudSportUsed;
         public boolean matBlockUsed;
+        public boolean doomDesireUsed;
+        public int doomDesireTurns;
 
         public boolean disguiseActivated;
 
@@ -135,6 +137,8 @@ public class DuelHelper
             this.quickGuardUsed = false;
             this.mudSportUsed = false;
             this.matBlockUsed = false;
+            this.doomDesireUsed = false;
+            this.doomDesireTurns = 0;
 
             this.disguiseActivated = false;
         }

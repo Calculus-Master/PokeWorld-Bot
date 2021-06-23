@@ -842,4 +842,9 @@ public class NormalMoves
                 .addRecoilEffect(1 / 4D)
                 .execute();
     }
+
+    public String Boomburst(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

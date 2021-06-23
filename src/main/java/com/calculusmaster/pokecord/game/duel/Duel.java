@@ -461,6 +461,22 @@ public class Duel
             }
         }
 
+        if(this.data(this.current).doomDesireUsed)
+        {
+            this.data(this.current).doomDesireTurns--;
+
+            if(this.data(this.current).doomDesireTurns <= 0)
+            {
+                this.data(this.current).doomDesireTurns = 0;
+                this.data(this.current).doomDesireUsed = false;
+
+                int damage = new Move("Doom Desire").getDamage(this.players[this.current].active, this.players[this.other].active);
+                this.players[this.other].active.damage(damage);
+
+                turnResult += "Doom Desire landed and dealt " + damage + " to " + this.players[this.other].active.getName() + "!\n";
+            }
+        }
+
         if(this.data(this.current).lockOnUsed)
         {
             this.data(this.current).lockOnUsed = false;
