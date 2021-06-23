@@ -180,4 +180,9 @@ public class DarkMoves
     {
         return move.getNotImplementedResult();
     }
+
+    public String Quash(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
 }

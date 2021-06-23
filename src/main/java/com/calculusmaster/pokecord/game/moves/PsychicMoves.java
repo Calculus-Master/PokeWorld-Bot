@@ -10,6 +10,8 @@ import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class PsychicMoves
@@ -267,5 +269,33 @@ public class PsychicMoves
         opponent.setType(Type.PSYCHIC, 1);
 
         return opponent.getName() + " is now a Psychic Type!";
+    }
+
+    public String Telekinesis(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
+
+    public String HeartSwap(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        Map<Stat, Integer> userStats = new HashMap<>();
+        Map<Stat, Integer> oppStats = new HashMap<>();
+
+        for(Stat s : Stat.values())
+        {
+            userStats.put(s, user.getStageChange(s));
+            oppStats.put(s, opponent.getStageChange(s));
+        }
+
+        user.setDefaultStatMultipliers();
+        opponent.setDefaultStatMultipliers();
+
+        for(Stat s : Stat.values())
+        {
+            user.changeStatMultiplier(s, oppStats.get(s));
+            opponent.changeStatMultiplier(s, userStats.get(s));
+        }
+
+        return user.getName() + " and " + opponent.getName() + "'s Stat Changes were swapped!";
     }
 }

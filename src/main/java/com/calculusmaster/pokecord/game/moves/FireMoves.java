@@ -143,4 +143,12 @@ public class FireMoves
                 .addStatusEffect(StatusCondition.BURNED, 10)
                 .execute();
     }
+
+    public String PyroBall(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.BURNED, 10)
+                .execute();
+    }
 }
