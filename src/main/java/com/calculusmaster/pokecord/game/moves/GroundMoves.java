@@ -121,4 +121,11 @@ public class GroundMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String DrillRun(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .execute();
+    }
 }

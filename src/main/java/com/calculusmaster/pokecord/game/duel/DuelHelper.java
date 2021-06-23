@@ -78,6 +78,8 @@ public class DuelHelper
         public boolean banefulBunkerUsed;
         public boolean spikyShieldUsed;
         public boolean quickGuardUsed;
+        public boolean mudSportUsed;
+        public boolean matBlockUsed;
 
         public boolean disguiseActivated;
 
@@ -131,6 +133,8 @@ public class DuelHelper
             this.banefulBunkerUsed = false;
             this.spikyShieldUsed = false;
             this.quickGuardUsed = false;
+            this.mudSportUsed = false;
+            this.matBlockUsed = false;
 
             this.disguiseActivated = false;
         }

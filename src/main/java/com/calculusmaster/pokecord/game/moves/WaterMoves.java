@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.elements.Weather;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 
@@ -134,5 +135,24 @@ public class WaterMoves
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addCritDamageEffect()
                 .execute();
+    }
+
+    public String FishiousRend(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.first.equals(user.getUUID())) move.setPower(move.getPower() * 2);
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String Soak(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(!opponent.getAbilities().contains("Multitype"))
+        {
+            opponent.setType(Type.WATER, 0);
+            opponent.setType(Type.WATER, 1);
+
+            return opponent.getName() + " is now a Water type!";
+        }
+        else return move.getNothingResult();
     }
 }

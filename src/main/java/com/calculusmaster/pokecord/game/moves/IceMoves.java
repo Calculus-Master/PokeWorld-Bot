@@ -107,4 +107,9 @@ public class IceMoves
     {
         return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPD, -1, 100, false);
     }
+
+    public String GlacialLance(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

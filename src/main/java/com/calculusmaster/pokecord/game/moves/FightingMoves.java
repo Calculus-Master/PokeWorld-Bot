@@ -181,4 +181,33 @@ public class FightingMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String HighJumpKick(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String MatBlock(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.turn <= 2)
+        {
+            duel.data(user.getUUID()).matBlockUsed = true;
+
+            return user.getName() + " protected itself from Physical and Special moves!";
+        }
+        else return move.getNoEffectResult(opponent);
+    }
+
+    public String BodyPress(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String RollingKick(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.FLINCHED, 30)
+                .execute();
+    }
 }

@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.moves;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
@@ -195,5 +196,27 @@ public class GrassMoves
         duel.data(user.getUUID()).spikyShieldUsed = true;
 
         return user.getName() + " defended itself with its Shield!";
+    }
+
+    public String GrassyTerrain(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addTerrainEffect(DuelHelper.Terrain.GRASSY_TERRAIN)
+                .execute();
+    }
+
+    public String Aromatherapy(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        for(Pokemon p : duel.getPlayers()[duel.playerIndexFromUUID(user.getUUID())].team) p.clearStatusConditions();
+
+        return user.getName() + "'s party's Status Conditions were cleared!";
+    }
+
+    public String NeedleArm(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.FLINCHED, 30)
+                .execute();
     }
 }

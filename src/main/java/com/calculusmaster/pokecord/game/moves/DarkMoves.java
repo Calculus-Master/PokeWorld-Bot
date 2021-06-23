@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 
@@ -164,5 +165,19 @@ public class DarkMoves
         }
 
         return opponent.getName() + "'s Stat Changes were reversed!";
+    }
+
+    public String Switcheroo(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        String temp = user.getItem();
+        user.setItem(opponent.getItem());
+        opponent.setItem(temp);
+
+        return user.getName() + " and " + opponent.getName() + "'s Items were swapped!";
+    }
+
+    public String Fling(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
     }
 }

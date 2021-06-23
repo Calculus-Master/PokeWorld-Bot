@@ -120,4 +120,11 @@ public class BugMoves
                                 .add(Stat.SPDEF, 1))
                 .execute();
     }
+
+    public String TailGlow(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.SPATK, 3, 100, true)
+                .execute();
+    }
 }

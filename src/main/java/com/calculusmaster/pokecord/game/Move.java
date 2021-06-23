@@ -19,7 +19,7 @@ public class Move
 {
     public static Map<String, MoveData> MOVES = new HashMap<>();
     //TODO: Keep checking the custom moves and see if they can function as close to the original as possible
-    public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Sweet Scent", "Smokescreen", "Safeguard", "Whirlwind", "Rage Powder", "Tailwind", "Light Screen", "Frustration", "Return", "Mind Reader", "Counter", "Magnetic Flux", "After You", "Disable", "Miracle Eye", "Guard Swap", "Power Swap", "Me First", "Yawn", "Gravity", "Spite", "Mean Look", "Foresight", "Wide Guard", "Ingrain", "Forests Curse", "Natural Gift", "Last Resort", "Sand Attack", "Teleport", "Odor Sleuth", "Helping Hand", "Mirror Move", "Stuff Cheeks", "Copycat", "Entrainment", "Block", "Follow Me");
+    public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Sweet Scent", "Smokescreen", "Safeguard", "Whirlwind", "Rage Powder", "Tailwind", "Light Screen", "Frustration", "Return", "Mind Reader", "Counter", "Magnetic Flux", "After You", "Disable", "Miracle Eye", "Guard Swap", "Power Swap", "Me First", "Yawn", "Gravity", "Spite", "Mean Look", "Foresight", "Wide Guard", "Ingrain", "Forests Curse", "Natural Gift", "Last Resort", "Sand Attack", "Teleport", "Odor Sleuth", "Helping Hand", "Mirror Move", "Stuff Cheeks", "Copycat", "Entrainment", "Block", "Follow Me", "Sky Drop", "Simple Beam", "Fling");
     public static final List<String> CUSTOM_MOVES = Arrays.asList("Leech Seed", "Rapid Spin", "Mirror Shot", "Stockpile", "Worry Seed", "Aromatic Mist");
     public static List<String> INCOMPLETE_MOVES = new ArrayList<>();
 
@@ -278,6 +278,9 @@ public class Move
 
         //Gensect Z-Move: Elemental Techno Overdrive
         if(this.name.equals("Elemental Techno Overdrive")) stab = Math.random() + 1;
+
+        //Body Press
+        if(this.name.equals("Body Press")) atkStat = user.getStat(Stat.DEF);
 
         //Ability: Adaptability
         if(stab == 1.5 && user.getAbilities().contains("Adaptability")) stab = 2.0;

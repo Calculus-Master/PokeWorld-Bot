@@ -798,4 +798,20 @@ public class NormalMoves
         return move.getNotImplementedResult();
     }
 
+    public String Pound(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String Sharpen(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.ATK, 1, 100, true)
+                .execute();
+    }
+
+    public String SimpleBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
 }

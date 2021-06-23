@@ -35,7 +35,7 @@ public class Duel
     protected Map<String, DuelPokemon> pokemonAttributes = new HashMap<>();
     protected Map<String, Integer> expGains = new HashMap<>();
 
-    private int turn;
+    public int turn;
     protected int current;
     protected int other;
 
@@ -421,6 +421,13 @@ public class Duel
             otherImmune = !bypass;
         }
 
+        if(this.data(this.other).matBlockUsed)
+        {
+            this.data(this.other).matBlockUsed = false;
+
+            if(!move.getCategory().equals(Category.STATUS)) otherImmune = !bypass;
+        }
+
         if(this.data(this.current).chargeUsed)
         {
             this.data(this.current).chargeUsed = false;
@@ -526,6 +533,11 @@ public class Duel
         if(this.data(this.current).focusEnergyUsed) move.critChance *= 3;
 
         if(this.data(this.current).laserFocusUsed) move.critChance = 24;
+
+        if(this.data(this.current).mudSportUsed || this.data(this.other).mudSportUsed)
+        {
+            if(move.getType().equals(Type.ELECTRIC)) move.setPower(move.getPower() * 0.5);
+        }
 
         //Fly, Bounce, Dig and Dive
 
@@ -638,11 +650,11 @@ public class Duel
         {
             turnResult += move.getMissedResult(this.players[this.current].active);
 
-            if(move.getName().equals("Jump Kick"))
+            if(move.getName().equals("Jump Kick") || move.getName().equals("High Jump Kick"))
             {
                 turnResult += " " + this.players[this.current].active.getName() + " kept going and crashed!";
 
-                this.players[this.current].active.damage(this.players[this.current].active.getStat(Stat.HP));
+                this.players[this.current].active.damage(this.players[this.current].active.getStat(Stat.HP) / 2);
             }
 
             this.data(this.other).lastDamageTaken = 0;
@@ -865,6 +877,8 @@ public class Duel
             }
             case GRASSY_TERRAIN -> {
                 if(move.getType().equals(Type.GRASS)) move.setPower(move.getPower() * 1.5);
+
+                if(!this.data(this.current).isRaised) this.players[this.current].active.heal(this.players[this.current].active.getStat(Stat.HP) / 16);
             }
             case MISTY_TERRAIN -> {
                 if(move.getType().equals(Type.DRAGON)) move.setDamageMultiplier(0.5);

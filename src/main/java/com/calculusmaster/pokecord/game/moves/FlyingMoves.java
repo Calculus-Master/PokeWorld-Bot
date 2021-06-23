@@ -145,4 +145,9 @@ public class FlyingMoves
     {
         return move.getNotImplementedResult();
     }
+
+    public String SkyDrop(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
 }
