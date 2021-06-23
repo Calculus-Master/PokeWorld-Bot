@@ -149,6 +149,12 @@ public class MoveEffectBuilder
         return this;
     }
 
+    public MoveEffectBuilder addCustomEffect(CustomEffect effect)
+    {
+        this.moveEffects.add(effect);
+        return this;
+    }
+
     public String execute()
     {
         //Initialization

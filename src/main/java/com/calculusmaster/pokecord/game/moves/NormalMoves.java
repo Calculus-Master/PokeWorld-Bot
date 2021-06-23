@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.elements.Weather;
+import com.calculusmaster.pokecord.game.moves.builder.CustomEffect;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.util.Global;
@@ -155,9 +156,16 @@ public class NormalMoves
 
     public String Protect(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.data(user.getUUID()).protectUsed = true;
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCustomEffect(new CustomEffect() {
+                    @Override
+                    public String get() {
+                        this.duel.data(user.getUUID()).protectUsed = true;
 
-        return user.getName() + " is now protected!";
+                        return user.getName() + " is now protected!";
+                    }
+                })
+                .execute();
     }
 
     public String SkullBash(Pokemon user, Pokemon opponent, Duel duel, Move move)
