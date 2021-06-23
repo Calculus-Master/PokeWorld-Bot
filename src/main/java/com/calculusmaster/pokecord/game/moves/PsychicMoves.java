@@ -298,4 +298,9 @@ public class PsychicMoves
 
         return user.getName() + " and " + opponent.getName() + "'s Stat Changes were swapped!";
     }
+
+    public String MagicCoat(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return move.getNotImplementedResult();
+    }
 }

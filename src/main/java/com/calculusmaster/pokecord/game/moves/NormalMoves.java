@@ -825,4 +825,21 @@ public class NormalMoves
     {
         return move.getNotImplementedResult();
     }
+
+    public String FalseSwipe(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        String s = Move.simpleDamageMove(user, opponent, duel, move);
+
+        if(opponent.getHealth() <= 0) opponent.setHealth(1);
+
+        return s;
+    }
+
+    public String HeadCharge(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addRecoilEffect(1 / 4D)
+                .execute();
+    }
 }

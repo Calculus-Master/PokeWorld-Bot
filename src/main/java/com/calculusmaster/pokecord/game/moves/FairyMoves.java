@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.moves;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
@@ -54,6 +55,13 @@ public class FairyMoves
     {
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addStatChangeEffect(Stat.SPDEF, 1, 100, true)
+                .execute();
+    }
+
+    public String FloralHealing(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFractionHealEffect(duel.terrain.equals(DuelHelper.Terrain.GRASSY_TERRAIN) ? 2 / 3D : 1 / 2D)
                 .execute();
     }
 }

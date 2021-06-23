@@ -159,4 +159,12 @@ public class ElectricMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String ElectricCharge(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addRecoilEffect(1 / 4D)
+                .execute();
+    }
 }
