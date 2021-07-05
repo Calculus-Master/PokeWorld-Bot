@@ -231,11 +231,13 @@ public class Pokemon
     public static void updateMoves(Pokemon p)
     {
         Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("moves", p.getMovesCondensed()));
+        CacheHelper.updatePokemon(p.getUUID());
     }
 
     public static void updateEVs(Pokemon p)
     {
         Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("evs", p.getVCondensed(p.getEVs())));
+        CacheHelper.updatePokemon(p.getUUID());
     }
 
     public static void updateName(Pokemon p, String evolved)
@@ -248,16 +250,19 @@ public class Pokemon
     {
         Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("tm", p.getTM()));
         Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("tr", p.getTR()));
+        CacheHelper.updatePokemon(p.getUUID());
     }
 
     public static void updateItem(Pokemon p)
     {
         Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("item", p.getItem()));
+        CacheHelper.updatePokemon(p.getUUID());
     }
 
     public static void updateDynamaxLevel(Pokemon p)
     {
         Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("dynamax_level", p.getDynamaxLevel()));
+        CacheHelper.updatePokemon(p.getUUID());
     }
 
     public static void deletePokemon(Pokemon p)
