@@ -136,6 +136,15 @@ public class PlayerDataQuery extends MongoQuery
     //key: "pokemon"
     public List<String> getPokemonList()
     {
+        if(CacheHelper.DYNAMIC_CACHING_ACTIVE && (!CacheHelper.POKEMON_LISTS.containsKey(this.getID()) || CacheHelper.UUID_LISTS.get(this.getID()).size() != this.getPokemonList().size()))
+        {
+            this.directMessage("Initializing your Pokemon List! This may take a while, depending on how many Pokemon you have. This will only happen once!");
+
+            CacheHelper.createPokemonList(this.getID());
+
+            this.directMessage("Your pokemon list has been initialized! Running command...");
+        }
+
         return CacheHelper.UUID_LISTS.get(this.getID());
     }
 

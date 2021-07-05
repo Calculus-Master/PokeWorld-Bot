@@ -27,11 +27,11 @@ public class CommandPokemon extends Command
 
         if(CacheHelper.DYNAMIC_CACHING_ACTIVE && (!CacheHelper.POKEMON_LISTS.containsKey(this.player.getId()) || CacheHelper.UUID_LISTS.get(this.player.getId()).size() != this.playerData.getPokemonList().size()))
         {
-            event.getChannel().sendMessage(this.playerData.getMention() + "Initializing your Pokemon list (this may take a while and will only happen once)!").queue();
-            event.getChannel().sendMessage(this.playerData.getMention() + "Your pokemon list has been initialized! Running command...").queue();
+            event.getChannel().sendMessage(this.playerData.getMention() + ": Initializing your Pokemon list (this may take a while and will only happen once)!").queue();
 
-            CacheHelper.initialList(this.player.getId());
             CacheHelper.createPokemonList(this.player.getId());
+
+            event.getChannel().sendMessage(this.playerData.getMention() + ": Your pokemon list has been initialized! Running command...").queue();
         }
 
         this.pokemon = new TreeList<>(CacheHelper.POKEMON_LISTS.get(this.player.getId()));
