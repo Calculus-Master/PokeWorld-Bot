@@ -119,7 +119,8 @@ public class PlayerDataQuery extends MongoQuery
 
     public void updateSelected()
     {
-        if(this.getSelected() >= this.getPokemonList().size()) this.setSelected(this.getPokemonList().size());
+        if(this.getSelected() > this.getPokemonList().size()) this.setSelected(this.getPokemonList().size());
+        else if(this.getSelected() <= 0) this.setSelected(1);
     }
 
     public Pokemon getSelectedPokemon()
@@ -150,6 +151,7 @@ public class PlayerDataQuery extends MongoQuery
         if(this.getFavorites().contains(UUID)) this.removePokemonFromFavorites(UUID);
 
         this.update();
+        this.updateSelected();
     }
 
     public void removePokemon(int index)

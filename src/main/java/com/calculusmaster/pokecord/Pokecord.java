@@ -4,7 +4,6 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.duel.CommandWildDuel;
-import com.calculusmaster.pokecord.commands.economy.CommandMarket;
 import com.calculusmaster.pokecord.commands.moves.CommandAbilityInfo;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.PokePass;
@@ -21,10 +20,6 @@ import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class Pokecord
 {
@@ -62,7 +57,7 @@ public class Pokecord
         Global.logInfo(Pokecord.class, "main", "Starting PokePass Init!");
         PokePass.init();
         Global.logInfo(Pokecord.class, "main", "Starting Market Init!");
-        CommandMarket.init();
+        CacheHelper.initMarketEntries();
         Global.logInfo(Pokecord.class, "main", "Starting CommandPokemon Init!");
         CacheHelper.initPokemonLists();
         Global.logInfo(Pokecord.class, "main", "Completed Init!");

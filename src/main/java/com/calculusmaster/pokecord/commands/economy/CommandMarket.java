@@ -1,225 +1,306 @@
 package com.calculusmaster.pokecord.commands.economy;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.pokemon.CommandInfo;
 import com.calculusmaster.pokecord.game.Achievements;
+import com.calculusmaster.pokecord.game.MarketEntry;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.PokemonRarity;
-import com.mongodb.client.model.Filters;
+import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import org.bson.Document;
-import org.json.JSONObject;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CommandMarket extends Command
 {
-    public static List<MarketEntry> marketEntries = new ArrayList<>();
-
-    public static void init()
+    public CommandMarket(MessageReceivedEvent event, String[] msg)
     {
-        long i = System.currentTimeMillis();
-        List<String> IDs = new ArrayList<>();
-        Mongo.MarketData.find(Filters.exists("marketID")).forEach(d -> IDs.add(d.getString("marketID")));
-
-        if(IDs.size() == 0) return;
-
-        int split = 20;
-        List<List<String>> totalList = new ArrayList<>();
-
-        for (int j = 0; j < IDs.size(); j += split)
-        {
-            totalList.add(IDs.subList(j, Math.min(j + split, IDs.size())));
-        }
-
-        int threads = IDs.size() < split ? 1 : IDs.size() / split;
-
-        ExecutorService pool = Executors.newFixedThreadPool(threads);
-
-        for(List<String> l : totalList)
-        {
-            try {Thread.sleep(100);}
-            catch (Exception e) {System.out.println("Can't Sleep Thread!");}
-
-            pool.execute(() -> { for(String s : l) marketEntries.add(MarketEntry.build(s)); });
-        }
-
-        pool.shutdown();
-
-        try { pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS); }
-        catch (Exception e) { System.out.println("CommandMarket Init failed!"); }
-
-        long f = System.currentTimeMillis();
-        System.out.println((f - i) + "ms");
-    }
-
-    public CommandMarket(MessageReceivedEvent event, String[] msg) {
         super(event, msg);
     }
 
-    //TODO: Add invalid messages for each if block
     @Override
     public Command runCommand()
     {
-        if (this.msg.length >= 4 && (this.msg[1].equals("list") || this.msg[1].equals("sell")) && isNumeric(2) && isNumeric(3) && Integer.parseInt(this.msg[2]) <= this.playerData.getPokemonList().size() && Integer.parseInt(this.msg[3]) > 0)
-        {
-            //Add pokemon to the market
-            MarketEntry newMarketEntry = MarketEntry.create(this.player.getId(), this.player.getName(), this.playerData.getPokemonList().get(Integer.parseInt(this.msg[2]) - 1), Integer.parseInt(this.msg[3]));
-            marketEntries.add(newMarketEntry);
-            this.playerData.removePokemon(newMarketEntry.pokemonID);
+        boolean list = this.msg.length >= 4 && (this.msg[1].equals("list") || this.msg[1].equals("sell")) && this.isNumeric(2) && this.isNumeric(3) && this.getInt(2) >= 1 && this.getInt(2) <= this.playerData.getPokemonList().size();
+        boolean buy = this.msg.length == 3 && this.msg[1].equals("buy") && MarketEntry.isValidID(this.msg[2]);
+        boolean collect = this.msg.length == 3 && this.msg[1].equals("collect") && MarketEntry.isValidID(this.msg[2]);
+        boolean info = this.msg.length == 3 && this.msg[1].equals("info") && MarketEntry.isValidID(this.msg[2]);
 
-            this.embed.setDescription("Listed your " + newMarketEntry.pokemon.getName() + " for " + newMarketEntry.price + "c!");
+        if(list)
+        {
+            MarketEntry newEntry = MarketEntry.create(this.player.getId(), this.player.getName(), this.playerData.getPokemonList().get(this.getInt(2) - 1), this.getInt(3));
+
+            this.playerData.removePokemon(newEntry.pokemonID);
+
+            this.sendMsg("You successfully listed your Level " + newEntry.pokemon.getLevel() + " " + newEntry.pokemon.getName() + "` for " + newEntry.price + " credits!");
         }
-        else if (this.msg.length >= 3 && this.msg[1].equals("buy") && isNumeric(2) && MarketEntry.isIDValid(this.msg[2]))
+        else if(buy || collect || info)
         {
-            //Buy pokemon from market
-            MarketEntry entry = marketEntries.stream().filter(m -> m.marketID.equals(this.msg[2])).collect(Collectors.toList()).get(0);
-            if (!this.player.getId().equals(entry.sellerID) && this.playerData.getCredits() >= entry.price)
-            {
-                marketEntries.remove(entry);
-                Mongo.MarketData.deleteOne(Filters.eq("marketID", entry.marketID));
+            MarketEntry m = MarketEntry.build(this.msg[2]);
 
-                this.playerData.changeCredits(-1 * entry.price);
-                this.playerData.addPokemon(entry.pokemonID);
-                if(!entry.sellerID.equals("BOT")) new PlayerDataQuery(entry.sellerID).changeCredits(entry.price);
+            if(buy && m.price <= this.playerData.getCredits())
+            {
+                this.playerData.changeCredits(-1 * m.price);
+                if(!m.sellerID.equals("BOT")) new PlayerDataQuery(m.sellerID).changeCredits(m.price);
+                this.playerData.addPokemon(m.pokemonID);
 
                 Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_POKEMON_MARKET, this.event);
 
-                this.embed.setDescription("Purchased a Level " + entry.pokemon.getLevel() + " " + entry.pokemon.getName() + " for " + entry.price + "c!");
+                this.sendMsg("You successfully bought `Level " + m.pokemon.getLevel() + " " + m.pokemon.getName() + "` for " + m.price + " credits!");
+                MarketEntry.delete(m.marketID);
             }
-        }
-        else if(this.msg.length >= 3 && this.msg[1].equals("collect") && isNumeric(2) && MarketEntry.isIDValid(this.msg[2]))
-        {
-            //Collect a listing from market
-            MarketEntry entry = marketEntries.stream().filter(m -> m.marketID.equals(this.msg[2])).collect(Collectors.toList()).get(0);
-            if(this.player.getId().equals(entry.sellerID))
+            else if(collect && m.sellerID.equals(this.player.getId()))
             {
-                marketEntries.remove(entry);
-                Mongo.MarketData.deleteOne(Filters.eq("marketID", entry.marketID));
+                this.playerData.addPokemon(m.pokemonID);
 
-                this.playerData.addPokemon(entry.pokemonID);
-                this.embed.setDescription("Collected your Level " + entry.pokemon.getLevel() + " " + entry.pokemon.getName() + " from the market!");
+                this.sendMsg("You successfully retrieved your `Level " + m.pokemon.getLevel() + " " + m.pokemon.getName() + "` from the market!");
+                MarketEntry.delete(m.marketID);
             }
-        }
-        else if (this.msg.length >= 3 && this.msg[1].equals("info") && isNumeric(2) && MarketEntry.isIDValid(this.msg[2]))
-        {
-            MarketEntry entry = marketEntries.stream().filter(m -> m.marketID.equals(this.msg[2])).collect(Collectors.toList()).get(0);
-            Pokemon chosen = Pokemon.build(entry.pokemonID);
+            else if(info)
+            {
+                MarketEntry entry = MarketEntry.build(this.msg[2]);
+                Pokemon chosen = Pokemon.build(entry.pokemonID);
 
-            String title = "**Level " + chosen.getLevel() + " " + chosen.getName() + "**" + (chosen.isShiny() ? " :star2:" : "");
-            String market = "Market ID: " + entry.marketID + " | Price: " + entry.price + "\nSold by: " + entry.sellerName;
-            String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getGenericJSON().getString("growthrate"), chosen.getLevel()) + " XP";
-            String type = "Type: " + (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalCase(chosen.getType()[0].toString()) : Global.normalCase(chosen.getType()[0].toString()) + " | " + Global.normalCase(chosen.getType()[1].toString()));
-            String nature = "Nature: " + Global.normalCase(chosen.getNature().toString());
-            String item = "Held Item: " + PokeItem.asItem(chosen.getItem()).getStyledName();
-            String stats = CommandInfo.getStatsFormatted(chosen);
+                String title = "**Level " + chosen.getLevel() + " " + chosen.getName() + "**" + (chosen.isShiny() ? " :star2:" : "");
+                String market = "Market ID: " + entry.marketID + " | Price: " + entry.price + "\nSold by: " + entry.sellerName;
+                String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getGenericJSON().getString("growthrate"), chosen.getLevel()) + " XP";
+                String type = "Type: " + (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalCase(chosen.getType()[0].toString()) : Global.normalCase(chosen.getType()[0].toString()) + " | " + Global.normalCase(chosen.getType()[1].toString()));
+                String nature = "Nature: " + Global.normalCase(chosen.getNature().toString());
+                String item = "Held Item: " + PokeItem.asItem(chosen.getItem()).getStyledName();
+                String stats = CommandInfo.getStatsFormatted(chosen);
 
-            this.embed.setTitle(title);
-            this.embed.setDescription(market + "\n" + exp + "\n" + type + "\n" + nature + "\n" + item + "\n\n" + stats);
-            this.color = chosen.getType()[0].getColor();
-            this.embed.setImage(chosen.getImage());
-            this.embed.setFooter("Buy this pokemon with `p!market buy " + entry.marketID + "`!");
+                this.embed.setTitle(title);
+                this.embed.setDescription(market + "\n" + exp + "\n" + type + "\n" + nature + "\n" + item + "\n\n" + stats);
+                this.color = chosen.getType()[0].getColor();
+                this.embed.setImage(chosen.getImage());
+                this.embed.setFooter("Buy this pokemon with `p!market buy " + entry.marketID + "`!");
+            }
+            else this.embed.setDescription(CommandInvalid.getShort());
         }
+        //Standard Display of Market Entries
         else
         {
-            List<MarketEntry> display = new ArrayList<>(List.copyOf(marketEntries));
+            List<MarketEntry> marketEntries = new ArrayList<>(List.copyOf(CacheHelper.MARKET_ENTRIES));
+            Stream<MarketEntry> display = marketEntries.stream();
 
-            //p!market listings - Shows only the player's listings
-            if(this.msg.length == 1) Collections.shuffle(display);
-            else if (this.msg[1].equals("listings")) display = display.stream().filter(m -> m.sellerID.equals(this.player.getId())).collect(Collectors.toList());
-            else if (this.msg[1].equals("search"))
+            if(this.msg.length == 1) Collections.shuffle(marketEntries);
+
+            List<String> msg = new ArrayList<>(Arrays.asList(this.msg));
+
+            //Market Specific Sorting
+            if(msg.contains("--listings"))
             {
-                List<String> args = new ArrayList<>(Arrays.asList(this.msg));
-
-                if (args.contains("--name") && args.indexOf("--name") + 1 < args.size())
-                {
-                    String name = args.get(args.indexOf("--name") + 1);
-                    if (isPokemon(name)) display = display.stream().filter(m -> m.pokemon.getName().equals(Global.normalCase(name))).collect(Collectors.toList());
-                }
-
-                if (args.contains("--level") && args.indexOf("--level") + 1 < args.size())
-                {
-                    int index = args.indexOf("--level") + 1;
-                    String after = args.get(index);
-                    boolean validIndex = index + 1 < args.size();
-                    if (after.equals(">") && validIndex && isNumeric(index + 1)) display = display.stream().filter(m -> m.pokemon.getLevel() > getInt(index + 1)).collect(Collectors.toList());
-                    else if (after.equals("<") && validIndex && isNumeric(index + 1)) display = display.stream().filter(m -> m.pokemon.getLevel() < getInt(index + 1)).collect(Collectors.toList());
-                    else if (isNumeric(index)) display = display.stream().filter(m -> m.pokemon.getLevel() == getInt(index)).collect(Collectors.toList());
-                }
-
-                if (args.contains("--iv") && args.indexOf("--iv") + 1 < args.size())
-                {
-                    int index = args.indexOf("--iv") + 1;
-                    String after = args.get(index);
-                    boolean validIndex = index + 1 < args.size();
-                    if (after.equals(">") && validIndex && isNumeric(index + 1)) display = display.stream().filter(m -> m.pokemon.getTotalIVRounded() > getInt(index + 1)).collect(Collectors.toList());
-                    else if (after.equals("<") && validIndex && isNumeric(index + 1)) display = display.stream().filter(m -> m.pokemon.getTotalIVRounded() < getInt(index + 1)).collect(Collectors.toList());
-                    else if (isNumeric(index)) display = display.stream().filter(m -> (int) m.pokemon.getTotalIVRounded() == getInt(index)).collect(Collectors.toList());
-                }
-
-                if (args.contains("--price") && args.indexOf("--price") + 1 < args.size())
-                {
-                    int index = args.indexOf("--price") + 1;
-                    String after = args.get(index);
-                    boolean validIndex = index + 1 < args.size();
-                    if (after.equals(">") && validIndex && isNumeric(index + 1)) display = display.stream().filter(m -> m.price > getInt(index + 1)).collect(Collectors.toList());
-                    else if (after.equals("<") && validIndex && isNumeric(index + 1)) display = display.stream().filter(m -> m.price < getInt(index + 1)).collect(Collectors.toList());
-                    else if (isNumeric(index)) display = display.stream().filter(m -> m.price == getInt(index)).collect(Collectors.toList());
-                }
-
-                if(args.contains("--legendary") || args.contains("--leg"))
-                {
-                    display = display.stream().filter(m -> PokemonRarity.LEGENDARY.contains(m.pokemon.getName())).collect(Collectors.toList());
-                }
-
-                if(args.contains("--mythical"))
-                {
-                    display = display.stream().filter(m -> PokemonRarity.MYTHICAL.contains(m.pokemon.getName())).collect(Collectors.toList());
-                }
-
-                if(args.contains("--ub") || args.contains("--ultrabeast"))
-                {
-                    display = display.stream().filter(m -> PokemonRarity.ULTRA_BEAST.contains(m.pokemon.getName())).collect(Collectors.toList());
-                }
-
-                if(args.contains("--mega"))
-                {
-                    display = display.stream().filter(m -> PokemonRarity.MEGA.contains(m.pokemon.getName())).collect(Collectors.toList());
-                }
-
-                if (args.contains("--order") && (args.indexOf("--order") + 1) < args.size())
-                {
-                    switch (args.get(args.indexOf("--order") + 1))
-                    {
-                        case "number" -> display.sort(Comparator.comparingInt(m -> m.pokemon.getNumber()));
-                        case "iv" -> display.sort((m1, m2) -> (int) (Double.parseDouble(m1.pokemon.getTotalIV().substring(0, 5)) - Double.parseDouble(m2.pokemon.getTotalIV().substring(0, 5))));
-                        case "level" -> display.sort(Comparator.comparingInt(m -> m.pokemon.getLevel()));
-                        case "price" -> display.sort(Comparator.comparingInt(m -> m.price));
-                        default -> display.sort(Comparator.comparing(m -> m.pokemon.getName()));
-                    }
-                }
-                else display.sort(Comparator.comparing(m -> m.pokemon.getName()));
+                display = display.filter(m -> m.sellerID.equals(this.player.getId()));
             }
 
-            this.embed.setTitle("Market Listings");
+            if(msg.contains("--bot"))
+            {
+                display = display.filter(m -> m.sellerID.equals("BOT"));
+            }
 
-            if (display.isEmpty())
-                this.embed.setDescription("There are no market listings. Add one using p!market list <pokemon> <price>!");
-            else
-                this.embed.setDescription(getMarketPage(display, this.msg.length > 2 && isNumeric(2) ? Integer.parseInt(this.msg[2]) : 0));
+            if(msg.contains("--price") && msg.indexOf("--price") + 1 < msg.size())
+            {
+                int index = msg.indexOf("--price") + 1;
+                String after = msg.get(index);
+                boolean validIndex = index + 1 < msg.size();
+
+                if (after.equals(">") && validIndex && isNumeric(index + 1)) display = display.filter(m -> m.price > getInt(index + 1));
+                else if (after.equals("<") && validIndex && isNumeric(index + 1)) display = display.filter(m -> m.price < getInt(index + 1));
+                else if (isNumeric(index)) display = display.filter(m -> m.price == getInt(index));
+            }
+
+            //General Sorting (Common with CommandPokemon)
+            if(msg.contains("--name") && msg.indexOf("--name") + 1 < msg.size())
+            {
+                int start = msg.indexOf("--name") + 1;
+                int end = msg.size() - 1;
+
+                for(int i = start; i < msg.size(); i++)
+                {
+                    if(msg.get(i).contains("--"))
+                    {
+                        end = i - 1;
+                        i = msg.size();
+                    }
+                }
+
+                StringBuilder names = new StringBuilder();
+
+                for(int i = start; i <= end; i++)
+                {
+                    names.append(msg.get(i)).append(" ");
+                }
+
+                String delimiter = "\\|"; //Currently the OR delimiter is |
+
+                List<String> searchNames = new ArrayList<>(Arrays.asList(names.toString().trim().split(delimiter))).stream().map(String::trim).map(String::toLowerCase).collect(Collectors.toList());
+
+                display = display.filter(m -> searchNames.stream().anyMatch(s -> m.pokemon.getName().toLowerCase().contains(s)));
+            }
+
+            if(msg.contains("--level") && msg.indexOf("--level") + 1 < msg.size())
+            {
+                int index = msg.indexOf("--level") + 1;
+                String after = msg.get(index);
+                boolean validIndex = index + 1 < msg.size();
+
+                if (after.equals(">") && validIndex && isNumeric(index + 1)) display = display.filter(m -> m.pokemon.getLevel() > getInt(index + 1));
+                else if (after.equals("<") && validIndex && isNumeric(index + 1)) display = display.filter(m -> m.pokemon.getLevel() < getInt(index + 1));
+                else if (isNumeric(index)) display = display.filter(m -> m.pokemon.getLevel() == getInt(index));
+            }
+
+            if(msg.contains("--iv") && msg.indexOf("--iv") + 1 < msg.size())
+            {
+                int index = msg.indexOf("--iv") + 1;
+                String after = msg.get(index);
+                boolean validIndex = index + 1 < msg.size();
+
+                if (after.equals(">") && validIndex && isNumeric(index + 1)) display = display.filter(m -> m.pokemon.getTotalIVRounded() > getInt(index + 1));
+                else if (after.equals("<") && validIndex && isNumeric(index + 1)) display = display.filter(m -> m.pokemon.getTotalIVRounded() < getInt(index + 1));
+                else if (isNumeric(index)) display = display.filter(m -> (int)m.pokemon.getTotalIVRounded() == getInt(index));
+            }
+
+            display = this.sortIVs(display, msg, "--hpiv", "--healthiv", Stat.HP);
+
+            display = this.sortIVs(display, msg, "--atkiv", "--attackiv", Stat.ATK);
+
+            display = this.sortIVs(display, msg, "--defiv", "--defenseiv", Stat.DEF);
+
+            display = this.sortIVs(display, msg, "--spatkiv", "--specialattackiv", Stat.SPATK);
+
+            display = this.sortIVs(display, msg, "--spdefiv", "--specialdefenseiv", Stat.SPDEF);
+
+            display = this.sortIVs(display, msg, "--spdiv", "--speediv", Stat.SPD);
+
+            if(msg.contains("--type") && msg.indexOf("--type") + 1 < msg.size() && Type.cast(msg.get(msg.indexOf("--type") + 1)) != null)
+            {
+                Type t = Type.cast(msg.get(msg.indexOf("--type") + 1));
+                display = display.filter(m -> m.pokemon.isType(t));
+            }
+
+            if(msg.contains("--maintype") && msg.indexOf("--maintype") + 1 < msg.size() && Type.cast(msg.get(msg.indexOf("--maintype") + 1)) != null)
+            {
+                Type t = Type.cast(msg.get(msg.indexOf("--maintype") + 1));
+                display = display.filter(m -> m.pokemon.getType()[0].equals(t));
+            }
+
+            if(msg.contains("--sidetype") && msg.indexOf("--sidetype") + 1 < msg.size() && Type.cast(msg.get(msg.indexOf("--sidetype") + 1)) != null)
+            {
+                Type t = Type.cast(msg.get(msg.indexOf("--sidetype") + 1));
+                display = display.filter(m -> m.pokemon.getType()[1].equals(t));
+            }
+
+            if(msg.contains("--shiny"))
+            {
+                display = display.filter(m -> m.pokemon.isShiny());
+            }
+
+            if(msg.contains("--legendary") || msg.contains("--leg"))
+            {
+                display = display.filter(m -> PokemonRarity.LEGENDARY.contains(m.pokemon.getName()));
+            }
+
+            if(msg.contains("--mythical"))
+            {
+                display = display.filter(m -> PokemonRarity.MYTHICAL.contains(m.pokemon.getName()));
+            }
+
+            if(msg.contains("--ub") || msg.contains("--ultrabeast"))
+            {
+                display = display.filter(m -> PokemonRarity.ULTRA_BEAST.contains(m.pokemon.getName()));
+            }
+
+            if(msg.contains("--mega"))
+            {
+                display = display.filter(m -> PokemonRarity.MEGA.contains(m.pokemon.getName()));
+            }
+
+            //Convert Stream back to List
+            marketEntries = display.collect(Collectors.toList());
+
+            if(msg.contains("--order") && msg.indexOf("--order") + 1 < msg.size())
+            {
+                String order = msg.get(msg.indexOf("--order") + 1);
+                boolean asc = msg.indexOf("--order") + 2 < msg.size() && msg.get(msg.indexOf("--order") + 2).equals("a");
+                OrderSort o = OrderSort.cast(order);
+                if(o != null) this.sortOrder(marketEntries, o, !asc);
+            }
+            else this.sortOrder(marketEntries, OrderSort.RANDOM, false);
+
+            //Finalizing
+            if(marketEntries.isEmpty()) this.embed.setDescription("No market listings found with those parameters!");
+            else this.embed.setDescription(this.getMarketPage(marketEntries));
         }
 
         return this;
+    }
+
+    private Stream<MarketEntry> sortIVs(Stream<MarketEntry> display, List<String> msg, String tag1, String tag2, Stat iv)
+    {
+        boolean hasTag1 = msg.contains(tag1) && msg.indexOf(tag1) + 1 < msg.size();
+        boolean hasTag2 = msg.contains(tag2) && msg.indexOf(tag2) + 1 < msg.size();
+
+        if(hasTag1 || hasTag2)
+        {
+            int index = msg.indexOf(hasTag1 ? tag1 : tag2) + 1;
+            String after = msg.get(index);
+            boolean validIndex = index + 1 < msg.size();
+            if(after.equals(">") && validIndex && isNumeric(index + 1)) return display.filter(m -> m.pokemon.getIVs().get(iv) > getInt(index + 1));
+            else if(after.equals("<") && validIndex && isNumeric(index + 1)) return display.filter(m -> m.pokemon.getIVs().get(iv) < getInt(index + 1));
+            else if(isNumeric(index)) return display.filter(m -> m.pokemon.getIVs().get(iv) == getInt(index));
+        }
+
+        return display;
+    }
+
+    private void sortOrder(List<MarketEntry> entries, OrderSort o, boolean desc)
+    {
+        switch(o)
+        {
+            case IV -> entries.sort(Comparator.comparingDouble(m -> m.pokemon.getTotalIVRounded()));
+            case LEVEL -> entries.sort(Comparator.comparingInt(m -> m.pokemon.getLevel()));
+            case NAME -> entries.sort(Comparator.comparing(m -> m.pokemon.getName()));
+            case PRICE -> entries.sort(Comparator.comparingInt(m -> m.price));
+            case RANDOM -> Collections.shuffle(entries);
+        }
+
+        if(desc) Collections.reverse(entries);
+    }
+
+    enum OrderSort
+    {
+        IV,
+        LEVEL,
+        NAME,
+        PRICE,
+        RANDOM;
+
+        static OrderSort cast(String s)
+        {
+            for(OrderSort o : values()) if(o.toString().equals(s.toUpperCase())) return o;
+            return null;
+        }
+    }
+
+    private String getMarketPage(List<MarketEntry> marketEntries)
+    {
+        int startIndex = 0;
+        if(this.msg.length >= 2 && this.isNumeric(2)) startIndex = (this.getInt(2) - 1) * 20;
+        int endIndex = startIndex + 20;
+
+        StringBuilder page = new StringBuilder();
+        for(int i = startIndex; i < endIndex; i++) if(i < marketEntries.size()) page.append(marketEntries.get(i).getEntryLine()).append("\n");
+
+        return page.toString();
     }
 
     public static void addBotEntry()
@@ -241,77 +322,6 @@ public class CommandMarket extends Command
 
         val += new Random().nextInt(val / 4) * (new Random().nextInt(50) < 25 ? -1 : 1);
 
-        MarketEntry m = MarketEntry.create("BOT", "BOT", p.getUUID(), val);
-
-        marketEntries.add(m);
-    }
-
-    private static String getMarketPage(List<MarketEntry> list, int start)
-    {
-        StringBuilder mList = new StringBuilder();
-
-        for(int i = start * 20; i < start * 20 + 20; i++) if(i < list.size()) mList.append(list.get(i).getEntryLine()).append("\n");
-
-        return mList.toString();
-    }
-
-    public static class MarketEntry
-    {
-        public String marketID;
-        public String sellerID;
-        public String sellerName;
-        public String pokemonID;
-        public int price;
-        public Pokemon pokemon;
-
-        public static MarketEntry create(String sellerID, String sellerName, String pokemonID, int price)
-        {
-            String marketID = generateUUID();
-            Document marketData = new Document("marketID", marketID).append("sellerID", sellerID).append("sellerName", sellerName).append("pokemonID", pokemonID).append("price", price);
-            Mongo.MarketData.insertOne(marketData);
-
-            return build(marketID);
-        }
-
-        public static MarketEntry build(String marketID)
-        {
-            MarketEntry m = new MarketEntry();
-            m.marketID = marketID;
-
-            JSONObject marketJSON = getMarketJSON(marketID);
-            m.sellerID = marketJSON.getString("sellerID");
-            m.sellerName = marketJSON.getString("sellerName");
-            m.pokemonID = marketJSON.getString("pokemonID");
-            m.price = marketJSON.getInt("price");
-            m.pokemon = Pokemon.buildCore(m.pokemonID, -1);
-
-            return m;
-        }
-
-        private String getEntryLine()
-        {
-            if(this.pokemon == null) return "ERROR";
-
-            return "ID: " + this.marketID + " | Level " + this.pokemon.getLevel() + " " + this.pokemon.getName() + " | Price: " + this.price + " | Total IV: " + this.pokemon.getTotalIV();
-        }
-
-        public static boolean isIDValid(String marketID)
-        {
-            return marketEntries.stream().anyMatch(m -> m.marketID.equals(marketID));
-        }
-
-        public static JSONObject getMarketJSON(String marketID)
-        {
-            return new JSONObject(Mongo.MarketData.find(Filters.eq("marketID", marketID)).first().toJson());
-        }
-
-        private static String generateUUID()
-        {
-            String digits = "0123456789";
-            StringBuilder s = new StringBuilder();
-            for(int i = 0; i < 8; i++) s.append(digits.charAt(new Random().nextInt(digits.length())));
-            return s.toString();
-        }
-
+        MarketEntry.create("BOT", "BOT", p.getUUID(), val);
     }
 }

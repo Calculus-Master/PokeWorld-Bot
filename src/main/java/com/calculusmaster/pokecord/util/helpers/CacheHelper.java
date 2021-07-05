@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.util.helpers;
 
-import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
+import com.calculusmaster.pokecord.game.MarketEntry;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
@@ -13,11 +13,15 @@ import java.util.concurrent.TimeUnit;
 public class CacheHelper
 {
     //If true, pokemon list caching will be done the first time the player uses p!p, rather than all at the bot init (to lower load times)
-    public static final boolean DYNAMIC_CACHING_ACTIVE = false;
+    public static final boolean DYNAMIC_CACHING_ACTIVE = true;
 
     //Key: playerID     Value: Pokemon List
     public static final Map<String, List<String>> UUID_LISTS = new HashMap<>();
     public static final Map<String, List<Pokemon>> POKEMON_LISTS = new HashMap<>();
+
+    //Stored Data Type: MarketEntry
+    public static final List<MarketEntry> MARKET_ENTRIES = new ArrayList<>();
+
     //Key: playerID     Value: Team
     public static final Map<String, List<Pokemon>> TEAM_LISTS = new HashMap<>();
 
@@ -78,7 +82,17 @@ public class CacheHelper
 
         List<Pokemon> pokemon = POKEMON_LISTS.get(player);
         int index = UUID_LISTS.get(player).indexOf(UUID);
-        pokemon.set(index, Pokemon.buildCore(UUID, index + 1));
+
+        try { pokemon.set(index, Pokemon.buildCore(UUID, index + 1)); }
+        catch (NullPointerException e)
+        {
+            if(DYNAMIC_CACHING_ACTIVE) System.out.println("Update Pokemon failed (Dynamic Caching is Active!");
+            else
+            {
+                System.out.println("DYNAMIC CACHING IS NOT ACTIVE!");
+                e.printStackTrace();
+            }
+        }
 
         updateNumbers(player);
 
@@ -138,5 +152,42 @@ public class CacheHelper
         long finalTime = System.currentTimeMillis();
 
         System.out.println("Pokemon List Init: " + (finalTime - initialTime) + "ms!");
+    }
+
+    public static void initMarketEntries()
+    {
+        long i = System.currentTimeMillis();
+        List<String> IDs = new ArrayList<>();
+        Mongo.MarketData.find(Filters.exists("marketID")).forEach(d -> IDs.add(d.getString("marketID")));
+
+        if(IDs.size() == 0) return;
+
+        int split = 20;
+        List<List<String>> totalList = new ArrayList<>();
+
+        for (int j = 0; j < IDs.size(); j += split)
+        {
+            totalList.add(IDs.subList(j, Math.min(j + split, IDs.size())));
+        }
+
+        int threads = IDs.size() < split ? 1 : IDs.size() / split;
+
+        ExecutorService pool = Executors.newFixedThreadPool(threads);
+
+        for(List<String> l : totalList)
+        {
+            try {Thread.sleep(100);}
+            catch (Exception e) {System.out.println("Can't Sleep Thread!");}
+
+            pool.execute(() -> { for(String s : l) MARKET_ENTRIES.add(MarketEntry.build(s)); });
+        }
+
+        pool.shutdown();
+
+        try { pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS); }
+        catch (Exception e) { System.out.println("CommandMarket Init failed!"); }
+
+        long f = System.currentTimeMillis();
+        System.out.println((f - i) + "ms");
     }
 }

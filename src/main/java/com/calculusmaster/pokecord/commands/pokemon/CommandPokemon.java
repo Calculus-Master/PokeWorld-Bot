@@ -27,7 +27,8 @@ public class CommandPokemon extends Command
 
         if(!CacheHelper.POKEMON_LISTS.containsKey(this.player.getId()))
         {
-            event.getChannel().sendMessage(this.playerData.getMention() + " Initializing your Pokemon list (this may take a while)!").queue();
+            event.getChannel().sendMessage(this.playerData.getMention() + "Initializing your Pokemon list (this may take a while and will only happen once)!").queue();
+            event.getChannel().sendMessage(this.playerData.getMention() + "Your pokemon list has been initialized! Running command...").queue();
 
             CacheHelper.initialList(this.player.getId());
             CacheHelper.createPokemonList(this.player.getId());

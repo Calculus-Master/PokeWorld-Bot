@@ -282,8 +282,6 @@ public abstract class Command
                 .addAliases();
     }
 
-    protected CommandDispatcher<Object> dispatcher;
-
     protected MessageReceivedEvent event;
     protected String[] msg;
     protected List<Member> mentions;
@@ -301,8 +299,6 @@ public abstract class Command
 
     public Command(MessageReceivedEvent event, String[] msg)
     {
-        this.dispatcher = new CommandDispatcher<>();
-
         this.event = event;
         this.msg = msg;
         this.mentions = event.getMessage().getMentionedMembers();
