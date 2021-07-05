@@ -84,7 +84,12 @@ public class CommandTrade extends Command
             }
             else if(confirm)
             {
-                trade.confirm(this.player.getId());
+                if(!trade.offer(this.player.getId()).isValid())
+                {
+                    trade.offer(this.player.getId()).clear();
+                    this.sendMsg("Your Trade Offer is invalid! It has been reset!");
+                }
+                else trade.confirm(this.player.getId());
 
                 this.embed = trade.getTradeEmbed();
 

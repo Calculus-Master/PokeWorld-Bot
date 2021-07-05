@@ -24,11 +24,46 @@ public class TradeOffer
     {
         this.player = new PlayerDataQuery(playerID);
 
+        this.clear();
+    }
+
+    public void clear()
+    {
         this.credits = 0;
         this.redeems = 0;
         this.pokemon = new ArrayList<>();
         this.tms = new ArrayList<>();
         this.trs = new ArrayList<>();
+    }
+
+    public boolean isValid()
+    {
+        if(this.credits > 0)
+        {
+            if(this.player.getCredits() < this.credits) return false;
+        }
+
+        if(this.redeems > 0)
+        {
+            if(this.player.getRedeems() < this.redeems) return false;
+        }
+
+        if(!this.pokemon.isEmpty())
+        {
+            for(String s : this.pokemon) if(!this.player.getPokemonList().contains(s)) return false;
+        }
+
+        if(!this.tms.isEmpty())
+        {
+            for(int i : this.tms) if(!this.player.getTMList().contains(TM.get(i).toString())) return false;
+        }
+
+        if(!this.trs.isEmpty())
+        {
+            for(int i : this.trs) if(!this.player.getTRList().contains(TR.get(i).toString())) return false;
+        }
+
+        return true;
     }
 
     public void transfer(PlayerDataQuery receiver)
