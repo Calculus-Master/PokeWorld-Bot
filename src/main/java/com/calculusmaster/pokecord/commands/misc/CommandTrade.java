@@ -2,12 +2,17 @@ package com.calculusmaster.pokecord.commands.misc;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
-import com.calculusmaster.pokecord.game.Achievements;
-import com.calculusmaster.pokecord.game.Trade;
+import com.calculusmaster.pokecord.game.enums.items.TM;
+import com.calculusmaster.pokecord.game.enums.items.TR;
+import com.calculusmaster.pokecord.game.trade.Trade;
+import com.calculusmaster.pokecord.game.trade.TradeHelper;
+import com.calculusmaster.pokecord.game.trade.elements.TradeOffer;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class CommandTrade extends Command
 {
@@ -22,126 +27,209 @@ public class CommandTrade extends Command
         if(this.msg.length == 1)
         {
             this.embed.setDescription(CommandInvalid.getShort());
+            return this;
         }
-        else if(this.msg.length == 2)
+
+        if(!TradeHelper.isInTrade(this.player.getId()) && this.mentions.size() > 0)
         {
-            if(Trade.isInTrade(this.player.getId()) && this.msg[1].equals("accept"))
-            {
-                Trade t = Trade.getInstance(this.player.getId());
-                t.setStatus(Trade.TradeStatus.TRADING);
+            String otherID = this.mentions.get(0).getId();
+            String otherName = new PlayerDataQuery(otherID).getUsername();
 
-                this.embed = t.getTradeEmbed();
+            if(TradeHelper.isInTrade(otherID))
+            {
+                this.sendMsg(otherName + " is already in a trade!");
             }
-            else if(Trade.isInTrade(this.player.getId()) && this.msg[1].equals("deny"))
+            else if(otherID.equals(this.player.getId()))
             {
-                Trade.remove(this.player.getId());
-                this.embed.setDescription(this.playerData.getUsername() + " has cancelled the trade request!");
-            }
-            else if(Trade.isInTrade(this.player.getId()) && this.msg[1].equals("confirm"))
-            {
-                Trade t = Trade.getInstance(this.player.getId());
-                t.confirmTrade(this.player.getId());
-                //this.event.getChannel().editMessageById(t.getMessageID(), t.getTradeEmbed().build()).queue();
-                this.embed = t.getTradeEmbed();
-
-                if(t.isComplete())
-                {
-                    t.onComplete();
-                    this.embed.setDescription("Trade complete!");
-
-                    Achievements.grant(t.getPlayers().get(0), Achievements.COMPLETED_FIRST_TRADE, this.event);
-                    Achievements.grant(t.getPlayers().get(1), Achievements.COMPLETED_FIRST_TRADE, this.event);
-
-                    new PlayerDataQuery(t.getPlayers().get(0)).addPokePassExp(400, this.event);
-                    new PlayerDataQuery(t.getPlayers().get(0)).addPokePassExp(400, this.event);
-                }
-            }
-            else if(this.mentions.size() > 0)
-            {
-                String otherID = this.mentions.get(0).getId();
-                if(!Trade.isInTrade(otherID) && !this.player.getId().equals(otherID))
-                {
-                    Trade.initiate(this.player.getId(), otherID, this.event.getMessageId());
-                    this.embed.setDescription(this.player.getName() + " has requested a trade!");
-                }
-                else if(this.player.getId().equals(otherID))
-                {
-                    this.embed.setDescription("Don't trade with yourself.");
-                }
-                else this.embed.setDescription(new PlayerDataQuery(otherID).getUsername() + " is already in a trade!");
+                this.sendMsg("You can't trade with yourself!");
             }
             else
             {
-                this.embed.setDescription(CommandInvalid.getShort());
+                Trade.create(this.player.getId(), otherID);
+
+                this.embed = null;
+                this.event.getChannel().sendMessage("<@" + otherID + ">: " + this.player.getName() + " requested a trade!").queue();
             }
         }
-        else if(Trade.isInTrade(this.player.getId()) && this.msg.length >= 4)
+        else if(TradeHelper.isInTrade(this.player.getId()) && this.msg.length >= 2)
         {
-            boolean hasAddRemove = this.msg[2].equals("add") || this.msg[2].equals("remove");
-            Trade t = Trade.getInstance(this.player.getId());
+            boolean accept = Arrays.asList("accept").contains(this.msg[1]);
+            boolean deny = Arrays.asList("deny").contains(this.msg[1]);
+            boolean confirm = Arrays.asList("confirm").contains(this.msg[1]);
 
-            if(t.getStatus().equals(Trade.TradeStatus.TRADING) && hasAddRemove && isAllNumeric(this.msg))
+            boolean changeCredits = Arrays.asList("credits", "c").contains(this.msg[1]);
+            boolean changeRedeems = Arrays.asList("redeems", "redeem", "r").contains(this.msg[1]);
+            boolean changePokemon = Arrays.asList("pokemon", "poke", "p").contains(this.msg[1]);
+            boolean changeTMs = Arrays.asList("tms", "tm").contains(this.msg[1]);
+            boolean changeTRs = Arrays.asList("trs", "tr").contains(this.msg[1]);
+
+            boolean editOffer = (changeCredits || changeRedeems || changePokemon || changeTMs || changeTRs)
+                    && this.msg.length >= 4 && (this.msg[2].equals("add") || this.msg[2].equals("remove"));
+
+            Trade trade = TradeHelper.instance(this.player.getId());
+
+            if(accept)
             {
-                if(this.msg[1].equals("credits") || this.msg[1].equals("c"))
-                {
-                    if(this.msg[2].equals("add"))
-                    {
-                        if(this.playerData.getCredits() >= this.getInt(3)) t.addCredits(this.player.getId(), Integer.parseInt(this.msg[3]));
-                        else
-                        {
-                            this.event.getChannel().sendMessage(this.playerData.getMention() + ": You don't have that many credits!").queue();
-                            this.embed = null;
-                            return this;
-                        }
-                    }
-                    else if(this.msg[2].equals("remove")) t.removeCredits(this.player.getId(), Integer.parseInt(this.msg[3]));
+                trade.setStatus(TradeHelper.TradeStatus.TRADING);
 
-                    this.embed = t.getTradeEmbed();
-                    //this.event.getChannel().editMessageById(t.getMessageID(), t.getTradeEmbed().build()).queue();
-                }
-                else if(this.msg[1].equals("pokemon") || this.msg[1].equals("p"))
-                {
-                    int[] rest = this.getPokemonNumbers(this.msg);
-                    //System.out.println(Arrays.toString(rest));
-                    if(this.msg[2].equals("add")) t.addPokemon(this.player.getId(), rest);
-                    else if(this.msg[2].equals("remove")) t.removePokemon(this.player.getId(), rest);
+                this.embed = trade.getTradeEmbed();
+            }
+            else if(deny)
+            {
+                String requestID = trade.getPlayers()[0].ID;
+                TradeHelper.delete(this.player.getId());
 
-                    this.embed = t.getTradeEmbed();
-                    //this.event.getChannel().editMessageById(t.getMessageID(), t.getTradeEmbed().build()).queue();
-                }
-                else if(this.msg[1].equals("redeems") || this.msg[1].equals("r"))
-                {
-                    if(this.msg[2].equals("add"))
-                    {
-                        if(this.playerData.getRedeems() >= this.getInt(3)) t.addRedeems(this.player.getId(), Integer.parseInt(this.msg[3]));
-                        else
-                        {
-                            this.event.getChannel().sendMessage(this.playerData.getMention() + ": You don't have that many redeems!").queue();
-                            this.embed = null;
-                            return this;
-                        }
-                    }
-                    else if(this.msg[2].equals("remove")) t.removeRedeems(this.player.getId(), Integer.parseInt(this.msg[3]));
+                this.embed = null;
+                this.event.getChannel().sendMessage("<@" + requestID + ">: " + this.player.getName() + " denied the trade request!").queue();
+            }
+            else if(confirm)
+            {
+                trade.confirm(this.player.getId());
 
-                    this.embed = t.getTradeEmbed();
+                this.embed = trade.getTradeEmbed();
+
+                if(trade.isComplete())
+                {
+                    trade.onComplete();
+
+                    String mention1 = trade.getPlayers()[0].data.getMention();
+                    String mention2 = trade.getPlayers()[1].data.getMention();
+
+                    this.event.getChannel().sendMessage(mention1 + " and " + mention2 + ": Trade Complete!").queue();
+
+                    TradeHelper.delete(this.player.getId());
                 }
             }
-            else this.embed.setDescription(CommandInvalid.getShort());
+            else if(editOffer)
+            {
+                //p!trade <type> <add:remove> <args>
+                boolean add = this.msg[2].equals("add");
+                boolean remove = this.msg[2].equals("remove");
+
+                TradeOffer offer = trade.offer(this.player.getId());
+                boolean success = false;
+
+                if(changeCredits && this.isNumeric(3))
+                {
+                    if(add)
+                    {
+                        if(this.playerData.getCredits() > (this.getInt(3) + offer.credits))
+                        {
+                            success = true;
+
+                            offer.add(TradeHelper.OfferType.CREDITS, this.getInt(3));
+                        }
+                    }
+                    else if(remove)
+                    {
+                        if(this.getInt(3) <= offer.credits)
+                        {
+                            success = true;
+
+                            offer.remove(TradeHelper.OfferType.CREDITS, this.getInt(3));
+                        }
+                    }
+                }
+                else if(changeRedeems && this.isNumeric(3))
+                {
+                    if(add)
+                    {
+                        if(this.playerData.getRedeems() > (this.getInt(3) + offer.redeems))
+                        {
+                            success = true;
+
+                            offer.add(TradeHelper.OfferType.REDEEMS, this.getInt(3));
+                        }
+                    }
+                    else if(remove)
+                    {
+                        if(this.getInt(3) <= offer.redeems)
+                        {
+                            success = true;
+
+                            offer.remove(TradeHelper.OfferType.REDEEMS, this.getInt(3));
+                        }
+                    }
+                }
+                else if(changePokemon)
+                {
+                    List<Integer> pokemon = new ArrayList<>();
+                    int listSize = this.playerData.getPokemonList().size();
+
+                    for(int i = 3; i < this.msg.length; i++)
+                    {
+                        if(this.isNumeric(i) && listSize >= this.getInt(i))
+                        {
+                            pokemon.add(this.getInt(i));
+                        }
+                    }
+
+                    String id;
+                    for(int i : pokemon)
+                    {
+                        id = this.playerData.getPokemonList().get(i - 1);
+
+                        if(add) offer.add(TradeHelper.OfferType.POKEMON, id);
+                        else if(remove) offer.remove(TradeHelper.OfferType.POKEMON, id);
+                    }
+
+                    success = true;
+                }
+                else if(changeTMs)
+                {
+                    List<Integer> TMs = new ArrayList<>();
+
+                    for(int i = 3; i < this.msg.length; i++)
+                    {
+                        this.msg[i] = this.msg[i].replaceAll("tm", "");
+
+                        if(this.isNumeric(i) && this.getInt(i) >= 1 && this.getInt(i) <= 100 && this.playerData.getTMList().contains(TM.get(this.getInt(i)).toString()))
+                        {
+                            TMs.add(this.getInt(i));
+                        }
+                    }
+
+                    for(int i : TMs)
+                    {
+                        if(add) offer.add(TradeHelper.OfferType.TM, i);
+                        else if(remove) offer.remove(TradeHelper.OfferType.TM, i);
+                    }
+
+                    success = true;
+                }
+                else if(changeTRs)
+                {
+                    List<Integer> TRs = new ArrayList<>();
+
+                    for(int i = 3; i < this.msg.length; i++)
+                    {
+                        this.msg[i] = this.msg[i].replaceAll("tr", "");
+
+                        if(this.isNumeric(i) && this.getInt(i) >= 0 && this.getInt(i) <= 99 && this.playerData.getTRList().contains(TR.get(this.getInt(i)).toString()))
+                        {
+                            TRs.add(this.getInt(i));
+                        }
+                    }
+
+                    for(int i : TRs)
+                    {
+                        if(add) offer.add(TradeHelper.OfferType.TR, i);
+                        else if(remove) offer.remove(TradeHelper.OfferType.TR, i);
+                    }
+
+                    success = true;
+                }
+
+                if(success)
+                {
+                    this.embed = trade.getTradeEmbed();
+
+                    trade.onOfferChanged();
+                }
+                else this.embed.setDescription(CommandInvalid.getShort());
+            }
         }
+
         return this;
-    }
-
-    private boolean isAllNumeric(String[] msg)
-    {
-        String[] strs = new String[msg.length - 3];
-        for(int i = 3; i < msg.length; i++) strs[i - 3] = msg[i];
-        return Arrays.stream(strs).map(String::chars).filter(s -> s.allMatch(Character::isDigit)).count() == strs.length;
-    }
-
-    private int[] getPokemonNumbers(String[] msg)
-    {
-        int[] nums = new int[msg.length - 3];
-        for(int i = 3; i < msg.length; i++) nums[i - 3] = Integer.parseInt(msg[i]);
-        return nums;
     }
 }

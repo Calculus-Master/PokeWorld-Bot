@@ -12,6 +12,9 @@ import java.util.concurrent.TimeUnit;
 
 public class CacheHelper
 {
+    //If true, pokemon list caching will be done the first time the player uses p!p, rather than all at the bot init (to lower load times)
+    public static final boolean DYNAMIC_CACHING_ACTIVE = true;
+
     //Key: playerID     Value: Pokemon List
     public static final Map<String, List<String>> UUID_LISTS = new HashMap<>();
     public static final Map<String, List<Pokemon>> POKEMON_LISTS = new HashMap<>();
@@ -87,7 +90,7 @@ public class CacheHelper
         for(Pokemon p : POKEMON_LISTS.get(player)) p.setNumber(UUID_LISTS.get(player).indexOf(p.getUUID()) + 1);
     }
 
-    private static void initialList(String player)
+    public static void initialList(String player)
     {
         POKEMON_LISTS.put(player, new ArrayList<>());
         UUID_LISTS.put(player, new ArrayList<>());
@@ -124,7 +127,7 @@ public class CacheHelper
 
         for(String p : players)
         {
-            pool.execute(() -> createPokemonList(p));
+            if(!DYNAMIC_CACHING_ACTIVE) pool.execute(() -> createPokemonList(p));
         }
 
         pool.shutdown();

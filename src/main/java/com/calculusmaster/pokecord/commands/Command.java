@@ -302,7 +302,6 @@ public abstract class Command
     public Command(MessageReceivedEvent event, String[] msg)
     {
         this.dispatcher = new CommandDispatcher<>();
-        this.createCommandDispatcher();
 
         this.event = event;
         this.msg = msg;

@@ -23,6 +23,7 @@ public class WeatherEffect extends MoveEffect
             case RAIN -> "summoned a Rain Shower!";
             case HARSH_SUNLIGHT -> "summoned Harsh Sunlight!";
             case CLEAR -> "cleared the weather!";
+            default -> "";
         };
     }
 }

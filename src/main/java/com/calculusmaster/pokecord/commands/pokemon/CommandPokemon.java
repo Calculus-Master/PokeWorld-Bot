@@ -24,6 +24,15 @@ public class CommandPokemon extends Command
     {
         super(event, msg);
         //this.buildList();
+
+        if(!CacheHelper.POKEMON_LISTS.containsKey(this.player.getId()))
+        {
+            event.getChannel().sendMessage(this.playerData.getMention() + " Initializing your Pokemon list (this may take a while)!").queue();
+
+            CacheHelper.initialList(this.player.getId());
+            CacheHelper.createPokemonList(this.player.getId());
+        }
+
         this.pokemon = new TreeList<>(CacheHelper.POKEMON_LISTS.get(this.player.getId()));
         this.team = List.copyOf(this.playerData.getTeam());
         this.favorites = List.copyOf(this.playerData.getFavorites());
