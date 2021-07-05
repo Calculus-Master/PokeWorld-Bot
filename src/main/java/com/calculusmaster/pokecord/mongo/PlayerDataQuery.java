@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.mongo;
 
+import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.PokePass;
 import com.calculusmaster.pokecord.game.Pokemon;
@@ -63,7 +64,7 @@ public class PlayerDataQuery extends MongoQuery
 
     public void directMessage(String msg)
     {
-        User.fromId(this.getID()).openPrivateChannel().flatMap(channel -> channel.sendMessage(msg)).queue();
+        Pokecord.BOT_JDA.openPrivateChannelById(this.getID()).flatMap(channel -> channel.sendMessage(msg)).queue();
     }
 
     //key: "playerID"
