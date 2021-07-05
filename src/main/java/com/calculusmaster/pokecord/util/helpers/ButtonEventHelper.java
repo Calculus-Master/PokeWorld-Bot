@@ -2,12 +2,15 @@ package com.calculusmaster.pokecord.util.helpers;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.components.Button;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ButtonEventHelper extends ListenerAdapter
 {
@@ -36,7 +39,15 @@ public class ButtonEventHelper extends ListenerAdapter
                 else
                 {
                     d.submitMove(playerID, moveNum, 'm');
+
+                    event.editButton(Button.success(DUEL_MOVE_BUTTONS.get(moveNum - 1), "Move " + moveNum)).queue();
                     event.deferEdit().queue();
+
+                    event.getChannel()
+                            .sendMessage("<@" + playerID + ">: Move Submitted!")
+                            .delay(15, TimeUnit.SECONDS)
+                            .flatMap(Message::delete)
+                            .queue();
 
                     d.checkReady();
                 }
