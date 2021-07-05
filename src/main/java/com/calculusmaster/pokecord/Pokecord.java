@@ -23,6 +23,8 @@ import javax.security.auth.login.LoginException;
 
 public class Pokecord
 {
+    public static JDA BOT_JDA;
+
     public static void main(String[] args) throws InterruptedException, LoginException
     {
         //Disable MongoDB Logging
@@ -70,12 +72,12 @@ public class Pokecord
         bot.setActivity(Activity.playing("Pokemon"));
         bot.addEventListeners(new Listener());
 
-        JDA botJDA = bot.build().awaitReady();
+        BOT_JDA = bot.build().awaitReady();
 
         end = System.currentTimeMillis();
         System.out.println("Loading finished in " + (end - start) + "ms!");
 
-        for(Guild g : botJDA.getGuilds())
+        for(Guild g : BOT_JDA.getGuilds())
         {
             Thread.sleep(1000);
             SpawnEventHelper.start(g);
