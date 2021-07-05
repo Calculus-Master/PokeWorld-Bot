@@ -62,7 +62,7 @@ public class GymDuel extends TrainerDuel
             embed.setDescription("You were defeated by " + leader.info.name + "!");
         }
 
-        this.event.getChannel().sendMessage(embed.build()).queue();
+        this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
         DuelHelper.delete(this.players[0].ID);
     }
 

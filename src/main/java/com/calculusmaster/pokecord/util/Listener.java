@@ -1,6 +1,5 @@
 package com.calculusmaster.pokecord.util;
 
-import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.config.CommandPrefix;
@@ -10,19 +9,19 @@ import com.calculusmaster.pokecord.commands.economy.*;
 import com.calculusmaster.pokecord.commands.misc.*;
 import com.calculusmaster.pokecord.commands.moves.*;
 import com.calculusmaster.pokecord.commands.pokemon.*;
-import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
-import com.calculusmaster.pokecord.util.helpers.SpawnEventHelper;
-import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 public class Listener extends ListenerAdapter
 {
@@ -244,7 +243,7 @@ public class Listener extends ListenerAdapter
 
             if(!(c instanceof CommandInvalid) && r.nextInt(5000) < 1) redeemEvent(event);
 
-            if(!c.isNull()) event.getChannel().sendMessage(c.getResponseEmbed()).queue();
+            if(!c.isNull()) event.getChannel().sendMessageEmbeds(c.getResponseEmbed()).queue();
         }
 
         if(r.nextInt(10) <= 3) Listener.expEvent(event);

@@ -17,10 +17,9 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 import static com.calculusmaster.pokecord.game.duel.DuelHelper.*;
 
@@ -1205,11 +1204,11 @@ public class Duel
 
         try
         {
-            this.event.getChannel().sendFile(this.getImage(), "duel.png").embed(embed.build()).queue();
+            this.event.getChannel().sendFile(this.getImage(), "duel.png").setEmbeds(embed.build()).queue();
         }
         catch (Exception e)
         {
-            this.event.getChannel().sendMessage(embed.build()).queue();
+            this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
             e.printStackTrace();
         }
     }
@@ -1222,7 +1221,7 @@ public class Duel
 
         embed.setDescription(this.getWinner().data.getUsername() + " has won!\nThey earned " + c + " credits!");
 
-        this.event.getChannel().sendMessage(embed.build()).queue();
+        this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
 
         Achievements.grant(this.getWinner().ID, Achievements.WON_FIRST_PVP_DUEL, this.event);
 

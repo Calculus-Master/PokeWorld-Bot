@@ -104,8 +104,8 @@ public class SpawnEventHelper
 
             byte[] bytes = out.toByteArray();
 
-            channel.sendFile(bytes, "pkmn.png").embed(embed.build()).queue();
-            if(g.getId().equals(PrivateInfo.SERVER_ID_MAIN)) g.getTextChannelById("843996103639695360").sendFile(bytes, "pkmn.png").embed(embed.build()).queue();
+            channel.sendFile(bytes, "pkmn.png").setEmbeds(embed.build()).queue();
+            if(g.getId().equals(PrivateInfo.SERVER_ID_MAIN)) g.getTextChannelById("843996103639695360").sendFile(bytes, "pkmn.png").setEmbeds(embed.build()).queue();
         }
         catch (Exception e)
         {

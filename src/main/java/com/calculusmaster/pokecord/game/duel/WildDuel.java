@@ -136,7 +136,7 @@ public class WildDuel extends Duel
             embed.setDescription("You lost! Your " + this.players[0].active.getName() + " didn't earn any EVs...");
         }
 
-        this.event.getChannel().sendMessage(embed.build()).queue();
+        this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
         DuelHelper.delete(this.players[0].ID);
     }
 
