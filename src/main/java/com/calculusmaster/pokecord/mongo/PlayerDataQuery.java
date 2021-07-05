@@ -61,6 +61,11 @@ public class PlayerDataQuery extends MongoQuery
         this.document = Mongo.PlayerData.find(this.query).first();
     }
 
+    public void directMessage(String msg)
+    {
+        User.fromId(this.getID()).openPrivateChannel().flatMap(channel -> channel.sendMessage(msg)).queue();
+    }
+
     //key: "playerID"
     public String getID()
     {

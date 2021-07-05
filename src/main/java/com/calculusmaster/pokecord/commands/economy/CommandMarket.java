@@ -50,8 +50,15 @@ public class CommandMarket extends Command
             if(buy && m.price <= this.playerData.getCredits())
             {
                 this.playerData.changeCredits(-1 * m.price);
-                if(!m.sellerID.equals("BOT")) new PlayerDataQuery(m.sellerID).changeCredits(m.price);
                 this.playerData.addPokemon(m.pokemonID);
+
+                if(!m.sellerID.equals("BOT"))
+                {
+                    PlayerDataQuery seller = new PlayerDataQuery(m.sellerID);
+
+                    seller.changeCredits(m.price);
+                    seller.directMessage("Your `Level " + m.pokemon.getLevel() + " " + m.pokemon.getName() + "` was sold from your Market Listing to " + this.playerData.getUsername() + " for " + m.price + " credits!");
+                }
 
                 Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_POKEMON_MARKET, this.event);
 

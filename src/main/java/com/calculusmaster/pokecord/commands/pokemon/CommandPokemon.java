@@ -25,7 +25,7 @@ public class CommandPokemon extends Command
         super(event, msg);
         //this.buildList();
 
-        if(!CacheHelper.POKEMON_LISTS.containsKey(this.player.getId()))
+        if(CacheHelper.DYNAMIC_CACHING_ACTIVE && (!CacheHelper.POKEMON_LISTS.containsKey(this.player.getId()) || CacheHelper.UUID_LISTS.get(this.player.getId()).size() != this.playerData.getPokemonList().size()))
         {
             event.getChannel().sendMessage(this.playerData.getMention() + "Initializing your Pokemon list (this may take a while and will only happen once)!").queue();
             event.getChannel().sendMessage(this.playerData.getMention() + "Your pokemon list has been initialized! Running command...").queue();
@@ -43,7 +43,6 @@ public class CommandPokemon extends Command
     public Command runCommand()
     {
         List<String> msg = Arrays.asList(this.msg);
-        //Stream<Pokemon> stream = msg.size() == 1 ? null : this.pokemon.stream();
         Stream<Pokemon> stream = this.pokemon.stream();
 
         if(msg.contains("--name") && msg.indexOf("--name") + 1 < msg.size())
