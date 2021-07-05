@@ -242,7 +242,7 @@ public class Listener extends ListenerAdapter
             }
             else c = new CommandInvalid(event, msg).runCommand();
 
-            if(!(c instanceof CommandInvalid)) redeemEvent(event);
+            if(!(c instanceof CommandInvalid) && r.nextInt(5000) < 1) redeemEvent(event);
 
             if(!c.isNull()) event.getChannel().sendMessage(c.getResponseEmbed()).queue();
         }
@@ -252,13 +252,10 @@ public class Listener extends ListenerAdapter
 
     private static void redeemEvent(MessageReceivedEvent event)
     {
-        if(new Random().nextInt(5000) < 1)
-        {
-            PlayerDataQuery p = new PlayerDataQuery(event.getAuthor().getId());
-            p.changeRedeems(1);
+        PlayerDataQuery p = new PlayerDataQuery(event.getAuthor().getId());
+        p.changeRedeems(1);
 
-            event.getChannel().sendMessage(p.getMention() + ": You earned a Redeem!").queue();
-        }
+        event.getChannel().sendMessage(p.getMention() + ": You earned a Redeem!").queue();
     }
 
     private static void expEvent(MessageReceivedEvent event)

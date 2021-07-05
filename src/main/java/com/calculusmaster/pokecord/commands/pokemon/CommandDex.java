@@ -121,9 +121,7 @@ public class CommandDex extends Command
 
     private String getPokemonName()
     {
-        StringBuilder sb = new StringBuilder();
-        for(int i = 1; i < this.msg.length; i++) sb.append(this.msg[i] + " ");
-        return sb.toString().replaceAll("shiny", "").replaceAll("gigantamax", "").trim();
+        return this.getMultiWordContent(1).replaceAll("shiny", "").replaceAll("gigantamax", "").trim();
     }
 
     private String getJSONArrayFormatted(JSONArray arr)

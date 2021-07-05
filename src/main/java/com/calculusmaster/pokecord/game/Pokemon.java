@@ -1042,6 +1042,12 @@ public class Pokemon
         for(int i = 0; i < 6; i++) this.IV.put(Stat.values()[i], new Random().nextInt(32));
     }
 
+    public void setIVs(int min)
+    {
+        do { this.setIVs(); }
+        while(this.getTotalIVRounded() < min);
+    }
+
     public void setEVs()
     {
         for(int i = 0; i < 6; i++) this.EV.put(Stat.values()[i], 0);

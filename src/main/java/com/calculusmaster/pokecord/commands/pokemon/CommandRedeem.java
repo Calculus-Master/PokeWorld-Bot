@@ -30,11 +30,7 @@ public class CommandRedeem extends Command
 
             Pokemon p = Pokemon.create(this.getPokemon());
             p.setLevel(new Random().nextInt(100) + 1);
-
-            while(p.getTotalIVRounded() <= 45)
-            {
-                p.setIVs();
-            }
+            p.setIVs(45);
 
             Pokemon.uploadPokemon(p);
             this.playerData.addPokemon(p.getUUID());
@@ -52,9 +48,6 @@ public class CommandRedeem extends Command
 
     private String getPokemon()
     {
-        StringBuilder sb = new StringBuilder();
-        for(int i = 1; i < this.msg.length; i++) sb.append(this.msg[i]).append(" ");
-
-        return Global.normalCase(sb.toString().trim());
+        return Global.normalCase(this.getMultiWordContent(1));
     }
 }

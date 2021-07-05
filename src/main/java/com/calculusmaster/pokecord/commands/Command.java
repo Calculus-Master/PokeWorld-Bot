@@ -352,6 +352,14 @@ public abstract class Command
         this.event.getChannel().sendMessage(this.playerData.getMention() + ": " + msg).queue();
     }
 
+    protected String getMultiWordContent(int start)
+    {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 1; i < this.msg.length; i++) sb.append(this.msg[i]).append(" ");
+
+        return sb.toString().trim();
+    }
+
     //Embed-Related
 
     protected void setAuthor()

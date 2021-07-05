@@ -90,8 +90,6 @@ public class CommandCatch extends Command
 
     private String getPokemon()
     {
-        StringBuilder sb = new StringBuilder();
-        for(int i = 1; i < this.msg.length; i++) sb.append(this.msg[i]).append(" ");
-        return Global.normalCase(sb.toString().trim());
+        return Global.normalCase(this.getMultiWordContent(1));
     }
 }

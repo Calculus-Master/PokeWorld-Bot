@@ -25,8 +25,7 @@ public class PokemonReward extends TierReward
     {
         Pokemon p = Pokemon.create(this.names.get(new Random().nextInt(this.names.size())));
         p.setLevel(this.level);
-
-        while(p.getTotalIVRounded() < this.minIV) p.setIVs();
+        p.setIVs(this.minIV);
 
         return p;
     }

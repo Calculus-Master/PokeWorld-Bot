@@ -38,8 +38,7 @@ public class CommandActivate extends Command
            if(item.equals(PokeItem.IV_REROLLER))
            {
                double minIV = s.getTotalIVRounded() - (s.getTotalIVRounded() / 2);
-               do { s.setIVs(); }
-               while (s.getTotalIVRounded() < minIV);
+               s.setIVs((int)minIV);
 
                Pokemon.uploadPokemon(s);
 

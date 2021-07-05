@@ -35,7 +35,7 @@ public class CommandDev extends Command
                 String spawn;
                 if (this.msg[2].equals("random")) spawn = PokemonRarity.getSpawn();
                 else if (this.msg[2].equals("legendary")) spawn = PokemonRarity.getLegendarySpawn();
-                else spawn = this.getMultiWordString(2);
+                else spawn = this.getMultiWordContent(2);
                 SpawnEventHelper.forceSpawn(this.server, spawn);
             }
             case "deletebotmarket" -> {
@@ -56,12 +56,5 @@ public class CommandDev extends Command
 
         this.sendMsg("Successfully ran Developer Command!");
         return this;
-    }
-
-    private String getMultiWordString(int start)
-    {
-        StringBuilder sb = new StringBuilder();
-        for(int i = start; i < this.msg.length; i++) sb.append(this.msg[i]).append(" ");
-        return sb.toString().trim();
     }
 }
