@@ -64,7 +64,7 @@ public class CommandTrade extends Command
             boolean changeTRs = Arrays.asList("trs", "tr").contains(this.msg[1]);
 
             boolean editOffer = (changeCredits || changeRedeems || changePokemon || changeTMs || changeTRs)
-                    && this.msg.length >= 4 && (this.msg[2].equals("add") || this.msg[2].equals("remove"));
+                    && this.msg.length >= 3 && (this.msg[2].equals("add") || this.msg[2].equals("remove"));
 
             Trade trade = TradeHelper.instance(this.player.getId());
 
@@ -110,11 +110,25 @@ public class CommandTrade extends Command
                 //p!trade <type> <add:remove> <args>
                 boolean add = this.msg[2].equals("add");
                 boolean remove = this.msg[2].equals("remove");
+                boolean clear = this.msg[2].equals("clear");
 
                 TradeOffer offer = trade.offer(this.player.getId());
                 boolean success = false;
 
-                if(changeCredits && this.isNumeric(3))
+                if(this.msg.length == 3)
+                {
+                    if(clear)
+                    {
+                        if(changeCredits) offer.clear(TradeHelper.OfferType.CREDITS);
+                        if(changeRedeems) offer.clear(TradeHelper.OfferType.REDEEMS);
+                        if(changePokemon) offer.clear(TradeHelper.OfferType.POKEMON);
+                        if(changeTMs) offer.clear(TradeHelper.OfferType.TM);
+                        if(changeTRs) offer.clear(TradeHelper.OfferType.TR);
+
+                        success = true;
+                    }
+                }
+                else if(changeCredits && this.isNumeric(3))
                 {
                     if(add)
                     {

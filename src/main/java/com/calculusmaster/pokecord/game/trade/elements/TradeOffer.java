@@ -29,11 +29,19 @@ public class TradeOffer
 
     public void clear()
     {
-        this.credits = 0;
-        this.redeems = 0;
-        this.pokemon = new ArrayList<>();
-        this.tms = new ArrayList<>();
-        this.trs = new ArrayList<>();
+        for(TradeHelper.OfferType t : TradeHelper.OfferType.values()) this.clear(t);
+    }
+
+    public void clear(TradeHelper.OfferType type)
+    {
+        switch(type)
+        {
+            case CREDITS -> this.credits = 0;
+            case REDEEMS -> this.redeems = 0;
+            case POKEMON -> this.pokemon = new ArrayList<>();
+            case TM -> this.tms = new ArrayList<>();
+            case TR -> this.trs = new ArrayList<>();
+        }
     }
 
     public boolean isValid()
