@@ -12,6 +12,7 @@ import com.calculusmaster.pokecord.util.helpers.ButtonEventHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.Button;
 
 import javax.imageio.ImageIO;
@@ -1215,12 +1216,18 @@ public class Duel
             else this.event.getChannel()
                     .sendFile(this.getImage(), "duel.png")
                     .setEmbeds(embed.build())
-                    .flatMap(m -> m.reply("Move Selection:")
-                            .setActionRow(
-                                    Button.primary(ButtonEventHelper.DUEL_MOVE_BUTTONS.get(0), "Move 1"),
-                                    Button.primary(ButtonEventHelper.DUEL_MOVE_BUTTONS.get(1), "Move 2"),
-                                    Button.primary(ButtonEventHelper.DUEL_MOVE_BUTTONS.get(2), "Move 3"),
-                                    Button.primary(ButtonEventHelper.DUEL_MOVE_BUTTONS.get(3), "Move 4")
+                    .flatMap(m -> m.reply("Turn Action Selection:")
+                            .setActionRows(
+                                    ActionRow.of(
+                                            Button.primary(ButtonEventHelper.DUEL_MOVE_BUTTONS.get(0), "Move 1"),
+                                            Button.primary(ButtonEventHelper.DUEL_MOVE_BUTTONS.get(1), "Move 2"),
+                                            Button.primary(ButtonEventHelper.DUEL_MOVE_BUTTONS.get(2), "Move 3"),
+                                            Button.primary(ButtonEventHelper.DUEL_MOVE_BUTTONS.get(3), "Move 4")
+                                    ),
+                                    ActionRow.of(
+                                            Button.primary(ButtonEventHelper.DUEL_ZMOVE_BUTTON, "Z-Move"),
+                                            Button.primary(ButtonEventHelper.DUEL_DYNAMAX_BUTTON, "Dynamax")
+                                    )
                             ))
                     .delay(30, TimeUnit.SECONDS)
                     .flatMap(Message::delete)
