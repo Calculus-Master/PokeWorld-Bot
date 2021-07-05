@@ -236,44 +236,15 @@ public class Listener extends ListenerAdapter
             {
                 c = new CommandForm(event, msg).runCommand();
             }
-            //Debug Commands
-            else if(player.getId().equals("309135641453527040"))
+            else if(Command.DEV.contains(msg[0]))
             {
-                if(msg[0].equals("forcespawn"))
-                {
-                    String spawn;
-
-                    if(msg[1].equals("random")) spawn = PokemonRarity.getSpawn();
-                    else if(msg[1].equals("legendary")) spawn = PokemonRarity.getLegendarySpawn();
-                    else spawn = msg.length > 2 ? msg[1] + " " + msg[2] : msg[1];
-
-                    SpawnEventHelper.forceSpawn(server, spawn);
-
-                    c = null;
-                }
-                else if(msg[0].equals("deletebotmarket"))
-                {
-                    Mongo.MarketData.deleteMany(Filters.eq("sellerID", "BOT"));
-                    CommandMarket.init();
-                    c = null;
-                }
-                else if(msg[0].equals("randommoves"))
-                {
-                    StringBuilder sb = new StringBuilder();
-                    int count = Move.INCOMPLETE_MOVES.size();
-                    for(int i = 0; i < 5; i++) sb.append(Move.INCOMPLETE_MOVES.get(new Random().nextInt(count))).append("   ");
-                    event.getChannel().sendMessage("Moves: " + sb.toString() + "\nTotal Remaining: " + count).queue();
-                    Move.init();
-                    c = null;
-                }
-                else c = new CommandInvalid(event, msg).runCommand();
+                c = new CommandDev(event, msg).runCommand();
             }
             else c = new CommandInvalid(event, msg).runCommand();
 
             if(!(c instanceof CommandInvalid)) redeemEvent(event);
 
-            if(c == null) event.getChannel().sendMessage("Debug command successfully run!").queue();
-            else if(!c.isNull()) event.getChannel().sendMessage(c.getResponseEmbed()).queue();
+            if(!c.isNull()) event.getChannel().sendMessage(c.getResponseEmbed()).queue();
         }
 
         if(r.nextInt(10) <= 3) Listener.expEvent(event);
@@ -302,7 +273,7 @@ public class Listener extends ListenerAdapter
 
         if(p.getLevel() != initL)
         {
-            event.getChannel().sendMessage(mention + ": Your " + p.getName() + " leveled up to Level " + p.getLevel() + "!").queue();
+            event.getChannel().sendMessage(mention + ": Your " + p.getName() + " is now Level " + p.getLevel() + "!").queue();
         }
 
         Pokemon.updateExperience(p);
