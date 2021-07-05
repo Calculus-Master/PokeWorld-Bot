@@ -322,8 +322,6 @@ public abstract class Command
 
     public abstract Command runCommand() throws IOException;
 
-    public void createCommandDispatcher() {}
-
     //Useful Methods for other Commands
     //TODO: Roll these out to all of the commands
     protected boolean isLength(int len)
