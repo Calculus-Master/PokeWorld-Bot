@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 public class CacheHelper
 {
     //If true, pokemon list caching will be done the first time the player uses p!p, rather than all at the bot init (to lower load times)
-    public static final boolean DYNAMIC_CACHING_ACTIVE = true;
+    public static final boolean DYNAMIC_CACHING_ACTIVE = false;
 
     //Key: playerID     Value: Pokemon List
     public static final Map<String, List<String>> UUID_LISTS = new HashMap<>();
