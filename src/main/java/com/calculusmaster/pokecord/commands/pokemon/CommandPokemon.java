@@ -100,6 +100,17 @@ public class CommandPokemon extends Command
             else if(isNumeric(index)) stream = stream.filter(p -> p.getLevel() == getInt(index));
         }
 
+        if(msg.contains("--dlevel") && msg.indexOf("--dlevel") + 1 < msg.size())
+        {
+            int index = msg.indexOf("--dlevel") + 1;
+            String after = msg.get(index);
+            boolean validIndex = index + 1 < msg.size();
+
+            if(after.equals(">") && validIndex && isNumeric(index + 1)) stream = stream.filter(p -> p.getDynamaxLevel() > getInt(index + 1));
+            else if(after.equals("<") && validIndex && isNumeric(index + 1)) stream = stream.filter(p -> p.getDynamaxLevel() < getInt(index + 1));
+            else if(isNumeric(index)) stream = stream.filter(p -> p.getDynamaxLevel() == getInt(index));
+        }
+
         if(msg.contains("--iv") && msg.indexOf("--iv") + 1 < msg.size())
         {
             int index = msg.indexOf("--iv") + 1;
