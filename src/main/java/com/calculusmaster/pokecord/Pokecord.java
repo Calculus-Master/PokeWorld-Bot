@@ -10,7 +10,11 @@ import com.calculusmaster.pokecord.game.PokePass;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.elements.GymLeader;
 import com.calculusmaster.pokecord.game.duel.elements.Trainer;
-import com.calculusmaster.pokecord.util.*;
+import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.Listener;
+import com.calculusmaster.pokecord.util.PokemonRarity;
+import com.calculusmaster.pokecord.util.PrivateInfo;
+import com.calculusmaster.pokecord.util.helpers.ButtonEventHelper;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.SpawnEventHelper;
 import net.dv8tion.jda.api.JDA;
@@ -70,7 +74,7 @@ public class Pokecord
         //Create Bot
         JDABuilder bot = JDABuilder.createDefault(PrivateInfo.TOKEN);
         bot.setActivity(Activity.playing("Pokemon"));
-        bot.addEventListeners(new Listener());
+        bot.addEventListeners(new Listener(), new ButtonEventHelper());
 
         BOT_JDA = bot.build().awaitReady();
 
