@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.util;
+package com.calculusmaster.pokecord.util.listener;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
@@ -12,6 +12,7 @@ import com.calculusmaster.pokecord.commands.pokemon.*;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
+import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;

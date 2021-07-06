@@ -8,7 +8,7 @@ import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
-import com.calculusmaster.pokecord.util.helpers.ButtonEventHelper;
+import com.calculusmaster.pokecord.util.listener.ButtonListener;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -1219,10 +1219,10 @@ public class Duel
                     .flatMap(m -> m.reply("Turn Action Selection:")
                             .setActionRows(
                                     ActionRow.of(
-                                            Button.primary(ButtonEventHelper.DUEL_MOVE_BUTTONS.get(0), "Move 1"),
-                                            Button.primary(ButtonEventHelper.DUEL_MOVE_BUTTONS.get(1), "Move 2"),
-                                            Button.primary(ButtonEventHelper.DUEL_MOVE_BUTTONS.get(2), "Move 3"),
-                                            Button.primary(ButtonEventHelper.DUEL_MOVE_BUTTONS.get(3), "Move 4")
+                                            Button.primary(ButtonListener.DUEL_MOVE_BUTTONS.get(0), "Move 1"),
+                                            Button.primary(ButtonListener.DUEL_MOVE_BUTTONS.get(1), "Move 2"),
+                                            Button.primary(ButtonListener.DUEL_MOVE_BUTTONS.get(2), "Move 3"),
+                                            Button.primary(ButtonListener.DUEL_MOVE_BUTTONS.get(3), "Move 4")
                                     )
                             ))
                     .delay(30, TimeUnit.SECONDS)

@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.util.helpers;
+package com.calculusmaster.pokecord.util.listener;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.DuelChecks;
@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class ButtonEventHelper extends ListenerAdapter
+public class ButtonListener extends ListenerAdapter
 {
     public static final List<String> DUEL_MOVE_BUTTONS = Arrays.asList("pokecord2_duel_move1", "pokecord2_duel_move2", "pokecord2_duel_move3", "pokecord2_duel_move4");
 
