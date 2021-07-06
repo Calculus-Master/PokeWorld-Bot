@@ -284,7 +284,7 @@ public abstract class Command
                 .addAliases();
 
         FLEE.setCategory(CommandHelp.CommandCategory.DUEL)
-                .addAliases();
+                .addAliases("concede", "surrender");
 
         DEV.setCategory(MISC)
                 .addAliases("run");
