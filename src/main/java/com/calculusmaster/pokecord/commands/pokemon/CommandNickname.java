@@ -20,18 +20,19 @@ public class CommandNickname extends Command
         if(this.msg.length >= 2)
         {
             String nick = this.getMultiWordContent(2);
-            Pokemon.updateNickname(s, nick);
+            s.setNickname(nick);
 
             this.sendMsg("Changed your Pokemon's nickname to `" + nick + "`!");
         }
         //Reset nickname (delete it)
         else
         {
-            Pokemon.updateNickname(s, "");
+            s.setNickname("");
 
             this.sendMsg("Reset your Pokemon's nickname!");
         }
 
+        Pokemon.updateNickname(s);
         return this;
     }
 }

@@ -40,6 +40,7 @@ public class Pokemon
     private int heldTR;
     private String heldItem;
     private int dynamaxLevel;
+    private String nickname;
 
     private int health;
     private Type[] type;
@@ -77,6 +78,7 @@ public class Pokemon
         p.setTR(specific.getInt("tr"));
         p.setItem(specific.has("item") ? specific.getString("item") : PokeItem.NONE.getName());
         p.setDynamaxLevel(specific.getInt("dynamax_level"));
+        p.setNickname(specific.getString("nickname"));
 
         p.setHealth(p.getStat(Stat.HP));
         p.setType();
@@ -108,6 +110,7 @@ public class Pokemon
         p.setTR(-1);
         p.setItem(PokeItem.NONE);
         p.setDynamaxLevel(0);
+        p.setNickname("");
 
         p.setHealth(p.getStat(Stat.HP));
         p.setType();
@@ -241,9 +244,9 @@ public class Pokemon
         CacheHelper.updatePokemon(p.getUUID());
     }
 
-    public static void updateNickname(Pokemon p, String nick)
+    public static void updateNickname(Pokemon p)
     {
-        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("nickname", nick));
+        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("nickname", p.getNickname()));
         CacheHelper.updatePokemon(p.getUUID());
     }
 
@@ -1153,7 +1156,12 @@ public class Pokemon
 
     public String getNickname()
     {
-        return this.specificJSON.getString("nickname");
+        return this.nickname;
+    }
+
+    public void setNickname(String nickname)
+    {
+        this.nickname = nickname;
     }
 
     public boolean hasNickname()
