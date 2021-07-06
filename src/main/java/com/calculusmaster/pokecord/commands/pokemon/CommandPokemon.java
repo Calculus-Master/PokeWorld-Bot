@@ -47,58 +47,12 @@ public class CommandPokemon extends Command
 
         if(msg.contains("--name") && msg.indexOf("--name") + 1 < msg.size())
         {
-            int start = msg.indexOf("--name") + 1;
-            int end = msg.size() - 1;
-
-            for(int i = start; i < msg.size(); i++)
-            {
-                if(msg.get(i).contains("--"))
-                {
-                    end = i - 1;
-                    i = msg.size();
-                }
-            }
-
-            StringBuilder names = new StringBuilder();
-
-            for(int i = start; i <= end; i++)
-            {
-                names.append(msg.get(i)).append(" ");
-            }
-
-            String delimiter = "\\|"; //Currently the OR delimiter is |
-
-            List<String> searchNames = new ArrayList<>(Arrays.asList(names.toString().trim().split(delimiter))).stream().map(String::trim).map(String::toLowerCase).collect(Collectors.toList());
-
-            stream = stream.filter(p -> searchNames.stream().anyMatch(s -> p.getName().toLowerCase().contains(s)));
+            stream = stream.filter(p -> CommandPokemon.getSearchNames(msg, "--name").stream().anyMatch(s -> p.getName().toLowerCase().contains(s)));
         }
 
         if(msg.contains("--nickname") && msg.indexOf("--nickname") + 1 < msg.size())
         {
-            int start = msg.indexOf("--nickname") + 1;
-            int end = msg.size() - 1;
-
-            for(int i = start; i < msg.size(); i++)
-            {
-                if(msg.get(i).contains("--"))
-                {
-                    end = i - 1;
-                    i = msg.size();
-                }
-            }
-
-            StringBuilder names = new StringBuilder();
-
-            for(int i = start; i <= end; i++)
-            {
-                names.append(msg.get(i)).append(" ");
-            }
-
-            String delimiter = "\\|"; //Currently the OR delimiter is |
-
-            List<String> searchNames = new ArrayList<>(Arrays.asList(names.toString().trim().split(delimiter))).stream().map(String::trim).map(String::toLowerCase).collect(Collectors.toList());
-
-            stream = stream.filter(p -> searchNames.stream().anyMatch(s -> p.getNickname().toLowerCase().contains(s)));
+            stream = stream.filter(p -> CommandPokemon.getSearchNames(msg, "--nickname").stream().anyMatch(s -> p.getNickname().toLowerCase().contains(s)));
         }
 
         if(msg.contains("--move") && msg.indexOf("--move") + 1 < msg.size())
@@ -276,6 +230,32 @@ public class CommandPokemon extends Command
         }
 
         return stream;
+    }
+
+    public static List<String> getSearchNames(List<String> msg, String flag)
+    {
+        int start = msg.indexOf(flag) + 1;
+        int end = msg.size() - 1;
+
+        for(int i = start; i < msg.size(); i++)
+        {
+            if(msg.get(i).contains("--"))
+            {
+                end = i - 1;
+                i = msg.size();
+            }
+        }
+
+        StringBuilder names = new StringBuilder();
+
+        for(int i = start; i <= end; i++)
+        {
+            names.append(msg.get(i)).append(" ");
+        }
+
+        String delimiter = "\\|"; //Currently the OR delimiter is |
+
+        return new ArrayList<>(Arrays.asList(names.toString().trim().split(delimiter))).stream().map(String::trim).map(String::toLowerCase).collect(Collectors.toList());
     }
 
     private void sortOrder(OrderSort o, boolean descending)

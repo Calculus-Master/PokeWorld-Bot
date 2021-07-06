@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.economy;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.pokemon.CommandInfo;
+import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.MarketEntry;
 import com.calculusmaster.pokecord.game.Pokemon;
@@ -128,30 +129,7 @@ public class CommandMarket extends Command
             //General Sorting (Common with CommandPokemon)
             if(msg.contains("--name") && msg.indexOf("--name") + 1 < msg.size())
             {
-                int start = msg.indexOf("--name") + 1;
-                int end = msg.size() - 1;
-
-                for(int i = start; i < msg.size(); i++)
-                {
-                    if(msg.get(i).contains("--"))
-                    {
-                        end = i - 1;
-                        i = msg.size();
-                    }
-                }
-
-                StringBuilder names = new StringBuilder();
-
-                for(int i = start; i <= end; i++)
-                {
-                    names.append(msg.get(i)).append(" ");
-                }
-
-                String delimiter = "\\|"; //Currently the OR delimiter is |
-
-                List<String> searchNames = new ArrayList<>(Arrays.asList(names.toString().trim().split(delimiter))).stream().map(String::trim).map(String::toLowerCase).collect(Collectors.toList());
-
-                display = display.filter(m -> searchNames.stream().anyMatch(s -> m.pokemon.getName().toLowerCase().contains(s)));
+                display = display.filter(m -> CommandPokemon.getSearchNames(msg, "--name").stream().anyMatch(s -> m.pokemon.getName().toLowerCase().contains(s)));
             }
 
             if(msg.contains("--level") && msg.indexOf("--level") + 1 < msg.size())
