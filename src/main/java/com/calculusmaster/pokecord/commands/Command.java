@@ -60,6 +60,7 @@ public abstract class Command
     public static final CommandHelp.HelpEntry FAVORITES = new CommandHelp.HelpEntry("favorites");
     public static final CommandHelp.HelpEntry FORM = new CommandHelp.HelpEntry("form");
     public static final CommandHelp.HelpEntry FLEE = new CommandHelp.HelpEntry("flee");
+    public static final CommandHelp.HelpEntry NICKNAME = new CommandHelp.HelpEntry("nickname");
 
     public static final CommandHelp.HelpEntry DEV = new CommandHelp.HelpEntry("dev");
 
@@ -285,6 +286,9 @@ public abstract class Command
 
         FLEE.setCategory(CommandHelp.CommandCategory.DUEL)
                 .addAliases("concede", "surrender");
+
+        NICKNAME.setCategory(CommandHelp.CommandCategory.POKEMON)
+                .addAliases("nick");
 
         DEV.setCategory(MISC)
                 .addAliases("run");

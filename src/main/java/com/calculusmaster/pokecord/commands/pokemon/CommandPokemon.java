@@ -4,9 +4,9 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
-import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.PokemonRarity;
+import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.commons.collections4.list.TreeList;
 
@@ -71,6 +71,34 @@ public class CommandPokemon extends Command
             List<String> searchNames = new ArrayList<>(Arrays.asList(names.toString().trim().split(delimiter))).stream().map(String::trim).map(String::toLowerCase).collect(Collectors.toList());
 
             stream = stream.filter(p -> searchNames.stream().anyMatch(s -> p.getName().toLowerCase().contains(s)));
+        }
+
+        if(msg.contains("--nickname") && msg.indexOf("--nickname") + 1 < msg.size())
+        {
+            int start = msg.indexOf("--nickname") + 1;
+            int end = msg.size() - 1;
+
+            for(int i = start; i < msg.size(); i++)
+            {
+                if(msg.get(i).contains("--"))
+                {
+                    end = i - 1;
+                    i = msg.size();
+                }
+            }
+
+            StringBuilder names = new StringBuilder();
+
+            for(int i = start; i <= end; i++)
+            {
+                names.append(msg.get(i)).append(" ");
+            }
+
+            String delimiter = "\\|"; //Currently the OR delimiter is |
+
+            List<String> searchNames = new ArrayList<>(Arrays.asList(names.toString().trim().split(delimiter))).stream().map(String::trim).map(String::toLowerCase).collect(Collectors.toList());
+
+            stream = stream.filter(p -> searchNames.stream().anyMatch(s -> p.getNickname().toLowerCase().contains(s)));
         }
 
         if(msg.contains("--move") && msg.indexOf("--move") + 1 < msg.size())
@@ -300,16 +328,8 @@ public class CommandPokemon extends Command
         this.embed.setFooter("Showing Numbers " + (startIndex + 1) + " to " + (endIndex) + " out of " + this.pokemon.size() + " Pokemon");
     }
 
-//    @Deprecated
-//    private void buildList()
-//    {
-//        //long l = System.currentTimeMillis();
-//        for(int i = 0; i < this.playerData.getPokemonList().length(); i++) this.pokemon.add(Pokemon.buildCore(this.playerData.getPokemonList().getString(i), i));
-//        //System.out.println("Creating the full list took " + (System.currentTimeMillis() - l) + "ms");
-//    }
-
     private String getLine(Pokemon p)
     {
-        return "**" + p.getName() + "**" + (p.isShiny() ? ":star2:" : "") + " " + (this.team.contains(p.getUUID()) ? ":regional_indicator_t: " : "") + (this.favorites.contains(p.getUUID()) ? ":regional_indicator_f: " : "") + "| Number: " + p.getNumber() + " | Level " + p.getLevel() + " | IV: " + p.getTotalIV() + "\n";
+        return "**" + p.getDisplayName() + "**" + (p.isShiny() ? ":star2:" : "") + " " + (this.team.contains(p.getUUID()) ? ":regional_indicator_t: " : "") + (this.favorites.contains(p.getUUID()) ? ":regional_indicator_f: " : "") + "| Number: " + p.getNumber() + " | Level " + p.getLevel() + " | IV: " + p.getTotalIV() + "\n";
     }
 }

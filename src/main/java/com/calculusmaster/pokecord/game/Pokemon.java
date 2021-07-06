@@ -6,10 +6,10 @@ import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
-import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.PokemonRarity;
+import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
@@ -210,7 +210,8 @@ public class Pokemon
                 .append("tm", p.getTM())
                 .append("tr", p.getTR())
                 .append("item", p.getItem())
-                .append("dynamax_level", p.getDynamaxLevel());
+                .append("dynamax_level", p.getDynamaxLevel())
+                .append("nickname", p.getNickname());
 
         Mongo.PokemonData.insertOne(pokeData);
     }
@@ -218,12 +219,6 @@ public class Pokemon
     public static void updateExperience(Pokemon p)
     {
         Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("level", p.getLevel()));
-        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("exp", p.getExp()));
-        CacheHelper.updatePokemon(p.getUUID());
-    }
-
-    public static void updateExpLevel(Pokemon p)
-    {
         Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("exp", p.getExp()));
         CacheHelper.updatePokemon(p.getUUID());
     }
@@ -243,6 +238,12 @@ public class Pokemon
     public static void updateName(Pokemon p, String evolved)
     {
         Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("name", Global.normalCase(evolved)));
+        CacheHelper.updatePokemon(p.getUUID());
+    }
+
+    public static void updateNickname(Pokemon p, String nick)
+    {
+        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("nickname", nick));
         CacheHelper.updatePokemon(p.getUUID());
     }
 
@@ -1148,6 +1149,22 @@ public class Pokemon
     public String getName()
     {
         return this.genericJSON.getString("name");
+    }
+
+    public String getNickname()
+    {
+        return this.specificJSON.getString("nickname");
+    }
+
+    public boolean hasNickname()
+    {
+        return !this.getNickname().equals("");
+    }
+
+    //Decides between nickname or real name, if the nickname exists or not
+    public String getDisplayName()
+    {
+        return this.hasNickname() ? "\"" + this.getNickname() + "\"" : this.getName();
     }
 
     public Type[] getType()
