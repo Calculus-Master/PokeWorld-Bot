@@ -1292,11 +1292,6 @@ public class Duel
     }
 
     //Useful Getters/Setters
-    @Deprecated
-    public void submitMove(String id, int moveIndex, boolean z)
-    {
-        this.queuedMoves.put(id, new TurnAction(z ? ActionType.ZMOVE : ActionType.MOVE, moveIndex, -1));
-    }
 
     public void submitMove(String id, int index, char type)
     {
@@ -1316,18 +1311,6 @@ public class Duel
         else this.queuedMoves.put(id, new TurnAction(type == 'z' ? ActionType.ZMOVE : (type == 'd' ? ActionType.DYNAMAX : ActionType.MOVE), index, -1));
     }
 
-    @Deprecated
-    public void submitMove(String id, int swapIndex)
-    {
-        if(this.players[this.indexOf(id)].team.get(swapIndex - 1).isFainted())
-        {
-            this.event.getChannel().sendMessage("That pokemon is fainted!").queue();
-            return;
-        }
-
-        this.queuedMoves.put(id, new TurnAction(ActionType.SWAP, -1, swapIndex));
-    }
-
     public void checkReady()
     {
         if(this.queuedMoves.containsKey(this.players[0].ID) && this.queuedMoves.containsKey(this.players[1].ID))
@@ -1338,10 +1321,11 @@ public class Duel
         boolean faintSwap1 = this.queuedMoves.containsKey(this.players[0].ID) && this.queuedMoves.get(this.players[0].ID).action().equals(ActionType.SWAP) && this.players[0].active.isFainted();
         boolean faintSwap2 = this.queuedMoves.containsKey(this.players[1].ID) && this.queuedMoves.get(this.players[1].ID).action().equals(ActionType.SWAP) && this.players[1].active.isFainted();
 
+        //TODO: Add a TurnAction IDLE
         if((faintSwap1 || faintSwap2) && !(faintSwap1 && faintSwap2))
         {
-            if(faintSwap1) this.submitMove(this.players[1].ID, 1, false);
-            else this.submitMove(this.players[0].ID, 1, false);
+            if(faintSwap1) this.submitMove(this.players[1].ID, 1, 'm');
+            else this.submitMove(this.players[0].ID, 1, 'm');
 
             turnHandler();
         }

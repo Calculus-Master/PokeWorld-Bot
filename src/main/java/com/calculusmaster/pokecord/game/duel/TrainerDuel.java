@@ -109,7 +109,7 @@ public class TrainerDuel extends Duel
 
         if(!this.isComplete() && this.players[1].active.isFainted())
         {
-            this.submitMove(this.players[1].ID, 1, false);
+            this.submitMove(this.players[1].ID, 1, 'm');
             this.checkReady();
         }
     }
