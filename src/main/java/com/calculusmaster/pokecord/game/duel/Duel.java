@@ -1226,7 +1226,8 @@ public class Duel
                                     ),
                                     ActionRow.of(
                                             Button.primary(ButtonEventHelper.DUEL_ZMOVE_BUTTON, "Z-Move"),
-                                            Button.primary(ButtonEventHelper.DUEL_DYNAMAX_BUTTON, "Dynamax")
+                                            Button.primary(ButtonEventHelper.DUEL_DYNAMAX_BUTTON, "Dynamax"),
+                                            Button.primary(ButtonEventHelper.DUEL_SWAP_BUTTON, "Swap")
                                     )
                             ))
                     .delay(30, TimeUnit.SECONDS)
@@ -1302,12 +1303,25 @@ public class Duel
         this.queuedMoves.put(id, new TurnAction(z ? ActionType.ZMOVE : ActionType.MOVE, moveIndex, -1));
     }
 
-    public void submitMove(String id, int moveIndex, char type)
+    public void submitMove(String id, int index, char type)
     {
         type = Character.toLowerCase(type);
-        this.queuedMoves.put(id, new TurnAction(type == 'z' ? ActionType.ZMOVE : (type == 'd' ? ActionType.DYNAMAX : ActionType.MOVE), moveIndex, -1));
+
+        //index functions as both the swapIndex and moveIndex, which one is dictated by type == 's' and type == 'm'
+        if(type == 's')
+        {
+            if(this.players[this.indexOf(id)].team.get(index - 1).isFainted())
+            {
+                this.event.getChannel().sendMessage("That pokemon is fainted!").queue();
+                return;
+            }
+
+            this.queuedMoves.put(id, new TurnAction(ActionType.SWAP, -1, index));
+        }
+        else this.queuedMoves.put(id, new TurnAction(type == 'z' ? ActionType.ZMOVE : (type == 'd' ? ActionType.DYNAMAX : ActionType.MOVE), index, -1));
     }
 
+    @Deprecated
     public void submitMove(String id, int swapIndex)
     {
         if(this.players[this.indexOf(id)].team.get(swapIndex - 1).isFainted())

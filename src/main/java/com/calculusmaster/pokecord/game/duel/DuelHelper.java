@@ -41,6 +41,7 @@ public class DuelHelper
         public int statImmuneTurns;
         public boolean recharge;
         public boolean isRaised;
+        public boolean canSwap;
 
         public int asleepTurns;
         public int boundTurns;
@@ -65,7 +66,6 @@ public class DuelHelper
         public boolean futureSightUsed;
         public int futureSightTurns;
         public boolean lockOnUsed;
-        public boolean thousandWavesUsed;
         public boolean imprisonUsed;
         public boolean destinyBondUsed;
         public int perishSongTurns;
@@ -98,6 +98,7 @@ public class DuelHelper
             this.statImmuneTurns = 0;
             this.recharge = false;
             this.isRaised = false;
+            this.canSwap = true;
 
             this.asleepTurns = 0;
             this.boundTurns = 0;
@@ -122,7 +123,6 @@ public class DuelHelper
             this.futureSightUsed = false;
             this.futureSightTurns = 0;
             this.lockOnUsed = false;
-            this.thousandWavesUsed = false;
             this.imprisonUsed = false;
             this.destinyBondUsed = false;
             this.perishSongTurns = 0;

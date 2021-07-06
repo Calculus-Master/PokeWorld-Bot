@@ -1,8 +1,8 @@
 package com.calculusmaster.pokecord.game.moves;
 
-import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
@@ -62,6 +62,7 @@ public class GroundMoves
 
     public String ThousandWaves(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        duel.data(opponent.getUUID()).canSwap = false;
         return Move.simpleDamageMove(user, opponent, duel, move) + " " + opponent.getName() + " cannot flee!";
     }
 

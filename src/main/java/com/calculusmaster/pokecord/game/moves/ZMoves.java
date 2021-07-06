@@ -1,16 +1,13 @@
 package com.calculusmaster.pokecord.game.moves;
 
-import com.calculusmaster.pokecord.game.TypeEffectiveness;
-import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
-
-import java.util.Random;
 
 public class ZMoves
 {
@@ -337,6 +334,8 @@ public class ZMoves
 
     public String MillionWaveTsunami(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        duel.data(opponent.getUUID()).canSwap = false;
+
         return Move.multihitDamageMove(user, opponent, duel, move);
     }
 
