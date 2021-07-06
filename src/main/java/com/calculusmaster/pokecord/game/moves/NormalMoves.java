@@ -1,8 +1,8 @@
 package com.calculusmaster.pokecord.game.moves;
 
-import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
@@ -13,7 +13,10 @@ import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.util.Global;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class NormalMoves
@@ -866,5 +869,11 @@ public class NormalMoves
             return user.getName() + " permanently learned " + move + "!";
         }
         else return move.getNothingResult();
+    }
+
+    public String SelfDestruct(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.damage(user.getHealth());
+        return Move.simpleDamageMove(user, opponent, duel, move);
     }
 }

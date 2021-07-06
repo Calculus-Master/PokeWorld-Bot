@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.enums.elements.Weather;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 
 import java.util.Random;
@@ -136,6 +137,13 @@ public class GroundMoves
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addDamageEffect()
                 .addStatusEffect(StatusCondition.FLINCHED, 10)
+                .execute();
+    }
+
+    public String ShoreUp(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFractionHealEffect(duel.weather.equals(Weather.SANDSTORM) ? 2 / 3D : 1 / 2D)
                 .execute();
     }
 }

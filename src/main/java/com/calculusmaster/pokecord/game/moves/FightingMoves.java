@@ -1,14 +1,12 @@
 package com.calculusmaster.pokecord.game.moves;
 
-import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
-
-import java.util.Random;
 
 public class FightingMoves
 {
@@ -224,5 +222,13 @@ public class FightingMoves
     public String DoubleKick(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return Move.multihitDamageMove(user, opponent, duel, move, 2);
+    }
+
+    public String Submission(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addRecoilEffect(1 / 4D)
+                .execute();
     }
 }

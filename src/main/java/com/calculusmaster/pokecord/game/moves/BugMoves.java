@@ -1,16 +1,13 @@
 package com.calculusmaster.pokecord.game.moves;
 
-import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
-import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
-
-import java.util.Random;
 
 public class BugMoves
 {
@@ -126,5 +123,11 @@ public class BugMoves
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addStatChangeEffect(Stat.SPATK, 3, 100, true)
                 .execute();
+    }
+
+    //TODO: Should work after the user swaps
+    public String FirstImpression(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return duel.turn == 1 ? Move.simpleDamageMove(user, opponent, duel, move) : move.getNothingResult();
     }
 }
