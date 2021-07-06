@@ -41,7 +41,6 @@ public class CommandFlee extends Command
                 else
                 {
                     //TODO: Random chance of fleeing
-                    //TODO: p!concede
                     Pokemon.uploadPokemon(d.getPlayers()[0].active);
 
                     DuelHelper.delete(this.player.getId());
