@@ -1223,11 +1223,6 @@ public class Duel
                                             Button.primary(ButtonEventHelper.DUEL_MOVE_BUTTONS.get(1), "Move 2"),
                                             Button.primary(ButtonEventHelper.DUEL_MOVE_BUTTONS.get(2), "Move 3"),
                                             Button.primary(ButtonEventHelper.DUEL_MOVE_BUTTONS.get(3), "Move 4")
-                                    ),
-                                    ActionRow.of(
-                                            Button.primary(ButtonEventHelper.DUEL_ZMOVE_BUTTON, "Z-Move"),
-                                            Button.primary(ButtonEventHelper.DUEL_DYNAMAX_BUTTON, "Dynamax"),
-                                            Button.primary(ButtonEventHelper.DUEL_SWAP_BUTTON, "Swap")
                                     )
                             ))
                     .delay(30, TimeUnit.SECONDS)

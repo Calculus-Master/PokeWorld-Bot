@@ -10,28 +10,21 @@ import net.dv8tion.jda.api.interactions.components.Button;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class ButtonEventHelper extends ListenerAdapter
 {
     public static final List<String> DUEL_MOVE_BUTTONS = Arrays.asList("pokecord2_duel_move1", "pokecord2_duel_move2", "pokecord2_duel_move3", "pokecord2_duel_move4");
-    public static final String DUEL_ZMOVE_BUTTON = "pokecord2_duel_zmove";
-    public static final String DUEL_DYNAMAX_BUTTON = "pokecord2_duel_dynamax";
-    public static final String DUEL_SWAP_BUTTON = "pokecord2_duel_swap";
-
-    public static final Map<String, Boolean> ZMOVE_REQUESTS = new HashMap<>();
-    public static final Map<String, Boolean> DYNAMAX_REQUESTS = new HashMap<>();
 
     @Override
     public void onButtonClick(@NotNull ButtonClickEvent event)
     {
+        String playerID = event.getMember().getId();
+
         if(event.getComponentId().startsWith("pokecord2_duel_move"))
         {
             int moveNum = Integer.parseInt(event.getComponentId().substring(event.getComponentId().length() - 1));
-            String playerID = event.getMember().getId();
 
             if(DuelHelper.isInDuel(playerID))
             {
