@@ -236,6 +236,10 @@ public class Listener extends ListenerAdapter
             {
                 c = new CommandForm(event, msg).runCommand();
             }
+            else if(Command.FLEE.contains(msg[0]))
+            {
+                c = new CommandFlee(event, msg).runCommand();
+            }
             else if(Command.DEV.contains(msg[0]))
             {
                 c = new CommandDev(event, msg).runCommand();

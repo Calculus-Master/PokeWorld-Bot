@@ -4,7 +4,6 @@ import com.calculusmaster.pokecord.commands.misc.CommandHelp;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
-import com.mojang.brigadier.CommandDispatcher;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -60,6 +59,7 @@ public abstract class Command
     public static final CommandHelp.HelpEntry POKEPASS = new CommandHelp.HelpEntry("pokepass");
     public static final CommandHelp.HelpEntry FAVORITES = new CommandHelp.HelpEntry("favorites");
     public static final CommandHelp.HelpEntry FORM = new CommandHelp.HelpEntry("form");
+    public static final CommandHelp.HelpEntry FLEE = new CommandHelp.HelpEntry("flee");
 
     public static final CommandHelp.HelpEntry DEV = new CommandHelp.HelpEntry("dev");
 
@@ -283,10 +283,11 @@ public abstract class Command
         FORM.setCategory(CommandHelp.CommandCategory.POKEMON)
                 .addAliases();
 
-
+        FLEE.setCategory(CommandHelp.CommandCategory.DUEL)
+                .addAliases();
 
         DEV.setCategory(MISC)
-                .addAliases();
+                .addAliases("run");
     }
 
     protected MessageReceivedEvent event;
