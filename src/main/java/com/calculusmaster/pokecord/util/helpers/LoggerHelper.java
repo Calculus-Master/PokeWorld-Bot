@@ -29,11 +29,6 @@ public class LoggerHelper
         LoggerFactory.getLogger(clazz).warn(msg);
     }
 
-    public static void debug(Class<?> clazz, String msg)
-    {
-        LoggerFactory.getLogger(clazz).debug(msg);
-    }
-
     public static void error(Class<?> clazz, String msg)
     {
         LoggerFactory.getLogger(clazz).error(msg);
