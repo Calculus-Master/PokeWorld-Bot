@@ -152,6 +152,11 @@ public class Pokemon
             public boolean isShiny() {
                 return d.getBoolean("shiny");
             }
+
+            @Override
+            public String getNickname() {
+                return d.getString("nickname");
+            }
         };
 
         p.linkGenericJSON(p.getName());

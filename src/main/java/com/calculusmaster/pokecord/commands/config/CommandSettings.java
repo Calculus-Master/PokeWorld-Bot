@@ -2,13 +2,13 @@ package com.calculusmaster.pokecord.commands.config;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.util.helpers.SettingsHelper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import static com.calculusmaster.pokecord.util.helpers.SettingsHelper.Setting;
-import static com.calculusmaster.pokecord.util.helpers.SettingsHelper.Setting.SERVER_PREFIX;
-import static com.calculusmaster.pokecord.util.helpers.SettingsHelper.Setting.SERVER_SPAWNCHANNEL;
+import static com.calculusmaster.pokecord.util.helpers.SettingsHelper.Setting.*;
 
 public class CommandSettings extends Command
 {
@@ -39,7 +39,36 @@ public class CommandSettings extends Command
             }
             else
             {
+                SettingsHelper settings = this.playerData.getSettings();
 
+                if(CLIENT_DETAILED.matches(this.msg[2]))
+                {
+                    //Toggle if no input given
+                    if(this.msg.length == 3)
+                    {
+                        boolean currentValue = settings.getSettingBoolean(CLIENT_DETAILED);
+
+                        settings.updateSettingBoolean(CLIENT_DETAILED, !currentValue);
+
+                        if(currentValue) this.sendMsg("Disabled viewing of detailed information!");
+                        else this.sendMsg("Enabled viewing of detailed information!");
+                    }
+                    //Set value to specific input
+                    else if(this.msg.length == 4)
+                    {
+                        if("true".contains(this.msg[3]) || "false".contains(this.msg[3]))
+                        {
+                            boolean newValue = "true".contains(this.msg[3]);
+
+                            settings.updateSettingBoolean(CLIENT_DETAILED, newValue);
+
+                            if(newValue) this.sendMsg("Enabled viewing of detailed information!");
+                            else this.sendMsg("Disabled viewing of detailed information!");
+                        }
+                        else this.sendMsg("Valid arguments: `true` or `false`!");
+                    }
+                }
+                else this.embed.setDescription(CommandInvalid.getShort());
             }
         }
         else if(server)

@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.PokemonRarity;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
+import com.calculusmaster.pokecord.util.helpers.SettingsHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.commons.collections4.list.TreeList;
 
@@ -310,6 +311,13 @@ public class CommandPokemon extends Command
 
     private String getLine(Pokemon p)
     {
-        return "**" + p.getDisplayName() + "**" + (p.isShiny() ? ":star2:" : "") + " " + (this.team.contains(p.getUUID()) ? ":regional_indicator_t: " : "") + (this.favorites.contains(p.getUUID()) ? ":regional_indicator_f: " : "") + "| Number: " + p.getNumber() + " | Level " + p.getLevel() + " | IV: " + p.getTotalIV() + "\n";
+        return "**" + p.getDisplayName() + "**" +
+                (p.isShiny() ? ":star2:" : "") + " " +
+                (this.team.contains(p.getUUID()) ? ":regional_indicator_t: " : "") +
+                (this.favorites.contains(p.getUUID()) ? ":regional_indicator_f: " : "") +
+                "| Number: " + p.getNumber() +
+                " | Level " + p.getLevel() +
+                (this.playerData.getSettings().getSettingBoolean(SettingsHelper.Setting.CLIENT_DETAILED) ? " | IV: " + p.getTotalIV() : "") +
+                "\n";
     }
 }

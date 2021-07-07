@@ -16,10 +16,8 @@ import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -71,7 +69,7 @@ public class SpawnEventHelper
 
     private static void spawnPokemon(Guild g, String spawn)
     {
-        List<TextChannel> channels = SpawnEventHelper.getSpawnChannels(g, new ServerDataQuery(g.getId()).getSpawnChannels());
+        List<TextChannel> channels = new ServerDataQuery(g.getId()).getSpawnChannels().stream().map(g::getTextChannelById).filter(Objects::nonNull).collect(Collectors.toList());;
 
         if(channels.isEmpty())
         {
@@ -127,10 +125,5 @@ public class SpawnEventHelper
         SCHEDULERS.get(serverID).cancel(true);
         SCHEDULERS.remove(serverID);
         SERVER_SPAWNS.remove(serverID);
-    }
-
-    private static List<TextChannel> getSpawnChannels(Guild g, List<String> channels)
-    {
-        return channels.stream().map(channel -> g.getTextChannelById(channel)).collect(Collectors.toList());
     }
 }

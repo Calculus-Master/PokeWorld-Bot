@@ -6,7 +6,6 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
 import org.bson.Document;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -14,7 +13,6 @@ import org.json.JSONTokener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -42,6 +40,7 @@ public class Mongo
     public static final MongoCollection<Document> MarketData = MutableDB.getCollection("MarketData");
     public static final MongoCollection<Document> GymData = MutableDB.getCollection("GymData");
     public static final MongoCollection<Document> DexData = MutableDB.getCollection("DexData");
+    public static final MongoCollection<Document> SettingsData = MutableDB.getCollection("SettingsData");
 
     public static void main(String[] args)
     {

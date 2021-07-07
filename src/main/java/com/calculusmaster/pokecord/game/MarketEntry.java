@@ -61,11 +61,11 @@ public class MarketEntry
         CacheHelper.MARKET_ENTRIES.remove(index);
     }
 
-    public String getEntryLine()
+    public String getEntryLine(boolean detailed)
     {
         if(this.pokemon == null) return "ERROR";
 
-        return "ID: " + this.marketID + " | Level " + this.pokemon.getLevel() + " " + this.pokemon.getName() + " | Price: " + this.price + " | IV: " + this.pokemon.getTotalIV();
+        return "ID: " + this.marketID + " | Level " + this.pokemon.getLevel() + " " + this.pokemon.getName() + " | Price: " + this.price + (detailed ? " | IV: " + this.pokemon.getTotalIV() : "");
     }
 
     public static boolean isValidID(String marketID)

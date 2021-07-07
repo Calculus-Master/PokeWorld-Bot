@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.helpers.SettingsHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandInfo extends Command
@@ -43,7 +44,7 @@ public class CommandInfo extends Command
         String item = "**Held Item**: " + PokeItem.asItem(chosen.getItem()).getStyledName();
         String tm = "**TM**: " + (chosen.hasTM() ? "TM" + (chosen.getTM() < 10 ? "0" : "") + chosen.getTM()  + " - " + TM.get(chosen.getTM()).getMoveName() : "None");
         String tr = "**TR**: " + (chosen.hasTR() ? "TR" + (chosen.getTR() < 10 ? "0" : "") + chosen.getTR()  + " - " + TR.get(chosen.getTR()).getMoveName() : "None");
-        String stats = getStatsFormatted(chosen);
+        String stats = getStatsFormatted(chosen, this.playerData.getSettings().getSettingBoolean(SettingsHelper.Setting.CLIENT_DETAILED));
 
         this.embed.setTitle(title);
         this.embed.setDescription(exp + "\n" + type + "\n" + nature + "\n" + dynamaxLevel + "\n" + item + "\n" + tm + "\n" + tr + "\n\n" + stats);
@@ -55,21 +56,23 @@ public class CommandInfo extends Command
         return this;
     }
 
-    public static String getStatsFormatted(Pokemon p)
+    public static String getStatsFormatted(Pokemon p, boolean detailedEnabled)
     {
-        String HP = formatStat(p, Stat.HP, "HP");
-        String ATK = formatStat(p, Stat.ATK, "Attack");
-        String DEF = formatStat(p, Stat.DEF, "Defense");
-        String SPATK = formatStat(p, Stat.SPATK, "Sp. Attack");
-        String SPDEF = formatStat(p, Stat.SPDEF, "Sp. Defense");
-        String SPD = formatStat(p, Stat.SPD, "Speed");
+        String HP = formatStat(p, Stat.HP, "HP", detailedEnabled);
+        String ATK = formatStat(p, Stat.ATK, "Attack", detailedEnabled);
+        String DEF = formatStat(p, Stat.DEF, "Defense", detailedEnabled);
+        String SPATK = formatStat(p, Stat.SPATK, "Sp. Attack", detailedEnabled);
+        String SPDEF = formatStat(p, Stat.SPDEF, "Sp. Defense", detailedEnabled);
+        String SPD = formatStat(p, Stat.SPD, "Speed", detailedEnabled);
         String total = "**Total IV %:** " + p.getTotalIV();
 
         return HP + ATK + DEF + SPATK + SPDEF + SPD + total;
     }
 
-    private static String formatStat(Pokemon p, Stat s, String statName)
+    private static String formatStat(Pokemon p, Stat s, String statName, boolean detailedEnabled)
     {
-        return "**" + statName + ":** " + p.getStat(s) + " - IV: " + p.getIVs().get(s) + " / 31 " + "(EV: " + p.getEVs().get(s) + ")\n";
+        String statHeader = "**" + statName + ":** " + p.getStat(s);
+        String detailed = "IV: " + p.getIVs().get(s) + " / 31 " + "(EV: " + p.getEVs().get(s) + ")";
+        return statHeader + (detailedEnabled ? " - " + detailed : "") + "\n";
     }
 }

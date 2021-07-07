@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.PokePass;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
+import com.calculusmaster.pokecord.util.helpers.SettingsHelper;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -55,6 +56,8 @@ public class PlayerDataQuery extends MongoQuery
                 .append("owned_megas", new JSONArray());
 
         Mongo.PlayerData.insertOne(data);
+
+        SettingsHelper.register(player.getId());
     }
 
     private void update()
@@ -65,6 +68,12 @@ public class PlayerDataQuery extends MongoQuery
     public void directMessage(String msg)
     {
         Pokecord.BOT_JDA.openPrivateChannelById(this.getID()).flatMap(channel -> channel.sendMessage(msg)).queue();
+    }
+
+    //Get the SettingsHelper object
+    public SettingsHelper getSettings()
+    {
+        return new SettingsHelper(this.getID());
     }
 
     //key: "playerID"
