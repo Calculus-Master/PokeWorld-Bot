@@ -17,6 +17,7 @@ import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.SpawnEventHelper;
 import com.calculusmaster.pokecord.util.listener.ButtonListener;
 import com.calculusmaster.pokecord.util.listener.Listener;
+import com.calculusmaster.pokecord.util.listener.MiscListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -74,7 +75,7 @@ public class Pokecord
         //Create Bot
         JDABuilder bot = JDABuilder.createDefault(PrivateInfo.TOKEN);
         bot.setActivity(Activity.playing("Pokemon"));
-        bot.addEventListeners(new Listener(), new ButtonListener());
+        bot.addEventListeners(new Listener(), new ButtonListener(), new MiscListener());
 
         BOT_JDA = bot.build().awaitReady();
 
