@@ -64,8 +64,7 @@ public class SpawnEventHelper
 
     public static void forceSpawn(Guild g, String spawn)
     {
-        SCHEDULERS.get(g.getId()).cancel(true);
-        SCHEDULERS.remove(g.getId());
+        removeServer(g.getId());
 
         spawnPokemon(g, SpawnEventHelper.getSpawnChannels(g, new ServerDataQuery(g.getId()).getSpawnChannels()), spawn);
 
@@ -121,6 +120,13 @@ public class SpawnEventHelper
 
         System.out.println("Spawn Event in " + g.getId() + ": " + spawn + " Shiny: " + shiny);
         SERVER_SPAWNS.put(g.getId(), (shiny ? "Shiny " : "") + spawn);
+    }
+
+    public static void removeServer(String serverID)
+    {
+        SCHEDULERS.get(serverID).cancel(true);
+        SCHEDULERS.remove(serverID);
+        SERVER_SPAWNS.remove(serverID);
     }
 
     private static List<TextChannel> getSpawnChannels(Guild g, List<String> channels)
