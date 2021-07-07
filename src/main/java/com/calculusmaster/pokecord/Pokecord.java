@@ -22,9 +22,12 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
+import java.util.EnumSet;
 
 public class Pokecord
 {
@@ -73,9 +76,16 @@ public class Pokecord
         System.out.println("Initialization finished in " + (end - start) + "ms!");
 
         //Create Bot
-        JDABuilder bot = JDABuilder.createDefault(PrivateInfo.TOKEN);
-        bot.setActivity(Activity.playing("Pokemon"));
-        bot.addEventListeners(new Listener(), new ButtonListener(), new MiscListener());
+        JDABuilder bot = JDABuilder
+                .createDefault(PrivateInfo.TOKEN)
+                .setMemberCachePolicy(MemberCachePolicy.ONLINE.or(MemberCachePolicy.VOICE))
+                .enableIntents(EnumSet.allOf(GatewayIntent.class))
+                .setActivity(Activity.playing("Pokemon"))
+                .addEventListeners(
+                        new Listener(),
+                        new ButtonListener(),
+                        new MiscListener()
+                );
 
         BOT_JDA = bot.build().awaitReady();
 
