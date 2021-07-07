@@ -32,7 +32,7 @@ public class Pokecord
 
     public static void main(String[] args) throws InterruptedException, LoginException
     {
-        LoggerHelper.disableSpecificLoggers();
+        LoggerHelper.disableMongoLoggers();
 
         //Initializations
         long start = System.currentTimeMillis();
@@ -57,7 +57,7 @@ public class Pokecord
         //Create Bot
         JDABuilder bot = JDABuilder
                 .createDefault(PrivateInfo.TOKEN)
-                .setMemberCachePolicy(MemberCachePolicy.ONLINE.or(MemberCachePolicy.VOICE))
+                .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .enableIntents(EnumSet.allOf(GatewayIntent.class))
                 .setActivity(Activity.playing("Pokemon"))
                 .addEventListeners(

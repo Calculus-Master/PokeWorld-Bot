@@ -35,7 +35,7 @@ public class LoggerHelper
     }
 
     //Misc
-    public static void disableSpecificLoggers()
+    public static void disableMongoLoggers()
     {
         ((LoggerContext) LoggerFactory.getILoggerFactory()).getLogger("org.mongodb.driver.connection").setLevel(Level.OFF);
         ((LoggerContext) LoggerFactory.getILoggerFactory()).getLogger("org.mongodb.driver.management").setLevel(Level.OFF);
