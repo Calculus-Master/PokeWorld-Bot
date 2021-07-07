@@ -22,7 +22,6 @@ import static com.calculusmaster.pokecord.commands.misc.CommandHelp.CommandCateg
 public abstract class Command
 {
     public static final CommandHelp.HelpEntry START = new CommandHelp.HelpEntry("start");
-    public static final CommandHelp.HelpEntry SPAWNCHANNEL = new CommandHelp.HelpEntry("setspawn");
     public static final CommandHelp.HelpEntry BALANCE = new CommandHelp.HelpEntry("balance");
     public static final CommandHelp.HelpEntry SELECT = new CommandHelp.HelpEntry("select");
     public static final CommandHelp.HelpEntry DEX = new CommandHelp.HelpEntry("dex");
@@ -42,7 +41,6 @@ public abstract class Command
     public static final CommandHelp.HelpEntry TEACH = new CommandHelp.HelpEntry("teach");
     public static final CommandHelp.HelpEntry INVENTORY = new CommandHelp.HelpEntry("inventory");
     public static final CommandHelp.HelpEntry HELP = new CommandHelp.HelpEntry("help");
-    public static final CommandHelp.HelpEntry PREFIX = new CommandHelp.HelpEntry("prefix");
     public static final CommandHelp.HelpEntry TRADE = new CommandHelp.HelpEntry("trade");
     public static final CommandHelp.HelpEntry GIVE = new CommandHelp.HelpEntry("give");
     public static final CommandHelp.HelpEntry MARKET = new CommandHelp.HelpEntry("market");
@@ -61,6 +59,7 @@ public abstract class Command
     public static final CommandHelp.HelpEntry FORM = new CommandHelp.HelpEntry("form");
     public static final CommandHelp.HelpEntry FLEE = new CommandHelp.HelpEntry("flee");
     public static final CommandHelp.HelpEntry NICKNAME = new CommandHelp.HelpEntry("nickname");
+    public static final CommandHelp.HelpEntry SETTINGS = new CommandHelp.HelpEntry("settings");
 
     public static final CommandHelp.HelpEntry DEV = new CommandHelp.HelpEntry("dev");
 
@@ -71,12 +70,6 @@ public abstract class Command
                 .addAliases()
                 .addArgs("starter")
                 .addArgDesc("starter", "The starter Pokemon you want to begin with.");
-
-        SPAWNCHANNEL.setCategory(CONFIG)
-                .addShortDescription("Set a channel where Pokemon will spawn.")
-                .addAliases()
-                .addArgs("channelID")
-                .addArgDesc("channelID", "The ID of the channel where you want to redirect spawns to.");
 
         BALANCE.setCategory(ECONOMY)
                 .addShortDescription("Check how much credits you have.")
@@ -203,12 +196,6 @@ public abstract class Command
                 .addArgs("command")
                 .addArgDesc("command", "Optional. Specify the command you want help on.");
 
-        PREFIX.setCategory(CONFIG)
-                .addShortDescription("Change the bot prefix!")
-                .addAliases()
-                .addArgs("prefix")
-                .addArgDesc("prefix", "The prefix you want to use instead of the current one.");
-
         TRADE.setCategory(MISC)
                 .addShortDescription("Trade with other players!")
                 .addAliases()
@@ -289,6 +276,9 @@ public abstract class Command
 
         NICKNAME.setCategory(CommandHelp.CommandCategory.POKEMON)
                 .addAliases("nick");
+
+        SETTINGS.setCategory(CONFIG)
+                .addAliases("config");
 
         DEV.setCategory(MISC)
                 .addAliases("run");

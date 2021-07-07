@@ -2,8 +2,7 @@ package com.calculusmaster.pokecord.util.listener;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
-import com.calculusmaster.pokecord.commands.config.CommandPrefix;
-import com.calculusmaster.pokecord.commands.config.CommandSpawnChannel;
+import com.calculusmaster.pokecord.commands.config.CommandSettings;
 import com.calculusmaster.pokecord.commands.duel.*;
 import com.calculusmaster.pokecord.commands.economy.*;
 import com.calculusmaster.pokecord.commands.misc.*;
@@ -49,7 +48,7 @@ public class Listener extends ListenerAdapter
         Random r = new Random(System.currentTimeMillis());
 
         //Check if the server is registered and register it if it is not
-        if(!ServerDataQuery.isRegistered(server)) ServerDataQuery.register(server, event.getChannel().getId());
+        if(!ServerDataQuery.isRegistered(server)) ServerDataQuery.register(server);
 
         //Create a query object for server data
         serverQuery = new ServerDataQuery(server.getId());
@@ -87,10 +86,6 @@ public class Listener extends ListenerAdapter
             if(Command.START.contains(msg[0]) || !isPlayerRegistered)
             {
                 c = new CommandStart(event, msg).runCommand();
-            }
-            else if(Command.SPAWNCHANNEL.contains(msg[0]))
-            {
-                c = new CommandSpawnChannel(event, msg).runCommand();
             }
             else if(Command.BALANCE.contains(msg[0]))
             {
@@ -168,10 +163,6 @@ public class Listener extends ListenerAdapter
             {
                 c = new CommandHelp(event, msg).runCommand();
             }
-            else if(Command.PREFIX.contains(msg[0]))
-            {
-                c = new CommandPrefix(event, msg).runCommand();
-            }
             else if(Command.TRADE.contains(msg[0]))
             {
                 c = new CommandTrade(event, msg).runCommand();
@@ -243,6 +234,10 @@ public class Listener extends ListenerAdapter
             else if(Command.NICKNAME.contains(msg[0]))
             {
                 c = new CommandNickname(event, msg).runCommand();
+            }
+            else if(Command.SETTINGS.contains(msg[0]))
+            {
+                c = new CommandSettings(event, msg).runCommand();
             }
             else if(Command.DEV.contains(msg[0]))
             {

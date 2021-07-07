@@ -5,7 +5,6 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.PokemonRarity;
-import com.calculusmaster.pokecord.util.PrivateInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -18,12 +17,14 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class SpawnEventHelper
 {
@@ -37,11 +38,11 @@ public class SpawnEventHelper
 
     public static void start(Guild g, int initDelay)
     {
-        TextChannel channel = g.getTextChannelById(new ServerDataQuery(g.getId()).getSpawnChannelID());
+        List<TextChannel> channels = SpawnEventHelper.getSpawnChannels(g, new ServerDataQuery(g.getId()).getSpawnChannels());
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-        ScheduledFuture<?> spawnEvent = scheduler.scheduleWithFixedDelay(() -> spawnPokemon(g, channel), initDelay, 450, TimeUnit.SECONDS);
+        ScheduledFuture<?> spawnEvent = scheduler.scheduleWithFixedDelay(() -> spawnPokemon(g, channels), initDelay, 450, TimeUnit.SECONDS);
 
         SCHEDULERS.put(g.getId(), spawnEvent);
     }
@@ -56,9 +57,9 @@ public class SpawnEventHelper
         SERVER_SPAWNS.put(id, "");
     }
 
-    private static void spawnPokemon(Guild g, TextChannel channel)
+    private static void spawnPokemon(Guild g, List<TextChannel> channels)
     {
-        spawnPokemon(g, channel, PokemonRarity.getSpawn());
+        spawnPokemon(g, channels, PokemonRarity.getSpawn());
     }
 
     public static void forceSpawn(Guild g, String spawn)
@@ -66,13 +67,19 @@ public class SpawnEventHelper
         SCHEDULERS.get(g.getId()).cancel(true);
         SCHEDULERS.remove(g.getId());
 
-        spawnPokemon(g, g.getTextChannelById(new ServerDataQuery(g.getId()).getSpawnChannelID()), spawn);
+        spawnPokemon(g, SpawnEventHelper.getSpawnChannels(g, new ServerDataQuery(g.getId()).getSpawnChannels()), spawn);
 
         start(g, 120);
     }
 
-    private static void spawnPokemon(Guild g, TextChannel channel, String spawn)
+    private static void spawnPokemon(Guild g, List<TextChannel> channels, String spawn)
     {
+        if(channels.isEmpty())
+        {
+            System.out.println(g.getName() + " has no Spawn Channels! Skipping spawn event...");
+            return;
+        }
+
         spawn = Global.normalCase(spawn);
         boolean shiny = new Random().nextInt(4096) < 1;
 
@@ -104,8 +111,7 @@ public class SpawnEventHelper
 
             byte[] bytes = out.toByteArray();
 
-            channel.sendFile(bytes, "pkmn.png").setEmbeds(embed.build()).queue();
-            if(g.getId().equals(PrivateInfo.SERVER_ID_MAIN)) g.getTextChannelById("843996103639695360").sendFile(bytes, "pkmn.png").setEmbeds(embed.build()).queue();
+            for(TextChannel c : channels) c.sendFile(bytes, "pkmn.png").setEmbeds(embed.build()).queue();
         }
         catch (Exception e)
         {
@@ -115,5 +121,11 @@ public class SpawnEventHelper
 
         System.out.println("Spawn Event in " + g.getId() + ": " + spawn + " Shiny: " + shiny);
         SERVER_SPAWNS.put(g.getId(), (shiny ? "Shiny " : "") + spawn);
+    }
+
+    private static List<TextChannel> getSpawnChannels(Guild g, List<String> channels)
+    {
+        //TODO: check when channel is deleted and remove from this input list
+        return channels.stream().map(channel -> g.getTextChannelById(channel)).collect(Collectors.toList());
     }
 }
