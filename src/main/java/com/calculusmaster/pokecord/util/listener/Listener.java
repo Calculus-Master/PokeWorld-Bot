@@ -59,9 +59,6 @@ public class Listener extends ListenerAdapter
         //Set a boolean if the player is registered or not
         boolean isPlayerRegistered = PlayerDataQuery.isRegistered(player.getId());
 
-        //If the 'selected' field is out of bounds, force it into bounds to avoid errors
-        if(isPlayerRegistered) new PlayerDataQuery(player.getId()).updateSelected();
-
         //If the message starts with the right prefix, continue, otherwise skip the listener
         if(msg[0].startsWith(serverQuery.getPrefix()))
         {
