@@ -350,7 +350,7 @@ public abstract class Command
     protected String getMultiWordContent(int start)
     {
         StringBuilder sb = new StringBuilder();
-        for(int i = 1; i < this.msg.length; i++) sb.append(this.msg[i]).append(" ");
+        for(int i = start; i < this.msg.length; i++) sb.append(this.msg[i]).append(" ");
 
         return sb.toString().trim();
     }
