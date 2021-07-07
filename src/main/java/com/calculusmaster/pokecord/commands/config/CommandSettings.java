@@ -20,7 +20,7 @@ public class CommandSettings extends Command
     @Override
     public Command runCommand()
     {
-        this.server.retrieveMemberById(this.player.getId());
+        this.server.retrieveMemberById(this.player.getId()).queue();
         boolean isUserAdmin = this.server.getMemberById(this.player.getId()).hasPermission(Permission.ADMINISTRATOR);
 
         boolean client = this.msg.length >= 2 && (this.msg[1].equals("client") || this.msg[1].equals("c"));
