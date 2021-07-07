@@ -38,11 +38,9 @@ public class SpawnEventHelper
 
     public static void start(Guild g, int initDelay)
     {
-        List<TextChannel> channels = SpawnEventHelper.getSpawnChannels(g, new ServerDataQuery(g.getId()).getSpawnChannels());
-
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-        ScheduledFuture<?> spawnEvent = scheduler.scheduleWithFixedDelay(() -> spawnPokemon(g, channels), initDelay, 450, TimeUnit.SECONDS);
+        ScheduledFuture<?> spawnEvent = scheduler.scheduleWithFixedDelay(() -> spawnPokemon(g), initDelay, 450, TimeUnit.SECONDS);
 
         SCHEDULERS.put(g.getId(), spawnEvent);
     }
@@ -57,22 +55,24 @@ public class SpawnEventHelper
         SERVER_SPAWNS.put(id, "");
     }
 
-    private static void spawnPokemon(Guild g, List<TextChannel> channels)
+    private static void spawnPokemon(Guild g)
     {
-        spawnPokemon(g, channels, PokemonRarity.getSpawn());
+        spawnPokemon(g, PokemonRarity.getSpawn());
     }
 
     public static void forceSpawn(Guild g, String spawn)
     {
         removeServer(g.getId());
 
-        spawnPokemon(g, SpawnEventHelper.getSpawnChannels(g, new ServerDataQuery(g.getId()).getSpawnChannels()), spawn);
+        spawnPokemon(g, spawn);
 
         start(g, 120);
     }
 
-    private static void spawnPokemon(Guild g, List<TextChannel> channels, String spawn)
+    private static void spawnPokemon(Guild g, String spawn)
     {
+        List<TextChannel> channels = SpawnEventHelper.getSpawnChannels(g, new ServerDataQuery(g.getId()).getSpawnChannels());
+
         if(channels.isEmpty())
         {
             System.out.println(g.getName() + " has no Spawn Channels! Skipping spawn event...");
@@ -131,7 +131,6 @@ public class SpawnEventHelper
 
     private static List<TextChannel> getSpawnChannels(Guild g, List<String> channels)
     {
-        //TODO: check when channel is deleted and remove from this input list
         return channels.stream().map(channel -> g.getTextChannelById(channel)).collect(Collectors.toList());
     }
 }
