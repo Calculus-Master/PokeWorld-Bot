@@ -8,18 +8,22 @@ import org.slf4j.LoggerFactory;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Global
 {
     public static final List<String> STARTERS = Arrays.asList("bulbasaur", "charmander", "squirtle", "chikorita", "quilava", "totodile", "treecko", "torchic", "mudkip", "turtwig", "chimchar", "piplup", "snivy", "tepig", "oshawott", "chespin", "fennekin", "froakie", "rowlet", "litten", "popplio");
     public static final List<String> POKEMON = new ArrayList<>();
 
+    @Deprecated
     public static void logInfo(Class<?> clazz, String method, String msg)
     {
         LoggerFactory.getLogger(clazz).info("#" + method + ": " + msg);
     }
 
+    @Deprecated
     public static void logTime(Class<?> clazz, String command, long timeI, long timeF, OffsetDateTime timestamp)
     {
         LoggerFactory.getLogger(clazz).info(command + " took " + (timeF - timeI) + " ms to complete!");

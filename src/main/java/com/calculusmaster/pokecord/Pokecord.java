@@ -1,7 +1,5 @@
 package com.calculusmaster.pokecord;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.LoggerContext;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.duel.CommandWildDuel;
 import com.calculusmaster.pokecord.commands.moves.CommandAbilityInfo;
@@ -10,10 +8,10 @@ import com.calculusmaster.pokecord.game.PokePass;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.elements.GymLeader;
 import com.calculusmaster.pokecord.game.duel.elements.Trainer;
-import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.PokemonRarity;
 import com.calculusmaster.pokecord.util.PrivateInfo;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.SpawnEventHelper;
 import com.calculusmaster.pokecord.util.listener.ButtonListener;
 import com.calculusmaster.pokecord.util.listener.Listener;
@@ -24,7 +22,6 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
-import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 import java.util.EnumSet;
@@ -35,45 +32,27 @@ public class Pokecord
 
     public static void main(String[] args) throws InterruptedException, LoginException
     {
-        //Disable MongoDB Logging
-        ((LoggerContext) LoggerFactory.getILoggerFactory()).getLogger("org.mongodb.driver.connection").setLevel(Level.OFF);
-        ((LoggerContext) LoggerFactory.getILoggerFactory()).getLogger("org.mongodb.driver.management").setLevel(Level.OFF);
-        ((LoggerContext) LoggerFactory.getILoggerFactory()).getLogger("org.mongodb.driver.cluster").setLevel(Level.OFF);
-        ((LoggerContext) LoggerFactory.getILoggerFactory()).getLogger("org.mongodb.driver.protocol.insert").setLevel(Level.OFF);
-        ((LoggerContext) LoggerFactory.getILoggerFactory()).getLogger("org.mongodb.driver.protocol.query").setLevel(Level.OFF);
-        ((LoggerContext) LoggerFactory.getILoggerFactory()).getLogger("org.mongodb.driver.protocol.update").setLevel(Level.OFF);
+        LoggerHelper.disableSpecificLoggers();
 
         //Initializations
         long start = System.currentTimeMillis();
 
-        Global.logInfo(Pokecord.class, "main", "Starting Pokemon Init!");
-        Pokemon.init();
-        Global.logInfo(Pokecord.class, "main", "Starting Gigantamax Init!");
-        Pokemon.gigantamaxInit();
-        Global.logInfo(Pokecord.class, "main", "Starting CommandWildDuel EV Lists Init!");
-        CommandWildDuel.init();
-        Global.logInfo(Pokecord.class, "main", "Starting setDailyTrainers!");
-        Trainer.setDailyTrainers();
-        Global.logInfo(Pokecord.class, "main", "Starting Move Init!");
-        Move.init();
-        Global.logInfo(Pokecord.class, "main", "Starting CommandAbilityInfo Init!");
-        CommandAbilityInfo.init();
-        Global.logInfo(Pokecord.class, "main", "Starting PokemonRarity Init!");
-        PokemonRarity.init();
-        Global.logInfo(Pokecord.class, "main", "Starting Command Init!");
-        Command.init();
-        Global.logInfo(Pokecord.class, "main", "Starting Gym Leader Init!");
-        GymLeader.init();
-        Global.logInfo(Pokecord.class, "main", "Starting PokePass Init!");
-        PokePass.init();
-        Global.logInfo(Pokecord.class, "main", "Starting Market Init!");
-        CacheHelper.initMarketEntries();
-        Global.logInfo(Pokecord.class, "main", "Starting CommandPokemon Init!");
-        CacheHelper.initPokemonLists();
-        Global.logInfo(Pokecord.class, "main", "Completed Init!");
+        LoggerHelper.init("Pokemon", Pokemon::init);
+        LoggerHelper.init("Gigantamax", Pokemon::gigantamaxInit);
+        LoggerHelper.init("EV Lists", CommandWildDuel::init);
+        LoggerHelper.init("Daily Trainer", Trainer::setDailyTrainers);
+        LoggerHelper.init("Move", Move::init);
+        LoggerHelper.init("Ability Info", CommandAbilityInfo::init);
+        LoggerHelper.init("Pokemon Rarity", PokemonRarity::init);
+        LoggerHelper.init("Command", Command::init);
+        LoggerHelper.init("Gym Leader", GymLeader::init);
+        LoggerHelper.init("PokePass", PokePass::init);
+        LoggerHelper.init("Market", CacheHelper::initMarketEntries);
+        LoggerHelper.init("CommandPokemon", CacheHelper::initPokemonLists);
 
         long end = System.currentTimeMillis();
-        System.out.println("Initialization finished in " + (end - start) + "ms!");
+
+        LoggerHelper.info(Pokecord.class, "Initialization Finished - " + (end - start) + "ms!");
 
         //Create Bot
         JDABuilder bot = JDABuilder
