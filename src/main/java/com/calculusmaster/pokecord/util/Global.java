@@ -18,12 +18,6 @@ public class Global
     public static final List<String> POKEMON = new ArrayList<>();
 
     @Deprecated
-    public static void logInfo(Class<?> clazz, String method, String msg)
-    {
-        LoggerFactory.getLogger(clazz).info("#" + method + ": " + msg);
-    }
-
-    @Deprecated
     public static void logTime(Class<?> clazz, String command, long timeI, long timeF, OffsetDateTime timestamp)
     {
         LoggerFactory.getLogger(clazz).info(command + " took " + (timeF - timeI) + " ms to complete!");

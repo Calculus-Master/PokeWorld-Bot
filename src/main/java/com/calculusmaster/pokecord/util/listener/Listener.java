@@ -11,7 +11,7 @@ import com.calculusmaster.pokecord.commands.pokemon.*;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
-import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -74,7 +74,7 @@ public class Listener extends ListenerAdapter
             }
             else this.cooldowns.put(player.getId(), System.currentTimeMillis());
 
-            Global.logInfo(this.getClass(), "getResponseEmbed", "Parsing: " + Arrays.toString(msg));
+            LoggerHelper.info(Listener.class, "Parsing: " + Arrays.toString(msg));
 
             //Remove prefix from the message array, msg[0] is the raw command name
             msg[0] = msg[0].substring(serverQuery.getPrefix().length());
