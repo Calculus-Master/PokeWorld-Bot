@@ -113,7 +113,11 @@ public class PlayerDataQuery extends MongoQuery
     //key: "selected"
     public int getSelected()
     {
-        this.updateSelected();
+        int selected = this.json().getInt("selected");
+        int pokemonListSize = this.getPokemonList().size();
+
+        if(selected > pokemonListSize) this.setSelected(pokemonListSize);
+        else if(selected <= 0) this.setSelected(1);
 
         return this.json().getInt("selected") - 1;
     }
@@ -123,12 +127,6 @@ public class PlayerDataQuery extends MongoQuery
         Mongo.PlayerData.updateOne(this.query, Updates.set("selected", num));
 
         this.update();
-    }
-
-    public void updateSelected()
-    {
-        if(this.getSelected() > this.getPokemonList().size()) this.setSelected(this.getPokemonList().size());
-        else if(this.getSelected() <= 0) this.setSelected(1);
     }
 
     public Pokemon getSelectedPokemon()
@@ -168,7 +166,6 @@ public class PlayerDataQuery extends MongoQuery
         if(this.getFavorites().contains(UUID)) this.removePokemonFromFavorites(UUID);
 
         this.update();
-        this.updateSelected();
     }
 
     public void removePokemon(int index)

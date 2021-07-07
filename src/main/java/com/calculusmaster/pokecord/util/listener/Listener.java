@@ -252,7 +252,6 @@ public class Listener extends ListenerAdapter
     private static void expEvent(MessageReceivedEvent event)
     {
         PlayerDataQuery data = new PlayerDataQuery(event.getAuthor().getId());
-        String mention = "<@" + event.getAuthor().getId() + ">";
         Pokemon p = data.getSelectedPokemon();
 
         int initL = p.getLevel();
@@ -261,7 +260,7 @@ public class Listener extends ListenerAdapter
 
         if(p.getLevel() != initL)
         {
-            event.getChannel().sendMessage(mention + ": Your " + p.getName() + " is now Level " + p.getLevel() + "!").queue();
+            event.getChannel().sendMessage(data.getMention() + ": Your " + p.getName() + " is now Level " + p.getLevel() + "!").queue();
         }
 
         Pokemon.updateExperience(p);
