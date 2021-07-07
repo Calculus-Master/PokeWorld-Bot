@@ -4,7 +4,9 @@ import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.SpawnEventHelper;
 import com.mongodb.client.model.Filters;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +24,14 @@ public class MiscListener extends ListenerAdapter
         {
             serverData.removeSpawnChannel(channelID);
         }
+    }
+
+    @Override
+    public void onGuildJoin(@NotNull GuildJoinEvent event)
+    {
+        Guild server = event.getGuild();
+
+        if(!ServerDataQuery.isRegistered(server)) ServerDataQuery.register(server);
     }
 
     @Override

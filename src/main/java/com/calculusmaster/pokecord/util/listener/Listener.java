@@ -43,21 +43,12 @@ public class Listener extends ListenerAdapter
         User player = event.getAuthor();
         Guild server = event.getGuild();
         String[] msg = event.getMessage().getContentRaw().toLowerCase().trim().split("\\s+");
-        ServerDataQuery serverQuery;
+        ServerDataQuery serverQuery = new ServerDataQuery(server.getId());
         Command c;
         Random r = new Random(System.currentTimeMillis());
 
-        //Check if the server is registered and register it if it is not
-        if(!ServerDataQuery.isRegistered(server)) ServerDataQuery.register(server);
-
-        //Create a query object for server data
-        serverQuery = new ServerDataQuery(server.getId());
-
         //If bot is mentioned, send the server prefix
         if(event.getMessage().getMentionedMembers().stream().anyMatch(m -> m.getId().equals("718169293904281610"))) event.getChannel().sendMessage("<@" + player.getId() + ">: My prefix is `" + serverQuery.getPrefix() + "`!").queue();
-
-        //Set a boolean if the player is registered or not
-        boolean isPlayerRegistered = PlayerDataQuery.isRegistered(player.getId());
 
         //If the message starts with the right prefix, continue, otherwise skip the listener
         if(msg[0].startsWith(serverQuery.getPrefix()))
@@ -80,7 +71,7 @@ public class Listener extends ListenerAdapter
             msg[0] = msg[0].substring(serverQuery.getPrefix().length());
 
             //Check for a valid command, and if there is none reply with the invalid message
-            if(Command.START.contains(msg[0]) || !isPlayerRegistered)
+            if(Command.START.contains(msg[0]) || !PlayerDataQuery.isRegistered(player.getId()))
             {
                 c = new CommandStart(event, msg).runCommand();
             }
