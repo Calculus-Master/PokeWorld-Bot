@@ -10,6 +10,7 @@ import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.PokemonRarity;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
@@ -87,7 +88,7 @@ public class Pokemon
         p.statBuff = 1.0;
         p.setDynamax(false);
 
-        Global.logInfo(Pokemon.class, "build", "Pokemon Built (UUID: " + UUID + ", Name: " + p.getName() + ")!");
+        LoggerHelper.info(Pokemon.class, "Pokemon Created: UUID (" + UUID + "), NAME (" + p.getName() + ")");
         return p;
     }
 
@@ -119,7 +120,7 @@ public class Pokemon
         p.statBuff = 1.0;
         p.setDynamax(false);
 
-        Global.logInfo(Pokemon.class, "create", "New Pokemon (" + name + ") Created!");
+        LoggerHelper.info(Pokemon.class, "Pokemon Created: UUID (" + p.getUUID() + "), NAME (" + name + ")");
         return p;
     }
 
@@ -217,6 +218,8 @@ public class Pokemon
                 .append("nickname", p.getNickname());
 
         Mongo.PokemonData.insertOne(pokeData);
+
+        LoggerHelper.info(Pokemon.class, "Pokemon Uploaded: UUID (" + p.getUUID() + "), NAME (" + p.getName() + ")");
     }
 
     public static void updateExperience(Pokemon p)
@@ -555,7 +558,6 @@ public class Pokemon
         this.heldItem = item.getName();
     }
 
-    @Deprecated
     public void removeItem()
     {
         this.heldItem = PokeItem.NONE.getName();
