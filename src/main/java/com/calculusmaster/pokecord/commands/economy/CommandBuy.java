@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.economy;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Nature;
@@ -131,7 +132,10 @@ public class CommandBuy extends Command
 
                 this.playerData.addOwnedForm(requestedForm);
                 this.playerData.changeCredits(-1 * COST_FORM);
+
                 selected.changeForm(requestedForm);
+
+                Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_FORM, this.event);
             }
         }
         else if(mega)
@@ -155,6 +159,8 @@ public class CommandBuy extends Command
                     this.playerData.changeCredits(-1 * COST_MEGA);
 
                     selected.changeForm(requestedMega);
+
+                    Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_MEGA, this.event);
                 }
             }
         }
@@ -224,6 +230,8 @@ public class CommandBuy extends Command
                 this.playerData.addZCrystal(z.getStyledName());
                 this.playerData.changeCredits(-1 * CommandShop.priceZCrystal);
 
+                Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_UNIQUE_ZCRYSTAL, this.event);
+
                 this.sendMsg("You acquired `" + z.getStyledName() + "`!");
             }
         }
@@ -236,6 +244,8 @@ public class CommandBuy extends Command
         if(success)
         {
             Pokemon.uploadPokemon(selected);
+
+            Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_ITEM_SHOP, this.event);
 
             this.playerData.addPokePassExp(200, this.event);
         }

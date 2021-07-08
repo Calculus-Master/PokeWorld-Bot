@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -34,6 +35,8 @@ public class CommandRedeem extends Command
 
             Pokemon.uploadPokemon(p);
             this.playerData.addPokemon(p.getUUID());
+
+            Achievements.grant(this.player.getId(), Achievements.REDEEMED_FIRST_POKEMON, this.event);
 
             this.event.getChannel().sendMessage(this.playerData.getMention() + ": You acquired a Level " + p.getLevel() + " " + p.getName() + "!").queue();
             this.embed = null;

@@ -63,6 +63,8 @@ public class TrainerDuel extends Duel
                 int credits = new Random().nextInt(500) + 500;
                 this.players[0].data.changeCredits(credits);
 
+                Achievements.grant(this.players[0].ID, Achievements.DEFEATED_FIRST_ELITE_TRAINER, this.event);
+
                 this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated the Elite Trainer and earned " + credits + " credits!").queue();
             }
             //Regular Daily Trainer

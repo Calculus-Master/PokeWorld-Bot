@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game.duel;
 
+import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
@@ -330,12 +331,16 @@ public class Duel
         {
             accurate = true;
             this.players[this.current].usedZMove = true;
+
+            Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_ZMOVE, this.event);
         }
 
         if(move.isMaxMove)
         {
             accurate = true;
             this.players[this.current].usedDynamax = true;
+
+            Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_DYNAMAX, this.event);
         }
 
         if(this.data(this.other).imprisonUsed && this.players[this.other].active.getLearnedMoves().contains(move.getName())) cantUse = true;
@@ -756,6 +761,8 @@ public class Duel
         if(!this.players[this.current].data.hasZCrystal(earnedZ.getStyledName()))
         {
             this.players[this.current].data.addZCrystal(earnedZ.getStyledName());
+
+            Achievements.grant(this.players[this.current].ID, Achievements.ACQUIRED_FIRST_TYPED_ZCRYSTAL, this.event);
 
             this.event.getChannel().sendMessage(this.players[this.current].data.getMention() + ": earned a Z-Crystal – " + earnedZ.getStyledName() + "!").queue();
         }
@@ -1247,6 +1254,7 @@ public class Duel
         this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
 
         Achievements.grant(this.getWinner().ID, Achievements.WON_FIRST_PVP_DUEL, this.event);
+        if(this.size == CommandTeam.MAX_TEAM_SIZE) Achievements.grant(this.getWinner().ID, Achievements.WON_FIRST_DUEL_MAX_SIZE, this.event);
 
         if(new Random().nextInt(100) < 20)
         {

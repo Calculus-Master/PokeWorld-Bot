@@ -8,14 +8,28 @@ public enum Achievements
 {
     START_JOURNEY(250, "Started your journey!"),
     CAUGHT_FIRST_POKEMON(500, "Caught your first Pokemon!"),
-    BOUGHT_FIRST_POKEMON_MARKET(500, "Bought your first Pokemon from the market!"),
+    BOUGHT_FIRST_POKEMON_MARKET(500, "Bought a Pokemon from the market for the first time!"),
     WON_FIRST_PVP_DUEL(500, "Won your first PVP (Player vs Player) duel!"),
     WON_FIRST_WILD_DUEL(500, "Defeated a Wild Pokemon for the first time!"),
     WON_FIRST_TRAINER_DUEL(500, "Defeating a Trainer for the first time!"),
     DEFEATED_DAILY_TRAINERS(5000, "Defeated all daily Trainers for the first time!"),
     COMPLETED_FIRST_TRADE(500, "Completed your first trade!"),
     SUBMITTED_BUG_REPORT(500, "Submitted a bug report/suggestion! Thank you!"),
-    DEFEATED_FIRST_GYM_LEADER(1000, "Defeated your first Gym Leader!");
+    DEFEATED_FIRST_GYM_LEADER(1000, "Defeated your first Gym Leader!"),
+    BOUGHT_FIRST_ITEM_SHOP(200, "Bought your first item from the shop!"),
+    ACQUIRED_FIRST_TYPED_ZCRYSTAL(1000, "Acquired your first generic Z Crystal!"),
+    BOUGHT_FIRST_UNIQUE_ZCRYSTAL(1000, "Bought your first unique Z Crystal from the shop!"),
+    SOLD_FIRST_POKEMON_MARKET(500, "Sold a Pokemon on the market for the first time!"),
+    DEFEATED_FIRST_ELITE_TRAINER(500, "Defeated an Elite Trainer for the first time!"),
+    CONCEDE_FIRST_TRAINER_DUEL(1, "Concede to a Trainer for the first time!"),
+    DUEL_USE_ZMOVE(1000, "Successfully used your first Z-Move!"),
+    DUEL_USE_DYNAMAX(500, "Successfully use a Max Move for the first time!"),
+    NICKNAME_FIRST_POKEMON(100, "Nickname one of your Pokemon for the first time!"),
+    EQUIP_FIRST_ZCRYSTAL(200, "Equip a Z Crystal for the first time!"),
+    WON_FIRST_DUEL_MAX_SIZE(1000, "Won your first PVP duel with a max size team!"),
+    REDEEMED_FIRST_POKEMON(100, "Redeemed a Pokemon for the first time!"),
+    BOUGHT_FIRST_MEGA(500, "Bought a Mega Evolution for the first time!"),
+    BOUGHT_FIRST_FORM(500, "Bought a Pokemon Form for the first time!");
 
     public int credits;
     public String desc;

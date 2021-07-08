@@ -60,6 +60,8 @@ public class CommandMarket extends Command
 
                     seller.changeCredits(m.price);
                     seller.directMessage("Your `Level " + m.pokemon.getLevel() + " " + m.pokemon.getName() + "` was sold from your Market Listing to " + this.playerData.getUsername() + " for " + m.price + " credits!");
+
+                    Achievements.grant(m.sellerID, Achievements.SOLD_FIRST_POKEMON_MARKET, this.event);
                 }
 
                 Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_POKEMON_MARKET, this.event);
