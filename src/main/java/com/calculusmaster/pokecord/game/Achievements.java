@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game;
 
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public enum Achievements
@@ -26,6 +27,8 @@ public enum Achievements
 
     public static void grant(String playerID, Achievements a, MessageReceivedEvent event)
     {
+        if(CacheHelper.ACHIEVEMENT_CACHE.get(a).contains(playerID)) return;
+
         PlayerDataQuery p = new PlayerDataQuery(playerID);
 
         if(!p.getAchievementsList().contains(a.toString()))
@@ -35,6 +38,7 @@ public enum Achievements
 
             event.getChannel().sendMessage(p.getMention() + ": Unlocked an achievement: \"" + a.desc + "\"").queue();
         }
+        else CacheHelper.ACHIEVEMENT_CACHE.get(a).add(playerID);
     }
 
     public static Achievements asAchievement(String a)

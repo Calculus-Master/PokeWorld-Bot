@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
+import com.calculusmaster.pokecord.game.enums.elements.EntryHazard;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 
@@ -187,22 +188,6 @@ public class DuelHelper
             this.removeHazard(EntryHazard.STICKY_WEB);
             this.removeHazard(EntryHazard.TOXIC_SPIKES);
         }
-    }
-
-    public enum EntryHazard
-    {
-        SPIKES,
-        STEALTH_ROCK,
-        STICKY_WEB,
-        TOXIC_SPIKES;
-    }
-
-    public enum Room
-    {
-        NORMAL_ROOM,
-        TRICK_ROOM,
-        WONDER_ROOM,
-        MAGIC_ROOM;
     }
 
     public enum ActionType

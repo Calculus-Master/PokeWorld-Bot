@@ -3,11 +3,7 @@ package com.calculusmaster.pokecord.game.moves.builder;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.Duel;
-import com.calculusmaster.pokecord.game.duel.DuelHelper;
-import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
-import com.calculusmaster.pokecord.game.enums.elements.Terrain;
-import com.calculusmaster.pokecord.game.enums.elements.Weather;
+import com.calculusmaster.pokecord.game.enums.elements.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -132,7 +128,7 @@ public class MoveEffectBuilder
         return this;
     }
 
-    public MoveEffectBuilder addRoomEffect(DuelHelper.Room room)
+    public MoveEffectBuilder addRoomEffect(Room room)
     {
         this.moveEffects.add(new RoomEffect(room));
         return this;
@@ -144,7 +140,7 @@ public class MoveEffectBuilder
         return this;
     }
 
-    public MoveEffectBuilder addEntryHazardEffect(DuelHelper.EntryHazard hazard)
+    public MoveEffectBuilder addEntryHazardEffect(EntryHazard hazard)
     {
         this.moveEffects.add(new EntryHazardEffect(hazard));
         return this;

@@ -1,12 +1,12 @@
 package com.calculusmaster.pokecord.game.moves.builder;
 
-import com.calculusmaster.pokecord.game.duel.DuelHelper;
+import com.calculusmaster.pokecord.game.enums.elements.EntryHazard;
 
 public class EntryHazardEffect extends MoveEffect
 {
-    private DuelHelper.EntryHazard hazard;
+    private EntryHazard hazard;
 
-    public EntryHazardEffect(DuelHelper.EntryHazard hazard)
+    public EntryHazardEffect(EntryHazard hazard)
     {
         this.hazard = hazard;
     }

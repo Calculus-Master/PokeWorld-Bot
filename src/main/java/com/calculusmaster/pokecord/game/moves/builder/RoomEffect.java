@@ -1,13 +1,13 @@
 package com.calculusmaster.pokecord.game.moves.builder;
 
-import com.calculusmaster.pokecord.game.duel.DuelHelper;
+import com.calculusmaster.pokecord.game.enums.elements.Room;
 import com.calculusmaster.pokecord.util.Global;
 
 public class RoomEffect extends MoveEffect
 {
-    private DuelHelper.Room room;
+    private Room room;
 
-    public RoomEffect(DuelHelper.Room room)
+    public RoomEffect(Room room)
     {
         this.room = room;
     }

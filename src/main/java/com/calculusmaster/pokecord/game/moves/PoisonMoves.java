@@ -1,16 +1,14 @@
 package com.calculusmaster.pokecord.game.moves;
 
-import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
-import com.calculusmaster.pokecord.game.duel.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
+import com.calculusmaster.pokecord.game.enums.elements.EntryHazard;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
-
-import java.util.Random;
 
 public class PoisonMoves
 {
@@ -37,7 +35,7 @@ public class PoisonMoves
     public String ToxicSpikes(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.make(user, opponent, duel, move)
-                .addEntryHazardEffect(DuelHelper.EntryHazard.TOXIC_SPIKES)
+                .addEntryHazardEffect(EntryHazard.TOXIC_SPIKES)
                 .execute();
     }
 

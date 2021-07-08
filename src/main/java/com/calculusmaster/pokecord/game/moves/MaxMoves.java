@@ -3,11 +3,7 @@ package com.calculusmaster.pokecord.game.moves;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.Duel;
-import com.calculusmaster.pokecord.game.duel.DuelHelper;
-import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
-import com.calculusmaster.pokecord.game.enums.elements.Terrain;
-import com.calculusmaster.pokecord.game.enums.elements.Weather;
+import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 
 import java.util.Arrays;
@@ -217,7 +213,7 @@ public class MaxMoves
 
     public String GMaxStonesurge(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.hazardData(opponent.getUUID()).addHazard(DuelHelper.EntryHazard.STEALTH_ROCK);
+        duel.hazardData(opponent.getUUID()).addHazard(EntryHazard.STEALTH_ROCK);
         return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + " laid a Stealth Rock trap!";
     }
 

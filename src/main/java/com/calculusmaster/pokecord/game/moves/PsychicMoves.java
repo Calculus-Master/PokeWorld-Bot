@@ -1,9 +1,9 @@
 package com.calculusmaster.pokecord.game.moves;
 
-import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
-import com.calculusmaster.pokecord.game.duel.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.enums.elements.Room;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
@@ -215,21 +215,21 @@ public class PsychicMoves
     public String TrickRoom(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.make(user, opponent, duel, move)
-                .addRoomEffect(DuelHelper.Room.TRICK_ROOM)
+                .addRoomEffect(Room.TRICK_ROOM)
                 .execute();
     }
 
     public String WonderRoom(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.make(user, opponent, duel, move)
-                .addRoomEffect(DuelHelper.Room.WONDER_ROOM)
+                .addRoomEffect(Room.WONDER_ROOM)
                 .execute() + " (WIP!) ";
     }
 
     public String MagicRoom(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.make(user, opponent, duel, move)
-                .addRoomEffect(DuelHelper.Room.MAGIC_ROOM)
+                .addRoomEffect(Room.MAGIC_ROOM)
                 .execute();
     }
 

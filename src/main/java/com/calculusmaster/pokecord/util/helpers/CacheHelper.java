@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.util.helpers;
 
+import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.MarketEntry;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.util.Mongo;
@@ -24,6 +25,9 @@ public class CacheHelper
 
     //Stored Data Type: MarketEntry
     public static final List<MarketEntry> MARKET_ENTRIES = new ArrayList<>();
+
+    //Stored Data Type: Player IDs
+    public static final Map<Achievements, List<String>> ACHIEVEMENT_CACHE = new HashMap<>();
 
     //Key: playerID     Value: Team
     public static final Map<String, List<Pokemon>> TEAM_LISTS = new HashMap<>();
@@ -192,5 +196,10 @@ public class CacheHelper
 
         long f = System.currentTimeMillis();
         System.out.println((f - i) + "ms");
+    }
+
+    public static void initAchievementCache()
+    {
+        for(Achievements a : Achievements.values()) ACHIEVEMENT_CACHE.put(a, new ArrayList<>());
     }
 }

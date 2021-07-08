@@ -48,6 +48,7 @@ public class Pokecord
         LoggerHelper.init("Command", Command::init);
         LoggerHelper.init("Gym Leader", GymLeader::init);
         LoggerHelper.init("PokePass", PokePass::init);
+        LoggerHelper.init("Achievement Cache", CacheHelper::initAchievementCache);
         LoggerHelper.init("Market", CacheHelper::initMarketEntries);
         LoggerHelper.init("CommandPokemon", CacheHelper::initPokemonLists);
 
