@@ -19,38 +19,30 @@ public class CommandRedeem extends Command
     @Override
     public Command runCommand()
     {
-        if(this.playerData.getRedeems() < 1)
+        if(this.playerData.getRedeems() < 1) this.sendMsg(this.playerData.getMention() + ": You don't have any redeems!");
+        else if(this.msg.length >= 2)
         {
-            this.event.getChannel().sendMessage(this.playerData.getMention() + ": You don't have any redeems!").queue();
-            this.embed = null;
-            return this;
+            String pokemon = Global.normalCase(this.getMultiWordContent(1));
+
+            if(!Global.POKEMON.contains(pokemon)) this.sendMsg("Invalid Pokemon!");
+            else
+            {
+                Pokemon p = Pokemon.create(pokemon);
+                p.setLevel(new Random().nextInt(100) + 1);
+                p.setIVs(45);
+
+                Pokemon.uploadPokemon(p);
+
+                this.playerData.changeRedeems(-1);
+                this.playerData.addPokemon(p.getUUID());
+
+                Achievements.grant(this.player.getId(), Achievements.REDEEMED_FIRST_POKEMON, this.event);
+
+                this.sendMsg(this.playerData.getMention() + ": You redeemed a Level " + p.getLevel() + " " + p.getName() + "!");
+            }
         }
-        else if(this.msg.length >= 2 && Global.POKEMON.contains(this.getPokemon()))
-        {
-            this.playerData.changeRedeems(-1);
+        else this.embed.setDescription(CommandInvalid.getShort());
 
-            Pokemon p = Pokemon.create(this.getPokemon());
-            p.setLevel(new Random().nextInt(100) + 1);
-            p.setIVs(45);
-
-            Pokemon.uploadPokemon(p);
-            this.playerData.addPokemon(p.getUUID());
-
-            Achievements.grant(this.player.getId(), Achievements.REDEEMED_FIRST_POKEMON, this.event);
-
-            this.event.getChannel().sendMessage(this.playerData.getMention() + ": You acquired a Level " + p.getLevel() + " " + p.getName() + "!").queue();
-            this.embed = null;
-            return this;
-        }
-        else
-        {
-            this.embed.setDescription(CommandInvalid.getShort());
-            return this;
-        }
-    }
-
-    private String getPokemon()
-    {
-        return Global.normalCase(this.getMultiWordContent(1));
+        return this;
     }
 }
