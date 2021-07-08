@@ -58,6 +58,7 @@ public class PlayerDataQuery extends MongoQuery
         Mongo.PlayerData.insertOne(data);
 
         SettingsHelper.register(player.getId());
+        PlayerStatisticsQuery.register(player.getId());
     }
 
     private void update()
@@ -74,6 +75,12 @@ public class PlayerDataQuery extends MongoQuery
     public SettingsHelper getSettings()
     {
         return new SettingsHelper(this.getID());
+    }
+
+    //Get the PlayerStatisticsQuery object
+    public PlayerStatisticsQuery getStats()
+    {
+        return new PlayerStatisticsQuery(this.getID());
     }
 
     //key: "playerID"
