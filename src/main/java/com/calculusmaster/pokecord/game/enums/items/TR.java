@@ -116,14 +116,19 @@ public enum TR
         return this.move;
     }
 
-    public Move asMove()
-    {
-        return Move.isMove(this.move) ? new Move(this.move) : new Move("Tackle");
-    }
-
     public Move.MoveData getMoveData()
     {
         return Move.isMove(this.move) ? Move.MOVES.get(this.move) : Move.MOVES.get("Tackle");
+    }
+
+    public String getShopEntry()
+    {
+        return "`" + this + "` - " + this.getMoveName();
+    }
+
+    public static boolean isOutOfBounds(int num)
+    {
+        return num < 0 || num > 99;
     }
 
     public static TR get(int number)

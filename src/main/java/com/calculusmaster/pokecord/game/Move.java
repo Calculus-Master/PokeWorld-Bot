@@ -10,6 +10,7 @@ import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.moves.*;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.IMoveTutorValidationRule;
 import com.calculusmaster.pokecord.util.Mongo;
 
 import java.util.*;
@@ -22,6 +23,7 @@ public class Move
     public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Sweet Scent", "Smokescreen", "Safeguard", "Whirlwind", "Rage Powder", "Tailwind", "Light Screen", "Frustration", "Return", "Mind Reader", "Counter", "Magnetic Flux", "After You", "Disable", "Miracle Eye", "Guard Swap", "Power Swap", "Me First", "Yawn", "Gravity", "Spite", "Mean Look", "Foresight", "Wide Guard", "Ingrain", "Forests Curse", "Natural Gift", "Last Resort", "Sand Attack", "Teleport", "Odor Sleuth", "Helping Hand", "Mirror Move", "Stuff Cheeks", "Copycat", "Entrainment", "Block", "Follow Me", "Sky Drop", "Simple Beam", "Fling", "Telekinesis", "Quash", "No Retreat", "Encore", "Substitute", "Magic Coat", "Embargo", "Ally Switch");
     public static final List<String> CUSTOM_MOVES = Arrays.asList("Leech Seed", "Rapid Spin", "Mirror Shot", "Stockpile", "Worry Seed", "Aromatic Mist");
     public static List<String> INCOMPLETE_MOVES = new ArrayList<>();
+    public static Map<String, IMoveTutorValidationRule> MOVE_TUTOR_MOVES = new HashMap<>();
 
     private String name;
     private MoveData moveData;
@@ -42,6 +44,7 @@ public class Move
         MOVES.clear();
         Mongo.MoveInfo.find().forEach(d -> MOVES.put(d.getString("name"), new MoveData(d.getString("name"), d.getString("type"), d.getString("category"), d.getInteger("power"), d.getInteger("accuracy"), d.getString("info"))));
 
+        //Incomplete Moves
         INCOMPLETE_MOVES.clear();
         Mongo.PokemonInfo.find().forEach(d -> {
             for(String s : d.getList("moves", String.class)) if(!Move.isMove(s) && !INCOMPLETE_MOVES.contains(s)) INCOMPLETE_MOVES.add(s);
@@ -51,6 +54,27 @@ public class Move
         for(TR tr : TR.values()) if(!Move.isMove(tr.getMoveName())) INCOMPLETE_MOVES.add(tr.getMoveName());
 
         INCOMPLETE_MOVES = INCOMPLETE_MOVES.stream().distinct().collect(Collectors.toList());
+
+        //Move Tutor Moves
+        Move.registerMoveTutorMove("Blast Burn", "Charizard", "Typhlosion", "Blaziken", "Infernape", "Emboar", "Delphox", "Incineroar");
+        Move.registerMoveTutorMove("Hydro Cannon", "Blastoise", "Feraligatr", "Swampert", "Empoleon", "Samurott", "Greninja", "Primarina");
+        Move.registerMoveTutorMove("Frenzy Plant", "Venusaur", "Meganium", "Sceptile", "Torterra", "Serperior", "Chesnaught", "Decidueye");
+        Move.registerMoveTutorMove("Draco Meteor", p -> p.getType()[0].equals(Type.DRAGON));
+        Move.registerMoveTutorMove("Steel Beam", p -> p.getType()[0].equals(Type.STEEL));
+        Move.registerMoveTutorMove("Volt Tackle", p -> p.getName().contains("Pikachu"));
+        Move.registerMoveTutorMove("Dragon Ascent", p -> p.getName().contains("Rayquaza"));
+        Move.registerMoveTutorMove("Secret Sword", p -> p.getName().contains("Keldeo"));
+        Move.registerMoveTutorMove("Relic Song", p -> p.getName().contains("Meloetta"));
+    }
+
+    private static void registerMoveTutorMove(String name, IMoveTutorValidationRule rule)
+    {
+        MOVE_TUTOR_MOVES.put(name, rule);
+    }
+
+    private static void registerMoveTutorMove(String name, String... pokemon)
+    {
+        registerMoveTutorMove(name, p -> Arrays.stream(pokemon).anyMatch(s -> p.getName().contains(s)));
     }
 
     public Move(String name)

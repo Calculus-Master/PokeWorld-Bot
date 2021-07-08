@@ -3,16 +3,22 @@ package com.calculusmaster.pokecord.commands.economy;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.Pokemon;
-import com.calculusmaster.pokecord.game.enums.items.*;
 import com.calculusmaster.pokecord.game.enums.elements.Nature;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.enums.items.TM;
+import com.calculusmaster.pokecord.game.enums.items.TR;
+import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.json.JSONObject;
 
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 public class CommandShop extends Command
 {
@@ -72,27 +78,15 @@ public class CommandShop extends Command
     public static int currentTMPrice = 10000;
     public static int currentTRPrice = 10000;
 
-    public static final List<String> entriesTM = new ArrayList<>();
-    public static final List<String> entriesTR = new ArrayList<>();
+    public static final List<TM> entriesTM = new ArrayList<>();
+    public static final List<TR> entriesTR = new ArrayList<>();
 
     private void page_tm_tr()
     {
         this.page.append("\n**Technical Machines (TMs) for " + currentTMPrice + "c each: **\n");
-        for(String s : entriesTM) this.page.append(s).append("\n");
+        for(TM tm : entriesTM) this.page.append(tm.getShopEntry()).append("\n");
         this.page.append("\n**Technical Records (TRs) for " + currentTRPrice + "c each: **\n");
-        for(String s : entriesTR) this.page.append(s).append("\n");
-    }
-
-    private String newTMEntry()
-    {
-        TM tm = TM.values()[new Random().nextInt(TM.values().length)];
-        return "`" + tm.toString() + "` - " + tm.getMoveName();
-    }
-
-    private String newTREntry()
-    {
-        TR tr = TR.values()[new Random().nextInt(TR.values().length)];
-        return "`" + tr.toString() + "` - " + tr.getMoveName();
+        for(TR tr : entriesTR) this.page.append(tr.getShopEntry()).append("\n");
     }
 
     private void page_mega()
@@ -166,15 +160,20 @@ public class CommandShop extends Command
         entriesTM.clear();
         entriesTR.clear();
 
+        TM tm;
         for(int i = 0; i < 10; i++)
         {
-            if(entriesTM.contains(newTMEntry())) i--;
-            else entriesTM.add(newTMEntry());
+            tm = TM.values()[new Random().nextInt(TM.values().length)];
+            if(entriesTM.contains(tm)) i--;
+            else entriesTM.add(tm);
         }
+
+        TR tr;
         for(int i = 0; i < 10; i++)
         {
-            if(entriesTR.contains(newTREntry())) i--;
-            else entriesTR.add(newTREntry());
+            tr = TR.values()[new Random().nextInt(TR.values().length)];
+            if(entriesTR.contains(tr)) i--;
+            else entriesTR.add(tr);
         }
 
         currentTMPrice = 3000 + new Random().nextInt(4000);

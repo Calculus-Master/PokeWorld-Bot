@@ -2,16 +2,17 @@ package com.calculusmaster.pokecord.commands.economy;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Nature;
-import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.enums.items.TM;
+import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class CommandBuy extends Command
 {
@@ -32,217 +33,213 @@ public class CommandBuy extends Command
     {
         if(this.msg.length == 1)
         {
-            this.embed.setDescription(CommandInvalid.getShort());
+            this.embed.setDescription("You have to specify a category! Valid categories are: `nature`, `candy`, `item`, `form`, `mega`, `tm`, `tr`, `movetutor`, `zcrystal`");
             return this;
         }
 
-        Pokemon selected = this.playerData.getSelectedPokemon();
+        //p!buy nature <nature>
+        boolean nature = this.msg.length == 3 && this.msg[1].equals("nature");
+        //p!buy candy <amount>
+        boolean candy = this.msg[1].equals("candy");
+        //p!buy item <index> or p!buy item <index> <amount>
+        boolean item = this.msg.length >= 3 && this.msg[1].equals("item");
+        //p!buy form <name>
+        boolean form = this.msg.length >= 3 && this.msg[1].equals("form");
+        //p!buy mega or p!buy mega <x:y>
+        boolean mega = this.msg[1].equals("mega");
+        //p!buy tm <tm>
+        boolean tm = this.msg[1].equals("tm");
+        //p!buy tm <tr>
+        boolean tr = this.msg[1].equals("tr");
+        //p!buy movetutor <move>
+        boolean movetutor = this.msg.length >= 3 && Arrays.asList("movetutor", "move", "tutor", "mt").contains(this.msg[1]);
+        //p!buy zcrystal <zcrystal>
+        boolean zcrystal = this.msg.length >= 3 && Arrays.asList("zcrystal", "z", "zc").contains(this.msg[1]);
 
-        if(this.msg[1].equals("nature") && this.msg.length == 3)
+        Pokemon selected = this.playerData.getSelectedPokemon();
+        boolean success = true;
+
+        if(nature)
         {
-            if(this.playerData.getCredits() >= CommandBuy.COST_NATURE && Nature.cast(this.msg[2]) != null)
+            Nature n = Nature.cast(this.msg[2]);
+
+            if(n == null) this.sendMsg("Invalid nature!");
+            else if(this.playerData.getCredits() < COST_NATURE) this.sendInvalidCredits(COST_NATURE);
+            else
             {
-                this.embed.setDescription(selected.getName() + "'s Nature was changed from " + Global.normalCase(selected.getNature().toString()) + " to " + Global.normalCase(this.msg[2]));
-                selected.setNature(this.msg[2]);
-                this.playerData.changeCredits(-1 * CommandBuy.COST_NATURE);
+                selected.setNature(n.toString());
+
+                this.playerData.changeCredits(-1 * COST_NATURE);
+
+                this.sendMsg(selected.getName() + "'s Nature was changed to " + Global.normalCase(n.toString()));
             }
-            else this.embed.setDescription("You do not have enough money!");
         }
-        else if(this.msg[1].equals("candy"))
+        else if(candy)
         {
-            int num = this.msg.length > 2 && isNumeric(2) && Integer.parseInt(this.msg[2]) > 0 ? Math.min(100, Integer.parseInt(this.msg[2])) : 1;
+            int requestedNum = 1;
+            if(this.msg.length > 2 && this.isNumeric(2) && this.getInt(2) > 0) requestedNum = Math.min(100, this.getInt(2));
+
+            int num = Math.min(requestedNum, 100 - selected.getLevel());
             int cost = num * COST_RARE_CANDY;
 
-            if(this.playerData.getCredits() >= cost)
+            if(num == 0) this.sendMsg(selected.getName() + " is already at the maximum level!");
+            else if(this.playerData.getCredits() < cost) this.sendInvalidCredits(cost);
+            else
             {
-                if(selected.getLevel() + num > 100)
-                {
-                    num = 100 - selected.getLevel();
-                    cost = num * COST_RARE_CANDY;
-                }
-
-                this.embed.setDescription("Bought " + num + " rare candies for a total of " + cost + " credits! " + selected.getName() + " leveled up to Level " + (selected.getLevel() + num) + "!");
                 this.playerData.changeCredits(-1 * cost);
                 selected.setLevel(selected.getLevel() + num);
+
+                this.sendMsg("Bought `" + num + "` Rare Candies for " + cost + "c! " + selected.getName() + " is now **Level " + selected.getLevel() + "**!");
             }
-            else this.embed.setDescription("You do not have enough money for " + num + " rare candies");
         }
-        else if(this.msg[1].equals("item") && this.msg.length == 3)
+        else if(item)
         {
-            int cost = isNumeric(2) ? CommandShop.itemPrices.get(Integer.parseInt(this.msg[2]) - 1) : -1;
-            if(cost > 0 && this.playerData.getCredits() >= cost)
+            if(!this.isNumeric(2) || this.getInt(2) < 1 || this.getInt(2) > CommandShop.itemPrices.size())
             {
-                PokeItem item = CommandShop.entriesItem.get(Integer.parseInt(this.msg[2]) - 1);
+                this.sendMsg("Invalid item number!");
+                return this;
+            }
+
+            int amount = 1;
+            if(this.msg.length == 4 && this.isNumeric(3)) amount = this.getInt(3);
+
+            int cost = CommandShop.itemPrices.get(this.getInt(2) - 1) * amount;
+
+            if(this.playerData.getCredits() < cost) this.sendInvalidCredits(cost);
+            else
+            {
+                PokeItem i = CommandShop.entriesItem.get(this.getInt(2) - 1);
 
                 this.playerData.changeCredits(-1 * cost);
-                this.playerData.addItem(item.getName());
+                this.playerData.addItem(i.toString());
 
-                this.embed.setDescription("Bought `" + item.getStyledName() + "` for " + cost + "c!");
+                this.sendMsg("Bought " + (amount > 1 ? amount + "x" : "") + "`" + i.getStyledName() + "` for " + cost + "c!");
             }
         }
-        else if(this.msg[1].equals("form") && this.msg.length >= 3)
+        else if(form)
         {
-            StringBuilder formBuilder = new StringBuilder();
-            for(int i = 2; i < this.msg.length; i++) formBuilder.append(this.msg[i]).append(" ");
-            String form = Global.normalCase(formBuilder.toString().trim());
+            String requestedForm = Global.normalCase(this.getMultiWordContent(2));
 
-            if(!selected.getName().contains("Aegislash") && selected.hasForms() && this.playerData.getCredits() >= CommandBuy.COST_FORM && selected.getFormsList().contains(form))
+            if(!selected.hasForms()) this.sendMsg(selected.getName() + " does not have any forms!");
+            else if(!Global.POKEMON.contains(requestedForm)) this.sendMsg("Invalid form name!");
+            else if(Arrays.asList("Aegislash", "Aegislash Blade").contains(selected.getName())) this.sendMsg(selected.getName() + "'s forms cannot be purchased!");
+            else if(this.playerData.getOwnedForms().contains(requestedForm)) this.sendMsg("You already own this form!");
+            else if(this.playerData.getCredits() < COST_FORM) this.sendInvalidCredits(COST_FORM);
+            else
             {
-                this.playerData.addOwnedForm(form);
-                this.embed.setDescription(selected.getName() + " transformed into " + form);
-                selected.changeForm(form);
-                this.playerData.changeCredits(-1 * CommandBuy.COST_FORM);
+                this.sendMsg(selected.getName() + " transformed into `" + requestedForm + "`!");
+
+                this.playerData.addOwnedForm(requestedForm);
+                this.playerData.changeCredits(-1 * COST_FORM);
+                selected.changeForm(requestedForm);
             }
-            else if(this.playerData.getCredits() < CommandBuy.COST_FORM)
-            {
-                this.embed.setDescription("You do not have enough money! You need " + (CommandBuy.COST_FORM - this.playerData.getCredits()) + " more credits!");
-            }
-            else this.embed.setDescription(selected.getName() + " cannot transform into " + form);
         }
-        else if(this.msg[1].equals("mega"))
+        else if(mega)
         {
-            boolean hasMoney = this.playerData.getCredits() >= CommandBuy.COST_MEGA;
-
-            if(this.msg.length == 2 && selected.hasMega() && hasMoney)
+            if(this.msg.length != 2 && this.msg.length != 3) this.sendMsg(CommandInvalid.getShort());
+            else if(!selected.hasMega()) this.sendMsg(selected.getName() + " cannot Mega Evolve!");
+            else if(this.playerData.getCredits() < COST_MEGA) this.sendInvalidCredits(COST_MEGA);
+            else if(selected.getMegaList().size() == 1 && this.msg.length == 3) this.sendMsg("Use `p!buy mega` instead!");
+            else if(selected.getMegaList().size() == 2 && this.msg.length == 2) this.sendMsg("Use `p!buy mega x` or `p!buy mega y` instead!");
+            else if(this.msg.length == 3 && (!this.msg[2].equals("x") && !this.msg[2].equals("y"))) this.sendMsg("Use either `p!buy mega x` or `p!buy mega y`!");
+            else
             {
-                if(selected.getMegaList().size() == 1)
+                String requestedMega = selected.getMegaList().get(this.msg.length == 2 ? 0 : (this.msg.length == 3 && this.msg[2].equals("x") ? 0 : 1));
+
+                if(this.playerData.getOwnedMegas().contains(requestedMega)) this.sendMsg("You already own this Mega! Use `p!mega` to Mega Evolve your Pokemon!");
+                else
                 {
-                    if(this.playerData.getOwnedMegas().contains(selected.getMegaList().get(0)))
-                    {
-                        this.embed.setDescription("You already own this Mega Evolution!");
-                        return this;
-                    }
+                    this.sendMsg(selected.getName() + " Mega Evolved!");
 
-                    this.embed.setDescription(selected.getName() + " mega evolved into " + selected.getMegaList().get(0) + "!");
+                    this.playerData.addOwnedMegas(requestedMega);
+                    this.playerData.changeCredits(-1 * COST_MEGA);
 
-                    this.playerData.addOwnedMegas(selected.getMegaList().get(0));
-                    selected.changeForm(selected.getMegaList().get(0));
-
-                    this.playerData.changeCredits(-1 * CommandBuy.COST_MEGA);
-                }
-                else this.embed.setDescription("Use p!buy mega x or p!buy mega y to buy the specific evolution!");
-            }
-            else if(this.msg.length == 3 && selected.hasMega() && hasMoney)
-            {
-                if(selected.getMegaList().size() == 2)
-                {
-                    String chosen = Global.normalCase(selected.getMegaList().get(this.msg[2].contains("x") ? 0 : 1));
-
-                    if(this.playerData.getOwnedMegas().contains(chosen))
-                    {
-                        this.embed.setDescription("You already own this Mega Evolution!");
-                        return this;
-                    }
-
-                    this.embed.setDescription(selected.getName() + " mega evolved into " + chosen + "!");
-
-                    this.playerData.addOwnedMegas(selected.getMegaList().get(this.msg[2].contains("x") ? 0 : 1));
-                    selected.changeForm(selected.getMegaList().get(this.msg[2].contains("x") ? 0 : 1));
-
-                    this.playerData.changeCredits(-1 * CommandBuy.COST_MEGA);
-                }
-                else this.embed.setDescription("Use p!buy mega to mega evolve!");
-            }
-        }
-        else if(this.msg[1].equals("tm"))
-        {
-            boolean isInTMList = CommandShop.entriesTM.stream().anyMatch(tm -> tm.toUpperCase().contains(this.msg[2].toUpperCase()));
-            System.out.println(CommandShop.entriesTM + ", checking for " + this.msg[2]);
-            if(isInTMList && this.playerData.getCredits() >= CommandShop.currentTMPrice)
-            {
-                this.playerData.addTM(this.msg[2].toUpperCase());
-                this.playerData.changeCredits(-1 * CommandShop.currentTMPrice);
-                this.embed.setDescription("Successfully bought " + this.msg[2].toUpperCase());
-            }
-            else if(!isInTMList)
-            {
-                this.embed.setDescription("Invalid TM!");
-            }
-            else this.embed.setDescription("You don't have enough money!");
-        }
-        else if(this.msg[1].equals("tr"))
-        {
-            boolean isInTRList = CommandShop.entriesTR.stream().anyMatch(tr -> tr.toUpperCase().contains(this.msg[2].toUpperCase()));
-            System.out.println(CommandShop.entriesTR + ", checking for " + this.msg[2]);
-            if(isInTRList && this.playerData.getCredits() >= CommandShop.currentTRPrice)
-            {
-                this.playerData.addTR(this.msg[2].toUpperCase());
-                this.playerData.changeCredits(-1 * CommandShop.currentTRPrice);
-                this.embed.setDescription("Successfully bought " + this.msg[2].toUpperCase());
-            }
-            else if(!isInTRList)
-            {
-                this.embed.setDescription("Invalid TR!");
-            }
-            else this.embed.setDescription("You don't have enough money!");
-        }
-        else if(this.msg[1].equals("movetutor") && this.msg.length >= 3 && this.playerData.getCredits() >= CommandBuy.COST_MOVETUTOR)
-        {
-            String move = this.msg.length == 2 ? Global.normalCase(this.msg[1]) : Global.normalCase(this.msg[2] + " " + this.msg[3]);
-
-            List<String> blastBurnPokemon = Arrays.asList("Charizard", "Mega Charizard X", "Mega Charizard Y", "Typhlosion", "Blaziken", "Mega Blaziken", "Infernape", "Emboar", "Delphox", "Incineroar");
-            List<String> hydroCannonPokemon = Arrays.asList("Blastoise", "Mega Blastoise", "Feraligatr", "Swampert", "Mega Swampert", "Empoleon", "Samurott", "Greninja", "Primarina");
-            List<String> frenzyPlantPokemon = Arrays.asList("Venusaur", "Mega Venusaur", "Meganium", "Sceptile", "Mega Sceptile", "Torterra", "Serperior", "Chesnaught", "Decidueye");
-
-            if(CommandShop.MOVE_TUTOR_MOVES.contains(move))
-            {
-                boolean blastBurn = move.equals("Blast Burn") && blastBurnPokemon.contains(selected.getName());
-                boolean hydroCannon = move.equals("Hydro Cannon") && hydroCannonPokemon.contains(selected.getName());
-                boolean frenzyPlant = move.equals("Frenzy Plant") && frenzyPlantPokemon.contains(selected.getName());
-                boolean dracoMeteor = move.equals("Draco Meteor") && selected.getType()[0].equals(Type.DRAGON);
-                boolean steelBeam = move.equals("Steel Beam") && selected.getType()[0].equals(Type.STEEL);
-                boolean voltTackle = move.equals("Volt Tackle") && selected.getName().equals("Pikachu");
-                boolean dragonAscent = move.equals("Dragon Ascent") && (selected.getName().equals("Rayquaza") || selected.getName().equals("Mega Rayquaza"));
-                boolean secretSword = move.equals("Secret Sword") && selected.getName().equals("Keldeo");
-                boolean relicSong = move.equals("Relic Song") && selected.getName().contains("Meloetta");
-
-                if(blastBurn || hydroCannon || frenzyPlant || steelBeam || dracoMeteor || voltTackle || dragonAscent || secretSword || relicSong)
-                {
-                    this.playerData.changeCredits(-1 * COST_MOVETUTOR);
-
-                    selected.learnMove(move, 1);
-                    Pokemon.updateMoves(selected);
-                    System.out.println(selected.getLearnedMoves());
-
-                    this.embed.setDescription("Bought " + move + " for " + selected.getName() + "!");
+                    selected.changeForm(requestedMega);
                 }
             }
         }
-        else if(this.msg[1].equals("zcrystal") && this.msg.length == 4)
+        else if(tm || tr)
         {
-            ZCrystal z = ZCrystal.cast(Global.normalCase(this.msg[2] + " " + this.msg[3]));
+            this.msg[2] = this.msg[2].replaceAll("tm", "").replaceAll("tr", "").trim();
 
-            if(z == null || !CommandShop.entriesZCrystal.contains(z.getStyledName()))
-            {
-                this.embed.setDescription("Invalid Z Crystal!");
-                return this;
-            }
-            else if(this.playerData.getCredits() < CommandShop.priceZCrystal)
-            {
-                this.embed.setDescription("You don't have enough credits!");
-                return this;
-            }
-            else if(this.playerData.hasZCrystal(z.getStyledName()))
-            {
-                this.embed.setDescription("You already own this Z-Crystal!");
-                return this;
-            }
+            boolean numberError = !this.isNumeric(2) || ((tm && TM.isOutOfBounds(this.getInt(2))) || (tr && TR.isOutOfBounds(this.getInt(2))));
+            int cost = tm ? CommandShop.currentTMPrice : CommandShop.currentTRPrice;
 
-            this.playerData.addZCrystal(z.getStyledName());
-            this.playerData.changeCredits(-1 * CommandShop.priceZCrystal);
+            if(numberError) this.sendMsg("Invalid " + (tm ? "TM" : "TR") + " number!");
+            else if(this.playerData.getCredits() < cost) this.sendInvalidCredits(cost);
+            else if(tm)
+            {
+                TM request = TM.get(this.getInt(2));
 
-            this.embed.setDescription("Successfully bought " + z.getStyledName() + "!");
+                if(!CommandShop.entriesTM.contains(request)) this.sendMsg("`" + request + "` is not in the shop right now!");
+                else
+                {
+                    this.playerData.addTM(request.toString());
+                    this.playerData.changeCredits(-1 * cost);
+
+                    this.sendMsg("Successfully bought `" + request.getShopEntry() + "`!");
+                }
+            }
+            else if(tr)
+            {
+                TR request = TR.get(this.getInt(2));
+
+                if(!CommandShop.entriesTR.contains(request)) this.sendMsg("`" + request + "` is not in the shop right now!");
+                else
+                {
+                    this.playerData.addTR(request.toString());
+                    this.playerData.changeCredits(-1 * cost);
+
+                    this.sendMsg("Successfully bought `" + request.getShopEntry() + "`!");
+                }
+            }
+        }
+        else if(movetutor)
+        {
+            String move = Global.normalCase(this.getMultiWordContent(1));
+
+            if(!Move.isMove(move)) this.sendMsg(Move.INCOMPLETE_MOVES.contains(move) ? "`" + move + "` has not been implemented yet!" : "Invalid move!");
+            else if(!Move.MOVE_TUTOR_MOVES.containsKey(selected.getName()) || !Move.MOVE_TUTOR_MOVES.get(selected.getName()).isValid(selected)) this.sendMsg("Your Pokemon cannot learn that Move Tutor move!");
+            else if(this.playerData.getCredits() < COST_MOVETUTOR) this.sendInvalidCredits(COST_MOVETUTOR);
+            else
+            {
+                this.playerData.changeCredits(-1 * COST_MOVETUTOR);
+                selected.learnMove(move, 1);
+
+                this.sendMsg(selected.getName() + " learned `" + move + "` in its first slot!");
+            }
+        }
+        else if(zcrystal)
+        {
+            if(this.msg.length != 3 && this.msg.length != 4) this.sendMsg(CommandInvalid.getShort());
+
+            String requestedZCrystal = Global.normalCase(this.msg[2] + " Z");
+            ZCrystal z = ZCrystal.cast(requestedZCrystal);
+
+            if(z == null) this.sendMsg("Invalid Z Crystal!");
+            else if(this.playerData.getZCrystalList().contains(z.getStyledName())) this.sendMsg("You already own this Z Crystal!");
+            else if(this.playerData.getCredits() < CommandShop.priceZCrystal) this.sendInvalidCredits(CommandShop.priceZCrystal);
+            else
+            {
+                this.playerData.addZCrystal(z.getStyledName());
+                this.playerData.changeCredits(-1 * CommandShop.priceZCrystal);
+
+                this.sendMsg("You acquired `" + z.getStyledName() + "`!");
+            }
         }
         else
         {
-            this.embed.setDescription(CommandInvalid.getShort());
-            return this;
+            success = false;
+            this.sendMsg("Invalid category!");
         }
 
-        this.playerData.addPokePassExp(200, this.event);
-        Pokemon.uploadPokemon(selected);
-        this.embed.setTitle(this.player.getName());
-        this.color = selected.getType()[0].getColor();
+        if(success)
+        {
+            Pokemon.uploadPokemon(selected);
+
+            this.playerData.addPokePassExp(200, this.event);
+        }
+
         return this;
     }
 }

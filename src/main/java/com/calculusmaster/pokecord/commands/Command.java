@@ -347,6 +347,11 @@ public abstract class Command
         this.event.getChannel().sendMessage(this.playerData.getMention() + ": " + msg).queue();
     }
 
+    protected void sendInvalidCredits(int req)
+    {
+        this.sendMsg("Insufficient Credits! Needed: `" + req + "`, you have `" + this.playerData.getCredits() + "`!");
+    }
+
     protected String getMultiWordContent(int start)
     {
         StringBuilder sb = new StringBuilder();
