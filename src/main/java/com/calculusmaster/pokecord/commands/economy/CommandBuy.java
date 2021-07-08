@@ -199,7 +199,7 @@ public class CommandBuy extends Command
             String move = Global.normalCase(this.getMultiWordContent(1));
 
             if(!Move.isMove(move)) this.sendMsg(Move.INCOMPLETE_MOVES.contains(move) ? "`" + move + "` has not been implemented yet!" : "Invalid move!");
-            else if(!Move.MOVE_TUTOR_MOVES.containsKey(selected.getName()) || !Move.MOVE_TUTOR_MOVES.get(selected.getName()).isValid(selected)) this.sendMsg("Your Pokemon cannot learn that Move Tutor move!");
+            else if(!Move.MOVE_TUTOR_MOVES.containsKey(selected.getName()) || !Move.MOVE_TUTOR_MOVES.get(selected.getName()).test(selected)) this.sendMsg("Your Pokemon cannot learn that Move Tutor move!");
             else if(this.playerData.getCredits() < COST_MOVETUTOR) this.sendInvalidCredits(COST_MOVETUTOR);
             else
             {

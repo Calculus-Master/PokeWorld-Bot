@@ -10,10 +10,10 @@ import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.moves.*;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.IMoveTutorValidationRule;
 import com.calculusmaster.pokecord.util.Mongo;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Move
@@ -23,7 +23,7 @@ public class Move
     public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Sweet Scent", "Smokescreen", "Safeguard", "Whirlwind", "Rage Powder", "Tailwind", "Light Screen", "Frustration", "Return", "Mind Reader", "Counter", "Magnetic Flux", "After You", "Disable", "Miracle Eye", "Guard Swap", "Power Swap", "Me First", "Yawn", "Gravity", "Spite", "Mean Look", "Foresight", "Wide Guard", "Ingrain", "Forests Curse", "Natural Gift", "Last Resort", "Sand Attack", "Teleport", "Odor Sleuth", "Helping Hand", "Mirror Move", "Stuff Cheeks", "Copycat", "Entrainment", "Block", "Follow Me", "Sky Drop", "Simple Beam", "Fling", "Telekinesis", "Quash", "No Retreat", "Encore", "Substitute", "Magic Coat", "Embargo", "Ally Switch");
     public static final List<String> CUSTOM_MOVES = Arrays.asList("Leech Seed", "Rapid Spin", "Mirror Shot", "Stockpile", "Worry Seed", "Aromatic Mist");
     public static List<String> INCOMPLETE_MOVES = new ArrayList<>();
-    public static Map<String, IMoveTutorValidationRule> MOVE_TUTOR_MOVES = new HashMap<>();
+    public static Map<String, Predicate<Pokemon>> MOVE_TUTOR_MOVES = new HashMap<>();
 
     private String name;
     private MoveData moveData;
@@ -67,7 +67,7 @@ public class Move
         Move.registerMoveTutorMove("Relic Song", p -> p.getName().contains("Meloetta"));
     }
 
-    private static void registerMoveTutorMove(String name, IMoveTutorValidationRule rule)
+    private static void registerMoveTutorMove(String name, Predicate<Pokemon> rule)
     {
         MOVE_TUTOR_MOVES.put(name, rule);
     }

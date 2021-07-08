@@ -227,54 +227,51 @@ public class Pokemon
         LoggerHelper.info(Pokemon.class, "Pokemon Uploaded: UUID (" + p.getUUID() + "), NAME (" + p.getName() + ")");
     }
 
+    private static void update(Pokemon p, Bson... update)
+    {
+        for(Bson u : update) Mongo.PokemonData.updateOne(p.getQuery(), u);
+
+        CacheHelper.updatePokemon(p.getUUID());
+    }
+
     public static void updateExperience(Pokemon p)
     {
-        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("level", p.getLevel()));
-        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("exp", p.getExp()));
-        CacheHelper.updatePokemon(p.getUUID());
+        update(p, Updates.set("level", p.getLevel()), Updates.set("exp", p.getExp()));
     }
 
     public static void updateMoves(Pokemon p)
     {
-        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("moves", p.getMovesCondensed()));
-        CacheHelper.updatePokemon(p.getUUID());
+        update(p, Updates.set("moves", p.getMovesCondensed()));
     }
 
     public static void updateEVs(Pokemon p)
     {
-        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("evs", p.getVCondensed(p.getEVs())));
-        CacheHelper.updatePokemon(p.getUUID());
+        update(p, Updates.set("moves", p.getVCondensed(p.getEVs())));
     }
 
     public static void updateName(Pokemon p, String evolved)
     {
-        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("name", Global.normalCase(evolved)));
-        CacheHelper.updatePokemon(p.getUUID());
+        update(p, Updates.set("name", Global.normalCase(evolved)));
     }
 
     public static void updateNickname(Pokemon p)
     {
-        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("nickname", p.getNickname()));
-        CacheHelper.updatePokemon(p.getUUID());
+        update(p, Updates.set("nickname", Global.normalCase(p.getNickname())));
     }
 
     public static void updateTMTR(Pokemon p)
     {
-        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("tm", p.getTM()));
-        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("tr", p.getTR()));
-        CacheHelper.updatePokemon(p.getUUID());
+        update(p, Updates.set("tm", p.getTM()), Updates.set("tr", p.getTR()));
     }
 
     public static void updateItem(Pokemon p)
     {
-        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("item", p.getItem()));
-        CacheHelper.updatePokemon(p.getUUID());
+        update(p, Updates.set("item", p.getItem()));
     }
 
     public static void updateDynamaxLevel(Pokemon p)
     {
-        Mongo.PokemonData.updateOne(p.getQuery(), Updates.set("dynamax_level", p.getDynamaxLevel()));
-        CacheHelper.updatePokemon(p.getUUID());
+        update(p, Updates.set("dynamax_level", p.getDynamaxLevel()));
     }
 
     public static void deletePokemon(Pokemon p)
@@ -298,8 +295,7 @@ public class Pokemon
         PokemonRarity.Rarity rarity = PokemonRarity.POKEMON_RARITIES.get(this.getName());
         if(rarity == null) rarity = PokemonRarity.Rarity.values()[new Random().nextInt(PokemonRarity.Rarity.values().length)];
 
-        int basePrice = switch(rarity)
-                {
+        int basePrice = switch(rarity) {
                     case COPPER -> 500;
                     case SILVER -> 1000;
                     case GOLD -> 2000;
@@ -311,7 +307,6 @@ public class Pokemon
                 };
 
         int numZero = 0;
-        int numSoftZero = 0;
         int numMax = 0;
         int numSoftMax = 0;
 
@@ -319,11 +314,7 @@ public class Pokemon
         {
             switch (this.getIVs().get(s))
             {
-                case 0 -> {
-                    numZero++;
-                    numSoftZero++;
-                }
-                case 1, 2 -> numSoftZero++;
+                case 0 -> numZero++;
                 case 31 -> {
                     numMax++;
                     numSoftMax++;
