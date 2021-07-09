@@ -10,6 +10,7 @@ import com.calculusmaster.pokecord.mongo.PokemonStatisticsQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.PokemonRarity;
+import com.calculusmaster.pokecord.util.enums.PokemonStatistic;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
@@ -175,6 +176,18 @@ public class Pokemon
     public PokemonStatisticsQuery getStatisticsData()
     {
         return new PokemonStatisticsQuery(this.getUUID());
+    }
+
+    public String getKDRatio()
+    {
+        PokemonStatisticsQuery stats = this.getStatisticsData();
+
+        int numerator = stats.get(PokemonStatistic.POKEMON_DEFEATED);
+        int denominator = stats.get(PokemonStatistic.TIMES_FAINTED);
+
+        if(numerator == 0 && denominator == 0) return "N/A";
+        else if(denominator == 0) return "Infinite";
+        else return String.format("%.2f", (double)numerator / (double)denominator);
     }
 
     public int getNumber()
