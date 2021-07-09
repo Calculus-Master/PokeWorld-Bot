@@ -230,6 +230,8 @@ public class Pokemon
 
         Mongo.PokemonData.insertOne(pokeData);
 
+        if(!PokemonStatisticsQuery.exists(p.getUUID())) PokemonStatisticsQuery.register(p.getUUID());
+
         LoggerHelper.info(Pokemon.class, "Pokemon Uploaded: UUID (" + p.getUUID() + "), NAME (" + p.getName() + ")");
     }
 

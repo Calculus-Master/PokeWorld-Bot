@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.mongo;
 
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.enums.PokemonStatistic;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 
@@ -19,6 +20,16 @@ public class PokemonStatisticsQuery extends MongoQuery
         for(PokemonStatistic s : PokemonStatistic.values()) statsData.append(s.key, 0);
 
         Mongo.PokemonStatisticsData.insertOne(statsData);
+    }
+
+    public static boolean exists(String UUID)
+    {
+        return Mongo.PokemonStatisticsData.find(Filters.eq("UUID", UUID)).first() != null;
+    }
+
+    public static void delete(String UUID)
+    {
+        Mongo.PokemonStatisticsData.deleteOne(Filters.eq("UUID", UUID));
     }
 
     private void update()

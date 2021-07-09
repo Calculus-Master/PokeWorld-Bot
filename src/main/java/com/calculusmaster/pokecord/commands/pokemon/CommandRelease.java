@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.mongo.PokemonStatisticsQuery;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.HashMap;
@@ -43,6 +44,8 @@ public class CommandRelease extends Command
             {
                 this.playerData.removePokemon(UUID);
                 Pokemon.deletePokemon(p);
+                PokemonStatisticsQuery.delete(UUID);
+
                 releaseRequests.remove(this.player.getId());
 
                 this.sendMsg("Released your " + label + "!");
