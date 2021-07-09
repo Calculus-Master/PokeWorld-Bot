@@ -765,6 +765,8 @@ public class Pokemon
         boolean isNormal = !this.specialCanEvolve();
         String newEvolution = "";
 
+        PokeItem item = PokeItem.asItem(this.getItem());
+
         if(isNormal) newEvolution = this.genericJSON.getJSONArray("evolutions").getString(0);
         else newEvolution = switch(this.getName())
             {
@@ -776,24 +778,24 @@ public class Pokemon
                 case "Vulpix" -> "Ninetales";
                 case "Alolan Vulpix" -> "Alolan Ninetales";
                 case "Jigglypuff" -> "Wigglytuff";
-                case "Gloom" -> PokeItem.asItem(this.getItem()).equals(PokeItem.LEAF_STONE) ? "Vileplume" : "Bellossom";
+                case "Gloom" -> item.equals(PokeItem.LEAF_STONE) ? "Vileplume" : "Bellossom";
                 case "Growlithe" -> "Arcanine";
                 case "Weepinbell" -> "Victreebel";
                 case "Shellder" -> "Cloyster";
                 case "Exeggcute" -> "Exeggutor";
                 case "Staryu" -> "Starmie";
-                case "Eevee" -> PokeItem.asItem(this.getItem()).equals(PokeItem.WATER_STONE) ? "Vaporeon" : (PokeItem.asItem(this.getItem()).equals(PokeItem.THUNDER_STONE) ? "Jolteon" : "Flareon");
+                case "Eevee" -> item.equals(PokeItem.WATER_STONE) ? "Vaporeon" : (item.equals(PokeItem.THUNDER_STONE) ? "Jolteon" : "Flareon");
                 case "Onix" -> "Steelix";
                 case "Haunter" -> "Gengar";
                 case "Charjabug" -> "Vikavolt";
                 case "Poipole" -> "Naganadel";
-                case "Poliwhirl" -> PokeItem.asItem(this.getItem()).equals(PokeItem.WATER_STONE) ? "Poliwrath" : "Politoed";
+                case "Poliwhirl" -> item.equals(PokeItem.WATER_STONE) ? "Poliwrath" : "Politoed";
                 case "Aipom" -> "Ambipom";
                 case "Sunkern" -> "Sunflora";
                 case "Yanma" -> "Yanmega";
                 case "Murkrow" -> "Honchkrow";
                 case "Slowpoke" -> "Slowking";
-                case "Galarian Slowpoke" -> PokeItem.asItem(this.getItem()).equals(PokeItem.GALARICA_CUFF) ? "Galarian Slowbro" : "Galarian Slowking";
+                case "Galarian Slowpoke" -> item.equals(PokeItem.GALARICA_CUFF) ? "Galarian Slowbro" : "Galarian Slowking";
                 case "Misdreavus" -> "Mismagius";
                 case "Gligar" -> "Gliscor";
                 case "Scyther" -> "Scizor";
@@ -811,7 +813,7 @@ public class Pokemon
                 case "Feebas" -> "Milotic";
                 case "Dusclops" -> "Dusknoir";
                 case "Snorunt" -> "Froslass";
-                case "Clamperl" -> PokeItem.asItem(this.getItem()).equals(PokeItem.DEEP_SEA_TOOTH) ? "Huntail" : "Gorebyss";
+                case "Clamperl" -> item.equals(PokeItem.DEEP_SEA_TOOTH) ? "Huntail" : "Gorebyss";
                 case "Bonsly" -> "Sudowoodo";
                 case "Mime Jr" -> "Mr Mime";
                 case "Happiny" -> "Chansey";
