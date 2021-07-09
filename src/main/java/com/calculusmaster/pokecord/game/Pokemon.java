@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
+import com.calculusmaster.pokecord.mongo.PokemonStatisticsQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.PokemonRarity;
@@ -169,6 +170,11 @@ public class Pokemon
         p.setItem(d.getString("item"));
 
         return p;
+    }
+
+    public PokemonStatisticsQuery getStatisticsData()
+    {
+        return new PokemonStatisticsQuery(this.getUUID());
     }
 
     public int getNumber()

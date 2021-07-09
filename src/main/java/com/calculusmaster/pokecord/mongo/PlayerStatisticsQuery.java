@@ -18,7 +18,7 @@ public class PlayerStatisticsQuery extends MongoQuery
 
         for(PlayerStatistic s : PlayerStatistic.values()) statsData.append(s.key, 0);
 
-        Mongo.SettingsData.insertOne(statsData);
+        Mongo.PlayerStatisticsData.insertOne(statsData);
     }
 
     private void update()
