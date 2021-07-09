@@ -9,6 +9,8 @@ import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
+import com.calculusmaster.pokecord.mongo.PokemonStatisticsQuery;
+import com.calculusmaster.pokecord.util.enums.PokemonStatistic;
 import com.calculusmaster.pokecord.util.listener.ButtonListener;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -727,6 +729,12 @@ public class Duel
             int exp = this.players[this.current].active.getDuelExp(this.players[this.other].active);
             this.expGains.put(UUID, (this.expGains.getOrDefault(UUID, 0)) + exp);
 
+            PokemonStatisticsQuery current = new PokemonStatisticsQuery(this.players[this.current].active.getUUID());
+            PokemonStatisticsQuery other = new PokemonStatisticsQuery(this.players[this.other].active.getUUID());
+
+            current.incr(PokemonStatistic.POKEMON_DEFEATED);
+            other.incr(PokemonStatistic.TIMES_FAINTED);
+
             if(this.players[this.current].active.isDynamaxed() && this.players[this.current].active.getDynamaxLevel() < 10 && new Random().nextInt(100) < 40)
             {
                 this.players[this.current].active.increaseDynamaxLevel();
@@ -737,6 +745,9 @@ public class Duel
             if(this.data(this.other).destinyBondUsed)
             {
                 this.data(this.other).destinyBondUsed = false;
+
+                other.incr(PokemonStatistic.POKEMON_DEFEATED);
+                current.incr(PokemonStatistic.TIMES_FAINTED);
 
                 this.players[this.current].active.damage(this.players[this.current].active.getHealth());
                 turnResult += " " + this.players[this.current].active.getName() + " fainted from the Destiny Bond!";
