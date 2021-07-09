@@ -7,7 +7,9 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
+import com.calculusmaster.pokecord.mongo.PokemonStatisticsQuery;
 import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.enums.PokemonStatistic;
 import com.calculusmaster.pokecord.util.helpers.SettingsHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -35,6 +37,7 @@ public class CommandInfo extends Command
 
         String UUID = this.playerData.getPokemonList().get(index);
         Pokemon chosen = Pokemon.build(UUID);
+        PokemonStatisticsQuery pokeStats = new PokemonStatisticsQuery(chosen.getUUID());
 
         String title = "**Level " + chosen.getLevel() + " " + chosen.getDisplayName() + "**" + (chosen.isShiny() ? " :star2:" : "");
         String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getGenericJSON().getString("growthrate"), chosen.getLevel()) + " XP";
@@ -45,9 +48,10 @@ public class CommandInfo extends Command
         String tm = "**TM**: " + (chosen.hasTM() ? "TM" + (chosen.getTM() < 10 ? "0" : "") + chosen.getTM()  + " - " + TM.get(chosen.getTM()).getMoveName() : "None");
         String tr = "**TR**: " + (chosen.hasTR() ? "TR" + (chosen.getTR() < 10 ? "0" : "") + chosen.getTR()  + " - " + TR.get(chosen.getTR()).getMoveName() : "None");
         String stats = getStatsFormatted(chosen, this.playerData.getSettings().getSettingBoolean(SettingsHelper.Setting.CLIENT_DETAILED));
+        String kd = "**Defeats/Faints Ratio**: " + String.format("%.2f", pokeStats.get(PokemonStatistic.POKEMON_DEFEATED) / (double)pokeStats.get(PokemonStatistic.TIMES_FAINTED));
 
         this.embed.setTitle(title);
-        this.embed.setDescription(exp + "\n" + type + "\n" + nature + "\n" + dynamaxLevel + "\n" + item + "\n" + tm + "\n" + tr + "\n\n" + stats);
+        this.embed.setDescription(exp + "\n" + type + "\n" + nature + "\n" + dynamaxLevel + "\n" + item + "\n" + tm + "\n" + tr + "\n\n" + stats + "\n" + kd);
         this.color = chosen.getType()[0].getColor();
         this.embed.setImage(chosen.getImage());
         this.embed.setFooter("Showing Pokemon " + (index + 1) + " / " + this.playerData.getPokemonList().size());
