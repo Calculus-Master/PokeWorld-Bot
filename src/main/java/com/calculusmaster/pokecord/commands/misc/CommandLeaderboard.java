@@ -49,7 +49,7 @@ public class CommandLeaderboard extends Command
 
                 for(ScoreComponent sc : ScoreComponent.values()) leaderboardInfo.append("**").append(sc.name).append("**: ***").append(this.format(sc.zscore.get(targetID))).append("***      (Weight: ").append(sc.weight).append(")\n");
 
-                this.embed.setTitle("Score Calculation for " + this.player.getName());
+                this.embed.setTitle("Score Calculation for " + PLAYER_QUERIES.stream().filter(p -> p.getID().equals(targetID)).collect(Collectors.toList()).get(0).getUsername());
                 this.embed.setDescription(leaderboardInfo + "\n\n" + standardizedNote);
                 this.embed.setFooter("Higher weight values mean that the component has a larger impact on your overall score value!");
             }
