@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class Pokemon
 {
     private JSONObject genericJSON;
-    private JSONObject specificJSON;
+    protected JSONObject specificJSON;
 
     private String UUID;
     private int num;
@@ -158,6 +158,11 @@ public class Pokemon
             @Override
             public String getNickname() {
                 return d.getString("nickname");
+            }
+
+            @Override
+            public void linkSpecificJSON(String UUID) {
+                this.specificJSON = new JSONObject(d.toJson());
             }
         };
 
