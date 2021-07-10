@@ -90,7 +90,7 @@ public class Pokemon
         p.statBuff = 1.0;
         p.setDynamax(false);
 
-        LoggerHelper.info(Pokemon.class, "Pokemon Created: UUID (" + UUID + "), NAME (" + p.getName() + ")");
+        LoggerHelper.info(Pokemon.class, "Pokemon Built: UUID (" + UUID + "), NAME (" + p.getName() + ")");
         return p;
     }
 
