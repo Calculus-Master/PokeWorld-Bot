@@ -149,4 +149,32 @@ public class ServerDataQuery extends MongoQuery
 
         this.update();
     }
+
+    //key: "botchannel"
+
+    public List<String> getBotChannels()
+    {
+        return this.json().getJSONArray("botchannel").toList().stream().map(s -> (String)s).collect(Collectors.toList());
+    }
+
+    public void addBotChannel(String channelID)
+    {
+        Mongo.ServerData.updateOne(this.query, Updates.push("botchannel", channelID));
+
+        this.update();
+    }
+
+    public void removeBotChannel(String channelID)
+    {
+        Mongo.ServerData.updateOne(this.query, Updates.pull("botchannel", channelID));
+
+        this.update();
+    }
+
+    public void clearBotChannels()
+    {
+        Mongo.ServerData.updateOne(this.query, Updates.set("botchannel", new JSONArray()));
+
+        this.update();
+    }
 }

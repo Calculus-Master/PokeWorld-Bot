@@ -207,6 +207,30 @@ public class CommandSettings extends Command
                         this.sendMsg("Duels are now allowed anywhere!");
                     }
                 }
+                else if(SERVER_BOTCHANNEL.matches(this.msg[2]))
+                {
+                    String channel = this.event.getMessage().getMentionedChannels().size() > 0 ? this.event.getMessage().getMentionedChannels().get(0).getId() : this.event.getMessage().getChannel().getId();
+                    TextChannel channelName = this.event.getGuild().getTextChannelById(channel);
+
+                    if(channelName != null && this.serverData.getBotChannels().contains(channel))
+                    {
+                        this.serverData.removeBotChannel(channel);
+
+                        this.sendMsg(this.serverData.getDuelChannels().isEmpty() ? "Bot commands are now allowed anywhere!" : "Bot commands are no longer allowed in " + channelName.getAsMention() + "!");
+                    }
+                    else if(channelName != null)
+                    {
+                        this.serverData.addBotChannel(channel);
+
+                        this.sendMsg("Bot commands are now allowed in " + channelName.getAsMention() + "!");
+                    }
+                    else if(this.msg.length == 4 && this.msg[3].equals("reset"))
+                    {
+                        this.serverData.clearBotChannels();
+
+                        this.sendMsg("Bot commands are now allowed anywhere!");
+                    }
+                }
                 else this.embed.setDescription(CommandInvalid.getShort());
             }
         }

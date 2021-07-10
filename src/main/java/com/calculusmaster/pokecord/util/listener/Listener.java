@@ -50,6 +50,9 @@ public class Listener extends ListenerAdapter
         //If bot is mentioned, send the server prefix
         if(event.getMessage().getMentionedMembers().stream().anyMatch(m -> m.getId().equals("718169293904281610"))) event.getChannel().sendMessage("<@" + player.getId() + ">: My prefix is `" + serverQuery.getPrefix() + "`!").queue();
 
+        //If bot commands are disabled in this channel, skip the listener
+        if(!serverQuery.getBotChannels().isEmpty() && !serverQuery.getBotChannels().contains(event.getChannel().getId())) return;
+
         //If the message starts with the right prefix, continue, otherwise skip the listener
         if(msg[0].startsWith(serverQuery.getPrefix()))
         {
