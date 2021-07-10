@@ -73,7 +73,7 @@ public class CommandLeaderboard extends Command
 
             this.embed.setTitle("Pokecord2 Global Leaderboard");
             this.embed.setDescription(leaderboard.toString());
-            this.embed.setFooter("Your Place: " + (SORTED_FINAL_SCORES.indexOf(self) + 1));
+            this.embed.setFooter("Your Position: " + (SORTED_FINAL_SCORES.indexOf(self) + 1) + " / " + SORTED_FINAL_SCORES.size());
         }
 
         return this;
