@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.interfaces.IScoreComponent;
+import net.dv8tion.jda.api.entities.ISnowflake;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
@@ -25,14 +26,14 @@ public class CommandLeaderboard extends Command
     public Command runCommand()
     {
         this.reset();
-        this.generatePlayerQueries();
+        this.generatePlayerQueries(this.msg.length == 2 && this.msg[1].equals("server"));
         this.generateZScores();
         this.generateFinalScores();
         this.sortFinalScores();
 
         final String standardizedNote = "*Note: Score values are Standardized. Negative values indicate a score below average, while Positive values indicate above average. The farther a value is from 0, the more extreme that value is compared to the player population!*";
 
-        if(this.msg.length == 2)
+        if(this.msg.length == 2 && !this.msg[1].equals("server"))
         {
             if(this.mentions.size() > 0 || this.msg[1].equals("self") || this.msg[1].equals("me"))
             {
@@ -127,9 +128,22 @@ public class CommandLeaderboard extends Command
         });
     }
 
-    private void generatePlayerQueries()
+    private void generatePlayerQueries(boolean server)
     {
-        Mongo.PlayerData.find().forEach(d -> PLAYER_QUERIES.add(new PlayerDataQuery(d.getString("playerID"))));
+        final List<String> IDs_Lambda = new ArrayList<>();
+        Mongo.PlayerData.find().forEach(d -> IDs_Lambda.add(d.getString("playerID")));
+
+        List<String> IDs = new ArrayList<>(IDs_Lambda);
+
+        if(server)
+        {
+            this.server.loadMembers();
+            List<String> serverMembers = this.server.getMembers().stream().map(ISnowflake::getId).collect(Collectors.toList());
+
+            IDs = IDs.stream().filter(serverMembers::contains).collect(Collectors.toList());
+        }
+
+        IDs.stream().map(PlayerDataQuery::new).forEach(PLAYER_QUERIES::add);
     }
 
     private void reset()
