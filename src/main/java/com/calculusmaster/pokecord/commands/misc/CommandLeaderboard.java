@@ -47,7 +47,8 @@ public class CommandLeaderboard extends Command
 
                 StringBuilder leaderboardInfo = new StringBuilder();
 
-                for(ScoreComponent sc : ScoreComponent.values()) leaderboardInfo.append("**").append(sc.name).append("**: ***").append(this.format(sc.zscore.get(targetID))).append("***      (Weight: ").append(sc.weight).append(")\n");
+                for(ScoreComponent sc : ScoreComponent.values()) leaderboardInfo.append("**").append(sc.name).append("**: `").append(this.format(sc.zscore.get(targetID))).append("`   (Weight: `").append(sc.weight).append("`)\n");
+                leaderboardInfo.append("\n**Total Score**: `").append(this.format(FINAL_SCORES.get(targetID))).append("`");
 
                 this.embed.setTitle("Score Calculation for " + PLAYER_QUERIES.stream().filter(p -> p.getID().equals(targetID)).collect(Collectors.toList()).get(0).getUsername());
                 this.embed.setDescription(leaderboardInfo + "\n\n" + standardizedNote);
