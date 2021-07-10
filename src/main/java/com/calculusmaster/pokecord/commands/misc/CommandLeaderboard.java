@@ -28,6 +28,8 @@ public class CommandLeaderboard extends Command
     {
         boolean server = this.msg.length == 2 && this.msg[1].equals("server");
 
+        this.playerData.directMessage("Calculating Player Scores...");
+
         this.reset();
         this.generatePlayerQueries(server);
         this.generateZScores();
@@ -48,14 +50,12 @@ public class CommandLeaderboard extends Command
                     return this;
                 }
 
-                StringBuilder leaderboardInfo = new StringBuilder();
+                for(ScoreComponent sc : ScoreComponent.values()) this.embed.addField(sc.name, "`" + this.format(sc.zscore.get(targetID)) + "`\nWeight: `" + sc.weight + "`", true);
+                this.embed.addField("Total Score", "`" + this.format(FINAL_SCORES.get(targetID)) + "`", false);
+                this.embed.addField("Position", "*" + this.getPosition(targetID) + "*", true);
 
-                for(ScoreComponent sc : ScoreComponent.values()) leaderboardInfo.append("**").append(sc.name).append("**: `").append(this.format(sc.zscore.get(targetID))).append("`   (Weight: `").append(sc.weight).append("`)\n");
-                leaderboardInfo.append("\n**Total Score**: `").append(this.format(FINAL_SCORES.get(targetID))).append("`");
-                leaderboardInfo.append("\n\n*").append(this.getPosition(targetID)).append("*");
-
+                this.embed.setDescription(standardizedNote);
                 this.embed.setTitle("Score Calculation for " + PLAYER_QUERIES.stream().filter(p -> p.getID().equals(targetID)).collect(Collectors.toList()).get(0).getUsername());
-                this.embed.setDescription(leaderboardInfo + "\n\n" + standardizedNote);
                 this.embed.setFooter("Higher weight values mean that the component has a larger impact on your overall score value!");
             }
             else this.sendMsg("Invalid Arguments!");
@@ -78,7 +78,7 @@ public class CommandLeaderboard extends Command
 
             this.embed.setTitle((server ? this.server.getName() : "Pokecord2 Global") + " Leaderboard");
             this.embed.setDescription(leaderboard + "\n\n" + standardizedNote);
-            this.embed.setFooter("Your " + this.getPosition(this.player.getId()));
+            this.embed.setFooter("Your Position: " + this.getPosition(this.player.getId()));
         }
 
         return this;
@@ -89,7 +89,7 @@ public class CommandLeaderboard extends Command
         int index = -1;
         for(int i = 0; i < SORTED_FINAL_SCORES.size(); i++) if(SORTED_FINAL_SCORES.get(i).getKey().equals(ID)) index = i;
 
-        return "Position: " + (index + 1) + " / " + SORTED_FINAL_SCORES.size();
+        return (index + 1) + " / " + SORTED_FINAL_SCORES.size();
     }
 
     private String format(double d)
