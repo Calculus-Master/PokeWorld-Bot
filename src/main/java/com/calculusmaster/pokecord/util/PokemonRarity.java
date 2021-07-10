@@ -1,5 +1,7 @@
 package com.calculusmaster.pokecord.util;
 
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
+
 import java.util.*;
 
 public class PokemonRarity
@@ -1002,7 +1004,7 @@ public class PokemonRarity
 
         Collections.shuffle(SPAWNS);
 
-        System.out.println("Spawn Master List Size: " + SPAWNS.size());
+        LoggerHelper.info(PokemonRarity.class, "Spawn List Size: " + SPAWNS.size());
     }
 
     public static String getSpawn()

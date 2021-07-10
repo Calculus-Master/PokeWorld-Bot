@@ -56,6 +56,8 @@ public class Pokecord
 
         LoggerHelper.info(Pokecord.class, "Initialization Finished - " + (end - start) + "ms!");
 
+        start = System.currentTimeMillis();
+
         //Create Bot
         JDABuilder bot = JDABuilder
                 .createDefault(PrivateInfo.TOKEN)
@@ -72,7 +74,8 @@ public class Pokecord
         BOT_JDA = bot.build().awaitReady();
 
         end = System.currentTimeMillis();
-        System.out.println("Loading finished in " + (end - start) + "ms!");
+
+        LoggerHelper.info(Pokecord.class, "Bot Loading Complete (" + (end - start) + "ms)!");
 
         for(Guild g : BOT_JDA.getGuilds())
         {

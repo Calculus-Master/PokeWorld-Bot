@@ -16,6 +16,7 @@ public class LoggerHelper
     {
         info(Pokecord.class, "Starting " + name + " Init!");
         init.run();
+        info(Pokecord.class, "Completed " + name + " Init!");
     }
 
     //Core

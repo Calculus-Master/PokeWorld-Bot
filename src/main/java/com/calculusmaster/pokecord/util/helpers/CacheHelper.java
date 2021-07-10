@@ -125,7 +125,7 @@ public class CacheHelper
         for(int i = 0; i < UUID_LISTS.get(player).size(); i++) list.add(Pokemon.buildCore(UUID_LISTS.get(player).get(i), i + 1));
         POKEMON_LISTS.put(player, list);
 
-        System.out.println("Initialization for Player: " + player + " took " + (System.currentTimeMillis() - init));
+        LoggerHelper.info(CacheHelper.class, "Pokemon List Init Complete - " + player + " (" + (System.currentTimeMillis() - init) + "ms)!");
     }
 
     public static void setUUIDLists()
@@ -158,7 +158,7 @@ public class CacheHelper
 
         long finalTime = System.currentTimeMillis();
 
-        System.out.println("Pokemon List Init: " + (finalTime - initialTime) + "ms!");
+        LoggerHelper.info(CacheHelper.class, "Full Pokemon List Cache Init: " + (finalTime - initialTime) + "ms!");
     }
 
     public static void initMarketEntries()
@@ -195,7 +195,8 @@ public class CacheHelper
         catch (Exception e) { System.out.println("CommandMarket Init failed!"); }
 
         long f = System.currentTimeMillis();
-        System.out.println((f - i) + "ms");
+
+        LoggerHelper.info(CacheHelper.class, "Market Cache Init: " + (f - i) + "ms!");
     }
 
     public static void initAchievementCache()
