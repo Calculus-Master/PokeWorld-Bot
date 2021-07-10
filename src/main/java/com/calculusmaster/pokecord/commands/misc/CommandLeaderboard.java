@@ -50,7 +50,7 @@ public class CommandLeaderboard extends Command
                     return this;
                 }
 
-                for(ScoreComponent sc : ScoreComponent.values()) this.embed.addField(sc.name, "`" + this.format(sc.zscore.get(targetID)) + "`\nWeight: `" + sc.weight + "`", true);
+                for(ScoreComponent sc : ScoreComponent.values()) this.embed.addField(sc.name, "Z Score: `" + this.format(sc.zscore.get(targetID)) + "`\nWeight: `" + sc.weight + "`", true);
                 this.embed.addField("Total Score", "`" + this.format(FINAL_SCORES.get(targetID)) + "`", false);
                 this.embed.addField("Position", "*" + this.getPosition(targetID) + "*", true);
 

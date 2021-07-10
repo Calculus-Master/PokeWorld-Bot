@@ -24,11 +24,11 @@ public class CommandBalance extends Command
 
         PlayerDataQuery p = targetID.equals(this.player.getId()) ? this.playerData : new PlayerDataQuery(targetID);
 
-        String creditsLine = "Credits: **" + p.getCredits() + "**!";
-        String redeemsLine = "Redeems: **" + p.getRedeems() + "**!";
-
         this.embed.setTitle(p.getUsername() + "'s Balance");
-        this.embed.setDescription(creditsLine + "\n\n" + redeemsLine);
+        this.embed
+                .addField("Credits", "`" + p.getCredits() + "`", true)
+                .addField("Redeems", "`" + p.getRedeems() + "`", true)
+                .addField("Items", "`" + (p.getItemList().size() + p.getTMList().size() + p.getTRList().size() + p.getZCrystalList().size()) + "`", true);
         this.embed.setThumbnail("https://images-ext-2.discordapp.net/external/xlEcYc2ErW6-vD7-nHbk3pv2u4sNwjDVx3jFEL6w9fc/https/emojipedia-us.s3.amazonaws.com/thumbs/120/emoji-one/104/money-bag_1f4b0.png");
 
         return this;

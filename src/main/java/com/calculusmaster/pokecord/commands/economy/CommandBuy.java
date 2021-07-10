@@ -184,7 +184,7 @@ public class CommandBuy extends Command
                     this.playerData.addTM(request.toString());
                     this.playerData.changeCredits(-1 * cost);
 
-                    this.sendMsg("Successfully bought `" + request.getShopEntry() + "`!");
+                    this.sendMsg("Successfully bought `" + request.getShopEntry().replaceAll("`", "") + "`!");
                 }
             }
             else if(tr)
