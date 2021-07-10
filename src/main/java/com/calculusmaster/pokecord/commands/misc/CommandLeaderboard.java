@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands.misc;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
@@ -62,6 +63,15 @@ public class CommandLeaderboard extends Command
         }
         else
         {
+            if(!server)
+            {
+                String currentID = this.player.getId();
+
+                if(SORTED_FINAL_SCORES.get(0).getKey().equals(currentID)) Achievements.grant(currentID, Achievements.REACHED_TOP_1_LEADERBOARD, this.event);
+
+                for(int i = 0; i < 10; i++) if(SORTED_FINAL_SCORES.get(i).getKey().equals(currentID)) Achievements.grant(currentID, Achievements.REACHED_TOP_10_LEADERBOARD, this.event);
+            }
+
             StringBuilder leaderboard = new StringBuilder();
 
             PlayerDataQuery p;

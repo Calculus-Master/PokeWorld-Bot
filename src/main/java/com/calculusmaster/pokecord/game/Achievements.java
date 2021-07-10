@@ -29,7 +29,9 @@ public enum Achievements
     WON_FIRST_DUEL_MAX_SIZE(1000, "Won your first PVP duel with a max size team!"),
     REDEEMED_FIRST_POKEMON(100, "Redeemed a Pokemon for the first time!"),
     BOUGHT_FIRST_MEGA(500, "Bought a Mega Evolution for the first time!"),
-    BOUGHT_FIRST_FORM(500, "Bought a Pokemon Form for the first time!");
+    BOUGHT_FIRST_FORM(500, "Bought a Pokemon Form for the first time!"),
+    REACHED_TOP_1_LEADERBOARD(2000, "Reached 1st Place on the Global Leaderboard!"),
+    REACHED_TOP_10_LEADERBOARD(1000, "Reached Top 10 on the Global Leaderboard!");
 
     public int credits;
     public String desc;

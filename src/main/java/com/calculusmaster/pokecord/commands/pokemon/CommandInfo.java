@@ -55,7 +55,6 @@ public class CommandInfo extends Command
                 .addField("Dynamax Level", dynamaxLevel, true)
                 .addField("Item", item, true)
                 .addField("TM/TR", "TM: " + tm + "\nTR: " + tr, true)
-                //.addBlankField(false)
                 .addField(this.getStatsField(chosen));
 
         if(this.playerData.getSettings().getSettingBoolean(SettingsHelper.Setting.CLIENT_DETAILED))
