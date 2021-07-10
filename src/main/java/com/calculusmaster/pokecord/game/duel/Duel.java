@@ -10,6 +10,7 @@ import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.mongo.PokemonStatisticsQuery;
+import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.enums.PokemonStatistic;
 import com.calculusmaster.pokecord.util.listener.ButtonListener;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -1260,7 +1261,7 @@ public class Duel
 
         int c = this.players[0].team.size() >= 6 ? this.giveWinCredits() : 0;
 
-        embed.setDescription(this.getWinner().data.getUsername() + " has won!\nThey earned " + c + " credits!");
+        embed.setDescription(this.getWinner().data.getUsername() + " has won!" + (c != 0 ? "\nThey earned " + c + " credits!" : ""));
 
         this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
 
@@ -1273,8 +1274,13 @@ public class Duel
             this.uploadEVs(1);
         }
 
-        this.players[0].data.addPokePassExp(500, this.event);
-        this.players[1].data.addPokePassExp(500, this.event);
+        int winner = this.getWinner().ID.equals(this.players[0].ID) ? 0 : 1;
+        int loser = winner == 0 ? 1 : 0;
+
+        this.players[winner].data.addPokePassExp(1000, this.event);
+        this.players[loser].data.addPokePassExp(500, this.event);
+
+        this.players[winner].data.getStats().incr(PlayerStatistic.PVP_DUELS_WON);
 
         this.uploadExperience();
 

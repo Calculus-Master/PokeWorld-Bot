@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.duel.elements.Trainer;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
+import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -64,6 +65,7 @@ public class TrainerDuel extends Duel
                 this.players[0].data.changeCredits(credits);
 
                 Achievements.grant(this.players[0].ID, Achievements.DEFEATED_FIRST_ELITE_TRAINER, this.event);
+                this.players[0].data.getStats().incr(PlayerStatistic.ELITE_TRAINER_DUELS_WON);
 
                 this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated the Elite Trainer and earned " + credits + " credits!").queue();
             }
@@ -75,6 +77,7 @@ public class TrainerDuel extends Duel
                 {
                     playersDefeatedBot.add(this.players[0].ID);
                     Trainer.PLAYER_TRAINERS_DEFEATED.put(bot, playersDefeatedBot);
+                    this.players[0].data.getStats().incr(PlayerStatistic.TRAINER_DUELS_WON);
 
                     boolean dailyComplete = true;
                     for(Trainer.TrainerInfo ti : Trainer.DAILY_TRAINERS) if(!Trainer.PLAYER_TRAINERS_DEFEATED.get(ti.name).contains(this.players[0].ID)) dailyComplete = false;

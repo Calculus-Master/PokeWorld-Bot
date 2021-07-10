@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.PokePass;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.SettingsHelper;
 import com.mongodb.client.model.Updates;
@@ -109,6 +110,9 @@ public class PlayerDataQuery extends MongoQuery
     public void changeCredits(int amount)
     {
         Mongo.PlayerData.updateOne(this.query, Updates.set("credits", this.getCredits() + amount));
+
+        if(amount < 0) this.getStats().incr(PlayerStatistic.CREDITS_SPENT);
+        else if(amount > 0) this.getStats().incr(PlayerStatistic.CREDITS_EARNED);
 
         this.update();
     }

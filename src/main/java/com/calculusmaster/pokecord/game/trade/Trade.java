@@ -2,10 +2,11 @@ package com.calculusmaster.pokecord.game.trade;
 
 import com.calculusmaster.pokecord.game.trade.elements.TradeOffer;
 import com.calculusmaster.pokecord.game.trade.elements.TradePlayer;
+import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 
-import static com.calculusmaster.pokecord.game.trade.TradeHelper.*;
+import static com.calculusmaster.pokecord.game.trade.TradeHelper.TRADES;
+import static com.calculusmaster.pokecord.game.trade.TradeHelper.TradeStatus;
 
 public class Trade
 {
@@ -29,6 +30,9 @@ public class Trade
         this.players[0].offer.transfer(this.players[1].data);
         //Transfer Offer from 1 to 0
         this.players[1].offer.transfer(this.players[0].data);
+
+        this.players[0].data.getStats().incr(PlayerStatistic.TRADES_COMPLETED);
+        this.players[1].data.getStats().incr(PlayerStatistic.TRADES_COMPLETED);
 
         this.setStatus(TradeStatus.COMPLETE);
 

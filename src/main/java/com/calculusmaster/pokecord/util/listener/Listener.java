@@ -13,6 +13,7 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
@@ -258,6 +259,8 @@ public class Listener extends ListenerAdapter
     {
         PlayerDataQuery p = new PlayerDataQuery(event.getAuthor().getId());
         p.changeRedeems(1);
+
+        p.getStats().incr(PlayerStatistic.NATURAL_REDEEMS_EARNED);
 
         event.getChannel().sendMessage(p.getMention() + ": You earned a Redeem!").queue();
     }

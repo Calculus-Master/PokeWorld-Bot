@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.duel.elements.WildPokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Room;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -129,6 +130,7 @@ public class WildDuel extends Duel
 
             Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_WILD_DUEL, this.event);
             this.players[0].data.addPokePassExp(50, this.event);
+            this.players[0].data.getStats().incr(PlayerStatistic.WILD_DUELS_WON);
 
             embed.setDescription("You won! Your " + this.players[0].active.getName() + " earned some EVs!");
         }
