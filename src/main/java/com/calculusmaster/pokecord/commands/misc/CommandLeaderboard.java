@@ -196,8 +196,12 @@ public class CommandLeaderboard extends Command
 
         double calculateZScore(String ID)
         {
-            try { return (this.raw.get(ID) - this.stats.getMean()) / this.stats.getStandardDeviation(); }
-            catch (Exception e) { return 0; }
+            try
+            {
+                double z = (this.raw.get(ID) - this.stats.getMean()) / this.stats.getStandardDeviation();
+                return Double.isNaN(z) ? 0 : z;
+            }
+            catch (ArithmeticException e) { return 0; }
         }
 
         public static void clearLists()
