@@ -1144,6 +1144,11 @@ public class Pokemon
         }
     }
 
+    public int getTotalStat()
+    {
+        return Arrays.stream(Stat.values()).mapToInt(this::getStat).sum();
+    }
+
     public int getBaseStat(Stat s)
     {
         return this.genericJSON.getJSONArray("stats").getInt(s.ordinal());

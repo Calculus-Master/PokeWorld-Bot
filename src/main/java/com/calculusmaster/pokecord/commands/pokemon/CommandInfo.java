@@ -9,6 +9,7 @@ import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.SettingsHelper;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandInfo extends Command
@@ -54,7 +55,15 @@ public class CommandInfo extends Command
                 .addField("Dynamax Level", dynamaxLevel, true)
                 .addField("Item", item, true)
                 .addField("TM/TR", "TM: " + tm + "\nTR: " + tr, true)
-                .addField("Stats", stats, false);
+                //.addBlankField(false)
+                .addField(this.getStatsField(chosen));
+
+        if(this.playerData.getSettings().getSettingBoolean(SettingsHelper.Setting.CLIENT_DETAILED))
+        {
+            this.embed
+                    .addField(this.getIVsField(chosen))
+                    .addField(this.getEVsField(chosen));
+        }
 
         this.embed.setTitle(title);
         this.color = chosen.getType()[0].getColor();
@@ -63,6 +72,33 @@ public class CommandInfo extends Command
 
         this.playerData.addPokePassExp(50, this.event);
         return this;
+    }
+
+    private MessageEmbed.Field getStatsField(Pokemon p)
+    {
+        StringBuilder sb = new StringBuilder();
+        for(Stat s : Stat.values()) sb.append("**").append(s.shortName()).append("**: ").append(p.getStat(s)).append("\n");
+        sb.append("**Total**: ").append(p.getTotalStat());
+
+        return new MessageEmbed.Field("Stats", sb.toString(), true);
+    }
+
+    private MessageEmbed.Field getIVsField(Pokemon p)
+    {
+        StringBuilder sb = new StringBuilder();
+        for(Stat s : Stat.values()) sb.append(p.getIVs().get(s)).append(" / 31\n");
+        sb.append(p.getTotalIV());
+
+        return new MessageEmbed.Field("IVs", sb.toString(), true);
+    }
+
+    private MessageEmbed.Field getEVsField(Pokemon p)
+    {
+        StringBuilder sb = new StringBuilder();
+        for(Stat s : Stat.values()) sb.append(p.getEVs().get(s)).append("\n");
+        sb.append(p.getEVTotal());
+
+        return new MessageEmbed.Field("EVs", sb.toString(), true);
     }
 
     public static String getStatsFormatted(Pokemon p, boolean detailedEnabled)

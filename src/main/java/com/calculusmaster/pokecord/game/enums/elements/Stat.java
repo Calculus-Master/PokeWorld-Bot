@@ -11,6 +11,11 @@ public enum Stat
     public String name;
     Stat(String fullName) {this.name = fullName;}
 
+    public String shortName()
+    {
+        return this.equals(SPATK) ? "Sp. Attack" : (this.equals(SPDEF) ? "Sp. Defense" : this.name);
+    }
+
     public int index()
     {
         return Arrays.asList(values()).indexOf(this);
