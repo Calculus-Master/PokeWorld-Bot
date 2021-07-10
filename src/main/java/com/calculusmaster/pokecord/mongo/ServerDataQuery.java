@@ -89,4 +89,32 @@ public class ServerDataQuery extends MongoQuery
 
         this.update();
     }
+
+    //key: "dynamax"
+
+    public boolean isDynamaxEnabled()
+    {
+        return this.json().getBoolean("dynamax");
+    }
+
+    public void setDynamaxEnabled(boolean val)
+    {
+        Mongo.ServerData.updateOne(this.query, Updates.set("dynamax", val));
+
+        this.update();
+    }
+
+    //key: "zmoves"
+
+    public boolean areZMovesEnabled()
+    {
+        return this.json().getBoolean("zmoves");
+    }
+
+    public void setZMovesEnabled(boolean val)
+    {
+        Mongo.ServerData.updateOne(this.query, Updates.set("zmoves", val));
+
+        this.update();
+    }
 }

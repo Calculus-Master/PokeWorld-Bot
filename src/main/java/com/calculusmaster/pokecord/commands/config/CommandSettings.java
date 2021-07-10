@@ -145,6 +145,44 @@ public class CommandSettings extends Command
                         this.sendMsg("Players can " + (newValue ? "now" : "no longer") + " equip Z Crystals while in a Duel!");
                     }
                 }
+                else if(SERVER_DYNAMAX.matches(this.msg[2]))
+                {
+                    if(this.msg.length == 3 || (this.msg.length == 4 && !this.msg[3].equals("true") && !this.msg[3].equals("false")))
+                    {
+                        boolean currentValue = this.serverData.isDynamaxEnabled();
+
+                        this.serverData.setDynamaxEnabled(!currentValue);
+
+                        this.sendMsg("Players can " + (this.serverData.isDynamaxEnabled() ? "now" : "no longer") + " Dynamax their Pokemon in a Duel!");
+                    }
+                    else if(this.msg.length == 4)
+                    {
+                        boolean newValue = this.msg[3].equals("true");
+
+                        this.serverData.setDynamaxEnabled(newValue);
+
+                        this.sendMsg("Players can " + (newValue ? "now" : "no longer") + " Dynamax their Pokemon in a Duel!");
+                    }
+                }
+                else if(SERVER_ZMOVE.matches(this.msg[2]))
+                {
+                    if(this.msg.length == 3 || (this.msg.length == 4 && !this.msg[3].equals("true") && !this.msg[3].equals("false")))
+                    {
+                        boolean currentValue = this.serverData.areZMovesEnabled();
+
+                        this.serverData.setZMovesEnabled(!currentValue);
+
+                        this.sendMsg("Players can " + (this.serverData.areZMovesEnabled() ? "now" : "no longer") + " use Z-Moves in a Duel!");
+                    }
+                    else if(this.msg.length == 4)
+                    {
+                        boolean newValue = this.msg[3].equals("true");
+
+                        this.serverData.setZMovesEnabled(newValue);
+
+                        this.sendMsg("Players can " + (newValue ? "now" : "no longer") + " use Z-Moves in a Duel!");
+                    }
+                }
                 else this.embed.setDescription(CommandInvalid.getShort());
             }
         }

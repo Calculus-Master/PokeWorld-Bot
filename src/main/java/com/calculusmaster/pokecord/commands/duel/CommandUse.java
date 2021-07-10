@@ -98,6 +98,12 @@ public class CommandUse extends Command
         //Z Move
         if(formatZMove)
         {
+            if(!this.serverData.areZMovesEnabled())
+            {
+                this.sendMsg("Z-Moves are not enabled in this server!");
+                return this;
+            }
+
             if(c.checkFailed(ZMOVE_CRYSTAL))
             {
                 this.sendMsg(ZMOVE_CRYSTAL.getInvalidMessage());
@@ -129,6 +135,12 @@ public class CommandUse extends Command
         //Dynamax
         if(formatDynamax)
         {
+            if(!this.serverData.isDynamaxEnabled())
+            {
+                this.sendMsg("Dynamaxing is not enabled in this server!");
+                return this;
+            }
+
             if(c.checkFailed(DYNAMAX_USED))
             {
                 this.sendMsg(DYNAMAX_USED.getInvalidMessage());
