@@ -196,7 +196,8 @@ public class CommandLeaderboard extends Command
 
         double calculateZScore(String ID)
         {
-            return (this.raw.get(ID) - this.stats.getMean()) / this.stats.getStandardDeviation();
+            try { return (this.raw.get(ID) - this.stats.getMean()) / this.stats.getStandardDeviation(); }
+            catch (Exception e) { return 0; }
         }
 
         public static void clearLists()
