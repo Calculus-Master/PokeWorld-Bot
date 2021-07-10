@@ -112,11 +112,11 @@ public class SpawnEventHelper
         }
         catch (Exception e)
         {
-            System.out.println("SPAWN EVENT FAILED trying to spawn " + spawn + "!");
+            LoggerHelper.error(SpawnEventHelper.class, "Spawn Event failed in " + g.getName() + " (" + g.getId() + ") trying to spawn " + spawn + "!");
             e.printStackTrace();
         }
 
-        System.out.println("Spawn Event in " + g.getId() + ": " + spawn + " Shiny: " + shiny);
+        LoggerHelper.info(SpawnEventHelper.class, "New Spawn Event – " + g.getName() + " (" + g.getId() + ") - " + spawn + " (Shiny? " + shiny + ")!");
         SERVER_SPAWNS.put(g.getId(), (shiny ? "Shiny " : "") + spawn);
     }
 

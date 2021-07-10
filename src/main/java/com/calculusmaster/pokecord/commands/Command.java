@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.misc.CommandHelp;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -376,7 +377,7 @@ public abstract class Command
     public MessageEmbed getResponseEmbed()
     {
         this.timeF = System.currentTimeMillis();
-        Global.logTime(this.getClass(), this.msg[0], this.timeI, this.timeF, this.event.getMessage().getTimeCreated());
+        LoggerHelper.time(this.getClass(), this.msg[0], this.timeI, this.timeF);
 
         this.setAuthor();
         this.setColor();
