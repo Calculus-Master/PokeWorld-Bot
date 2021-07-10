@@ -29,7 +29,11 @@ public class ServerDataQuery extends MongoQuery
         Document serverData = new Document()
                 .append("serverID", server.getId())
                 .append("prefix", "p!")
-                .append("spawnchannel", new JSONArray());
+                .append("spawnchannel", new JSONArray())
+                .append("equipzcrystal_duel", true)
+                .append("dynamax", true)
+                .append("zmoves", true)
+                .append("duelchannel", new JSONArray());
 
         Mongo.ServerData.insertOne(serverData);
 
@@ -114,6 +118,34 @@ public class ServerDataQuery extends MongoQuery
     public void setZMovesEnabled(boolean val)
     {
         Mongo.ServerData.updateOne(this.query, Updates.set("zmoves", val));
+
+        this.update();
+    }
+
+    //key: "duelchannel"
+
+    public List<String> getDuelChannels()
+    {
+        return this.json().getJSONArray("duelchannel").toList().stream().map(s -> (String)s).collect(Collectors.toList());
+    }
+
+    public void addDuelChannel(String channelID)
+    {
+        Mongo.ServerData.updateOne(this.query, Updates.push("duelchannel", channelID));
+
+        this.update();
+    }
+
+    public void removeDuelChannel(String channelID)
+    {
+        Mongo.ServerData.updateOne(this.query, Updates.pull("duelchannel", channelID));
+
+        this.update();
+    }
+
+    public void clearDuelChannels()
+    {
+        Mongo.ServerData.updateOne(this.query, Updates.set("duelchannel", new JSONArray()));
 
         this.update();
     }

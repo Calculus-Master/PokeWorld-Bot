@@ -183,6 +183,30 @@ public class CommandSettings extends Command
                         this.sendMsg("Players can " + (newValue ? "now" : "no longer") + " use Z-Moves in a Duel!");
                     }
                 }
+                else if(SERVER_DUELCHANNEL.matches(this.msg[2]))
+                {
+                    String channel = this.event.getMessage().getMentionedChannels().size() > 0 ? this.event.getMessage().getMentionedChannels().get(0).getId() : this.event.getMessage().getChannel().getId();
+                    TextChannel channelName = this.event.getGuild().getTextChannelById(channel);
+
+                    if(channelName != null && this.serverData.getDuelChannels().contains(channel))
+                    {
+                        this.serverData.removeDuelChannel(channel);
+
+                        this.sendMsg(this.serverData.getDuelChannels().isEmpty() ? "Duels are now allowed anywhere!" : "Duels are no longer allowed in " + channelName.getAsMention() + "!");
+                    }
+                    else if(channelName != null)
+                    {
+                        this.serverData.addDuelChannel(channel);
+
+                        this.sendMsg("Duels are now allowed in " + channelName.getAsMention() + "!");
+                    }
+                    else if(this.msg.length == 4 && this.msg[3].equals("reset"))
+                    {
+                        this.serverData.clearDuelChannels();
+
+                        this.sendMsg("Duels are now allowed anywhere!");
+                    }
+                }
                 else this.embed.setDescription(CommandInvalid.getShort());
             }
         }

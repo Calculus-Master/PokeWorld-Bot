@@ -3,8 +3,8 @@ package com.calculusmaster.pokecord.commands.duel;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
-import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.PokemonRarity;
@@ -29,6 +29,11 @@ public class CommandDuel extends Command
         if(this.msg.length == 1)
         {
             this.embed.setDescription(CommandInvalid.getShort());
+            return this;
+        }
+        else if(!this.serverData.getDuelChannels().isEmpty() && !this.serverData.getDuelChannels().contains(this.event.getChannel().getId()))
+        {
+            this.sendMsg("Duels are not allowed in this channel!");
             return this;
         }
         else if(this.msg.length >= 3 && (!isNumeric(2) || this.getInt(2) > CommandTeam.MAX_TEAM_SIZE || this.getInt(2) > this.playerData.getTeam().size()))

@@ -63,7 +63,8 @@ public class SettingsHelper
         SERVER_SPAWNCHANNEL("spawnchannel", "Toggles if spawns are enabled in a specific channel."),
         SERVER_ZCRYSTAL_DUEL_EQUIP("equipzcrystal_duel", "Toggles if players can equip Z Crystals while in a duel."),
         SERVER_DYNAMAX("dynamax", "Toggles if players can dynamax in duels."),
-        SERVER_ZMOVE("zmoves", "Toggles if players can use Z-Moves in duels.");
+        SERVER_ZMOVE("zmoves", "Toggles if players can use Z-Moves in duels."),
+        SERVER_DUELCHANNEL("duelchannel", "Restricts dueling to certain channels.");
 
         private String command;
         private String desc;
