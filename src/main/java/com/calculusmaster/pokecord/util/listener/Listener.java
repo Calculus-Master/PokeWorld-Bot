@@ -13,6 +13,7 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -54,8 +55,13 @@ public class Listener extends ListenerAdapter
         //If bot commands are disabled in this channel, skip the listener
         if(!serverQuery.getBotChannels().isEmpty() && !serverQuery.getBotChannels().contains(event.getChannel().getId()))
         {
-            Pokecord.BOT_JDA.openPrivateChannelById(player.getId()).flatMap(channel -> channel.sendMessage("Bot Commands are not allowed in that channel!")).queue();
-            return;
+            server.retrieveMemberById(player.getId()).queue();
+
+            if(!server.getMemberById(player.getId()).hasPermission(Permission.ADMINISTRATOR))
+            {
+                Pokecord.BOT_JDA.openPrivateChannelById(player.getId()).flatMap(channel -> channel.sendMessage("Bot Commands are not allowed in that channel!")).queue();
+                return;
+            }
         }
 
         //If the message starts with the right prefix, continue, otherwise skip the listener
