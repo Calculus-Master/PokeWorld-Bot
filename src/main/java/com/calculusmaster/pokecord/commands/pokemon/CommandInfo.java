@@ -38,17 +38,25 @@ public class CommandInfo extends Command
 
         String title = "**Level " + chosen.getLevel() + " " + chosen.getDisplayName() + "**" + (chosen.isShiny() ? " :star2:" : "");
         String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getGenericJSON().getString("growthrate"), chosen.getLevel()) + " XP";
-        String type = "**Type**: " + (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalCase(chosen.getType()[0].toString()) : Global.normalCase(chosen.getType()[0].toString()) + " | " + Global.normalCase(chosen.getType()[1].toString()));
-        String nature = "**Nature**: " + Global.normalCase(chosen.getNature().toString());
-        String dynamaxLevel = "**Dynamax Level**: " + chosen.getDynamaxLevel();
-        String item = "**Held Item**: " + PokeItem.asItem(chosen.getItem()).getStyledName();
-        String tm = "**TM**: " + (chosen.hasTM() ? "TM" + (chosen.getTM() < 10 ? "0" : "") + chosen.getTM()  + " - " + TM.get(chosen.getTM()).getMoveName() : "None");
-        String tr = "**TR**: " + (chosen.hasTR() ? "TR" + (chosen.getTR() < 10 ? "0" : "") + chosen.getTR()  + " - " + TR.get(chosen.getTR()).getMoveName() : "None");
+        String type = (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalCase(chosen.getType()[0].toString()) : Global.normalCase(chosen.getType()[0].toString()) + "\n" + Global.normalCase(chosen.getType()[1].toString()));
+        String nature = Global.normalCase(chosen.getNature().toString());
+        String dynamaxLevel = "" + chosen.getDynamaxLevel();
+        String item = PokeItem.asItem(chosen.getItem()).getStyledName();
+        String tm = (chosen.hasTM() ? "TM" + (chosen.getTM() < 10 ? "0" : "") + chosen.getTM()  + " - " + TM.get(chosen.getTM()).getMoveName() : "None");
+        String tr =  (chosen.hasTR() ? "TR" + (chosen.getTR() < 10 ? "0" : "") + chosen.getTR()  + " - " + TR.get(chosen.getTR()).getMoveName() : "None");
         String stats = getStatsFormatted(chosen, this.playerData.getSettings().getSettingBoolean(SettingsHelper.Setting.CLIENT_DETAILED));
         String kd = "**Defeats/Faints Ratio**: " + chosen.getKDRatio();
 
+        this.embed
+                .addField("Experience", exp, true)
+                .addField("Type", type, true)
+                .addField("Nature", nature, true)
+                .addField("Dynamax Level", dynamaxLevel, true)
+                .addField("Item", item, true)
+                .addField("TM/TR", "TM: " + tm + "\nTR: " + tr, true)
+                .addField("Stats", stats, false);
+
         this.embed.setTitle(title);
-        this.embed.setDescription(exp + "\n" + type + "\n" + nature + "\n" + dynamaxLevel + "\n" + item + "\n" + tm + "\n" + tr + "\n\n" + stats + "\n" + kd);
         this.color = chosen.getType()[0].getColor();
         this.embed.setImage(chosen.getImage());
         this.embed.setFooter("Showing Pokemon " + (index + 1) + " / " + this.playerData.getPokemonList().size());
