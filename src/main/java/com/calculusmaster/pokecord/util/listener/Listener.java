@@ -236,6 +236,10 @@ public class Listener extends ListenerAdapter
             {
                 c = new CommandSettings(event, msg).runCommand();
             }
+            else if(Command.LEADERBOARD.contains(msg[0]))
+            {
+                c = new CommandLeaderboard(event, msg).runCommand();
+            }
             else if(Command.DEV.contains(msg[0]))
             {
                 c = new CommandDev(event, msg).runCommand();

@@ -61,6 +61,7 @@ public abstract class Command
     public static final CommandHelp.HelpEntry FLEE = new CommandHelp.HelpEntry("flee");
     public static final CommandHelp.HelpEntry NICKNAME = new CommandHelp.HelpEntry("nickname");
     public static final CommandHelp.HelpEntry SETTINGS = new CommandHelp.HelpEntry("settings");
+    public static final CommandHelp.HelpEntry LEADERBOARD = new CommandHelp.HelpEntry("leaderboard");
 
     public static final CommandHelp.HelpEntry DEV = new CommandHelp.HelpEntry("dev");
 
@@ -280,6 +281,9 @@ public abstract class Command
 
         SETTINGS.setCategory(CONFIG)
                 .addAliases("config");
+
+        LEADERBOARD.setCategory(MISC)
+                .addAliases("lb");
 
         DEV.setCategory(MISC)
                 .addAliases("run");
