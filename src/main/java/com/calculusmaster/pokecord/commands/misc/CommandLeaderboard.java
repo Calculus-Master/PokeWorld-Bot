@@ -30,6 +30,8 @@ public class CommandLeaderboard extends Command
         this.generateFinalScores();
         this.sortFinalScores();
 
+        final String standardizedNote = "*Note: Score values are Standardized. Negative values indicate a score below average, while Positive values indicate above average. The farther a value is from 0, the more extreme that value is compared to the player population!*";
+
         if(this.msg.length == 2)
         {
             if(this.mentions.size() > 0 || this.msg[1].equals("self") || this.msg[1].equals("me"))
@@ -47,7 +49,7 @@ public class CommandLeaderboard extends Command
                 for(ScoreComponent sc : ScoreComponent.values()) leaderboardInfo.append("**").append(sc.name).append("**: ***").append(this.format(sc.zscore.get(targetID))).append("***      (Weight: ").append(sc.weight).append(")\n");
 
                 this.embed.setTitle("Score Calculation for " + this.player.getName());
-                this.embed.setDescription(leaderboardInfo.toString());
+                this.embed.setDescription(leaderboardInfo + "\n\n" + standardizedNote);
                 this.embed.setFooter("Higher weight values mean that the component has a larger impact on your overall score value!");
             }
             else this.sendMsg("Invalid Arguments!");
@@ -72,7 +74,7 @@ public class CommandLeaderboard extends Command
             for(Map.Entry<String, Double> e : SORTED_FINAL_SCORES) if(e.getKey().equals(this.player.getId())) self = e;
 
             this.embed.setTitle("Pokecord2 Global Leaderboard");
-            this.embed.setDescription(leaderboard.toString());
+            this.embed.setDescription(leaderboard + "\n\n" + standardizedNote);
             this.embed.setFooter("Your Position: " + (SORTED_FINAL_SCORES.indexOf(self) + 1) + " / " + SORTED_FINAL_SCORES.size());
         }
 
