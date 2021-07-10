@@ -32,14 +32,23 @@ public class CommandLeaderboard extends Command
 
         if(this.msg.length == 2)
         {
-            if(this.msg[1].equals("self") || this.msg[1].equals("me"))
+            if(this.mentions.size() > 0 || this.msg[1].equals("self") || this.msg[1].equals("me"))
             {
+                String targetID = this.mentions.size() > 0 ? this.mentions.get(0).getId() : this.player.getId();
+
+                if(PLAYER_QUERIES.stream().noneMatch(p -> p.getID().equals(targetID)))
+                {
+                    this.sendMsg(this.mentions.get(0).getEffectiveName() + " is not registered!");
+                    return this;
+                }
+
                 StringBuilder leaderboardInfo = new StringBuilder();
 
-                for(ScoreComponent sc : ScoreComponent.values()) leaderboardInfo.append(sc.name).append(": ").append(this.format(sc.zscore.get(this.player.getId()))).append(" (Weight: ").append(sc.weight).append(")\n");
+                for(ScoreComponent sc : ScoreComponent.values()) leaderboardInfo.append("**").append(sc.name).append("**: ***").append(this.format(sc.zscore.get(targetID))).append("***      (Weight: ").append(sc.weight).append(")\n");
 
                 this.embed.setTitle("Score Calculation for " + this.player.getName());
                 this.embed.setDescription(leaderboardInfo.toString());
+                this.embed.setFooter("Higher weight values mean that the component has a larger impact on your overall score value!");
             }
             else this.sendMsg("Invalid Arguments!");
         }
