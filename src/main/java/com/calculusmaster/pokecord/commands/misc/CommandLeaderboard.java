@@ -51,6 +51,7 @@ public class CommandLeaderboard extends Command
 
                 for(ScoreComponent sc : ScoreComponent.values()) leaderboardInfo.append("**").append(sc.name).append("**: `").append(this.format(sc.zscore.get(targetID))).append("`   (Weight: `").append(sc.weight).append("`)\n");
                 leaderboardInfo.append("\n**Total Score**: `").append(this.format(FINAL_SCORES.get(targetID))).append("`");
+                leaderboardInfo.append("\n\n*").append(this.getPosition(targetID)).append("*");
 
                 this.embed.setTitle("Score Calculation for " + PLAYER_QUERIES.stream().filter(p -> p.getID().equals(targetID)).collect(Collectors.toList()).get(0).getUsername());
                 this.embed.setDescription(leaderboardInfo + "\n\n" + standardizedNote);
@@ -74,15 +75,20 @@ public class CommandLeaderboard extends Command
                 }
             }
 
-            Map.Entry<String, Double> self = null;
-            for(Map.Entry<String, Double> e : SORTED_FINAL_SCORES) if(e.getKey().equals(this.player.getId())) self = e;
-
             this.embed.setTitle((server ? this.server.getName() : "Pokecord2 Global") + " Leaderboard");
             this.embed.setDescription(leaderboard + "\n\n" + standardizedNote);
-            this.embed.setFooter("Your Position: " + (SORTED_FINAL_SCORES.indexOf(self) + 1) + " / " + SORTED_FINAL_SCORES.size());
+            this.embed.setFooter("Your " + this.getPosition(this.player.getId()));
         }
 
         return this;
+    }
+
+    private String getPosition(String ID)
+    {
+        int index = -1;
+        for(int i = 0; i < SORTED_FINAL_SCORES.size(); i++) if(SORTED_FINAL_SCORES.get(i).getKey().equals(ID)) index = i;
+
+        return "Position: " + (index + 1) + " / " + SORTED_FINAL_SCORES.size();
     }
 
     private String format(double d)
