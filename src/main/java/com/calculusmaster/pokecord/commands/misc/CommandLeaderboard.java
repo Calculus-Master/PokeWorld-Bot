@@ -25,15 +25,17 @@ public class CommandLeaderboard extends Command
     @Override
     public Command runCommand()
     {
+        boolean server = this.msg.length == 2 && this.msg[1].equals("server");
+
         this.reset();
-        this.generatePlayerQueries(this.msg.length == 2 && this.msg[1].equals("server"));
+        this.generatePlayerQueries(server);
         this.generateZScores();
         this.generateFinalScores();
         this.sortFinalScores();
 
         final String standardizedNote = "*Note: Score values are Standardized. Negative values indicate a score below average, while Positive values indicate above average. The farther a value is from 0, the more extreme that value is compared to the player population!*";
 
-        if(this.msg.length == 2 && !this.msg[1].equals("server"))
+        if(this.msg.length == 2 && !server)
         {
             if(this.mentions.size() > 0 || this.msg[1].equals("self") || this.msg[1].equals("me"))
             {
@@ -75,7 +77,7 @@ public class CommandLeaderboard extends Command
             Map.Entry<String, Double> self = null;
             for(Map.Entry<String, Double> e : SORTED_FINAL_SCORES) if(e.getKey().equals(this.player.getId())) self = e;
 
-            this.embed.setTitle("Pokecord2 Global Leaderboard");
+            this.embed.setTitle((server ? this.server.getName() : "Pokecord2 Global") + " Leaderboard");
             this.embed.setDescription(leaderboard + "\n\n" + standardizedNote);
             this.embed.setFooter("Your Position: " + (SORTED_FINAL_SCORES.indexOf(self) + 1) + " / " + SORTED_FINAL_SCORES.size());
         }
