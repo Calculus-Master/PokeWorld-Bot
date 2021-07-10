@@ -2,8 +2,8 @@ package com.calculusmaster.pokecord.commands.config;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.SettingsHelper;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -20,8 +20,7 @@ public class CommandSettings extends Command
     @Override
     public Command runCommand()
     {
-        this.server.retrieveMemberById(this.player.getId()).queue();
-        boolean isUserAdmin = this.server.getMemberById(this.player.getId()).hasPermission(Permission.ADMINISTRATOR);
+        boolean isUserAdmin = Global.userHasAdmin(this.server, this.player);
 
         boolean client = this.msg.length >= 2 && (this.msg[1].equals("client") || this.msg[1].equals("c"));
         boolean server = this.msg.length >= 2 && (this.msg[1].equals("server") || this.msg[1].equals("s"));

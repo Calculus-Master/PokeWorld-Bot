@@ -1,9 +1,11 @@
 package com.calculusmaster.pokecord.util;
 
 import com.calculusmaster.pokecord.game.Pokemon;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
 import org.bson.Document;
 import org.jetbrains.annotations.Nls;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -17,11 +19,11 @@ public class Global
     public static final List<String> STARTERS = Arrays.asList("bulbasaur", "charmander", "squirtle", "chikorita", "quilava", "totodile", "treecko", "torchic", "mudkip", "turtwig", "chimchar", "piplup", "snivy", "tepig", "oshawott", "chespin", "fennekin", "froakie", "rowlet", "litten", "popplio");
     public static final List<String> POKEMON = new ArrayList<>();
 
-    @Deprecated
-    public static void logTime(Class<?> clazz, String command, long timeI, long timeF, OffsetDateTime timestamp)
+    public static boolean userHasAdmin(Guild server, User player)
     {
-        LoggerFactory.getLogger(clazz).info(command + " took " + (timeF - timeI) + " ms to complete!");
-        //addPerformanceEntry(command, timeI, timeF, timestamp);
+        server.retrieveMemberById(player.getId());
+
+        return server.getMemberById(player.getId()).hasPermission(Permission.ADMINISTRATOR);
     }
 
     private static void addPerformanceEntry(String command, long timeI, long timeF, OffsetDateTime timestamp)
