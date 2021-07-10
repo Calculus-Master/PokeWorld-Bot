@@ -166,16 +166,17 @@ public class CommandLeaderboard extends Command
 
     enum ScoreComponent
     {
-        POKEMON_LISTS(2.5, p -> p.getPokemonList().size(), "Pokemon"),
-        CREDITS(1.0, p -> p.getCredits(), "Credits"),
-        REDEEMS(1.75, p -> p.getRedeems(), "Redeems"),
-        TM_TR(1.5, p -> p.getTMList().size() + p.getTRList().size(), "TMs/TRs"),
+        POKEMON_LISTS(2.25, p -> p.getPokemonList().size(), "Pokemon"),
+        CREDITS(1.25, p -> p.getCredits(), "Credits"),
+        REDEEMS(1.85, p -> p.getRedeems(), "Redeems"),
+        TMS(1.5, p -> p.getTMList().size(), "TMs"),
+        TRS(1.5, p -> p.getTRList().size(), "TRs"),
         ITEMS(0.75, p -> p.getItemList().size(), "Items"),
         ZCRYSTALS(2.0, p -> p.getZCrystalList().size(), "Z Crystals"),
         DUELS_PVP_WON(1.75, p -> p.getStats().get(PlayerStatistic.PVP_DUELS_WON), "PvP Duels Won"),
         DUELS_WILD_WON(0.5, p -> p.getStats().get(PlayerStatistic.WILD_DUELS_WON), "Wild Duels Won"),
         DUELS_TRAINER_WON(0.75, p -> p.getStats().get(PlayerStatistic.TRAINER_DUELS_WON), "Trainer Duels Won"),
-        DUELS_TRAINER_ELITE_WON(1.25, p -> p.getStats().get(PlayerStatistic.ELITE_TRAINER_DUELS_WON), "Elite Trainer Duels Won");
+        DUELS_TRAINER_ELITE_WON(1.25, p -> p.getStats().get(PlayerStatistic.ELITE_TRAINER_DUELS_WON), "Elite Duels Won");
 
         double weight;
         IScoreComponent value;
