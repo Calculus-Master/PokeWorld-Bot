@@ -26,6 +26,11 @@ public class CommandEquip extends Command
             this.embed.setDescription(CommandInvalid.getShort());
             return this;
         }
+        else if(!this.serverData.canEquipZCrystalDuel() && DuelHelper.isInDuel(this.player.getId()))
+        {
+            this.sendMsg("You can't equip Z Crystals while in a Duel!");
+            return this;
+        }
 
         String z = this.playerData.getZCrystalList().get(this.getInt(1) - 1);
 

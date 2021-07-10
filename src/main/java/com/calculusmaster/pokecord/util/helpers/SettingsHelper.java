@@ -60,7 +60,8 @@ public class SettingsHelper
         CLIENT_DETAILED("detailed", "Toggles the display of IVs and EVs throughout the bot"),
         //Server
         SERVER_PREFIX("prefix", "Changes the bot prefix (default `p!`)"),
-        SERVER_SPAWNCHANNEL("spawnchannel", "Toggles if spawns are enabled in a specific channel.");
+        SERVER_SPAWNCHANNEL("spawnchannel", "Toggles if spawns are enabled in a specific channel."),
+        SERVER_ZCRYSTAL_DUEL_EQUIP("equipzcrystal_duel", "Toggles if players can equip Z Crystals while in a duel.");
 
         private String command;
         private String desc;

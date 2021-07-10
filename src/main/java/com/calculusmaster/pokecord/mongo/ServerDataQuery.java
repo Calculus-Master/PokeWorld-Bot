@@ -41,25 +41,25 @@ public class ServerDataQuery extends MongoQuery
         this.document = Mongo.ServerData.find(this.query).first();
     }
 
-    //Gets
+    //key: "prefix"
 
     public String getPrefix()
     {
         return this.json().getString("prefix");
     }
 
-    public List<String> getSpawnChannels()
-    {
-        return this.json().getJSONArray("spawnchannel").toList().stream().map(s -> (String)s).collect(Collectors.toList());
-    }
-
-    //Updates
-
     public void setPrefix(String prefix)
     {
         Mongo.ServerData.updateOne(this.query, Updates.set("prefix", prefix));
 
         this.update();
+    }
+
+    //key: "spawnchannel"
+
+    public List<String> getSpawnChannels()
+    {
+        return this.json().getJSONArray("spawnchannel").toList().stream().map(s -> (String)s).collect(Collectors.toList());
     }
 
     public void addSpawnChannel(String channelID)
@@ -72,6 +72,20 @@ public class ServerDataQuery extends MongoQuery
     public void removeSpawnChannel(String channelID)
     {
         Mongo.ServerData.updateOne(this.query, Updates.pull("spawnchannel", channelID));
+
+        this.update();
+    }
+
+    //key: "equipzcrystal_duel"
+
+    public boolean canEquipZCrystalDuel()
+    {
+        return this.json().getBoolean("equipzcrystal_duel");
+    }
+
+    public void setEquipZCrystalDuel(boolean val)
+    {
+        Mongo.ServerData.updateOne(this.query, Updates.set("equipzcrystal_duel", val));
 
         this.update();
     }

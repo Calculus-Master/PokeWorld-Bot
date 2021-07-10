@@ -126,6 +126,25 @@ public class CommandSettings extends Command
                         this.sendMsg(channelName.getAsMention() + " will now have Pokemon spawns!");
                     }
                 }
+                else if(SERVER_ZCRYSTAL_DUEL_EQUIP.matches(this.msg[2]))
+                {
+                    if(this.msg.length == 3 || (this.msg.length == 4 && !this.msg[3].equals("true") && !this.msg[3].equals("false")))
+                    {
+                        boolean currentValue = this.serverData.canEquipZCrystalDuel();
+
+                        this.serverData.setEquipZCrystalDuel(!currentValue);
+
+                        this.sendMsg("Players can " + (this.serverData.canEquipZCrystalDuel() ? "now" : "no longer") + " equip Z Crystals while in a Duel!");
+                    }
+                    else if(this.msg.length == 4)
+                    {
+                        boolean newValue = this.msg[3].equals("true");
+
+                        this.serverData.setEquipZCrystalDuel(newValue);
+
+                        this.sendMsg("Players can " + (newValue ? "now" : "no longer") + " equip Z Crystals while in a Duel!");
+                    }
+                }
                 else this.embed.setDescription(CommandInvalid.getShort());
             }
         }
