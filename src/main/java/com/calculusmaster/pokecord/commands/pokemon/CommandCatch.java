@@ -70,6 +70,8 @@ public class CommandCatch extends Command
             {
                 this.playerData.changeRedeems(1);
 
+                this.playerData.getStats().incr(PlayerStatistic.NATURAL_REDEEMS_EARNED);
+
                 this.sendMsg("You earned a redeem for catching a Pokemon with high IVs!");
             }
 
