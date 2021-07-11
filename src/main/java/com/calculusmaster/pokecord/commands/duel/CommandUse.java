@@ -2,9 +2,11 @@ package com.calculusmaster.pokecord.commands.duel;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.DuelChecks;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.elements.Player;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import static com.calculusmaster.pokecord.game.duel.DuelChecks.CheckType.*;
@@ -35,6 +37,7 @@ public class CommandUse extends Command
 
         final Duel d = DuelHelper.instance(this.player.getId());
         final DuelChecks c = new DuelChecks(this.player.getId());
+        final Player p = d.getPlayers()[d.indexOf(this.player.getId())];
 
         boolean formatNormal = this.msg.length == 2 && this.isNumeric(1) && this.getInt(1) > 0 && this.getInt(1) < 5;
         boolean formatSwap = this.msg.length == 3 && (this.msg[1].equals("swap") || this.msg[1].equals("s")) && this.isNumeric(2) && this.getInt(2) > 0 && this.getInt(2) <= d.getSize();
@@ -121,6 +124,8 @@ public class CommandUse extends Command
                 this.sendMsg(ZMOVE_DYNAMAXED.getInvalidMessage());
                 return this;
             }
+
+            c.setMove(new Move(p.active.getLearnedMoves().get(this.getInt(2) - 1)));
 
             if(c.checkFailed(ZMOVE_MOVE))
             {
