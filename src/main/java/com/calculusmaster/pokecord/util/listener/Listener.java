@@ -1,15 +1,7 @@
 package com.calculusmaster.pokecord.util.listener;
 
 import com.calculusmaster.pokecord.Pokecord;
-import com.calculusmaster.pokecord.commands.Command;
-import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.Commands;
-import com.calculusmaster.pokecord.commands.config.CommandSettings;
-import com.calculusmaster.pokecord.commands.duel.*;
-import com.calculusmaster.pokecord.commands.economy.*;
-import com.calculusmaster.pokecord.commands.misc.*;
-import com.calculusmaster.pokecord.commands.moves.*;
-import com.calculusmaster.pokecord.commands.pokemon.*;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
@@ -48,7 +40,6 @@ public class Listener extends ListenerAdapter
         Guild server = event.getGuild();
         String[] msg = event.getMessage().getContentRaw().toLowerCase().trim().split("\\s+");
         ServerDataQuery serverQuery = new ServerDataQuery(server.getId());
-        Command c;
         Random r = new Random(System.currentTimeMillis());
 
         //If bot is mentioned, send the server prefix
@@ -81,184 +72,12 @@ public class Listener extends ListenerAdapter
             //Remove prefix from the message array, msg[0] is the raw command name
             msg[0] = msg[0].substring(serverQuery.getPrefix().length());
 
-            if(2 > 1)
-            {
-                c = null;
-                Commands.execute(msg[0], event, msg);
-            }
-            //Check for a valid command, and if there is none reply with the invalid message
-            else if(Command.START.contains(msg[0]) || !PlayerDataQuery.isRegistered(player.getId()))
-            {
-                c = new CommandStart(event, msg).runCommand();
-            }
-            else if(Command.BALANCE.contains(msg[0]))
-            {
-                c = new CommandBalance(event, msg).runCommand();
-            }
-            else if(Command.SELECT.contains(msg[0]))
-            {
-                c = new CommandSelect(event, msg).runCommand();
-            }
-            else if(Command.DEX.contains(msg[0]))
-            {
-                c = new CommandDex(event, msg).runCommand();
-            }
-            else if(Command.INFO.contains(msg[0]))
-            {
-                c = new CommandInfo(event, msg).runCommand();
-            }
-            else if(Command.CATCH.contains(msg[0]))
-            {
-                c = new CommandCatch(event, msg).runCommand();
-            }
-            else if(Command.POKEMON.contains(msg[0]))
-            {
-                c = new CommandPokemon(event, msg).runCommand();
-            }
-            else if(Command.MOVES.contains(msg[0]))
-            {
-                c = new CommandMoves(event, msg).runCommand();
-            }
-            else if(Command.LEARN.contains(msg[0]))
-            {
-                c = new CommandLearn(event, msg).runCommand();
-            }
-            else if(Command.REPLACE.contains(msg[0]))
-            {
-                c = new CommandReplace(event, msg).runCommand();
-            }
-            else if(Command.MOVEINFO.contains(msg[0]))
-            {
-                c = new CommandMoveInfo(event, msg).runCommand();
-            }
-            else if(Command.DUEL.contains(msg[0]))
-            {
-                c = new CommandDuel(event, msg).runCommand();
-            }
-            else if(Command.USE.contains(msg[0]))
-            {
-                c = new CommandUse(event, msg).runCommand();
-            }
-            else if(Command.SHOP.contains(msg[0]))
-            {
-                c = new CommandShop(event, msg).runCommand();
-            }
-            else if(Command.BUY.contains(msg[0]))
-            {
-                c = new CommandBuy(event, msg).runCommand();
-            }
-            else if(Command.RELEASE.contains(msg[0]))
-            {
-                c = new CommandRelease(event, msg).runCommand();
-            }
-            else if(Command.REPORT.contains(msg[0]))
-            {
-                c = new CommandReport(event, msg).runCommand();
-            }
-            else if(Command.TEACH.contains(msg[0]))
-            {
-                c = new CommandTeach(event, msg).runCommand();
-            }
-            else if(Command.INVENTORY.contains(msg[0]))
-            {
-                c = new CommandInventory(event, msg).runCommand();
-            }
-            else if(Command.HELP.contains(msg[0]))
-            {
-                c = new CommandHelp(event, msg).runCommand();
-            }
-            else if(Command.TRADE.contains(msg[0]))
-            {
-                c = new CommandTrade(event, msg).runCommand();
-            }
-            else if(Command.GIVE.contains(msg[0]))
-            {
-                c = new CommandGive(event, msg).runCommand();
-            }
-            else if(Command.MARKET.contains(msg[0]))
-            {
-                c = new CommandMarket(event, msg).runCommand();
-            }
-            else if(Command.EVOLVE.contains(msg[0]))
-            {
-                c = new CommandEvolve(event, msg).runCommand();
-            }
-            else if(Command.EQUIP.contains(msg[0]))
-            {
-                c = new CommandEquip(event, msg).runCommand();
-            }
-            else if(Command.TEAM.contains(msg[0]))
-            {
-                c = new CommandTeam(event, msg).runCommand();
-            }
-            else if(Command.MEGA.contains(msg[0]))
-            {
-                c = new CommandMega(event, msg).runCommand();
-            }
-            else if(Command.WILDDUEL.contains(msg[0]))
-            {
-                c = new CommandWildDuel(event, msg).runCommand();
-            }
-            else if(Command.REDEEM.contains(msg[0]))
-            {
-                c = new CommandRedeem(event, msg).runCommand();
-            }
-            else if(Command.TRAINERDUEL.contains(msg[0]))
-            {
-                c = new CommandTrainerDuel(event, msg).runCommand();
-            }
-            else if(Command.GYMDUEL.contains(msg[0]))
-            {
-                c = new CommandGymDuel(event, msg).runCommand();
-            }
-            else if(Command.ABILITYINFO.contains(msg[0]))
-            {
-                c = new CommandAbilityInfo(event, msg).runCommand();
-            }
-            else if(Command.ACTIVATE.contains(msg[0]))
-            {
-                c = new CommandActivate(event, msg).runCommand();
-            }
-            else if(Command.POKEPASS.contains(msg[0]))
-            {
-                c = new CommandPokePass(event, msg).runCommand();
-            }
-            else if(Command.FAVORITES.contains(msg[0]))
-            {
-                c = new CommandFavorites(event, msg).runCommand();
-            }
-            else if(Command.FORM.contains(msg[0]))
-            {
-                c = new CommandForm(event, msg).runCommand();
-            }
-            else if(Command.FLEE.contains(msg[0]))
-            {
-                c = new CommandFlee(event, msg).runCommand();
-            }
-            else if(Command.NICKNAME.contains(msg[0]))
-            {
-                c = new CommandNickname(event, msg).runCommand();
-            }
-            else if(Command.SETTINGS.contains(msg[0]))
-            {
-                c = new CommandSettings(event, msg).runCommand();
-            }
-            else if(Command.LEADERBOARD.contains(msg[0]))
-            {
-                c = new CommandLeaderboard(event, msg).runCommand();
-            }
-            else if(Command.DEV.contains(msg[0]))
-            {
-                c = new CommandDev(event, msg).runCommand();
-            }
-            else c = new CommandInvalid(event, msg).runCommand();
+            Commands.execute(msg[0], event, msg);
 
-            if(!(c instanceof CommandInvalid) && r.nextInt(5000) < 1) redeemEvent(event);
-
-            //if(!c.isNull()) event.getChannel().sendMessageEmbeds(c.getResponseEmbed()).queue();
+            if(r.nextInt(5000) < 1) redeemEvent(event);
         }
 
-        if(r.nextInt(10) <= 3) Listener.expEvent(event);
+        if(r.nextInt(10) <= 3) expEvent(event);
     }
 
     private static void redeemEvent(MessageReceivedEvent event)

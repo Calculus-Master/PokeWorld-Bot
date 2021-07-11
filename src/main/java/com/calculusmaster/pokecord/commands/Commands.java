@@ -212,6 +212,11 @@ public class Commands
         if(!cmd.isNull()) event.getChannel().sendMessageEmbeds(cmd.getResponseEmbed()).queue();
     }
 
+    public static boolean isValid(String input)
+    {
+        return COMMANDS.stream().anyMatch(r -> r.aliases.contains(input));
+    }
+
     public static Command getCommand(String input, MessageReceivedEvent event, String[] msg)
     {
         Command c = new CommandInvalid(event, msg);
@@ -237,13 +242,13 @@ public class Commands
         return r;
     }
 
-    static class Registry
+    public static class Registry
     {
-        private List<String> aliases;
+        public List<String> aliases;
         private ICommandCreator builder;
-        private Category category;
-        private String shortDesc;
-        private Map<String, String> help;
+        public Category category;
+        public String shortDesc;
+        public Map<String, String> help;
 
         Registry(String... aliases)
         {
