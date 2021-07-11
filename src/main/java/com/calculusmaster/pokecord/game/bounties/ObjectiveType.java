@@ -3,7 +3,8 @@ package com.calculusmaster.pokecord.game.bounties;
 public enum ObjectiveType
 {
     DEFEAT_POKEMON,
-    DEFEAT_POKEMON_TYPE;
+    DEFEAT_POKEMON_TYPE,
+    DEFEAT_LEGENDARY;
 
     public static ObjectiveType cast(String objectiveType)
     {

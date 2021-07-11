@@ -12,6 +12,7 @@ import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.mongo.PokemonStatisticsQuery;
+import com.calculusmaster.pokecord.util.PokemonRarity;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.enums.PokemonStatistic;
 import com.calculusmaster.pokecord.util.listener.ButtonListener;
@@ -748,6 +749,10 @@ public class Duel
                         case DEFEAT_POKEMON -> b.update();
                         case DEFEAT_POKEMON_TYPE -> {
                             if(this.players[this.other].active.isType(((DefeatTypeObjective)b.getObjective()).getType())) b.update();
+                        }
+                        case DEFEAT_LEGENDARY -> {
+                            String otherName = this.players[this.other].active.getName();
+                            if(PokemonRarity.LEGENDARY.contains(otherName) || PokemonRarity.MYTHICAL.contains(otherName) || PokemonRarity.ULTRA_BEAST.contains(otherName)) b.update();
                         }
                     }
 

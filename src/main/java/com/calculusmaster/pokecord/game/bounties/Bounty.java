@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game.bounties;
 
 import com.calculusmaster.pokecord.game.bounties.objectives.DefeatGenericObjective;
+import com.calculusmaster.pokecord.game.bounties.objectives.DefeatLegendaryObjective;
 import com.calculusmaster.pokecord.game.bounties.objectives.DefeatTypeObjective;
 import com.calculusmaster.pokecord.game.bounties.objectives.Objective;
 import com.calculusmaster.pokecord.util.Mongo;
@@ -112,6 +113,7 @@ public class Bounty
         this.objective = switch(o) {
             case DEFEAT_POKEMON -> new DefeatGenericObjective();
             case DEFEAT_POKEMON_TYPE -> new DefeatTypeObjective();
+            case DEFEAT_LEGENDARY -> new DefeatLegendaryObjective();
         };
 
         return this.objective;
