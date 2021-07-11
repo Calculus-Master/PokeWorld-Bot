@@ -40,7 +40,9 @@ public class CommandBounties extends Command
 
                 Bounty.delete(b.getBountyID());
 
-                this.sendMsg("You earned " + b.getReward() + " credits for completing this bounty!");
+                this.playerData.addPokePassExp(200, this.event);
+
+                this.sendMsg("You earned " + b.getReward() + " credits and some PokePass XP for completing this bounty!");
             }
         }
         else if(reroll)
