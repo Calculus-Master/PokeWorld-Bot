@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.bounties.objectives.Objective;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import org.bson.Document;
 
 import java.util.Random;
@@ -73,6 +74,11 @@ public class Bounty
         this.objective.update();
     }
 
+    public void updateProgression()
+    {
+        Mongo.BountyData.updateOne(Filters.eq("bountyID", this.bountyID), Updates.set("progression", this.objective.getProgression()));
+    }
+
     public void setRandomObjective()
     {
         ObjectiveType o = ObjectiveType.values()[new Random().nextInt(ObjectiveType.values().length)];
@@ -125,5 +131,14 @@ public class Bounty
     public Objective getObjective()
     {
         return this.objective;
+    }
+
+    @Override
+    public String toString() {
+        return "Bounty{" +
+                "bountyID='" + bountyID + '\'' +
+                ", objective=" + objective +
+                ", reward=" + reward +
+                '}';
     }
 }

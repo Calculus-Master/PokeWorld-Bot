@@ -64,4 +64,23 @@ public abstract class Objective
         this.progression = progression;
         return this;
     }
+
+    public int getProgression()
+    {
+        return this.progression;
+    }
+
+    public int getTarget()
+    {
+        return this.target;
+    }
+
+    @Override
+    public String toString() {
+        return "Objective{" +
+                "objectiveType=" + objectiveType +
+                ", progression=" + progression +
+                ", target=" + target +
+                '}';
+    }
 }

@@ -6,7 +6,6 @@ import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.TypeEffectiveness;
 import com.calculusmaster.pokecord.game.bounties.Bounty;
-import com.calculusmaster.pokecord.game.bounties.objectives.DefeatGenericObjective;
 import com.calculusmaster.pokecord.game.bounties.objectives.DefeatTypeObjective;
 import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.enums.elements.*;
@@ -741,10 +740,18 @@ public class Duel
 
             if(this.current == 0 || (this.current == 1 && this.isPvP()))
             {
-                for(Bounty b : this.players[this.current].data.getBounties())
+                for(String ID : this.players[this.current].data.getBountyIDs())
                 {
-                    if(b.getObjective() instanceof DefeatTypeObjective) if(this.players[this.other].active.isType(((DefeatTypeObjective)b.getObjective()).getType())) b.update();
-                    else if(b.getObjective() instanceof DefeatGenericObjective) b.update();
+                    Bounty b = Bounty.fromDB(ID);
+
+                    switch(b.getType()) {
+                        case DEFEAT_POKEMON -> b.update();
+                        case DEFEAT_POKEMON_TYPE -> {
+                            if(this.players[this.other].active.isType(((DefeatTypeObjective)b.getObjective()).getType())) b.update();
+                        }
+                    }
+
+                    b.updateProgression();
                 }
             }
 
