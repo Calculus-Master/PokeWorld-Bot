@@ -194,7 +194,7 @@ public class Commands
                 .setCommand(CommandLeaderboard::new)
                 .setCategory(Category.MISC);
 
-        register("bounties")
+        register("bounties", "bounty", "tasks", "quests")
                 .setCommand(CommandBounties::new)
                         .setCategory(Category.MISC);
 
