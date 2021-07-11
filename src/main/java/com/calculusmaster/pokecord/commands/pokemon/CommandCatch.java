@@ -4,6 +4,8 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.bounties.objectives.CatchNameObjective;
+import com.calculusmaster.pokecord.game.bounties.objectives.CatchTypeObjective;
 import com.calculusmaster.pokecord.mongo.CollectionsQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
@@ -80,6 +82,18 @@ public class CommandCatch extends Command
 
             Achievements.grant(this.player.getId(), Achievements.CAUGHT_FIRST_POKEMON, this.event);
             this.playerData.addPokePassExp(100, this.event);
+
+            this.playerData.updateBountyProgression(b -> {
+                switch(b.getType()) {
+                    case CATCH_POKEMON -> b.update();
+                    case CATCH_POKEMON_TYPE -> {
+                        if(caught.isType(((CatchTypeObjective)b.getObjective()).getType())) b.update();
+                    }
+                    case CATCH_POKEMON_NAME -> {
+                        if(caught.getName().equals(((CatchNameObjective)b.getObjective()).getName())) b.update();
+                    }
+                }
+            });
 
             this.sendMsg("You caught a **Level " + caught.getLevel() + " " + caught.getName() + "** (Collection: " + amount + ")!");
 

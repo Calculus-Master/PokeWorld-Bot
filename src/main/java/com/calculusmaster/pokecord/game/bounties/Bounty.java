@@ -40,7 +40,9 @@ public class Bounty
                 .setProgression(d.getInteger("progression"))
                 .setTarget(d.getInteger("target"));
 
-        if(b.objective instanceof DefeatTypeObjective) ((DefeatTypeObjective)b.objective).setType(d.getString("type"));
+        if(b.getType().equals(ObjectiveType.DEFEAT_POKEMON_TYPE)) ((DefeatTypeObjective)b.objective).setType(d.getString("type"));
+        if(b.getType().equals(ObjectiveType.CATCH_POKEMON_TYPE)) ((CatchTypeObjective)b.objective).setType(d.getString("type"));
+        if(b.getType().equals(ObjectiveType.CATCH_POKEMON_NAME)) ((CatchNameObjective)b.objective).setName(d.getString("name"));
 
         return b;
     }
@@ -126,6 +128,9 @@ public class Bounty
             case WIN_PVP_DUEL -> new WinPVPDuelObjective();
             case WIN_WILD_DUEL -> new WinWildDuelObjective();
             case WIN_ELITE_DUEL -> new WinEliteDuelObjective();
+            case CATCH_POKEMON -> new CatchGenericObjective();
+            case CATCH_POKEMON_TYPE -> new CatchTypeObjective();
+            case CATCH_POKEMON_NAME -> new CatchNameObjective();
         };
 
         return this.objective;

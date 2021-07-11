@@ -14,7 +14,10 @@ public enum ObjectiveType
     COMPLETE_ELITE_DUEL,
     WIN_PVP_DUEL,
     WIN_WILD_DUEL,
-    WIN_ELITE_DUEL;
+    WIN_ELITE_DUEL,
+    CATCH_POKEMON,
+    CATCH_POKEMON_TYPE,
+    CATCH_POKEMON_NAME;
 
     public static ObjectiveType cast(String objectiveType)
     {

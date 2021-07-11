@@ -7,20 +7,20 @@ import org.bson.Document;
 
 import java.util.Random;
 
-public class DefeatTypeObjective extends Objective
+public class CatchTypeObjective extends Objective
 {
     private Type type;
 
-    public DefeatTypeObjective()
+    public CatchTypeObjective()
     {
-        super(ObjectiveType.DEFEAT_POKEMON_TYPE, Objective.randomTargetAmount(1, 10));
+        super(ObjectiveType.CATCH_POKEMON_TYPE, Objective.randomTargetAmount(10, 20));
         this.type = Type.values()[new Random().nextInt(Type.values().length)];
     }
 
     @Override
     public String getDesc()
     {
-        return "Defeat any " + this.target + " Pokemon that are " + Global.normalCase(this.type.toString()) + " Type";
+        return "Catch " + this.target + " Pokemon that are " + Global.normalCase(this.type.toString()) + " Type";
     }
 
     @Override
@@ -35,7 +35,7 @@ public class DefeatTypeObjective extends Objective
         return this.type;
     }
 
-    public DefeatTypeObjective setType(String type)
+    public CatchTypeObjective setType(String type)
     {
         this.type = Type.cast(type);
         return this;
