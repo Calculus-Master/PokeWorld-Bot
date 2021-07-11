@@ -273,7 +273,7 @@ public class Pokemon
 
     public static void updateEVs(Pokemon p)
     {
-        update(p, Updates.set("moves", p.getVCondensed(p.getEVs())));
+        update(p, Updates.set("evs", p.getVCondensed(p.getEVs())));
     }
 
     public static void updateName(Pokemon p, String evolved)
