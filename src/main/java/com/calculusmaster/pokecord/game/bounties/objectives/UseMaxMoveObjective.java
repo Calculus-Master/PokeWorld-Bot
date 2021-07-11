@@ -6,7 +6,7 @@ public class UseMaxMoveObjective extends Objective
 {
     public UseMaxMoveObjective()
     {
-        super(ObjectiveType.USE_MAX_MOVES, Objective.randomTargetAmount(5, 30));
+        super(ObjectiveType.USE_MAX_MOVE, Objective.randomTargetAmount(5, 30));
     }
 
     @Override

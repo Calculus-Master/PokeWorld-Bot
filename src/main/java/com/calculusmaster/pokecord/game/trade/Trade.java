@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game.trade;
 
+import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.trade.elements.TradeOffer;
 import com.calculusmaster.pokecord.game.trade.elements.TradePlayer;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
@@ -33,6 +34,9 @@ public class Trade
 
         this.players[0].data.getStats().incr(PlayerStatistic.TRADES_COMPLETED);
         this.players[1].data.getStats().incr(PlayerStatistic.TRADES_COMPLETED);
+
+        this.players[0].data.updateBountyProgression(ObjectiveType.COMPLETE_TRADE);
+        this.players[1].data.updateBountyProgression(ObjectiveType.COMPLETE_TRADE);
 
         this.setStatus(TradeStatus.COMPLETE);
 

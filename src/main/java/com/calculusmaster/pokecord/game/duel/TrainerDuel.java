@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.game.duel;
 
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Move;
+import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.duel.elements.Trainer;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
@@ -40,6 +41,8 @@ public class TrainerDuel extends Duel
     {
         EmbedBuilder embed = new EmbedBuilder();
 
+        boolean elite = ((Trainer)this.players[1]).info.elite;
+
         //Player won
         if(this.getWinner().ID.equals(this.players[0].ID))
         {
@@ -50,22 +53,25 @@ public class TrainerDuel extends Duel
             this.uploadEVs(0);
             this.uploadExperience();
 
-            embed.setDescription("You defeated " + ((Trainer)this.players[1]).info.name + "!");
+            String bot = ((Trainer)this.players[1]).info.name;
+
+            embed.setDescription("You defeated " + bot + "!");
 
             Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_TRAINER_DUEL, this.event);
-
-            String bot = ((Trainer)this.players[1]).info.name;
 
             this.players[0].data.addPokePassExp(500, this.event);
 
             //Elite Trainer
-            if(((Trainer)this.players[1]).info.elite)
+            if(elite)
             {
                 int credits = new Random().nextInt(500) + 500;
                 this.players[0].data.changeCredits(credits);
 
                 Achievements.grant(this.players[0].ID, Achievements.DEFEATED_FIRST_ELITE_TRAINER, this.event);
                 this.players[0].data.getStats().incr(PlayerStatistic.ELITE_TRAINER_DUELS_WON);
+                this.players[0].data.updateBountyProgression(b -> {
+                    if(b.getType().equals(ObjectiveType.WIN_ELITE_DUEL) || b.getType().equals(ObjectiveType.COMPLETE_ELITE_DUEL)) b.update();
+                });
 
                 this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated the Elite Trainer and earned " + credits + " credits!").queue();
             }
@@ -100,6 +106,7 @@ public class TrainerDuel extends Duel
         {
             this.uploadEVs(0);
 
+            if(elite) this.players[0].data.updateBountyProgression(ObjectiveType.COMPLETE_ELITE_DUEL);
             embed.setDescription("You were defeated by " + ((Trainer)this.players[1]).info.name + "!");
         }
 

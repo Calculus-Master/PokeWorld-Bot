@@ -118,7 +118,14 @@ public class Bounty
             case DEFEAT_LEGENDARY -> new DefeatLegendaryObjective();
             case BUY_ITEMS -> new BuyItemsObjective();
             case USE_ZMOVE -> new UseZMoveObjective();
-            case USE_MAX_MOVES -> new UseMaxMoveObjective();
+            case USE_MAX_MOVE -> new UseMaxMoveObjective();
+            case COMPLETE_TRADE -> new CompleteTradeObjective();
+            case COMPLETE_PVP_DUEL -> new CompletePVPDuelObjective();
+            case COMPLETE_WILD_DUEL -> new CompleteWildDuelObjective();
+            case COMPLETE_ELITE_DUEL -> new CompleteEliteDuelObjective();
+            case WIN_PVP_DUEL -> new WinPVPDuelObjective();
+            case WIN_WILD_DUEL -> new WinWildDuelObjective();
+            case WIN_ELITE_DUEL -> new WinEliteDuelObjective();
         };
 
         return this.objective;

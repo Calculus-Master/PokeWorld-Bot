@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.duel;
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.duel.elements.WildPokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Room;
@@ -131,12 +132,16 @@ public class WildDuel extends Duel
             Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_WILD_DUEL, this.event);
             this.players[0].data.addPokePassExp(50, this.event);
             this.players[0].data.getStats().incr(PlayerStatistic.WILD_DUELS_WON);
+            this.players[0].data.updateBountyProgression(b -> {
+                if(b.getType().equals(ObjectiveType.WIN_WILD_DUEL) || b.getType().equals(ObjectiveType.COMPLETE_WILD_DUEL)) b.update();
+            });
 
             embed.setDescription("You won! Your " + this.players[0].active.getName() + " earned some EVs!");
         }
         //Player lost
         else
         {
+            this.players[0].data.updateBountyProgression(ObjectiveType.COMPLETE_WILD_DUEL);
             embed.setDescription("You lost! Your " + this.players[0].active.getName() + " didn't earn any EVs...");
         }
 

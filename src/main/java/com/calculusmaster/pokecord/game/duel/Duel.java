@@ -348,7 +348,7 @@ public class Duel
             this.players[this.current].usedDynamax = true;
 
             Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_DYNAMAX, this.event);
-            this.players[this.current].data.updateBountyProgression(ObjectiveType.USE_MAX_MOVES);
+            this.players[this.current].data.updateBountyProgression(ObjectiveType.USE_MAX_MOVE);
         }
 
         if(this.data(this.other).imprisonUsed && this.players[this.other].active.getLearnedMoves().contains(move.getName())) cantUse = true;
@@ -1303,6 +1303,10 @@ public class Duel
         this.players[loser].data.addPokePassExp(500, this.event);
 
         this.players[winner].data.getStats().incr(PlayerStatistic.PVP_DUELS_WON);
+        this.players[winner].data.updateBountyProgression(b -> {
+            if(b.getType().equals(ObjectiveType.WIN_PVP_DUEL) || b.getType().equals(ObjectiveType.COMPLETE_PVP_DUEL)) b.update();
+        });
+        this.players[loser].data.updateBountyProgression(ObjectiveType.COMPLETE_PVP_DUEL);
 
         this.uploadExperience();
 
