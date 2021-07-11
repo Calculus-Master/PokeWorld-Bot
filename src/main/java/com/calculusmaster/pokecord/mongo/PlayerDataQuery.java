@@ -494,6 +494,8 @@ public class PlayerDataQuery extends MongoQuery
 
             checker.accept(b);
 
+            if(b.getObjective().isComplete()) this.directMessage("You have unclaimed bounties!");
+
             b.updateProgression();
         }
     }
