@@ -60,6 +60,12 @@ public class CommandBounties extends Command
         }
         else if(acquire)
         {
+            if(bounties.size() == Bounty.MAX_BOUNTIES_HELD)
+            {
+                this.sendMsg("You already have the maximum amount of Bounties! Either complete them, or use `p!bounties reroll <num>` to reroll the objective!");
+                return this;
+            }
+
             int requested = this.msg.length == 3 && this.isNumeric(2) ? this.getInt(2) : 1;
             requested = Math.min(requested, Bounty.MAX_BOUNTIES_HELD - bounties.size());
 
