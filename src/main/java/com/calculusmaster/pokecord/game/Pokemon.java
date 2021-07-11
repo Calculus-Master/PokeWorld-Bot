@@ -12,6 +12,7 @@ import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.PokemonRarity;
 import com.calculusmaster.pokecord.util.enums.PokemonStatistic;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
+import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
@@ -598,13 +599,10 @@ public class Pokemon
     //UUID
     private void setUUID()
     {
-        String charList = "abcdefghijklmnopqrstuvwxyz0123456789";
-        Random r = new Random();
         StringBuilder uuid = new StringBuilder();
         for(int i = 0; i < 6; i++)
         {
-            for(int a = 0; a < 4; a++) uuid.append(charList.charAt(r.nextInt(charList.length())));
-            uuid.append("-");
+            uuid.append(IDHelper.alphanumeric(4)).append("-");
         }
         this.setUUID(uuid.substring(0, uuid.toString().length() - 1));
     }

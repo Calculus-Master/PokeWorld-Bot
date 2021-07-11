@@ -1,0 +1,129 @@
+package com.calculusmaster.pokecord.game.bounties;
+
+import com.calculusmaster.pokecord.game.bounties.objectives.DefeatGenericObjective;
+import com.calculusmaster.pokecord.game.bounties.objectives.DefeatTypeObjective;
+import com.calculusmaster.pokecord.game.bounties.objectives.Objective;
+import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.helpers.IDHelper;
+import com.mongodb.client.model.Filters;
+import org.bson.Document;
+
+import java.util.Random;
+
+public class Bounty
+{
+    public static final int MAX_BOUNTIES_HELD = 3;
+
+    private String bountyID;
+    private Objective objective;
+    private int reward;
+
+    public static Bounty create()
+    {
+        Bounty b = new Bounty();
+
+        b.setBountyID(IDHelper.numeric(8));
+        b.setRandomReward();
+        b.setRandomObjective();
+
+        return b;
+    }
+
+    public static Bounty fromDB(String bountyID)
+    {
+        Document d = Mongo.BountyData.find(Filters.eq("bountyID", bountyID)).first();
+
+        Bounty b = new Bounty();
+
+        b.setBountyID(bountyID);
+        b.setReward(d.getInteger("reward"));
+        b.setObjective(ObjectiveType.cast(d.getString("objective_type")))
+                .setProgression(d.getInteger("progression"))
+                .setTarget(d.getInteger("target"));
+
+        if(b.objective instanceof DefeatTypeObjective) ((DefeatTypeObjective)b.objective).setType(d.getString("type"));
+
+        return b;
+    }
+
+    public static void toDB(Bounty b)
+    {
+        Document data = new Document()
+                .append("bountyID", b.getBountyID())
+                .append("reward", b.getReward());
+
+        b.objective.addObjectiveData(data);
+
+        Mongo.BountyData.insertOne(data);
+    }
+
+    public static void delete(String bountyID)
+    {
+        Mongo.BountyData.deleteOne(Filters.eq("bountyID", bountyID));
+    }
+
+    public String getOverview()
+    {
+        String overview = "ID: " + this.bountyID + "\nReward: " + this.getReward() + "c\n" + this.objective.getDesc() + "\n" + this.objective.getStatus();
+        return (this.objective.isComplete() ? "~~" : "") + overview + (this.objective.isComplete() ? "~~" : "");
+    }
+
+    public void update()
+    {
+        this.objective.update();
+    }
+
+    public void setRandomObjective()
+    {
+        ObjectiveType o = ObjectiveType.values()[new Random().nextInt(ObjectiveType.values().length)];
+
+        this.setObjective(o);
+    }
+
+    public void setRandomReward()
+    {
+        this.setReward(new Random().nextInt(200) + 50);
+    }
+
+    public ObjectiveType getType()
+    {
+        return this.objective.getObjectiveType();
+    }
+
+    //Core
+    public void setBountyID(String bountyID)
+    {
+        this.bountyID = bountyID;
+    }
+
+    public String getBountyID()
+    {
+        return this.bountyID;
+    }
+
+    public Objective setObjective(ObjectiveType o)
+    {
+        this.objective = switch(o) {
+            case DEFEAT_POKEMON -> new DefeatGenericObjective();
+            case DEFEAT_POKEMON_TYPE -> new DefeatTypeObjective();
+        };
+
+        return this.objective;
+    }
+
+    public Bounty setReward(int reward)
+    {
+        this.reward = reward;
+        return this;
+    }
+
+    public int getReward()
+    {
+        return this.reward;
+    }
+
+    public Objective getObjective()
+    {
+        return this.objective;
+    }
+}

@@ -2,10 +2,9 @@ package com.calculusmaster.pokecord.game;
 
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
+import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.mongodb.client.model.Filters;
 import org.bson.Document;
-
-import java.util.Random;
 
 public class MarketEntry
 {
@@ -26,7 +25,7 @@ public class MarketEntry
         m.price = price;
 
         m.pokemon = Pokemon.buildCore(pokemonID, -1);
-        m.marketID = m.generateMarketID();
+        m.marketID = IDHelper.numeric(8);
 
         Document marketData = new Document("marketID", m.marketID).append("sellerID", m.sellerID).append("sellerName", m.sellerName).append("pokemonID", m.pokemonID).append("price", m.price);
         Mongo.MarketData.insertOne(marketData);
@@ -71,13 +70,5 @@ public class MarketEntry
     public static boolean isValidID(String marketID)
     {
         return CacheHelper.MARKET_ENTRIES.stream().anyMatch(m -> m.marketID.equals(marketID));
-    }
-
-    private String generateMarketID()
-    {
-        String digits = "0123456789";
-        StringBuilder s = new StringBuilder();
-        for(int i = 0; i < 8; i++) s.append(digits.charAt(new Random().nextInt(digits.length())));
-        return s.toString();
     }
 }

@@ -194,6 +194,10 @@ public class Commands
                 .setCommand(CommandLeaderboard::new)
                 .setCategory(Category.MISC);
 
+        register("bounties")
+                .setCommand(CommandBounties::new)
+                        .setCategory(Category.MISC);
+
         register("dev")
                 .setCommand(CommandDev::new)
                 .setCategory(Category.MISC);

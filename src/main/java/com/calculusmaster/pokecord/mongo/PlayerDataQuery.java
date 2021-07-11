@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.PokePass;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.bounties.Bounty;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
@@ -54,7 +55,8 @@ public class PlayerDataQuery extends MongoQuery
                 .append("pokepass_tier", 0)
                 .append("favorites", new JSONArray())
                 .append("owned_forms", new JSONArray())
-                .append("owned_megas", new JSONArray());
+                .append("owned_megas", new JSONArray())
+                .append("bounties", new JSONArray());
 
         Mongo.PlayerData.insertOne(data);
 
@@ -111,8 +113,8 @@ public class PlayerDataQuery extends MongoQuery
     {
         Mongo.PlayerData.updateOne(this.query, Updates.set("credits", this.getCredits() + amount));
 
-        if(amount < 0) this.getStats().incr(PlayerStatistic.CREDITS_SPENT);
-        else if(amount > 0) this.getStats().incr(PlayerStatistic.CREDITS_EARNED);
+        if(amount < 0) this.getStats().incr(PlayerStatistic.CREDITS_SPENT, Math.abs(amount));
+        else if(amount > 0) this.getStats().incr(PlayerStatistic.CREDITS_EARNED, Math.abs(amount));
 
         this.update();
     }
@@ -463,6 +465,31 @@ public class PlayerDataQuery extends MongoQuery
     public void addOwnedMegas(String mega)
     {
         Mongo.PlayerData.updateOne(this.query, Updates.push("owned_megas", mega));
+
+        this.update();
+    }
+
+    //key: "bounties"
+    public List<String> getBountyIDs()
+    {
+        return this.json().getJSONArray("bounties").toList().stream().map(s -> (String)s).collect(Collectors.toList());
+    }
+
+    public List<Bounty> getBounties()
+    {
+        return this.getBountyIDs().stream().map(Bounty::fromDB).collect(Collectors.toList());
+    }
+
+    public void addBounty(String ID)
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.push("bounties", ID));
+
+        this.update();
+    }
+
+    public void removeBounty(String ID)
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.pull("bounties", ID));
 
         this.update();
     }
