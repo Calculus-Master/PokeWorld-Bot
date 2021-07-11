@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public class CommandBounties extends Command
 {
@@ -45,6 +46,8 @@ public class CommandBounties extends Command
                 this.playerData.addPokePassExp(200, this.event);
                 this.playerData.getStats().incr(PlayerStatistic.BOUNTIES_COMPLETED);
                 Achievements.grant(this.player.getId(), Achievements.COMPLETED_FIRST_BOUNTY, this.event);
+
+                if(new Random().nextInt(50) < 10 && this.playerData.getSelectedPokemon().getLevel() != 100) this.playerData.getSelectedPokemon().addExp(500);
 
                 this.sendMsg("You earned " + b.getReward() + " credits and some PokePass XP for completing this bounty!");
             }
