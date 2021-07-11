@@ -18,9 +18,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Listener extends ListenerAdapter
 {
+    private static final ExecutorService EVENT_THREAD_POOL = Executors.newFixedThreadPool(3);
+
     private final Map<String, Long> cooldowns = new HashMap<>();
     int cooldown = 1; //Seconds
 
@@ -74,10 +78,10 @@ public class Listener extends ListenerAdapter
 
             Commands.execute(msg[0], event, msg);
 
-            if(r.nextInt(5000) < 1) redeemEvent(event);
+            if(r.nextInt(5000) < 1) EVENT_THREAD_POOL.execute(() -> redeemEvent(event));
         }
 
-        if(r.nextInt(10) <= 3) expEvent(event);
+        if(r.nextInt(10) <= 3) EVENT_THREAD_POOL.execute(() -> expEvent(event));
     }
 
     private static void redeemEvent(MessageReceivedEvent event)
