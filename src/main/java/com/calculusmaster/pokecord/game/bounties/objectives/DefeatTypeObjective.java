@@ -35,6 +35,11 @@ public class DefeatTypeObjective extends Objective
                 .append("type", this.type.toString());
     }
 
+    public Type getType()
+    {
+        return this.type;
+    }
+
     public DefeatTypeObjective setType(String type)
     {
         this.type = Type.cast(type);

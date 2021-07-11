@@ -5,6 +5,9 @@ import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.TypeEffectiveness;
+import com.calculusmaster.pokecord.game.bounties.Bounty;
+import com.calculusmaster.pokecord.game.bounties.objectives.DefeatGenericObjective;
+import com.calculusmaster.pokecord.game.bounties.objectives.DefeatTypeObjective;
 import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
@@ -735,6 +738,12 @@ public class Duel
 
             current.incr(PokemonStatistic.POKEMON_DEFEATED);
             other.incr(PokemonStatistic.TIMES_FAINTED);
+
+            for(Bounty b : this.players[this.current].data.getBounties())
+            {
+                if(b.getObjective() instanceof DefeatTypeObjective) if(this.players[this.other].active.isType(((DefeatTypeObjective)b.getObjective()).getType())) b.update();
+                else if(b.getObjective() instanceof DefeatGenericObjective) b.update();
+            }
 
             if(this.players[this.current].active.isDynamaxed() && this.players[this.current].active.getDynamaxLevel() < 10 && new Random().nextInt(100) < 40)
             {
