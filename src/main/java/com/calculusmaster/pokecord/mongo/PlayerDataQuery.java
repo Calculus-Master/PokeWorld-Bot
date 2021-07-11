@@ -394,6 +394,10 @@ public class PlayerDataQuery extends MongoQuery
     {
         Mongo.PlayerData.updateOne(this.query, Updates.inc("pokepass_exp", amount));
 
+        this.updateBountyProgression(b -> {
+            if(b.getType().equals(ObjectiveType.EARN_XP_POKEPASS)) b.update(amount);
+        });
+
         this.update();
 
         if(this.getPokePassExp() >= PokePass.TIER_EXP && PokePass.tierExists(this.getPokePassTier() + 1))

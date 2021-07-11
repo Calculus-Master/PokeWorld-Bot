@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.util.listener;
 import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
@@ -101,7 +102,13 @@ public class Listener extends ListenerAdapter
 
         int initL = p.getLevel();
 
-        p.addExp((int)(new Random().nextInt(200) * (1 + Math.random())));
+        int experience = (int)(new Random().nextInt(200) * (1 + Math.random()));
+
+        p.addExp(experience);
+
+        EVENT_THREAD_POOL.execute(() -> data.updateBountyProgression(b -> {
+            if(b.getType().equals(ObjectiveType.EARN_XP_POKEMON)) b.update(experience);
+        }));
 
         if(p.getLevel() != initL)
         {

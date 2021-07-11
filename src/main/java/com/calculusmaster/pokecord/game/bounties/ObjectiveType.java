@@ -17,7 +17,9 @@ public enum ObjectiveType
     WIN_ELITE_DUEL,
     CATCH_POKEMON,
     CATCH_POKEMON_TYPE,
-    CATCH_POKEMON_NAME;
+    CATCH_POKEMON_NAME,
+    EARN_XP_POKEPASS,
+    EARN_XP_POKEMON;
 
     public static ObjectiveType cast(String objectiveType)
     {

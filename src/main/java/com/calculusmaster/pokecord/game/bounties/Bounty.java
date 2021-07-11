@@ -131,6 +131,8 @@ public class Bounty
             case CATCH_POKEMON -> new CatchGenericObjective();
             case CATCH_POKEMON_TYPE -> new CatchTypeObjective();
             case CATCH_POKEMON_NAME -> new CatchNameObjective();
+            case EARN_XP_POKEPASS -> new EarnPokePassXPObjective();
+            case EARN_XP_POKEMON -> new EarnPokemonXPObjective();
         };
 
         return this.objective;
