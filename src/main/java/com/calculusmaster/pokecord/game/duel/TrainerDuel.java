@@ -186,6 +186,7 @@ public class TrainerDuel extends Duel
     public void setPlayers(String player1ID, String player2ID, int size)
     {
         this.players = new Player[]{new Player(player1ID, size), null};
+        this.size = size;
     }
 
     private void setTrainer(Trainer.TrainerInfo info)

@@ -1505,7 +1505,7 @@ public class Duel
 
     public int getSize()
     {
-        return this.size;
+        return this.players[0].team.size();
     }
 
     public void setPlayers(String player1ID, String player2ID, int size)
