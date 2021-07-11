@@ -1,0 +1,17 @@
+package com.calculusmaster.pokecord.game.bounties.objectives;
+
+import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
+
+public class UseMaxMoveObjective extends Objective
+{
+    public UseMaxMoveObjective()
+    {
+        super(ObjectiveType.USE_MAX_MOVES, Objective.randomTargetAmount(5, 30));
+    }
+
+    @Override
+    public String getDesc()
+    {
+        return "Use Dynamax " + this.target + " times";
+    }
+}

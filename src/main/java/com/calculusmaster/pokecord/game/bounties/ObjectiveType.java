@@ -5,7 +5,9 @@ public enum ObjectiveType
     DEFEAT_POKEMON,
     DEFEAT_POKEMON_TYPE,
     DEFEAT_LEGENDARY,
-    BUY_ITEMS;
+    BUY_ITEMS,
+    USE_ZMOVE,
+    USE_MAX_MOVES;
 
     public static ObjectiveType cast(String objectiveType)
     {

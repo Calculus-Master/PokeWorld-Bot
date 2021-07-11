@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.TypeEffectiveness;
+import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.bounties.objectives.DefeatTypeObjective;
 import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.enums.elements.*;
@@ -338,6 +339,7 @@ public class Duel
             this.players[this.current].usedZMove = true;
 
             Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_ZMOVE, this.event);
+            this.players[this.current].data.updateBountyProgression(ObjectiveType.USE_ZMOVE);
         }
 
         if(move.isMaxMove)
@@ -346,6 +348,7 @@ public class Duel
             this.players[this.current].usedDynamax = true;
 
             Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_DYNAMAX, this.event);
+            this.players[this.current].data.updateBountyProgression(ObjectiveType.USE_MAX_MOVES);
         }
 
         if(this.data(this.other).imprisonUsed && this.players[this.other].active.getLearnedMoves().contains(move.getName())) cantUse = true;

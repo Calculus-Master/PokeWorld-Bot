@@ -117,6 +117,8 @@ public class Bounty
             case DEFEAT_POKEMON_TYPE -> new DefeatTypeObjective();
             case DEFEAT_LEGENDARY -> new DefeatLegendaryObjective();
             case BUY_ITEMS -> new BuyItemsObjective();
+            case USE_ZMOVE -> new UseZMoveObjective();
+            case USE_MAX_MOVES -> new UseMaxMoveObjective();
         };
 
         return this.objective;
