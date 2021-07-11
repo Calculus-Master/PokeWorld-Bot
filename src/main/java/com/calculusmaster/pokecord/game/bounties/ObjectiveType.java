@@ -4,7 +4,8 @@ public enum ObjectiveType
 {
     DEFEAT_POKEMON,
     DEFEAT_POKEMON_TYPE,
-    DEFEAT_LEGENDARY;
+    DEFEAT_LEGENDARY,
+    BUY_ITEMS;
 
     public static ObjectiveType cast(String objectiveType)
     {

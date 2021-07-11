@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.PokePass;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.bounties.Bounty;
+import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
@@ -17,6 +18,7 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class PlayerDataQuery extends MongoQuery
@@ -478,6 +480,30 @@ public class PlayerDataQuery extends MongoQuery
     public List<Bounty> getBounties()
     {
         return this.getBountyIDs().stream().map(Bounty::fromDB).collect(Collectors.toList());
+    }
+
+    public void updateBountyProgression(Consumer<Bounty> checker)
+    {
+        for(String ID : this.getBountyIDs())
+        {
+            Bounty b = Bounty.fromDB(ID);
+
+            checker.accept(b);
+
+            b.updateProgression();
+        }
+    }
+
+    public void updateBountyProgression(ObjectiveType type, Consumer<Bounty> checker)
+    {
+        this.updateBountyProgression((b) -> {
+            if(b.getType().equals(type)) checker.accept(b);
+        });
+    }
+
+    public void updateBountyProgression(ObjectiveType type)
+    {
+        this.updateBountyProgression(type, Bounty::update);
     }
 
     public void addBounty(String ID)

@@ -1,9 +1,6 @@
 package com.calculusmaster.pokecord.game.bounties;
 
-import com.calculusmaster.pokecord.game.bounties.objectives.DefeatGenericObjective;
-import com.calculusmaster.pokecord.game.bounties.objectives.DefeatLegendaryObjective;
-import com.calculusmaster.pokecord.game.bounties.objectives.DefeatTypeObjective;
-import com.calculusmaster.pokecord.game.bounties.objectives.Objective;
+import com.calculusmaster.pokecord.game.bounties.objectives.*;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.mongodb.client.model.Filters;
@@ -75,6 +72,11 @@ public class Bounty
         this.objective.update();
     }
 
+    public void update(int amount)
+    {
+        for(int i = 0; i < amount; i++) this.update();
+    }
+
     public void updateProgression()
     {
         Mongo.BountyData.updateOne(Filters.eq("bountyID", this.bountyID), Updates.set("progression", this.objective.getProgression()));
@@ -114,6 +116,7 @@ public class Bounty
             case DEFEAT_POKEMON -> new DefeatGenericObjective();
             case DEFEAT_POKEMON_TYPE -> new DefeatTypeObjective();
             case DEFEAT_LEGENDARY -> new DefeatLegendaryObjective();
+            case BUY_ITEMS -> new BuyItemsObjective();
         };
 
         return this.objective;

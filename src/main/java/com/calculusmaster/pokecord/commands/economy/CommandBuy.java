@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.enums.elements.Nature;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.TM;
@@ -114,6 +115,9 @@ public class CommandBuy extends Command
 
                 this.playerData.changeCredits(-1 * cost);
                 this.playerData.addItem(i.toString());
+
+                final int amt = amount;
+                this.playerData.updateBountyProgression(ObjectiveType.BUY_ITEMS, b -> b.update(amt));
 
                 this.sendMsg("Bought " + (amount > 1 ? amount + "x" : "") + "`" + i.getStyledName() + "` for " + cost + "c!");
             }
