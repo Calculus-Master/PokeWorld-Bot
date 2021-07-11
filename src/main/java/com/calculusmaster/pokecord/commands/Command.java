@@ -53,17 +53,7 @@ public abstract class Command
 
     public abstract Command runCommand();
 
-    public Commands.Registry getRegistry()
-    {
-        return Commands.getRegistry(this.msg[0]);
-    }
-
     //Useful Methods for other Commands
-    //TODO: Roll these out to all of the commands
-    protected boolean isLength(int len)
-    {
-        return this.msg.length >= len;
-    }
 
     protected boolean isNumeric(int index)
     {

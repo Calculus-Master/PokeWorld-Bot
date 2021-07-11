@@ -7,7 +7,7 @@ import com.calculusmaster.pokecord.commands.misc.*;
 import com.calculusmaster.pokecord.commands.moves.*;
 import com.calculusmaster.pokecord.commands.pokemon.*;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
-import com.calculusmaster.pokecord.util.interfaces.ICommandCreator;
+import com.calculusmaster.pokecord.util.interfaces.CommandSupplier;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.*;
@@ -245,7 +245,7 @@ public class Commands
     public static class Registry
     {
         public List<String> aliases;
-        private ICommandCreator builder;
+        private CommandSupplier builder;
         public Category category;
         public String shortDesc;
         public Map<String, String> help;
@@ -258,7 +258,7 @@ public class Commands
             this.shortDesc = "";
         }
 
-        Registry setCommand(ICommandCreator builder)
+        Registry setCommand(CommandSupplier builder)
         {
             this.builder = builder;
             return this;

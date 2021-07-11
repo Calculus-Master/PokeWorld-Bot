@@ -3,7 +3,7 @@ package com.calculusmaster.pokecord.game.enums.items;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
-import com.calculusmaster.pokecord.util.interfaces.IZCrystalValidRule;
+import com.calculusmaster.pokecord.util.interfaces.ZCrystalValidator;
 
 import java.util.*;
 
@@ -65,10 +65,10 @@ public enum ZCrystal
     ETERNIUM_Z("Eternatus", "Eternabeam", "Dynamax Cannon"),
     DARKRAIUM_Z("Darkrai", "Dark Void");
 
-    private IZCrystalValidRule rule;
+    private ZCrystalValidator rule;
     private Type type;
 
-    ZCrystal(IZCrystalValidRule rule)
+    ZCrystal(ZCrystalValidator rule)
     {
         this.rule = rule;
         this.type = null;
