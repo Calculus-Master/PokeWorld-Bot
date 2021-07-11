@@ -739,10 +739,13 @@ public class Duel
             current.incr(PokemonStatistic.POKEMON_DEFEATED);
             other.incr(PokemonStatistic.TIMES_FAINTED);
 
-            for(Bounty b : this.players[this.current].data.getBounties())
+            if(this.current == 0 || (this.current == 1 && this.isPvP()))
             {
-                if(b.getObjective() instanceof DefeatTypeObjective) if(this.players[this.other].active.isType(((DefeatTypeObjective)b.getObjective()).getType())) b.update();
-                else if(b.getObjective() instanceof DefeatGenericObjective) b.update();
+                for(Bounty b : this.players[this.current].data.getBounties())
+                {
+                    if(b.getObjective() instanceof DefeatTypeObjective) if(this.players[this.other].active.isType(((DefeatTypeObjective)b.getObjective()).getType())) b.update();
+                    else if(b.getObjective() instanceof DefeatGenericObjective) b.update();
+                }
             }
 
             if(this.players[this.current].active.isDynamaxed() && this.players[this.current].active.getDynamaxLevel() < 10 && new Random().nextInt(100) < 40)
@@ -1525,6 +1528,11 @@ public class Duel
     public Player[] getPlayers()
     {
         return this.players;
+    }
+
+    public boolean isPvP()
+    {
+        return !(this instanceof WildDuel) && !(this instanceof TrainerDuel);
     }
 
     public int indexOf(String id)
