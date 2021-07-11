@@ -12,6 +12,6 @@ public class UseMaxMoveObjective extends Objective
     @Override
     public String getDesc()
     {
-        return "Use Dynamax " + this.target + " times";
+        return "Use " + this.target + " Max Moves";
     }
 }
