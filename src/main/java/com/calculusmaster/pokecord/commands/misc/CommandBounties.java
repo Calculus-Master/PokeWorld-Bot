@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.misc;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.bounties.Bounty;
+import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -41,6 +42,7 @@ public class CommandBounties extends Command
                 Bounty.delete(b.getBountyID());
 
                 this.playerData.addPokePassExp(200, this.event);
+                this.playerData.getStats().incr(PlayerStatistic.BOUNTIES_COMPLETED);
 
                 this.sendMsg("You earned " + b.getReward() + " credits and some PokePass XP for completing this bounty!");
             }

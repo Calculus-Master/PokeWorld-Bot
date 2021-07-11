@@ -28,7 +28,8 @@ public enum PlayerStatistic
     POKEMON_SOLD_MARKET("sold_market"),
     POKEMON_BOUGHT_MARKET("bought_market"),
     TRADES_COMPLETED("trades_completed"),
-    SHOP_ITEMS_BOUGHT("shop_items_bought");
+    SHOP_ITEMS_BOUGHT("shop_items_bought"),
+    BOUNTIES_COMPLETED("bounties_completed");
 
     public String key;
     PlayerStatistic(String key)
