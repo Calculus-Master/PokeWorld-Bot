@@ -13,7 +13,6 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -322,7 +321,12 @@ public abstract class Command
         this.timeI = System.currentTimeMillis();
     }
 
-    public abstract Command runCommand() throws IOException;
+    public abstract Command runCommand();
+
+    public Commands.Registry getRegistry()
+    {
+        return Commands.getRegistry(this.msg[0]);
+    }
 
     //Useful Methods for other Commands
     //TODO: Roll these out to all of the commands

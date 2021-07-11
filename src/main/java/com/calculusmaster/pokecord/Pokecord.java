@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.commands.duel.CommandWildDuel;
 import com.calculusmaster.pokecord.commands.moves.CommandAbilityInfo;
 import com.calculusmaster.pokecord.game.Move;
@@ -46,6 +47,7 @@ public class Pokecord
         LoggerHelper.init("Ability Info", CommandAbilityInfo::init);
         LoggerHelper.init("Pokemon Rarity", PokemonRarity::init);
         LoggerHelper.init("Command", Command::init);
+        LoggerHelper.init("Command", Commands::init);
         LoggerHelper.init("Gym Leader", GymLeader::init);
         LoggerHelper.init("PokePass", PokePass::init);
         LoggerHelper.init("Achievement Cache", CacheHelper::initAchievementCache);

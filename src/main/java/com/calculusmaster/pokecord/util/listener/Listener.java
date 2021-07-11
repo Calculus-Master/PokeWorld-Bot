@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.util.listener;
 import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.commands.config.CommandSettings;
 import com.calculusmaster.pokecord.commands.duel.*;
 import com.calculusmaster.pokecord.commands.economy.*;
@@ -80,8 +81,13 @@ public class Listener extends ListenerAdapter
             //Remove prefix from the message array, msg[0] is the raw command name
             msg[0] = msg[0].substring(serverQuery.getPrefix().length());
 
+            if(2 > 1)
+            {
+                c = null;
+                Commands.execute(msg[0], event, msg);
+            }
             //Check for a valid command, and if there is none reply with the invalid message
-            if(Command.START.contains(msg[0]) || !PlayerDataQuery.isRegistered(player.getId()))
+            else if(Command.START.contains(msg[0]) || !PlayerDataQuery.isRegistered(player.getId()))
             {
                 c = new CommandStart(event, msg).runCommand();
             }
@@ -249,7 +255,7 @@ public class Listener extends ListenerAdapter
 
             if(!(c instanceof CommandInvalid) && r.nextInt(5000) < 1) redeemEvent(event);
 
-            if(!c.isNull()) event.getChannel().sendMessageEmbeds(c.getResponseEmbed()).queue();
+            //if(!c.isNull()) event.getChannel().sendMessageEmbeds(c.getResponseEmbed()).queue();
         }
 
         if(r.nextInt(10) <= 3) Listener.expEvent(event);
