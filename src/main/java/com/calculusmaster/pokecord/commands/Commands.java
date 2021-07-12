@@ -56,15 +56,21 @@ public class Commands
 
         register("catch")
                 .setCommand(CommandCatch::new)
-                .setCategory(Category.POKEMON);
+                .setCategory(Category.POKEMON)
+                .setDesc("Catch a Pokemon!")
+                .addTerminalPoint("catch <guess>", "Attempt to catch a spawn by guessing its name (<guess>).");
 
         register("pokemon", "p")
                 .setCommand(CommandPokemon::new)
-                .setCategory(Category.POKEMON);
+                .setCategory(Category.POKEMON)
+                .setDesc("View your Pokemon!")
+                .addTerminalPoint("pokemon", "View & sort your Pokemon list. There are many possible arguments.");
 
         register("moves", "m")
                 .setCommand(CommandMoves::new)
-                .setCategory(Category.MOVES);
+                .setCategory(Category.MOVES)
+                .setDesc("View your active Pokemon's moves!")
+                .addTerminalPoint("moves", "Shows your active Pokemon's move set. In duels, this will show extra information (like the effectiveness), otherwise, this will show your Pokemon's available moves as well.");
 
         register("moveinfo", "mi")
                 .setCommand(CommandMoveInfo::new)
