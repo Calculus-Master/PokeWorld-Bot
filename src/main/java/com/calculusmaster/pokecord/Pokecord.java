@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord;
 
 import com.calculusmaster.pokecord.commands.Commands;
-import com.calculusmaster.pokecord.commands.duel.CommandWildDuel;
 import com.calculusmaster.pokecord.commands.moves.CommandAbilityInfo;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.PokePass;
@@ -10,10 +9,7 @@ import com.calculusmaster.pokecord.game.duel.elements.GymLeader;
 import com.calculusmaster.pokecord.game.duel.elements.Trainer;
 import com.calculusmaster.pokecord.util.PokemonRarity;
 import com.calculusmaster.pokecord.util.PrivateInfo;
-import com.calculusmaster.pokecord.util.helpers.CacheHelper;
-import com.calculusmaster.pokecord.util.helpers.ConfigHelper;
-import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
-import com.calculusmaster.pokecord.util.helpers.SpawnEventHelper;
+import com.calculusmaster.pokecord.util.helpers.*;
 import com.calculusmaster.pokecord.util.listener.ButtonListener;
 import com.calculusmaster.pokecord.util.listener.Listener;
 import com.calculusmaster.pokecord.util.listener.MiscListener;
@@ -42,7 +38,7 @@ public class Pokecord
         LoggerHelper.init("Config", ConfigHelper::init);
         LoggerHelper.init("Pokemon", Pokemon::init);
         LoggerHelper.init("Gigantamax", Pokemon::gigantamaxInit);
-        LoggerHelper.init("EV Lists", CommandWildDuel::init);
+        LoggerHelper.init("EV Lists", DataHelper::createEVLists);
         LoggerHelper.init("Daily Trainer", Trainer::setDailyTrainers);
         LoggerHelper.init("Move", Move::init);
         LoggerHelper.init("Ability Info", CommandAbilityInfo::init);

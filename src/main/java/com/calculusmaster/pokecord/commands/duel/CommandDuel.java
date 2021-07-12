@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands.duel;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
@@ -100,7 +101,7 @@ public class CommandDuel extends Command
 
         if(DuelHelper.isInDuel(this.player.getId()))
         {
-            this.sendMsg("You are already in a duel! You cannot start another one until your current duel is complete!");
+            this.sendMsg(CommandInvalid.ALREADY_IN_DUEL);
             return this;
         }
 

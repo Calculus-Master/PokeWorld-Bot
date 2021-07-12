@@ -4,6 +4,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandInvalid extends Command
 {
+    public static final String ALREADY_IN_DUEL = "You are already in a duel! You cannot start another one until your current duel is complete!";
+
     public CommandInvalid(MessageReceivedEvent event, String[] msg)
     {
         super(event, msg);

@@ -7,36 +7,14 @@ import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.WildDuel;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.Mongo;
-import com.mongodb.client.model.Filters;
+import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import org.json.JSONArray;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class CommandWildDuel extends Command
 {
-    public static final List<String> HP = new ArrayList<>();
-    public static final List<String> ATK = new ArrayList<>();
-    public static final List<String> DEF = new ArrayList<>();
-    public static final List<String> SPATK = new ArrayList<>();
-    public static final List<String> SPDEF = new ArrayList<>();
-    public static final List<String> SPD = new ArrayList<>();
-    public static final List<List<String>> EV_LISTS = new ArrayList<>();
-
-    //Initialize the Stat List
-    public static void init()
-    {
-        EV_LISTS.add(HP); EV_LISTS.add(ATK); EV_LISTS.add(DEF); EV_LISTS.add(SPATK); EV_LISTS.add(SPDEF); EV_LISTS.add(SPD);
-
-        Mongo.PokemonInfo.find(Filters.exists("ev")).forEach(d -> {
-            List<Integer> j = d.getList("ev", Integer.class);
-            for(int i = 0; i < 6; i++) if(j.get(i) > 0) EV_LISTS.get(i).add(d.getString("name"));
-        });
-    }
-
     public CommandWildDuel(MessageReceivedEvent event, String[] msg)
     {
         super(event, msg);
@@ -47,73 +25,51 @@ public class CommandWildDuel extends Command
     {
         //Possible options: p!wildduel (random pokemon), p!wildduel STAT (random pokemon with evs in STAT), p!wildduel PKMN (specifically battle PKMN)
         boolean random = this.msg.length == 1;
-        boolean randomSTAT = this.msg.length == 2 && Stat.cast(this.msg[1]) != null;
-        boolean specific = this.msg.length >= 2 && Global.POKEMON.contains(this.getPokemon());
+        boolean stat = this.msg.length == 2 && Stat.cast(this.msg[1]) != null;
+        boolean specific = this.msg.length >= 2 && Global.POKEMON.contains(Global.normalCase(this.getMultiWordContent(1)));
 
         int specificPrice = 300;
         int statSpecificPrice = 100;
 
         if(DuelHelper.isInDuel(this.player.getId()))
         {
-            this.event.getMessage().getChannel().sendMessage(this.playerData.getMention() + ": You are already in a duel!").queue();
-            this.embed = null;
+            this.sendMsg(CommandInvalid.ALREADY_IN_DUEL);
         }
-        else if(specific)
+        else if(random || stat || specific)
         {
-            if(this.playerData.getCredits() < specificPrice)
+            int price = stat ? statSpecificPrice : (specific ? specificPrice : 0);
+
+            if(price != 0 && this.playerData.getCredits() < price)
             {
-                this.event.getMessage().getChannel().sendMessage(this.playerData.getMention() + ": You don't have enough credits! Price: " + specificPrice).queue();
-                this.embed = null;
-                return this;
+                this.sendInvalidCredits(price);
             }
-
-            Duel d = WildDuel.create(this.player.getId(), this.event, this.getPokemon());
-            this.event.getMessage().getChannel().sendMessage(this.playerData.getMention() + ": A wild Pokemon appeared, and it wants to challenge you!").queue();
-            this.embed = null;
-
-            this.playerData.changeCredits(-1 * specificPrice);
-
-            d.sendTurnEmbed();
-        }
-        else if(randomSTAT)
-        {
-            if(this.playerData.getCredits() < statSpecificPrice)
+            else
             {
-                this.event.getMessage().getChannel().sendMessage(this.playerData.getMention() + ": You don't have enough credits! Price: " + statSpecificPrice).queue();
-                this.embed = null;
-                return this;
+                String pokemon;
+
+                if(specific) pokemon = Global.normalCase(this.getMultiWordContent(1));
+                else if(stat)
+                {
+                    List<String> statList = DataHelper.EV_LISTS.get(Stat.cast(this.msg[1]).ordinal());
+                    pokemon = statList.get(new Random().nextInt(statList.size()));
+                }
+                else pokemon = "";
+
+                Duel d = WildDuel.create(this.player.getId(), this.event, pokemon);
+
+                if(price != 0) this.playerData.changeCredits(-1 * price);
+
+                this.sendMsg("A wild Pokemon appeared, and it wants to challenge you!");
+
+                d.sendTurnEmbed();
+
             }
-
-            String pokemon = EV_LISTS.get(Stat.cast(this.msg[1]).ordinal()).get(new Random().nextInt(EV_LISTS.get(Stat.cast(this.msg[1]).ordinal()).size()));
-            Duel d = WildDuel.create(this.player.getId(), this.event, pokemon);
-            this.event.getMessage().getChannel().sendMessage(this.playerData.getMention() + ": A wild Pokemon appeared, and it wants to challenge you!").queue();
-            this.embed = null;
-
-            this.playerData.changeCredits(-1 * statSpecificPrice);
-
-            d.sendTurnEmbed();
-        }
-        else if(random)
-        {
-            Duel d = WildDuel.create(this.player.getId(), this.event, "");
-            this.event.getMessage().getChannel().sendMessage(this.playerData.getMention() + ": A wild Pokemon appeared, and it wants to challenge you!").queue();
-            this.embed = null;
-
-            d.sendTurnEmbed();
         }
         else
         {
-            this.embed.setDescription(CommandInvalid.getShort());
+            this.sendMsg("Invalid arguments! Make sure your Pokemon name or Stat name (HP, ATK, DEF, SPATK, SPDEF, and SPD) is correct.");
         }
 
         return this;
-    }
-
-    private String getPokemon()
-    {
-        StringBuilder sb = new StringBuilder();
-        for(int i = 1; i < this.msg.length; i++) sb.append(this.msg[i]).append(" ");
-
-        return Global.normalCase(sb.toString().trim());
     }
 }
