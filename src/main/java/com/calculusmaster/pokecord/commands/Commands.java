@@ -92,15 +92,28 @@ public class Commands
 
         register("duel")
                 .setCommand(CommandDuel::new)
-                .setCategory(Category.DUEL);
+                .setCategory(Category.DUEL)
+                .setDesc("Duel other players!")
+                .addTerminalPoint("duel <@player>", "Send a duel request to the mentioned player.")
+                .addTerminalPoint("duel confirm", "Accept a duel request.")
+                .addTerminalPoint("duel deny", "Deny a duel request.")
+                .addTerminalPoint("duel cancel", "Cancel a duel request you have sent to someone else.");
 
         register("use")
                 .setCommand(CommandUse::new)
-                .setCategory(Category.DUEL);
+                .setCategory(Category.DUEL)
+                .setDesc("Use a move or swap out Pokemon in a duel!")
+                .addTerminalPoint("use <number>", "Use one of your learned moves. <number> must be between 1 and 4, inclusive.")
+                .addTerminalPoint("use swap <number>", "Swap out your active Pokemon to another on your team (index given by <number>). Cannot be used in Wild Pokemon duels.")
+                .addTerminalPoint("use z <number>", "Use a Z-Move of one of your learned moves given by <number>.")
+                .addTerminalPoint("use d <number>", "Enter Dynamax, and then use one of your learned moves.");
 
         register("shop", "store")
                 .setCommand(CommandShop::new)
-                .setCategory(Category.ECONOMY);
+                .setCategory(Category.ECONOMY)
+                .setDesc("View the shop!")
+                .addTerminalPoint("shop", "View a list of all shop categories. Use `shop <page>` to see the listings in a specific category.")
+                .addTerminalPoint("shop <page>", "View a specific shop page, category given by <page>.");
 
         register("buy")
                 .setCommand(CommandBuy::new)
