@@ -4,6 +4,9 @@ import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public enum Achievements
 {
     START_JOURNEY(250, "Started your journey!"),
@@ -36,6 +39,8 @@ public enum Achievements
     COMPLETED_FIRST_PURSUIT(1000, "Completed your first Pursuit"),
     COMPLETED_FIRST_LEGEND_PURSUIT(20000, "Completed your first Legend size Pursuit!");
 
+    public static final ExecutorService ACHIEVEMENT_THREAD_POOL = Executors.newFixedThreadPool(3);
+
     public int credits;
     public String desc;
     Achievements(int credits, String desc)
@@ -46,18 +51,20 @@ public enum Achievements
 
     public static void grant(String playerID, Achievements a, MessageReceivedEvent event)
     {
-        if(CacheHelper.ACHIEVEMENT_CACHE.get(a).contains(playerID)) return;
+        ACHIEVEMENT_THREAD_POOL.execute(() -> {
+            if(CacheHelper.ACHIEVEMENT_CACHE.get(a).contains(playerID)) return;
 
-        PlayerDataQuery p = new PlayerDataQuery(playerID);
+            PlayerDataQuery p = new PlayerDataQuery(playerID);
 
-        if(!p.getAchievementsList().contains(a.toString()))
-        {
-            p.addAchievement(a);
-            p.changeCredits(a.credits);
+            if(!p.getAchievementsList().contains(a.toString()))
+            {
+                p.addAchievement(a);
+                p.changeCredits(a.credits);
 
-            event.getChannel().sendMessage(p.getMention() + ": Unlocked an achievement: \"" + a.desc + "\"").queue();
-        }
-        else CacheHelper.ACHIEVEMENT_CACHE.get(a).add(playerID);
+                event.getChannel().sendMessage(p.getMention() + ": Unlocked an achievement: \"" + a.desc + "\"").queue();
+            }
+            else CacheHelper.ACHIEVEMENT_CACHE.get(a).add(playerID);
+        });
     }
 
     public static Achievements asAchievement(String a)
