@@ -78,6 +78,7 @@ public class CommandPursuit extends Command
 
                     this.playerData.increasePursuitLevel();
 
+                    //Pursuit Complete
                     if(this.playerData.getPursuitLevel() > this.playerData.getPursuitIDs().size())
                     {
                         int creditReward = pursuitSize.finalRewardCredits;
@@ -85,6 +86,9 @@ public class CommandPursuit extends Command
                         //Pursuit Final Rewards
                         this.playerData.addPokePassExp(pursuitSize.getPokePassXPReward(count), this.event);
                         this.playerData.changeCredits(creditReward);
+
+                        Achievements.grant(this.player.getId(), Achievements.COMPLETED_FIRST_PURSUIT, this.event);
+                        if(pursuitSize.equals(PursuitSize.LEGEND)) Achievements.grant(this.player.getId(), Achievements.COMPLETED_FIRST_LEGEND_PURSUIT, this.event);
 
                         this.playerData.removePursuit();
 
