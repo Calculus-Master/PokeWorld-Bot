@@ -4,7 +4,7 @@ import java.util.concurrent.*;
 
 public class ThreadPoolHandler
 {
-    public static final int THREAD_POOL_TYPE = 0;
+    public static int THREAD_POOL_TYPE;
 
     public static final ExecutorService ACHIEVEMENT = ThreadPoolHandler.customThreadPool();
     public static final ExecutorService LISTENER_EVENT = ThreadPoolHandler.customThreadPool();

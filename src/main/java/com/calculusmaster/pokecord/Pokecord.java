@@ -11,6 +11,7 @@ import com.calculusmaster.pokecord.game.duel.elements.Trainer;
 import com.calculusmaster.pokecord.util.PokemonRarity;
 import com.calculusmaster.pokecord.util.PrivateInfo;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
+import com.calculusmaster.pokecord.util.helpers.ConfigHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.SpawnEventHelper;
 import com.calculusmaster.pokecord.util.listener.ButtonListener;
@@ -38,6 +39,7 @@ public class Pokecord
         //Initializations
         long start = System.currentTimeMillis();
 
+        LoggerHelper.init("Config", ConfigHelper::init);
         LoggerHelper.init("Pokemon", Pokemon::init);
         LoggerHelper.init("Gigantamax", Pokemon::gigantamaxInit);
         LoggerHelper.init("EV Lists", CommandWildDuel::init);

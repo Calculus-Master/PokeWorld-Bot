@@ -73,7 +73,7 @@ public class SpawnEventHelper
 
         if(channels.isEmpty())
         {
-            System.out.println(g.getName() + " has no Spawn Channels! Skipping spawn event...");
+            LoggerHelper.warn(SpawnEventHelper.class, g.getName() + " has no Spawn Channels! Skipping spawn event...");
             return;
         }
 
