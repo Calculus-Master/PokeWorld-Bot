@@ -230,6 +230,10 @@ public class Commands
         register("dev")
                 .setCommand(CommandDev::new)
                 .setCategory(Category.MISC);
+
+        register("target")
+                .setCommand(CommandTarget::new)
+                .setCategory(Category.DUEL);
     }
 
     public static void execute(String input, MessageReceivedEvent event, String[] msg)

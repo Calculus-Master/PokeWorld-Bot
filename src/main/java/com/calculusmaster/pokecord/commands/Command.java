@@ -89,6 +89,12 @@ public abstract class Command
         return sb.toString().trim();
     }
 
+    protected Member getMember(String ID)
+    {
+        this.server.retrieveMemberById(ID);
+        return this.server.getMemberById(ID);
+    }
+
     //Embed-Related
 
     protected void setAuthor()

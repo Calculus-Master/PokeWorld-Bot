@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game.duel;
 
+import com.calculusmaster.pokecord.commands.duel.CommandTarget;
 import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Move;
@@ -1281,7 +1282,30 @@ public class Duel
     {
         EmbedBuilder embed = new EmbedBuilder();
 
-        int c = this.players[0].team.size() >= 6 ? this.giveWinCredits() : 0;
+        int winner = this.getWinner().ID.equals(this.players[0].ID) ? 0 : 1;
+        int loser = winner == 0 ? 1 : 0;
+
+        int c = this.players[0].team.size() >= 6 ? this.giveWinCredits() : new Random().nextInt(11) + 10;
+
+        if(CommandTarget.isTarget(this.event.getGuild(), this.players[winner].ID))
+        {
+            c = (new Random().nextInt(201) + 50) * (CommandTarget.SERVER_TARGET_DUELS_WON.get(this.event.getGuild().getId()) + 1);
+
+            CommandTarget.SERVER_TARGET_DUELS_WON.put(this.event.getGuild().getId(), CommandTarget.SERVER_TARGET_DUELS_WON.get(this.event.getGuild().getId()) + 1);
+
+            embed.setFooter("The Server Target has won another duel!");
+        }
+        else if(CommandTarget.isTarget(this.event.getGuild(), this.players[loser].ID))
+        {
+            CommandTarget.SERVER_TARGETS.remove(this.event.getGuild().getId());
+
+            c = new Random().nextInt(501) + 500;
+            this.players[winner].data.addPokePassExp(500, this.event);
+
+            CommandTarget.generateNewServerTarget(this.event.getGuild());
+
+            embed.setFooter("The Server Target has been defeated!");
+        }
 
         embed.setDescription(this.getWinner().data.getUsername() + " has won!" + (c != 0 ? "\nThey earned " + c + " credits!" : ""));
 
@@ -1295,9 +1319,6 @@ public class Duel
             this.uploadEVs(0);
             this.uploadEVs(1);
         }
-
-        int winner = this.getWinner().ID.equals(this.players[0].ID) ? 0 : 1;
-        int loser = winner == 0 ? 1 : 0;
 
         this.players[winner].data.addPokePassExp(1000, this.event);
         this.players[loser].data.addPokePassExp(500, this.event);
