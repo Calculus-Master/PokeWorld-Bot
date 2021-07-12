@@ -33,7 +33,8 @@ public class ServerDataQuery extends MongoQuery
                 .append("equipzcrystal_duel", true)
                 .append("dynamax", true)
                 .append("zmoves", true)
-                .append("duelchannel", new JSONArray());
+                .append("duelchannel", new JSONArray())
+                .append("botchannel", new JSONArray());
 
         Mongo.ServerData.insertOne(serverData);
 
