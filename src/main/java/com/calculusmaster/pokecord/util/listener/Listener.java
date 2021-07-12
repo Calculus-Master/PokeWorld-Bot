@@ -9,6 +9,7 @@ import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
+import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -19,13 +20,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Listener extends ListenerAdapter
 {
-    private static final ExecutorService EVENT_THREAD_POOL = Executors.newFixedThreadPool(3);
-
     private final Map<String, Long> cooldowns = new HashMap<>();
     int cooldown = 1; //Seconds
 
@@ -79,10 +76,10 @@ public class Listener extends ListenerAdapter
 
             Commands.execute(msg[0], event, msg);
 
-            if(r.nextInt(5000) < 1) EVENT_THREAD_POOL.execute(() -> redeemEvent(event));
+            if(r.nextInt(5000) < 1) ThreadPoolHandler.LISTENER_EVENT.execute(() -> redeemEvent(event));
         }
 
-        if(r.nextInt(10) <= 3) EVENT_THREAD_POOL.execute(() -> expEvent(event));
+        if(r.nextInt(10) <= 3) ThreadPoolHandler.LISTENER_EVENT.execute(() -> expEvent(event));
     }
 
     private static void redeemEvent(MessageReceivedEvent event)
@@ -106,7 +103,7 @@ public class Listener extends ListenerAdapter
 
         p.addExp(experience);
 
-        EVENT_THREAD_POOL.execute(() -> data.updateBountyProgression(b -> {
+        ThreadPoolHandler.LISTENER_EVENT.execute(() -> data.updateBountyProgression(b -> {
             if(b.getType().equals(ObjectiveType.EARN_XP_POKEMON)) b.update(experience);
         }));
 

@@ -2,10 +2,8 @@ package com.calculusmaster.pokecord.game;
 
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
+import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public enum Achievements
 {
@@ -39,8 +37,6 @@ public enum Achievements
     COMPLETED_FIRST_PURSUIT(1000, "Completed your first Pursuit"),
     COMPLETED_FIRST_LEGEND_PURSUIT(20000, "Completed your first Legend size Pursuit!");
 
-    public static final ExecutorService ACHIEVEMENT_THREAD_POOL = Executors.newFixedThreadPool(3);
-
     public int credits;
     public String desc;
     Achievements(int credits, String desc)
@@ -51,7 +47,7 @@ public enum Achievements
 
     public static void grant(String playerID, Achievements a, MessageReceivedEvent event)
     {
-        ACHIEVEMENT_THREAD_POOL.execute(() -> {
+        ThreadPoolHandler.ACHIEVEMENT.execute(() -> {
             if(CacheHelper.ACHIEVEMENT_CACHE.get(a).contains(playerID)) return;
 
             PlayerDataQuery p = new PlayerDataQuery(playerID);
