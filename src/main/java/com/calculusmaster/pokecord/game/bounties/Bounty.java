@@ -40,9 +40,9 @@ public class Bounty
                 .setProgression(d.getInteger("progression"))
                 .setTarget(d.getInteger("target"));
 
-        if(b.getType().equals(ObjectiveType.DEFEAT_POKEMON_TYPE)) ((DefeatTypeObjective)b.objective).setType(d.getString("type"));
-        if(b.getType().equals(ObjectiveType.CATCH_POKEMON_TYPE)) ((CatchTypeObjective)b.objective).setType(d.getString("type"));
-        if(b.getType().equals(ObjectiveType.CATCH_POKEMON_NAME)) ((CatchNameObjective)b.objective).setName(d.getString("name"));
+        if(b.objective instanceof DefeatTypeObjective o) o.setType(d.getString("type"));
+        if(b.objective instanceof CatchTypeObjective o) o.setType(d.getString("type"));
+        if(b.objective instanceof CatchNameObjective o) o.setName(d.getString("name"));
 
         return b;
     }
