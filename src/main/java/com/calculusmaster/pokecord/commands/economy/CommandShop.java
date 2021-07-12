@@ -24,8 +24,8 @@ public class CommandShop extends Command
 
     public static final List<PokeItem> ITEM_ENTRIES = new ArrayList<>();
     public static final List<Integer> ITEM_PRICES = new ArrayList<>();
-    public static int ITEM_COUNT_MAX;
     public static int ITEM_COUNT_MIN;
+    public static int ITEM_COUNT_MAX;
 
     public static final List<TM> TM_ENTRIES = new ArrayList<>();
     public static int TM_COUNT;
@@ -36,8 +36,8 @@ public class CommandShop extends Command
     public static int TR_PRICE = 0;
 
     public static final List<ZCrystal> ZCRYSTAL_ENTRIES = new ArrayList<>();
-    public static int ZCRYSTAL_COUNT_MAX;
     public static int ZCRYSTAL_COUNT_MIN;
+    public static int ZCRYSTAL_COUNT_MAX;
 
     public CommandShop(MessageReceivedEvent event, String[] msg)
     {

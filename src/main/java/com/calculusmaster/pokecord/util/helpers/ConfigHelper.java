@@ -15,12 +15,12 @@ public class ConfigHelper
 
             ThreadPoolHandler.THREAD_POOL_TYPE = config.getInt("thread_pool_type");
             CacheHelper.DYNAMIC_CACHING_ACTIVE = config.getBoolean("dynamic_caching");
-            CommandShop.ITEM_COUNT_MAX = config.getInt("item_count_max");
-            CommandShop.ITEM_COUNT_MIN = config.getInt("item_count_min");
+            CommandShop.ITEM_COUNT_MIN = config.getJSONArray("item_counts").getInt(0);
+            CommandShop.ITEM_COUNT_MAX = config.getJSONArray("item_counts").getInt(1);
             CommandShop.TM_COUNT = config.getInt("tm_count");
             CommandShop.TR_COUNT = config.getInt("tr_count");
-            CommandShop.ZCRYSTAL_COUNT_MAX = config.getInt("zcrystal_count_max");
-            CommandShop.ZCRYSTAL_COUNT_MIN = config.getInt("zcrystal_count_min");
+            CommandShop.ZCRYSTAL_COUNT_MIN = config.getJSONArray("zcrystal_counts").getInt(0);
+            CommandShop.ZCRYSTAL_COUNT_MAX = config.getJSONArray("zcrystal_counts").getInt(1);
 
             LoggerHelper.info(ConfigHelper.class, "Loaded config.json files!");
         }
