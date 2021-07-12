@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord.commands.duel;
 
 import com.calculusmaster.pokecord.commands.Command;
-import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
@@ -27,9 +26,19 @@ public class CommandDuel extends Command
     @Override
     public Command runCommand()
     {
-        if(this.msg.length == 1)
+        boolean info = this.msg.length == 2 && Arrays.asList("info", "tutorial", "how").contains(this.msg[1]);
+
+        if(this.msg.length == 1 || info)
         {
-            this.embed.setDescription(CommandInvalid.getShort());
+            this.embed.setTitle("Duel Info");
+            this.embed.setDescription("This is a PvP Duel! Duel another player with a Pokemon team of any size, up to a maximum of " + CommandTeam.MAX_TEAM_SIZE + "!");
+            this.embed
+                    .addField("Limits", "Duel Teams are limited by default. This means, that depending on the size of the Duel, there is a certain maximum number of Legendary and Mythical/Ultra Beast Pokemon you can have on your team. You will be notified about this when you request a duel (if your team violates the limits), and it can be disabled by including the `--nolimit` argument when requesting a duel.", false)
+                    .addField("1v1", "To initiate a simple 1v1 duel, simply use `p!duel <@player> 1`. This will start a duel using you and your opponent's selected Pokemon, and will not involve either of your Pokemon teams.", false)
+                    .addField("Battling", "While in a duel, you are able to submit a Turn Action using the `p!use` command. A list of the possible Turn Actions can be found by using `p!help use`", false)
+                    .addField("Targets", "In every Server, a player is randomly chosen as the Target. `p!target` will show who this player is. To see more information about the Target system, use `p!target info`.", false)
+                    .addField("Other Duels", "There are other kinds of duels available (other than PvP). `p!wildduel` initiates a duel against a Wild Pokemon, `p!trainerduel` initiates a duel against an AI Trainer, and `p!gymduel` initiates a duel against a Gym Leader", false);
+            this.embed.setFooter("Enjoy dueling!");
             return this;
         }
         else if(!this.serverData.getDuelChannels().isEmpty() && !this.serverData.getDuelChannels().contains(this.event.getChannel().getId()))
@@ -48,9 +57,13 @@ public class CommandDuel extends Command
         boolean accept = this.msg[1].equals("accept");
         boolean deny = this.msg[1].equals("deny") || this.msg[1].equals("cancel");
 
-        if(DuelHelper.isInDuel(this.player.getId()) && (accept || deny))
+        if(accept || deny)
         {
-            if(accept)
+            if(!DuelHelper.isInDuel(this.player.getId()))
+            {
+                this.sendMsg("You are not in a duel!");
+            }
+            else if(accept)
             {
                 Duel d = DuelHelper.instance(this.player.getId());
 
@@ -73,7 +86,7 @@ public class CommandDuel extends Command
             else
             {
                 DuelHelper.delete(this.player.getId());
-                this.embed.setDescription(this.player.getName() + " denied the duel request!");
+                this.sendMsg(this.player.getName() + " denied the duel request!");
             }
 
             return this;
