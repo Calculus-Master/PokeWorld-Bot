@@ -1,19 +1,16 @@
 package com.calculusmaster.pokecord.commands.economy;
 
 import com.calculusmaster.pokecord.commands.Command;
-import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Nature;
-import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
-import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.enums.Prices;
-import com.mongodb.client.model.Filters;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import org.json.JSONObject;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -23,7 +20,24 @@ import java.util.Random;
 
 public class CommandShop extends Command
 {
-    private StringBuilder page;
+    public static OffsetDateTime TIME;
+
+    public static final List<PokeItem> ITEM_ENTRIES = new ArrayList<>();
+    public static final List<Integer> ITEM_PRICES = new ArrayList<>();
+    public static int ITEM_COUNT_MAX;
+    public static int ITEM_COUNT_MIN;
+
+    public static final List<TM> TM_ENTRIES = new ArrayList<>();
+    public static int TM_COUNT;
+    public static int TM_PRICE = 0;
+
+    public static final List<TR> TR_ENTRIES = new ArrayList<>();
+    public static int TR_COUNT;
+    public static int TR_PRICE = 0;
+
+    public static final List<ZCrystal> ZCRYSTAL_ENTRIES = new ArrayList<>();
+    public static int ZCRYSTAL_COUNT_MAX;
+    public static int ZCRYSTAL_COUNT_MIN;
 
     public CommandShop(MessageReceivedEvent event, String[] msg)
     {
@@ -33,221 +47,213 @@ public class CommandShop extends Command
     @Override
     public Command runCommand()
     {
+        if(this.isShopUpdateTime()) this.updateDailyShops();
+
         if(this.msg.length == 1)
         {
-            this.embed.setDescription("`p!shop mega` – Mega Evolutions\n`p!shop forms` – Pokemon Forms\n`p!shop nature` – Change your Pokemon's Nature\n`p!shop tm:tr` – Buy TMs and TRs\n`p!shop movetutor:tutor:mt` – Buy Move Tutor moves\n`p!shop zcrystals:zcrystal:z` – Buy Unique Z-Crystals\n`p!shop items` – Misc. Items");
-            this.embed.setTitle("Pokecord Shop");
-            return this;
+            this.embed.setTitle("Pokecord2 Shop");
+            for(Page p : Page.values()) this.embed.addField(p.title, "`" + this.serverData.getPrefix() + "shop " + p.commands.get(0) + "`\n" + p.desc, false);
+            this.embed.setDescription("Here is a list of all the shop pages.");
         }
-
-        if(this.isUpdateTime()) this.updateDailyShops();
-
-        this.page = new StringBuilder();
-
-        switch (this.msg[1])
+        else
         {
-            case "mega" -> page_mega();
-            case "forms" -> page_forms();
-            case "nature" -> page_nature();
-            case "items" -> page_items();
-            case "tm", "tr" -> page_tm_tr();
-            case "movetutor", "mt", "tutor" -> page_movetutor();
-            case "zcrystals", "zcrystal", "z" -> page_zcrystals();
-            default -> this.embed.setDescription(CommandInvalid.getShort());
+            if(Page.isInvalid(this.msg[1])) this.sendMsg("Invalid page! Use `p!shop` to see the possible shop pages.");
+            else
+            {
+                Page p = Page.cast(this.msg[1]);
+
+                Pokemon selected = this.playerData.getSelectedPokemon();
+
+                if(Page.MEGA.matches(this.msg[1]))
+                {
+                    this.embed
+                            .addField("Price", "All Mega Evolutions cost " + Prices.SHOP_MEGA.get() + " credits!", false)
+                            .addField("Single Mega Evolution", this.getCommandFormatted("buy mega") + " – Buy the Mega Evolution of a Pokemon that does not have an X or Y Mega Evolution.", false)
+                            .addField("Mega X Evolution", this.getCommandFormatted("buy mega x") + " - Buy the X Mega Evolution of a Pokemon that has an X or Y Mega Evolution", false)
+                            .addField("Mega Y Evolution", this.getCommandFormatted("buy mega y") + " - Buy the Y Mega Evolution of a Pokemon that has an X or Y Mega Evolution", false);
+
+                    this.embed.setFooter("Your Selected Pokemon (" + selected.getName() + ") " + switch(selected.getMegaList().size()) {
+                        case 1 -> "has one Mega Evolution!";
+                        case 2 -> "has an X and Y Mega Evolution!";
+                        default -> "cannot Mega Evolve!";
+                    });
+                }
+                else if(Page.FORMS.matches(this.msg[1]))
+                {
+                    this.embed
+                            .addField("Price", "All Forms cost " + Prices.SHOP_FORM.get() + " credits!", false)
+                            .addField("Purchase", "To buy a form, type `p!buy form <name>`, where <name> is the name of the form", false)
+                            .addField("Selected Pokemon", selected.getName(), false);
+
+                    StringBuilder availableForms = new StringBuilder();
+
+                    if(selected.getFormsList().isEmpty()) availableForms.append("None");
+                    else if(selected.getName().contains("Aegislash")) availableForms.append("Aegislash Forms are not purchasable! Aegislash will automatically switch forms in duels – Shield Form when using Kings Shield (and subsequent status moves), and Blade Form when using any damaging move.");
+                    else for(String s : selected.getFormsList()) availableForms.append(s).append("\n");
+
+                    this.embed.addField("Available Forms", availableForms.toString(), false);
+                }
+                else if(Page.NATURE.matches(this.msg[1]))
+                {
+                    this.embed.addField("Price", "All Natures cost " + Prices.SHOP_NATURE.get() + " credits!", false);
+
+                    for(Nature n : Nature.values()) this.embed.addField(n.toString(), n.getShopEntry(), true);
+                }
+                else if(Page.CANDY.matches(this.msg[1]))
+                {
+                    this.embed.addField("Price", "Rare Candies cost " + Prices.SHOP_CANDY + " each.", false);
+                    this.embed.addField("Selected Pokemon", "Your Selected Pokemon is Level `" + selected.getLevel() + "`\nYou can buy a Maximum of `" + (100 - selected.getLevel()) + "` Rare Candies!", false);
+                }
+                else if(Page.ITEMS.matches(this.msg[1]))
+                {
+                    for(int i = 0; i < ITEM_ENTRIES.size(); i++) this.embed.addField(ITEM_ENTRIES.get(i).getStyledName(), "Number: `" + (i + 1) + "`\nPrice: " + ITEM_PRICES.get(i) + " c", true);
+                }
+                else if(Page.TM.matches(this.msg[1]))
+                {
+                    for(TM tm : TM_ENTRIES) this.embed.addField("", tm.getShopEntry(), false);
+                }
+                else if(Page.TR.matches(this.msg[1]))
+                {
+                    for(TR tr : TR_ENTRIES) this.embed.addField("", tr.getShopEntry(), false);
+                }
+                else if(Page.MOVETUTOR.matches(this.msg[1]))
+                {
+                    this.embed
+                            .addField("Price", "All Move Tutor Moves cost " + Prices.SHOP_MOVETUTOR + " credits!", false)
+                            .addField("Info", "Buying a Move Tutor move will automatically add it to the first slot of your Selected Pokemon. If you accidentally replace it, there is no way of retrieving that move without buying it again, so be careful!", false);
+
+                    for(String s : Move.MOVE_TUTOR_MOVES.keySet()) this.embed.addField("", "`" + s + "`", false);
+                }
+                else if(Page.ZCRYSTAL.matches(this.msg[1]))
+                {
+                    this.embed.addField("Price", "All Z Crystals cost " + Prices.SHOP_ZCRYSTAL + " credits!", false);
+
+                    for(ZCrystal z : ZCRYSTAL_ENTRIES) this.embed.addField("", "`" + z.getStyledName() + "`", false);
+                }
+
+                this.embed.setTitle("Pokecord2 Shop - " + p.title);
+                this.embed.setDescription(p.desc);
+            }
         }
-
-        if(this.page.isEmpty()) return this;
-
-        this.embed.setTitle("Shop – " + this.msg[1].toUpperCase());
-        this.embed.setDescription(this.page.toString());
 
         return this;
     }
 
-    public static final List<PokeItem> entriesItem = new ArrayList<>();
-    public static final List<Integer> itemPrices = new ArrayList<>();
-
-    private void page_items()
-    {
-        this.page.append("Rare Candies (Level up Pokemon once per candy) : `p!buy candy <amount>`");
-
-        this.page.append("\n\n**Items**:\n");
-        for(PokeItem i : entriesItem) this.page.append((entriesItem.indexOf(i) + 1) + ": " + i.getStyledName() + " - " + itemPrices.get(entriesItem.indexOf(i)) + "c\n");
-    }
-
-    private static OffsetDateTime time;
-    public static int currentTMPrice = 10000;
-    public static int currentTRPrice = 10000;
-
-    public static final List<TM> entriesTM = new ArrayList<>();
-    public static final List<TR> entriesTR = new ArrayList<>();
-
-    private void page_tm_tr()
-    {
-        this.page.append("\n**Technical Machines (TMs) for " + currentTMPrice + "c each: **\n");
-        for(TM tm : entriesTM) this.page.append(tm.getShopEntry()).append("\n");
-        this.page.append("\n**Technical Records (TRs) for " + currentTRPrice + "c each: **\n");
-        for(TR tr : entriesTR) this.page.append(tr.getShopEntry()).append("\n");
-    }
-
-    private void page_mega()
-    {
-        this.page.append("Megas: \n\n")
-                .append("`p!buy mega`" + " – Buy the mega of a pokemon (if it doesn't have X or Y megas).")
-                .append("\n`p!buy mega x`" + " – Buy the x mega evolution of a pokemon.")
-                .append("\n`p!buy mega y`" + " – Buy the y mega evolution of a pokemon.");
-        this.embed.setFooter("All mega evolutions cost " + Prices.SHOP_MEGA.get() + "c each. Primal Groudon and Primal Kyogre both count as megas.");
-    }
-
-    private void page_forms()
-    {
-        Pokemon selected = this.playerData.getSelectedPokemon();
-
-        this.page.append("Forms: \n\n").append("Selected Pokemon: ").append(selected.getName()).append("\n\n");
-
-        if(!selected.getName().contains("Aegislash"))
-        {
-            for(int i = 0; i < selected.getGenericJSON().getJSONArray("forms").length(); i++) this.page.append(selected.getGenericJSON().getJSONArray("forms").getString(i)).append("\n");
-        }
-        else this.page.append("Aegislash Forms automatically change during a duel! They are not purchasable separately!");
-
-        if(!selected.hasForms()) this.page.append(selected.getName()).append(" has no forms.");
-
-        this.page.append("\nBuy forms with p!buy form <form> where <form> is the name of the form. All forms cost " + Prices.SHOP_FORM.get() + "c.");
-        this.embed.setFooter("This page is dynamically updated based on your selected Pokemon.");
-    }
-
-    public static List<String> MOVE_TUTOR_MOVES = Arrays.asList("Blast Burn", "Hydro Cannon", "Frenzy Plant", "Draco Meteor", "Steel Beam", "Volt Tackle", "Dragon Ascent", "Secret Sword", "Relic Song");
-
-    private void page_movetutor()
-    {
-        this.page.append("Move Tutor Moves: \n\n");
-
-        for(String s : MOVE_TUTOR_MOVES) this.page.append("`").append(s).append("`\n");
-
-        this.embed.setFooter("All move tutor moves cost " + Prices.SHOP_MOVETUTOR.get() + "c. Buying a move tutor move will automatically set the move in your first slot to the move tutor move.");
-    }
-
-    public static final List<String> entriesZCrystal = new ArrayList<>();
-    //public static int priceZCrystal = 200000;
-
-    private void page_zcrystals()
-    {
-        this.page.append("Z Crystals: \n\n");
-
-        for(String s : entriesZCrystal) this.page.append("**").append(s).append("**\n");
-
-        this.page.append("\nZ Crystal Price: ").append(Prices.SHOP_ZCRYSTAL.get()).append("c!");
-    }
-
-    private boolean isUpdateTime()
-    {
-        if(time == null) return true;
-
-        int lastHours = time.getHour() + time.getDayOfYear() * 24;
-        int currentHours = this.event.getMessage().getTimeCreated().getHour() + this.event.getMessage().getTimeCreated().getHour() * 24;
-
-        int interval = 4; //Every <interval> hours, shop updates
-        return currentHours - lastHours >= interval;
-    }
-
     private void updateDailyShops()
     {
-        System.out.println("Updating Daily Shops!");
+        TIME = this.event.getMessage().getTimeCreated();
 
-        time = this.event.getMessage().getTimeCreated();
+        LoggerHelper.info(CommandShop.class, "Updating Daily Shops!");
 
-        //TMs and TRs
-        entriesTM.clear();
-        entriesTR.clear();
+        ITEM_ENTRIES.clear();
+        TM_ENTRIES.clear();
+        TR_ENTRIES.clear();
+        ZCRYSTAL_ENTRIES.clear();
 
-        TM tm;
-        for(int i = 0; i < 10; i++)
-        {
-            tm = TM.values()[new Random().nextInt(TM.values().length)];
-            if(entriesTM.contains(tm)) i--;
-            else entriesTM.add(tm);
-        }
+        int count;
 
-        TR tr;
-        for(int i = 0; i < 10; i++)
-        {
-            tr = TR.values()[new Random().nextInt(TR.values().length)];
-            if(entriesTR.contains(tr)) i--;
-            else entriesTR.add(tr);
-        }
-
-        currentTMPrice = 3000 + new Random().nextInt(4000);
-        currentTRPrice = 3000 + new Random().nextInt(4000);
+        Random r = new Random();
 
         //Items
-        int num = new Random().nextInt(8) + 6;
-        entriesItem.clear();
+        count = r.nextInt(ITEM_COUNT_MAX - ITEM_COUNT_MIN + 1) + ITEM_COUNT_MIN;
 
-        PokeItem item;
-        for(int i = 0; i < num; i++)
-        {
-            item = PokeItem.values()[new Random().nextInt(PokeItem.values().length)];
-
-            if(item.equals(PokeItem.NONE) || item.nonPokemon) i--;
-
-            if(!entriesItem.contains(item) && !item.equals(PokeItem.NONE) && !item.nonPokemon)
-            {
-                entriesItem.add(item);
-                itemPrices.add(item.cost + (new Random().nextInt(item.cost / 2) * (new Random().nextInt(2) == 1 ? 1 : -1)));
-            }
-        }
-
-        //Z-Crystals
-        entriesZCrystal.clear();
-
-        String z;
-        int count = new Random().nextInt(5) + 5;
         for(int i = 0; i < count; i++)
         {
-            z = ZCrystal.getRandomUniqueZCrystal().getStyledName();
-            if(entriesZCrystal.contains(z)) i--;
-            else entriesZCrystal.add(z);
+            PokeItem item = PokeItem.values()[r.nextInt(PokeItem.values().length)];
+
+            if(!item.equals(PokeItem.NONE) && !ITEM_ENTRIES.contains(item) && !item.nonPokemon)
+            {
+                ITEM_ENTRIES.add(item);
+                ITEM_PRICES.add(item.cost + (r.nextInt(item.cost / 2) * (r.nextInt(10) < 5 ? 1 : -1)));
+            }
+            else i--;
+        }
+
+        //TMs
+        for(int i = 0; i < TM_COUNT; i++)
+        {
+            TM tm = TM.values()[r.nextInt(TM.values().length)];
+
+            if(TM_ENTRIES.contains(tm)) i--;
+            else TM_ENTRIES.add(tm);
+        }
+
+        TM_PRICE = Prices.SHOP_BASE_TM.get() + r.nextInt(Prices.SHOP_RANDOM_TM.get() + 1);
+
+        //TRs
+        for(int i = 0; i < TR_COUNT; i++)
+        {
+            TR tr = TR.values()[r.nextInt(TR.values().length)];
+
+            if(TR_ENTRIES.contains(tr)) i--;
+            else TR_ENTRIES.add(tr);
+        }
+
+        TR_PRICE = Prices.SHOP_BASE_TR.get() + r.nextInt(Prices.SHOP_RANDOM_TR.get() + 1);
+
+        //Z Crystals
+        count = new Random().nextInt(ZCRYSTAL_COUNT_MAX - ZCRYSTAL_COUNT_MIN + 1) + ZCRYSTAL_COUNT_MIN;
+
+        for(int i = 0; i < count; i++)
+        {
+            ZCrystal z = ZCrystal.getRandomUniqueZCrystal();
+
+            if(ZCRYSTAL_ENTRIES.contains(z)) i--;
+            else ZCRYSTAL_ENTRIES.add(z);
         }
     }
 
-    private void page_nature()
+    private boolean isShopUpdateTime()
     {
-        List<JSONObject> natures = new ArrayList<>();
-        Mongo.NatureInfo.find(Filters.exists("name")).forEach(d -> natures.add(new JSONObject(d.toJson())));
+        if(TIME == null) return true;
+        else
+        {
+            OffsetDateTime currentTime = this.event.getMessage().getTimeCreated();
 
-        this.page.append("Natures: \n\n");
-        for(JSONObject j : natures) this.page.append("`" + j.getString("name") + "`: " + this.getNatureEntry(j) + "\n");
+            int lastHours = TIME.getHour() + TIME.getDayOfYear() * 24;
+            int currentHours = currentTime.getHour() + currentTime.getDayOfYear() * 24;
 
-        this.embed.setFooter("All natures cost " + Prices.SHOP_NATURE.get() + "c. Buy a nature with p!buy nature <nature>, where <nature> is the name of the nature.");
+            int interval = 4; //Every <interval> hours, shop updates
+            return currentHours - lastHours >= interval;
+        }
     }
 
-    private String getNatureEntry(JSONObject j)
+    enum Page
     {
-        String statIncr = "ERROR";
-        String statDecr = "ERROR";
+        MEGA("Mega Evolutions", "Buy Mega Evolutions!", "mega"),
+        FORMS("Forms", "Buy Forms!", "forms"),
+        NATURE("Natures", "Buy Natures!", "nature"),
+        CANDY("Candies", "Buy Rare Candies to level up Pokemon quickly!", "candy"),
+        ITEMS("Items", "Buy Pokemon-Related Items!", "items"),
+        TM("TMs", "Buy Technical Machines (TMs) to teach your Pokemon new moves!", "tm"),
+        TR("TRs", "Buy Technical Records (TRs) to teach your Pokemon new moves!", "tr"),
+        MOVETUTOR("Move Tutor", "Buy Move Tutor moves to teach your Pokemon!", "movetutor", "mt"),
+        ZCRYSTAL("Z Crystals", "Buy Z Crystals to unlock the power of Z-Moves in duels!", "zcrystal", "z");
 
-        for(int i = 1; i < Stat.values().length; i++)
+        private List<String> commands;
+        public String title, desc;
+
+        Page(String title, String desc, String... commands)
         {
-            if(j.getDouble(Stat.values()[i].toString()) == 1.1) statIncr = Stat.values()[i].toString();
-            if(j.getDouble(Stat.values()[i].toString()) == 0.9) statDecr = Stat.values()[i].toString();
+            this.title = title;
+            this.desc = desc;
+            this.commands = Arrays.asList(commands);
         }
 
-        if(statIncr.equals(statDecr) && statDecr.equals("ERROR"))
+        public boolean matches(String s)
         {
-            statIncr = switch(Nature.cast(j.getString("name")))
-                        {
-                            case BASHFUL -> Stat.SPATK.toString();
-                            case DOCILE -> Stat.DEF.toString();
-                            case HARDY ->  Stat.ATK.toString();
-                            case QUIRKY -> Stat.SPDEF.toString();
-                            case SERIOUS -> Stat.SPD.toString();
-                            default -> null;
-                        };
-            statDecr = statIncr;
-            statDecr += "  *";
+            return this.commands.contains(s);
         }
 
-        return " +10% **" + statIncr + "** | -10% **" + statDecr + "**";
+        public static boolean isInvalid(String s)
+        {
+            return Arrays.stream(values()).noneMatch(p -> p.matches(s));
+        }
+
+        public static Page cast(String s)
+        {
+            for(Page p : values()) if(p.matches(s)) return p;
+            return null;
+        }
     }
 }

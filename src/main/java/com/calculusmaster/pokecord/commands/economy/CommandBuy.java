@@ -98,7 +98,7 @@ public class CommandBuy extends Command
         }
         else if(item)
         {
-            if(!this.isNumeric(2) || this.getInt(2) < 1 || this.getInt(2) > CommandShop.itemPrices.size())
+            if(!this.isNumeric(2) || this.getInt(2) < 1 || this.getInt(2) > CommandShop.ITEM_PRICES.size())
             {
                 this.sendMsg("Invalid item number!");
                 return this;
@@ -107,12 +107,12 @@ public class CommandBuy extends Command
             int amount = 1;
             if(this.msg.length == 4 && this.isNumeric(3)) amount = this.getInt(3);
 
-            int cost = CommandShop.itemPrices.get(this.getInt(2) - 1) * amount;
+            int cost = CommandShop.ITEM_PRICES.get(this.getInt(2) - 1) * amount;
 
             if(this.playerData.getCredits() < cost) this.sendInvalidCredits(cost);
             else
             {
-                PokeItem i = CommandShop.entriesItem.get(this.getInt(2) - 1);
+                PokeItem i = CommandShop.ITEM_ENTRIES.get(this.getInt(2) - 1);
 
                 this.playerData.changeCredits(-1 * cost);
                 this.playerData.addItem(i.toString());
@@ -175,7 +175,7 @@ public class CommandBuy extends Command
             this.msg[2] = this.msg[2].replaceAll("tm", "").replaceAll("tr", "").trim();
 
             boolean numberError = !this.isNumeric(2) || ((tm && TM.isOutOfBounds(this.getInt(2))) || (tr && TR.isOutOfBounds(this.getInt(2))));
-            int cost = tm ? CommandShop.currentTMPrice : CommandShop.currentTRPrice;
+            int cost = tm ? CommandShop.TM_PRICE : CommandShop.TR_PRICE;
 
             if(numberError) this.sendMsg("Invalid " + (tm ? "TM" : "TR") + " number!");
             else if(this.playerData.getCredits() < cost) this.sendInvalidCredits(cost);
@@ -183,7 +183,7 @@ public class CommandBuy extends Command
             {
                 TM request = TM.get(this.getInt(2));
 
-                if(!CommandShop.entriesTM.contains(request)) this.sendMsg("`" + request + "` is not in the shop right now!");
+                if(!CommandShop.TM_ENTRIES.contains(request)) this.sendMsg("`" + request + "` is not in the shop right now!");
                 else
                 {
                     this.playerData.addTM(request.toString());
@@ -196,7 +196,7 @@ public class CommandBuy extends Command
             {
                 TR request = TR.get(this.getInt(2));
 
-                if(!CommandShop.entriesTR.contains(request)) this.sendMsg("`" + request + "` is not in the shop right now!");
+                if(!CommandShop.TR_ENTRIES.contains(request)) this.sendMsg("`" + request + "` is not in the shop right now!");
                 else
                 {
                     this.playerData.addTR(request.toString());
@@ -229,6 +229,7 @@ public class CommandBuy extends Command
             ZCrystal z = ZCrystal.cast(requestedZCrystal);
 
             if(z == null) this.sendMsg("Invalid Z Crystal!");
+            else if(!CommandShop.ZCRYSTAL_ENTRIES.contains(z)) this.sendMsg("This Z Crystal is not in the shop right now!");
             else if(this.playerData.getZCrystalList().contains(z.getStyledName())) this.sendMsg("You already own this Z Crystal!");
             else if(this.playerData.getCredits() < Prices.SHOP_ZCRYSTAL.get()) this.sendInvalidCredits(Prices.SHOP_ZCRYSTAL.get());
             else

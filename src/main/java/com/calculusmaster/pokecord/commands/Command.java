@@ -95,6 +95,11 @@ public abstract class Command
         return this.server.getMemberById(ID);
     }
 
+    protected String getCommandFormatted(String command)
+    {
+        return "`" + this.serverData.getPrefix() + command + "`";
+    }
+
     //Embed-Related
 
     protected void setAuthor()

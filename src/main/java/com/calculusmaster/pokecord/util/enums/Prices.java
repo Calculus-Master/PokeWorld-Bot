@@ -9,7 +9,11 @@ public enum Prices
     SHOP_NATURE(200),
     SHOP_CANDY(500),
     SHOP_MOVETUTOR(6000),
-    SHOP_ZCRYSTAL(15000);
+    SHOP_ZCRYSTAL(15000),
+    SHOP_BASE_TM(3000),
+    SHOP_RANDOM_TM(4000),
+    SHOP_BASE_TR(3000),
+    SHOP_RANDOM_TR(4000);
 
     private int price;
     Prices(int price)

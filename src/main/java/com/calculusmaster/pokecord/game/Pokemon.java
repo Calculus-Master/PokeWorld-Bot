@@ -1,6 +1,5 @@
 package com.calculusmaster.pokecord.game;
 
-import com.calculusmaster.pokecord.commands.economy.CommandShop;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
@@ -517,7 +516,7 @@ public class Pokemon
 
     public void learnMove(String move, int replace)
     {
-        if(this.getAvailableMoves().contains(move) || CommandShop.MOVE_TUTOR_MOVES.contains(move)) this.learnedMoves.set(replace - 1, move);
+        if(this.getAvailableMoves().contains(move) || Move.MOVE_TUTOR_MOVES.containsKey(move)) this.learnedMoves.set(replace - 1, move);
     }
 
     public boolean hasTM()

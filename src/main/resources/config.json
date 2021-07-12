@@ -1,4 +1,10 @@
 {
     "thread_pool_type": 1,
-    "dynamic_caching": false
+    "dynamic_caching": false,
+    "item_count_max": 12,
+    "item_count_min": 5,
+    "tm_count": 10,
+    "tr_count": 10,
+    "zcrystal_count_max": 10,
+    "zcrystal_count_min": 5
 }
