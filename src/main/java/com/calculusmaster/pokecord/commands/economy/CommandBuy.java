@@ -13,6 +13,7 @@ import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.enums.Prices;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;
@@ -20,11 +21,11 @@ import java.util.Arrays;
 public class CommandBuy extends Command
 {
     //Prices
-    public static final int COST_MEGA = 2000;
-    public static final int COST_FORM = 1500;
-    public static final int COST_NATURE = 200;
-    public static final int COST_RARE_CANDY = 500;
-    public static final int COST_MOVETUTOR = 10000;
+    //public static final int COST_MEGA = 2000;
+    //public static final int COST_FORM = 1500;
+    //public static final int COST_NATURE = 200;
+    //public static final int COST_RARE_CANDY = 500;
+    //public static final int COST_MOVETUTOR = 10000;
 
     public CommandBuy(MessageReceivedEvent event, String[] msg)
     {
@@ -67,12 +68,12 @@ public class CommandBuy extends Command
             Nature n = Nature.cast(this.msg[2]);
 
             if(n == null) this.sendMsg("Invalid nature!");
-            else if(this.playerData.getCredits() < COST_NATURE) this.sendInvalidCredits(COST_NATURE);
+            else if(this.playerData.getCredits() < Prices.SHOP_NATURE.get()) this.sendInvalidCredits(Prices.SHOP_NATURE.get());
             else
             {
                 selected.setNature(n.toString());
 
-                this.playerData.changeCredits(-1 * COST_NATURE);
+                this.playerData.changeCredits(-1 * Prices.SHOP_NATURE.get());
 
                 this.sendMsg(selected.getName() + "'s Nature was changed to " + Global.normalCase(n.toString()));
             }
@@ -83,7 +84,7 @@ public class CommandBuy extends Command
             if(this.msg.length > 2 && this.isNumeric(2) && this.getInt(2) > 0) requestedNum = Math.min(100, this.getInt(2));
 
             int num = Math.min(requestedNum, 100 - selected.getLevel());
-            int cost = num * COST_RARE_CANDY;
+            int cost = num * Prices.SHOP_CANDY.get();
 
             if(num == 0) this.sendMsg(selected.getName() + " is already at the maximum level!");
             else if(this.playerData.getCredits() < cost) this.sendInvalidCredits(cost);
@@ -130,13 +131,13 @@ public class CommandBuy extends Command
             else if(!Global.POKEMON.contains(requestedForm)) this.sendMsg("Invalid form name!");
             else if(Arrays.asList("Aegislash", "Aegislash Blade").contains(selected.getName())) this.sendMsg(selected.getName() + "'s forms cannot be purchased!");
             else if(this.playerData.getOwnedForms().contains(requestedForm)) this.sendMsg("You already own this form!");
-            else if(this.playerData.getCredits() < COST_FORM) this.sendInvalidCredits(COST_FORM);
+            else if(this.playerData.getCredits() < Prices.SHOP_FORM.get()) this.sendInvalidCredits(Prices.SHOP_FORM.get());
             else
             {
                 this.sendMsg(selected.getName() + " transformed into `" + requestedForm + "`!");
 
                 this.playerData.addOwnedForm(requestedForm);
-                this.playerData.changeCredits(-1 * COST_FORM);
+                this.playerData.changeCredits(-1 * Prices.SHOP_FORM.get());
 
                 selected.changeForm(requestedForm);
 
@@ -147,7 +148,7 @@ public class CommandBuy extends Command
         {
             if(this.msg.length != 2 && this.msg.length != 3) this.sendMsg(CommandInvalid.getShort());
             else if(!selected.hasMega()) this.sendMsg(selected.getName() + " cannot Mega Evolve!");
-            else if(this.playerData.getCredits() < COST_MEGA) this.sendInvalidCredits(COST_MEGA);
+            else if(this.playerData.getCredits() < Prices.SHOP_MEGA.get()) this.sendInvalidCredits(Prices.SHOP_MEGA.get());
             else if(selected.getMegaList().size() == 1 && this.msg.length == 3) this.sendMsg("Use `p!buy mega` instead!");
             else if(selected.getMegaList().size() == 2 && this.msg.length == 2) this.sendMsg("Use `p!buy mega x` or `p!buy mega y` instead!");
             else if(this.msg.length == 3 && (!this.msg[2].equals("x") && !this.msg[2].equals("y"))) this.sendMsg("Use either `p!buy mega x` or `p!buy mega y`!");
@@ -161,7 +162,7 @@ public class CommandBuy extends Command
                     this.sendMsg(selected.getName() + " Mega Evolved!");
 
                     this.playerData.addOwnedMegas(requestedMega);
-                    this.playerData.changeCredits(-1 * COST_MEGA);
+                    this.playerData.changeCredits(-1 * Prices.SHOP_MEGA.get());
 
                     selected.changeForm(requestedMega);
 
@@ -211,10 +212,10 @@ public class CommandBuy extends Command
 
             if(!Move.isMove(move)) this.sendMsg(Move.INCOMPLETE_MOVES.contains(move) ? "`" + move + "` has not been implemented yet!" : "Invalid move!");
             else if(!Move.MOVE_TUTOR_MOVES.containsKey(selected.getName()) || !Move.MOVE_TUTOR_MOVES.get(selected.getName()).test(selected)) this.sendMsg("Your Pokemon cannot learn that Move Tutor move!");
-            else if(this.playerData.getCredits() < COST_MOVETUTOR) this.sendInvalidCredits(COST_MOVETUTOR);
+            else if(this.playerData.getCredits() < Prices.SHOP_MOVETUTOR.get()) this.sendInvalidCredits(Prices.SHOP_MOVETUTOR.get());
             else
             {
-                this.playerData.changeCredits(-1 * COST_MOVETUTOR);
+                this.playerData.changeCredits(-1 * Prices.SHOP_MOVETUTOR.get());
                 selected.learnMove(move, 1);
 
                 this.sendMsg(selected.getName() + " learned `" + move + "` in its first slot!");
@@ -229,11 +230,11 @@ public class CommandBuy extends Command
 
             if(z == null) this.sendMsg("Invalid Z Crystal!");
             else if(this.playerData.getZCrystalList().contains(z.getStyledName())) this.sendMsg("You already own this Z Crystal!");
-            else if(this.playerData.getCredits() < CommandShop.priceZCrystal) this.sendInvalidCredits(CommandShop.priceZCrystal);
+            else if(this.playerData.getCredits() < Prices.SHOP_ZCRYSTAL.get()) this.sendInvalidCredits(Prices.SHOP_ZCRYSTAL.get());
             else
             {
                 this.playerData.addZCrystal(z.getStyledName());
-                this.playerData.changeCredits(-1 * CommandShop.priceZCrystal);
+                this.playerData.changeCredits(-1 * Prices.SHOP_ZCRYSTAL.get());
 
                 Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_UNIQUE_ZCRYSTAL, this.event);
 

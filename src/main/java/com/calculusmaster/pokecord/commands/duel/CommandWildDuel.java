@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.WildDuel;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.enums.Prices;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -28,16 +29,13 @@ public class CommandWildDuel extends Command
         boolean stat = this.msg.length == 2 && Stat.cast(this.msg[1]) != null;
         boolean specific = this.msg.length >= 2 && Global.POKEMON.contains(Global.normalCase(this.getMultiWordContent(1)));
 
-        int specificPrice = 300;
-        int statSpecificPrice = 100;
-
         if(DuelHelper.isInDuel(this.player.getId()))
         {
             this.sendMsg(CommandInvalid.ALREADY_IN_DUEL);
         }
         else if(random || stat || specific)
         {
-            int price = stat ? statSpecificPrice : (specific ? specificPrice : 0);
+            int price = stat ? Prices.WILDDUEL_STAT.get() : (specific ? Prices.WILDDUEL_SPECIFIC.get() : 0);
 
             if(price != 0 && this.playerData.getCredits() < price)
             {

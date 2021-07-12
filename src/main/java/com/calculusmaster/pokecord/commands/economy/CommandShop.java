@@ -10,6 +10,7 @@ import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.enums.Prices;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.json.JSONObject;
@@ -95,7 +96,7 @@ public class CommandShop extends Command
                 .append("`p!buy mega`" + " – Buy the mega of a pokemon (if it doesn't have X or Y megas).")
                 .append("\n`p!buy mega x`" + " – Buy the x mega evolution of a pokemon.")
                 .append("\n`p!buy mega y`" + " – Buy the y mega evolution of a pokemon.");
-        this.embed.setFooter("All mega evolutions cost " + CommandBuy.COST_MEGA + "c each. Primal Groudon and Primal Kyogre both count as megas.");
+        this.embed.setFooter("All mega evolutions cost " + Prices.SHOP_MEGA.get() + "c each. Primal Groudon and Primal Kyogre both count as megas.");
     }
 
     private void page_forms()
@@ -112,7 +113,7 @@ public class CommandShop extends Command
 
         if(!selected.hasForms()) this.page.append(selected.getName()).append(" has no forms.");
 
-        this.page.append("\nBuy forms with p!buy form <form> where <form> is the name of the form. All forms cost " + CommandBuy.COST_FORM + "c.");
+        this.page.append("\nBuy forms with p!buy form <form> where <form> is the name of the form. All forms cost " + Prices.SHOP_FORM.get() + "c.");
         this.embed.setFooter("This page is dynamically updated based on your selected Pokemon.");
     }
 
@@ -124,11 +125,11 @@ public class CommandShop extends Command
 
         for(String s : MOVE_TUTOR_MOVES) this.page.append("`").append(s).append("`\n");
 
-        this.embed.setFooter("All move tutor moves cost " + CommandBuy.COST_MOVETUTOR + "c. Buying a move tutor move will automatically set the move in your first slot to the move tutor move.");
+        this.embed.setFooter("All move tutor moves cost " + Prices.SHOP_MOVETUTOR.get() + "c. Buying a move tutor move will automatically set the move in your first slot to the move tutor move.");
     }
 
     public static final List<String> entriesZCrystal = new ArrayList<>();
-    public static int priceZCrystal = 200000;
+    //public static int priceZCrystal = 200000;
 
     private void page_zcrystals()
     {
@@ -136,7 +137,7 @@ public class CommandShop extends Command
 
         for(String s : entriesZCrystal) this.page.append("**").append(s).append("**\n");
 
-        this.page.append("\nZ Crystal Price: ").append(priceZCrystal).append("c!");
+        this.page.append("\nZ Crystal Price: ").append(Prices.SHOP_ZCRYSTAL.get()).append("c!");
     }
 
     private boolean isUpdateTime()
@@ -208,8 +209,6 @@ public class CommandShop extends Command
             if(entriesZCrystal.contains(z)) i--;
             else entriesZCrystal.add(z);
         }
-
-        priceZCrystal = 17500;
     }
 
     private void page_nature()
@@ -220,7 +219,7 @@ public class CommandShop extends Command
         this.page.append("Natures: \n\n");
         for(JSONObject j : natures) this.page.append("`" + j.getString("name") + "`: " + this.getNatureEntry(j) + "\n");
 
-        this.embed.setFooter("All natures cost " + CommandBuy.COST_NATURE + "c. Buy a nature with p!buy nature <nature>, where <nature> is the name of the nature.");
+        this.embed.setFooter("All natures cost " + Prices.SHOP_NATURE.get() + "c. Buy a nature with p!buy nature <nature>, where <nature> is the name of the nature.");
     }
 
     private String getNatureEntry(JSONObject j)
