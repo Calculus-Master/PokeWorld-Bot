@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.PokePass;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.bounties.Bounty;
 import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
+import com.calculusmaster.pokecord.game.bounties.Pursuit;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
@@ -58,7 +59,8 @@ public class PlayerDataQuery extends MongoQuery
                 .append("favorites", new JSONArray())
                 .append("owned_forms", new JSONArray())
                 .append("owned_megas", new JSONArray())
-                .append("bounties", new JSONArray());
+                .append("bounties", new JSONArray())
+                .append("pursuit", new JSONArray());
 
         Mongo.PlayerData.insertOne(data);
 
@@ -488,6 +490,7 @@ public class PlayerDataQuery extends MongoQuery
 
     public void updateBountyProgression(Consumer<Bounty> checker)
     {
+        //Basic Bounties
         for(String ID : this.getBountyIDs())
         {
             Bounty b = Bounty.fromDB(ID);
@@ -497,6 +500,18 @@ public class PlayerDataQuery extends MongoQuery
             if(b.getObjective().isComplete()) this.directMessage("You have unclaimed bounties!");
 
             b.updateProgression();
+        }
+
+        //Pursuit Bounty
+        if(this.hasPursuit())
+        {
+            Bounty pursuitBounty = this.getCurrentPursuitBounty();
+
+            checker.accept(pursuitBounty);
+
+            if(pursuitBounty.getObjective().isComplete()) this.directMessage("Your current Pursuit bounty is complete! You can move on to the next level!");
+
+            pursuitBounty.updateProgression();
         }
     }
 
@@ -524,5 +539,28 @@ public class PlayerDataQuery extends MongoQuery
         Mongo.PlayerData.updateOne(this.query, Updates.pull("bounties", ID));
 
         this.update();
+    }
+
+    //key: "pursuit"
+    public List<String> getPursuitIDs()
+    {
+        return this.json().getJSONArray("pursuit").toList().stream().map(s -> (String)s).collect(Collectors.toList());
+    }
+
+    public Pursuit getPursuit()
+    {
+        return Pursuit.fromIDs(this.getPursuitIDs());
+    }
+
+    public Bounty getCurrentPursuitBounty()
+    {
+        Pursuit p = this.getPursuit();
+
+        return p.getBounties().get(p.getProgressLevel() - 1);
+    }
+
+    public boolean hasPursuit()
+    {
+        return !this.getPursuitIDs().isEmpty();
     }
 }
