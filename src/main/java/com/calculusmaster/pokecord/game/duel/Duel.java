@@ -1290,6 +1290,7 @@ public class Duel
         if(CommandTarget.isTarget(this.event.getGuild(), this.players[winner].ID))
         {
             c = (new Random().nextInt(201) + 50) * (CommandTarget.SERVER_TARGET_DUELS_WON.get(this.event.getGuild().getId()) + 1);
+            this.players[winner].data.addPokePassExp(200, this.event);
 
             CommandTarget.SERVER_TARGET_DUELS_WON.put(this.event.getGuild().getId(), CommandTarget.SERVER_TARGET_DUELS_WON.get(this.event.getGuild().getId()) + 1);
 
