@@ -495,11 +495,14 @@ public class PlayerDataQuery extends MongoQuery
         {
             Bounty b = Bounty.fromDB(ID);
 
-            checker.accept(b);
+            if(!b.getObjective().isComplete())
+            {
+                checker.accept(b);
 
-            if(b.getObjective().isComplete()) this.directMessage("You have unclaimed bounties!");
+                if(b.getObjective().isComplete()) this.directMessage("You have unclaimed bounties!");
 
-            b.updateProgression();
+                b.updateProgression();
+            }
         }
 
         //Pursuit Bounty
@@ -507,11 +510,14 @@ public class PlayerDataQuery extends MongoQuery
         {
             Bounty pursuitBounty = this.getCurrentPursuitBounty();
 
-            checker.accept(pursuitBounty);
+            if(!pursuitBounty.getObjective().isComplete())
+            {
+                checker.accept(pursuitBounty);
 
-            if(pursuitBounty.getObjective().isComplete()) this.directMessage("Your current Pursuit bounty is complete! You can move on to the next level!");
+                if(pursuitBounty.getObjective().isComplete()) this.directMessage("Your current Pursuit bounty is complete! You can move on to the next level!");
 
-            pursuitBounty.updateProgression();
+                pursuitBounty.updateProgression();
+            }
         }
     }
 
