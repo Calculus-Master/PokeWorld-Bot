@@ -56,4 +56,18 @@ public class Player
         for(Pokemon p : this.team) lost = lost && p.isFainted();
         return lost;
     }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "ID='" + ID + '\'' +
+                ", data=" + data +
+                ", active=" + active +
+                ", move=" + move +
+                ", usedZMove=" + usedZMove +
+                ", usedDynamax=" + usedDynamax +
+                ", dynamaxTurns=" + dynamaxTurns +
+                ", team=" + team +
+                '}';
+    }
 }

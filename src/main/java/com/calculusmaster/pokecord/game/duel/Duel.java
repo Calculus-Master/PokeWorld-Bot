@@ -1585,4 +1585,30 @@ public class Duel
     {
         return this.players[0].ID.equals(id) || this.players[1].ID.equals(id);
     }
+
+    @Override
+    public String toString() {
+        return "Duel{" +
+                "status=" + status +
+                ", event=" + event +
+                ", size=" + size +
+                ", players=0: " + players[0] + ", 1: " + players[1] +
+                ", queuedMoves=" + queuedMoves +
+                ", pokemonAttributes=" + pokemonAttributes +
+                ", expGains=" + expGains +
+                ", turn=" + turn +
+                ", current=" + current +
+                ", other=" + other +
+                ", moveLog=" + moveLog +
+                ", first='" + first + '\'' +
+                ", results=" + results +
+                ", weather=" + weather +
+                ", weatherTurns=" + weatherTurns +
+                ", terrain=" + terrain +
+                ", terrainTurns=" + terrainTurns +
+                ", room=" + room +
+                ", roomTurns=" + roomTurns +
+                ", entryHazards=" + Arrays.toString(entryHazards) +
+                '}';
+    }
 }
