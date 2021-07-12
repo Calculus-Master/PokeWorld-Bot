@@ -11,6 +11,8 @@ import java.util.Arrays;
 
 public class CommandPursuit extends Command
 {
+    private static final String NO_PURSUIT_MESSAGE = "You do not have an active Pursuit! Use either `p!pursuit info` to see more information, or `p!pursuit start` to start a Pursuit!";
+
     public CommandPursuit(MessageReceivedEvent event, String[] msg)
     {
         super(event, msg);
@@ -53,7 +55,7 @@ public class CommandPursuit extends Command
         }
         else if(advance)
         {
-            if(!this.playerData.hasPursuit()) this.sendMsg("You do not have an active Pursuit!");
+            if(!this.playerData.hasPursuit()) this.sendMsg(NO_PURSUIT_MESSAGE);
             else
             {
                 Bounty b = this.playerData.getCurrentPursuitBounty();
@@ -93,6 +95,7 @@ public class CommandPursuit extends Command
         }
         else
         {
+            if(!this.playerData.hasPursuit()) this.sendMsg(NO_PURSUIT_MESSAGE);
             int level = this.playerData.getPursuitLevel();
             Bounty current = this.playerData.getCurrentPursuitBounty();
 
