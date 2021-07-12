@@ -6,18 +6,15 @@ import java.util.Random;
 
 public class Pursuit
 {
-    public static final int MIN_PURSUIT_SIZE = 15;
-    public static final int MAX_PURSUIT_SIZE = 20;
-
     private List<Bounty> bounties;
+    private Size size;
 
-    public static Pursuit create()
+    public static Pursuit create(Size size)
     {
         Pursuit p = new Pursuit();
 
-        int size = new Random().nextInt(MAX_PURSUIT_SIZE - MIN_PURSUIT_SIZE + 1) + MIN_PURSUIT_SIZE;
-
-        p.setBounties(size);
+        p.setSize(size);
+        p.setBounties();
 
         return p;
     }
@@ -56,9 +53,20 @@ public class Pursuit
         return this.bounties;
     }
 
-    private void setBounties(int size)
+    public void setSize(Size s)
+    {
+        this.size = s;
+    }
+
+    public Size getSize()
+    {
+        return this.size;
+    }
+
+    private void setBounties()
     {
         this.bounties = new ArrayList<>();
+        int size = this.size.generateSize();
 
         for(int i = 0; i < size; i++) this.bounties.add(Bounty.create());
     }
@@ -68,6 +76,35 @@ public class Pursuit
         for(String ID : bountyIDs)
         {
             this.bounties.add(Bounty.fromDB(ID));
+        }
+    }
+
+    public enum Size
+    {
+        MINI(2, 3, 1.0, 500),
+        SHORT(5, 10, 1.2, 2000),
+        AVERAGE(15, 20, 1.5, 5000),
+        LONG(25, 35, 2.0, 10000),
+        JOURNEY(40, 60, 5.0, 25000),
+        LEGEND(75, 100, 10.0, 60000);
+
+        private int min;
+        private int max;
+        public double multiplier;
+        public int finalReward;
+
+        Size(int min, int max, double multiplier, int finalReward)
+        {
+            this.min = min;
+            this.max = max;
+
+            this.multiplier = multiplier;
+            this.finalReward = finalReward;
+        }
+
+        public int generateSize()
+        {
+            return new Random().nextInt(this.max - this.min + 1) + this.min;
         }
     }
 }

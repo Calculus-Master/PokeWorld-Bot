@@ -198,6 +198,10 @@ public class Commands
                 .setCommand(CommandBounties::new)
                         .setCategory(Category.MISC);
 
+        register("pursuit")
+                .setCommand(CommandPursuit::new)
+                .setCategory(Category.MISC);
+
         register("dev")
                 .setCommand(CommandDev::new)
                 .setCategory(Category.MISC);
