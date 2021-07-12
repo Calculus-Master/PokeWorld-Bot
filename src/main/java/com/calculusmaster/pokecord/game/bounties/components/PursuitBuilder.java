@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 
 public class PursuitBuilder
 {
+    public static final int PER_BOUNTY_REWARD = 150;
+
     private List<Bounty> bounties;
 
     public static PursuitBuilder create(PursuitSize s)
@@ -20,7 +22,7 @@ public class PursuitBuilder
         int size = s.generateSize();
         for(int i = 0; i < size; i++)
         {
-            Bounty b = Bounty.create();
+            Bounty b = Bounty.create().setReward(PER_BOUNTY_REWARD);
 
             if(i == size - 1) b.getObjective().setTarget(1.75);
             else if(i == size - 2) b.getObjective().setTarget(1.25);
@@ -35,7 +37,7 @@ public class PursuitBuilder
 
     public List<String> getIDs()
     {
-        return this.bounties.stream().map(b -> b.getBountyID()).collect(Collectors.toList());
+        return this.bounties.stream().map(Bounty::getBountyID).collect(Collectors.toList());
     }
 
     public void build()
