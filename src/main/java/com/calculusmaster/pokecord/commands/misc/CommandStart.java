@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.PrivateInfo;
+import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Random;
@@ -49,6 +50,8 @@ public class CommandStart extends Command
         else
         {
             PlayerDataQuery.register(this.player);
+            DataHelper.updateServerPlayers(this.server);
+
             PlayerDataQuery p = new PlayerDataQuery(this.player.getId());
 
             Pokemon starter = Pokemon.create(Global.normalCase(this.msg[1]));

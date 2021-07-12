@@ -1,19 +1,21 @@
 package com.calculusmaster.pokecord.commands.duel;
 
 import com.calculusmaster.pokecord.commands.Command;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class CommandTarget extends Command
 {
     public static final Map<String, String> SERVER_TARGETS = new HashMap<>();
     public static final Map<String, Integer> SERVER_TARGET_DUELS_WON = new HashMap<>();
-    public static final Map<String, List<String>> SERVER_POKECORD_PLAYERS = new HashMap<>();
 
     public CommandTarget(MessageReceivedEvent event, String[] msg)
     {
@@ -51,9 +53,9 @@ public class CommandTarget extends Command
 
     public static void generateNewServerTarget(Guild g)
     {
-        CommandTarget.generatePlayerCache(g);
+        DataHelper.updateServerPlayers(g);
 
-        List<String> pool = SERVER_POKECORD_PLAYERS.get(g.getId());
+        List<String> pool = DataHelper.SERVER_PLAYERS.get(g.getId());
 
         String target = pool.get(new Random().nextInt(pool.size()));
 
@@ -61,15 +63,6 @@ public class CommandTarget extends Command
         SERVER_TARGET_DUELS_WON.put(g.getId(), 0);
 
         LoggerHelper.info(CommandTarget.class, "Generated new Duel Target for " + g.getName() + " (" + g.getId() + ") - ID: " + target);
-    }
-
-    public static void generatePlayerCache(Guild g)
-    {
-        SERVER_POKECORD_PLAYERS.put(g.getId(), new ArrayList<>());
-
-        g.loadMembers();
-
-        for(Member m : g.getMembers()) if(PlayerDataQuery.isRegistered(m.getId())) SERVER_POKECORD_PLAYERS.get(g.getId()).add(m.getId());
     }
 
     public static boolean isTarget(Guild server, String ID)
