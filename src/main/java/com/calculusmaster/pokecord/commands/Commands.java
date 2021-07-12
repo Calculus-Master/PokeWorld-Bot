@@ -70,19 +70,25 @@ public class Commands
                 .setCommand(CommandMoves::new)
                 .setCategory(Category.MOVES)
                 .setDesc("View your active Pokemon's moves!")
-                .addTerminalPoint("moves", "Shows your active Pokemon's move set. In duels, this will show extra information (like the effectiveness), otherwise, this will show your Pokemon's available moves as well.");
+                .addTerminalPoint("moves", "Shows your active Pokemon's move set. In duels, this will show the move's type effectiveness against the opponent), otherwise, this will show your Pokemon's available moves.");
 
         register("moveinfo", "mi")
                 .setCommand(CommandMoveInfo::new)
-                .setCategory(Category.MOVES);
+                .setCategory(Category.MOVES)
+                .setDesc("View information about a specific move!")
+                .addTerminalPoint("moveinfo <name>", "View more information about a move given by <name>. <name can also be a TM or TR (formatted like TM01 or TR00), and this will display information about the move that the TM/TR is linked to.");
 
         register("learn")
                 .setCommand(CommandLearn::new)
-                .setCategory(Category.MOVES);
+                .setCategory(Category.MOVES)
+                .setDesc("Learn a move!")
+                .addTerminalPoint("learn <name>", "Learn a move from your Pokemon's available moves.");
 
         register("replace")
                 .setCommand(CommandReplace::new)
-                .setCategory(Category.MOVES);
+                .setCategory(Category.MOVES)
+                .setDesc("Replace a move in your move set!")
+                .addTerminalPoint("replace <number>", "Must be used after `learn`. Replaces a move in your active Pokemon's current move set with one requested by the `learn` command.");
 
         register("duel")
                 .setCommand(CommandDuel::new)
