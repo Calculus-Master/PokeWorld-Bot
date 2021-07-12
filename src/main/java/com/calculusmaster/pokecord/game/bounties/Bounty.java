@@ -12,6 +12,7 @@ import java.util.Random;
 public class Bounty
 {
     public static final int MAX_BOUNTIES_HELD = 3;
+    public static final int POKEPASS_EXP_YIELD = 200;
 
     private String bountyID;
     private Objective objective;

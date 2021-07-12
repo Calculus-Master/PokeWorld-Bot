@@ -43,7 +43,7 @@ public class CommandBounties extends Command
 
                 Bounty.delete(b.getBountyID());
 
-                this.playerData.addPokePassExp(200, this.event);
+                this.playerData.addPokePassExp(Bounty.POKEPASS_EXP_YIELD, this.event);
                 this.playerData.getStats().incr(PlayerStatistic.BOUNTIES_COMPLETED);
                 Achievements.grant(this.player.getId(), Achievements.COMPLETED_FIRST_BOUNTY, this.event);
 

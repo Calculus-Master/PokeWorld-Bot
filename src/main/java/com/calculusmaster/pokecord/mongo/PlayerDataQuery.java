@@ -6,7 +6,6 @@ import com.calculusmaster.pokecord.game.PokePass;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.bounties.Bounty;
 import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
-import com.calculusmaster.pokecord.game.bounties.Pursuit;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
@@ -505,18 +504,18 @@ public class PlayerDataQuery extends MongoQuery
             }
         }
 
-        //Pursuit Bounty
-        if(this.hasPursuit())
+        //PursuitBuilder Bounty
+        if(this.hasPursuit() && this.getPursuitLevel() <= this.getPursuitIDs().size())
         {
-            Bounty pursuitBounty = this.getCurrentPursuitBounty();
+            Bounty pursuit = this.getCurrentPursuitBounty();
 
-            if(!pursuitBounty.getObjective().isComplete())
+            if(!pursuit.getObjective().isComplete())
             {
-                checker.accept(pursuitBounty);
+                checker.accept(pursuit);
 
-                if(pursuitBounty.getObjective().isComplete()) this.directMessage("Your current Pursuit bounty is complete! You can move on to the next level!");
+                if(pursuit.getObjective().isComplete()) this.directMessage("Your active Pursuit bounty is complete!");
 
-                pursuitBounty.updateProgression();
+                pursuit.updateProgression();
             }
         }
     }
@@ -553,20 +552,49 @@ public class PlayerDataQuery extends MongoQuery
         return this.json().getJSONArray("pursuit").toList().stream().map(s -> (String)s).collect(Collectors.toList());
     }
 
-    public Pursuit getPursuit()
+    public void setPursuit(List<String> IDs)
     {
-        return Pursuit.fromIDs(this.getPursuitIDs());
+        Mongo.PlayerData.updateOne(this.query, Updates.pushEach("pursuit", IDs));
+
+        this.update();
     }
 
     public Bounty getCurrentPursuitBounty()
     {
-        Pursuit p = this.getPursuit();
-
-        return p.getBounties().get(p.getProgressLevel() - 1);
+        return Bounty.fromDB(this.getPursuitIDs().get(this.getPursuitLevel() - 1));
     }
 
     public boolean hasPursuit()
     {
         return !this.getPursuitIDs().isEmpty();
+    }
+
+    public void removePursuit()
+    {
+        for(String s : this.getPursuitIDs()) Bounty.delete(s);
+
+        Mongo.PlayerData.updateOne(this.query, Updates.set("pursuit", new JSONArray()));
+
+        this.resetPursuitLevel();
+    }
+
+    //key: "pursuit_level"
+    public int getPursuitLevel()
+    {
+        return this.json().getInt("pursuit_level");
+    }
+
+    public void increasePursuitLevel()
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.inc("pursuit_level", 1));
+
+        this.update();
+    }
+
+    public void resetPursuitLevel()
+    {
+        Mongo.PlayerData.updateOne(this.query, Updates.set("pursuit_level", 0));
+
+        this.update();
     }
 }
