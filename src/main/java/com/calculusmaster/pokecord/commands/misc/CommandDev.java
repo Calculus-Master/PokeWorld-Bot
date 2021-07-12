@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.misc;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
+import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.PokemonRarity;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
@@ -51,6 +52,10 @@ public class CommandDev extends Command
                 Move.init();
             }
             case "clearduels" -> DuelHelper.DUELS.clear();
+            case "deletepursuit" -> {
+                PlayerDataQuery query = this.mentions.size() > 0 ? new PlayerDataQuery(this.mentions.get(0).getId()) : this.playerData;
+                query.removePursuit();
+            }
         }
 
         this.sendMsg("Successfully ran Developer Command!");
