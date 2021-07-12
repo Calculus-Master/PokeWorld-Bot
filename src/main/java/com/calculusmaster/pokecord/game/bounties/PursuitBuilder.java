@@ -16,7 +16,17 @@ public class PursuitBuilder
         p.bounties = new ArrayList<>();
 
         int size = s.generateSize();
-        for(int i = 0; i < size; i++) p.bounties.add(Bounty.create());
+        for(int i = 0; i < size; i++)
+        {
+            Bounty b = Bounty.create();
+
+            if(i == size - 1) b.getObjective().setTarget(1.75);
+            else if(i == size - 2) b.getObjective().setTarget(1.25);
+
+            p.bounties.add(b);
+        }
+
+        p.bounties.get(new Random().nextInt(p.bounties.size())).getObjective().setTarget(2.0);
 
         return p;
     }

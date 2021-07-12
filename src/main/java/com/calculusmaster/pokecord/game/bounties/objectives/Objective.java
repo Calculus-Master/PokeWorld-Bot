@@ -59,6 +59,12 @@ public abstract class Objective
         return this;
     }
 
+    public Objective setTarget(double multiplier)
+    {
+        this.target = (int)(this.target * multiplier);
+        return this;
+    }
+
     public Objective setProgression(int progression)
     {
         this.progression = progression;
