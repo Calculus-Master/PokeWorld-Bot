@@ -10,7 +10,7 @@ public class CatchNameObjective extends Objective
 
     public CatchNameObjective()
     {
-        super(ObjectiveType.CATCH_POKEMON_NAME, Objective.randomTargetAmount(10, 20));
+        super(ObjectiveType.CATCH_POKEMON_NAME, Objective.randomTargetAmount(2, 6));
         this.name = PokemonRarity.getSpawn();
     }
 
