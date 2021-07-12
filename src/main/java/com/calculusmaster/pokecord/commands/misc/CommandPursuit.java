@@ -96,13 +96,19 @@ public class CommandPursuit extends Command
         }
         else
         {
-            if(!this.playerData.hasPursuit()) this.sendMsg(NO_PURSUIT_MESSAGE);
-            int level = this.playerData.getPursuitLevel();
-            Bounty current = this.playerData.getCurrentPursuitBounty();
+            if(!this.playerData.hasPursuit())
+            {
+                this.sendMsg(NO_PURSUIT_MESSAGE);
+            }
+            else
+            {
+                int level = this.playerData.getPursuitLevel();
+                Bounty current = this.playerData.getCurrentPursuitBounty();
 
-            this.embed.addField("Pursuit Bounty", current.getOverview(), true);
-            this.embed.setTitle(this.player.getName() + "'s Pursuit");
-            this.embed.setDescription("Pursuit Progress: " + level + " / " + this.playerData.getPursuitIDs().size());
+                this.embed.addField("Pursuit Bounty", current.getOverview(), true);
+                this.embed.setTitle(this.player.getName() + "'s Pursuit");
+                this.embed.setDescription("Pursuit Progress: " + level + " / " + this.playerData.getPursuitIDs().size());
+            }
         }
 
         return this;
