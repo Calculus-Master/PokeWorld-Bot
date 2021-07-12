@@ -23,7 +23,17 @@ public class CommandTarget extends Command
     @Override
     public Command runCommand()
     {
-        if(!SERVER_TARGETS.containsKey(this.server.getId()))
+        boolean info = this.msg.length == 2 && this.msg[1].equals("info");
+
+        if(info)
+        {
+            this.embed.setTitle("Targets Info");
+            this.embed.setDescription("Targets are randomly chosen players in a server. If a player is chosen as a Target, Duel rewards are slightly changed.");
+            this.embed
+                    .addField("If the Target wins a Duel", "The Target will gain increasing rewards based on how many consecutive duels they have won (as the target).", true)
+                    .addField("If the Target loses a Duel", "The Target will lose their status as the Server Target. A new Target will be chosen, and the player who defeated the Target will gain a large amount of credits (and XP) as a reward.", true);
+        }
+        else if(!SERVER_TARGETS.containsKey(this.server.getId()))
         {
             CommandTarget.generateNewServerTarget(this.server);
 
