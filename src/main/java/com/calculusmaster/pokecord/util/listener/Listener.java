@@ -112,6 +112,8 @@ public class Listener extends ListenerAdapter
 
         if(p.getLevel() != initL)
         {
+            data.updateBountyProgression(ObjectiveType.LEVEL_POKEMON);
+
             event.getChannel().sendMessage(data.getMention() + ": Your " + p.getName() + " is now Level " + p.getLevel() + "!").queue();
         }
 

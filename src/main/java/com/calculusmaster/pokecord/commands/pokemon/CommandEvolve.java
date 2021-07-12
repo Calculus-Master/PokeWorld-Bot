@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandEvolve extends Command
@@ -22,7 +23,9 @@ public class CommandEvolve extends Command
             String old = selected.getName();
             selected.evolve();
 
-            this.playerData.addPokePassExp(1000, this.event);
+            this.playerData.addPokePassExp(500, this.event);
+            this.playerData.updateBountyProgression(ObjectiveType.EVOLVE_POKEMON);
+
             this.event.getChannel().sendMessage(this.playerData.getMention() + ": Your " + old + " evolved into a " + selected.getName() + "!").queue();
         }
         else this.event.getChannel().sendMessage(this.playerData.getMention() + ": Your " + selected.getName() + " cannot evolve right now!").queue();

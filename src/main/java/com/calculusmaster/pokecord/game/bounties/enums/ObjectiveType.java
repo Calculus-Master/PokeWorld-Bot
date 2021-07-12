@@ -19,7 +19,9 @@ public enum ObjectiveType
     CATCH_POKEMON_TYPE,
     CATCH_POKEMON_NAME,
     EARN_XP_POKEPASS,
-    EARN_XP_POKEMON;
+    EARN_XP_POKEMON,
+    EVOLVE_POKEMON,
+    LEVEL_POKEMON;
 
     public static ObjectiveType cast(String objectiveType)
     {
