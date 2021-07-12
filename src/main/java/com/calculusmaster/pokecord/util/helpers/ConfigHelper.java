@@ -20,10 +20,12 @@ public class ConfigHelper
 
             ThreadPoolHandler.THREAD_POOL_TYPE = config.getInt("thread_pool_type");
             CacheHelper.DYNAMIC_CACHING_ACTIVE = config.getBoolean("dynamic_caching");
+
+            LoggerHelper.info(ConfigHelper.class, "Loaded config.json files!");
         }
         catch (Exception e)
         {
-            LoggerHelper.warn(ConfigHelper.class, "Could not load config.json! Setting default values");
+            LoggerHelper.warn(ConfigHelper.class, "Could not load config.json! Setting default values...");
             e.printStackTrace();
 
             ThreadPoolHandler.THREAD_POOL_TYPE = 1;
