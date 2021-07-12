@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.game.bounties.objectives;
 
-import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
+import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import org.bson.Document;
 
 import java.util.Random;

@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game.bounties;
+package com.calculusmaster.pokecord.game.bounties.enums;
 
 public enum ObjectiveType
 {

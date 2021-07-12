@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.game.bounties.objectives;
 
-import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
+import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.util.PokemonRarity;
 import org.bson.Document;
 
@@ -10,7 +10,7 @@ public class CatchNameObjective extends Objective
 
     public CatchNameObjective()
     {
-        super(ObjectiveType.CATCH_POKEMON_NAME, Objective.randomTargetAmount(2, 6));
+        super(ObjectiveType.CATCH_POKEMON_NAME, Objective.randomTargetAmount(10, 20));
         this.name = PokemonRarity.getSpawn();
     }
 

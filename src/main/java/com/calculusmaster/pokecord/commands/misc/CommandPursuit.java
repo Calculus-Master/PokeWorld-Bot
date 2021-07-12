@@ -2,8 +2,9 @@ package com.calculusmaster.pokecord.commands.misc;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.Achievements;
-import com.calculusmaster.pokecord.game.bounties.Bounty;
-import com.calculusmaster.pokecord.game.bounties.PursuitBuilder;
+import com.calculusmaster.pokecord.game.bounties.components.Bounty;
+import com.calculusmaster.pokecord.game.bounties.components.PursuitBuilder;
+import com.calculusmaster.pokecord.game.bounties.enums.PursuitSize;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -30,7 +31,7 @@ public class CommandPursuit extends Command
             if(this.playerData.hasPursuit()) this.sendMsg("You already have an active Pursuit!");
             else
             {
-                PursuitBuilder.Size size = this.msg.length == 3 && PursuitBuilder.Size.cast(this.msg[2]) != null ? PursuitBuilder.Size.cast(this.msg[2]) : PursuitBuilder.Size.AVERAGE;
+                PursuitSize size = this.msg.length == 3 && PursuitSize.cast(this.msg[2]) != null ? PursuitSize.cast(this.msg[2]) : PursuitSize.AVERAGE;
 
                 this.sendMsg("Generating your Pursuit...");
                 PursuitBuilder pursuit = PursuitBuilder.create(size);
@@ -45,7 +46,7 @@ public class CommandPursuit extends Command
             this.embed.setDescription("Pursuits are large amounts of bounties that grant extra rewards per bounty as well as a large reward after completing one. Pursuits come in multiple sizes, as shown below.");
             this.embed.setTitle("Pursuit Info");
 
-            for(PursuitBuilder.Size s : PursuitBuilder.Size.values())
+            for(PursuitSize s : PursuitSize.values())
             {
                 this.embed.addField(s.toString(), s.getOverview(), true);
             }
@@ -64,7 +65,7 @@ public class CommandPursuit extends Command
                 else
                 {
                     int count = this.playerData.getPursuitIDs().size();
-                    PursuitBuilder.Size pursuitSize = PursuitBuilder.Size.get(count);
+                    PursuitSize pursuitSize = PursuitSize.get(count);
 
                     //Bounty Rewards
                     this.playerData.changeCredits((int)(b.getReward() * pursuitSize.multiplier));
