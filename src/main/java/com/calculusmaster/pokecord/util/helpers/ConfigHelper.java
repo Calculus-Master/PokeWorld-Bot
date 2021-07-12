@@ -1,13 +1,9 @@
 package com.calculusmaster.pokecord.util.helpers;
 
+import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.economy.CommandShop;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.net.URL;
-import java.nio.file.Paths;
 
 public class ConfigHelper
 {
@@ -15,9 +11,7 @@ public class ConfigHelper
     {
         try
         {
-            URL resource = ConfigHelper.class.getResource("config.json");
-            File f = Paths.get(resource.toURI()).toFile();
-            JSONObject config = new JSONObject(new JSONTokener(new FileInputStream(f)));
+            JSONObject config = new JSONObject(new JSONTokener(Pokecord.class.getResourceAsStream("/config.json")));
 
             ThreadPoolHandler.THREAD_POOL_TYPE = config.getInt("thread_pool_type");
             CacheHelper.DYNAMIC_CACHING_ACTIVE = config.getBoolean("dynamic_caching");
