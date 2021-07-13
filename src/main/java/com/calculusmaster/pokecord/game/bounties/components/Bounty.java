@@ -51,6 +51,7 @@ public class Bounty
         if(b.objective instanceof ReleaseTypeObjective o) o.setType(d.getString("type"));
         if(b.objective instanceof ReleaseNameObjective o) o.setName(d.getString("name"));
         if(b.objective instanceof ReleasePoolObjective o) o.setPool(d.getList("pool", String.class));
+        if(b.objective instanceof EarnEVsStatObjective o) o.setStat(d.getString("stat"));
         if(b.objective instanceof UseZMoveTypeObjective o) o.setType(d.getString("type"));
         if(b.objective instanceof UseMaxMoveTypeObjective o) o.setType(d.getString("type"));
         if(b.objective instanceof UseMoveTypeObjective o) o.setType(d.getString("type"));
