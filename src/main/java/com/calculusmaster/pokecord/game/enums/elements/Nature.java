@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 import org.bson.Document;
+import org.json.JSONObject;
 
 public enum Nature
 {
@@ -16,9 +17,11 @@ public enum Nature
 
     public String getShopEntry()
     {
-        Document natureDB = Mongo.NatureInfo.find(Filters.eq("name", this.toString())).first();
+        Document doc = Mongo.NatureInfo.find(Filters.eq("name", this.toString())).first();
 
-        if(natureDB == null) return "ERROR\nERROR";
+        if(doc == null) return "ERROR\nERROR";
+
+        JSONObject natureDB = new JSONObject(doc.toJson());
 
         String statIncr = "ERROR";
         String statDecr = "ERROR";

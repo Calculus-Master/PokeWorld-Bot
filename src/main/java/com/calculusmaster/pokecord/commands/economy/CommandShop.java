@@ -82,7 +82,7 @@ public class CommandShop extends Command
                 {
                     this.embed
                             .addField("Price", "All Forms cost " + Prices.SHOP_FORM.get() + " credits!", false)
-                            .addField("Purchase", "To buy a form, type `p!buy form <name>`, where <name> is the name of the form", false)
+                            .addField("Purchase", "To buy a form, type `p!buy form <name>`, where <name> is the name of the form.", false)
                             .addField("Selected Pokemon", selected.getName(), false);
 
                     StringBuilder availableForms = new StringBuilder();
@@ -101,34 +101,45 @@ public class CommandShop extends Command
                 }
                 else if(Page.CANDY.matches(this.msg[1]))
                 {
-                    this.embed.addField("Price", "Rare Candies cost " + Prices.SHOP_CANDY + " each.", false);
-                    this.embed.addField("Selected Pokemon", "Your Selected Pokemon is Level `" + selected.getLevel() + "`\nYou can buy a Maximum of `" + (100 - selected.getLevel()) + "` Rare Candies!", false);
+                    this.embed.addField("Price", "Rare Candies cost " + Prices.SHOP_CANDY.get() + " each.", false);
+                    this.embed.addField("Selected Pokemon", "Level `" + selected.getLevel() + "`\nYou can buy a maximum of `" + (100 - selected.getLevel()) + "` Rare Candies!", false);
                 }
                 else if(Page.ITEMS.matches(this.msg[1]))
                 {
-                    for(int i = 0; i < ITEM_ENTRIES.size(); i++) this.embed.addField(ITEM_ENTRIES.get(i).getStyledName(), "Number: `" + (i + 1) + "`\nPrice: " + ITEM_PRICES.get(i) + " c", true);
+                    for(int i = 0; i < ITEM_ENTRIES.size(); i++) this.embed.addField(ITEM_ENTRIES.get(i).getStyledName(), "Number: `" + (i + 1) + "`\nPrice: " + ITEM_PRICES.get(i) + "c", true);
+                    for(int i = 0; i < ITEM_ENTRIES.size() % 3; i++) this.embed.addBlankField(true);
                 }
                 else if(Page.TM.matches(this.msg[1]))
                 {
-                    for(TM tm : TM_ENTRIES) this.embed.addField("", tm.getShopEntry(), false);
+                    StringBuilder s = new StringBuilder();
+                    for(TM tm : TM_ENTRIES) s.append(tm.getShopEntry()).append("\n");
+                    this.embed.addField("Available TMs", s.toString(), false);
                 }
                 else if(Page.TR.matches(this.msg[1]))
                 {
-                    for(TR tr : TR_ENTRIES) this.embed.addField("", tr.getShopEntry(), false);
+                    StringBuilder s = new StringBuilder();
+                    for(TR tr : TR_ENTRIES) s.append(tr.getShopEntry()).append("\n");
+                    this.embed.addField("Available TRs", s.toString(), false);
                 }
                 else if(Page.MOVETUTOR.matches(this.msg[1]))
                 {
                     this.embed
-                            .addField("Price", "All Move Tutor Moves cost " + Prices.SHOP_MOVETUTOR + " credits!", false)
+                            .addField("Price", "All Move Tutor Moves cost " + Prices.SHOP_MOVETUTOR.get() + " credits!", false)
                             .addField("Info", "Buying a Move Tutor move will automatically add it to the first slot of your Selected Pokemon. If you accidentally replace it, there is no way of retrieving that move without buying it again, so be careful!", false);
 
-                    for(String s : Move.MOVE_TUTOR_MOVES.keySet()) this.embed.addField("", "`" + s + "`", false);
+                    StringBuilder s = new StringBuilder();
+                    for(String move : Move.MOVE_TUTOR_MOVES.keySet()) s.append("`").append(move).append("`\n");
+
+                    this.embed.addField("Moves", s.toString(), false);
                 }
                 else if(Page.ZCRYSTAL.matches(this.msg[1]))
                 {
-                    this.embed.addField("Price", "All Z Crystals cost " + Prices.SHOP_ZCRYSTAL + " credits!", false);
+                    this.embed.addField("Price", "All Z Crystals cost " + Prices.SHOP_ZCRYSTAL.get() + " credits!", false);
 
-                    for(ZCrystal z : ZCRYSTAL_ENTRIES) this.embed.addField("", "`" + z.getStyledName() + "`", false);
+                    StringBuilder s = new StringBuilder();
+                    for(ZCrystal z : ZCRYSTAL_ENTRIES) s.append("`").append(z.getStyledName()).append("`\n");
+
+                    this.embed.addField("Z Crystals", s.toString(), false);
                 }
 
                 this.embed.setTitle("Pokecord2 Shop - " + p.title);
