@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.commands.misc;
 
+import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
@@ -56,6 +57,7 @@ public class CommandDev extends Command
                 PlayerDataQuery query = this.mentions.size() > 0 ? new PlayerDataQuery(this.mentions.get(0).getId()) : this.playerData;
                 query.removePursuit();
             }
+            case "close", "shutdown", "stop", "quit" -> Pokecord.BOT_JDA.shutdown();
         }
 
         this.sendMsg("Successfully ran Developer Command!");
