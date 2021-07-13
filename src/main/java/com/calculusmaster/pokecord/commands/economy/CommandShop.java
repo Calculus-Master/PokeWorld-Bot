@@ -99,9 +99,10 @@ public class CommandShop extends Command
                             .addField("Price", "All Natures cost " + Prices.SHOP_NATURE.get() + " credits!", false)
                             .addField("Selected Pokemon", "Nature: `" + selected.getNature().toString() + "`", false);
 
-                    for(Nature n : Nature.values()) this.embed.addField(n.toString(), n.getShopEntry(), true);
+                    for(Nature n : Nature.values()) this.embed.addField(n.toString() + (n.hasNoEffect() ? "*" : ""), n.getShopEntry(), true);
+                    for(int i = 0; i < Nature.values().length % 3; i++) this.embed.addBlankField(true);
 
-                    this.embed.setFooter("Natures with crossed out stats do not affect a Pokemon's stats, because they increase and decrease the same stat.");
+                    this.embed.setFooter("Natures with an asterisk (*) have no effect on a Pokemon's Stats.");
                 }
                 else if(Page.CANDY.matches(this.msg[1]))
                 {

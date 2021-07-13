@@ -53,6 +53,11 @@ public enum Nature
         }
     }
 
+    public boolean hasNoEffect()
+    {
+        return this.increase.equals(this.decrease);
+    }
+
     public Map<Stat, Double> getMap()
     {
         return this.multipliers;
@@ -65,6 +70,6 @@ public enum Nature
 
     public String getShopEntry()
     {
-        return (this.increase.equals(this.decrease) ? "~~" : "") + "+10% **" + this.increase + "**\n-10% **" + this.decrease + "**" + (this.increase.equals(this.decrease) ? "~~" : "");
+        return "+10% **" + this.increase + "**\n-10% **" + this.decrease + "**";
     }
 }
