@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.util.PokemonRarity;
 import org.bson.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -14,6 +15,8 @@ public class DefeatPoolObjective extends Objective
     public DefeatPoolObjective()
     {
         super(ObjectiveType.DEFEAT_POKEMON_POOL, Objective.randomTargetAmount(5, 15));
+
+        this.pool = new ArrayList<>();
 
         int size = new Random().nextInt(16) + 5;
         for(int i = 0; i < size; i++) this.pool.add(PokemonRarity.getSpawn());

@@ -369,7 +369,6 @@ public class Duel
             this.players[this.current].usedDynamax = true;
 
             Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_DYNAMAX, this.event);
-            this.players[this.current].data.updateBountyProgression(ObjectiveType.USE_MAX_MOVE);
 
             if(this.current == 0 || (this.current == 1 && this.isPvP()))
             {

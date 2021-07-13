@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.util.PokemonRarity;
 import org.bson.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -14,6 +15,8 @@ public class ReleasePoolObjective extends Objective
     public ReleasePoolObjective()
     {
         super(ObjectiveType.RELEASE_POKEMON_POOL, Objective.randomTargetAmount(10, 30));
+
+        this.pool = new ArrayList<>();
 
         int size = new Random().nextInt(20) + 5;
         for(int i = 0; i < size; i++) this.pool.add(PokemonRarity.getSpawn());

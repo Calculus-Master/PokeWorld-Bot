@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import org.bson.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -14,6 +15,8 @@ public class UseMovePoolObjective extends Objective
     public UseMovePoolObjective()
     {
         super(ObjectiveType.USE_MOVES_POOL, Objective.randomTargetAmount(10, 50));
+
+        this.pool = new ArrayList<>();
 
         int size = new Random().nextInt(15) + 5;
         for(int i = 0; i < size; i++) this.pool.add(Move.getRandomMove());

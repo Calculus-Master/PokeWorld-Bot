@@ -6,7 +6,7 @@ public class WinPVPDuelObjective extends Objective
 {
     public WinPVPDuelObjective()
     {
-        super(ObjectiveType.COMPLETE_TRADE, Objective.randomTargetAmount(2, 5));
+        super(ObjectiveType.WIN_PVP_DUEL, Objective.randomTargetAmount(2, 5));
     }
 
     @Override

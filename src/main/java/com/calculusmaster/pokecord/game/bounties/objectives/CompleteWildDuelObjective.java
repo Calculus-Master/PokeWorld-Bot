@@ -6,7 +6,7 @@ public class CompleteWildDuelObjective extends Objective
 {
     public CompleteWildDuelObjective()
     {
-        super(ObjectiveType.COMPLETE_TRADE, Objective.randomTargetAmount(20, 50));
+        super(ObjectiveType.COMPLETE_WILD_DUEL, Objective.randomTargetAmount(20, 50));
     }
 
     @Override
