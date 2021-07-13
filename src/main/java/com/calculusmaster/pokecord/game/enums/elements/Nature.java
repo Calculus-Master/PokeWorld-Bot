@@ -1,14 +1,62 @@
 package com.calculusmaster.pokecord.game.enums.elements;
 
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.Mongo;
-import com.mongodb.client.model.Filters;
-import org.bson.Document;
-import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.calculusmaster.pokecord.game.enums.elements.Stat.*;
 
 public enum Nature
 {
-    HARDY, LONELY, BRAVE, ADAMANT, NAUGHTY, BOLD, DOCILE, RELAXED, IMPISH, LAX, TIMID, HASTY, SERIOUS, JOLLY, NAIVE, MODEST, MILD, QUIET, BASHFUL, RASH, CALM, GENTLE, SASSY, CAREFUL, QUIRKY;
+    HARDY(ATK, ATK),
+    LONELY(ATK, DEF),
+    BRAVE(ATK, SPD),
+    ADAMANT(ATK, SPATK),
+    NAUGHTY(ATK, SPDEF),
+    BOLD(DEF, ATK),
+    DOCILE(DEF, DEF),
+    RELAXED(DEF, SPD),
+    IMPISH(DEF, SPATK),
+    LAX(DEF, SPDEF),
+    TIMID(SPD, ATK),
+    HASTY(SPD, DEF),
+    SERIOUS(SPD, SPD),
+    JOLLY(SPD, SPATK),
+    NAIVE(SPD, SPDEF),
+    MODEST(SPATK, ATK),
+    MILD(SPATK, SPDEF),
+    QUIET(SPATK, SPD),
+    BASHFUL(SPATK, SPATK),
+    RASH(SPATK, SPDEF),
+    CALM(SPDEF, ATK),
+    GENTLE(SPDEF, DEF),
+    SASSY(SPDEF, SPD),
+    CAREFUL(SPDEF, SPATK),
+    QUIRKY(SPDEF, SPDEF);
+
+    private final Map<Stat, Double> multipliers = new HashMap<>();
+    private final Stat increase;
+    private final Stat decrease;
+
+    Nature(Stat increase, Stat decrease)
+    {
+        this.increase = increase;
+        this.decrease = decrease;
+
+        for(Stat s : Stat.values()) this.multipliers.put(s, 1.0);
+
+        if(!increase.equals(decrease))
+        {
+            this.multipliers.put(increase, 1.1);
+            this.multipliers.put(decrease, 0.9);
+        }
+    }
+
+    public Map<Stat, Double> getMap()
+    {
+        return this.multipliers;
+    }
 
     public static Nature cast(String nature)
     {
@@ -17,36 +65,6 @@ public enum Nature
 
     public String getShopEntry()
     {
-        Document doc = Mongo.NatureInfo.find(Filters.eq("name", this.toString())).first();
-
-        if(doc == null) return "ERROR\nERROR";
-
-        JSONObject natureDB = new JSONObject(doc.toJson());
-
-        String statIncr = "ERROR";
-        String statDecr = "ERROR";
-
-        for(int i = 1; i < Stat.values().length; i++)
-        {
-            if(natureDB.getDouble(Stat.values()[i].toString()) == 1.1) statIncr = Stat.values()[i].toString();
-            if(natureDB.getDouble(Stat.values()[i].toString()) == 0.9) statDecr = Stat.values()[i].toString();
-        }
-
-        if(statIncr.equals(statDecr) && statDecr.equals("ERROR"))
-        {
-            statIncr = switch(Nature.cast(natureDB.getString("name")))
-                    {
-                        case BASHFUL -> Stat.SPATK.toString();
-                        case DOCILE -> Stat.DEF.toString();
-                        case HARDY ->  Stat.ATK.toString();
-                        case QUIRKY -> Stat.SPDEF.toString();
-                        case SERIOUS -> Stat.SPD.toString();
-                        default -> null;
-                    };
-            statDecr = statIncr;
-            statDecr += "  *";
-        }
-
-        return "+10% **" + statIncr + "**\n-10% **" + statDecr + "**";
+        return (this.increase.equals(this.decrease) ? "~~" : "") + "+10% **" + this.increase + "**\n-10% **" + this.decrease + "**" + (this.increase.equals(this.decrease) ? "~~" : "");
     }
 }

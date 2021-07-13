@@ -30,7 +30,6 @@ public class Mongo
     //Database Collections
     public static final MongoCollection<Document> PokemonInfo = ImmutableDB.getCollection("PokemonInfo");
     public static final MongoCollection<Document> MoveInfo = ImmutableDB.getCollection("MoveInfo");
-    public static final MongoCollection<Document> NatureInfo = ImmutableDB.getCollection("NatureInfo");
 
     public static final MongoCollection<Document> PlayerData = MutableDB.getCollection("PlayerData");
     public static final MongoCollection<Document> ServerData = MutableDB.getCollection("ServerData");

@@ -32,8 +32,6 @@ public class Pokemon
     private int num;
     private boolean shiny;
     private Nature nature;
-    private Map<Stat, Double> natureMap;
-
     private int level;
     private int exp;
     private Map<Stat, Integer> IV = new TreeMap<>();
@@ -1095,19 +1093,11 @@ public class Pokemon
     public void setNature(String nature)
     {
         this.nature = Nature.cast(nature);
-        this.setNatureJSON();
     }
 
     public void setNature()
     {
         this.setNature(Nature.values()[new Random().nextInt(Nature.values().length)].toString());
-    }
-
-    public void setNatureJSON()
-    {
-        this.natureMap = new HashMap<>();
-        JSONObject natureJSON = new JSONObject(Mongo.NatureInfo.find(Filters.eq("name", this.nature.toString().toUpperCase())).first().toJson());
-        for(Stat s : new Stat[]{Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD}) this.natureMap.put(s, natureJSON.getDouble(s.toString()));
     }
 
     public Nature getNature()
@@ -1132,7 +1122,7 @@ public class Pokemon
         else
         {
             //Stat = Nature * [5 + ((2 * Base + IV + EV / 4) * Level) / 100]
-            double nature = this.natureMap.get(s);
+            double nature = this.nature.getMap().get(s);
             double base = this.getBaseStat(s);
             int IV = this.IV.get(s);
             int EV = this.EV.get(s);
