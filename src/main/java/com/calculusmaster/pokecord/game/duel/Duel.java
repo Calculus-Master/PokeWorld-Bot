@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.TypeEffectiveness;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.bounties.objectives.DefeatTypeObjective;
+import com.calculusmaster.pokecord.game.bounties.objectives.EarnEVsStatObjective;
 import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
@@ -754,6 +755,11 @@ public class Duel
                         case DEFEAT_LEGENDARY -> {
                             String otherName = this.players[this.other].active.getName();
                             if(PokemonRarity.LEGENDARY.contains(otherName) || PokemonRarity.MYTHICAL.contains(otherName) || PokemonRarity.ULTRA_BEAST.contains(otherName)) b.update();
+                        }
+                        case EARN_EVS -> b.update(this.players[this.other].active.getEVYield().values().stream().mapToInt(e -> e).sum());
+                        case EARN_EVS_STAT -> {
+                            int statYield = this.players[this.other].active.getEVYield().get(((EarnEVsStatObjective)b.getObjective()).getStat());
+                            if(statYield != 0) b.update(statYield);
                         }
                     }
                 });

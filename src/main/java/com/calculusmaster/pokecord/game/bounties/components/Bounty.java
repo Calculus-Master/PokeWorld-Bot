@@ -45,6 +45,7 @@ public class Bounty
         if(b.objective instanceof DefeatTypeObjective o) o.setType(d.getString("type"));
         if(b.objective instanceof CatchTypeObjective o) o.setType(d.getString("type"));
         if(b.objective instanceof CatchNameObjective o) o.setName(d.getString("name"));
+        if(b.objective instanceof EarnEVsStatObjective o) o.setStat(d.getString("stat"));
 
         return b;
     }
@@ -116,29 +117,7 @@ public class Bounty
 
     public Objective setObjective(ObjectiveType o)
     {
-        this.objective = switch(o) {
-            case DEFEAT_POKEMON -> new DefeatGenericObjective();
-            case DEFEAT_POKEMON_TYPE -> new DefeatTypeObjective();
-            case DEFEAT_LEGENDARY -> new DefeatLegendaryObjective();
-            case BUY_ITEMS -> new BuyItemsObjective();
-            case USE_ZMOVE -> new UseZMoveObjective();
-            case USE_MAX_MOVE -> new UseMaxMoveObjective();
-            case COMPLETE_TRADE -> new CompleteTradeObjective();
-            case COMPLETE_PVP_DUEL -> new CompletePVPDuelObjective();
-            case COMPLETE_WILD_DUEL -> new CompleteWildDuelObjective();
-            case COMPLETE_ELITE_DUEL -> new CompleteEliteDuelObjective();
-            case WIN_PVP_DUEL -> new WinPVPDuelObjective();
-            case WIN_WILD_DUEL -> new WinWildDuelObjective();
-            case WIN_ELITE_DUEL -> new WinEliteDuelObjective();
-            case CATCH_POKEMON -> new CatchGenericObjective();
-            case CATCH_POKEMON_TYPE -> new CatchTypeObjective();
-            case CATCH_POKEMON_NAME -> new CatchNameObjective();
-            case EARN_XP_POKEPASS -> new EarnPokePassXPObjective();
-            case EARN_XP_POKEMON -> new EarnPokemonXPObjective();
-            case EVOLVE_POKEMON -> new EvolvePokemonObjective();
-            case LEVEL_POKEMON -> new LevelPokemonObjective();
-        };
-
+        this.objective = o.constructor.get();
         return this.objective;
     }
 
@@ -156,14 +135,5 @@ public class Bounty
     public Objective getObjective()
     {
         return this.objective;
-    }
-
-    @Override
-    public String toString() {
-        return "Bounty{" +
-                "bountyID='" + bountyID + '\'' +
-                ", objective=" + objective +
-                ", reward=" + reward +
-                '}';
     }
 }
