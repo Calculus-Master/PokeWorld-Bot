@@ -46,6 +46,8 @@ public class Bounty
         if(b.objective instanceof CatchTypeObjective o) o.setType(d.getString("type"));
         if(b.objective instanceof CatchNameObjective o) o.setName(d.getString("name"));
         if(b.objective instanceof EarnEVsStatObjective o) o.setStat(d.getString("stat"));
+        if(b.objective instanceof DefeatPokemonPoolObjective o) o.setPool(d.getList("pool", String.class));
+        if(b.objective instanceof CatchPokemonPoolObjective o) o.setPool(d.getList("pool", String.class));
 
         return b;
     }

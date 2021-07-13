@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.bounties.objectives.CatchNameObjective;
+import com.calculusmaster.pokecord.game.bounties.objectives.CatchPokemonPoolObjective;
 import com.calculusmaster.pokecord.game.bounties.objectives.CatchTypeObjective;
 import com.calculusmaster.pokecord.mongo.CollectionsQuery;
 import com.calculusmaster.pokecord.util.Global;
@@ -91,6 +92,9 @@ public class CommandCatch extends Command
                     }
                     case CATCH_POKEMON_NAME -> {
                         if(caught.getName().equals(((CatchNameObjective)b.getObjective()).getName())) b.update();
+                    }
+                    case CATCH_POKEMON_POOL -> {
+                        if(((CatchPokemonPoolObjective)b.getObjective()).getPool().contains(caught.getName())) b.update();
                     }
                 }
             });

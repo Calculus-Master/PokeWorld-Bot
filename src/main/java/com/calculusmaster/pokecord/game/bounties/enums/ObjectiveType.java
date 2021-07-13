@@ -8,6 +8,7 @@ public enum ObjectiveType
 {
     DEFEAT_POKEMON(DefeatGenericObjective::new),
     DEFEAT_POKEMON_TYPE(DefeatTypeObjective::new),
+    DEFEAT_POKEMON_POOL(DefeatPokemonPoolObjective::new),
     DEFEAT_LEGENDARY(DefeatLegendaryObjective::new),
     BUY_ITEMS(BuyItemsObjective::new),
     USE_ZMOVE(UseZMoveObjective::new),
@@ -22,6 +23,7 @@ public enum ObjectiveType
     CATCH_POKEMON(CatchGenericObjective::new),
     CATCH_POKEMON_TYPE(CatchTypeObjective::new),
     CATCH_POKEMON_NAME(CatchNameObjective::new),
+    CATCH_POKEMON_POOL(CatchPokemonPoolObjective::new),
     EARN_XP_POKEPASS(EarnPokePassXPObjective::new),
     EARN_XP_POKEMON(EarnPokemonXPObjective::new),
     EVOLVE_POKEMON(EvolvePokemonObjective::new),
