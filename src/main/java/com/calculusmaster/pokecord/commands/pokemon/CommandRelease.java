@@ -3,6 +3,9 @@ package com.calculusmaster.pokecord.commands.pokemon;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.bounties.objectives.ReleaseNameObjective;
+import com.calculusmaster.pokecord.game.bounties.objectives.ReleasePoolObjective;
+import com.calculusmaster.pokecord.game.bounties.objectives.ReleaseTypeObjective;
 import com.calculusmaster.pokecord.mongo.PokemonStatisticsQuery;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -45,6 +48,21 @@ public class CommandRelease extends Command
                 this.playerData.removePokemon(UUID);
                 Pokemon.deletePokemon(p);
                 PokemonStatisticsQuery.delete(UUID);
+
+                this.playerData.updateBountyProgression(b -> {
+                    switch(b.getType()) {
+                        case RELEASE_POKEMON -> b.update();
+                        case RELEASE_POKEMON_TYPE -> {
+                            if(p.isType(((ReleaseTypeObjective)b.getObjective()).getType())) b.update();
+                        }
+                        case RELEASE_POKEMON_NAME -> {
+                            if(p.getName().equals(((ReleaseNameObjective)b.getObjective()).getName())) b.update();
+                        }
+                        case RELEASE_POKEMON_POOL -> {
+                            if(((ReleasePoolObjective)b.getObjective()).getPool().contains(p.getName())) b.update();
+                        }
+                    }
+                });
 
                 releaseRequests.remove(this.player.getId());
 

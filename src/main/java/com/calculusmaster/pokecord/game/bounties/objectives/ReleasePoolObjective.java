@@ -7,22 +7,22 @@ import org.bson.Document;
 import java.util.List;
 import java.util.Random;
 
-public class DefeatPokemonPoolObjective extends Objective
+public class ReleasePoolObjective extends Objective
 {
     private List<String> pool;
 
-    public DefeatPokemonPoolObjective()
+    public ReleasePoolObjective()
     {
-        super(ObjectiveType.DEFEAT_POKEMON_POOL, Objective.randomTargetAmount(5, 15));
+        super(ObjectiveType.RELEASE_POKEMON_POOL, Objective.randomTargetAmount(10, 30));
 
-        int size = new Random().nextInt(16) + 5;
+        int size = new Random().nextInt(20) + 5;
         for(int i = 0; i < size; i++) this.pool.add(PokemonRarity.getSpawn());
     }
 
     @Override
     public String getDesc()
     {
-        return "Defeat " + this.target + " Pokemon from this list: " + this.pool;
+        return "Release " + this.target + " Pokemon from this list: " + this.pool;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class DefeatPokemonPoolObjective extends Objective
         return this.pool;
     }
 
-    public DefeatPokemonPoolObjective setPool(List<String> pool)
+    public ReleasePoolObjective setPool(List<String> pool)
     {
         this.pool = pool;
         return this;

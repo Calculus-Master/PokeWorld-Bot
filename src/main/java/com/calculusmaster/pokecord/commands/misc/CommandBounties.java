@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.misc;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.bounties.components.Bounty;
+import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -46,6 +47,7 @@ public class CommandBounties extends Command
                 this.playerData.addPokePassExp(Bounty.POKEPASS_EXP_YIELD, this.event);
                 this.playerData.getStats().incr(PlayerStatistic.BOUNTIES_COMPLETED);
                 Achievements.grant(this.player.getId(), Achievements.COMPLETED_FIRST_BOUNTY, this.event);
+                this.playerData.updateBountyProgression(ObjectiveType.COMPLETE_BOUNTY);
 
                 if(new Random().nextInt(50) < 10 && this.playerData.getSelectedPokemon().getLevel() != 100) this.playerData.getSelectedPokemon().addExp(500);
 
