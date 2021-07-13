@@ -51,6 +51,15 @@ public class Bounty
         if(b.objective instanceof ReleaseTypeObjective o) o.setType(d.getString("type"));
         if(b.objective instanceof ReleaseNameObjective o) o.setName(d.getString("name"));
         if(b.objective instanceof ReleasePoolObjective o) o.setPool(d.getList("pool", String.class));
+        if(b.objective instanceof UseZMoveTypeObjective o) o.setType(d.getString("type"));
+        if(b.objective instanceof UseMaxMoveTypeObjective o) o.setType(d.getString("type"));
+        if(b.objective instanceof UseMoveTypeObjective o) o.setType(d.getString("type"));
+        if(b.objective instanceof UseMoveNameObjective o) o.setName(d.getString("name"));
+        if(b.objective instanceof UseMoveCategoryObjective o) o.setCategory(d.getString("category"));
+        if(b.objective instanceof UseMovePoolObjective o) o.setPool(d.getList("pool", String.class));
+        if(b.objective instanceof UseMovePowerLessObjective o) o.setPower(d.getInteger("power"));
+        if(b.objective instanceof UseMovePowerGreaterObjective o) o.setPower(d.getInteger("power"));
+        if(b.objective instanceof UseMoveAccuracyLessObjective o) o.setAccuracy(d.getInteger("accuracy"));
 
         return b;
     }

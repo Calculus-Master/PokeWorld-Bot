@@ -7,9 +7,7 @@ import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.TypeEffectiveness;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
-import com.calculusmaster.pokecord.game.bounties.objectives.DefeatPoolObjective;
-import com.calculusmaster.pokecord.game.bounties.objectives.DefeatTypeObjective;
-import com.calculusmaster.pokecord.game.bounties.objectives.EarnEVsStatObjective;
+import com.calculusmaster.pokecord.game.bounties.objectives.*;
 import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
@@ -172,12 +170,16 @@ public class Duel
 
             this.entryHazardEffects(0);
 
+            this.players[0].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
+
             ind = this.queuedMoves.get(this.players[1].ID).swapInd() - 1;
             this.players[1].swap(ind);
 
             results.add(this.players[1].data.getUsername() + " brought in " + this.players[1].active.getName() + "!\n");
 
             this.entryHazardEffects(1);
+
+            if(this.isPvP()) this.players[1].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
 
             this.checkWeatherAbilities();
         }
@@ -214,6 +216,8 @@ public class Duel
                 this.checkWeatherAbilities(0);
                 this.entryHazardEffects(0);
 
+                this.players[0].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
+
                 if(!faintSwap) results.add(this.turn(move));
             }
             else //Player 2 wants to swap
@@ -245,6 +249,8 @@ public class Duel
 
                 this.checkWeatherAbilities(1);
                 this.entryHazardEffects(1);
+
+                if(this.isPvP()) this.players[1].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
 
                 if(!faintSwap) results.add(this.turn(move));
             }
@@ -342,7 +348,19 @@ public class Duel
             this.players[this.current].usedZMove = true;
 
             Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_ZMOVE, this.event);
-            this.players[this.current].data.updateBountyProgression(ObjectiveType.USE_ZMOVE);
+
+            if(this.current == 0 || (this.current == 1 && this.isPvP()))
+            {
+                final Move m = move;
+                this.players[this.current].data.updateBountyProgression(b -> {
+                    switch(b.getType()) {
+                        case USE_ZMOVE -> b.update();
+                        case USE_ZMOVE_TYPE -> {
+                            if(((UseZMoveTypeObjective)b.getObjective()).getType().equals(m.getType())) b.update();
+                        }
+                    }
+                });
+            }
         }
 
         if(move.isMaxMove)
@@ -352,6 +370,19 @@ public class Duel
 
             Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_DYNAMAX, this.event);
             this.players[this.current].data.updateBountyProgression(ObjectiveType.USE_MAX_MOVE);
+
+            if(this.current == 0 || (this.current == 1 && this.isPvP()))
+            {
+                final Move m = move;
+                this.players[this.current].data.updateBountyProgression(b -> {
+                    switch(b.getType()) {
+                        case USE_MAX_MOVE -> b.update();
+                        case USE_MAX_MOVE_TYPE -> {
+                            if(((UseMaxMoveTypeObjective)b.getObjective()).getType().equals(m.getType())) b.update();
+                        }
+                    }
+                });
+            }
         }
 
         if(this.data(this.other).imprisonUsed && this.players[this.other].active.getLearnedMoves().contains(move.getName())) cantUse = true;
@@ -726,6 +757,43 @@ public class Duel
                 this.data(this.other).bideTurns--;
 
                 this.data(this.other).bideDamage += Math.max(preMoveHP - this.players[this.other].active.getHealth(), 0);
+            }
+
+            if(this.current == 0 || (this.current == 1 && this.isPvP()))
+            {
+                final Move m = move;
+                this.players[this.current].data.updateBountyProgression(b -> {
+                    switch(b.getType()) {
+                        case USE_MOVES -> b.update();
+                        case USE_MOVES_TYPE -> {
+                            if(((UseMoveTypeObjective)b.getObjective()).getType().equals(m.getType())) b.update();
+                        }
+                        case USE_MOVES_CATEGORY -> {
+                            if(((UseMoveCategoryObjective)b.getObjective()).getCategory().equals(m.getCategory())) b.update();
+                        }
+                        case USE_MOVES_NAME -> {
+                            if(((UseMoveNameObjective)b.getObjective()).getName().equals(m.getName())) b.update();
+                        }
+                        case USE_MOVES_POOL -> {
+                            if(((UseMovePoolObjective)b.getObjective()).getPool().contains(m.getName())) b.update();
+                        }
+                        case USE_MOVES_POWER_LESS -> {
+                            if(m.getPower() < ((UseMovePowerLessObjective)b.getObjective()).getPower()) b.update();
+                        }
+                        case USE_MOVES_POWER_GREATER -> {
+                            if(m.getPower() > ((UseMovePowerGreaterObjective)b.getObjective()).getPower()) b.update();
+                        }
+                        case USE_MOVES_ACCURACY_LESS -> {
+                            if(m.getAccuracy() < ((UseMoveAccuracyLessObjective)b.getObjective()).getAccuracy()) b.update();
+                        }
+                        case USE_MOVES_PRIORITY_HIGH -> {
+                            if(m.getPriority() > 0) b.update();
+                        }
+                        case USE_MOVES_PRIORITY_LOW -> {
+                            if(m.getPriority() < 0) b.update();
+                        }
+                    }
+                });
             }
         }
 

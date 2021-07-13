@@ -11,8 +11,20 @@ public enum ObjectiveType
     DEFEAT_POKEMON_POOL(DefeatPoolObjective::new),
     DEFEAT_LEGENDARY(DefeatLegendaryObjective::new),
     BUY_ITEMS(BuyItemsObjective::new),
+    USE_MOVES(UseMoveGenericObjective::new),
+    USE_MOVES_CATEGORY(UseMoveCategoryObjective::new),
+    USE_MOVES_TYPE(UseMoveTypeObjective::new),
+    USE_MOVES_NAME(UseMoveNameObjective::new),
+    USE_MOVES_POOL(UseMovePoolObjective::new),
+    USE_MOVES_POWER_LESS(UseMovePowerLessObjective::new),
+    USE_MOVES_POWER_GREATER(UseMovePowerGreaterObjective::new),
+    USE_MOVES_ACCURACY_LESS(UseMoveAccuracyLessObjective::new),
+    USE_MOVES_PRIORITY_HIGH(UseMovePriorityHighObjective::new),
+    USE_MOVES_PRIORITY_LOW(UseMovePriorityLowObjective::new),
     USE_ZMOVE(UseZMoveObjective::new),
+    USE_ZMOVE_TYPE(UseZMoveTypeObjective::new),
     USE_MAX_MOVE(UseMaxMoveObjective::new),
+    USE_MAX_MOVE_TYPE(UseMaxMoveTypeObjective::new),
     COMPLETE_TRADE(CompleteTradeObjective::new),
     COMPLETE_PVP_DUEL(CompletePVPDuelObjective::new),
     COMPLETE_WILD_DUEL(CompleteWildDuelObjective::new),
@@ -34,7 +46,8 @@ public enum ObjectiveType
     RELEASE_POKEMON(ReleaseGenericObjective::new),
     RELEASE_POKEMON_TYPE(ReleaseTypeObjective::new),
     RELEASE_POKEMON_NAME(ReleaseNameObjective::new),
-    RELEASE_POKEMON_POOL(ReleasePoolObjective::new);
+    RELEASE_POKEMON_POOL(ReleasePoolObjective::new),
+    SWAP_POKEMON(SwapGenericObjective::new);
 
     public Supplier<? extends Objective> constructor;
     ObjectiveType(Supplier<? extends Objective> constructor) { this.constructor = constructor; }

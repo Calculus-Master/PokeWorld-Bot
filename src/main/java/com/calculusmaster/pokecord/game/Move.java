@@ -427,6 +427,12 @@ public class Move
         return this.priority;
     }
 
+    public static String getRandomMove()
+    {
+        List<String> pool = new ArrayList<>(MOVES.keySet());
+        return pool.get(new Random().nextInt(pool.size()));
+    }
+
     @Override
     public String toString() {
         return "MoveNew{" +
