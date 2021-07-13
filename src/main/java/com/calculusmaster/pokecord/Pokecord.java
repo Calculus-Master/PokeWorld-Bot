@@ -39,6 +39,7 @@ public class Pokecord
         LoggerHelper.init("Pokemon", Pokemon::init);
         LoggerHelper.init("Gigantamax", Pokemon::gigantamaxInit);
         LoggerHelper.init("EV Lists", DataHelper::createEVLists);
+        LoggerHelper.init("Type Lists", DataHelper::createTypeLists);
         LoggerHelper.init("Daily Trainer", Trainer::setDailyTrainers);
         LoggerHelper.init("Move", Move::init);
         LoggerHelper.init("Ability Info", CommandAbilityInfo::init);

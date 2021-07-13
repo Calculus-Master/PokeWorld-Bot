@@ -4,6 +4,7 @@ public enum Prices
 {
     WILDDUEL_STAT(150),
     WILDDUEL_SPECIFIC(300),
+    WILDDUEL_TYPE(100),
     SHOP_MEGA(2000),
     SHOP_FORM(1500),
     SHOP_NATURE(200),

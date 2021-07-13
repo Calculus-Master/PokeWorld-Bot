@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.WildDuel;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.enums.Prices;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
@@ -27,15 +28,16 @@ public class CommandWildDuel extends Command
         //Possible options: p!wildduel (random pokemon), p!wildduel STAT (random pokemon with evs in STAT), p!wildduel PKMN (specifically battle PKMN)
         boolean random = this.msg.length == 1;
         boolean stat = this.msg.length == 2 && Stat.cast(this.msg[1]) != null;
+        boolean type = this.msg.length == 2 && Type.cast(this.msg[1]) != null;
         boolean specific = this.msg.length >= 2 && Global.POKEMON.contains(Global.normalCase(this.getMultiWordContent(1)));
 
         if(DuelHelper.isInDuel(this.player.getId()))
         {
             this.sendMsg(CommandInvalid.ALREADY_IN_DUEL);
         }
-        else if(random || stat || specific)
+        else if(random || stat || type || specific)
         {
-            int price = stat ? Prices.WILDDUEL_STAT.get() : (specific ? Prices.WILDDUEL_SPECIFIC.get() : 0);
+            int price = stat ? Prices.WILDDUEL_STAT.get() : (type ? Prices.WILDDUEL_TYPE.get() : (specific ? Prices.WILDDUEL_SPECIFIC.get() : 0));
 
             if(price != 0 && this.playerData.getCredits() < price)
             {
@@ -50,6 +52,11 @@ public class CommandWildDuel extends Command
                 {
                     List<String> statList = DataHelper.EV_LISTS.get(Stat.cast(this.msg[1]).ordinal());
                     pokemon = statList.get(new Random().nextInt(statList.size()));
+                }
+                else if(type)
+                {
+                    List<String> typeList = DataHelper.TYPE_LISTS.get(Type.cast(this.msg[1]));
+                    pokemon = typeList.get(new Random().nextInt(typeList.size()));
                 }
                 else pokemon = "";
 
