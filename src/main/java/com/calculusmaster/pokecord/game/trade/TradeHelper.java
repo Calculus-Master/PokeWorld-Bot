@@ -31,13 +31,13 @@ public class TradeHelper
         REDEEMS,
         POKEMON,
         TM,
-        TR;
+        TR
     }
 
     public enum TradeStatus
     {
         WAITING,
         TRADING,
-        COMPLETE;
+        COMPLETE
     }
 }

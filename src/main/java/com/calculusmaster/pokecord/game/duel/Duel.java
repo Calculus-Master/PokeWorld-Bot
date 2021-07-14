@@ -958,7 +958,7 @@ public class Duel
             }
         }
 
-        this.results.add("\n" + weatherResult.toString());
+        this.results.add("\n" + weatherResult);
     }
 
     private boolean isAffectedByHail(int p)

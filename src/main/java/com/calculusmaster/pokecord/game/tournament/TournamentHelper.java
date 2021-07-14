@@ -46,6 +46,6 @@ public class TournamentHelper
         WAITING_FOR_PLAYERS,
         WAITING_FOR_START,
         DUELING,
-        COMPLETE;
+        COMPLETE
     }
 }

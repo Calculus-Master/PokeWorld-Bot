@@ -1,16 +1,12 @@
 package com.calculusmaster.pokecord.util.helpers;
 
-import ch.qos.logback.core.util.FileUtil;
-import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.PrivateInfo;
-import com.mongodb.client.model.Filters;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.bson.Document;
 import org.json.JSONObject;
 import org.json.JSONTokener;

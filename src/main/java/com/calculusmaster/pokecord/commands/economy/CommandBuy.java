@@ -20,13 +20,6 @@ import java.util.Arrays;
 
 public class CommandBuy extends Command
 {
-    //Prices
-    //public static final int COST_MEGA = 2000;
-    //public static final int COST_FORM = 1500;
-    //public static final int COST_NATURE = 200;
-    //public static final int COST_RARE_CANDY = 500;
-    //public static final int COST_MOVETUTOR = 10000;
-
     public CommandBuy(MessageReceivedEvent event, String[] msg)
     {
         super(event, msg);

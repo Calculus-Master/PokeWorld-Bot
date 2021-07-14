@@ -5,5 +5,5 @@ public enum Room
     NORMAL_ROOM,
     TRICK_ROOM,
     WONDER_ROOM,
-    MAGIC_ROOM;
+    MAGIC_ROOM
 }

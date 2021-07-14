@@ -174,16 +174,6 @@ public class Pokemon
         return p;
     }
 
-    /*public String getKDRatio()
-    {
-        int numerator = stats.get(PokemonStatistic.POKEMON_DEFEATED);
-        int denominator = stats.get(PokemonStatistic.TIMES_FAINTED);
-
-        if(numerator == 0 && denominator == 0) return "N/A";
-        else if(denominator == 0) return "Infinite";
-        else return String.format("%.2f", (double)numerator / (double)denominator);
-    }*/
-
     public int getNumber()
     {
         return this.num;
@@ -236,8 +226,6 @@ public class Pokemon
                 .append("nickname", p.getNickname());
 
         Mongo.PokemonData.insertOne(pokeData);
-
-        if(!PokemonStatisticsQuery.exists(p.getUUID())) PokemonStatisticsQuery.register(p.getUUID());
 
         LoggerHelper.info(Pokemon.class, "Pokemon Uploaded: UUID (" + p.getUUID() + "), NAME (" + p.getName() + ")");
     }
@@ -943,7 +931,7 @@ public class Pokemon
 
     public static final Map<String, GigantamaxData> GIGANTAMAX_DATA = new HashMap<>();
 
-    public record GigantamaxData(String pokemon, String move, Type moveType, String normalImage, String shinyImage) {};
+    public record GigantamaxData(String pokemon, String move, Type moveType, String normalImage, String shinyImage) {}
 
     public static void gigantamaxInit()
     {

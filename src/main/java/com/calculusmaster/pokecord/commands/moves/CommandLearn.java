@@ -44,7 +44,7 @@ public class CommandLearn extends Command
             StringBuilder movesList = new StringBuilder().append("\n");
             for(int i = 0; i < 4; i++) movesList.append((i + 1) + ": " + selected.getLearnedMoves().get(i) + "\n");
 
-            this.embed.setDescription("Which move do you want to replace with " + move + "?" + movesList.toString());
+            this.embed.setDescription("Which move do you want to replace with " + move + "?" + movesList);
             moveLearnRequests.put(selected.getUUID(), move);
         }
 

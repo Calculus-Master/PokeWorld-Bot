@@ -5,5 +5,5 @@ public enum EntryHazard
     SPIKES,
     STEALTH_ROCK,
     STICKY_WEB,
-    TOXIC_SPIKES;
+    TOXIC_SPIKES
 }

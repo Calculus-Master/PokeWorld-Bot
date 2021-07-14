@@ -195,14 +195,14 @@ public class DuelHelper
         MOVE,
         ZMOVE,
         SWAP,
-        DYNAMAX;
+        DYNAMAX
     }
 
     public enum DuelStatus
     {
         WAITING,
         DUELING,
-        COMPLETE;
+        COMPLETE
     }
 
     public static Move getZMove(Player p, Move baseMove)

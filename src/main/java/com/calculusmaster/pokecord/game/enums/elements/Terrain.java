@@ -6,5 +6,5 @@ public enum Terrain
     ELECRIC_TERRAIN,
     GRASSY_TERRAIN,
     MISTY_TERRAIN,
-    PSYCHIC_TERRAIN;
+    PSYCHIC_TERRAIN
 }

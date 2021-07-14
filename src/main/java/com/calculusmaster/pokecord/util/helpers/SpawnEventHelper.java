@@ -69,7 +69,7 @@ public class SpawnEventHelper
 
     private static void spawnPokemon(Guild g, String spawn)
     {
-        List<TextChannel> channels = new ServerDataQuery(g.getId()).getSpawnChannels().stream().map(g::getTextChannelById).filter(Objects::nonNull).collect(Collectors.toList());;
+        List<TextChannel> channels = new ServerDataQuery(g.getId()).getSpawnChannels().stream().map(g::getTextChannelById).filter(Objects::nonNull).collect(Collectors.toList());
 
         if(channels.isEmpty())
         {

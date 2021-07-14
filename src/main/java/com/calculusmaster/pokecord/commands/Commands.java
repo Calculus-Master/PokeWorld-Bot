@@ -331,6 +331,6 @@ public class Commands
         ECONOMY,
         MISC,
         MOVES,
-        POKEMON;
+        POKEMON
     }
 }
