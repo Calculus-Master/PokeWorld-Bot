@@ -6,7 +6,6 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.bounties.objectives.ReleaseNameObjective;
 import com.calculusmaster.pokecord.game.bounties.objectives.ReleasePoolObjective;
 import com.calculusmaster.pokecord.game.bounties.objectives.ReleaseTypeObjective;
-import com.calculusmaster.pokecord.mongo.PokemonStatisticsQuery;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.HashMap;
