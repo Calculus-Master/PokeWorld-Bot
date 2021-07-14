@@ -11,6 +11,7 @@ import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.SettingsHelper;
+import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -495,7 +496,12 @@ public class PlayerDataQuery extends MongoQuery
         return this.getBountyIDs().stream().map(Bounty::fromDB).collect(Collectors.toList());
     }
 
-    public void updateBountyProgression(Consumer<Bounty> checker)
+    public void updateBountyProgression(final Consumer<Bounty> checker)
+    {
+        ThreadPoolHandler.BOUNTY.execute(() -> this.updateBounty(checker));
+    }
+
+    private void updateBounty(Consumer<Bounty> checker)
     {
         //Basic Bounties
         for(String ID : this.getBountyIDs())

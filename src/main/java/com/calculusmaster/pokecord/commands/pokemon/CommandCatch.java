@@ -25,6 +25,7 @@ public class CommandCatch extends Command
     @Override
     public Command runCommand()
     {
+        long initT = System.currentTimeMillis();
         if(this.msg.length < 2)
         {
             this.embed.setDescription(CommandInvalid.getShort());
@@ -38,12 +39,14 @@ public class CommandCatch extends Command
         else if(!guess.equals(spawn)) this.sendMsg("Incorrect name!");
         else
         {
+            long i = System.currentTimeMillis();
             String poke = spawn.contains("Shiny") ? spawn.substring("Shiny ".length()) : spawn;
 
             Pokemon caught = Pokemon.create(poke);
             caught.setLevel(new Random().nextInt(20 + 5 * (this.playerData.getGymLevel() - 1)) + 1);
             if(!caught.isShiny()) caught.setShiny(spawn.contains("Shiny"));
 
+            //Longest 2 methods in this entire command (~100-200 ms each) - Thread Pool?
             Pokemon.uploadPokemon(caught);
             this.playerData.addPokemon(caught.getUUID());
 
