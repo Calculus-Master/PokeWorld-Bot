@@ -36,6 +36,8 @@ public class Pokecord
         long start = System.currentTimeMillis();
 
         LoggerHelper.init("Config", ConfigHelper::init);
+        LoggerHelper.init("Pokemon Data", DataHelper::createPokemonData);
+        LoggerHelper.init("Pokemon", DataHelper::createPokemonList);
         LoggerHelper.init("Pokemon", Pokemon::init);
         LoggerHelper.init("Gigantamax", DataHelper::createGigantamaxDataMap);
         LoggerHelper.init("EV Lists", DataHelper::createEVLists);

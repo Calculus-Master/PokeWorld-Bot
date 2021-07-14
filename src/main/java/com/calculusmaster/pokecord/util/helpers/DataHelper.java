@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.util.helpers;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.PokemonData;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -15,10 +16,31 @@ import java.util.stream.Collectors;
 
 public class DataHelper
 {
+    public static final Map<String, PokemonData> POKEMON_DATA = new HashMap<>();
+    public static final List<String> POKEMON = new ArrayList<>();
+
     public static final Map<String, List<String>> SERVER_PLAYERS = new HashMap<>();
     public static final List<List<String>> EV_LISTS = new ArrayList<>();
     public static final Map<Type, List<String>> TYPE_LISTS = new HashMap<>();
     public static final Map<String, GigantamaxData> GIGANTAMAX_DATA = new HashMap<>();
+
+    //Pokemon Data
+    public static void createPokemonData()
+    {
+        long i = System.currentTimeMillis();
+        Mongo.PokemonInfo.find().forEach(d -> POKEMON_DATA.put(d.getString("name"), new PokemonData(d)));
+        LoggerHelper.info(CacheHelper.class, "Creating Pokemon Data Objects: " + (System.currentTimeMillis() - i) + "ms!");
+    }
+
+    public static void createPokemonList()
+    {
+        POKEMON.addAll(POKEMON_DATA.keySet());
+    }
+
+    public static PokemonData pokeData(String name)
+    {
+        return POKEMON_DATA.get(name).copy();
+    }
 
     //Server Players
     public static void updateServerPlayers(Guild g)
