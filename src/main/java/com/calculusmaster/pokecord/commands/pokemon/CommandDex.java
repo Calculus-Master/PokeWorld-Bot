@@ -6,7 +6,6 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.mongo.CollectionsQuery;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
@@ -16,10 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 public class CommandDex extends Command
 {
@@ -79,10 +75,10 @@ public class CommandDex extends Command
         }
 
         //Dex Generic Info Command
-        boolean isShiny = this.msg[1].toLowerCase().equals("shiny");
-        boolean isGigantamax = this.msg[isShiny ? 2 : 1].toLowerCase().equals("gigantamax");
+        boolean isShiny = this.msg[1].equalsIgnoreCase("shiny");
+        boolean isGigantamax = this.msg[isShiny ? 2 : 1].equalsIgnoreCase("gigantamax");
 
-        if(!isPokemon(this.getPokemonName()) || (isGigantamax && !Pokemon.GIGANTAMAX_DATA.containsKey(Global.normalCase(this.getPokemonName()))))
+        if(!isPokemon(this.getPokemonName()) || (isGigantamax && !Pokemon.existsGigantamax(Global.normalCase(this.getPokemonName()))))
         {
             this.embed.setDescription(CommandInvalid.getShort());
             return this;
@@ -106,7 +102,7 @@ public class CommandDex extends Command
         String trs = "**TRs**: " + (info.getJSONArray("movesTR").length() == 0 ? "None" : info.getJSONArray("movesTR").toString());
         String baseStats = "**Base Stats:** \n" + this.getStatsFormatted(info.getJSONArray("stats"));
 
-        String image = isGigantamax ? (isShiny ? Pokemon.GIGANTAMAX_DATA.get(pokemon).shinyImage() : Pokemon.GIGANTAMAX_DATA.get(pokemon).normalImage()) : (info.getString((isShiny ? "shiny" : "normal") + "URL"));
+        String image = isGigantamax ? (isShiny ? Pokemon.getGigantamaxData(pokemon).shinyImage() : Pokemon.getGigantamaxData(pokemon).normalImage()) : (info.getString((isShiny ? "shiny" : "normal") + "URL"));
 
         this.embed.setTitle(title);
         this.embed.setDescription(filler + "\n" + type + "\n" + abilities + "\n" + growth + "" +

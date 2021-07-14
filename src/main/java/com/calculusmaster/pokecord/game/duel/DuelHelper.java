@@ -326,7 +326,6 @@ public class DuelHelper
 
     public static Move getMaxMove(Pokemon p, Move baseMove)
     {
-        //Fallback
         Move maxMove;
 
         String maxName;
@@ -339,11 +338,10 @@ public class DuelHelper
             maxName = "Max Guard";
             maxType = Type.NORMAL;
         }
-        else if(p.canGigantamax() && Pokemon.GIGANTAMAX_DATA.get(p.getName()).moveType().equals(baseMove.getType()))
+        else if(p.canGigantamax() && Pokemon.getGigantamaxData(p.getName()).moveType().equals(baseMove.getType()))
         {
-            Pokemon.GigantamaxData data = Pokemon.GIGANTAMAX_DATA.get(p.getName());
-            maxName = data.move();
-            maxType = data.moveType();
+            maxName = Pokemon.getGigantamaxData(p.getName()).move();
+            maxType = Pokemon.getGigantamaxData(p.getName()).moveType();
         }
         else maxName = "Max " + switch(baseMove.getType()) {
             case BUG -> "Flutterby";
