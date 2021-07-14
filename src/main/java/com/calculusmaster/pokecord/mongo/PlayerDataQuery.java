@@ -9,6 +9,7 @@ import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.SettingsHelper;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.User;
@@ -74,7 +75,14 @@ public class PlayerDataQuery extends MongoQuery
 
     public void directMessage(String msg)
     {
-        Pokecord.BOT_JDA.openPrivateChannelById(this.getID()).flatMap(channel -> channel.sendMessage(msg)).queue();
+        try
+        {
+            Pokecord.BOT_JDA.openPrivateChannelById(this.getID()).flatMap(channel -> channel.sendMessage(msg)).queue();
+        }
+        catch (Exception e)
+        {
+            LoggerHelper.error(this.getClass(), "Failed to DM " + this.getUsername() + " (ID: " + this.getID() + ")!");
+        }
     }
 
     //Get the SettingsHelper object

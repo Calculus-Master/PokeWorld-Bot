@@ -12,6 +12,8 @@ import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
+import com.calculusmaster.pokecord.game.tournament.Tournament;
+import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
 import com.calculusmaster.pokecord.mongo.PokemonStatisticsQuery;
 import com.calculusmaster.pokecord.util.PokemonRarity;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
@@ -1407,6 +1409,16 @@ public class Duel
         });
         this.players[loser].data.updateBountyProgression(ObjectiveType.COMPLETE_PVP_DUEL);
 
+        if(TournamentHelper.isInTournament(this.players[winner].ID) && TournamentHelper.isInTournament(this.players[loser].ID))
+        {
+            Tournament t = TournamentHelper.instance(this.getWinner().ID);
+
+            boolean neitherElim = !t.isPlayerEliminated(this.players[winner].ID) && !t.isPlayerEliminated(this.players[loser].ID);
+            boolean matchupValid = t.getMatchups().stream().anyMatch(m -> m.has(this.players[winner].ID) && m.has(this.players[loser].ID));
+
+            if(neitherElim && matchupValid) t.addDuelResults(this.players[winner].ID, this.players[loser].ID);
+        }
+
         this.uploadExperience();
 
         DuelHelper.delete(this.players[0].ID);
@@ -1450,13 +1462,8 @@ public class Duel
         //index functions as both the swapIndex and moveIndex, which one is dictated by type == 's' and type == 'm'
         if(type == 's')
         {
-            if(this.players[this.indexOf(id)].team.get(index - 1).isFainted())
-            {
-                this.event.getChannel().sendMessage("That pokemon is fainted!").queue();
-                return;
-            }
-
-            this.queuedMoves.put(id, new TurnAction(ActionType.SWAP, -1, index));
+            if(this.players[this.indexOf(id)].team.get(index - 1).isFainted()) this.event.getChannel().sendMessage("That pokemon is fainted!").queue();
+            else this.queuedMoves.put(id, new TurnAction(ActionType.SWAP, -1, index));
         }
         else this.queuedMoves.put(id, new TurnAction(type == 'z' ? ActionType.ZMOVE : (type == 'd' ? ActionType.DYNAMAX : ActionType.MOVE), index, -1));
     }

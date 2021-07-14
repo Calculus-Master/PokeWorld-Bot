@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
+import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.PokemonRarity;
@@ -64,6 +65,10 @@ public class CommandDuel extends Command
             {
                 this.sendMsg("You are not in a duel!");
             }
+            else if(DuelHelper.instance(this.player.getId()).getStatus().equals(DuelHelper.DuelStatus.DUELING))
+            {
+                this.sendMsg("You are already in a duel!");
+            }
             else if(accept)
             {
                 Duel d = DuelHelper.instance(this.player.getId());
@@ -97,6 +102,8 @@ public class CommandDuel extends Command
 
         if(this.msg.length >= 3) size = this.getInt(2);
 
+        if(TournamentHelper.isInTournament(this.player.getId())) size = TournamentHelper.instance(this.player.getId()).getSize();
+
         //Player wants to start a duel with the mention, check all necessary things
 
         if(DuelHelper.isInDuel(this.player.getId()))
@@ -114,7 +121,11 @@ public class CommandDuel extends Command
         String opponentID = this.mentions.get(0).getId();
         Member opponent = this.getMember(opponentID);
 
-        if(!PlayerDataQuery.isRegistered(opponentID))
+        if(this.playerData.getTeam().size() < size)
+        {
+            this.sendMsg("Your team needs to have at least " + size + " Pokemon!");
+        }
+        else if(!PlayerDataQuery.isRegistered(opponentID))
         {
             this.sendMsg(opponent.getEffectiveName() + " is not registered! Use p!start <starter> to begin!");
         }

@@ -72,7 +72,7 @@ public class CommandWildDuel extends Command
         }
         else
         {
-            this.sendMsg("Invalid arguments! Make sure your Pokemon name or Stat name (HP, ATK, DEF, SPATK, SPDEF, and SPD) is correct.");
+            this.sendMsg("Invalid arguments! Make sure your Pokemon name, Stat name (HP, ATK, DEF, SPATK, SPDEF, and SPD), or Type name is correct.");
         }
 
         return this;

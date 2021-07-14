@@ -52,6 +52,7 @@ public class DataHelper
 
         Mongo.PokemonInfo.find().forEach(d -> {
             List<Type> types = d.getList("type", String.class).stream().distinct().map(Type::cast).collect(Collectors.toList());
+            for(Type t : types) TYPE_LISTS.get(t).add(d.getString("name"));
         });
     }
 }

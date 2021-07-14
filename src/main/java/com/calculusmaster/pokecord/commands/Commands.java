@@ -227,13 +227,17 @@ public class Commands
                 .setCommand(CommandPursuit::new)
                 .setCategory(Category.MISC);
 
-        register("dev")
-                .setCommand(CommandDev::new)
-                .setCategory(Category.MISC);
-
         register("target")
                 .setCommand(CommandTarget::new)
                 .setCategory(Category.DUEL);
+
+        register("tournament")
+                .setCommand(CommandTournament::new)
+                .setCategory(Category.DUEL);
+
+        register("dev")
+                .setCommand(CommandDev::new)
+                .setCategory(Category.MISC);
     }
 
     public static void execute(String input, MessageReceivedEvent event, String[] msg)

@@ -45,7 +45,7 @@ public class CommandTarget extends Command
         {
             Member m = this.getMember(SERVER_TARGETS.get(this.server.getId()));
 
-            this.sendMsg("The Server Target is " + m.getEffectiveName() + "! Defeat them in a PvP Duel to earn extra rewards! If you are the target, winning PvP Duels grants extra credits the more duels you win!");
+            this.sendMsg("The Server Target is " + m.getEffectiveName() + " (" + m.getUser().getAsTag() + ")! Defeat them in a PvP Duel to earn extra rewards! If you are the target, winning PvP Duels grants extra credits the more duels you win!");
         }
 
         return this;
