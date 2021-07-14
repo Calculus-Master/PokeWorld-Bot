@@ -5,8 +5,8 @@ import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import com.calculusmaster.pokecord.util.interfaces.IScoreComponent;
-import net.dv8tion.jda.api.entities.ISnowflake;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
@@ -157,8 +157,7 @@ public class CommandLeaderboard extends Command
 
         if(server)
         {
-            this.server.loadMembers();
-            List<String> serverMembers = this.server.getMembers().stream().map(ISnowflake::getId).collect(Collectors.toList());
+            List<String> serverMembers = DataHelper.SERVER_PLAYERS.get(this.server.getId());
 
             IDs = IDs.stream().filter(serverMembers::contains).collect(Collectors.toList());
         }
