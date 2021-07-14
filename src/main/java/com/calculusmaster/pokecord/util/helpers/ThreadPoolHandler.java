@@ -9,6 +9,7 @@ public class ThreadPoolHandler
     public static final ExecutorService ACHIEVEMENT = ThreadPoolHandler.customThreadPool();
     public static final ExecutorService LISTENER_EVENT = ThreadPoolHandler.customThreadPool();
     public static final ExecutorService BOUNTY = ThreadPoolHandler.customThreadPool();
+    public static final ExecutorService CATCH = ThreadPoolHandler.customThreadPool();
 
     private static ExecutorService customThreadPool()
     {

@@ -11,6 +11,7 @@ import com.calculusmaster.pokecord.mongo.CollectionsQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.SpawnEventHelper;
+import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Random;
@@ -39,7 +40,6 @@ public class CommandCatch extends Command
         else if(!guess.equals(spawn)) this.sendMsg("Incorrect name!");
         else
         {
-            long i = System.currentTimeMillis();
             String poke = spawn.contains("Shiny") ? spawn.substring("Shiny ".length()) : spawn;
 
             Pokemon caught = Pokemon.create(poke);
@@ -47,8 +47,10 @@ public class CommandCatch extends Command
             if(!caught.isShiny()) caught.setShiny(spawn.contains("Shiny"));
 
             //Longest 2 methods in this entire command (~100-200 ms each) - Thread Pool?
-            Pokemon.uploadPokemon(caught);
-            this.playerData.addPokemon(caught.getUUID());
+            ThreadPoolHandler.CATCH.execute(() -> {
+                Pokemon.uploadPokemon(caught);
+                this.playerData.addPokemon(caught.getUUID());
+            });
 
             //Collections
             CollectionsQuery collection = new CollectionsQuery(caught.getName(), this.player.getId());
