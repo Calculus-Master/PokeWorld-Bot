@@ -45,8 +45,6 @@ public class CommandInfo extends Command
         String item = PokeItem.asItem(chosen.getItem()).getStyledName();
         String tm = (chosen.hasTM() ? "TM" + (chosen.getTM() < 10 ? "0" : "") + chosen.getTM()  + " - " + TM.get(chosen.getTM()).getMoveName() : "None");
         String tr =  (chosen.hasTR() ? "TR" + (chosen.getTR() < 10 ? "0" : "") + chosen.getTR()  + " - " + TR.get(chosen.getTR()).getMoveName() : "None");
-        String stats = getStatsFormatted(chosen, this.playerData.getSettings().getSettingBoolean(SettingsHelper.Setting.CLIENT_DETAILED));
-        String kd = "**Defeats/Faints Ratio**: " + chosen.getKDRatio();
 
         this.embed
                 .addField("Experience", exp, true)
@@ -85,7 +83,7 @@ public class CommandInfo extends Command
     private MessageEmbed.Field getIVsField(Pokemon p)
     {
         StringBuilder sb = new StringBuilder();
-        for(Stat s : Stat.values()) sb.append(p.getIVs().get(s)).append(" / 31\n");
+        for(Stat s : Stat.values()) sb.append(p.getIVs().get(s) == 31 ? "**" + p.getIVs().get(s) + "**" : p.getIVs().get(s)).append(" / 31\n");
         sb.append(p.getTotalIV());
 
         return new MessageEmbed.Field("IVs", sb.toString(), true);
@@ -94,7 +92,7 @@ public class CommandInfo extends Command
     private MessageEmbed.Field getEVsField(Pokemon p)
     {
         StringBuilder sb = new StringBuilder();
-        for(Stat s : Stat.values()) sb.append(p.getEVs().get(s)).append("\n");
+        for(Stat s : Stat.values()) sb.append(p.getEVs().get(s) >= 252 ? "**" + p.getEVs().get(s) + "**" : p.getEVs().get(s)).append("\n");
         sb.append(p.getEVTotal());
 
         return new MessageEmbed.Field("EVs", sb.toString(), true);
