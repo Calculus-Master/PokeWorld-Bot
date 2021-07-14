@@ -58,6 +58,12 @@ public class CommandTournament extends Command
 
                     t.notifyCreator(this.player.getName() + " joined your Tournament!");
 
+                    if(t.isReady())
+                    {
+                        t.setStatus(TournamentHelper.TournamentStatus.WAITING_FOR_START);
+                        t.notifyCreator("Tournament ready to start! Use `p!tournament start` to begin!");
+                    }
+
                     this.sendMsg("You entered this Tournament! It will begin once all players have accepted their invites and the creator starts the Tournament.");
                 }
                 else if(deny)

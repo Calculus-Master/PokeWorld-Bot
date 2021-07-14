@@ -150,7 +150,7 @@ public class Tournament
 
                 embed.addField("Matchup Overview", matches.toString(), false);
 
-                int playerCount = this.matchups.keySet().stream().mapToInt(m -> 2).sum();
+                int playerCount = this.matchups.keySet().size() * 2;
                 embed.setFooter(switch(playerCount) {
                     case 2 -> "Finals";
                     case 4 -> "Semifinals";
@@ -194,7 +194,7 @@ public class Tournament
 
     public boolean isReady()
     {
-        return this.playerAccepts.entrySet().stream().allMatch(Map.Entry::getValue);
+        return this.playerAccepts.values().stream().allMatch(v -> v);
     }
 
     public void setPlayers(String creator, List<String> players)
@@ -217,12 +217,6 @@ public class Tournament
     public void setPlayerAccepted(String ID, boolean value)
     {
         this.playerAccepts.put(ID, value);
-
-        if(this.isReady())
-        {
-            this.setStatus(TournamentStatus.WAITING_FOR_START);
-            this.notifyCreator("Tournament ready to start! Use `p!tournament start` to begin!");
-        }
     }
 
     public void notifyCreator(String msg)
