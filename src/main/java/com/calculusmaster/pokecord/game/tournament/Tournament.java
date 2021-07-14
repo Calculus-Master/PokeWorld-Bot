@@ -109,7 +109,7 @@ public class Tournament
         winner.changeCredits(credits);
         winner.addPokePassExp(xp, this.event);
 
-        embed.setDescription("The Tournament winner is " + this.playerQueries.get(this.playerPool.get(0)) + "! They earned " + credits + " credits!");
+        embed.setDescription("The Tournament winner is " + this.playerQueries.get(this.playerPool.get(0)).getUsername() + "! They earned " + credits + " credits!");
         embed.setTitle("Tournament Complete");
 
         this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
@@ -150,11 +150,12 @@ public class Tournament
 
                 embed.addField("Matchup Overview", matches.toString(), false);
 
-                embed.setFooter(switch(this.playerPool.size()) {
+                int playerCount = this.matchups.keySet().stream().mapToInt(m -> 2).sum();
+                embed.setFooter(switch(playerCount) {
                     case 2 -> "Finals";
                     case 4 -> "Semifinals";
                     case 8 -> "Quarterfinals";
-                    default -> "Round of " + this.playerPool.size();
+                    default -> "Round of " + playerCount;
                 });
             }
         }
