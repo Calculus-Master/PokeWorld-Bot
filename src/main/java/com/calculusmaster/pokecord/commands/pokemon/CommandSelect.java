@@ -17,6 +17,9 @@ public class CommandSelect extends Command
     @Override
     public Command runCommand()
     {
+        boolean latest = this.msg.length == 2 && this.msg[1].equals("latest");
+        boolean number = this.msg.length == 2 && this.isNumeric(1);
+
         if(TournamentHelper.isInTournament(this.player.getId()))
         {
             Tournament t = TournamentHelper.instance(this.player.getId());
@@ -28,19 +31,20 @@ public class CommandSelect extends Command
             }
         }
 
-        if(this.msg.length != 2 || (!this.msg[1].equals("latest") && (!this.isNumeric(1) || Integer.parseInt(this.msg[1]) > this.playerData.getPokemonList().size())))
+        if(number || latest)
         {
-            this.embed.setDescription(CommandInvalid.getShort());
-        }
-        else
-        {
-            int selected = this.msg[1].equals("latest") ? this.playerData.getPokemonList().size() : this.getInt(1);
-            this.playerData.setSelected(selected);
-            Pokemon p = this.playerData.getSelectedPokemon();
+            if(number && this.getInt(1) > this.playerData.getPokemonList().size()) this.sendMsg("That number exceeds the amount of Pokemon you have!");
+            else
+            {
+                int newSelected = latest ? this.playerData.getPokemonList().size() : this.getInt(1);
 
-            this.embed = null;
-            this.event.getChannel().sendMessage("You selected your **Level " + p.getLevel() + " " + p.getName() + "** (#" + selected + ")!").queue();
+                this.playerData.setSelected(newSelected);
+
+                Pokemon p = this.playerData.getSelectedPokemon();
+                this.sendMsg("You selected your **Level " + p.getLevel() + " " + p.getName() + "** (#" + newSelected + ")!");
+            }
         }
+        else this.sendMsg(CommandInvalid.getShort());
 
         return this;
     }
