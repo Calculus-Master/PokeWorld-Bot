@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord.commands.duel;
 
 import com.calculusmaster.pokecord.commands.Command;
-import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
@@ -68,8 +67,6 @@ public class CommandFlee extends Command
 
                             int loss = Math.min(this.playerData.getCredits(), 500);
                             this.playerData.changeCredits(-1 * loss);
-
-                            Achievements.grant(this.player.getId(), Achievements.CONCEDE_FIRST_TRAINER_DUEL, this.event);
 
                             DuelHelper.delete(this.player.getId());
 
