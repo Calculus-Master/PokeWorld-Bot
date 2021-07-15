@@ -6,6 +6,8 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.tournament.Tournament;
+import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
 import com.calculusmaster.pokecord.util.PokemonRarity;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -34,6 +36,17 @@ public class CommandTeam extends Command
         boolean swap = this.msg.length == 4 && this.msg[1].equals("swap") && isNumeric(2) && isNumeric(3);
         //p!team clear
         boolean clear = this.msg.length == 2 && this.msg[1].equals("clear");
+
+        if(TournamentHelper.isInTournament(this.player.getId()))
+        {
+            Tournament t = TournamentHelper.instance(this.player.getId());
+
+            if(t.getStatus().equals(TournamentHelper.TournamentStatus.DUELING) && !t.isPlayerEliminated(this.player.getId()))
+            {
+                this.sendMsg("You can't change your team while in a Tournament!");
+                return this;
+            }
+        }
 
         if(set || add)
         {
