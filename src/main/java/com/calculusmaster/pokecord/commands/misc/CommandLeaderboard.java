@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import com.calculusmaster.pokecord.util.interfaces.IScoreComponent;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
@@ -28,8 +29,9 @@ public class CommandLeaderboard extends Command
     public Command runCommand()
     {
         boolean server = this.msg.length == 2 && this.msg[1].equals("server");
+        boolean specific = this.msg.length == 2;
 
-        this.playerData.directMessage("Calculating Player Scores...");
+        this.sendMsg("Calculating Player Scores...");
 
         this.reset();
         this.generatePlayerQueries(server);
@@ -37,9 +39,11 @@ public class CommandLeaderboard extends Command
         this.generateFinalScores();
         this.sortFinalScores();
 
+        this.embed = new EmbedBuilder();
+
         final String standardizedNote = "*Note: Score values are Standardized. Negative values indicate a score below average, while Positive values indicate above average. The farther a value is from 0, the more extreme that value is compared to the player population!*";
 
-        if(this.msg.length == 2 && !server)
+        if(specific && !server)
         {
             if(this.mentions.size() > 0 || this.msg[1].equals("self") || this.msg[1].equals("me"))
             {
