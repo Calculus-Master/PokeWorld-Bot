@@ -180,7 +180,7 @@ public class CommandLeaderboard extends Command
     enum ScoreComponent
     {
         POKEMON_LISTS(2.5, p -> p.getPokemonList().size(), "Pokemon"),
-        ACHIEVEMENTS(5.0, p -> p.getAchievementsList().size(), "Achievements"),
+        ACHIEVEMENTS(2.5, p -> p.getAchievementsList().size(), "Achievements"),
         CREDITS(1.25, p -> p.getCredits(), "Credits"),
         REDEEMS(1.85, p -> p.getRedeems(), "Redeems"),
         TMS(1.5, p -> p.getTMList().size(), "TMs"),
