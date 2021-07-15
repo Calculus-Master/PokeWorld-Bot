@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.Achievements;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +31,7 @@ public class CommandAchievements extends Command
         else
         {
             List<Achievements> achievementsRemaining = Arrays.stream(Achievements.values()).filter(a -> !achievementsCompleted.contains(a.toString())).collect(Collectors.toList());
+            Collections.shuffle(achievementsRemaining);
             for(int i = 0; i < Math.min(5, achievementsRemaining.size()); i++) others.append("`").append(achievementsRemaining.get(i).desc).append("` - Reward: ").append(achievementsRemaining.get(i).credits).append("\n");
         }
 
