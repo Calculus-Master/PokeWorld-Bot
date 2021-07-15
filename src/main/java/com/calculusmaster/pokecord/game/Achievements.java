@@ -37,7 +37,8 @@ public enum Achievements
     COMPLETED_FIRST_PURSUIT(1000, "Completed your first Pursuit"),
     COMPLETED_FIRST_LEGEND_PURSUIT(20000, "Completed your first Legend size Pursuit!"),
     PARTICIPATED_FIRST_TOURNAMENT(500, "Participated in your first Tournament!"),
-    WON_FIRST_TOURNAMENT(5000, "Won your first Tournament!");
+    WON_FIRST_TOURNAMENT(5000, "Won your first Tournament!"),
+    COMPLETED_ALL_ACHIEVEMENTS(100000, "Completed all Achievements!");
 
     public int credits;
     public String desc;
@@ -62,6 +63,8 @@ public enum Achievements
                 event.getChannel().sendMessage(p.getMention() + ": Unlocked an achievement: \"" + a.desc + "\"").queue();
             }
             else CacheHelper.ACHIEVEMENT_CACHE.get(a).add(playerID);
+
+            if(p.getAchievementsList().size() == Achievements.values().length - 1) grant(playerID, Achievements.COMPLETED_ALL_ACHIEVEMENTS, event);
         });
     }
 
