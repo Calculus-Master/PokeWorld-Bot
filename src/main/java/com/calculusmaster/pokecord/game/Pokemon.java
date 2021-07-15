@@ -163,13 +163,13 @@ public class Pokemon
             }
         };
 
-        p.linkGenericJSON(p.getName());
+        p.genericJSON = new JSONObject(DataHelper.pokeData(p.getName()));
         p.linkSpecificJSON(UUID);
 
         p.setNumber(num + 1);
 
         p.setIVs(d.getString("ivs"));
-        p.setType();
+        p.type = new Type[]{DataHelper.pokeData(p.getName()).types.get(0), DataHelper.pokeData(p.getName()).types.get(1)};
         p.setItem(d.getString("item"));
 
         return p;

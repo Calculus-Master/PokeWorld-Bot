@@ -56,7 +56,7 @@ public final class PokemonData
 
         this.species = d.getString("fillerinfo").split("-")[0];
         this.height = Double.parseDouble(d.getString("fillerinfo").split("-")[1]);
-        this.weight = Double.parseDouble(d.getString("fillerinfo").split("-")[2]);
+        this.weight = this.name.equals("Eternamax Eternatus") ? Double.MAX_VALUE : Double.parseDouble(d.getString("fillerinfo").split("-")[2]);
 
         this.dex = d.getInteger("dex");
 

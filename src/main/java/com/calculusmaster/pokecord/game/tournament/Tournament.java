@@ -184,7 +184,7 @@ public class Tournament
 
     private boolean isRoundComplete()
     {
-        return this.matchups.entrySet().stream().allMatch(Map.Entry::getValue);
+        return this.matchups.values().stream().allMatch(v -> v);
     }
 
     private boolean isTournamentComplete()
