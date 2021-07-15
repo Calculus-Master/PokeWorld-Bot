@@ -2,11 +2,10 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
-import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.util.ListPokemon;
 import com.calculusmaster.pokecord.util.PokemonRarity;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -128,14 +127,14 @@ public class CommandTeam extends Command
             {
                 List<String> teamUUIDs = List.copyOf(this.playerData.getTeam());
 
-                ListPokemon p;
+                Pokemon p;
                 for(int i = 0; i < MAX_TEAM_SIZE; i++)
                 {
                     team.append(i + 1).append(": ");
 
                     if(i < teamUUIDs.size())
                     {
-                        p = new ListPokemon(teamUUIDs.get(i), -1);
+                        p = Pokemon.buildCore(teamUUIDs.get(i), -1);
                         team.append("Level ").append(p.getLevel()).append(" ").append(p.getName()).append(this.getTag(p.getName()));
                     }
                     else team.append("None");
