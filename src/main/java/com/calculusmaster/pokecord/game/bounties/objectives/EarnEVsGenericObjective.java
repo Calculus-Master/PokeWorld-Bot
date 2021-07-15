@@ -1,12 +1,13 @@
 package com.calculusmaster.pokecord.game.bounties.objectives;
 
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
+import com.calculusmaster.pokecord.game.bounties.objectives.core.Objective;
 
 public class EarnEVsGenericObjective extends Objective
 {
     public EarnEVsGenericObjective()
     {
-        super(ObjectiveType.EARN_EVS, Objective.randomTargetAmount(10, 50));
+        super(ObjectiveType.EARN_EVS);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.game.bounties.components;
 
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
-import com.calculusmaster.pokecord.game.bounties.objectives.*;
+import com.calculusmaster.pokecord.game.bounties.objectives.core.*;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.mongodb.client.model.Filters;
@@ -42,25 +42,13 @@ public class Bounty
                 .setProgression(d.getInteger("progression"))
                 .setTarget(d.getInteger("target"));
 
-        if(b.objective instanceof DefeatTypeObjective o) o.setType(d.getString("type"));
-        if(b.objective instanceof CatchTypeObjective o) o.setType(d.getString("type"));
-        if(b.objective instanceof CatchNameObjective o) o.setName(d.getString("name"));
-        if(b.objective instanceof EarnEVsStatObjective o) o.setStat(d.getString("stat"));
-        if(b.objective instanceof DefeatPoolObjective o) o.setPool(d.getList("pool", String.class));
-        if(b.objective instanceof CatchPoolObjective o) o.setPool(d.getList("pool", String.class));
-        if(b.objective instanceof ReleaseTypeObjective o) o.setType(d.getString("type"));
-        if(b.objective instanceof ReleaseNameObjective o) o.setName(d.getString("name"));
-        if(b.objective instanceof ReleasePoolObjective o) o.setPool(d.getList("pool", String.class));
-        if(b.objective instanceof EarnEVsStatObjective o) o.setStat(d.getString("stat"));
-        if(b.objective instanceof UseZMoveTypeObjective o) o.setType(d.getString("type"));
-        if(b.objective instanceof UseMaxMoveTypeObjective o) o.setType(d.getString("type"));
-        if(b.objective instanceof UseMoveTypeObjective o) o.setType(d.getString("type"));
-        if(b.objective instanceof UseMoveNameObjective o) o.setName(d.getString("name"));
-        if(b.objective instanceof UseMoveCategoryObjective o) o.setCategory(d.getString("category"));
-        if(b.objective instanceof UseMovePoolObjective o) o.setPool(d.getList("pool", String.class));
-        if(b.objective instanceof UseMovePowerLessObjective o) o.setPower(d.getInteger("power"));
-        if(b.objective instanceof UseMovePowerGreaterObjective o) o.setPower(d.getInteger("power"));
-        if(b.objective instanceof UseMoveAccuracyLessObjective o) o.setAccuracy(d.getInteger("accuracy"));
+        if(b.objective instanceof AbstractTypeObjective o) o.setType(d.getString("type"));
+        if(b.objective instanceof AbstractNameObjective o) o.setName(d.getString("name"));
+        if(b.objective instanceof AbstractStatObjective o) o.setStat(d.getString("stat"));
+        if(b.objective instanceof AbstractPoolObjective o) o.setPool(d.getList("pool", String.class));
+        if(b.objective instanceof AbstractPowerObjective o) o.setPower(d.getInteger("power"));
+        if(b.objective instanceof AbstractAccuracyObjective o) o.setAccuracy(d.getInteger("accuracy"));
+        if(b.objective instanceof AbstractCategoryObjective o) o.setCategory(d.getString("category"));
 
         return b;
     }

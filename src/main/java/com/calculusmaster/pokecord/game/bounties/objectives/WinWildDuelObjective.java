@@ -1,12 +1,13 @@
 package com.calculusmaster.pokecord.game.bounties.objectives;
 
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
+import com.calculusmaster.pokecord.game.bounties.objectives.core.Objective;
 
 public class WinWildDuelObjective extends Objective
 {
     public WinWildDuelObjective()
     {
-        super(ObjectiveType.WIN_WILD_DUEL, Objective.randomTargetAmount(10, 30));
+        super(ObjectiveType.WIN_WILD_DUEL);
     }
 
     @Override

@@ -1,12 +1,13 @@
 package com.calculusmaster.pokecord.game.bounties.objectives;
 
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
+import com.calculusmaster.pokecord.game.bounties.objectives.core.Objective;
 
 public class CompletePVPDuelObjective extends Objective
 {
     public CompletePVPDuelObjective()
     {
-        super(ObjectiveType.COMPLETE_PVP_DUEL, Objective.randomTargetAmount(5, 15));
+        super(ObjectiveType.COMPLETE_PVP_DUEL);
     }
 
     @Override

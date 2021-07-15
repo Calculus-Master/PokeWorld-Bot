@@ -7,7 +7,6 @@ import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.TypeEffectiveness;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
-import com.calculusmaster.pokecord.game.bounties.objectives.*;
 import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
@@ -356,7 +355,7 @@ public class Duel
                     switch(b.getType()) {
                         case USE_ZMOVE -> b.update();
                         case USE_ZMOVE_TYPE -> {
-                            if(((UseZMoveTypeObjective)b.getObjective()).getType().equals(m.getType())) b.update();
+                            if(b.getObjective().asTypeObjective().getType().equals(m.getType())) b.update();
                         }
                     }
                 });
@@ -377,7 +376,7 @@ public class Duel
                     switch(b.getType()) {
                         case USE_MAX_MOVE -> b.update();
                         case USE_MAX_MOVE_TYPE -> {
-                            if(((UseMaxMoveTypeObjective)b.getObjective()).getType().equals(m.getType())) b.update();
+                            if(b.getObjective().asTypeObjective().getType().equals(m.getType())) b.update();
                         }
                     }
                 });
@@ -765,25 +764,25 @@ public class Duel
                     switch(b.getType()) {
                         case USE_MOVES -> b.update();
                         case USE_MOVES_TYPE -> {
-                            if(((UseMoveTypeObjective)b.getObjective()).getType().equals(m.getType())) b.update();
+                            if(b.getObjective().asTypeObjective().getType().equals(m.getType())) b.update();
                         }
                         case USE_MOVES_CATEGORY -> {
-                            if(((UseMoveCategoryObjective)b.getObjective()).getCategory().equals(m.getCategory())) b.update();
+                            if(b.getObjective().asCategoryObjective().getCategory().equals(m.getCategory())) b.update();
                         }
                         case USE_MOVES_NAME -> {
-                            if(((UseMoveNameObjective)b.getObjective()).getName().equals(m.getName())) b.update();
+                            if(b.getObjective().asNameObjective().getName().equals(m.getName())) b.update();
                         }
                         case USE_MOVES_POOL -> {
-                            if(((UseMovePoolObjective)b.getObjective()).getPool().contains(m.getName())) b.update();
+                            if(b.getObjective().asPoolObjective().getPool().contains(m.getName())) b.update();
                         }
                         case USE_MOVES_POWER_LESS -> {
-                            if(m.getPower() < ((UseMovePowerLessObjective)b.getObjective()).getPower()) b.update();
+                            if(m.getPower() < b.getObjective().asPowerObjective().getPower()) b.update();
                         }
                         case USE_MOVES_POWER_GREATER -> {
-                            if(m.getPower() > ((UseMovePowerGreaterObjective)b.getObjective()).getPower()) b.update();
+                            if(m.getPower() > b.getObjective().asPowerObjective().getPower()) b.update();
                         }
                         case USE_MOVES_ACCURACY_LESS -> {
-                            if(m.getAccuracy() < ((UseMoveAccuracyLessObjective)b.getObjective()).getAccuracy()) b.update();
+                            if(m.getAccuracy() < b.getObjective().asAccuracyObjective().getAccuracy()) b.update();
                         }
                         case USE_MOVES_PRIORITY_HIGH -> {
                             if(m.getPriority() > 0) b.update();
@@ -812,10 +811,10 @@ public class Duel
                     {
                         case DEFEAT_POKEMON -> b.update();
                         case DEFEAT_POKEMON_TYPE -> {
-                            if(this.players[this.other].active.isType(((DefeatTypeObjective)b.getObjective()).getType())) b.update();
+                            if(this.players[this.other].active.isType(b.getObjective().asTypeObjective().getType())) b.update();
                         }
                         case DEFEAT_POKEMON_POOL -> {
-                            if(((DefeatPoolObjective)b.getObjective()).getPool().contains(this.players[this.other].active.getName())) b.update();
+                            if(b.getObjective().asPoolObjective().getPool().contains(this.players[this.other].active.getName())) b.update();
                         }
                         case DEFEAT_LEGENDARY -> {
                             String otherName = this.players[this.other].active.getName();
@@ -823,7 +822,7 @@ public class Duel
                         }
                         case EARN_EVS -> b.update(this.players[this.other].active.getEVYield().values().stream().mapToInt(e -> e).sum());
                         case EARN_EVS_STAT -> {
-                            int statYield = this.players[this.other].active.getEVYield().get(((EarnEVsStatObjective)b.getObjective()).getStat());
+                            int statYield = this.players[this.other].active.getEVYield().get(b.getObjective().asStatObjective().getStat());
                             if(statYield != 0) b.update(statYield);
                         }
                     }

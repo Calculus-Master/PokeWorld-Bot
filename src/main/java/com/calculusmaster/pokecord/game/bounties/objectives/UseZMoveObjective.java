@@ -1,12 +1,13 @@
 package com.calculusmaster.pokecord.game.bounties.objectives;
 
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
+import com.calculusmaster.pokecord.game.bounties.objectives.core.Objective;
 
 public class UseZMoveObjective extends Objective
 {
     public UseZMoveObjective()
     {
-        super(ObjectiveType.USE_ZMOVE, Objective.randomTargetAmount(2, 15));
+        super(ObjectiveType.USE_ZMOVE);
     }
 
     @Override

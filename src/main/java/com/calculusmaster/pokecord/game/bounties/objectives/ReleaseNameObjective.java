@@ -1,16 +1,19 @@
 package com.calculusmaster.pokecord.game.bounties.objectives;
 
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
+import com.calculusmaster.pokecord.game.bounties.objectives.core.AbstractNameObjective;
 import com.calculusmaster.pokecord.util.PokemonRarity;
-import org.bson.Document;
 
-public class ReleaseNameObjective extends Objective
+public class ReleaseNameObjective extends AbstractNameObjective
 {
-    private String name;
-
     public ReleaseNameObjective()
     {
-        super(ObjectiveType.RELEASE_POKEMON_NAME, Objective.randomTargetAmount(1, 5));
+        super(ObjectiveType.RELEASE_POKEMON_NAME);
+    }
+
+    @Override
+    protected void setRandomName()
+    {
         this.name = PokemonRarity.getSpawn();
     }
 
@@ -18,23 +21,5 @@ public class ReleaseNameObjective extends Objective
     public String getDesc()
     {
         return "Release " + this.target + " " + this.name;
-    }
-
-    @Override
-    public Document addObjectiveData(Document document)
-    {
-        return super.addObjectiveData(document)
-                .append("name", this.name);
-    }
-
-    public String getName()
-    {
-        return this.name;
-    }
-
-    public ReleaseNameObjective setName(String name)
-    {
-        this.name = name;
-        return this;
     }
 }

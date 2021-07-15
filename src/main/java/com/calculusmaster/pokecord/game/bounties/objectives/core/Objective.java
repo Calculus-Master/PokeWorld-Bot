@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game.bounties.objectives;
+package com.calculusmaster.pokecord.game.bounties.objectives.core;
 
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import org.bson.Document;
@@ -11,11 +11,11 @@ public abstract class Objective
     protected int progression;
     protected int target;
 
-    public Objective(ObjectiveType objectiveType, int target)
+    public Objective(ObjectiveType objectiveType)
     {
         this.objectiveType = objectiveType;
         this.progression = 0;
-        this.target = target;
+        this.target = objectiveType.getRandomTarget();
     }
 
     public Document addObjectiveData(Document document)
@@ -43,6 +43,7 @@ public abstract class Objective
         return this.progression >= this.target;
     }
 
+    @Deprecated
     public static int randomTargetAmount(int min, int max)
     {
         return new Random().nextInt(max - min + 1) + min;
@@ -79,6 +80,42 @@ public abstract class Objective
     public int getTarget()
     {
         return this.target;
+    }
+
+    //Casts
+    public AbstractCategoryObjective asCategoryObjective()
+    {
+        return (AbstractCategoryObjective)this;
+    }
+
+    public AbstractNameObjective asNameObjective()
+    {
+        return (AbstractNameObjective)this;
+    }
+
+    public AbstractPoolObjective asPoolObjective()
+    {
+        return (AbstractPoolObjective)this;
+    }
+
+    public AbstractStatObjective asStatObjective()
+    {
+        return (AbstractStatObjective)this;
+    }
+
+    public AbstractTypeObjective asTypeObjective()
+    {
+        return (AbstractTypeObjective)this;
+    }
+
+    public AbstractPowerObjective asPowerObjective()
+    {
+        return (AbstractPowerObjective)this;
+    }
+
+    public AbstractAccuracyObjective asAccuracyObjective()
+    {
+        return (AbstractAccuracyObjective)this;
     }
 
     @Override
