@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.util.helpers;
 
 import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.commands.economy.CommandShop;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -21,6 +22,7 @@ public class ConfigHelper
             CommandShop.TR_COUNT = config.getInt("tr_count");
             CommandShop.ZCRYSTAL_COUNT_MIN = config.getJSONArray("zcrystal_counts").getInt(0);
             CommandShop.ZCRYSTAL_COUNT_MAX = config.getJSONArray("zcrystal_counts").getInt(1);
+            Commands.COMMAND_THREAD_POOL = config.getBoolean("command_thread_pool");
 
             LoggerHelper.info(ConfigHelper.class, "Loaded config.json files!");
         }
@@ -37,6 +39,7 @@ public class ConfigHelper
             CommandShop.TR_COUNT = 10;
             CommandShop.ZCRYSTAL_COUNT_MAX = 10;
             CommandShop.ZCRYSTAL_COUNT_MIN = 5;
+            Commands.COMMAND_THREAD_POOL = false;
         }
     }
 }

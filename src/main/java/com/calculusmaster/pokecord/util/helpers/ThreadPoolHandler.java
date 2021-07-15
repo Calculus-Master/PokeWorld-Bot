@@ -10,6 +10,7 @@ public class ThreadPoolHandler
     public static final ExecutorService LISTENER_EVENT = ThreadPoolHandler.customThreadPool();
     public static final ExecutorService BOUNTY = ThreadPoolHandler.customThreadPool();
     public static final ExecutorService CATCH = ThreadPoolHandler.customThreadPool();
+    public static final ExecutorService LISTENER_COMMAND = Executors.newFixedThreadPool(6);
 
     private static ExecutorService customThreadPool()
     {

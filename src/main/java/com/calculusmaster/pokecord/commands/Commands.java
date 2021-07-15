@@ -17,6 +17,8 @@ public class Commands
     //TODO: Finish adding descriptions for all commands
     public static final List<Registry> COMMANDS = new ArrayList<>();
 
+    public static boolean COMMAND_THREAD_POOL;
+
     public static void init()
     {
         register("start")
