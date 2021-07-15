@@ -235,6 +235,10 @@ public class Commands
                 .setCommand(CommandTournament::new)
                 .setCategory(Category.DUEL);
 
+        register("achievements")
+                .setCommand(CommandAchievements::new)
+                .setCategory(Category.MISC);
+
         register("dev")
                 .setCommand(CommandDev::new)
                 .setCategory(Category.MISC);
