@@ -1,10 +1,9 @@
 package com.calculusmaster.pokecord.util.helpers;
 
-import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.commands.economy.CommandShop;
+import com.calculusmaster.pokecord.util.Mongo;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 public class ConfigHelper
 {
@@ -12,7 +11,8 @@ public class ConfigHelper
     {
         try
         {
-            JSONObject config = new JSONObject(new JSONTokener(Pokecord.class.getResourceAsStream("/config.json")));
+            //JSONObject config = new JSONObject(new JSONTokener(Pokecord.class.getResourceAsStream("/config.json")));
+            JSONObject config = new JSONObject(Mongo.ConfigData.find().first().toJson());
 
             ThreadPoolHandler.THREAD_POOL_TYPE = config.getInt("thread_pool_type");
             CacheHelper.DYNAMIC_CACHING_ACTIVE = config.getBoolean("dynamic_caching");
