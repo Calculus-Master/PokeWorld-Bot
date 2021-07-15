@@ -24,7 +24,7 @@ public class ConfigHelper
             CommandShop.ZCRYSTAL_COUNT_MAX = config.getJSONArray("zcrystal_counts").getInt(1);
             Commands.COMMAND_THREAD_POOL = config.getBoolean("command_thread_pool");
 
-            LoggerHelper.info(ConfigHelper.class, "Loaded config.json files!");
+            LoggerHelper.info(ConfigHelper.class, "Loaded config values!");
         }
         catch (Exception e)
         {

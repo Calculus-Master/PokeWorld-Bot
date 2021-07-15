@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.PokemonRarity;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
+import com.calculusmaster.pokecord.util.helpers.ConfigHelper;
 import com.calculusmaster.pokecord.util.helpers.SpawnEventHelper;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -58,6 +59,7 @@ public class CommandDev extends Command
                 query.removePursuit();
             }
             case "close", "shutdown", "stop", "quit" -> Pokecord.BOT_JDA.shutdown();
+            case "reloadconfig" -> ConfigHelper.init();
         }
 
         this.sendMsg("Successfully ran Developer Command!");
