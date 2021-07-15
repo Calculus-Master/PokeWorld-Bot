@@ -22,7 +22,7 @@ public enum Achievements
     BOUGHT_FIRST_UNIQUE_ZCRYSTAL(1000, "Bought your first unique Z Crystal from the shop!"),
     SOLD_FIRST_POKEMON_MARKET(500, "Sold a Pokemon on the market for the first time!"),
     DEFEATED_FIRST_ELITE_TRAINER(500, "Defeated an Elite Trainer for the first time!"),
-    CONCEDE_FIRST_TRAINER_DUEL(1, "Concede to a Trainer for the first time!"),
+    CONCEDE_FIRST_TRAINER_DUEL(1, "Conceded to a Trainer for the first time!"),
     DUEL_USE_ZMOVE(1000, "Successfully used your first Z-Move!"),
     DUEL_USE_DYNAMAX(500, "Successfully used a Max Move for the first time!"),
     NICKNAME_FIRST_POKEMON(100, "Nicknamed one of your Pokemon for the first time!"),
@@ -35,7 +35,9 @@ public enum Achievements
     REACHED_TOP_10_LEADERBOARD(1000, "Reached Top 10 on the Global Leaderboard!"),
     COMPLETED_FIRST_BOUNTY(500, "Completed your first Bounty!"),
     COMPLETED_FIRST_PURSUIT(1000, "Completed your first Pursuit"),
-    COMPLETED_FIRST_LEGEND_PURSUIT(20000, "Completed your first Legend size Pursuit!");
+    COMPLETED_FIRST_LEGEND_PURSUIT(20000, "Completed your first Legend size Pursuit!"),
+    PARTICIPATED_FIRST_TOURNAMENT(500, "Participated in your first Tournament!"),
+    WON_FIRST_TOURNAMENT(5000, "Won your first Tournament!");
 
     public int credits;
     public String desc;
