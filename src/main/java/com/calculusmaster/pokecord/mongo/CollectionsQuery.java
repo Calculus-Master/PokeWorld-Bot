@@ -38,6 +38,6 @@ public class CollectionsQuery
 
     public int getCaughtAmount()
     {
-        return !this.document.containsKey(this.player) ? -1 : this.document.getInteger(this.player);
+        return !this.document.containsKey(this.player) ? 0 : this.document.getInteger(this.player);
     }
 }

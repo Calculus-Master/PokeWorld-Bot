@@ -35,6 +35,11 @@ public enum Type
         return this.color;
     }
 
+    public String getStyledName()
+    {
+        return Global.normalCase(this.toString());
+    }
+
     public static Type cast(String type)
     {
         return (Type) Global.getEnumFromString(values(), type);

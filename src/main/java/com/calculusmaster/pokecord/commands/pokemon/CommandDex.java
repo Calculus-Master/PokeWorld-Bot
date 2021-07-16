@@ -4,18 +4,19 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.mongo.CollectionsQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.PokemonData;
+import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import com.mongodb.client.model.Filters;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.bson.Document;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class CommandDex extends Command
 {
@@ -86,28 +87,26 @@ public class CommandDex extends Command
 
         String pokemon = Global.normalCase(this.getPokemonName());
 
-        JSONObject info = Pokemon.genericJSON(pokemon);
-        String[] fillerINFO = info.getString("fillerinfo").split("-");
+        PokemonData data = DataHelper.pokeData(pokemon);
+        this.embed.setDescription(data.species + "\nHeight: " + data.height + "     |     Weight: "+ data.weight);
+        this.embed
+                .addField("Type", data.types.get(0).equals(data.types.get(1)) ? data.types.get(0).getStyledName() : data.types.get(0).getStyledName() + "\n" + data.types.get(1).getStyledName(), true)
+                .addField("Abilities", this.listToMultiLineString(data.abilities), true)
+                .addBlankField(true)
+                .addField("Growth Rate", Global.normalCase(data.growthRate.toString()), true)
+                .addField("EXP Yield", String.valueOf(data.baseEXP), true)
+                .addField("EV Yield", this.getEVYield(data.yield), true)
+                .addField("Evolutions", this.getEvolutionsFormatted(data.evolutions), true)
+                .addField("Forms", this.listToMultiLineString(data.forms), true)
+                .addField("Mega", this.listToMultiLineString(data.megas), true)
+                .addField("TMs", data.validTMs.toString().substring(1, data.validTMs.toString().length() - 1), false)
+                .addField("TRs", data.validTRs.toString().substring(1, data.validTRs.toString().length() - 1), false)
+                .addField(this.getStatsField(data));
 
-        String title = "**" + info.getString("name") + (isShiny ? ":star2:" : "") + " (#" + info.getInt("dex") + ")**";
-        String filler = "*" + fillerINFO[0] + "*\nHeight: " + fillerINFO[1] + "m     Weight: " + fillerINFO[2] + "kg";
-        String type = "**Type:** " + (info.getJSONArray("type").getString(0).equals(info.getJSONArray("type").getString(1)) ? info.getJSONArray("type").getString(0) : this.getJSONArrayFormatted(info.getJSONArray("type")));
-        String abilities = "**Abilities:** " + this.getJSONArrayFormatted(info.getJSONArray("abilities"));
-        String growth = "**Growth Rate:** " + info.getString("growthrate").replaceAll("_", " ") + "\n**Base EXP Yield:** " + info.getInt("exp") + " XP";
-        String evYield = "**EV Yield:** " + this.getEVYieldFormatted(info.getJSONArray("ev"));
-        String evolutions = "**" + this.getEvolutionsFormatted(info.getJSONArray("evolutions"), info.getJSONArray("evolutionsLVL")) + "**";
-        String forms = "**Forms:** " + this.getFormsFormatted(info.getJSONArray("forms"));
-        String megas = "**Megas:** " + this.getMegasFormatted(info.getJSONArray("mega"));
-        String tms = "**TMs**: " + (info.getJSONArray("movesTM").length() == 0 ? "None" : info.getJSONArray("movesTM").toString());
-        String trs = "**TRs**: " + (info.getJSONArray("movesTR").length() == 0 ? "None" : info.getJSONArray("movesTR").toString());
-        String baseStats = "**Base Stats:** \n" + this.getStatsFormatted(info.getJSONArray("stats"));
+        String image = isGigantamax ? (isShiny ? Pokemon.getGigantamaxData(pokemon).shinyImage() : Pokemon.getGigantamaxData(pokemon).normalImage()) : (isShiny ? data.shinyURL : data.normalURL);
 
-        String image = isGigantamax ? (isShiny ? Pokemon.getGigantamaxData(pokemon).shinyImage() : Pokemon.getGigantamaxData(pokemon).normalImage()) : (info.getString((isShiny ? "shiny" : "normal") + "URL"));
-
-        this.embed.setTitle(title);
-        this.embed.setDescription(filler + "\n" + type + "\n" + abilities + "\n" + growth + "" +
-                "\n" + evYield + "\n" + evolutions + "\n" + forms + "\n" + megas + "\n" + tms + "\n" + trs + "\n\n" + baseStats);
-        this.color = Type.cast(info.getJSONArray("type").getString(0)).getColor();
+        this.embed.setTitle("**" + data.name + (isShiny ? ":star2:" : "") + " (#" + data.dex + ")**");
+        this.color = data.types.get(0).getColor();
         this.embed.setImage(image.equals("") ? Pokemon.getWIPImage() : image);
         this.embed.setFooter("You have collected " + new CollectionsQuery(pokemon, this.player.getId()).getCaughtAmount() + "!");
 
@@ -120,59 +119,41 @@ public class CommandDex extends Command
         return this.getMultiWordContent(1).replaceAll("shiny", "").replaceAll("gigantamax", "").trim();
     }
 
-    private String getJSONArrayFormatted(JSONArray arr)
+    private String listToMultiLineString(List<String> list)
     {
+        if(list.isEmpty()) return "None";
         StringBuilder s = new StringBuilder();
-        for(int i = 0; i < arr.length(); i++) s.append(arr.getString(i)).append(i == arr.length() - 1 ? "" : " | ");
-        return s.toString();
+        for(String str : list) s.append(str).append("\n");
+        return s.deleteCharAt(s.length() - 1).toString();
     }
 
-    private String getEVYieldFormatted(JSONArray yield)
+    private String getEVYield(Map<Stat, Integer> yield)
     {
         StringBuilder s = new StringBuilder();
-        for(int i = 0; i < 6; i++)
-        {
-            if(yield.getInt(i) != 0) s.append(yield.getInt(i)).append(" ").append(Stat.values()[i].toString()).append(" ");
-        }
-        return s.toString();
+        for(Stat stat : yield.keySet()) if(yield.get(stat) != 0) s.append(stat.toString()).append(": ").append(yield.get(stat)).append("\n");
+        return s.deleteCharAt(s.length() - 1).toString();
     }
 
-    private String getEvolutionsFormatted(JSONArray evos, JSONArray evosLVL)
+    private String getEvolutionsFormatted(Map<String, Integer> evos)
     {
         StringBuilder s = new StringBuilder();
-        switch (evos.length())
+        List<String> names = new ArrayList<>(evos.keySet());
+        switch (names.size())
         {
             case 0 -> s.append("Either does not evolve or has a special evolution");
-            case 1 -> s.append("Evolves into ").append(evos.getString(0)).append(" at Level ").append(evosLVL.getInt(0));
-            case 2 -> s.append("Evolves into ").append(evos.getString(0)).append(" at Level ").append(evosLVL.getInt(0)).append(" and ").append(evos.getString(1)).append(" at level ").append(evosLVL.getInt(1));
+            case 1 -> s.append("Evolves into ").append(names.get(0)).append(" at Level ").append(evos.get(names.get(0)));
+            case 2 -> s.append("Evolves into ").append(names.get(0)).append(" at Level ").append(evos.get(names.get(0))).append(" and ").append(names.get(1)).append(" at level ").append(evos.get(names.get(1)));
             default -> s.append("ERROR – REPORT");
         }
         return s.toString();
     }
 
-    private String getFormsFormatted(JSONArray forms)
+    private MessageEmbed.Field getStatsField(PokemonData p)
     {
-        StringBuilder s = new StringBuilder();
-        for(int i = 0; i < forms.length(); i++) s.append(forms.getString(i)).append(i == forms.length() - 1 ? "" : " | ");
-        if(forms.length() == 0) s.append("None");
-        return s.toString();
-    }
+        StringBuilder sb = new StringBuilder();
+        for(Stat s : Stat.values()) sb.append("**").append(s.shortName()).append("**: ").append(p.baseStats.get(s)).append("\n");
+        sb.append("**Total**: ").append(p.baseStats.values().stream().mapToInt(s -> s).sum());
 
-    private String getMegasFormatted(JSONArray megas)
-    {
-        StringBuilder s = new StringBuilder();
-        for(int i = 0; i < megas.length(); i++) s.append(megas.getString(i)).append(i == megas.length() - 1 ? "" : " | ");
-        if(megas.length() == 0) s.append("None");
-        return s.toString();
-    }
-
-    private String getStatsFormatted(JSONArray stats)
-    {
-        return "HP: " + stats.getInt(0) +
-                "\nAttack: " + stats.getInt(1) +
-                "\nDefense: " + stats.getInt(2) +
-                "\nSp. Attack: " + stats.getInt(3) +
-                "\nSp. Defense: " + stats.getInt(4) +
-                "\nSpeed: " + stats.getInt(5);
+        return new MessageEmbed.Field("Base Stats", sb.toString(), false);
     }
 }
