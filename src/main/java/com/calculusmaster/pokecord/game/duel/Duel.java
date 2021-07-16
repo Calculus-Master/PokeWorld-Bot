@@ -1649,6 +1649,7 @@ public class Duel
     public void setPlayers(String player1ID, String player2ID, int size)
     {
         this.players = new Player[]{new Player(player1ID, size), new Player(player2ID, size)};
+        this.size = size;
     }
 
     public Player[] getPlayers()
