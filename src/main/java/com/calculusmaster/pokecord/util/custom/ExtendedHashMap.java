@@ -22,6 +22,11 @@ public class ExtendedHashMap<K, V> extends HashMap<K, V>
         return this;
     }
 
+    public Map<K, V> asMap()
+    {
+        return this;
+    }
+
     public Optional<Map<K, V>> optional()
     {
         return Optional.of(this);

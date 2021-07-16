@@ -750,11 +750,29 @@ public class Duel
                 turnResult += "\n" + this.players[this.current].active.getName() + " took " + dmg + " damage from the Iron Barbs!";
             }
 
+            int damageDealt = preMoveHP - this.players[this.other].active.getHealth();
+
             if(this.data(this.other).bideTurns > 0)
             {
                 this.data(this.other).bideTurns--;
 
-                this.data(this.other).bideDamage += Math.max(preMoveHP - this.players[this.other].active.getHealth(), 0);
+                this.data(this.other).bideDamage += Math.max(damageDealt, 0);
+            }
+
+            if(damageDealt > 0)
+            {
+                final Move m = move;
+                this.players[this.current].data.updateBountyProgression(b -> {
+                    switch(b.getType()) {
+                        case DAMAGE_POKEMON -> b.update(damageDealt);
+                        case DAMAGE_POKEMON_TYPE -> {
+                            if(this.players[this.other].active.isType(b.getObjective().asTypeObjective().getType())) b.update(damageDealt);
+                        }
+                        case DAMAGE_POKEMON_CATEGORY -> {
+                            if(b.getObjective().asCategoryObjective().getCategory().equals(m.getCategory())) b.update(damageDealt);
+                        }
+                    }
+                });
             }
 
             if(this.current == 0 || (this.current == 1 && this.isPvP()))

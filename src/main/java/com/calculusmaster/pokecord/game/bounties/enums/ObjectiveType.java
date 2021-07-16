@@ -49,7 +49,10 @@ public enum ObjectiveType
     RELEASE_POKEMON_TYPE(ReleaseTypeObjective::new, 1, 3),
     RELEASE_POKEMON_NAME(ReleaseNameObjective::new, 1, 3),
     RELEASE_POKEMON_POOL(ReleasePoolObjective::new, 1, 4),
-    SWAP_POKEMON(SwapGenericObjective::new, 5, 30);
+    SWAP_POKEMON(SwapGenericObjective::new, 5, 30),
+    DAMAGE_POKEMON(DamageGenericObjective::new, 100, 3000),
+    DAMAGE_POKEMON_TYPE(DamageTypeObjective::new, 100, 1500),
+    DAMAGE_POKEMON_CATEGORY(DamageCategoryObjective::new, 100, 2500);
 
     public Supplier<? extends Objective> constructor;
     private final int min;
