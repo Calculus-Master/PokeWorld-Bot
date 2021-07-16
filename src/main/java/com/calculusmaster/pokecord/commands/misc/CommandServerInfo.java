@@ -49,7 +49,7 @@ public class CommandServerInfo extends Command
         List<String> ids = new ArrayList<>(List.copyOf(this.serverData.getSpawnChannels()));
 
         if(ids.size() == 0) s.append("Spawns are disabled! Notify a server administrator to run `p!settings server spawnchannel` in a channel to allow spawns.");
-        else for(String id : ids) s.append(this.server.getTextChannelById(id).getAsMention());
+        else for(String id : ids) s.append(this.server.getTextChannelById(id).getAsMention()).append("\n");
         return s.toString();
     }
 
@@ -59,7 +59,7 @@ public class CommandServerInfo extends Command
         List<String> ids = new ArrayList<>(List.copyOf(this.serverData.getDuelChannels()));
 
         if(ids.size() == 0) s.append("Duels are allowed anywhere!");
-        else for(String id : ids) s.append(this.server.getTextChannelById(id).getAsMention());
+        else for(String id : ids) s.append(this.server.getTextChannelById(id).getAsMention()).append("\n");
         return s.toString();
     }
 
@@ -69,7 +69,7 @@ public class CommandServerInfo extends Command
         List<String> ids = new ArrayList<>(List.copyOf(this.serverData.getBotChannels()));
 
         if(ids.size() == 0) s.append("Bot commands are allowed anywhere!");
-        else for(String id : ids) s.append(this.server.getTextChannelById(id).getAsMention());
+        else for(String id : ids) s.append(this.server.getTextChannelById(id).getAsMention()).append("\n");
         return s.toString();
     }
 }
