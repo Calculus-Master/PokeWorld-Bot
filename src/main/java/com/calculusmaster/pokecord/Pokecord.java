@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord;
 
 import com.calculusmaster.pokecord.commands.Commands;
+import com.calculusmaster.pokecord.commands.duel.CommandTarget;
 import com.calculusmaster.pokecord.commands.moves.CommandAbilityInfo;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.PokePass;
@@ -82,6 +83,7 @@ public class Pokecord
         {
             Thread.sleep(1000);
             SpawnEventHelper.start(g);
+            CommandTarget.generateNewServerTarget(g);
         }
     }
 }
