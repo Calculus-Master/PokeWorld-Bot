@@ -26,6 +26,11 @@ public class Global
         return server.getMemberById(player.getId()).hasPermission(Permission.ADMINISTRATOR);
     }
 
+    public static int clamp(int val, int min, int max)
+    {
+        return val < min ? min : (val > max ? max : val);
+    }
+
     private static void addPerformanceEntry(String command, long timeI, long timeF, OffsetDateTime timestamp)
     {
         Document data = new Document("command", command).append("time", timeF - timeI).append("timestamp", timestamp.format(DateTimeFormatter.RFC_1123_DATE_TIME));

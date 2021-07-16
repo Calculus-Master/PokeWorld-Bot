@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
+import com.calculusmaster.pokecord.util.custom.ExtendedHashMap;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -36,6 +37,8 @@ public final class PokemonData
     public final Map<Stat, Integer> yield;
 
     public final Map<String, Integer> moves;
+    //public final List<String> moves;
+    //public final List<Integer> movesLVL;
 
     public final List<TM> validTMs;
     public final List<TR> validTRs;
@@ -62,7 +65,7 @@ public final class PokemonData
 
         this.types = List.of(Type.cast(d.getList("type", String.class).get(0)), Type.cast(d.getList("type", String.class).get(1)));
 
-        this.evolutions = new HashMap<>();
+        this.evolutions = new ExtendedHashMap<>();
         for(int i = 0; i < d.getList("evolutions", String.class).size(); i++) this.evolutions.put(d.getList("evolutions", String.class).get(i), d.getList("evolutionsLVL", Integer.class).get(i));
 
         this.forms = d.getList("forms", String.class, new ArrayList<>());

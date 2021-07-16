@@ -1,9 +1,14 @@
 package com.calculusmaster.pokecord.game;
 
+import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.elements.Nature;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.enums.items.TM;
+import com.calculusmaster.pokecord.game.enums.items.TR;
+import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.PokemonData;
 import com.calculusmaster.pokecord.util.custom.ExtendedHashMap;
@@ -16,6 +21,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class PokemonNew
@@ -35,8 +41,15 @@ public class PokemonNew
     private Optional<Map<Stat, Integer>> ivs = Optional.empty();
     private Optional<Map<Stat, Integer>> evs = Optional.empty();
     private Optional<Map<Stat, Integer>> multipliers = Optional.empty();
+    private Optional<Integer> dynamaxLevel = Optional.empty();
+    private Optional<PokeItem> item = Optional.empty();
+    private Optional<TM> tm = Optional.empty();
+    private Optional<TR> tr = Optional.empty();
+    private Optional<List<String>> learnedMoves = Optional.empty();
 
+    private Optional<Integer> health = Optional.empty();
     private Optional<Double> boost = Optional.empty();
+    private Optional<Boolean> isDynamaxed = Optional.empty();
 
     public static PokemonNew create(String name)
     {
@@ -104,6 +117,261 @@ public class PokemonNew
         this.update(Updates.set("exp", this.getExp()));
     }
 
+    //Moves
+    public List<String> getAllMoves()
+    {
+        List<String> moves = new ArrayList<>();
+        moves.addAll(this.data.moves.keySet());
+        moves.sort(Comparator.comparingInt(s -> this.data.moves.get(s)));
+
+        if(this.getName().contains("Zygarde") && this.hasItem() && this.getItem().equals(PokeItem.ZYGARDE_CUBE))
+        {
+            moves.addAll(Arrays.asList("Core Enforcer", "Dragon Dance", "Extreme Speed", "Thousand Arrows", "Thousand Waves"));
+        }
+
+        return moves;
+    }
+
+    public List<String> getAvailableMoves()
+    {
+        List<String> moves = new ArrayList<>(List.copyOf(this.getAllMoves())).stream().filter(s -> this.data.moves.get(s) <= this.getLevel()).sorted(Comparator.comparingInt(s -> this.data.moves.get(s))).collect(Collectors.toList());;
+
+        if(this.hasTM()) moves.add(this.getTM().getMoveName());
+        if(this.hasTR()) moves.add(this.getTR().getMoveName());
+
+        if(this.getName().contains("Zygarde") && this.hasItem() && this.getItem().equals(PokeItem.ZYGARDE_CUBE))
+        {
+            Collections.addAll(moves, "Core Enforcer", "Dragon Dance", "Extreme Speed", "Thousand Arrows", "Thousand Waves");
+        }
+
+        return moves;
+    }
+
+    public List<String> getLearnedMoves()
+    {
+        return this.learnedMoves.orElse(this.expand(this.specific.getString("moves")));
+    }
+
+    public void learnMove(String move, int index)
+    {
+        List<String> moves = new ArrayList<>(List.copyOf(this.getLearnedMoves()));
+        moves.set(index - 1, move);
+        this.learnedMoves = Optional.of(moves);
+    }
+
+    private List<String> expand(String condensed)
+    {
+        return new ArrayList<>(Arrays.asList(condensed.split("-")));
+    }
+
+    private String condense(List<String> list)
+    {
+        StringBuilder condensed = new StringBuilder();
+        for(String s : list) condensed.append(Global.normalCase(s));
+        return condensed.toString();
+    }
+
+    //TM & TR
+    public TM getTM()
+    {
+        return this.tm.orElse(!this.hasTM() ? null : TM.get(this.getTMNumber()));
+    }
+
+    public int getTMNumber()
+    {
+        return this.specific.getInteger("tm");
+    }
+
+    public TR getTR()
+    {
+        return this.tr.orElse(!this.hasTR() ? null : TR.get(this.getTRNumber()));
+    }
+
+    public int getTRNumber()
+    {
+        return this.specific.getInteger("tr");
+    }
+
+    public void setTM(TM tm)
+    {
+        this.tm = Optional.of(tm);
+    }
+
+    public void setTR(TR tr)
+    {
+        this.tr = Optional.of(tr);
+    }
+
+    public boolean hasTM()
+    {
+        return this.getTMNumber() != -1;
+    }
+
+    public boolean hasTR()
+    {
+        return this.getTRNumber() != -1;
+    }
+
+    public boolean canLearn(TM tm)
+    {
+        return this.getValidTMs().contains(tm);
+    }
+
+    public boolean canLearn(TR tr)
+    {
+        return this.getValidTRs().contains(tr);
+    }
+
+    public List<TM> getValidTMs()
+    {
+        return this.data.validTMs;
+    }
+
+    public List<TR> getValidTRs()
+    {
+        return this.data.validTRs;
+    }
+
+    //Items
+    public PokeItem getItem()
+    {
+        return this.item.orElse(PokeItem.asItem(this.specific.getString("item")));
+    }
+
+    public void setItem(PokeItem item)
+    {
+        this.item = Optional.of(item);
+    }
+
+    public boolean hasItem()
+    {
+        return this.item.isEmpty() || !this.getItem().equals(PokeItem.NONE);
+    }
+
+    public void removeItem()
+    {
+        this.setItem(PokeItem.NONE);
+    }
+
+    //Mega & Forms
+    public boolean hasMega()
+    {
+        return !this.data.megas.isEmpty();
+    }
+
+    public boolean hasForms()
+    {
+        return !this.data.forms.isEmpty();
+    }
+
+    public List<String> getMegaList()
+    {
+        return this.data.megas;
+    }
+
+    public List<String> getFormsList()
+    {
+        return this.data.forms;
+    }
+
+    public void transform(String form)
+    {
+        this.setData(Global.normalCase(form));
+        //TODO: This used to update database: Pokemon.updateName(this, form);
+    }
+
+    //Dynamax and Gigantamax
+    public boolean isDynamaxed()
+    {
+        return this.isDynamaxed.orElse(false);
+    }
+
+    public void setDynamax(boolean value)
+    {
+        this.isDynamaxed = Optional.of(value);
+    }
+
+    public int getDynamaxLevel()
+    {
+        return this.dynamaxLevel.orElse(this.specific.getInteger("dynamax_level"));
+    }
+
+    public void increaseDynamaxLevel()
+    {
+        if(this.getDynamaxLevel() <= 9) this.setDynamaxLevel(this.getDynamaxLevel() + 1);
+        //TODO: This used to update database: Pokemon.updateDynamaxLevel(this);
+    }
+
+    public void setDynamaxLevel(int level)
+    {
+        this.dynamaxLevel = Optional.of(level);
+    }
+
+    public void enterDynamax()
+    {
+        double ratio = (double)this.getHealth() / (double)this.getMaxHealth();
+
+        this.setDynamax(true);
+
+        this.setHealth((int)(ratio * this.getMaxHealth()));
+    }
+
+    public void exitDynamax()
+    {
+        double ratio = (double)this.getHealth() / (double)this.getMaxHealth();
+
+        this.setDynamax(true);
+
+        this.setHealth((int)(ratio * this.getMaxHealth()));
+    }
+
+    public boolean canGigantamax()
+    {
+        return existsGigantamax(this.getName());
+    }
+
+    public static boolean existsGigantamax(String name)
+    {
+        return DataHelper.GIGANTAMAX_DATA.containsKey(name);
+    }
+
+    public static DataHelper.GigantamaxData getGigantamaxData(String name)
+    {
+        return DataHelper.GIGANTAMAX_DATA.get(name);
+    }
+
+    //Health
+    public int getHealth()
+    {
+        return this.health.orElse(this.getMaxHealth());
+    }
+
+    public int getMaxHealth()
+    {
+        return this.getStat(Stat.HP);
+    }
+
+    public boolean isFainted()
+    {
+        return this.getHealth() <= 0;
+    }
+
+    public void setHealth(int HP)
+    {
+        this.health = Optional.of(Global.clamp(HP, 0, this.getMaxHealth()));
+    }
+
+    public void damage(int amount)
+    {
+        this.setHealth(this.getHealth() - amount);
+        DuelHelper.instance(this.getUUID()).addDamage(amount, this.getUUID());
+    }
+
+    public void heal(int amount)
+    {
+        this.setHealth(this.getHealth() + amount);
+    }
+
     //Stats
     public int getStat(Stat s)
     {
@@ -116,7 +384,7 @@ public class PokemonNew
             int EV = this.getEVs().get(Stat.HP);
             double maxHP = level + 10 + ((level * (2 * base + IV + EV / 4.0)) / 100);
 
-            double dynamaxBoost = 1.0; //this.isDynamaxed ? 1.0 + (this.getDynamaxLevel() * 0.05 + 0.5) : 1.0;
+            double dynamaxBoost = this.isDynamaxed() ? 1.0 + (this.getDynamaxLevel() * 0.05 + 0.5) : 1.0;
             return (int)(maxHP * dynamaxBoost);
         }
         else
@@ -142,7 +410,7 @@ public class PokemonNew
         return Arrays.stream(Stat.values()).mapToInt(this::getStat).sum();
     }
 
-    public double calculateMultiplier(Stat s)
+    private double calculateMultiplier(Stat s)
     {
         return this.getStageChange().get(s) == 0 ? 1.0 : (double)(this.getStageChange().get(s) < 0 ? 2 : 2 + Math.abs(this.getStageChange().get(s))) / (this.getStageChange().get(s) < 0 ? 2 + Math.abs(this.getStageChange().get(s)) : 2);
     }
@@ -248,6 +516,20 @@ public class PokemonNew
             this.setExp(this.getExp() - required);
             required = GrowthRate.getRequiredExp(this.data.growthRate, this.getLevel());
         }
+    }
+
+    public int getDuelExp(PokemonNew opponent)
+    {
+        int a = 1;
+        int b = this.data.baseEXP;
+        int e = 1;
+        int L = opponent.getLevel();
+        int Lp = this.getLevel();
+        int p = 1;
+        int s = 1;
+        int t = 1;
+
+        return (int)(t * e * p * (1 + (a * b * L / (5.0 * s)) * (Math.pow(2 * L + 10, 2.5) / Math.pow(L + Lp + 10, 2.5))));
     }
 
     //Level
