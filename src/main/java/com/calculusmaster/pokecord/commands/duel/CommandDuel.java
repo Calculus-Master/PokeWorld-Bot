@@ -73,7 +73,7 @@ public class CommandDuel extends Command
             {
                 Duel d = DuelHelper.instance(this.player.getId());
 
-                if(d.getSize() > this.playerData.getTeam().size())
+                if(d.getSize() != 1 && d.getSize() > this.playerData.getTeam().size())
                 {
                     this.sendMsg("Your team needs to contain at least " + d.getSize() + " Pokemon to participate! Deleting duel request!");
 
@@ -129,7 +129,7 @@ public class CommandDuel extends Command
         {
             this.sendMsg(opponent.getEffectiveName() + " is not registered! Use p!start <starter> to begin!");
         }
-        else if(new PlayerDataQuery(opponentID).getTeam().isEmpty())
+        else if(size != 1 && new PlayerDataQuery(opponentID).getTeam().isEmpty())
         {
             this.sendMsg(opponent.getEffectiveName() + " needs to create a Pokemon team!");
         }
