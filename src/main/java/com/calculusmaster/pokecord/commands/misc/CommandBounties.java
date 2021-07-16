@@ -84,6 +84,12 @@ public class CommandBounties extends Command
             {
                 Bounty b = Bounty.create();
 
+                if(new Random().nextInt(100) < 5)
+                {
+                    b.setElite();
+                    this.playerData.directMessage("One of your acquired Bounties is an Elite Bounty! Completing it will grant much higher rewards!");
+                }
+
                 Bounty.toDB(b);
                 this.playerData.addBounty(b.getBountyID());
             }
