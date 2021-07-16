@@ -12,10 +12,10 @@ import java.util.Random;
 
 public class Bounty
 {
-    public static final int MAX_BOUNTIES_HELD = 3;
-    public static final int POKEPASS_EXP_YIELD = 200;
-    public static final int MAX_BOUNTY_REWARD = 250;
-    public static final int MIN_BOUNTY_REWARD = 50;
+    public static int MAX_BOUNTIES_HELD = 3;
+    public static int POKEPASS_EXP_YIELD = 200;
+    public static int BOUNTY_REWARD_MAX = 250;
+    public static int BOUNTY_REWARD_MIN = 50;
 
     private String bountyID;
     private Objective objective;
@@ -107,7 +107,7 @@ public class Bounty
 
     public void setRandomReward()
     {
-        this.setReward(new Random().nextInt(MAX_BOUNTY_REWARD - MIN_BOUNTY_REWARD + 1) + MIN_BOUNTY_REWARD);
+        this.setReward(new Random().nextInt(BOUNTY_REWARD_MAX - BOUNTY_REWARD_MIN + 1) + BOUNTY_REWARD_MIN);
     }
 
     public ObjectiveType getType()

@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.util.helpers;
 
 import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.commands.economy.CommandShop;
+import com.calculusmaster.pokecord.game.bounties.components.Bounty;
 import com.calculusmaster.pokecord.util.Mongo;
 import org.json.JSONObject;
 
@@ -23,6 +24,10 @@ public class ConfigHelper
             CommandShop.ZCRYSTAL_COUNT_MIN = config.getJSONArray("zcrystal_counts").getInt(0);
             CommandShop.ZCRYSTAL_COUNT_MAX = config.getJSONArray("zcrystal_counts").getInt(1);
             Commands.COMMAND_THREAD_POOL = config.getBoolean("command_thread_pool");
+            Bounty.MAX_BOUNTIES_HELD = config.getInt("bounty_max_held");
+            Bounty.POKEPASS_EXP_YIELD = config.getInt("bounty_reward_exp");
+            Bounty.BOUNTY_REWARD_MIN = config.getJSONArray("bounty_rewards").getInt(0);
+            Bounty.BOUNTY_REWARD_MAX = config.getJSONArray("bounty_rewards").getInt(1);
 
             LoggerHelper.info(ConfigHelper.class, "Loaded config values!");
         }
@@ -40,6 +45,10 @@ public class ConfigHelper
             CommandShop.ZCRYSTAL_COUNT_MAX = 10;
             CommandShop.ZCRYSTAL_COUNT_MIN = 5;
             Commands.COMMAND_THREAD_POOL = false;
+            Bounty.MAX_BOUNTIES_HELD = 3;
+            Bounty.POKEPASS_EXP_YIELD = 200;
+            Bounty.BOUNTY_REWARD_MIN = 250;
+            Bounty.BOUNTY_REWARD_MAX = 50;
         }
     }
 }
