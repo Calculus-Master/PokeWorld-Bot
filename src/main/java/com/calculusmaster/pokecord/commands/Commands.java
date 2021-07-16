@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.commands.duel.*;
 import com.calculusmaster.pokecord.commands.economy.*;
 import com.calculusmaster.pokecord.commands.misc.*;
 import com.calculusmaster.pokecord.commands.moves.*;
+import com.calculusmaster.pokecord.commands.player.*;
 import com.calculusmaster.pokecord.commands.pokemon.*;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.interfaces.CommandSupplier;
@@ -195,7 +196,7 @@ public class Commands
 
         register("pokepass", "pp", "bp")
                 .setCommand(CommandPokePass::new)
-                .setCategory(Category.MISC);
+                .setCategory(Category.PLAYER);
 
         register("favorites", "fav")
                 .setCommand(CommandFavorites::new)
@@ -219,15 +220,15 @@ public class Commands
 
         register("leaderboard", "lb", "lead")
                 .setCommand(CommandLeaderboard::new)
-                .setCategory(Category.MISC);
+                .setCategory(Category.PLAYER);
 
         register("bounties", "bounty", "tasks", "quests")
                 .setCommand(CommandBounties::new)
-                        .setCategory(Category.MISC);
+                .setCategory(Category.PLAYER);
 
         register("pursuit")
                 .setCommand(CommandPursuit::new)
-                .setCategory(Category.MISC);
+                .setCategory(Category.PLAYER);
 
         register("target")
                 .setCommand(CommandTarget::new)
@@ -239,7 +240,7 @@ public class Commands
 
         register("achievements")
                 .setCommand(CommandAchievements::new)
-                .setCategory(Category.MISC);
+                .setCategory(Category.PLAYER);
 
         register("dev")
                 .setCommand(CommandDev::new)
@@ -337,6 +338,7 @@ public class Commands
         ECONOMY,
         MISC,
         MOVES,
-        POKEMON
+        PLAYER,
+        POKEMON;
     }
 }

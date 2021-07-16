@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.commands.misc;
+package com.calculusmaster.pokecord.commands.player;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.PokePass;

@@ -23,7 +23,7 @@ public class CacheHelper
     public static final Map<String, List<String>> UUID_LISTS = new HashMap<>();
     public static final Map<String, List<Pokemon>> POKEMON_LISTS = new HashMap<>();
 
-    //Stored Data Type: MarketEntry
+    //Stored Data Type: MarketEntryp
     public static final List<MarketEntry> MARKET_ENTRIES = new ArrayList<>();
 
     //Stored Data Type: Player IDs
