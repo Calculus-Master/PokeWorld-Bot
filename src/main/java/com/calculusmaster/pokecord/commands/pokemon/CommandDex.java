@@ -6,13 +6,10 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.mongo.CollectionsQuery;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.PokemonData;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
-import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import org.bson.Document;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,48 +25,7 @@ public class CommandDex extends Command
     @Override
     public Command runCommand()
     {
-        //Pokedex Command
-        if(this.msg.length == 1 || (this.msg.length == 2 && this.isNumeric(1)))
-        {
-            int total = Global.POKEMON.size();
-
-            List<String> collected = new ArrayList<>();
-            Mongo.DexData.find(Filters.exists("name")).forEach(d -> {
-                if(d.containsKey(this.player.getId()) && d.getInteger(this.player.getId()) > 0) collected.add(d.getString("name"));
-            });
-            this.embed.setFooter("Total Pokemon Collected: " + collected.size() + " / " + total);
-
-            int[] indices = {this.msg.length == 1 ? 0 : (this.getInt(1) * 20), this.msg.length == 1 ? 20 : (this.getInt(1) * 20 + 20)};
-            if(indices[1] > total) indices[1] = total;
-
-            StringBuilder list = new StringBuilder();
-            Document d;
-            String name;
-            for(int i = indices[0]; i < indices[1]; i++)
-            {
-                list.append("#").append(i + 1).append(": ");
-
-                try
-                {
-                    name = Mongo.PokemonInfo.find(Filters.eq("dex", i + 1)).first().getString("name");
-                    d = Mongo.DexData.find(Filters.eq("name", name)).first();
-
-                    list.append(name).append(d.containsKey(this.player.getId()) && d.getInteger(this.player.getId()) > 0 ? ":white_check_mark:" : ":x:").append(" - Caught: ").append(d.getInteger(this.player.getId()) == null ? 0 : d.getInteger(this.player.getId())).append("\n");
-                }
-                catch (Exception e)
-                {
-                    System.out.println("Error Displaying " + (i + 1));
-                    e.printStackTrace();
-
-                    list.append("\n");
-                }
-            }
-
-            this.embed.setDescription(list.toString());
-            this.embed.setTitle(this.player.getName() + "'s Pokedex");
-            return this;
-        }
-        else if(this.msg.length == 1)
+        if(this.msg.length == 1)
         {
             this.embed.setDescription(CommandInvalid.getShort());
             return this;
