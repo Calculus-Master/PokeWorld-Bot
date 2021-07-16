@@ -31,6 +31,7 @@ public class CommandTournament extends Command
         boolean cancel = this.msg.length == 2 && this.msg[1].equals("cancel");
         boolean deny = this.msg.length == 2 && this.msg[1].equals("deny");
         boolean status = this.msg.length == 2 && this.msg[1].equals("status");
+        boolean notify = this.msg.length == 2 && this.msg[1].equals("notify");
 
         if(info || this.msg.length == 1)
         {
@@ -43,6 +44,21 @@ public class CommandTournament extends Command
             {
                 this.embed = null;
                 TournamentHelper.instance(this.player.getId()).sendStatusEmbed();
+            }
+        }
+        else if(notify)
+        {
+            if(!TournamentHelper.isInTournament(this.player.getId())) this.sendMsg("You are not in a Tournament!");
+            else
+            {
+                Tournament t = TournamentHelper.instance(this.player.getId());
+
+                if(!t.getCreator().equals(this.player.getId())) this.sendMsg("You are not the creator of this Tournament!");
+                else
+                {
+                    List<String> players = t.getPlayers().stream().filter(p -> !t.hasPlayerAccepted(p)).collect(Collectors.toList());
+                    for(String s : players) t.sendInvite(s);
+                }
             }
         }
         else if(accept || cancel || deny)

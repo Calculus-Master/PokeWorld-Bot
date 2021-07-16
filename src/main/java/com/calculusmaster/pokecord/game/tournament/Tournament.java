@@ -253,6 +253,11 @@ public class Tournament
         return this.eliminatedPlayers.contains(ID);
     }
 
+    public boolean hasPlayerAccepted(String ID)
+    {
+        return this.playerAccepts.get(ID);
+    }
+
     public List<String> getPlayers()
     {
         return this.allPlayers;
