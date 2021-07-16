@@ -113,11 +113,6 @@ public abstract class Objective
         return (AbstractPowerObjective)this;
     }
 
-    public AbstractDamageObjective asDamageObjective()
-    {
-        return (AbstractDamageObjective)this;
-    }
-
     public AbstractAccuracyObjective asAccuracyObjective()
     {
         return (AbstractAccuracyObjective)this;
