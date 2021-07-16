@@ -47,8 +47,8 @@ public class ConfigHelper
             Commands.COMMAND_THREAD_POOL = false;
             Bounty.MAX_BOUNTIES_HELD = 3;
             Bounty.POKEPASS_EXP_YIELD = 200;
-            Bounty.BOUNTY_REWARD_MIN = 250;
-            Bounty.BOUNTY_REWARD_MAX = 50;
+            Bounty.BOUNTY_REWARD_MIN = 50;
+            Bounty.BOUNTY_REWARD_MAX = 250;
         }
     }
 }
