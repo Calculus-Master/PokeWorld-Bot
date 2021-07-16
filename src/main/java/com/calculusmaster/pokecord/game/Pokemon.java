@@ -164,7 +164,7 @@ public class Pokemon
             }
         };
 
-        p.genericJSON = new JSONObject(DataHelper.pokeData(p.getName()));
+        p.genericJSON = new JSONObject(DataHelper.pokeData(p.getName()).document.toJson());
         p.linkSpecificJSON(UUID);
 
         p.setNumber(num + 1);
@@ -189,7 +189,8 @@ public class Pokemon
     //JSONs
     public void linkGenericJSON(String name)
     {
-        this.genericJSON = Pokemon.genericJSON(name);
+        //this.genericJSON = Pokemon.genericJSON(name);
+        this.genericJSON = new JSONObject(DataHelper.pokeData(name).document.toJson());
     }
 
     public void linkSpecificJSON(String UUID)

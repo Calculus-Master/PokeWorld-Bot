@@ -15,7 +15,7 @@ import java.util.Map;
 
 public final class PokemonData
 {
-    private final Document document;
+    public final Document document;
 
     public final String name;
 
