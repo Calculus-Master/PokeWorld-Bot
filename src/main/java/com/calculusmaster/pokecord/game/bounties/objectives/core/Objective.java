@@ -3,8 +3,6 @@ package com.calculusmaster.pokecord.game.bounties.objectives.core;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import org.bson.Document;
 
-import java.util.Random;
-
 public abstract class Objective
 {
     protected ObjectiveType objectiveType;
@@ -41,12 +39,6 @@ public abstract class Objective
     public boolean isComplete()
     {
         return this.progression >= this.target;
-    }
-
-    @Deprecated
-    public static int randomTargetAmount(int min, int max)
-    {
-        return new Random().nextInt(max - min + 1) + min;
     }
 
     public ObjectiveType getObjectiveType()
