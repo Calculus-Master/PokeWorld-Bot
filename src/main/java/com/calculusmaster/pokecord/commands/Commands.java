@@ -242,6 +242,10 @@ public class Commands
                 .setCommand(CommandAchievements::new)
                 .setCategory(Category.PLAYER);
 
+        register("serverinfo", "server")
+                .setCommand(CommandServerInfo::new)
+                .setCategory(Category.MISC);
+
         register("dev")
                 .setCommand(CommandDev::new)
                 .setCategory(Category.MISC);
