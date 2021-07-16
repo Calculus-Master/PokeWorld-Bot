@@ -98,7 +98,7 @@ public class CommandDuel extends Command
             return this;
         }
 
-        int size = 3;
+        int size = 1;
 
         if(this.msg.length >= 3) size = this.getInt(2);
 
