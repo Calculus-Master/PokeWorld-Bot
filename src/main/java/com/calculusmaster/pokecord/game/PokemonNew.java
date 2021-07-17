@@ -1,10 +1,7 @@
 package com.calculusmaster.pokecord.game;
 
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
-import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
-import com.calculusmaster.pokecord.game.enums.elements.Nature;
-import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
@@ -50,6 +47,7 @@ public class PokemonNew
     private Optional<Integer> health = Optional.empty();
     private Optional<Double> boost = Optional.empty();
     private Optional<Boolean> isDynamaxed = Optional.empty();
+    private Optional<Map<StatusCondition, Boolean>> status = Optional.empty();
 
     public static PokemonNew create(String name)
     {
@@ -79,6 +77,17 @@ public class PokemonNew
         Document data = new Document()
                 .append("UUID", p.getUUID())
                 .append("name", p.getName())
+                .append("shiny", p.isShiny())
+                .append("level", p.getLevel())
+                .append("exp", p.getExp())
+                .append("nature", p.getNature().toString())
+                .append("ivs", StatIntMap.to(p.getIVs()))
+                .append("evs", StatIntMap.to(p.getEVs()))
+                .append("moves", p.condense(p.getLearnedMoves()))
+                .append("tm", p.getTM())
+                .append("tr", p.getTR())
+                .append("item", p.getItem())
+                .append("dynamax_level", p.getDynamaxLevel())
                 .append("nickname", p.getNickname());
 
         Mongo.PokemonData.insertOne(data);
@@ -115,6 +124,54 @@ public class PokemonNew
     {
         this.update(Updates.set("level", this.getLevel()));
         this.update(Updates.set("exp", this.getExp()));
+    }
+
+    //Status Conditions
+    public Map<StatusCondition, Boolean> getStatusConditions()
+    {
+        return this.status.orElse(ExtendedHashMap.createStatusConditionMap());
+    }
+
+    public void addStatusCondition(StatusCondition s)
+    {
+        if((this.isType(Type.ELECTRIC) && s.equals(StatusCondition.PARALYZED)) ||
+                (this.isType(Type.ICE) && s.equals(StatusCondition.FROZEN)) ||
+                (this.isType(Type.FIRE) && s.equals(StatusCondition.BURNED)) ||
+                ((this.isType(Type.POISON) || this.isType(Type.STEEL)) && s.equals(StatusCondition.POISONED))) return;
+        else this.status = Optional.of(ExtendedHashMap.copy(this.getStatusConditions()).insert(s, true));
+    }
+
+    public void removeStatusCondition(StatusCondition s)
+    {
+        this.status = Optional.of(ExtendedHashMap.copy(this.getStatusConditions()).insert(s, false));
+    }
+
+    public void clearStatusConditions()
+    {
+        this.status = Optional.of(ExtendedHashMap.copy(this.getStatusConditions()).editEach((s, v) -> false));
+    }
+
+    public boolean hasStatusCondition(StatusCondition s)
+    {
+        return this.getStatusConditions().get(s);
+    }
+
+    public boolean hasAnyStatusConditions()
+    {
+        return this.getStatusConditions().values().stream().noneMatch(v -> v);
+    }
+
+    public String getActiveStatusConditions()
+    {
+        List<String> active = this.getStatusConditions().entrySet().stream().filter(Map.Entry::getValue).map(Map.Entry::getKey).map(StatusCondition::getAbbrev).collect(Collectors.toList());
+
+        if(active.isEmpty()) return "";
+
+        StringBuilder s = new StringBuilder().append("(");
+        for(String str : active) s.append(str).append(", ");
+        s.deleteCharAt(s.length() - 1).deleteCharAt(s.length() - 1).append(")");
+
+        return s.toString();
     }
 
     //Moves

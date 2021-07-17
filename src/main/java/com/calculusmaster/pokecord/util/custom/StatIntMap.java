@@ -41,6 +41,11 @@ public class StatIntMap extends ExtendedHashMap<Stat, Integer>
         return condensed.deleteCharAt(condensed.length() - 1).toString();
     }
 
+    public static String to(Map<? extends Stat, ? extends Integer> map)
+    {
+        return to(StatIntMap.from(map));
+    }
+
     public StatIntMap increase(Stat s)
     {
         this.put(s, this.getOrDefault(s, 0) + 1);
