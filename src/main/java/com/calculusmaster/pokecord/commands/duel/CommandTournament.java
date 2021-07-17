@@ -63,6 +63,8 @@ public class CommandTournament extends Command
                 {
                     List<String> players = t.getPlayers().stream().filter(p -> !t.hasPlayerAccepted(p)).collect(Collectors.toList());
                     for(String s : players) t.sendInvite(s);
+
+                    this.sendMsg("Reminded players!");
                 }
             }
         }
