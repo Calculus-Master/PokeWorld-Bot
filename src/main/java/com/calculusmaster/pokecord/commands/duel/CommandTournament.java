@@ -35,7 +35,12 @@ public class CommandTournament extends Command
 
         if(info || this.msg.length == 1)
         {
-
+            this.embed.setTitle("Tournament Info");
+            this.embed.setDescription("Tournaments are large competitions between many players.");
+            this.embed.addField("Creation", "To create a Tournament, type `p!tournament create --size <num>`. <num> is the team size you want players to use during Tournament duels, and in the same message you have to mention all the players you want to invite. Tournaments must have some multiple of 4 players (4, 8, 16, etc).", false)
+                    .addField("Before Starting", "Tournaments cannot be started unless all invited players accept their invitations with `p!tournament accept`. To see which players still need to accept their invites, type `p!tournament status.` To notify all the players that they have not accepted their invites, type `p!tournament notify`.", false)
+                    .addField("Starting", "Once all invited players have accepted their invites, the Tournament can be started with `p!tournament start`.", false)
+                    .addField("Dueling", "Matchps for the current round can be found at anytime by using `p!tournament status`. To start a Tournament duel, simply send a duel request to the other player. The size will be automatically set to the Tournament's size setting. Each round, if all the duels are complete, the Tournament will automatically progress to the next round, or if the finals are complete, reward players correctly.", false);
         }
         else if(status)
         {
