@@ -251,6 +251,10 @@ public class Commands
                 .setCommand(CommandSkins::new)
                 .setCategory(Category.POKEMON);
 
+        register("profile")
+                .setCommand(CommandProfile::new)
+                .setCategory(Category.PLAYER);
+
         register("dev")
                 .setCommand(CommandDev::new)
                 .setCategory(Category.MISC);
