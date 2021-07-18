@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.PokePass;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.PokemonSkin;
 import com.calculusmaster.pokecord.game.bounties.components.Bounty;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.util.Mongo;
@@ -16,6 +17,7 @@ import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
@@ -72,6 +74,13 @@ public class PlayerDataQuery extends MongoQuery
     private void update()
     {
         this.document = Mongo.PlayerData.find(this.query).first();
+    }
+
+    private void update(Bson update)
+    {
+        Mongo.PlayerData.updateOne(this.query, update);
+
+        this.update();
     }
 
     public void directMessage(String msg)
@@ -612,5 +621,52 @@ public class PlayerDataQuery extends MongoQuery
         Mongo.PlayerData.updateOne(this.query, Updates.set("pursuit_level", 0));
 
         this.update();
+    }
+
+    //key: "skins"
+    public List<PokemonSkin> getOwnedSkins()
+    {
+        return this.json().getJSONArray("skins").toList().stream().map(s -> (String)s).map(PokemonSkin::cast).collect(Collectors.toList());
+    }
+
+    public List<PokemonSkin> getOwnedSkins(String pokemon)
+    {
+        return this.getOwnedSkins().stream().filter(s -> s.pokemon.equals(pokemon)).collect(Collectors.toList());
+    }
+
+    public boolean hasSkin(String pokemon)
+    {
+        return this.getOwnedSkins().stream().anyMatch(s -> s.pokemon.equals(pokemon));
+    }
+
+    public void addSkin(PokemonSkin skin)
+    {
+        this.update(Updates.push("skins", skin.toString()));
+    }
+
+    //key: "equipped_skins"
+    public List<PokemonSkin> getEquippedSkins()
+    {
+        return this.json().getJSONArray("equipped_skins").toList().stream().map(s -> (String)s).map(PokemonSkin::cast).collect(Collectors.toList());
+    }
+
+    public PokemonSkin getEquippedSkin(String pokemon)
+    {
+        return this.getEquippedSkins().stream().filter(s -> s.pokemon.equals(pokemon)).collect(Collectors.toList()).get(0);
+    }
+
+    public boolean hasEquippedSkin(String pokemon)
+    {
+        return this.getEquippedSkins().stream().anyMatch(s -> s.pokemon.equals(pokemon));
+    }
+
+    public void equipSkin(PokemonSkin skin)
+    {
+        this.update(Updates.push("equipped_skins", skin.toString()));
+    }
+
+    public void unequipSkin(PokemonSkin skin)
+    {
+        this.update(Updates.pull("equipped_skins", skin.toString()));
     }
 }
