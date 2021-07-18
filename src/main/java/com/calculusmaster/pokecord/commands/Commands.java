@@ -73,7 +73,8 @@ public class Commands
                 .setCommand(CommandMoves::new)
                 .setCategory(Category.MOVES)
                 .setDesc("View your active Pokemon's moves!")
-                .addTerminalPoint("moves", "Shows your active Pokemon's move set. In duels, this will show the move's type effectiveness against the opponent), otherwise, this will show your Pokemon's available moves.");
+                .addTerminalPoint("moves", "Shows your active Pokemon's move set. In duels, this will show the move's type effectiveness against the opponent), otherwise, this will show your Pokemon's available moves.")
+                .addTerminalPoint("moves info", "Shows information about all the available moves for your active Pokemon. This can help you create the perfect move set!");
 
         register("moveinfo", "mi")
                 .setCommand(CommandMoveInfo::new)
