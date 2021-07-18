@@ -503,6 +503,8 @@ public class PlayerDataQuery extends MongoQuery
 
     private void updateBounty(Consumer<Bounty> checker)
     {
+        if(this.document == null) this.update();
+
         //Basic Bounties
         for(String ID : this.getBountyIDs())
         {
@@ -512,9 +514,9 @@ public class PlayerDataQuery extends MongoQuery
             {
                 checker.accept(b);
 
-                if(b.getObjective().isComplete()) this.directMessage("You have unclaimed bounties!");
-
                 b.updateProgression();
+
+                if(b.getObjective().isComplete()) this.directMessage("You have unclaimed bounties!");
             }
         }
 
@@ -527,9 +529,9 @@ public class PlayerDataQuery extends MongoQuery
             {
                 checker.accept(pursuit);
 
-                if(pursuit.getObjective().isComplete()) this.directMessage("Your active Pursuit bounty is complete!");
-
                 pursuit.updateProgression();
+
+                if(pursuit.getObjective().isComplete()) this.directMessage("Your active Pursuit bounty is complete!");
             }
         }
     }

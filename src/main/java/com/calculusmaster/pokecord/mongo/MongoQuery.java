@@ -19,7 +19,8 @@ public abstract class MongoQuery
 
     public JSONObject json()
     {
-        return new JSONObject(this.document == null ? "" : this.document.toJson());
+        if(this.document == null) System.out.println(this + ", Query: " + this.query);
+        return new JSONObject(this.document.toJson());
     }
 
     public boolean isNull()

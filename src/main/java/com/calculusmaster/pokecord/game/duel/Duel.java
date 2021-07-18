@@ -178,7 +178,7 @@ public class Duel
 
             this.entryHazardEffects(1);
 
-            if(this.isPvP()) this.players[1].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
+            if(this.checkBounties(1)) this.players[1].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
 
             this.checkWeatherAbilities();
         }
@@ -249,7 +249,7 @@ public class Duel
                 this.checkWeatherAbilities(1);
                 this.entryHazardEffects(1);
 
-                if(this.isPvP()) this.players[1].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
+                if(this.checkBounties(1)) this.players[1].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
 
                 if(!faintSwap) results.add(this.turn(move));
             }
@@ -348,7 +348,7 @@ public class Duel
 
             Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_ZMOVE, this.event);
 
-            if(this.current == 0 || (this.current == 1 && this.isPvP()))
+            if(this.checkBounties(this.current))
             {
                 final Move m = move;
                 this.players[this.current].data.updateBountyProgression(b -> {
@@ -369,7 +369,7 @@ public class Duel
 
             Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_DYNAMAX, this.event);
 
-            if(this.current == 0 || (this.current == 1 && this.isPvP()))
+            if(this.checkBounties(this.current))
             {
                 final Move m = move;
                 this.players[this.current].data.updateBountyProgression(b -> {
@@ -759,7 +759,7 @@ public class Duel
                 this.data(this.other).bideDamage += Math.max(damageDealt, 0);
             }
 
-            if(damageDealt > 0)
+            if(damageDealt > 0 && this.checkBounties(this.current))
             {
                 final Move m = move;
                 this.players[this.current].data.updateBountyProgression(b -> {
@@ -775,7 +775,7 @@ public class Duel
                 });
             }
 
-            if(this.current == 0 || (this.current == 1 && this.isPvP()))
+            if(this.checkBounties(this.current))
             {
                 final Move m = move;
                 this.players[this.current].data.updateBountyProgression(b -> {
@@ -822,7 +822,7 @@ public class Duel
             int exp = this.players[this.current].active.getDuelExp(this.players[this.other].active);
             this.expGains.put(UUID, (this.expGains.getOrDefault(UUID, 0)) + exp);
 
-            if(this.current == 0 || (this.current == 1 && this.isPvP()))
+            if(this.checkBounties(this.current))
             {
                 this.players[this.current].data.updateBountyProgression((b) -> {
                     switch(b.getType())
@@ -1660,6 +1660,11 @@ public class Duel
     public boolean isPvP()
     {
         return !(this instanceof WildDuel) && !(this instanceof TrainerDuel);
+    }
+
+    public boolean checkBounties(int p)
+    {
+        return p == 0 || this.players[p].ID.chars().allMatch(Character::isDigit);
     }
 
     public int indexOf(String id)
