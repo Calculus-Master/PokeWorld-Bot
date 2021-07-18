@@ -247,6 +247,10 @@ public class Commands
                 .setCommand(CommandServerInfo::new)
                 .setCategory(Category.MISC);
 
+        register("skins")
+                .setCommand(CommandSkins::new)
+                .setCategory(Category.POKEMON);
+
         register("dev")
                 .setCommand(CommandDev::new)
                 .setCategory(Category.MISC);

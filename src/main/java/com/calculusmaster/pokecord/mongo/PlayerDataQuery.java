@@ -639,9 +639,14 @@ public class PlayerDataQuery extends MongoQuery
         return this.getOwnedSkins().stream().anyMatch(s -> s.pokemon.equals(pokemon));
     }
 
+    public boolean hasSkin(PokemonSkin skin)
+    {
+        return this.getOwnedSkins().stream().anyMatch(s -> s.equals(skin));
+    }
+
     public void addSkin(PokemonSkin skin)
     {
-        this.update(Updates.push("skins", skin.toString()));
+        if(!this.hasSkin(skin)) this.update(Updates.push("skins", skin.toString()));
     }
 
     //key: "equipped_skins"
@@ -668,5 +673,12 @@ public class PlayerDataQuery extends MongoQuery
     public void unequipSkin(PokemonSkin skin)
     {
         this.update(Updates.pull("equipped_skins", skin.toString()));
+    }
+
+    public void unequipSkin(String pokemon)
+    {
+        PokemonSkin skin = null;
+        for(PokemonSkin s : this.getEquippedSkins()) if(s.pokemon.equals(pokemon)) skin = s;
+        this.unequipSkin(skin);
     }
 }

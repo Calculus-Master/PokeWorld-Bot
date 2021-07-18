@@ -178,7 +178,7 @@ public class Duel
 
             this.entryHazardEffects(1);
 
-            if(this.checkBounties(1)) this.players[1].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
+            if(this.isNonBotPlayer(1)) this.players[1].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
 
             this.checkWeatherAbilities();
         }
@@ -249,7 +249,7 @@ public class Duel
                 this.checkWeatherAbilities(1);
                 this.entryHazardEffects(1);
 
-                if(this.checkBounties(1)) this.players[1].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
+                if(this.isNonBotPlayer(1)) this.players[1].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
 
                 if(!faintSwap) results.add(this.turn(move));
             }
@@ -348,7 +348,7 @@ public class Duel
 
             Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_ZMOVE, this.event);
 
-            if(this.checkBounties(this.current))
+            if(this.isNonBotPlayer(this.current))
             {
                 final Move m = move;
                 this.players[this.current].data.updateBountyProgression(b -> {
@@ -369,7 +369,7 @@ public class Duel
 
             Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_DYNAMAX, this.event);
 
-            if(this.checkBounties(this.current))
+            if(this.isNonBotPlayer(this.current))
             {
                 final Move m = move;
                 this.players[this.current].data.updateBountyProgression(b -> {
@@ -759,7 +759,7 @@ public class Duel
                 this.data(this.other).bideDamage += Math.max(damageDealt, 0);
             }
 
-            if(damageDealt > 0 && this.checkBounties(this.current))
+            if(damageDealt > 0 && this.isNonBotPlayer(this.current))
             {
                 final Move m = move;
                 this.players[this.current].data.updateBountyProgression(b -> {
@@ -775,7 +775,7 @@ public class Duel
                 });
             }
 
-            if(this.checkBounties(this.current))
+            if(this.isNonBotPlayer(this.current))
             {
                 final Move m = move;
                 this.players[this.current].data.updateBountyProgression(b -> {
@@ -822,7 +822,7 @@ public class Duel
             int exp = this.players[this.current].active.getDuelExp(this.players[this.other].active);
             this.expGains.put(UUID, (this.expGains.getOrDefault(UUID, 0)) + exp);
 
-            if(this.checkBounties(this.current))
+            if(this.isNonBotPlayer(this.current))
             {
                 this.players[this.current].data.updateBountyProgression((b) -> {
                     switch(b.getType())
@@ -1594,6 +1594,10 @@ public class Duel
         {
             return "https://static.wikia.nocookie.net/villains/images/7/76/HOME890E.png/revision/latest/scale-to-width-down/512?cb=20200221025522";
         }
+        else if(this.isNonBotPlayer(player) && this.players[player].data.hasEquippedSkin(p.getName()))
+        {
+            return this.players[player].data.getEquippedSkin(p.getName()).URL;
+        }
         else return p.getImage();
     }
 
@@ -1662,7 +1666,7 @@ public class Duel
         return !(this instanceof WildDuel) && !(this instanceof TrainerDuel);
     }
 
-    public boolean checkBounties(int p)
+    public boolean isNonBotPlayer(int p)
     {
         return p == 0 || this.players[p].ID.chars().allMatch(Character::isDigit);
     }

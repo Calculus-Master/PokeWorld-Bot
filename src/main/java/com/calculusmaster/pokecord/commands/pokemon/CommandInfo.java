@@ -45,6 +45,13 @@ public class CommandInfo extends Command
         String item = PokeItem.asItem(chosen.getItem()).getStyledName();
         String tm = (chosen.hasTM() ? "TM" + (chosen.getTM() < 10 ? "0" : "") + chosen.getTM()  + " - " + TM.get(chosen.getTM()).getMoveName() : "None");
         String tr =  (chosen.hasTR() ? "TR" + (chosen.getTR() < 10 ? "0" : "") + chosen.getTR()  + " - " + TR.get(chosen.getTR()).getMoveName() : "None");
+        String image = chosen.getImage();
+
+        if(!chosen.isShiny() && this.playerData.hasEquippedSkin(chosen.getName()))
+        {
+            image = this.playerData.getEquippedSkin(chosen.getName()).URL;
+        }
+
 
         this.embed
                 .addField("Experience", exp, true)
@@ -64,7 +71,7 @@ public class CommandInfo extends Command
 
         this.embed.setTitle(title);
         this.color = chosen.getType()[0].getColor();
-        this.embed.setImage(chosen.getImage());
+        this.embed.setImage(image);
         this.embed.setFooter("Showing Pokemon " + (index + 1) + " / " + this.playerData.getPokemonList().size());
 
         this.playerData.addPokePassExp(50, this.event);
