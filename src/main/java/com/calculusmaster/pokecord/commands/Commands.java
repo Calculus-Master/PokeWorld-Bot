@@ -255,6 +255,10 @@ public class Commands
                 .setCommand(CommandProfile::new)
                 .setCategory(Category.PLAYER);
 
+        register("tip", "tips")
+                .setCommand(CommandTip::new)
+                .setCategory(Category.MISC);
+
         register("dev")
                 .setCommand(CommandDev::new)
                 .setCategory(Category.MISC);

@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.commands;
 
+import com.calculusmaster.pokecord.game.Tips;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
@@ -111,6 +112,11 @@ public abstract class Command
     private void setColor()
     {
         this.embed.setColor(this.color == null ? this.getRandomColor() : this.color);
+    }
+
+    private void setTipFooter()
+    {
+        if(this.embed.build().getFooter() == null) this.embed.setFooter("Tip: " + Tips.get().tip);
     }
 
     public MessageEmbed getResponseEmbed()
