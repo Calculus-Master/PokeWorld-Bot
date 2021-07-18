@@ -207,7 +207,7 @@ public class PlayerDataQuery extends MongoQuery
         removePokemon(this.getPokemonList().get(index - 1));
     }
 
-    //key: "team"       TODO: Team Caching
+    //key: "team"
     public List<String> getTeam()
     {
         return this.json().getJSONArray("team").toList().stream().map(o -> (String)o).collect(Collectors.toList());

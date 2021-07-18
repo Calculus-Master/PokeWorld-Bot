@@ -14,7 +14,7 @@ public class PokePass
 
     public static void init()
     {
-        //TODO: Complete PokePass, Limit Certain Rewards based on Gym Level
+        //TODO: Complete PokePass
         PokePass.addTier(0, new EmptyReward());
         PokePass.addTier(1, new RedeemReward(1));
         PokePass.addTier(2, new CreditReward(250));
