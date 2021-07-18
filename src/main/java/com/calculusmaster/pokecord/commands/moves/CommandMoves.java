@@ -52,7 +52,11 @@ public class CommandMoves extends Command
             for(Type t : Type.values()) if(moves.stream().anyMatch(m -> m.getType().equals(t))) typeMoves.put(t, moves.stream().filter(m -> m.getType().equals(t)).collect(Collectors.toList()));
 
             StringBuilder type = new StringBuilder();
-            for(Type t : typeMoves.keySet()) type.append(Global.normalCase(t.toString())).append(" - ").append(typeMoves.get(t).toString()).append("\n");
+            for(Type t : typeMoves.keySet())
+            {
+                String mL = typeMoves.get(t).stream().map(Move::getName).collect(Collectors.toList()).toString();
+                type.append(Global.normalCase(t.toString())).append(" - ").append(mL, 1, mL.length() - 1).append("\n");
+            }
             type.deleteCharAt(type.length() - 1);
 
             List<Move> priorityMoves = moves.stream().filter(m -> m.getPriority() != 0).sorted(Comparator.comparingInt(Move::getPriority)).collect(Collectors.toList());
@@ -72,15 +76,15 @@ public class CommandMoves extends Command
             if(accuracyMoves.isEmpty()) accuracy.append("None");
             else
             {
-                for(Move m : accuracyMoves) priority.append(m.getName()).append(" - ").append(m.getAccuracy()).append("%\n");
-                priority.deleteCharAt(priority.length() - 1);
+                for(Move m : accuracyMoves) accuracy.append(m.getName()).append(" - ").append(m.getAccuracy()).append("%\n");
+                accuracy.deleteCharAt(accuracy.length() - 1);
             }
 
-            this.embed.addField("Highest Damage Moves", damage.toString(), false)
-                    .addField("Status Moves", status.toString(), false)
-                    .addField("Moves Listed by Type", type.toString(), false)
-                    .addField("High/Low Priority Moves", priority.toString(), false)
-                    .addField("Low Accuracy Moves", accuracy.toString(), false);
+            this.embed.addField("Top 5 Highest Base Damage Moves", damage.toString(), true)
+                    .addField("Status Moves", status.toString(), true)
+                    .addField("Move Types", type.toString(), false)
+                    .addField("Priority Moves", priority.toString(), true)
+                    .addField("Low Accuracy Moves", accuracy.toString(), true);
         }
         else
         {
