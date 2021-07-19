@@ -11,8 +11,6 @@ public class SpecialEvolutionRegistry
 {
     public static final List<Evolution> EVOLUTIONS = new ArrayList<>();
 
-    //TODO: Friendship evolutions: Alolan Meowth -> Persian, Chansey -> Blissey, Golbat -> Crobat, Pichu -> Pikachu, Cleffa -> Clefairy, Igglybuff -> Jigglypuff, Togepi -> Togetic, Azurill -> Marill, Budew -> Roselia, Chingling -> Chimecho, Buneary -> Lopunny, Munchlax -> Snorlax, Riolu -> Lucario, Woobat -> Swoobat, Swadloon -> Leavanny
-    //TODO: Friendship evolutions pt2: Type Null -> Silvally, Snom -> Frosmoth
     //TODO: Trade evolutions: Poliwhirl -> Politoed, Kadabra -> Alakazam, Machoke -> Machamp, Graveler -> Golem, Alolan Graveler -> Alolan Golem, Haunter -> Gengar, Boldore -> Gigalith, Gurdurr -> Conkeldurr, Phantump -> Trevenant, Pumpkaboo -> Gourgeist
     //TODO: Regional evolutions: Exeggcute -> Alolan Exeggutor w/Leaf Stone in Alola, Koffing -> Galarian Weezing in Galar
     //TODO: Other evolutions: Cubone -> Alolan Marowak in Alola Nighttime, Mantyke -> Mantine (w/Remoraid in party)
@@ -150,6 +148,24 @@ public class SpecialEvolutionRegistry
         register("Swirlix", "Slurpuff", PokeItem.WHIPPED_DREAM);
 
         register("Steenee", "Tsareena", "Stomp");
+
+        register("Alolan Meowth", "Alolan Persian", PokeItem.FRIENDSHIP_BAND)
+                .another("Chansey", "Blissey")
+                .another("Golbat", "Crobat")
+                .another("Pichu", "Pikachu")
+                .another("Cleffa", "Clefairy")
+                .another("Igglybuff", "Jigglypuff")
+                .another("Togepi", "Togetic")
+                .another("Azurill", "Marill")
+                .another("Budew", "Roselia")
+                .another("Chingling", "Chimecho")
+                .another("Buneary", "Lopunny")
+                .another("Munchlax", "Snorlax")
+                .another("Riolu", "Lucario")
+                .another("Woobat", "Swoobat")
+                .another("Swadloon", "Leavanny")
+                .another("Type Null", "Silvally")
+                .another("Snom", "Frosmoth");
     }
 
     public static String getTarget(Pokemon p)
@@ -177,7 +193,14 @@ public class SpecialEvolutionRegistry
 
     private static Evolution register(String source, String target, PokeItem item)
     {
-        return register(source, target, p -> p.hasItem() && PokeItem.asItem(p.getItem()).equals(item));
+        EvolutionValidator normal = p -> p.hasItem() && PokeItem.asItem(p.getItem()).equals(item);
+        EvolutionValidator friendship = p -> p.hasItem() && PokeItem.asItem(p.getItem()).equals(item) && hasFriendship(p);
+        return register(source, target, item.equals(PokeItem.FRIENDSHIP_BAND) ? friendship : normal);
+    }
+
+    private static boolean hasFriendship(Pokemon p)
+    {
+        return p.getLevel() >= 50 && p.getEVTotal() >= 20;
     }
 
     private static Evolution register(String source, String target, EvolutionValidator validator)

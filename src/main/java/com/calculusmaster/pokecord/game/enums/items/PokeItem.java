@@ -14,6 +14,7 @@ public enum PokeItem
     IV_REROLLER(0, true),
     EV_CLEARER(0, true),
     //Pokemon Items (p!give)
+    FRIENDSHIP_BAND(500),
     THUNDER_STONE(250),
     ICE_STONE(250),
     MOON_STONE(250),
