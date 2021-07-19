@@ -75,6 +75,8 @@ public class Pokecord
 
         BOT_JDA = bot.build().awaitReady();
 
+        LoggerHelper.init("Spawn Event Thread Pool", ThreadPoolHandler::createSpawnThreadPool);
+
         end = System.currentTimeMillis();
 
         LoggerHelper.info(Pokecord.class, "Bot Loading Complete (" + (end - start) + "ms)!");

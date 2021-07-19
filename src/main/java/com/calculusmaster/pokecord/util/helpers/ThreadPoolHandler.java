@@ -1,10 +1,14 @@
 package com.calculusmaster.pokecord.util.helpers;
 
+import com.calculusmaster.pokecord.Pokecord;
+
 import java.util.concurrent.*;
 
 public class ThreadPoolHandler
 {
     public static int THREAD_POOL_TYPE;
+
+    public static ScheduledExecutorService SPAWN;
 
     public static final ExecutorService ACHIEVEMENT = ThreadPoolHandler.customThreadPool();
     public static final ExecutorService LISTENER_EVENT = ThreadPoolHandler.customThreadPool();
@@ -20,5 +24,10 @@ public class ThreadPoolHandler
             case 2 -> Executors.newFixedThreadPool(4);
             default -> Executors.newFixedThreadPool(THREAD_POOL_TYPE * 2);
         };
+    }
+
+    public static void createSpawnThreadPool()
+    {
+        SPAWN = Executors.newScheduledThreadPool(Pokecord.BOT_JDA.getGuilds().size());
     }
 }

@@ -126,6 +126,7 @@ public abstract class Command
 
         this.setAuthor();
         this.setColor();
+        this.setTipFooter();
         return this.embed.build();
     }
 

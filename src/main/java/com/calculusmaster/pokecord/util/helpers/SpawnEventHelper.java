@@ -18,8 +18,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -36,9 +34,7 @@ public class SpawnEventHelper
 
     public static void start(Guild g, int initDelay)
     {
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-
-        ScheduledFuture<?> spawnEvent = scheduler.scheduleWithFixedDelay(() -> spawnPokemon(g), initDelay, 450, TimeUnit.SECONDS);
+        ScheduledFuture<?> spawnEvent = ThreadPoolHandler.SPAWN.scheduleWithFixedDelay(() -> spawnPokemon(g), initDelay, 450, TimeUnit.SECONDS);
 
         SCHEDULERS.put(g.getId(), spawnEvent);
     }
