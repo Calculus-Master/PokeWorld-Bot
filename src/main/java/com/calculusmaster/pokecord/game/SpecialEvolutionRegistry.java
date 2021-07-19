@@ -21,10 +21,7 @@ public class SpecialEvolutionRegistry
     //TODO: Karrablast -> Escaliver & Shelmet -> Accelgor w/Trade
     //TODO: Crabrawler -> Crabominable at Mount Lanakila
     //TODO: Galarian Yamask -> Runerigus (near Dusty Bowl)
-    //TODO: Applin -> Flapple (Tart Apple), Applin -> Appletun (Sweet Apple)
-    //TODO: Sinistea -> Polteageist (Cracked Pot)
     //TODO: G. Farfetchd -> Sirfetchd (3 critical hits in a battle)
-    //TODO: Milcery -> Alcremie (Sweet)
     //TODO: Kubfu -> Urshifu (Tower of Darkness) and Kubfu -> Urshifu Rapid Strike (Tower of Water)
 
     //TODO: Forms: Castform, Zacian/Zamazenta, Wormadam, Rotom, Basculin, Darmanitan Zen (Galarian Darmanitan is added), Meowstic, Pumpkaboo, Gourgeist, Oricorio
@@ -177,6 +174,13 @@ public class SpecialEvolutionRegistry
 
         register("Toxel", "Toxtricity Amped", p -> p.getNature().isAmped())
                 .another("Toxtricity Low Key", p -> !p.getNature().isAmped());
+
+        register("Sinistea", "Polteageist", PokeItem.CRACKED_POT);
+
+        register("Applin", "Flapple", PokeItem.TART_APPLE)
+                .another("Appletun", PokeItem.SWEET_APPLE);
+
+        register("Milcery", "Alcremie", PokeItem.SWEET);
     }
 
     public static String getTarget(Pokemon p)
