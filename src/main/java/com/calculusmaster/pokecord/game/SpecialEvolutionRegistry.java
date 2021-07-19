@@ -11,7 +11,6 @@ public class SpecialEvolutionRegistry
 {
     public static final List<Evolution> EVOLUTIONS = new ArrayList<>();
 
-    //TODO: Trade evolutions: Poliwhirl -> Politoed, Kadabra -> Alakazam, Machoke -> Machamp, Graveler -> Golem, Alolan Graveler -> Alolan Golem, Haunter -> Gengar, Boldore -> Gigalith, Gurdurr -> Conkeldurr, Phantump -> Trevenant, Pumpkaboo -> Gourgeist
     //TODO: Regional evolutions: Exeggcute -> Alolan Exeggutor w/Leaf Stone in Alola, Koffing -> Galarian Weezing in Galar
     //TODO: Other evolutions: Cubone -> Alolan Marowak in Alola Nighttime, Mantyke -> Mantine (w/Remoraid in party)
     //TODO: Eeveelutions: Espeon (High Friendship, Daytime), Umbreon (High Friendship, Nighttime), Leafeon (Mossy Rock), Glaceon (Icy Rock), Sylveon (Affection/Fairy Move)
@@ -24,7 +23,6 @@ public class SpecialEvolutionRegistry
     //TODO: Galarian Yamask -> Runerigus (near Dusty Bowl)
     //TODO: Applin -> Flapple (Tart Apple), Applin -> Appletun (Sweet Apple)
     //TODO: Toxel -> Toxtricity (Amped Nature and Low Key Nature)
-    //TODO: Clobbopus -> Grapploct (after Taunt learned)
     //TODO: Sinistea -> Polteageist (Cracked Pot)
     //TODO: G. Farfetchd -> Sirfetchd (3 critical hits in a battle)
     //TODO: Milcery -> Alcremie (Sweet)
@@ -73,7 +71,16 @@ public class SpecialEvolutionRegistry
         register("Onix", "Steelix", PokeItem.METAL_COAT)
                 .another("Scyther", "Scizor");
 
-        register("Haunter", "Gengar", PokeItem.TRADE_EVOLVER);
+        register("Haunter", "Gengar", PokeItem.TRADE_EVOLVER)
+                .another("Poliwhirl", "Politoed")
+                .another("Kadabra", "Alakazam")
+                .another("Machoke", "Machamp")
+                .another("Graveler", "Golem")
+                .another("Alolan Graveler", "Alolan Golem")
+                .another("Boldore", "Gigalith")
+                .another("Gurdurr", "Conkeldurr")
+                .another("Phantump", "Trevenant")
+                .another("Pumpkaboo", "Gourgeist");
 
         register("Poipole", "Naganadel", "Dragon Pulse");
 
@@ -166,6 +173,8 @@ public class SpecialEvolutionRegistry
                 .another("Swadloon", "Leavanny")
                 .another("Type Null", "Silvally")
                 .another("Snom", "Frosmoth");
+
+        register("Clobbopus", "Grapploct", "Taunt");
     }
 
     public static String getTarget(Pokemon p)
