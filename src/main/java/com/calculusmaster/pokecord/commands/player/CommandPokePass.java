@@ -24,14 +24,14 @@ public class CommandPokePass extends Command
 
         for(int i = start; i < end; i++)
         {
-            if(this.playerData.getPokePassTier() > i) sb.append("~~");
+            if(this.playerData.getPokePassTier() >= i) sb.append("~~");
 
             sb.append("**Tier ").append(i).append("**: ");
 
             if(!PokePass.tierExists(i)) sb.append("No Reward! Tier has not been added yet!\n");
             else sb.append(PokePass.getTierDescription(i)).append("\n");
 
-            if(this.playerData.getPokePassTier() > i) sb.append("~~");
+            if(this.playerData.getPokePassTier() >= i) sb.append("~~");
         }
 
         this.embed.setDescription(sb.toString());
