@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.SpecialEvolutionRegistry;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Location;
+import com.calculusmaster.pokecord.game.enums.elements.Time;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.util.helpers.LocationEventHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -36,6 +37,7 @@ public class CommandEvolve extends Command
 
         String target = "";
         Location location = LocationEventHelper.getLocation(this.server.getId());
+        Time time = LocationEventHelper.getTime();
 
         //Custom Evolution Overrides
         if(Arrays.asList("Magneton", "Nosepass", "Charjabug").contains(selected.getName()) && location.isMagneticField())
@@ -54,10 +56,10 @@ public class CommandEvolve extends Command
 
             if(!special && location.isIcyRock()) target = "Glaceon";
 
-            if(!target.equals("") && selected.hasItem() && PokeItem.asItem(selected.getItem()).equals(PokeItem.FRIENDSHIP_BAND) && SpecialEvolutionRegistry.hasFriendship(selected) && LocationEventHelper.getTime().isNight())
+            if(!target.equals("") && selected.hasItem() && PokeItem.asItem(selected.getItem()).equals(PokeItem.FRIENDSHIP_BAND) && SpecialEvolutionRegistry.hasFriendship(selected) && time.isNight())
                 target = "Umbreon";
 
-            if(!target.equals("") && selected.hasItem() && PokeItem.asItem(selected.getItem()).equals(PokeItem.FRIENDSHIP_BAND) && SpecialEvolutionRegistry.hasFriendship(selected) && LocationEventHelper.getTime().isDay())
+            if(!target.equals("") && selected.hasItem() && PokeItem.asItem(selected.getItem()).equals(PokeItem.FRIENDSHIP_BAND) && SpecialEvolutionRegistry.hasFriendship(selected) && time.isDay())
                 target = "Espeon";
         }
 
@@ -65,6 +67,19 @@ public class CommandEvolve extends Command
         {
             if(location.equals(Location.TOWER_OF_WATER)) target = "Urshifu Rapid Strike";
             else if(location.equals(Location.TOWER_OF_DARKNESS)) target = "Urshifu";
+        }
+
+        if(selected.getName().equals("Cosmoem") && selected.getLevel() >= 53)
+        {
+            if(time.isDay()) target = "Solgaleo";
+            else if(time.isNight()) target = "Lunala";
+        }
+
+        if(selected.getName().equals("Rockruff") && selected.getLevel() >= 25)
+        {
+            if(time.equals(Time.DUSK)) target = "Lycanroc Dusk";
+            else if(time.isDay()) target = "Lycanroc";
+            else target = "Lycanroc Night";
         }
 
         //Basic Special & Normal (Level Up) Evolutions
