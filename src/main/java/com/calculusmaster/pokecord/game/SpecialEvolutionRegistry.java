@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game;
 
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class SpecialEvolutionRegistry
 
     //TODO: Regional evolutions: Exeggcute -> Alolan Exeggutor w/Leaf Stone in Alola, Koffing -> Galarian Weezing in Galar
     //TODO: Other evolutions: Cubone -> Alolan Marowak in Alola Nighttime, Mantyke -> Mantine (w/Remoraid in party)
-    //TODO: Eeveelutions: Espeon (High Friendship, Daytime), Umbreon (High Friendship, Nighttime), Leafeon (Mossy Rock), Glaceon (Icy Rock), Sylveon (Affection/Fairy Move)
+    //TODO: Eeveelutions: Espeon (High Friendship, Daytime), Umbreon (High Friendship, Nighttime), Leafeon (Mossy Rock), Glaceon (Icy Rock)
     //TODO: Cosmoem -> Solgaleo and Cosmoem -> Lunala
     //TODO: Wurmple -> Cascoon/Silcoon
     //TODO: Magnetic Field evolutions: Magneton -> Magnezone, Nosepass -> Probopass
@@ -62,7 +63,8 @@ public class SpecialEvolutionRegistry
 
         register("Eevee", "Vaporeon", PokeItem.WATER_STONE)
                 .another("Flareon", PokeItem.FIRE_STONE)
-                .another("Jolteon", PokeItem.THUNDER_STONE);
+                .another("Jolteon", PokeItem.THUNDER_STONE)
+                .another("Sylveon", p -> p.getLearnedMoves().stream().map(Move::new).anyMatch(m -> m.getType().equals(Type.FAIRY)));
 
         register("Onix", "Steelix", PokeItem.METAL_COAT)
                 .another("Scyther", "Scizor");
