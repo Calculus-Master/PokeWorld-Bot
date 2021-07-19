@@ -5,13 +5,9 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
-import com.calculusmaster.pokecord.util.custom.ExtendedHashMap;
 import org.bson.Document;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class PokemonData
 {
@@ -65,7 +61,7 @@ public final class PokemonData
 
         this.types = List.of(Type.cast(d.getList("type", String.class).get(0)), Type.cast(d.getList("type", String.class).get(1)));
 
-        this.evolutions = new ExtendedHashMap<>();
+        this.evolutions = new LinkedHashMap<>();
         for(int i = 0; i < d.getList("evolutions", String.class).size(); i++) this.evolutions.put(d.getList("evolutions", String.class).get(i), d.getList("evolutionsLVL", Integer.class).get(i));
 
         this.forms = d.getList("forms", String.class, new ArrayList<>());
@@ -77,7 +73,7 @@ public final class PokemonData
         this.yield = new HashMap<>();
         for(Stat s : Stat.values()) this.yield.put(s, d.getList("ev", Integer.class).get(s.ordinal()));
 
-        this.moves = new HashMap<>();
+        this.moves = new LinkedHashMap<>();
         for(int i = 0; i < d.getList("moves", String.class).size(); i++) this.moves.put(d.getList("moves", String.class).get(i), d.getList("movesLVL", Integer.class).get(i));
 
         this.validTMs = d.getList("movesTM", Integer.class).stream().map(TM::get).toList();

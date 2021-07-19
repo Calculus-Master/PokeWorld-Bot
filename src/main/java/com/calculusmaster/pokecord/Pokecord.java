@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.commands.moves.CommandAbilityInfo;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.PokePass;
 import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.SpecialEvolutionRegistry;
 import com.calculusmaster.pokecord.game.duel.elements.GymLeader;
 import com.calculusmaster.pokecord.game.duel.elements.Trainer;
 import com.calculusmaster.pokecord.util.PokemonRarity;
@@ -43,6 +44,7 @@ public class Pokecord
         LoggerHelper.init("Gigantamax", DataHelper::createGigantamaxDataMap);
         LoggerHelper.init("EV Lists", DataHelper::createEVLists);
         LoggerHelper.init("Type Lists", DataHelper::createTypeLists);
+        LoggerHelper.init("Evolutions", SpecialEvolutionRegistry::init);
         LoggerHelper.init("Daily Trainer", Trainer::setDailyTrainers);
         LoggerHelper.init("Move", Move::init);
         LoggerHelper.init("Ability Info", CommandAbilityInfo::init);

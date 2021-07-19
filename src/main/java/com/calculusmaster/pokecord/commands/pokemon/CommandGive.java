@@ -39,8 +39,6 @@ public class CommandGive extends Command
 
             this.event.getChannel().sendMessage(this.playerData.getMention() + ": Gave " + s.getName() + " a `" + item.getStyledName() + "`!").queue();
             this.embed = null;
-
-            if(s.specialCanEvolve()) s.evolve();
         }
         else if(item != null && item.nonPokemon)
         {

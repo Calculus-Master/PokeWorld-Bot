@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.PokemonData;
 import com.calculusmaster.pokecord.util.PokemonRarity;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 @Deprecated
 public class Pokemon
 {
-    private JSONObject genericJSON;
+    public JSONObject genericJSON;
     protected JSONObject specificJSON;
 
     private String UUID;
@@ -176,15 +177,22 @@ public class Pokemon
         return p;
     }
 
+    public PokemonData getData()
+    {
+        return DataHelper.pokeData(this.getName());
+    }
+
     public int getNumber()
     {
         int index = -1;
 
-        for(List<Pokemon> list : CacheHelper.POKEMON_LISTS.values()) for(int i = 0; i < list.size(); i++) if(list.get(i).getUUID().equals(this.UUID)) index = i;
+        String UUID = this.UUID == null ? this.specificJSON.getString("UUID") : this.UUID;
+
+        for(List<Pokemon> list : CacheHelper.POKEMON_LISTS.values()) for(int i = 0; i < list.size(); i++) if(list.get(i).getUUID().equals(UUID)) index = i;
 
         if(index == -1)
         {
-            LoggerHelper.warn(Pokemon.class, "Could not find number for " + this.UUID + "!");
+            LoggerHelper.warn(Pokemon.class, "Could not find number for " + UUID + " (Document: " + this.specificJSON + "!");
             return this.num;
         }
         else return index + 1;
@@ -685,179 +693,6 @@ public class Pokemon
         int t = 1;
 
         return (int)(t * e * p * (1 + (a * b * L / (5.0 * s)) * (Math.pow(2 * L + 10, 2.5) / Math.pow(L + Lp + 10, 2.5))));
-    }
-
-    //Evolution
-    public boolean canEvolve()
-    {
-        if(specialCanEvolve()) return true;
-        else
-        return this.genericJSON.getJSONArray("evolutionsLVL").length() != 0 && this.genericJSON.getJSONArray("evolutionsLVL").getInt(0) <= this.getLevel();
-    }
-
-    public boolean specialCanEvolve()
-    {
-        PokeItem item = PokeItem.asItem(this.getItem());
-        //TODO: Friendship evolutions: Alolan Meowth -> Persian, Chansey -> Blissey, Golbat -> Crobat, Pichu -> Pikachu, Cleffa -> Clefairy, Igglybuff -> Jigglypuff, Togepi -> Togetic, Azurill -> Marill, Budew -> Roselia, Chingling -> Chimecho, Buneary -> Lopunny, Munchlax -> Snorlax, Riolu -> Lucario, Woobat -> Swoobat, Swadloon -> Leavanny
-        //TODO: Friendship evolutions pt2: Type Null -> Silvally, Snom -> Frosmoth
-        //TODO: Trade evolutions: Poliwhirl -> Politoed, Kadabra -> Alakazam, Machoke -> Machamp, Graveler -> Golem, Alolan Graveler -> Alolan Golem, Haunter -> Gengar, Boldore -> Gigalith, Gurdurr -> Conkeldurr, Phantump -> Trevenant, Pumpkaboo -> Gourgeist
-        //TODO: Regional evolutions: Exeggcute -> Alolan Exeggutor w/Leaf Stone in Alola, Koffing -> Galarian Weezing in Galar
-        //TODO: Other evolutions: Cubone -> Alolan Marowak in Alola Nighttime, Mantyke -> Mantine (w/Remoraid in party)
-        //TODO: Eeveelutions: Espeon (High Friendship, Daytime), Umbreon (High Friendship, Nighttime), Leafeon (Mossy Rock), Glaceon (Icy Rock), Sylveon (Affection/Fairy Move)
-        //TODO: Cosmoem -> Solgaleo and Cosmoem -> Lunala
-        //TODO: Wurmple -> Cascoon/Silcoon
-        //TODO: Magnetic Field evolutions: Magneton -> Magnezone, Nosepass -> Probopass
-        //TODO: Burmy -> Mothim (Male) or Wormadam (Male) at Level 20
-        //TODO: Karrablast -> Escaliver & Shelmet -> Accelgor w/Trade
-        //TODO: Crabrawler -> Crabominable at Mount Lanakila
-        //TODO: Galarian Yamask -> Runerigus (near Dusty Bowl)
-        //TODO: Applin -> Flapple (Tart Apple), Applin -> Appletun (Sweet Apple)
-        //TODO: Toxel -> Toxtricity (Amped Nature and Low Key Nature)
-        //TODO: Clobbopus -> Grapploct (after Taunt learned)
-        //TODO: Sinistea -> Polteageist (Cracked Pot)
-        //TODO: G. Farfetchd -> Sirfetchd (3 critical hits in a battle)
-        //TODO: Milcery -> Alcremie (Sweet)
-        //TODO: Kubfu -> Urshifu (Tower of Darkness) and Kubfu -> Urshifu Rapid Strike (Tower of Water)
-
-        //TODO: Forms: Castform, Zacian/Zamazenta, Wormadam, Rotom, Basculin, Darmanitan Zen (Galarian Darmanitan is added), Meowstic, Pumpkaboo, Gourgeist, Oricorio
-
-        //Trade evolutions are converted into item based ones
-
-        return switch (this.getName()) {
-            case "Pikachu", "Charjabug", "Eelektrik" -> item.equals(PokeItem.THUNDER_STONE);
-            case "Alolan Sandshrew", "Alolan Vulpix", "Galarian Darumaka" -> item.equals(PokeItem.ICE_STONE);
-            case "Nidorina", "Nidorino", "Clefairy", "Jigglypuff", "Skitty", "Munna" -> item.equals(PokeItem.MOON_STONE);
-            case "Vulpix", "Growlithe", "Pansear" -> item.equals(PokeItem.FIRE_STONE);
-            case "Gloom" -> item.equals(PokeItem.LEAF_STONE) || item.equals(PokeItem.SUN_STONE);
-            case "Weepinbell", "Exeggcute", "Nuzleaf", "Pansage" -> item.equals(PokeItem.LEAF_STONE);
-            case "Shellder", "Staryu", "Lombre", "Panpour" -> item.equals(PokeItem.WATER_STONE);
-            case "Eevee" -> item.equals(PokeItem.WATER_STONE) || item.equals(PokeItem.FIRE_STONE) || item.equals(PokeItem.THUNDER_STONE);
-            case "Onix", "Scyther" -> item.equals(PokeItem.METAL_COAT);
-            case "Haunter" -> item.equals(PokeItem.TRADE_EVOLVER);
-            case "Poipole" -> this.getLearnedMoves().contains("Dragon Pulse");
-            case "Poliwhirl" -> item.equals(PokeItem.WATER_STONE) || item.equals(PokeItem.KINGS_ROCK);
-            case "Aipom" -> this.getLearnedMoves().contains("Double Hit");
-            case "Sunkern", "Cottonee", "Petilil", "Helioptile" -> item.equals(PokeItem.SUN_STONE);
-            case "Yanma", "Piloswine", "Tangela" -> this.getLearnedMoves().contains("Ancient Power");
-            case "Murkrow", "Misdreavus", "Lampent", "Doublade" -> item.equals(PokeItem.DUSK_STONE);
-            case "Slowpoke" -> item.equals(PokeItem.KINGS_ROCK);
-            case "Galarian Slowpoke" -> item.equals(PokeItem.GALARICA_CUFF) || item.equals(PokeItem.GALARICA_WREATH);
-            case "Gligar" -> item.equals(PokeItem.RAZOR_FANG);
-            case "Sneasel" -> item.equals(PokeItem.RAZOR_CLAW);
-            case "Seadra" -> item.equals(PokeItem.DRAGON_SCALE);
-            case "Porygon" -> item.equals(PokeItem.UPGRADE);
-            case "Porygon2" -> item.equals(PokeItem.DUBIOUS_DISC);
-            case "Tyrogue" -> true;
-            case "Kirlia", "Glalie" -> item.equals(PokeItem.DAWN_STONE);
-            case "Roselia", "Togetic", "Minccino", "Floette" -> item.equals(PokeItem.SHINY_STONE);
-            case "Feebas" -> item.equals(PokeItem.PRISM_SCALE);
-            case "Dusclops" -> item.equals(PokeItem.REAPER_CLOTH);
-            case "Clamperl" -> item.equals(PokeItem.DEEP_SEA_TOOTH) || item.equals(PokeItem.DEEP_SEA_SCALE);
-            case "Bonsly", "Mime Jr" -> this.getLearnedMoves().contains("Mimic");
-            case "Happiny" -> item.equals(PokeItem.OVAL_STONE);
-            case "Lickitung" -> this.getLearnedMoves().contains("Rollout");
-            case "Rhydon" -> item.equals(PokeItem.PROTECTOR);
-            case "Electabuzz" -> item.equals(PokeItem.ELECTIRIZER);
-            case "Magmar" -> item.equals(PokeItem.MAGMARIZER);
-            case "Spritzee" -> item.equals(PokeItem.SACHET);
-            case "Swirlix" -> item.equals(PokeItem.WHIPPED_DREAM);
-            case "Steenee" -> this.getLearnedMoves().contains("Stomp");
-            default -> false;
-        };
-    }
-
-    public void evolve()
-    {
-        boolean isNormal = !this.specialCanEvolve();
-        String newEvolution = "";
-
-        PokeItem item = PokeItem.asItem(this.getItem());
-
-        if(isNormal) newEvolution = this.genericJSON.getJSONArray("evolutions").getString(0);
-        else newEvolution = switch(this.getName())
-            {
-                case "Pikachu" -> "Raichu";
-                case "Alolan Sandshrew" -> "Alolan Sandslash";
-                case "Nidorina" -> "Nidoqueen";
-                case "Nidorino" -> "Nidoking";
-                case "Clefairy" -> "Clefable";
-                case "Vulpix" -> "Ninetales";
-                case "Alolan Vulpix" -> "Alolan Ninetales";
-                case "Jigglypuff" -> "Wigglytuff";
-                case "Gloom" -> item.equals(PokeItem.LEAF_STONE) ? "Vileplume" : "Bellossom";
-                case "Growlithe" -> "Arcanine";
-                case "Weepinbell" -> "Victreebel";
-                case "Shellder" -> "Cloyster";
-                case "Exeggcute" -> "Exeggutor";
-                case "Staryu" -> "Starmie";
-                case "Eevee" -> item.equals(PokeItem.WATER_STONE) ? "Vaporeon" : (item.equals(PokeItem.THUNDER_STONE) ? "Jolteon" : "Flareon");
-                case "Onix" -> "Steelix";
-                case "Haunter" -> "Gengar";
-                case "Charjabug" -> "Vikavolt";
-                case "Poipole" -> "Naganadel";
-                case "Poliwhirl" -> item.equals(PokeItem.WATER_STONE) ? "Poliwrath" : "Politoed";
-                case "Aipom" -> "Ambipom";
-                case "Sunkern" -> "Sunflora";
-                case "Yanma" -> "Yanmega";
-                case "Murkrow" -> "Honchkrow";
-                case "Slowpoke" -> "Slowking";
-                case "Galarian Slowpoke" -> item.equals(PokeItem.GALARICA_CUFF) ? "Galarian Slowbro" : "Galarian Slowking";
-                case "Misdreavus" -> "Mismagius";
-                case "Gligar" -> "Gliscor";
-                case "Scyther" -> "Scizor";
-                case "Sneasel" -> "Weavile";
-                case "Piloswine" -> "Mamoswine";
-                case "Seadra" -> "Kingdra";
-                case "Porygon" -> "Porygon2";
-                case "Porygon2" -> "PorygonZ";
-                case "Tyrogue" -> this.getStat(Stat.ATK) == this.getStat(Stat.DEF) ? "Hitmontop" : (this.getStat(Stat.ATK) > this.getStat(Stat.DEF) ? "Hitmonlee" : "Hitmonchan");
-                case "Lombre" -> "Ludicolo";
-                case "Nuzleaf" -> "Shiftry";
-                case "Kirlia" -> "Gallade";
-                case "Skitty" -> "Delcatty";
-                case "Roselia" -> "Roserade";
-                case "Feebas" -> "Milotic";
-                case "Dusclops" -> "Dusknoir";
-                case "Snorunt" -> "Froslass";
-                case "Clamperl" -> item.equals(PokeItem.DEEP_SEA_TOOTH) ? "Huntail" : "Gorebyss";
-                case "Bonsly" -> "Sudowoodo";
-                case "Mime Jr" -> "Mr Mime";
-                case "Happiny" -> "Chansey";
-                case "Lickitung" -> "Lickilicky";
-                case "Rhydon" -> "Rhyperior";
-                case "Tangela" -> "Tangrowth";
-                case "Electabuzz" -> "Electivire";
-                case "Magmar" -> "Magmortar";
-                case "Togetic" -> "Togekiss";
-                case "Pansage" -> "Simisage";
-                case "Pansear" -> "Simisear";
-                case "Panpour" -> "Simipour";
-                case "Munna" -> "Musharna";
-                case "Cottonee" -> "Whimsicott";
-                case "Petilil" -> "Lilligant";
-                case "Minccino" -> "Cinccino";
-                case "Eelektrik" -> "Eelektross";
-                case "Lampent" -> "Chandelure";
-                case "Floette" -> "Florges";
-                case "Doublade" -> "Aegislash";
-                case "Spritzee" -> "Aromatisse";
-                case "Swirlix" -> "Slurpuff";
-                case "Helioptil" -> "Heliolisk";
-                case "Steenee" -> "Tsareena";
-                case "Galarian Darumaka" -> "Galarian Darmanitan";
-                default -> "";
-            };
-
-        if(!Global.POKEMON.contains(newEvolution))
-        {
-            System.out.println(newEvolution + " isn't implemented!");
-            return;
-        }
-
-        if(newEvolution.isEmpty()) throw new IllegalStateException("Evolution failed - " + this.getName());
-
-        this.linkGenericJSON(Global.normalCase(newEvolution));
-        Pokemon.updateName(this, newEvolution);
     }
 
     //Megas and Forms

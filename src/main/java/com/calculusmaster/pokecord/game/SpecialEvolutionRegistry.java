@@ -1,0 +1,228 @@
+package com.calculusmaster.pokecord.game;
+
+import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class SpecialEvolutionRegistry
+{
+    public static final List<Evolution> EVOLUTIONS = new ArrayList<>();
+
+    //TODO: Friendship evolutions: Alolan Meowth -> Persian, Chansey -> Blissey, Golbat -> Crobat, Pichu -> Pikachu, Cleffa -> Clefairy, Igglybuff -> Jigglypuff, Togepi -> Togetic, Azurill -> Marill, Budew -> Roselia, Chingling -> Chimecho, Buneary -> Lopunny, Munchlax -> Snorlax, Riolu -> Lucario, Woobat -> Swoobat, Swadloon -> Leavanny
+    //TODO: Friendship evolutions pt2: Type Null -> Silvally, Snom -> Frosmoth
+    //TODO: Trade evolutions: Poliwhirl -> Politoed, Kadabra -> Alakazam, Machoke -> Machamp, Graveler -> Golem, Alolan Graveler -> Alolan Golem, Haunter -> Gengar, Boldore -> Gigalith, Gurdurr -> Conkeldurr, Phantump -> Trevenant, Pumpkaboo -> Gourgeist
+    //TODO: Regional evolutions: Exeggcute -> Alolan Exeggutor w/Leaf Stone in Alola, Koffing -> Galarian Weezing in Galar
+    //TODO: Other evolutions: Cubone -> Alolan Marowak in Alola Nighttime, Mantyke -> Mantine (w/Remoraid in party)
+    //TODO: Eeveelutions: Espeon (High Friendship, Daytime), Umbreon (High Friendship, Nighttime), Leafeon (Mossy Rock), Glaceon (Icy Rock), Sylveon (Affection/Fairy Move)
+    //TODO: Cosmoem -> Solgaleo and Cosmoem -> Lunala
+    //TODO: Wurmple -> Cascoon/Silcoon
+    //TODO: Magnetic Field evolutions: Magneton -> Magnezone, Nosepass -> Probopass
+    //TODO: Burmy -> Mothim (Male) or Wormadam (Male) at Level 20
+    //TODO: Karrablast -> Escaliver & Shelmet -> Accelgor w/Trade
+    //TODO: Crabrawler -> Crabominable at Mount Lanakila
+    //TODO: Galarian Yamask -> Runerigus (near Dusty Bowl)
+    //TODO: Applin -> Flapple (Tart Apple), Applin -> Appletun (Sweet Apple)
+    //TODO: Toxel -> Toxtricity (Amped Nature and Low Key Nature)
+    //TODO: Clobbopus -> Grapploct (after Taunt learned)
+    //TODO: Sinistea -> Polteageist (Cracked Pot)
+    //TODO: G. Farfetchd -> Sirfetchd (3 critical hits in a battle)
+    //TODO: Milcery -> Alcremie (Sweet)
+    //TODO: Kubfu -> Urshifu (Tower of Darkness) and Kubfu -> Urshifu Rapid Strike (Tower of Water)
+
+    //TODO: Forms: Castform, Zacian/Zamazenta, Wormadam, Rotom, Basculin, Darmanitan Zen (Galarian Darmanitan is added), Meowstic, Pumpkaboo, Gourgeist, Oricorio
+
+    public static void init()
+    {
+        register("Pikachu", "Raichu", PokeItem.THUNDER_STONE)
+                .another("Charjabug", "Vikavolt")
+                .another("Eelektrik", "Eelektross");
+
+        register("Alolan Sandshrew", "Alolan Sandslash", PokeItem.ICE_STONE)
+                .another("Alolan Vulpix", "Alolan Ninetales")
+                .another("Galarian Darumaka", "Galarian Darmanitan");
+
+        register("Nidorina", "Nidoqueen", PokeItem.MOON_STONE)
+                .another("Nidorino", "Nidoking")
+                .another("Clefairy", "Clefable")
+                .another("Jigglypuff", "Wigglytuff")
+                .another("Skitty", "Delcatty")
+                .another("Munna", "Musharna");
+
+        register("Vulpix", "Ninetales", PokeItem.FIRE_STONE)
+                .another("Growlithe", "Arcanine")
+                .another("Pansear", "Simisear");
+
+        register("Gloom", "Vileplume", PokeItem.LEAF_STONE)
+                .another("Bellossom", PokeItem.SUN_STONE);
+
+        register("Weepinbell", "Victreebel", PokeItem.LEAF_STONE)
+                .another("Exeggcute", "Exeggutor")
+                .another("Nuzleaf", "Shiftry")
+                .another("Pansage", "Simisage");
+
+        register("Shellder", "Cloyster", PokeItem.WATER_STONE)
+                .another("Staryu", "Starmine")
+                .another("Lombre", "Ludicolo")
+                .another("Panpour", "Simipour");
+
+        register("Eevee", "Vaporeon", PokeItem.WATER_STONE)
+                .another("Flareon", PokeItem.FIRE_STONE)
+                .another("Jolteon", PokeItem.THUNDER_STONE);
+
+        register("Onix", "Steelix", PokeItem.METAL_COAT)
+                .another("Scyther", "Scizor");
+
+        register("Haunter", "Gengar", PokeItem.TRADE_EVOLVER);
+
+        register("Poipole", "Naganadel", "Dragon Pulse");
+
+        register("Poliwhirl", "Poliwrath", PokeItem.WATER_STONE)
+                .another("Politoed", PokeItem.KINGS_ROCK);
+
+        register("Aipom", "Ambipom", "Double Hit");
+
+        register("Sunkern", "Sunflora", PokeItem.LEAF_STONE)
+                .another("Cottonee", "Whimsicott")
+                .another("Petilil", "Lilligant")
+                .another("Helioptile", "Heliolisk");
+
+        register("Yanma", "Yanmega", "Ancient Power")
+                .another("Piloswine", "Mamoswine")
+                .another("Tangela", "Tangrowth");
+
+        register("Murkrow", "Honchkrow", PokeItem.DUSK_STONE)
+                .another("Misdreavus", "Mismagius")
+                .another("Lampent", "Chandelure")
+                .another("Doublade", "Aegislash");
+
+        register("Slowpoke", "Slowking", PokeItem.KINGS_ROCK);
+
+        register("Galarian Slowpoke", "Galarian Slowbro", PokeItem.GALARICA_CUFF)
+                .another("Galarian Slowking", PokeItem.GALARICA_WREATH);
+
+        register("Gligar", "Gliscor", PokeItem.RAZOR_FANG);
+
+        register("Sneasel", "Weavile", PokeItem.RAZOR_CLAW);
+
+        register("Seadra", "Kingdra", PokeItem.DRAGON_SCALE);
+
+        register("Porygon", "Porygon2", PokeItem.UPGRADE);
+
+        register("Porygon", "Porygonz", PokeItem.DUBIOUS_DISC);
+
+        register("Tyrogue", "Hitmonlee", p -> p.getStat(Stat.ATK) > p.getStat(Stat.DEF))
+                .another("Hitmonchan", p -> p.getStat(Stat.ATK) < p.getStat(Stat.DEF))
+                .another("Hitmontop", p -> p.getStat(Stat.ATK) == p.getStat(Stat.DEF));
+
+        register("Kirlia", "Gallade", PokeItem.DAWN_STONE)
+                .another("Snorunt", "Froslass");
+
+        register("Roselia", "Roserade", PokeItem.SHINY_STONE)
+                .another("Togetic", "Togekiss")
+                .another("Minccino", "Cinccino")
+                .another("Floette", "Florges");
+
+        register("Feebas", "Milotic", PokeItem.PRISM_SCALE);
+
+        register("Dusclops", "Dusknoir", PokeItem.REAPER_CLOTH);
+
+        register("Clamperl", "Huntail", PokeItem.DEEP_SEA_TOOTH)
+                .another("Gorebyss", PokeItem.DEEP_SEA_SCALE);
+
+        register("Bonsly", "Sudowoodo", "Mimic")
+                .another("Mime Jr", "Mr Mime");
+
+        register("Happiny", "Chansey", PokeItem.OVAL_STONE);
+
+        register("Lickitung", "Lickilicky", "Rollout");
+
+        register("Rhydon", "Rhyperior", PokeItem.PROTECTOR);
+
+        register("Electabuzz", "Electivire", PokeItem.ELECTIRIZER);
+
+        register("Magmar", "Magmortar", PokeItem.MAGMARIZER);
+
+        register("Spritzee", "Aromatisse", PokeItem.SACHET);
+
+        register("Swirlix", "Slurpuff", PokeItem.WHIPPED_DREAM);
+
+        register("Steenee", "Tsareena", "Stomp");
+    }
+
+    public static String getTarget(Pokemon p)
+    {
+        List<Evolution> possible = EVOLUTIONS.stream().filter(e -> e.source.equals(p.getName())).collect(Collectors.toList());
+
+        for(Evolution e : possible) if(e.validator.canEvolve(p)) return e.target;
+        return "";
+    }
+
+    public static boolean hasSpecialEvolution(String pokemon)
+    {
+        return EVOLUTIONS.stream().anyMatch(e -> e.source.equals(pokemon));
+    }
+
+    public static boolean canEvolve(Pokemon p)
+    {
+        return EVOLUTIONS.stream().filter(e -> e.source.equals(p.getName())).anyMatch(e -> e.validator.canEvolve(p));
+    }
+
+    private static Evolution register(String source, String target, String move)
+    {
+        return register(source, target, p -> p.getLearnedMoves().contains(move));
+    }
+
+    private static Evolution register(String source, String target, PokeItem item)
+    {
+        return register(source, target, p -> p.hasItem() && PokeItem.asItem(p.getItem()).equals(item));
+    }
+
+    private static Evolution register(String source, String target, EvolutionValidator validator)
+    {
+        Evolution ev = new Evolution(source, target, validator);
+
+        EVOLUTIONS.add(ev);
+
+        return ev;
+    }
+
+    private static class Evolution
+    {
+        private String source;
+        private String target;
+        private EvolutionValidator validator;
+
+        Evolution(String source, String target, EvolutionValidator validator)
+        {
+            this.source = source;
+            this.target = target;
+            this.validator = validator;
+        }
+
+        Evolution another(String source, String target)
+        {
+            register(source, target, this.validator);
+            return this;
+        }
+
+        Evolution another(String target, PokeItem item)
+        {
+            register(this.source, target, item);
+            return this;
+        }
+
+        Evolution another(String target, EvolutionValidator validator)
+        {
+            register(this.source, target, validator);
+            return this;
+        }
+    }
+
+    private interface EvolutionValidator
+    {
+        boolean canEvolve(Pokemon p);
+    }
+}
