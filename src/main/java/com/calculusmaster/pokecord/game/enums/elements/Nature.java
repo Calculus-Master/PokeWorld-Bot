@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.game.enums.elements;
 
 import com.calculusmaster.pokecord.util.Global;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,6 +52,11 @@ public enum Nature
             this.multipliers.put(increase, 1.1);
             this.multipliers.put(decrease, 0.9);
         }
+    }
+
+    public boolean isAmped()
+    {
+        return Arrays.asList(HARDY, BRAVE, ADAMANT, NAUGHTY, DOCILE, IMPISH, LAX, HASTY, JOLLY, NAIVE, RASH, SASSY, QUIRKY).contains(this);
     }
 
     public boolean hasNoEffect()

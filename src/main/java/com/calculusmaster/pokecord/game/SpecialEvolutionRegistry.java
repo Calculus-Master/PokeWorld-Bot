@@ -22,7 +22,6 @@ public class SpecialEvolutionRegistry
     //TODO: Crabrawler -> Crabominable at Mount Lanakila
     //TODO: Galarian Yamask -> Runerigus (near Dusty Bowl)
     //TODO: Applin -> Flapple (Tart Apple), Applin -> Appletun (Sweet Apple)
-    //TODO: Toxel -> Toxtricity (Amped Nature and Low Key Nature)
     //TODO: Sinistea -> Polteageist (Cracked Pot)
     //TODO: G. Farfetchd -> Sirfetchd (3 critical hits in a battle)
     //TODO: Milcery -> Alcremie (Sweet)
@@ -175,6 +174,9 @@ public class SpecialEvolutionRegistry
                 .another("Snom", "Frosmoth");
 
         register("Clobbopus", "Grapploct", "Taunt");
+
+        register("Toxel", "Toxtricity Amped", p -> p.getNature().isAmped())
+                .another("Toxtricity Low Key", p -> !p.getNature().isAmped());
     }
 
     public static String getTarget(Pokemon p)
