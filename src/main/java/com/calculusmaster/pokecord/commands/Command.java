@@ -92,7 +92,7 @@ public abstract class Command
 
     protected Member getMember(String ID)
     {
-        this.server.retrieveMemberById(ID);
+        this.server.retrieveMemberById(ID).queue();
         return this.server.getMemberById(ID);
     }
 
