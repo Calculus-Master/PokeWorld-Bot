@@ -9,6 +9,7 @@ public class ThreadPoolHandler
     public static int THREAD_POOL_TYPE;
 
     public static ScheduledExecutorService SPAWN;
+    public static ScheduledExecutorService LOCATION;
 
     public static final ExecutorService ACHIEVEMENT = ThreadPoolHandler.customThreadPool();
     public static final ExecutorService LISTENER_EVENT = ThreadPoolHandler.customThreadPool();
@@ -26,8 +27,10 @@ public class ThreadPoolHandler
         };
     }
 
-    public static void createSpawnThreadPool()
+    public static void createGuildSizeThreadPools()
     {
-        SPAWN = Executors.newScheduledThreadPool(Pokecord.BOT_JDA.getGuilds().size());
+        int guilds = Pokecord.BOT_JDA.getGuilds().size();
+        SPAWN = Executors.newScheduledThreadPool(guilds);
+        LOCATION = Executors.newScheduledThreadPool(guilds);
     }
 }

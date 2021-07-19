@@ -4,13 +4,11 @@ import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
+import com.calculusmaster.pokecord.game.enums.elements.Location;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.PokemonRarity;
-import com.calculusmaster.pokecord.util.helpers.CacheHelper;
-import com.calculusmaster.pokecord.util.helpers.ConfigHelper;
-import com.calculusmaster.pokecord.util.helpers.DataHelper;
-import com.calculusmaster.pokecord.util.helpers.SpawnEventHelper;
+import com.calculusmaster.pokecord.util.helpers.*;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -62,6 +60,10 @@ public class CommandDev extends Command
             case "close", "shutdown", "stop", "quit" -> Pokecord.BOT_JDA.shutdown();
             case "reloadconfig" -> ConfigHelper.init();
             case "reloadpokemondata" -> DataHelper.createPokemonData();
+            case "forcelocation" -> {
+                Location l = Location.cast(this.msg[2]);
+                if(l != null) LocationEventHelper.forceLocation(this.server, l);
+            }
         }
 
         this.sendMsg("Successfully ran Developer Command!");

@@ -77,7 +77,7 @@ public class Pokecord
 
         BOT_JDA = bot.build().awaitReady();
 
-        LoggerHelper.init("Spawn Event Thread Pool", ThreadPoolHandler::createSpawnThreadPool);
+        LoggerHelper.init("Spawn Event & Location Event Thread Pools", ThreadPoolHandler::createGuildSizeThreadPools);
 
         end = System.currentTimeMillis();
 
@@ -86,7 +86,10 @@ public class Pokecord
         for(Guild g : BOT_JDA.getGuilds())
         {
             Thread.sleep(1000);
+
             SpawnEventHelper.start(g);
+            LocationEventHelper.start(g);
+
             CommandTarget.generateNewServerTarget(g);
         }
     }

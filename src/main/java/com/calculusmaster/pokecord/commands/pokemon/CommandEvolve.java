@@ -5,9 +5,12 @@ import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.SpecialEvolutionRegistry;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
+import com.calculusmaster.pokecord.game.enums.elements.Location;
+import com.calculusmaster.pokecord.util.helpers.LocationEventHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CommandEvolve extends Command
 {
@@ -31,10 +34,27 @@ public class CommandEvolve extends Command
         boolean special = SpecialEvolutionRegistry.hasSpecialEvolution(selected.getName()) && SpecialEvolutionRegistry.canEvolve(selected);
 
         String target = "";
+        Location location = LocationEventHelper.getLocation(this.server.getId());
 
-        if(special) target = SpecialEvolutionRegistry.getTarget(selected);
+        if(Arrays.asList("Magneton", "Nosepass", "Charjabug").contains(selected.getName()) && location.isMagneticField())
+        {
+            target = switch(selected.getName()) {
+                case "Magneton" -> "Magnezone";
+                case "Nosepass" -> "Probopass";
+                case "Charjabug" -> "Vikavolt";
+                default -> "";
+            };
+        }
+        else if(selected.getName().equals("Eevee") && !special && location.isMossyRock()) target = "Leafeon";
+        else if(selected.getName().equals("Eevee") && !special && location.isIcyRock()) target = "Glaceon";
+        else if(selected.getName().equals("Kubfu") && location.equals(Location.TOWER_OF_WATER)) target = "Urshifu Rapid Strike";
+        else if(selected.getName().equals("Kubfu") && location.equals(Location.TOWER_OF_DARKNESS)) target = "Urshifu";
+        else
+        {
+            if(special) target = SpecialEvolutionRegistry.getTarget(selected);
 
-        if(!special && normal) target = new ArrayList<>(selected.getData().evolutions.keySet()).get(0);
+            if(!special && normal) target = new ArrayList<>(selected.getData().evolutions.keySet()).get(0);
+        }
 
         if(!target.equals(""))
         {
