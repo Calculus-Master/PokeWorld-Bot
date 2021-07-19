@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.SpecialEvolutionRegistry;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Location;
+import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.util.helpers.LocationEventHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -36,6 +37,7 @@ public class CommandEvolve extends Command
         String target = "";
         Location location = LocationEventHelper.getLocation(this.server.getId());
 
+        //Custom Evolution Overrides
         if(Arrays.asList("Magneton", "Nosepass", "Charjabug").contains(selected.getName()) && location.isMagneticField())
         {
             target = switch(selected.getName()) {
@@ -45,17 +47,32 @@ public class CommandEvolve extends Command
                 default -> "";
             };
         }
-        else if(selected.getName().equals("Eevee") && !special && location.isMossyRock()) target = "Leafeon";
-        else if(selected.getName().equals("Eevee") && !special && location.isIcyRock()) target = "Glaceon";
-        else if(selected.getName().equals("Kubfu") && location.equals(Location.TOWER_OF_WATER)) target = "Urshifu Rapid Strike";
-        else if(selected.getName().equals("Kubfu") && location.equals(Location.TOWER_OF_DARKNESS)) target = "Urshifu";
-        else
-        {
-            if(special) target = SpecialEvolutionRegistry.getTarget(selected);
 
-            if(!special && normal) target = new ArrayList<>(selected.getData().evolutions.keySet()).get(0);
+        if(selected.getName().equals("Eevee"))
+        {
+            if(!special && location.isMossyRock()) target = "Leafeon";
+
+            if(!special && location.isIcyRock()) target = "Glaceon";
+
+            if(!target.equals("") && selected.hasItem() && PokeItem.asItem(selected.getItem()).equals(PokeItem.FRIENDSHIP_BAND) && SpecialEvolutionRegistry.hasFriendship(selected) && LocationEventHelper.getTime().isNight())
+                target = "Umbreon";
+
+            if(!target.equals("") && selected.hasItem() && PokeItem.asItem(selected.getItem()).equals(PokeItem.FRIENDSHIP_BAND) && SpecialEvolutionRegistry.hasFriendship(selected) && LocationEventHelper.getTime().isDay())
+                target = "Espeon";
         }
 
+        if(selected.getName().equals("Kubfu"))
+        {
+            if(location.equals(Location.TOWER_OF_WATER)) target = "Urshifu Rapid Strike";
+            else if(location.equals(Location.TOWER_OF_DARKNESS)) target = "Urshifu";
+        }
+
+        //Basic Special & Normal (Level Up) Evolutions
+        if(target.equals("") && special) target = SpecialEvolutionRegistry.getTarget(selected);
+
+        if(target.equals("") && !special && normal) target = new ArrayList<>(selected.getData().evolutions.keySet()).get(0);
+
+        //Evolve
         if(!target.equals(""))
         {
             Pokemon.updateName(selected, target);

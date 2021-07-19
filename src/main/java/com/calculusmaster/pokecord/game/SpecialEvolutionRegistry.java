@@ -14,7 +14,7 @@ public class SpecialEvolutionRegistry
 
     //TODO: Regional evolutions: Exeggcute -> Alolan Exeggutor w/Leaf Stone in Alola, Koffing -> Galarian Weezing in Galar
     //TODO: Other evolutions: Cubone -> Alolan Marowak in Alola Nighttime, Mantyke -> Mantine (w/Remoraid in party)
-    //TODO: Eeveelutions: Espeon (High Friendship, Daytime), Umbreon (High Friendship, Nighttime), Leafeon (Mossy Rock), Glaceon (Icy Rock)
+    //TODO: Eeveelutions: Espeon (High Friendship, Daytime), Umbreon (High Friendship, Nighttime)
     //TODO: Cosmoem -> Solgaleo and Cosmoem -> Lunala
     //TODO: Wurmple -> Cascoon/Silcoon
     //TODO: Magnetic Field evolutions: Magneton -> Magnezone, Nosepass -> Probopass
@@ -23,7 +23,6 @@ public class SpecialEvolutionRegistry
     //TODO: Crabrawler -> Crabominable at Mount Lanakila
     //TODO: Galarian Yamask -> Runerigus (near Dusty Bowl)
     //TODO: G. Farfetchd -> Sirfetchd (3 critical hits in a battle)
-    //TODO: Kubfu -> Urshifu (Tower of Darkness) and Kubfu -> Urshifu Rapid Strike (Tower of Water)
 
     //TODO: Forms: Castform, Zacian/Zamazenta, Wormadam, Rotom, Basculin, Darmanitan Zen (Galarian Darmanitan is added), Meowstic, Pumpkaboo, Gourgeist, Oricorio
 
@@ -215,7 +214,7 @@ public class SpecialEvolutionRegistry
         return register(source, target, item.equals(PokeItem.FRIENDSHIP_BAND) ? friendship : normal);
     }
 
-    private static boolean hasFriendship(Pokemon p)
+    public static boolean hasFriendship(Pokemon p)
     {
         return p.getLevel() >= 50 && p.getEVTotal() >= 20;
     }
