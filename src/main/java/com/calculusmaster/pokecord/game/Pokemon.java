@@ -178,7 +178,16 @@ public class Pokemon
 
     public int getNumber()
     {
-        return this.num;
+        int index = -1;
+
+        for(List<Pokemon> list : CacheHelper.POKEMON_LISTS.values()) for(int i = 0; i < list.size(); i++) if(list.get(i).getUUID().equals(this.UUID)) index = i;
+
+        if(index == -1)
+        {
+            LoggerHelper.warn(Pokemon.class, "Could not find number for " + this.UUID + "!");
+            return this.num;
+        }
+        else return index + 1;
     }
 
     public void setNumber(int n)
