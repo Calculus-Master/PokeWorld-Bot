@@ -259,6 +259,10 @@ public class Commands
                 .setCommand(CommandTip::new)
                 .setCategory(Category.MISC);
 
+        register("location", "time", "region")
+                .setCommand(CommandLocation::new)
+                .setCategory(Category.MISC);
+
         register("dev")
                 .setCommand(CommandDev::new)
                 .setCategory(Category.MISC);
