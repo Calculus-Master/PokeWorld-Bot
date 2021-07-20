@@ -59,6 +59,7 @@ public class LocationEventHelper
 
     private static void changeLocation(Guild g, Location location)
     {
+        LoggerHelper.info(LocationEventHelper.class, "New Location Event – " + g.getName() + " (" + g.getId() + ") - Location: " + location.toString() + " | Region: " + location.region + " | Time: " + getTime().toString());
         SERVER_LOCATIONS.put(g.getId(), location);
     }
 
