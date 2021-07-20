@@ -52,7 +52,7 @@ public class CommandDex extends Command
                 .addField("Type", data.types.get(0).equals(data.types.get(1)) ? data.types.get(0).getStyledName() : data.types.get(0).getStyledName() + "\n" + data.types.get(1).getStyledName(), true)
                 .addField("Abilities", this.listToMultiLineString(data.abilities), true)
                 .addBlankField(true)
-                .addField("Growth Rate", Global.normalCase(data.growthRate.toString()), true)
+                .addField("Growth Rate", Global.normalCase(data.growthRate.toString().replaceAll("_", "")), true)
                 .addField("EXP Yield", String.valueOf(data.baseEXP), true)
                 .addField("EV Yield", this.getEVYield(data.yield), true)
                 .addField("Evolutions", this.getEvolutionsFormatted(data.evolutions), true)
