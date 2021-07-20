@@ -13,7 +13,6 @@ public class SpecialEvolutionRegistry
     public static final List<Evolution> EVOLUTIONS = new ArrayList<>();
 
     //TODO: Regional evolutions: Exeggcute -> Alolan Exeggutor w/Leaf Stone in Alola, Koffing -> Galarian Weezing in Galar
-    //TODO: Other evolutions: Mantyke -> Mantine (w/Remoraid in party)
     //TODO: Wurmple -> Cascoon/Silcoon
     //TODO: Burmy -> Mothim (Male) or Wormadam (Male) at Level 20
     //TODO: Karrablast -> Escaliver & Shelmet -> Accelgor w/Trade
