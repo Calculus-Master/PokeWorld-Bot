@@ -1324,7 +1324,6 @@ public class Duel
         catch (Exception e)
         {
             this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
-            e.printStackTrace();
         }
     }
 

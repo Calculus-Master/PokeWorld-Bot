@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -211,6 +212,15 @@ public class CommandPokemon extends Command
 
         if(!this.pokemon.isEmpty()) this.createListEmbed();
         else this.embed.setDescription("You have no Pokemon with those characteristics!");
+
+        int owned = this.playerData.getPokemonList().size();
+        if(owned >= 10) Achievements.grant(this.player.getId(), Achievements.OWNED_10_POKEMON, this.event);
+        if(owned >= 100) Achievements.grant(this.player.getId(), Achievements.OWNED_100_POKEMON, this.event);
+        if(owned >= 500) Achievements.grant(this.player.getId(), Achievements.OWNED_500_POKEMON, this.event);
+        if(owned >= 1000) Achievements.grant(this.player.getId(), Achievements.OWNED_1000_POKEMON, this.event);
+        if(owned >= 5000) Achievements.grant(this.player.getId(), Achievements.OWNED_5000_POKEMON, this.event);
+        if(owned >= 10000) Achievements.grant(this.player.getId(), Achievements.OWNED_10000_POKEMON, this.event);
+
 
         return this;
     }

@@ -37,6 +37,12 @@ public enum Achievements
     COMPLETED_FIRST_LEGEND_PURSUIT(20000, "Completed your first Legend size Pursuit!"),
     PARTICIPATED_FIRST_TOURNAMENT(500, "Participated in your first Tournament!"),
     WON_FIRST_TOURNAMENT(5000, "Won your first Tournament!"),
+    OWNED_10_POKEMON(200, "Owned 10 Pokemon!"),
+    OWNED_100_POKEMON(600, "Owned 100 Pokemon!"),
+    OWNED_500_POKEMON(1000, "Owned 500 Pokemon!"),
+    OWNED_1000_POKEMON(2000, "Owned 1000 Pokemon!"),
+    OWNED_5000_POKEMON(3000, "Owned 5000 Pokemon!"),
+    OWNED_10000_POKEMON(7500, "Owned 5000 Pokemon!"),
     COMPLETED_ALL_ACHIEVEMENTS(100000, "Completed all Achievements!");
 
     public int credits;
