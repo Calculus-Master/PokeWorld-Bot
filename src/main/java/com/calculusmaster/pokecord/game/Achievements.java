@@ -50,6 +50,8 @@ public enum Achievements
     public static void grant(String playerID, Achievements a, MessageReceivedEvent event)
     {
         ThreadPoolHandler.ACHIEVEMENT.execute(() -> {
+            if(!playerID.chars().allMatch(Character::isDigit)) return;
+
             if(CacheHelper.ACHIEVEMENT_CACHE.get(a).contains(playerID)) return;
 
             PlayerDataQuery p = new PlayerDataQuery(playerID);
