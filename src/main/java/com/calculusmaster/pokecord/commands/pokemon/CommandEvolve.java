@@ -99,6 +99,9 @@ public class CommandEvolve extends Command
         if(selected.getName().equals("Crabrawler") && location.equals(Location.MOUNT_LANAKILA))
             target = "Crabominable";
 
+        if(selected.getName().equals("Galarian Yamask") && location.equals(Location.DUSTY_BOWL))
+            target = "Runerigus";
+
         //Basic Special & Normal (Level Up) Evolutions
         if(target.equals("") && special) target = SpecialEvolutionRegistry.getTarget(selected);
 

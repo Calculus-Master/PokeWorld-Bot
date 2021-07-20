@@ -30,6 +30,7 @@ public enum Location
     MOUNT_LANAKILA(ALOLA),
     LUSH_JUNGLE(ALOLA),
     //Galar
+    DUSTY_BOWL(GALAR),
     TOWER_OF_WATER(GALAR),
     TOWER_OF_DARKNESS(GALAR);
 
