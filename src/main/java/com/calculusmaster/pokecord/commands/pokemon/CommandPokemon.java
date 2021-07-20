@@ -221,7 +221,6 @@ public class CommandPokemon extends Command
         if(owned >= 5000) Achievements.grant(this.player.getId(), Achievements.OWNED_5000_POKEMON, this.event);
         if(owned >= 10000) Achievements.grant(this.player.getId(), Achievements.OWNED_10000_POKEMON, this.event);
 
-
         return this;
     }
 

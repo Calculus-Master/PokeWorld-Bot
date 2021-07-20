@@ -6,12 +6,14 @@ import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import com.calculusmaster.pokecord.util.helpers.SpawnEventHelper;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
+import net.dv8tion.jda.api.events.user.update.UserUpdateNameEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
@@ -61,5 +63,14 @@ public class MiscListener extends ListenerAdapter
 
         SpawnEventHelper.removeServer(serverID);
         DataHelper.removeServer(serverID);
+    }
+
+    @Override
+    public void onUserUpdateName(@NotNull UserUpdateNameEvent event)
+    {
+        if(PlayerDataQuery.isRegistered(event.getUser().getId()))
+        {
+            Mongo.PlayerData.updateOne(Filters.eq("playerID", event.getUser().getId()), Updates.set("username", event.getNewName()));
+        }
     }
 }
