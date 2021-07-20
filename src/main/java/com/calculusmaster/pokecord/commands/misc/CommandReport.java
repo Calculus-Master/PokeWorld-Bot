@@ -17,26 +17,18 @@ public class CommandReport extends Command
     @Override
     public Command runCommand()
     {
-        if(this.msg.length >= 3)
+        if(this.msg.length >= 2)
         {
             Document reportInfo = new Document("user", this.player.getName())
-                    .append("command", this.msg[1])
-                    .append("report", this.restOfString());
+                    .append("report", this.getMultiWordContent(1));
 
             Mongo.ReportData.insertOne(reportInfo);
-            this.embed.setDescription("Successfully submitted!");
+            this.sendMsg("Successfully submitted!");
 
             Achievements.grant(this.player.getId(), Achievements.SUBMITTED_BUG_REPORT, this.event);
         }
-        else this.embed.setDescription(CommandInvalid.getFull());
+        else this.sendMsg(CommandInvalid.getFull());
 
         return this;
-    }
-
-    private String restOfString()
-    {
-        StringBuilder sb = new StringBuilder();
-        for(int i = 2; i < this.msg.length; i++) sb.append(this.msg[i] + " ");
-        return sb.toString().trim();
     }
 }
