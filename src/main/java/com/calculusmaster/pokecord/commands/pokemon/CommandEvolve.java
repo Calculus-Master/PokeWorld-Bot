@@ -52,15 +52,15 @@ public class CommandEvolve extends Command
 
         if(selected.getName().equals("Eevee"))
         {
-            if(!special && location.isMossyRock()) target = "Leafeon";
-
-            if(!special && location.isIcyRock()) target = "Glaceon";
-
-            if(!target.equals("") && selected.hasItem() && PokeItem.asItem(selected.getItem()).equals(PokeItem.FRIENDSHIP_BAND) && SpecialEvolutionRegistry.hasFriendship(selected) && time.isNight())
+            if(selected.hasItem() && PokeItem.asItem(selected.getItem()).equals(PokeItem.FRIENDSHIP_BAND) && SpecialEvolutionRegistry.hasFriendship(selected) && time.isNight())
                 target = "Umbreon";
 
-            if(!target.equals("") && selected.hasItem() && PokeItem.asItem(selected.getItem()).equals(PokeItem.FRIENDSHIP_BAND) && SpecialEvolutionRegistry.hasFriendship(selected) && time.isDay())
+            if(selected.hasItem() && PokeItem.asItem(selected.getItem()).equals(PokeItem.FRIENDSHIP_BAND) && SpecialEvolutionRegistry.hasFriendship(selected) && time.isDay())
                 target = "Espeon";
+
+            if(target.equals("") && !special && location.isMossyRock()) target = "Leafeon";
+
+            if(target.equals("") && !special && location.isIcyRock()) target = "Glaceon";
         }
 
         if(selected.getName().equals("Kubfu"))
