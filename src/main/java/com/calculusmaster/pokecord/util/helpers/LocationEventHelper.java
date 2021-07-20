@@ -24,7 +24,7 @@ public class LocationEventHelper
 
     public static void start(Guild g, int delay)
     {
-        ScheduledFuture<?> locationEvent = ThreadPoolHandler.LOCATION.scheduleWithFixedDelay(() -> changeLocation(g), 10, 200, TimeUnit.SECONDS);
+        ScheduledFuture<?> locationEvent = ThreadPoolHandler.LOCATION.scheduleWithFixedDelay(() -> changeLocation(g), delay, 2, TimeUnit.HOURS);
 
         SCHEDULERS.put(g.getId(), locationEvent);
     }
