@@ -95,7 +95,7 @@ public class SpawnEventHelper
 
             if(spawn.equals("Deerling")) URLString = Global.getDeerlingImage(shiny);
             else if(spawn.equals("Sawsbuck")) URLString = Global.getSawsbuckImage(shiny);
-            else URLString = Pokemon.genericJSON(spawn).getString(shiny ? "shinyURL" : "normalURL");
+            else URLString = shiny ? DataHelper.pokeData(spawn).shinyURL : DataHelper.pokeData(spawn).normalURL;
 
             URL url = new URL(URLString.equals("") ? Pokemon.getWIPImage() : URLString);
             BufferedImage img = ImageIO.read(url);
