@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class CommandDex extends Command
 {
@@ -44,8 +45,10 @@ public class CommandDex extends Command
         String pokemon = Global.normalCase(this.getPokemonName());
 
         PokemonData data = DataHelper.pokeData(pokemon);
-        this.embed.setDescription(data.species + "\nHeight: " + data.height + "     |     Weight: "+ data.weight);
+        String flavor = DataHelper.POKEMON_SPECIES_DESC.get(data.dex).get(new Random().nextInt(DataHelper.POKEMON_SPECIES_DESC.get(data.dex).size()));
+
         this.embed
+                .setDescription(data.species + "\nHeight: " + data.height + "     |     Weight: " + data.weight + "\n" + flavor)
                 .addField("Type", data.types.get(0).equals(data.types.get(1)) ? data.types.get(0).getStyledName() : data.types.get(0).getStyledName() + "\n" + data.types.get(1).getStyledName(), true)
                 .addField("Abilities", this.listToMultiLineString(data.abilities), true)
                 .addBlankField(true)

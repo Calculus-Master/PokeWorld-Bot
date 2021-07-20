@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.util.helpers;
 
+import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
@@ -93,6 +94,22 @@ public class CSVHelper
 //        }
 //
 //        for(String s : moves) Mongo.PerformanceData.insertOne(getMoveData(s));
+    }
+
+    public static List<String[]> readCSV(String fileName)
+    {
+        String file = "/csv/" + fileName + ".csv";
+        try
+        {
+            //return new CSVReader(new FileReader(new File(Pokecord.class.getResource(file).toURI()))).readAll();
+            return new CSVReader(new InputStreamReader(Objects.requireNonNull(Pokecord.class.getResourceAsStream(file)))).readAll();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            LoggerHelper.error(CSVHelper.class, "Could not read " + file + "!");
+            return new ArrayList<>();
+        }
     }
 
     private static void createCSVLists() throws IOException, CsvException

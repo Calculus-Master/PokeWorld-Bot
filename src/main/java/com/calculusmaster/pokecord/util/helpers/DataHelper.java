@@ -23,6 +23,7 @@ public class DataHelper
     public static final List<List<String>> EV_LISTS = new ArrayList<>();
     public static final Map<Type, List<String>> TYPE_LISTS = new HashMap<>();
     public static final Map<String, GigantamaxData> GIGANTAMAX_DATA = new HashMap<>();
+    public static final Map<Integer, List<String>> POKEMON_SPECIES_DESC = new HashMap<>();
 
     //Pokemon Data
     public static void createPokemonData()
@@ -134,5 +135,26 @@ public class DataHelper
     private static void registerGigantamax(String name, String move, Type type, String normal)
     {
         registerGigantamax(name, move, type, normal, normal);
+    }
+
+    //Species Description Lines (from CSV)
+    public static void createSpeciesDescLists()
+    {
+        List<String[]> speciesCSV = CSVHelper.readCSV("pokemon_species_flavor_text").stream().filter(l -> l[2].equals("9")).collect(Collectors.toList());
+
+        //species_id,version_id,language_id,flavor_text
+        //language_id 9 is English
+        for(int i = 1; i < 898; i++)
+        {
+            final int dex = i;
+            List<String> lines = speciesCSV.stream()
+                    .filter(l -> l[0].equals(dex + "")) //Lines with dex number
+                    .map(l -> l[3]) //Map to the Flavor Text
+                    .distinct()//Remove duplicates
+                    .map(s -> s.replaceAll("\n", " ")) //Replace new line characters with spaces
+                    .map(s -> s.replaceAll("POKéMON", "Pokemon")) //Fix the weirdly formatted Pokemon word
+                    .collect(Collectors.toList());
+            POKEMON_SPECIES_DESC.put(dex, lines);
+        }
     }
 }
