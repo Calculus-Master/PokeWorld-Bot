@@ -15,9 +15,18 @@ public class SkinReward extends TierReward
     @Override
     public String grantReward(PlayerDataQuery player)
     {
-        player.addSkin(this.skin);
+        if(player.hasSkin(this.skin))
+        {
+            player.changeCredits(1000);
 
-        return "You earned a new skin for " + this.skin.pokemon + " - \"" + this.skin.skinName + "\"";
+            return "You already own " + this.skin.skinName + ", so you earned 1000 credits instead!";
+        }
+        else
+        {
+            player.addSkin(this.skin);
+
+            return "You earned a new skin for " + this.skin.pokemon + " - \"" + this.skin.skinName + "\"";
+        }
     }
 
     @Override
