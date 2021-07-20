@@ -89,172 +89,39 @@ public class Duel
         if(!this.players[1].active.isFainted()) this.data(1).canUseMove = this.statusConditionEffects(1);
 
         //Both players are using a move
-        if(!this.queuedMoves.get(this.players[0].ID).action().equals(ActionType.SWAP) && !this.queuedMoves.get(this.players[1].ID).action().equals(ActionType.SWAP))
+        if(this.isUsingMove(0) && this.isUsingMove(1))
         {
-            //Base Move
-            this.players[0].move = new Move(this.players[0].active.getLearnedMoves().get(this.queuedMoves.get(this.players[0].ID).moveInd() - 1));
-            this.players[1].move = new Move(this.players[1].active.getLearnedMoves().get(this.queuedMoves.get(this.players[1].ID).moveInd() - 1));
+            //Establish moves
+            this.moveAction(0);
+            this.moveAction(1);
 
-            //Check if Z-Move
-            if(this.getAction(0).equals(ActionType.ZMOVE)) this.players[0].move = DuelHelper.getZMove(this.players[0], this.players[0].move);
-            if(this.getAction(1).equals(ActionType.ZMOVE)) this.players[1].move = DuelHelper.getZMove(this.players[1], this.players[1].move);
-
-            //Check if Entering Dynamax
-            if(this.getAction(0).equals(ActionType.DYNAMAX))
-            {
-                this.players[0].active.enterDynamax();
-                this.players[0].dynamaxTurns = 3;
-                this.players[0].usedDynamax = true;
-
-                this.results.add(this.players[0].active.getName() + " dynamaxed!\n");
-            }
-            if(this.getAction(1).equals(ActionType.DYNAMAX))
-            {
-                this.players[1].active.enterDynamax();
-                this.players[1].dynamaxTurns = 3;
-                this.players[1].usedDynamax = true;
-
-                this.results.add(this.players[1].active.getName() + " dynamaxed!\n");
-            }
-
-            //Check if Max Move (Dynamaxed)
-            if(this.players[0].active.isDynamaxed()) this.players[0].move = DuelHelper.getMaxMove(this.players[0].active, this.players[0].move);
-            if(this.players[1].active.isDynamaxed()) this.players[1].move = DuelHelper.getMaxMove(this.players[1].active, this.players[1].move);
-
-            //Set who attacks first
-            int speed1 = this.players[0].active.getStat(Stat.SPD);
-            int speed2 = this.players[1].active.getStat(Stat.SPD);
-
-            if(this.players[0].move.getPriority() == this.players[1].move.getPriority())
-            {
-                this.current = speed1 == speed2 ? (new Random().nextInt(100) < 50 ? 0 : 1) : (speed1 > speed2 ? 0 : 1);
-
-                if(this.room.equals(Room.TRICK_ROOM)) this.current = this.current == 0 ? 1 : 0;
-            }
-            else
-            {
-                this.current = this.players[0].move.getPriority() > this.players[1].move.getPriority() ? 0 : 1;
-            }
-
-            this.other = this.current == 0 ? 1 : 0;
-
-            this.first = this.players[this.current].active.getUUID();
-
-            //Do moves
-            if(!this.players[this.current].active.isFainted())
-            {
-                results.add(this.turn(this.players[this.current].move));
-            }
-            else results.add("\n" + this.players[this.current].active.getName() + " fainted!");
-
-            if(!this.players[this.other].active.isFainted())
-            {
-                this.current = this.current == 0 ? 1 : 0;
-                this.other = this.current == 0 ? 1 : 0;
-
-                results.add("\n" + this.turn(this.players[this.current].move));
-            }
-            else results.add("\n" + this.players[this.other].active.getName() + " fainted!");
+            this.fullMoveTurn();
         }
-        //Both players are swapping
-        else if(this.getAction(0).equals(ActionType.SWAP) && this.getAction(1).equals(ActionType.SWAP))
-        {
-            this.data(0).setDefaults();
-            this.data(1).setDefaults();
-
-            int ind = this.queuedMoves.get(this.players[0].ID).swapInd() - 1;
-            this.players[0].swap(ind);
-
-            results.add(this.players[0].data.getUsername() + " brought in " + this.players[0].active.getName() + "!\n");
-
-            this.entryHazardEffects(0);
-
-            this.players[0].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
-
-            ind = this.queuedMoves.get(this.players[1].ID).swapInd() - 1;
-            this.players[1].swap(ind);
-
-            results.add(this.players[1].data.getUsername() + " brought in " + this.players[1].active.getName() + "!\n");
-
-            this.entryHazardEffects(1);
-
-            if(this.isNonBotPlayer(1)) this.players[1].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
-
-            this.checkWeatherAbilities();
-        }
-        //Either player wants to swap out a pokemon
         else
         {
-            boolean player1Swap = this.getAction(0).equals(ActionType.SWAP);
+            this.checkFaintSwap(0);
+            this.checkFaintSwap(1);
 
-            if(player1Swap) //Player 1 wants to swap
+            if(this.getAction(0).equals(ActionType.SWAP)) this.swapAction(0);
+            if(this.getAction(1).equals(ActionType.SWAP)) this.swapAction(1);
+
+            if(this.isUsingMove(0))
             {
-                this.current = 1;
-                this.other = 0;
-
-                boolean faintSwap = this.players[0].active.isFainted();
-
-                Move move = new Move(this.players[1].active.getLearnedMoves().get(this.queuedMoves.get(this.players[1].ID).moveInd() - 1));
-                if(this.getAction(1).equals(ActionType.ZMOVE)) move = DuelHelper.getZMove(this.players[1], move);
-                if(this.getAction(1).equals(ActionType.DYNAMAX))
-                {
-                    this.players[1].active.enterDynamax();
-                    this.players[1].dynamaxTurns = 3;
-                    this.players[1].usedDynamax = true;
-                    this.results.add(this.players[1].active.getName() + " dynamaxed!\n");
-                }
-
-                if(!faintSwap && this.players[1].active.isDynamaxed()) move = DuelHelper.getMaxMove(this.players[1].active, this.players[1].move);
-
-                int ind = this.queuedMoves.get(this.players[0].ID).swapInd() - 1;
-                this.data(0).setDefaults();
-                this.players[0].swap(ind);
-
-                results.add(this.players[0].data.getUsername() + " brought in " + this.players[0].active.getName() + "!\n");
-
-                this.checkWeatherAbilities(0);
-                this.entryHazardEffects(0);
-
-                this.players[0].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
-
-                if(!faintSwap) results.add(this.turn(move));
+                this.moveAction(0);
+                this.moveLogic(0);
             }
-            else //Player 2 wants to swap
+            else if(this.isUsingMove(1))
             {
-                this.current = 0;
-                this.other = 1;
-
-                boolean faintSwap = this.players[1].active.isFainted();
-                //TODO: move to methods, also remove the entire zmove and dynamax check if this is an AI duel & the trainer swaps
-                //TODO: Add TurnAction: Idle - player does nothing on that turn and Item - usable items (maybe????)
-
-                Move move = new Move(this.players[0].active.getLearnedMoves().get(this.queuedMoves.get(this.players[0].ID).moveInd() - 1));
-                if(this.getAction(0).equals(ActionType.ZMOVE)) move = DuelHelper.getZMove(this.players[0], move);
-                if(this.getAction(0).equals(ActionType.DYNAMAX))
-                {
-                    this.players[0].active.enterDynamax();
-                    this.players[0].dynamaxTurns = 3;
-                    this.players[0].usedDynamax = true;
-                    this.results.add(this.players[0].active.getName() + " dynamaxed!\n");
-                }
-
-                if(!faintSwap && this.players[0].active.isDynamaxed()) move = DuelHelper.getMaxMove(this.players[0].active, this.players[0].move);
-
-                int ind = this.queuedMoves.get(this.players[1].ID).swapInd() - 1;
-                this.data(1).setDefaults();
-                this.players[1].swap(ind);
-
-                results.add(this.players[1].data.getUsername() + " brought in " + this.players[1].active.getName() + "!\n");
-
-                this.checkWeatherAbilities(1);
-                this.entryHazardEffects(1);
-
-                if(this.isNonBotPlayer(1)) this.players[1].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
-
-                if(!faintSwap) results.add(this.turn(move));
+                this.moveAction(1);
+                this.moveLogic(1);
             }
         }
 
+        this.onTurnEnd();
+    }
+
+    protected void onTurnEnd()
+    {
         this.updateWeatherTerrainRoom();
 
         this.weatherEffects();
@@ -271,6 +138,101 @@ public class Duel
         else this.sendTurnEmbed();
 
         this.queuedMoves.clear();
+    }
+
+    protected void checkFaintSwap(int p)
+    {
+        int o = p == 0 ? 1 : 0;
+        if(this.getAction(p).equals(ActionType.SWAP) && this.players[p].active.isFainted() && !this.players[0].active.isFainted()) this.queuedMoves.put(this.players[o].ID, new TurnAction(ActionType.IDLE, -1, -1));
+    }
+
+    protected boolean isUsingMove(int p)
+    {
+        return Arrays.asList(ActionType.MOVE, ActionType.ZMOVE, ActionType.DYNAMAX).contains(this.getAction(p));
+    }
+
+    protected void fullMoveTurn()
+    {
+        //Set who goes first (set this.current and this.other)
+        this.setMoveOrder();
+
+        //Move Logic - Player 1 (index 0)
+        this.moveLogic(this.current);
+
+        //Switch players
+        this.current = this.current == 0 ? 1 : 0;
+        this.other = this.current == 0 ? 1 : 0;
+
+        //Move Logic - Player 2 (index 1)
+        this.moveLogic(this.current);
+    }
+
+    private void moveLogic(int p)
+    {
+        this.current = p;
+        if(!this.players[p].active.isFainted())
+        {
+            results.add(this.turn(this.players[p].move));
+        }
+        else results.add("\n" + this.players[p].active.getName() + " fainted!");
+    }
+
+    private void setMoveOrder()
+    {
+        int speed1 = this.players[0].active.getStat(Stat.SPD);
+        int speed2 = this.players[1].active.getStat(Stat.SPD);
+
+        if(this.players[0].move.getPriority() == this.players[1].move.getPriority())
+        {
+            this.current = speed1 == speed2 ? (new Random().nextInt(100) < 50 ? 0 : 1) : (speed1 > speed2 ? 0 : 1);
+
+            if(this.room.equals(Room.TRICK_ROOM)) this.current = this.current == 0 ? 1 : 0;
+        }
+        else
+        {
+            this.current = this.players[0].move.getPriority() > this.players[1].move.getPriority() ? 0 : 1;
+        }
+
+        this.other = this.current == 0 ? 1 : 0;
+
+        this.first = this.players[this.current].active.getUUID();
+    }
+
+    protected void moveAction(int p)
+    {
+        //Basic Move
+        Move move = new Move(this.players[p].active.getLearnedMoves().get(this.queuedMoves.get(this.players[p].ID).moveInd() - 1));
+
+        //Z Move
+        if(this.getAction(p).equals(ActionType.ZMOVE)) move = DuelHelper.getZMove(this.players[p], move);
+
+        //Dynamax - Request (If the player is entering Dynamax this turn)
+        if(this.getAction(p).equals(ActionType.DYNAMAX))
+        {
+            this.players[p].active.enterDynamax();
+            this.players[p].dynamaxTurns = 3;
+            this.players[p].usedDynamax = true;
+            this.results.add(this.players[p].active.getName() + " dynamaxed!\n");
+        }
+
+        //Max Move
+        if(this.players[p].active.isDynamaxed()) move = DuelHelper.getMaxMove(this.players[p].active, move);
+
+        this.players[p].move = move;
+    }
+
+    private void swapAction(int p)
+    {
+        int index = this.queuedMoves.get(this.players[p].ID).swapInd() - 1;
+        this.data(p).setDefaults();
+        this.players[p].swap(index);
+
+        results.add(this.players[p].data.getUsername() + " brought in " + this.players[p].active.getName() + "!\n");
+
+        this.checkWeatherAbilities(p);
+        this.entryHazardEffects(p);
+
+        if(this.isNonBotPlayer(p)) this.players[p].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
     }
 
     //Always use this.current!
@@ -1465,8 +1427,9 @@ public class Duel
     {
         type = Character.toLowerCase(type);
 
+        if(type == 'i') this.queuedMoves.put(id, new TurnAction(ActionType.IDLE, -1, -1));
         //index functions as both the swapIndex and moveIndex, which one is dictated by type == 's' and type == 'm'
-        if(type == 's')
+        else if(type == 's')
         {
             if(this.players[this.indexOf(id)].team.get(index - 1).isFainted()) this.event.getChannel().sendMessage("That pokemon is fainted!").queue();
             else this.queuedMoves.put(id, new TurnAction(ActionType.SWAP, -1, index));
@@ -1484,11 +1447,10 @@ public class Duel
         boolean faintSwap1 = this.queuedMoves.containsKey(this.players[0].ID) && this.queuedMoves.get(this.players[0].ID).action().equals(ActionType.SWAP) && this.players[0].active.isFainted();
         boolean faintSwap2 = this.queuedMoves.containsKey(this.players[1].ID) && this.queuedMoves.get(this.players[1].ID).action().equals(ActionType.SWAP) && this.players[1].active.isFainted();
 
-        //TODO: Add a TurnAction IDLE
         if((faintSwap1 || faintSwap2) && !(faintSwap1 && faintSwap2))
         {
-            if(faintSwap1) this.submitMove(this.players[1].ID, 1, 'm');
-            else this.submitMove(this.players[0].ID, 1, 'm');
+            if(faintSwap1) this.submitMove(this.players[1].ID, -1, 'i');
+            else this.submitMove(this.players[0].ID, -1, 'i');
 
             turnHandler();
         }

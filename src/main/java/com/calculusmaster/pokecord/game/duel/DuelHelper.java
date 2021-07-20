@@ -195,7 +195,8 @@ public class DuelHelper
         MOVE,
         ZMOVE,
         SWAP,
-        DYNAMAX
+        DYNAMAX,
+        IDLE
     }
 
     public enum DuelStatus

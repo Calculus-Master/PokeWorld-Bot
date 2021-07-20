@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static com.calculusmaster.pokecord.game.duel.DuelHelper.*;
+import static com.calculusmaster.pokecord.game.duel.DuelHelper.DUELS;
+import static com.calculusmaster.pokecord.game.duel.DuelHelper.DuelStatus;
 
 public class TrainerDuel extends Duel
 {
@@ -140,8 +141,16 @@ public class TrainerDuel extends Duel
     {
         super.turnSetup();
 
+        int index;
+        char type;
+
+        if(this.players[0].active.isFainted() && !this.players[1].active.isFainted())
+        {
+            index = -1;
+            type = 'i';
+        }
         //If active is fainted, AI needs to swap
-        if(this.players[1].active.isFainted())
+        else if(this.players[1].active.isFainted())
         {
             int ind = -1;
             for(int i = 0; i < this.players[1].team.size(); i++)
@@ -153,26 +162,35 @@ public class TrainerDuel extends Duel
                 }
             }
 
-            this.queuedMoves.put(this.players[1].ID, new TurnAction(ActionType.SWAP, -1, ind));
+            index = ind;
+            type = 's';
         }
         //Z-Move
         else if(!this.players[1].usedZMove)
         {
-            int index = new Random().nextInt(4);
-            Move move = new Move(this.players[1].active.getLearnedMoves().get(index));
-            if(this.players[1].data.hasZCrystal(ZCrystal.getCrystalOfType(move.getType()).getStyledName())) this.queuedMoves.put(this.players[1].ID, new TurnAction(ActionType.ZMOVE, index + 1, -1));
-            else this.queuedMoves.put(this.players[1].ID, new TurnAction(ActionType.MOVE, index + 1, -1));
+            int ind = new Random().nextInt(4);
+            Move move = new Move(this.players[1].active.getLearnedMoves().get(ind));
+
+            index = ind + 1;
+
+            if(this.players[1].data.hasZCrystal(ZCrystal.getCrystalOfType(move.getType()).getStyledName())) type = 'z';
+            else type = 'm';
 
         }
         //Dynamax
         else if(!this.players[1].usedDynamax && new Random().nextInt(100) < 33)
         {
-            int index = new Random().nextInt(4);
-
-            this.queuedMoves.put(this.players[1].ID, new TurnAction(ActionType.DYNAMAX, index + 1, -1));
+            index = new Random().nextInt(4) + 1;
+            type = 'd';
         }
         //Normal Move
-        else this.queuedMoves.put(this.players[1].ID, new TurnAction(ActionType.MOVE, new Random().nextInt(4) + 1, -1));
+        else
+        {
+            index = new Random().nextInt(4) + 1;
+            type = 'm';
+        }
+
+        this.submitMove(this.players[1].ID, index, type);
     }
 
     protected void limitPlayerPokemon(int level)

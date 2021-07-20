@@ -4,7 +4,6 @@ import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.duel.elements.WildPokemon;
-import com.calculusmaster.pokecord.game.enums.elements.Room;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -51,7 +50,7 @@ public class WildDuel extends Duel
         if(!this.isComplete())
         {
             //Get moves - [1] is the bot so get a random move
-            this.players[0].move = new Move(this.players[0].active.getLearnedMoves().get(this.queuedMoves.get(this.players[0].ID).moveInd() - 1));
+            this.moveAction(0);
 
             List<Move> botMoves = new ArrayList<>();
             for(String s : this.players[1].active.getAllMoves()) botMoves.add(new Move(s));
@@ -63,55 +62,10 @@ public class WildDuel extends Duel
             if(this.players[1].active.getHealth() <= this.players[1].active.getStat(Stat.HP) / 4) this.players[1].move = mostDamage;
             else this.players[1].move = botMoves.get(new Random().nextInt(botMoves.size()));
 
-            //Set who goes first
-            int speed1 = this.players[0].active.getStat(Stat.SPD);
-            int speed2 = this.players[1].active.getStat(Stat.SPD);
-
-            if(this.players[0].move.getPriority() == this.players[1].move.getPriority())
-            {
-                this.current = speed1 == speed2 ? (new Random().nextInt(100) < 50 ? 0 : 1) : (speed1 > speed2 ? 0 : 1);
-
-                if(this.room.equals(Room.TRICK_ROOM)) this.current = this.current == 0 ? 1 : 0;
-            }
-            else
-            {
-                this.current = this.players[0].move.getPriority() > this.players[1].move.getPriority() ? 0 : 1;
-            }
-
-            this.other = this.current == 0 ? 1 : 0;
-
-            this.first = this.players[this.current].active.getUUID();
-
-            //Do moves
-            if(!this.players[this.current].active.isFainted())
-            {
-                results.add(this.turn(this.players[this.current].move));
-            }
-            else results.add("\n" + this.players[this.current].active.getName() + " fainted!");
-
-            if(!this.players[this.other].active.isFainted())
-            {
-                this.current = this.current == 0 ? 1 : 0;
-                this.other = this.current == 0 ? 1 : 0;
-
-                results.add("\n" + this.turn(this.players[this.current].move));
-            }
-            else results.add("\n" + this.players[this.other].active.getName() + " fainted!");
+            this.fullMoveTurn();
         }
 
-        this.updateWeatherTerrainRoom();
-
-        this.weatherEffects();
-
-        if(this.isComplete())
-        {
-            this.sendTurnEmbed();
-            this.sendWinEmbed();
-            this.setStatus(DuelStatus.COMPLETE);
-        }
-        else this.sendTurnEmbed();
-
-        this.queuedMoves.clear();
+        this.onTurnEnd();
     }
 
     @Override
