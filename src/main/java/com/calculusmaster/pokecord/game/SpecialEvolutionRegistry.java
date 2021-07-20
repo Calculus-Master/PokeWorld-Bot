@@ -15,7 +15,6 @@ public class SpecialEvolutionRegistry
     //TODO: Wurmple -> Cascoon/Silcoon
     //TODO: Burmy -> Mothim (Male) or Wormadam (Male) at Level 20
     //TODO: Karrablast -> Escaliver & Shelmet -> Accelgor w/Trade
-    //TODO: Crabrawler -> Crabominable at Mount Lanakila
     //TODO: Galarian Yamask -> Runerigus (near Dusty Bowl)
     //TODO: G. Farfetchd -> Sirfetchd (3 critical hits in a battle)
 

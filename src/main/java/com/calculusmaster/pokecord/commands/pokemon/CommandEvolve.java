@@ -96,6 +96,9 @@ public class CommandEvolve extends Command
         if(selected.getName().equals("Exeggcute") && location.region.equals(Region.ALOLA) && selected.hasItem() && PokeItem.asItem(selected.getItem()).equals(PokeItem.LEAF_STONE))
             target = "Alolan Exeggutor";
 
+        if(selected.getName().equals("Crabrawler") && location.equals(Location.MOUNT_LANAKILA))
+            target = "Crabominable";
+
         //Basic Special & Normal (Level Up) Evolutions
         if(target.equals("") && special) target = SpecialEvolutionRegistry.getTarget(selected);
 
