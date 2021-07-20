@@ -21,7 +21,7 @@ public class Move
 {
     public static Map<String, MoveData> MOVES = new HashMap<>();
     //TODO: Keep checking the custom moves and see if they can function as close to the original as possible
-    public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Sweet Scent", "Smokescreen", "Safeguard", "Whirlwind", "Rage Powder", "Tailwind", "Light Screen", "Frustration", "Return", "Mind Reader", "Counter", "Magnetic Flux", "After You", "Disable", "Miracle Eye", "Guard Swap", "Power Swap", "Me First", "Yawn", "Gravity", "Spite", "Mean Look", "Foresight", "Wide Guard", "Ingrain", "Forests Curse", "Natural Gift", "Last Resort", "Sand Attack", "Teleport", "Odor Sleuth", "Helping Hand", "Mirror Move", "Stuff Cheeks", "Copycat", "Entrainment", "Block", "Follow Me", "Sky Drop", "Simple Beam", "Fling", "Telekinesis", "Quash", "No Retreat", "Encore", "Substitute", "Magic Coat", "Embargo", "Ally Switch");
+    public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Safeguard", "Whirlwind", "Rage Powder", "Tailwind", "Light Screen", "Frustration", "Return", "Mind Reader", "Counter", "Magnetic Flux", "After You", "Disable", "Miracle Eye", "Guard Swap", "Power Swap", "Me First", "Yawn", "Gravity", "Spite", "Mean Look", "Foresight", "Wide Guard", "Ingrain", "Forests Curse", "Natural Gift", "Last Resort", "Sand Attack", "Teleport", "Odor Sleuth", "Helping Hand", "Mirror Move", "Stuff Cheeks", "Copycat", "Entrainment", "Block", "Follow Me", "Sky Drop", "Simple Beam", "Fling", "Telekinesis", "Quash", "No Retreat", "Encore", "Substitute", "Magic Coat", "Embargo", "Ally Switch");
     public static final List<String> CUSTOM_MOVES = Arrays.asList("Leech Seed", "Rapid Spin", "Mirror Shot", "Stockpile", "Worry Seed", "Aromatic Mist");
     public static List<String> INCOMPLETE_MOVES = new ArrayList<>();
     public static Map<String, Predicate<Pokemon>> MOVE_TUTOR_MOVES = new HashMap<>();
@@ -36,6 +36,7 @@ public class Move
     public boolean isMaxMove;
     private int priority;
     private double damageMultiplier;
+    public double accuracyMultiplier;
 
     public int critChance;
     private boolean hitCrit;
@@ -264,9 +265,14 @@ public class Move
         return MOVES.containsKey(Global.normalCase(move));
     }
 
-    public boolean isAccurate()
+    public boolean isAccurate(Pokemon user, Pokemon opponent)
     {
-        return (new Random().nextInt(100) + 1) <= this.accuracy;
+        int combined = user.getAccuracyStage() - opponent.getEvasionStage();
+        double stageMultiplier = (double)(3 + combined > 0 ? combined : 0) / (double)(3 + combined < 0 ? Math.abs(combined) : 0);
+
+        int threshold = (int)(this.accuracy * stageMultiplier * this.accuracyMultiplier);
+
+        return (new Random().nextInt(100) + 1) <= threshold;
     }
 
     public int getDamage(Pokemon user, Pokemon opponent)
@@ -334,6 +340,7 @@ public class Move
         this.isZMove = false;
         this.isMaxMove = false;
         this.damageMultiplier = 1.0;
+        this.accuracyMultiplier = 1.0;
         this.setPriority();
     }
 

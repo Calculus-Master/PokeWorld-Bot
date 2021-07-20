@@ -143,10 +143,12 @@ public class DarkMoves
                 .execute();
     }
 
-    //TODO: 40% Lower Accuracy
     public String NightDaze(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addAccuracyChangeEffect(-1, 40, false)
+                .execute();
     }
 
     public String FakeTears(Pokemon user, Pokemon opponent, Duel duel, Move move)

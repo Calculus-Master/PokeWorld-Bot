@@ -108,10 +108,12 @@ public class GroundMoves
         return move.getNotImplementedResult();
     }
 
-    //TODO: Lowers Accuracy by 1 stage
     public String MudSlap(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addAccuracyChangeEffect(-1, 100, false)
+                .execute();
     }
 
     public String BoneRush(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -119,10 +121,12 @@ public class GroundMoves
         return Move.multihitDamageMove(user, opponent, duel, move);
     }
 
-    //TODO: 30% Lower Accuracy
     public String MudBomb(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addAccuracyChangeEffect(-1, 30, false)
+                .execute();
     }
 
     public String DrillRun(Pokemon user, Pokemon opponent, Duel duel, Move move)

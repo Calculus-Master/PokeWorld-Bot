@@ -74,6 +74,20 @@ public class MoveEffectBuilder
         return this;
     }
 
+    //Accuracy stage changed
+    public MoveEffectBuilder addAccuracyChangeEffect(int stage, int percent, boolean userChange)
+    {
+        this.moveEffects.add(new AccuracyChangeEffect(stage, percent, userChange));
+        return this;
+    }
+
+    //Evasion stage changed
+    public MoveEffectBuilder addEvasionChangeEffect(int stage, int percent, boolean userChange)
+    {
+        this.moveEffects.add(new EvasionChangeEffect(stage, percent, userChange));
+        return this;
+    }
+
     public MoveEffectBuilder addVariableMultiStrikeEffect()
     {
         this.moveEffects.add(new VariableMultiStrikeDamageEffect());

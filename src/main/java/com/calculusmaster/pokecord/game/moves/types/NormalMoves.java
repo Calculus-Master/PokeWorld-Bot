@@ -103,10 +103,11 @@ public class NormalMoves
                 .execute();
     }
 
-    //TODO: Evasion or custom idea
     public String SweetScent(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return move.getNotImplementedResult();
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addAccuracyChangeEffect(-1, 100, false)
+                .execute();
     }
 
     public String DoubleEdge(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -124,8 +125,9 @@ public class NormalMoves
 
     public String Smokescreen(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        //TODO: Accuracy Stat Multiplier
-        return move.getNotImplementedResult();
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addAccuracyChangeEffect(-1, 100, false)
+                .execute();
     }
 
     public String ScaryFace(Pokemon user, Pokemon opponent, Duel duel, Move move)

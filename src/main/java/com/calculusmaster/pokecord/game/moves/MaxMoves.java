@@ -222,10 +222,12 @@ public class MaxMoves
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
 
-    //TODO: Lower Evasiveness by 1 stage
     public String GMaxTartness(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addEvasionChangeEffect(-1, 100, false)
+                .execute();
     }
 
     public String GMaxSweetness(Pokemon user, Pokemon opponent, Duel duel, Move move)

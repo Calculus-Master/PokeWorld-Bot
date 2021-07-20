@@ -302,7 +302,7 @@ public class Duel
         if(new Random().nextInt(100) < 5) this.zcrystalEvent(move);
 
         //Pre-Move Checks
-        boolean accurate = move.isAccurate();
+        boolean accurate = move.isAccurate(this.players[this.current].active, this.players[this.other].active);
         boolean otherImmune = false;
         boolean cantUse = false;
 
@@ -404,19 +404,19 @@ public class Duel
         if(move.getName().equals("Sheer Cold"))
         {
             move.setAccuracy((this.players[this.current].active.isType(Type.ICE) ? 30 : 20) + (this.players[this.current].active.getLevel() - this.players[this.other].active.getLevel()));
-            accurate = move.isAccurate();
+            accurate = move.isAccurate(this.players[this.current].active, this.players[this.other].active);
         }
 
         if(move.getName().equals("Fissure"))
         {
             move.setAccuracy(20 + (this.players[this.current].active.getLevel() - this.players[this.other].active.getLevel()));
-            accurate = move.isAccurate();
+            accurate = move.isAccurate(this.players[this.current].active, this.players[this.other].active);
         }
 
         if(move.getName().equals("Horn Drill"))
         {
             move.setAccuracy(30 + (this.players[this.current].active.getLevel() - this.players[this.other].active.getLevel()));
-            accurate = move.isAccurate();
+            accurate = move.isAccurate(this.players[this.current].active, this.players[this.other].active);
         }
 
         boolean bypass = (move.getName().equals("Phantom Force") && this.data(this.current).phantomForceUsed) || (move.getName().equals("Shadow Force") && this.data(this.current).shadowForceUsed) || move.getName().equals("Feint");

@@ -128,14 +128,15 @@ public class FlyingMoves
                 .execute();
     }
 
-    //TODO: Removes barriers and lowers evasion by one stage
-    //TODO: barrier moves: mist, light screen, reflect, safeguard
+    //TODO: Removes barriers - barrier moves: mist, light screen, reflect, safeguard
     public String Defog(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         duel.entryHazards[duel.playerIndexFromUUID(user.getUUID())] = new DuelHelper.EntryHazardHandler();
         duel.entryHazards[duel.playerIndexFromUUID(opponent.getUUID())] = new DuelHelper.EntryHazardHandler();
 
-        return "All Entry Hazards were removed!";
+        return "All Entry Hazards were removed!" + MoveEffectBuilder.make(user, opponent, duel, move)
+                .addEvasionChangeEffect(-1, 100, false)
+                .execute();
     }
 
     //TODO: Copies last move
