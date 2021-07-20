@@ -58,8 +58,8 @@ public class CommandDex extends Command
                 .addField("Evolutions", this.getEvolutionsFormatted(data.evolutions), true)
                 .addField("Forms", this.listToMultiLineString(data.forms), true)
                 .addField("Mega", this.listToMultiLineString(data.megas), true)
-                .addField("TMs", data.validTMs.isEmpty() ? "None" : data.validTMs.toString().substring(1, data.validTMs.toString().length() - 1), false)
-                .addField("TRs", data.validTRs.isEmpty() ? "None" : data.validTRs.toString().substring(1, data.validTRs.toString().length() - 1), false)
+                .addField("TMs", data.validTMs.isEmpty() ? "None" : data.validTMs.toString().substring(1, data.validTMs.toString().length() - 1).replaceAll("TM", ""), false)
+                .addField("TRs", data.validTRs.isEmpty() ? "None" : data.validTRs.toString().substring(1, data.validTRs.toString().length() - 1).replaceAll("TR", ""), false)
                 .addField(this.getStatsField(data));
 
         String image = isGigantamax ? (isShiny ? Pokemon.getGigantamaxData(pokemon).shinyImage() : Pokemon.getGigantamaxData(pokemon).normalImage()) : (isShiny ? data.shinyURL : data.normalURL);
