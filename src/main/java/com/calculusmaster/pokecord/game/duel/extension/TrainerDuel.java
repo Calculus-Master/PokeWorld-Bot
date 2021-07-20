@@ -1,9 +1,11 @@
-package com.calculusmaster.pokecord.game.duel;
+package com.calculusmaster.pokecord.game.duel.extension;
 
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
-import com.calculusmaster.pokecord.game.duel.elements.Player;
-import com.calculusmaster.pokecord.game.duel.elements.Trainer;
+import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.players.Player;
+import com.calculusmaster.pokecord.game.duel.players.Trainer;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
@@ -15,8 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static com.calculusmaster.pokecord.game.duel.DuelHelper.DUELS;
-import static com.calculusmaster.pokecord.game.duel.DuelHelper.DuelStatus;
+import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.DUELS;
+import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.DuelStatus;
 
 public class TrainerDuel extends Duel
 {

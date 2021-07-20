@@ -1,6 +1,8 @@
-package com.calculusmaster.pokecord.game.duel;
+package com.calculusmaster.pokecord.game.duel.core;
 
-import com.calculusmaster.pokecord.game.duel.elements.Player;
+import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.duel.extension.WildDuel;
+import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;

@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.commands.misc;
 
 import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.Command;
-import com.calculusmaster.pokecord.game.duel.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Location;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;

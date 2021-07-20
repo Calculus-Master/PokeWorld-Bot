@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.game.pokemon;
 
-import com.calculusmaster.pokecord.game.duel.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.TM;

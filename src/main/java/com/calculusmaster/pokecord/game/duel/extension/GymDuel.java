@@ -1,14 +1,16 @@
-package com.calculusmaster.pokecord.game.duel;
+package com.calculusmaster.pokecord.game.duel.extension;
 
 import com.calculusmaster.pokecord.game.Achievements;
-import com.calculusmaster.pokecord.game.duel.elements.GymLeader;
+import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.players.GymLeader;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import static com.calculusmaster.pokecord.game.duel.DuelHelper.DUELS;
+import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.DUELS;
 
 public class GymDuel extends TrainerDuel
 {

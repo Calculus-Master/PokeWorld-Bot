@@ -2,9 +2,9 @@ package com.calculusmaster.pokecord.commands.duel;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.duel.Duel;
-import com.calculusmaster.pokecord.game.duel.DuelHelper;
-import com.calculusmaster.pokecord.game.duel.TrainerDuel;
-import com.calculusmaster.pokecord.game.duel.elements.Trainer;
+import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.extension.TrainerDuel;
+import com.calculusmaster.pokecord.game.duel.players.Trainer;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;

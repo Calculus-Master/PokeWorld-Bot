@@ -1,6 +1,7 @@
-package com.calculusmaster.pokecord.game.duel;
+package com.calculusmaster.pokecord.game.duel.core;
 
-import com.calculusmaster.pokecord.game.duel.elements.Player;
+import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.EntryHazard;
 import com.calculusmaster.pokecord.game.enums.elements.Type;

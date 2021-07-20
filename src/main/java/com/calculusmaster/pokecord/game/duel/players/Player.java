@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game.duel.elements;
+package com.calculusmaster.pokecord.game.duel.players;
 
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;

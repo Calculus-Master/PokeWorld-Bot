@@ -1,8 +1,8 @@
 package com.calculusmaster.pokecord.util.listener;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
-import com.calculusmaster.pokecord.game.duel.DuelChecks;
-import com.calculusmaster.pokecord.game.duel.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.core.DuelChecks;
+import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;

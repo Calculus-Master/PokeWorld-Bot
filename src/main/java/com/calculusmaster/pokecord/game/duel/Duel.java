@@ -4,7 +4,10 @@ import com.calculusmaster.pokecord.commands.duel.CommandTarget;
 import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
-import com.calculusmaster.pokecord.game.duel.elements.Player;
+import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.extension.TrainerDuel;
+import com.calculusmaster.pokecord.game.duel.extension.WildDuel;
+import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
@@ -33,7 +36,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static com.calculusmaster.pokecord.game.duel.DuelHelper.*;
+import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.*;
 
 //PVP Duel - Infinitely Scalable
 public class Duel

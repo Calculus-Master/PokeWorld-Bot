@@ -2,8 +2,8 @@ package com.calculusmaster.pokecord.commands.duel;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.duel.Duel;
-import com.calculusmaster.pokecord.game.duel.GymDuel;
-import com.calculusmaster.pokecord.game.duel.elements.GymLeader;
+import com.calculusmaster.pokecord.game.duel.extension.GymDuel;
+import com.calculusmaster.pokecord.game.duel.players.GymLeader;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
