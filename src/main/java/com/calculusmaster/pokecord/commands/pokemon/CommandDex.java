@@ -64,6 +64,9 @@ public class CommandDex extends Command
 
         String image = isGigantamax ? (isShiny ? Pokemon.getGigantamaxData(pokemon).shinyImage() : Pokemon.getGigantamaxData(pokemon).normalImage()) : (isShiny ? data.shinyURL : data.normalURL);
 
+        if(pokemon.equals("Deerling")) image = Global.getDeerlingImage(isShiny);
+        else if(pokemon.equals("Sawsbuck")) image = Global.getSawsbuckImage(isShiny);
+
         this.embed.setTitle("**" + data.name + (isShiny ? ":star2:" : "") + " (#" + data.dex + ")**");
         this.color = data.types.get(0).getColor();
         this.embed.setImage(image.equals("") ? Pokemon.getWIPImage() : image);
