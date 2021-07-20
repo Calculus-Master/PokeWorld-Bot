@@ -19,7 +19,7 @@ public class CommandNickname extends Command
         //Set new nickname
         if(this.msg.length >= 2)
         {
-            this.msg = this.event.getMessage().getContentRaw().toLowerCase().trim().split("\\s+");
+            this.msg = this.event.getMessage().getContentRaw().trim().split("\\s+");
 
             String nick = this.getMultiWordContent(2);
             s.setNickname(nick);
