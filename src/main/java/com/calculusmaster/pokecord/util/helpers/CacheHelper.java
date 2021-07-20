@@ -135,8 +135,6 @@ public class CacheHelper
 
     public static void initPokemonLists()
     {
-        long initialTime = System.currentTimeMillis();
-
         List<String> players = new ArrayList<>();
         Mongo.PlayerData.find(Filters.exists("username")).forEach(d -> players.add(d.getString("playerID")));
 
@@ -155,15 +153,10 @@ public class CacheHelper
 
         try { pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS); }
         catch (Exception e) { System.out.println("Pokemon List Init failed!"); }
-
-        long finalTime = System.currentTimeMillis();
-
-        LoggerHelper.info(CacheHelper.class, "Full Pokemon List Cache Init: " + (finalTime - initialTime) + "ms!");
     }
 
     public static void initMarketEntries()
     {
-        long i = System.currentTimeMillis();
         List<String> IDs = new ArrayList<>();
         Mongo.MarketData.find(Filters.exists("marketID")).forEach(d -> IDs.add(d.getString("marketID")));
 
@@ -193,10 +186,6 @@ public class CacheHelper
 
         try { pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS); }
         catch (Exception e) { System.out.println("CommandMarket Init failed!"); }
-
-        long f = System.currentTimeMillis();
-
-        LoggerHelper.info(CacheHelper.class, "Market Cache Init: " + (f - i) + "ms!");
     }
 
     public static void initAchievementCache()

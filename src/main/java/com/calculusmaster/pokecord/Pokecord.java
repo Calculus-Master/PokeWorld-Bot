@@ -38,13 +38,13 @@ public class Pokecord
         long start = System.currentTimeMillis();
 
         LoggerHelper.init("Config", ConfigHelper::init);
-        LoggerHelper.init("Pokemon Data", DataHelper::createPokemonData);
+        LoggerHelper.init("Pokemon Data", DataHelper::createPokemonData, true);
         LoggerHelper.init("Pokemon", DataHelper::createPokemonList);
         LoggerHelper.init("Pokemon", Pokemon::init);
         LoggerHelper.init("Gigantamax", DataHelper::createGigantamaxDataMap);
         LoggerHelper.init("EV Lists", DataHelper::createEVLists);
         LoggerHelper.init("Type Lists", DataHelper::createTypeLists);
-        LoggerHelper.init("Species Descriptions", DataHelper::createSpeciesDescLists);
+        LoggerHelper.init("Species Descriptions", DataHelper::createSpeciesDescLists, true);
         LoggerHelper.init("Evolutions", SpecialEvolutionRegistry::init);
         LoggerHelper.init("Daily Trainer", Trainer::setDailyTrainers);
         LoggerHelper.init("Move", Move::init);
@@ -54,8 +54,8 @@ public class Pokecord
         LoggerHelper.init("Gym Leader", GymLeader::init);
         LoggerHelper.init("PokePass", PokePass::init);
         LoggerHelper.init("Achievement Cache", CacheHelper::initAchievementCache);
-        LoggerHelper.init("Market", CacheHelper::initMarketEntries);
-        LoggerHelper.init("CommandPokemon", CacheHelper::initPokemonLists);
+        LoggerHelper.init("Market", CacheHelper::initMarketEntries, true);
+        LoggerHelper.init("CommandPokemon", CacheHelper::initPokemonLists, true);
 
         long end = System.currentTimeMillis();
 

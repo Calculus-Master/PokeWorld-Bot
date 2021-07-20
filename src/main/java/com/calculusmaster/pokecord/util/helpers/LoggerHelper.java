@@ -12,11 +12,20 @@ public class LoggerHelper
         info(clazz, "Time Info: " + command + " - " + (timeF - timeI) + " ms!");
     }
 
-    public static void init(String name, Runnable init)
+    public static void init(String name, Runnable init, boolean time)
     {
         info(Pokecord.class, "Starting " + name + " Init!");
+        long i = System.currentTimeMillis();
+
         init.run();
-        info(Pokecord.class, "Completed " + name + " Init!");
+
+        long f = System.currentTimeMillis();
+        info(Pokecord.class, "Completed " + name + " Init!" + (time ? " Time: " + (f - i) + " ms!" : ""));
+    }
+
+    public static void init(String name, Runnable init)
+    {
+        init(name, init, false);
     }
 
     //Core

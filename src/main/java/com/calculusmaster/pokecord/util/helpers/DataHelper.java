@@ -28,9 +28,7 @@ public class DataHelper
     //Pokemon Data
     public static void createPokemonData()
     {
-        long i = System.currentTimeMillis();
         Mongo.PokemonInfo.find().forEach(d -> POKEMON_DATA.put(d.getString("name"), new PokemonData(d)));
-        LoggerHelper.info(CacheHelper.class, "Creating Pokemon Data Objects: " + (System.currentTimeMillis() - i) + "ms!");
     }
 
     public static void createPokemonList()
