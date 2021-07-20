@@ -84,11 +84,13 @@ public class CommandEvolve extends Command
             else target = "Lycanroc Night";
         }
 
-        if(selected.getName().equals("Cubone") && location.region.equals(Region.ALOLA) && time.isNight())
+        if(selected.getName().equals("Cubone") && selected.getLevel() >= 28 && location.region.equals(Region.ALOLA) && time.isNight())
             target = "Alolan Marowak";
 
         if(selected.getName().equals("Mantyke") && CacheHelper.POKEMON_LISTS.get(this.player.getId()).stream().anyMatch(p -> p.getName().equals("Remoraid")))
             target = "Mantine";
+
+        if(selected.getName().equals("Koffing") && selected.getLevel() >= 35 && location.region.equals(Region.GALAR)) target = "Galarian Weezing";
 
         //Basic Special & Normal (Level Up) Evolutions
         if(target.equals("") && special) target = SpecialEvolutionRegistry.getTarget(selected);
