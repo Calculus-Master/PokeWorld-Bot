@@ -90,7 +90,11 @@ public class CommandEvolve extends Command
         if(selected.getName().equals("Mantyke") && CacheHelper.POKEMON_LISTS.get(this.player.getId()).stream().anyMatch(p -> p.getName().equals("Remoraid")))
             target = "Mantine";
 
-        if(selected.getName().equals("Koffing") && selected.getLevel() >= 35 && location.region.equals(Region.GALAR)) target = "Galarian Weezing";
+        if(selected.getName().equals("Koffing") && selected.getLevel() >= 35 && location.region.equals(Region.GALAR))
+            target = "Galarian Weezing";
+
+        if(selected.getName().equals("Exeggcute") && location.region.equals(Region.ALOLA) && selected.hasItem() && PokeItem.asItem(selected.getItem()).equals(PokeItem.LEAF_STONE))
+            target = "Alolan Exeggutor";
 
         //Basic Special & Normal (Level Up) Evolutions
         if(target.equals("") && special) target = SpecialEvolutionRegistry.getTarget(selected);
