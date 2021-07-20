@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.SpecialEvolutionRegistry;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Location;
+import com.calculusmaster.pokecord.game.enums.elements.Region;
 import com.calculusmaster.pokecord.game.enums.elements.Time;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.util.helpers.LocationEventHelper;
@@ -81,6 +82,9 @@ public class CommandEvolve extends Command
             else if(time.isDay()) target = "Lycanroc";
             else target = "Lycanroc Night";
         }
+
+        if(selected.getName().equals("Cubone") && location.region.equals(Region.ALOLA) && time.isNight())
+            target = "Alolan Marowak";
 
         //Basic Special & Normal (Level Up) Evolutions
         if(target.equals("") && special) target = SpecialEvolutionRegistry.getTarget(selected);

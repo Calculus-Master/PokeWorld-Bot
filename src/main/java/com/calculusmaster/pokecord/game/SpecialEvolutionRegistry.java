@@ -13,11 +13,8 @@ public class SpecialEvolutionRegistry
     public static final List<Evolution> EVOLUTIONS = new ArrayList<>();
 
     //TODO: Regional evolutions: Exeggcute -> Alolan Exeggutor w/Leaf Stone in Alola, Koffing -> Galarian Weezing in Galar
-    //TODO: Other evolutions: Cubone -> Alolan Marowak in Alola Nighttime, Mantyke -> Mantine (w/Remoraid in party)
-    //TODO: Eeveelutions: Espeon (High Friendship, Daytime), Umbreon (High Friendship, Nighttime)
-    //TODO: Cosmoem -> Solgaleo and Cosmoem -> Lunala
+    //TODO: Other evolutions: Mantyke -> Mantine (w/Remoraid in party)
     //TODO: Wurmple -> Cascoon/Silcoon
-    //TODO: Magnetic Field evolutions: Magneton -> Magnezone, Nosepass -> Probopass
     //TODO: Burmy -> Mothim (Male) or Wormadam (Male) at Level 20
     //TODO: Karrablast -> Escaliver & Shelmet -> Accelgor w/Trade
     //TODO: Crabrawler -> Crabominable at Mount Lanakila
