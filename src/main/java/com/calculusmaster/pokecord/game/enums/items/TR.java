@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.game.enums.items;
 
-import com.calculusmaster.pokecord.game.Move;
+import com.calculusmaster.pokecord.game.moves.Move;
 
 public enum TR
 {

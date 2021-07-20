@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.util.interfaces;
 
-import com.calculusmaster.pokecord.game.Move;
+import com.calculusmaster.pokecord.game.moves.Move;
 
 public interface ZCrystalValidator
 {

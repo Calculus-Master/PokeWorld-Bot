@@ -5,8 +5,8 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.TrainerDuel;
 import com.calculusmaster.pokecord.game.duel.elements.Trainer;
+import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.util.Mongo;
-import com.calculusmaster.pokecord.util.PokemonRarity;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 

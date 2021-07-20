@@ -1,8 +1,8 @@
 package com.calculusmaster.pokecord.game.enums.items;
 
-import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.util.interfaces.ZCrystalValidator;
 
 import java.util.*;

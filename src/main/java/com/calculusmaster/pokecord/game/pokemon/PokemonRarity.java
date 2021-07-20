@@ -1,5 +1,6 @@
-package com.calculusmaster.pokecord.util;
+package com.calculusmaster.pokecord.game.pokemon;
 
+import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 
 import java.util.*;

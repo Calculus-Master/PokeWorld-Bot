@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.util;
+package com.calculusmaster.pokecord.game.pokemon;
 
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;

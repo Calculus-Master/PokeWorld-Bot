@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.game.pokepass;
 
-import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 
 import java.util.ArrayList;

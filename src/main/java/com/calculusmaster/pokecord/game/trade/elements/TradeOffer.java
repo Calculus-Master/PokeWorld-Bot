@@ -1,8 +1,8 @@
 package com.calculusmaster.pokecord.game.trade.elements;
 
-import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
+import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.trade.TradeHelper;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 

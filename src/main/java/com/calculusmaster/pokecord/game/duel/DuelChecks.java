@@ -1,9 +1,9 @@
 package com.calculusmaster.pokecord.game.duel;
 
-import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
+import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 
 import java.util.Arrays;

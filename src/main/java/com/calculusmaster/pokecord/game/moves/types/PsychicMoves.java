@@ -1,14 +1,14 @@
-package com.calculusmaster.pokecord.game.moves;
+package com.calculusmaster.pokecord.game.moves.types;
 
-import com.calculusmaster.pokecord.game.Move;
-import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.enums.elements.Room;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
+import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,8 +1,8 @@
 package com.calculusmaster.pokecord.game.moves.builder;
 
-import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
 import java.util.Random;
 

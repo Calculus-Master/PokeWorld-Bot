@@ -1,8 +1,8 @@
 package com.calculusmaster.pokecord.game.bounties.objectives;
 
-import com.calculusmaster.pokecord.game.Move;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.bounties.objectives.core.AbstractPoolObjective;
+import com.calculusmaster.pokecord.game.moves.Move;
 
 import java.util.Random;
 

@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.util;
 
-import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;

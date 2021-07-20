@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game;
+package com.calculusmaster.pokecord.game.moves;
 
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 

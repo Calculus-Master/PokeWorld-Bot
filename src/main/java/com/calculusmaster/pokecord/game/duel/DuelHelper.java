@@ -1,12 +1,12 @@
 package com.calculusmaster.pokecord.game.duel;
 
-import com.calculusmaster.pokecord.game.Move;
-import com.calculusmaster.pokecord.game.Pokemon;
 import com.calculusmaster.pokecord.game.duel.elements.Player;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.EntryHazard;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
+import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
 import java.util.*;
 import java.util.stream.Collectors;

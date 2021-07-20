@@ -1,14 +1,14 @@
 package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
-import com.calculusmaster.pokecord.game.Pokemon;
-import com.calculusmaster.pokecord.game.SpecialEvolutionRegistry;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Location;
 import com.calculusmaster.pokecord.game.enums.elements.Region;
 import com.calculusmaster.pokecord.game.enums.elements.Time;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.SpecialEvolutionRegistry;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.LocationEventHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -116,7 +116,6 @@ public class CommandEvolve extends Command
             this.playerData.updateBountyProgression(ObjectiveType.EVOLVE_POKEMON);
 
             this.sendMsg("`" + selected.getName() + "` evolved into `" + target + "`!");
-
         }
         else this.sendMsg(selected.getName() + " cannot evolve right now!");
 

@@ -1,8 +1,9 @@
-package com.calculusmaster.pokecord.game;
+package com.calculusmaster.pokecord.game.pokemon;
 
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.moves.Move;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.game.duel.elements;
 
-import com.calculusmaster.pokecord.game.Move;
-import com.calculusmaster.pokecord.game.Pokemon;
+import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 
 import java.util.ArrayList;

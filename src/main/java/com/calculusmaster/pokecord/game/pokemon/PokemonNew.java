@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game;
+package com.calculusmaster.pokecord.game.pokemon;
 
 import com.calculusmaster.pokecord.game.duel.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.*;
@@ -7,7 +7,6 @@ import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
-import com.calculusmaster.pokecord.util.PokemonData;
 import com.calculusmaster.pokecord.util.custom.ExtendedHashMap;
 import com.calculusmaster.pokecord.util.custom.StatIntMap;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;

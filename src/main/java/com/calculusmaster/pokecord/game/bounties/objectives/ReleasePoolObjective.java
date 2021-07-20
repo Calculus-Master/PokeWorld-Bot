@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.game.bounties.objectives;
 
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.bounties.objectives.core.AbstractPoolObjective;
-import com.calculusmaster.pokecord.util.PokemonRarity;
+import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 
 import java.util.Random;
 
