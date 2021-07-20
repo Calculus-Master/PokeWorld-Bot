@@ -312,19 +312,6 @@ public class Duel
             this.players[this.current].usedZMove = true;
 
             Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_ZMOVE, this.event);
-
-            if(this.isNonBotPlayer(this.current))
-            {
-                final Move m = move;
-                this.players[this.current].data.updateBountyProgression(b -> {
-                    switch(b.getType()) {
-                        case USE_ZMOVE -> b.update();
-                        case USE_ZMOVE_TYPE -> {
-                            if(b.getObjective().asTypeObjective().getType().equals(m.getType())) b.update();
-                        }
-                    }
-                });
-            }
         }
 
         if(move.isMaxMove)
@@ -333,19 +320,6 @@ public class Duel
             this.players[this.current].usedDynamax = true;
 
             Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_DYNAMAX, this.event);
-
-            if(this.isNonBotPlayer(this.current))
-            {
-                final Move m = move;
-                this.players[this.current].data.updateBountyProgression(b -> {
-                    switch(b.getType()) {
-                        case USE_MAX_MOVE -> b.update();
-                        case USE_MAX_MOVE_TYPE -> {
-                            if(b.getObjective().asTypeObjective().getType().equals(m.getType())) b.update();
-                        }
-                    }
-                });
-            }
         }
 
         if(this.data(this.other).imprisonUsed && this.players[this.other].active.getLearnedMoves().contains(move.getName())) cantUse = true;
@@ -772,6 +746,18 @@ public class Duel
                         }
                         case USE_MOVES_PRIORITY_LOW -> {
                             if(m.getPriority() < 0) b.update();
+                        }
+                        case USE_ZMOVE -> {
+                            if(m.isZMove) b.update();
+                        }
+                        case USE_ZMOVE_TYPE -> {
+                            if(m.isZMove && b.getObjective().asTypeObjective().getType().equals(m.getType())) b.update();
+                        }
+                        case USE_MAX_MOVE -> {
+                            if(m.isMaxMove) b.update();
+                        }
+                        case USE_MAX_MOVE_TYPE -> {
+                            if(m.isMaxMove && b.getObjective().asTypeObjective().getType().equals(m.getType())) b.update();
                         }
                     }
                 });
@@ -1623,11 +1609,6 @@ public class Duel
     public Player[] getPlayers()
     {
         return this.players;
-    }
-
-    public boolean isPvP()
-    {
-        return !(this instanceof WildDuel) && !(this instanceof TrainerDuel);
     }
 
     public boolean isNonBotPlayer(int p)
