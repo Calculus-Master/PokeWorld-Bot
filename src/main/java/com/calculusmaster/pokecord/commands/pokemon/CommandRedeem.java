@@ -29,7 +29,6 @@ public class CommandRedeem extends Command
             {
                 Pokemon p = Pokemon.create(pokemon);
                 p.setLevel(new Random().nextInt(100) + 1);
-                p.setIVs(45);
 
                 Pokemon.uploadPokemon(p);
 

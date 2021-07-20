@@ -26,7 +26,6 @@ public class CommandCatch extends Command
     @Override
     public Command runCommand()
     {
-        long initT = System.currentTimeMillis();
         if(this.msg.length < 2)
         {
             this.embed.setDescription(CommandInvalid.getShort());
