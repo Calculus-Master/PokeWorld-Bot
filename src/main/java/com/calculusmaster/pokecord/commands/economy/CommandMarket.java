@@ -296,7 +296,7 @@ public class CommandMarket extends Command
     private String getMarketPage(List<MarketEntry> marketEntries)
     {
         int startIndex = 0;
-        if(this.msg.length >= 2 && this.isNumeric(2)) startIndex = (this.getInt(2) - 1) * 20;
+        if(this.msg.length >= 2 && this.isNumeric(1)) startIndex = (this.getInt(1) - 1) * 20;
         int endIndex = startIndex + 20;
 
         StringBuilder page = new StringBuilder();
