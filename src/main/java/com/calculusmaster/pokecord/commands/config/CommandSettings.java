@@ -109,7 +109,7 @@ public class CommandSettings extends Command
                 }
                 else if(SERVER_SPAWNCHANNEL.matches(this.msg[2]))
                 {
-                    String channel = this.event.getMessage().getMentionedChannels().size() > 0 ? this.event.getMessage().getMentionedChannels().get(0).getId() : this.event.getMessage().getChannel().getId();
+                    String channel = !this.event.getMessage().getMentionedChannels().isEmpty() ? this.event.getMessage().getMentionedChannels().get(0).getId() : this.event.getMessage().getChannel().getId();
                     TextChannel channelName = this.event.getGuild().getTextChannelById(channel);
 
                     if(channelName != null && this.serverData.getSpawnChannels().contains(channel))
@@ -184,7 +184,7 @@ public class CommandSettings extends Command
                 }
                 else if(SERVER_DUELCHANNEL.matches(this.msg[2]))
                 {
-                    String channel = this.event.getMessage().getMentionedChannels().size() > 0 ? this.event.getMessage().getMentionedChannels().get(0).getId() : this.event.getMessage().getChannel().getId();
+                    String channel = !this.event.getMessage().getMentionedChannels().isEmpty() ? this.event.getMessage().getMentionedChannels().get(0).getId() : this.event.getMessage().getChannel().getId();
                     TextChannel channelName = this.event.getGuild().getTextChannelById(channel);
 
                     if(channelName != null && this.serverData.getDuelChannels().contains(channel))
@@ -208,7 +208,7 @@ public class CommandSettings extends Command
                 }
                 else if(SERVER_BOTCHANNEL.matches(this.msg[2]))
                 {
-                    String channel = this.event.getMessage().getMentionedChannels().size() > 0 ? this.event.getMessage().getMentionedChannels().get(0).getId() : this.event.getMessage().getChannel().getId();
+                    String channel = !this.event.getMessage().getMentionedChannels().isEmpty() ? this.event.getMessage().getMentionedChannels().get(0).getId() : this.event.getMessage().getChannel().getId();
                     TextChannel channelName = this.event.getGuild().getTextChannelById(channel);
 
                     if(channelName != null && this.serverData.getBotChannels().contains(channel))

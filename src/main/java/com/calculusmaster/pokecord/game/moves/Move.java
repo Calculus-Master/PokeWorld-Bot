@@ -268,9 +268,13 @@ public class Move
     public boolean isAccurate(Pokemon user, Pokemon opponent)
     {
         int combined = user.getAccuracyStage() - opponent.getEvasionStage();
-        double stageMultiplier = (double)(3 + combined > 0 ? combined : 0) / (double)(3 + combined < 0 ? Math.abs(combined) : 0);
 
-        int threshold = (int)(this.accuracy * stageMultiplier * this.accuracyMultiplier);
+        double numerator = 3.0 + combined > 0 ? combined : 0;
+        double denominator = 3.0 + combined < 0 ? Math.abs(combined) : 0;
+
+        double stageMultiplier = combined == 0 ? 1.0 : numerator / denominator;
+
+        int threshold = (int)(this.getAccuracy() * stageMultiplier * this.accuracyMultiplier);
 
         return (new Random().nextInt(100) + 1) <= threshold;
     }
