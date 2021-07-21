@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.duel.core.DuelChecks;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.moves.Move;
+import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import static com.calculusmaster.pokecord.game.duel.core.DuelChecks.CheckType.*;
@@ -14,6 +15,11 @@ import static com.calculusmaster.pokecord.game.duel.core.DuelChecks.CheckType.*;
 public class CommandUse extends Command
 {
     public CommandUse(MessageReceivedEvent event, String[] msg)
+    {
+        super(event, msg);
+    }
+
+    public CommandUse(ButtonClickEvent event, String[] msg)
     {
         super(event, msg);
     }
@@ -65,7 +71,7 @@ public class CommandUse extends Command
         if(formatNormal)
         {
             d.submitMove(this.player.getId(), this.getInt(1), 'm');
-            this.event.getMessage().delete().queue();
+            this.deleteOriginal();
         }
         else if(c.checkFailed(NORMAL_WILDDUEL))
         {
@@ -95,7 +101,7 @@ public class CommandUse extends Command
             }
 
             d.submitMove(this.player.getId(), this.getInt(2), 's');
-            this.event.getMessage().delete().queue();
+            this.deleteOriginal();
         }
 
         //Z Move
@@ -134,7 +140,7 @@ public class CommandUse extends Command
             }
 
             d.submitMove(this.player.getId(), this.getInt(2), 'z');
-            this.event.getMessage().delete().queue();
+            this.deleteOriginal();
         }
 
         //Dynamax
@@ -165,7 +171,7 @@ public class CommandUse extends Command
             }
 
             d.submitMove(this.player.getId(), this.getInt(2), 'd');
-            this.event.getMessage().delete().queue();
+            this.deleteOriginal();
         }
 
         d.checkReady();

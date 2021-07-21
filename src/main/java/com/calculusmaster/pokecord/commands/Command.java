@@ -10,9 +10,11 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -20,6 +22,7 @@ import java.util.Random;
 public abstract class Command
 {
     protected MessageReceivedEvent event;
+    protected ButtonClickEvent buttonEvent;
     protected String[] msg;
     protected List<Member> mentions;
 
@@ -37,10 +40,30 @@ public abstract class Command
     public Command(MessageReceivedEvent event, String[] msg)
     {
         this.event = event;
+        this.buttonEvent = null;
         this.msg = msg;
         this.mentions = event.getMessage().getMentionedMembers();
 
         this.player = event.getAuthor();
+        this.server = event.getGuild();
+
+        this.serverData = new ServerDataQuery(this.server.getId());
+        this.playerData = new PlayerDataQuery(this.player.getId());
+
+        this.embed = new EmbedBuilder();
+        this.color = null;
+
+        this.timeI = System.currentTimeMillis();
+    }
+
+    public Command(ButtonClickEvent event, String[] msg)
+    {
+        this.event = null;
+        this.buttonEvent = event;
+        this.msg = msg;
+        this.mentions = new ArrayList<>();
+
+        this.player = event.getMember().getUser();
         this.server = event.getGuild();
 
         this.serverData = new ServerDataQuery(this.server.getId());
@@ -74,7 +97,8 @@ public abstract class Command
     protected void sendMsg(String msg)
     {
         this.embed = null;
-        this.event.getChannel().sendMessage(this.playerData.getMention() + ": " + msg).queue();
+        if(this.event != null) this.event.getChannel().sendMessage(this.playerData.getMention() + ": " + msg).queue();
+        else if(this.buttonEvent != null)  this.buttonEvent.getChannel().sendMessage(this.playerData.getMention() + ": " + msg).queue();
     }
 
     protected void sendInvalidCredits(int req)
@@ -99,6 +123,11 @@ public abstract class Command
     protected String getCommandFormatted(String command)
     {
         return "`" + this.serverData.getPrefix() + command + "`";
+    }
+
+    protected void deleteOriginal()
+    {
+        if(this.event != null) this.event.getMessage().delete().queue();
     }
 
     //Embed-Related

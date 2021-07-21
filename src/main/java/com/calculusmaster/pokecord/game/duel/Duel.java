@@ -1287,6 +1287,7 @@ public class Duel
 
         try
         {
+            ButtonListener.ZMOVE_SELECTIONS.remove(this.players[0].ID);
             if(this.isComplete())
             {
                 this.event.getChannel().sendFile(this.getImage(), "duel.png").setEmbeds(embed.build()).queue();
@@ -1301,6 +1302,10 @@ public class Duel
                                             Button.primary(ButtonListener.DUEL_MOVE_BUTTONS.get(1), "Move 2"),
                                             Button.primary(ButtonListener.DUEL_MOVE_BUTTONS.get(2), "Move 3"),
                                             Button.primary(ButtonListener.DUEL_MOVE_BUTTONS.get(3), "Move 4")
+                                    ),
+                                    ActionRow.of(
+                                            Button.primary(ButtonListener.DUEL_ZMOVE_BUTTON, "Z-Move"),
+                                            Button.primary(ButtonListener.DUEL_DYNAMAX_BUTTON, "Dynamax")
                                     )
                             ))
                     .delay(30, TimeUnit.SECONDS)
