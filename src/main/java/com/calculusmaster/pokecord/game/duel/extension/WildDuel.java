@@ -78,19 +78,7 @@ public class WildDuel extends Duel
         //Player won
         if(this.getWinner().ID.equals(this.players[0].ID))
         {
-            int exp = this.players[0].active.getDuelExp(this.players[1].active);
-            Pokemon p = this.players[0].data.getSelectedPokemon();
-            p.addExp(exp);
-
-            Pokemon.updateEVs(this.players[this.current].active);
-            Pokemon.updateExperience(p);
-
-            Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_WILD_DUEL, this.event);
-            this.players[0].data.addPokePassExp(50, this.event);
-            this.players[0].data.getStats().incr(PlayerStatistic.WILD_DUELS_WON);
-            this.players[0].data.updateBountyProgression(b -> {
-                if(b.getType().equals(ObjectiveType.WIN_WILD_DUEL) || b.getType().equals(ObjectiveType.COMPLETE_WILD_DUEL)) b.update();
-            });
+            this.onWildDuelWon(true);
 
             embed.setDescription("You won! Your " + this.players[0].active.getName() + " earned some EVs!");
         }
@@ -103,6 +91,23 @@ public class WildDuel extends Duel
 
         this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
         DuelHelper.delete(this.players[0].ID);
+    }
+
+    protected void onWildDuelWon(boolean evs)
+    {
+        int exp = this.players[0].active.getDuelExp(this.players[1].active);
+        Pokemon p = this.players[0].data.getSelectedPokemon();
+        p.addExp(exp);
+
+        if(evs) Pokemon.updateEVs(this.players[this.current].active);
+        Pokemon.updateExperience(p);
+
+        Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_WILD_DUEL, this.event);
+        this.players[0].data.addPokePassExp(50, this.event);
+        this.players[0].data.getStats().incr(PlayerStatistic.WILD_DUELS_WON);
+        this.players[0].data.updateBountyProgression(b -> {
+            if(b.getType().equals(ObjectiveType.WIN_WILD_DUEL) || b.getType().equals(ObjectiveType.COMPLETE_WILD_DUEL)) b.update();
+        });
     }
 
     @Override

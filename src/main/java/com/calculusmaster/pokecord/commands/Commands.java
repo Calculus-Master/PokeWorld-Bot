@@ -279,6 +279,10 @@ public class Commands
                 .setCommand(CommandLocation::new)
                 .setCategory(Category.MISC);
 
+        register("gauntlet", "gauntletduel")
+                .setCommand(CommandGauntlet::new)
+                .setCategory(Category.DUEL);
+
         register("dev")
                 .setCommand(CommandDev::new)
                 .setCategory(Category.MISC);
