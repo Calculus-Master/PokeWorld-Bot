@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game.duel.extension;
 
+import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -56,6 +57,12 @@ public class GauntletDuel extends WildDuel
             this.players[0].data.addPokePassExp(xp, this.event);
 
             embed.setDescription("You lost! Your Gauntlet Run ended at Level %s! You earned %s credits!".formatted(this.level, credits));
+
+            Achievements.grant(this.players[0].ID, Achievements.GAUNTLET_FIRST_COMPLETED, this.event);
+            if(this.level >= 3) Achievements.grant(this.players[0].ID, Achievements.GAUNTLET_FIRST_REACHED_LEVEL_3, this.event);
+            if(this.level >= 5) Achievements.grant(this.players[0].ID, Achievements.GAUNTLET_FIRST_REACHED_LEVEL_5, this.event);
+            if(this.level >= 7) Achievements.grant(this.players[0].ID, Achievements.GAUNTLET_FIRST_REACHED_LEVEL_7, this.event);
+            if(this.level >= 10) Achievements.grant(this.players[0].ID, Achievements.GAUNTLET_FIRST_REACHED_LEVEL_10, this.event);
 
             DuelHelper.delete(this.players[0].ID);
         }

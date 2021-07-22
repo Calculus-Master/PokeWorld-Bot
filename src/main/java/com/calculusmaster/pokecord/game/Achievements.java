@@ -43,6 +43,11 @@ public enum Achievements
     OWNED_1000_POKEMON(2000, "Owned 1000 Pokemon!"),
     OWNED_5000_POKEMON(3000, "Owned 5000 Pokemon!"),
     OWNED_10000_POKEMON(7500, "Owned 5000 Pokemon!"),
+    GAUNTLET_FIRST_COMPLETED(200, "Completed your first Gauntlet!"),
+    GAUNTLET_FIRST_REACHED_LEVEL_3(500, "Reached Level 3 in a Gauntlet for the first time!"),
+    GAUNTLET_FIRST_REACHED_LEVEL_5(1000, "Reached Level 5 in a Gauntlet for the first time!"),
+    GAUNTLET_FIRST_REACHED_LEVEL_7(1500, "Reached Level 7 in a Gauntlet for the first time!"),
+    GAUNTLET_FIRST_REACHED_LEVEL_10(2000, "Reached Level 10 in a Gauntlet for the first time!"),
     COMPLETED_ALL_ACHIEVEMENTS(100000, "Completed all Achievements!");
 
     public int credits;
