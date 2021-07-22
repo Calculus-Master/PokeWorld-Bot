@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'application'
     id "com.github.johnrengelman.shadow" version "7.0.0"
+    id 'org.openjfx.javafxplugin' version "0.0.10"
 }
 
 mainClassName = "com.calculusmaster.pokecord.Pokecord"
@@ -30,4 +31,9 @@ dependencies {
     implementation 'com.mojang:brigadier:1.0.17'
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'org.projectlombok:lombok:1.18.20'
+}
+
+javafx {
+    version = '16'
+    modules = ['javafx.controls']
 }
