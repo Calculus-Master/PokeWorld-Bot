@@ -32,6 +32,13 @@ public class RaidEventHelper
     {
         RaidDuel raid = RaidDuel.create();
         SERVER_RAIDS.put(g.getId(), raid);
+
+        EmbedBuilder embed = new EmbedBuilder();
+
+        embed.setTitle("A Raid Has Started!");
+        embed.setDescription("Join the Raid with `p!raid join`! The battle will begin after a little bit!");
+
+        new ServerDataQuery(g.getId()).getSpawnChannels().stream().map(g::getTextChannelById).filter(Objects::nonNull).collect(Collectors.toList()).get(0).sendMessageEmbeds(embed.build()).queue();
     }
 
     public static RaidDuel getRaid(String id)
@@ -68,12 +75,7 @@ public class RaidEventHelper
             return;
         }
 
-        EmbedBuilder embed = new EmbedBuilder();
-
-        embed.setTitle("A Raid Has Started!");
-        embed.setDescription("Join the Raid with `p!raid join`! The battle will begin after a little bit!");
-
-        channels.get(0).sendMessageEmbeds(embed.build()).queue();
+        channels.get(0).sendMessage("Raid Starting! " + SERVER_RAIDS.get(g.getId()).getWaitingPlayers().stream().map(s -> "<@" + s + ">").toList()).queue();
 
         SERVER_RAIDS.get(g.getId()).start();
 
