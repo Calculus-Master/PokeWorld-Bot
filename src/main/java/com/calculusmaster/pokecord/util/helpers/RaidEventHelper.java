@@ -63,11 +63,18 @@ public class RaidEventHelper
 
     public static void startRaid(Guild g, TextChannel channel)
     {
-        if(SERVER_RAIDS.get(g.getId()).getWaitingPlayers().isEmpty()) return;
+        RaidDuel raid = SERVER_RAIDS.get(g.getId());
 
-        channel.sendMessage("Raid Starting! " + SERVER_RAIDS.get(g.getId()).getWaitingPlayers().stream().map(s -> "<@" + s + ">").toList()).queue();
+        if(raid.getWaitingPlayers().isEmpty())
+        {
+            SERVER_RAIDS.remove(g.getId());
+            RaidDuel.delete(raid.getDuelID());
+            return;
+        }
 
-        SERVER_RAIDS.get(g.getId()).start();
+        channel.sendMessage("Raid Starting! " + raid.getWaitingPlayers().stream().map(s -> "<@" + s + ">").toList()).queue();
+
+        raid.start();
 
         SpawnEventHelper.removeServer(g.getId());
 
