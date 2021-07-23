@@ -25,6 +25,8 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 import javax.security.auth.login.LoginException;
 import java.util.EnumSet;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Pokecord
 {
@@ -78,7 +80,8 @@ public class Pokecord
 
         BOT_JDA = bot.build().awaitReady();
 
-        LoggerHelper.init("Spawn Event & Location Event Thread Pools", ThreadPoolHandler::createGuildSizeThreadPools);
+        //Initializations Requiring Bot to be Loaded
+        LoggerHelper.init("Spawn Event & Location Event Thread Pools", ThreadPoolHandler::init);
 
         end = System.currentTimeMillis();
 
@@ -93,5 +96,15 @@ public class Pokecord
 
             CommandTarget.generateNewServerTarget(g);
         }
+    }
+
+    public static void close()
+    {
+        SpawnEventHelper.close();
+        RaidEventHelper.close();
+        LocationEventHelper.close();
+        ThreadPoolHandler.close();
+
+        Executors.newScheduledThreadPool(1).schedule(() -> BOT_JDA.shutdownNow(), 15, TimeUnit.SECONDS);
     }
 }

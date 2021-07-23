@@ -14,8 +14,6 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class CommandDev extends Command
 {
@@ -60,7 +58,7 @@ public class CommandDev extends Command
                 PlayerDataQuery query = this.mentions.size() > 0 ? new PlayerDataQuery(this.mentions.get(0).getId()) : this.playerData;
                 query.removePursuit();
             }
-            case "close", "shutdown", "stop", "quit" -> Executors.newScheduledThreadPool(1).schedule(() -> Pokecord.BOT_JDA.shutdown(), 15, TimeUnit.SECONDS);
+            case "close", "shutdown", "stop", "quit" -> Pokecord.close();
             case "reloadconfig" -> ConfigHelper.init();
             case "reloadpokemondata" -> DataHelper.createPokemonData();
             case "forcelocation" -> {

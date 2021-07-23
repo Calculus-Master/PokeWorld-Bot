@@ -133,4 +133,11 @@ public class SpawnEventHelper
         SCHEDULERS.remove(serverID);
         SERVER_SPAWNS.remove(serverID);
     }
+
+    public static void close()
+    {
+        SERVER_SPAWNS.clear();
+        SCHEDULERS.values().forEach(future -> future.cancel(true));
+        SCHEDULERS.clear();
+    }
 }

@@ -69,4 +69,11 @@ public class LocationEventHelper
         SCHEDULERS.remove(serverID);
         SERVER_LOCATIONS.remove(serverID);
     }
+
+    public static void close()
+    {
+        SERVER_LOCATIONS.clear();
+        SCHEDULERS.values().forEach(future -> future.cancel(true));
+        SCHEDULERS.clear();
+    }
 }

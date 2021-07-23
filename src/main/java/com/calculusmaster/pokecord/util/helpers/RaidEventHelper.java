@@ -80,4 +80,11 @@ public class RaidEventHelper
         SCHEDULERS.remove(serverID);
         SERVER_RAIDS.remove(serverID);
     }
+
+    public static void close()
+    {
+        SERVER_RAIDS.clear();
+        SCHEDULERS.values().forEach(future -> future.cancel(true));
+        SCHEDULERS.clear();
+    }
 }
