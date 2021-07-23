@@ -52,9 +52,7 @@ public class Player
 
     public boolean lost()
     {
-        boolean lost = true;
-        for(Pokemon p : this.team) lost = lost && p.isFainted();
-        return lost;
+        return this.team.stream().allMatch(Pokemon::isFainted);
     }
 
     @Override
