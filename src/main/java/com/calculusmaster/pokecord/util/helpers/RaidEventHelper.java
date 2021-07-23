@@ -81,8 +81,6 @@ public class RaidEventHelper
 
         raid.start();
 
-        SpawnEventHelper.removeServer(g.getId());
-
         LoggerHelper.info(SpawnEventHelper.class, "New Raid Event – " + g.getName() + " (" + g.getId() + ")!");
     }
 

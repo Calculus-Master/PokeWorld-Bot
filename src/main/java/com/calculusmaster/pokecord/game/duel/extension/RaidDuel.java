@@ -9,7 +9,6 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.calculusmaster.pokecord.util.helpers.RaidEventHelper;
-import com.calculusmaster.pokecord.util.helpers.SpawnEventHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import javax.imageio.ImageIO;
@@ -138,8 +137,6 @@ public class RaidDuel extends WildDuel
 
         DuelHelper.delete(this.players[0].ID);
         RaidEventHelper.removeServer(this.event.getGuild().getId());
-
-        SpawnEventHelper.start(this.event.getGuild());
     }
 
     @Override
