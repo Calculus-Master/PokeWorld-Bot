@@ -25,11 +25,22 @@ public class CommandBounties extends Command
         this.checkBountyCount();
         List<Bounty> bounties = this.playerData.getBounties();
 
+        boolean info = this.msg.length == 2 && this.msg[1].equals("info");
         boolean collect = this.msg.length >= 3 && this.msg[1].equals("collect") && this.isNumeric(2) && this.getInt(2) > 0 && this.getInt(2) <= bounties.size();
         boolean reroll = this.msg.length == 3 && this.msg[1].equals("reroll") && this.isNumeric(2) && this.getInt(2) > 0 && this.getInt(2) <= bounties.size();
         boolean acquire = this.msg.length >= 2 && Arrays.asList("acquire", "get", "new").contains(this.msg[1]);
 
-        if(collect)
+        if(info)
+        {
+            this.embed = new EmbedBuilder()
+                    .setTitle("Bounty Info")
+                    .setDescription("Bounties are short tasks with small rewards!")
+                    .addField("Acquisition", "Using `p!bounty` will automatically grant you new bounties if you do not have any currently. Otherwise, use `p!bounty acquire` to receive new ones, provided your Bounty list is not full!", false)
+                    .addField("Rerolling", "You can reroll a bounty (change its objective) by using `p!bounty reroll <number>`. Note: the new bounty will have less rewards!", false)
+                    .addField("Completing", "Bounty Objective progress is automatically updated provided you are doing the correct activity. Once complete, you will be notified. To collect the bounty, use `p!bounty collect <number>`", false)
+                    .addField("Pursuit", "Pursuits are a large list of bounties that must be completed sequentially. To learn more, use `p!pursuit info`.", false);
+        }
+        else if(collect)
         {
             Bounty b = bounties.get(this.getInt(2) - 1);
 
@@ -106,7 +117,6 @@ public class CommandBounties extends Command
             }
 
             this.embed.setTitle(this.player.getName() + "'s Bounties");
-            this.embed.setDescription("Bounties are short tasks with small rewards!");
         }
         return this;
     }
