@@ -853,6 +853,7 @@ public class Duel
         this.room = Room.NORMAL_ROOM;
         this.entryHazards = new EntryHazardHandler[]{new EntryHazardHandler(), new EntryHazardHandler()};
         this.queuedMoves = new HashMap<>();
+        for(Player p : this.players) p.active.setHealth(p.active.getStat(Stat.HP));
     }
 
     public void checkDynamax(int p)
