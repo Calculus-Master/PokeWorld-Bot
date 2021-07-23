@@ -59,8 +59,6 @@ public class RaidDuel extends WildDuel
 
         for(Player p : this.players) if (p.active.isFainted()) this.queuedMoves.put(p.ID, new TurnAction(ActionType.IDLE, -1, -1));
 
-        System.out.println(this);
-
         //Status Conditions
         for(int i = 0; i < this.players.length; i++) if(!this.players[i].active.isFainted()) this.data(i).canUseMove = this.statusConditionEffects(i);
 
@@ -73,7 +71,7 @@ public class RaidDuel extends WildDuel
             List<Integer> pool = new ArrayList<>();
             for(int i = 0; i < this.getNonBotPlayers().length; i++) pool.add(i);
 
-            pool.sort(Comparator.comparingInt(i -> this.players[(int)i].move.getPriority()).thenComparingInt(i -> this.players[(int)i].active.getStat(Stat.SPD)).reversed());
+            pool.stream().filter(this::isUsingMove).toList().sort(Comparator.comparingInt(i -> this.players[(int)i].move.getPriority()).thenComparingInt(i -> this.players[(int)i].active.getStat(Stat.SPD)).reversed());
 
             if(this.room.equals(Room.TRICK_ROOM)) Collections.reverse(pool);
 
