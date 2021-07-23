@@ -451,7 +451,7 @@ public class Pokemon
             DuelHelper.instance(this.getUUID()).addDamage(amount, this.getUUID());
         } catch (Exception e)
         {
-            System.out.println("Could not find " + this.getUUID() + " (" + this.getName() + ") in " + DuelHelper.DUELS);
+            System.out.println("Could not find " + this.getUUID() + " (" + this.getName() + ") in Duel");
         }
     }
 

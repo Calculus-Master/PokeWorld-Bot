@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game.duel.extension;
 
 import com.calculusmaster.pokecord.game.Achievements;
+import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -39,6 +40,8 @@ public class GauntletDuel extends WildDuel
             this.onWildDuelWon(false);
 
             this.level++;
+
+            this.players[0].data.updateBountyProgression(ObjectiveType.COMPLETE_GAUNTLET_LEVELS);
 
             this.setWildPokemon("");
             this.setDuelPokemonObjects(1);

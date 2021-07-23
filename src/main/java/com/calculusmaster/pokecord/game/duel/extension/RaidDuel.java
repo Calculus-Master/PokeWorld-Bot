@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game.duel.extension;
 
+import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.duel.players.WildPokemon;
@@ -122,12 +123,16 @@ public class RaidDuel extends WildDuel
 
         if(playersWon)
         {
+            for(Player p : this.getNonBotPlayers()) p.data.updateBountyProgression(ObjectiveType.WIN_RAID_DUEL);
+
             embed.setDescription("You defeated the Raid Pokemon!");
         }
         else
         {
             embed.setDescription("You could not defeat the Raid Pokemon.");
         }
+
+        for(Player p : this.getNonBotPlayers()) p.data.updateBountyProgression(ObjectiveType.PARTICIPATE_RAID);
 
         this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
 

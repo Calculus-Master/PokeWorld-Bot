@@ -32,9 +32,11 @@ public enum ObjectiveType
     COMPLETE_WILD_DUEL(CompleteWildDuelObjective::new, 10, 80),
     COMPLETE_ELITE_DUEL(CompleteEliteDuelObjective::new, 2, 10),
     COMPLETE_BOUNTY(CompleteBountyObjective::new, 1, 10),
+    COMPLETE_GAUNTLET_LEVELS(CompleteGauntletLevelsObjective::new, 1, 10),
     WIN_PVP_DUEL(CompletePVPDuelObjective::new, 1, 5),
     WIN_WILD_DUEL(CompleteWildDuelObjective::new, 10, 40),
     WIN_ELITE_DUEL(CompleteEliteDuelObjective::new, 1, 5),
+    WIN_RAID_DUEL(WinRaidObjective::new, 2, 4),
     CATCH_POKEMON(CatchGenericObjective::new, 30, 100),
     CATCH_POKEMON_TYPE(CatchTypeObjective::new, 20, 40),
     CATCH_POKEMON_NAME(CatchNameObjective::new, 1, 10),
@@ -52,7 +54,8 @@ public enum ObjectiveType
     SWAP_POKEMON(SwapGenericObjective::new, 5, 30),
     DAMAGE_POKEMON(DamageGenericObjective::new, 100, 3000),
     DAMAGE_POKEMON_TYPE(DamageTypeObjective::new, 100, 1500),
-    DAMAGE_POKEMON_CATEGORY(DamageCategoryObjective::new, 100, 2500);
+    DAMAGE_POKEMON_CATEGORY(DamageCategoryObjective::new, 100, 2500),
+    PARTICIPATE_RAID(ParticipateRaidObjective::new, 2, 5);
 
     public Supplier<? extends Objective> constructor;
     private final int min;
