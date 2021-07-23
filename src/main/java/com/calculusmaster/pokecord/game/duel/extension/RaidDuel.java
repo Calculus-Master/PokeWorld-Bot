@@ -55,6 +55,8 @@ public class RaidDuel extends WildDuel
     {
         this.turnSetup();
 
+        for(Player p : this.players) if (p.active.isFainted()) this.queuedMoves.put(p.ID, new TurnAction(ActionType.IDLE, -1, -1));
+
         System.out.println(this);
 
         //Status Conditions
@@ -62,23 +64,20 @@ public class RaidDuel extends WildDuel
 
         if(!this.isComplete())
         {
-            for(int i = 0; i < this.getNonBotPlayers().length; i++) this.moveAction(i);
-
-            System.out.println(this);
+            for(int i = 0; i < this.getNonBotPlayers().length; i++) if(!this.getAction(i).equals(ActionType.IDLE)) this.moveAction(i);
 
             this.getRaidBoss().move = new Move(this.getRaidBoss().active.getAllMoves().get(new Random().nextInt(this.getRaidBoss().active.getAllMoves().size())));
-
-            System.out.println(this);
 
             for(int i = 0; i < this.getNonBotPlayers().length; i++)
             {
                 this.other = this.players.length - 1;
-                System.out.println("Attacker: " + this.players[i] + ", Defender: " + this.players[this.other]);
+                System.out.println("Attacker: " + this.players[i].active.getName() + ", Defender: " + this.players[this.other].active.getName());
                 this.moveLogic(i);
             }
 
             this.current = this.other;
-            this.other = new Random().nextInt(this.getNonBotPlayers().length);
+            do this.other = new Random().nextInt(this.getNonBotPlayers().length);
+            while(this.players[this.other].active.isFainted());
 
             this.results.add("\n");
             this.moveLogic(this.current);
@@ -245,6 +244,7 @@ public class RaidDuel extends WildDuel
     {
         super.setDefaults();
         this.waiting = new ArrayList<>();
+        this.players = new Player[0];
     }
 
     private Player[] getNonBotPlayers()

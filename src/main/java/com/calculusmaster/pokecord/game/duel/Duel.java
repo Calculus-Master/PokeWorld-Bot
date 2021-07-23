@@ -203,6 +203,8 @@ public class Duel
 
     protected void moveAction(int p)
     {
+        if(!this.isUsingMove(p)) return;
+
         //Basic Move
         Move move = new Move(this.players[p].active.getLearnedMoves().get(this.queuedMoves.get(this.players[p].ID).moveInd() - 1));
 
@@ -1623,22 +1625,25 @@ public class Duel
 
     public boolean isNonBotPlayer(int p)
     {
-        return p == 0 || this.players[p].ID.chars().allMatch(Character::isDigit);
+        return this.players[p].ID.chars().allMatch(Character::isDigit);
     }
 
     public int indexOf(String id)
     {
-        return this.players[0].ID.equals(id) ? 0 : 1;
+        for(int i = 0; i < this.players.length; i++) if(this.players[i].ID.equals(id)) return i;
+        return -1;
     }
 
     public int playerIndexFromUUID(String UUID)
     {
-        return this.players[0].active.getUUID().equals(UUID) ? 0 : 1;
+        for(int i = 0; i < this.players.length; i++) if(this.players[i].active.getUUID().equals(UUID)) return i;
+        return -1;
     }
 
     public boolean hasPlayer(String id)
     {
-        return this.players[0].ID.equals(id) || this.players[1].ID.equals(id);
+        if(this.players == null) return false;
+        else return Arrays.stream(this.players).anyMatch(p -> p.ID.equals(id));
     }
 
     @Override
