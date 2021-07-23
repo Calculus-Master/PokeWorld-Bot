@@ -10,6 +10,7 @@ import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.*;
 import com.mongodb.client.model.Filters;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Random;
@@ -66,7 +67,20 @@ public class CommandDev extends Command
                 Location l = Location.cast(this.msg[2]);
                 if(l != null) LocationEventHelper.forceLocation(this.server, l);
             }
-            case "forceraid" -> RaidEventHelper.forceRaid(this.server);
+            case "forceraid" -> RaidEventHelper.forceRaid(this.server, this.event.getTextChannel());
+            case "restartspawns" -> {
+                for(Guild g : Pokecord.BOT_JDA.getGuilds())
+                {
+                    try {
+                        SpawnEventHelper.removeServer(g.getId());
+                        Thread.sleep(1000);
+                        SpawnEventHelper.start(g);
+                    } catch (Exception e) {
+                        LoggerHelper.error(CommandDev.class, "Could not restart Spawn Event in " + g.getName() + "!");
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
 
         this.sendMsg("Successfully ran Developer Command!");

@@ -71,7 +71,7 @@ public class RaidDuel extends WildDuel
             List<Integer> pool = new ArrayList<>();
             for(int i = 0; i < this.getNonBotPlayers().length; i++) pool.add(i);
 
-            pool.stream().filter(this::isUsingMove).toList().sort(Comparator.comparingInt(i -> this.players[(int)i].move.getPriority()).thenComparingInt(i -> this.players[(int)i].active.getStat(Stat.SPD)).reversed());
+            pool.stream().filter(this::isUsingMove).collect(Collectors.toList()).sort(Comparator.comparingInt(i -> this.players[(int)i].move.getPriority()).thenComparingInt(i -> this.players[(int)i].active.getStat(Stat.SPD)).reversed());
 
             if(this.room.equals(Room.TRICK_ROOM)) Collections.reverse(pool);
 
@@ -198,6 +198,7 @@ public class RaidDuel extends WildDuel
         for(int i = 0; i < this.waiting.size(); i++) this.players[i] = new Player(this.waiting.get(i), 1);
 
         this.setWildPokemon("");
+        this.players[this.players.length - 1].active.hpBuff = 1.5 + this.waiting.size();
 
         for(Player p : this.players) p.active.setHealth(p.active.getStat(Stat.HP));
 
@@ -244,19 +245,16 @@ public class RaidDuel extends WildDuel
         Player raidBoss = this.players[this.players.length - 1];
 
         raidBoss.active.statBuff = 2.5;
-        raidBoss.active.hpBuff = 3.0;
         raidBoss.active.setIVs(80);
         raidBoss.active.setEVs("50-50-50-50-50-50");
-
-        raidBoss.active.setHealth(raidBoss.active.getStat(Stat.HP));
     }
 
     @Override
     public void setDefaults()
     {
-        super.setDefaults();
         this.waiting = new ArrayList<>();
         this.players = new Player[0];
+        super.setDefaults();
     }
 
     private Player[] getNonBotPlayers()
@@ -300,23 +298,5 @@ public class RaidDuel extends WildDuel
     public String getDuelID()
     {
         return this.duelID;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "RaidDuel{" +
-                "status=" + status +
-                ", \nsize=" + size +
-                ", \nplayers=" + Arrays.toString(players) +
-                ", \nqueuedMoves=" + queuedMoves +
-                ", \nturn=" + turn +
-                ", \ncurrent=" + current +
-                ", \nother=" + other +
-                ", \nfirst='" + first + '\'' +
-                ", \nresults=" + results +
-                ", \nduelID='" + duelID + '\'' +
-                ", \nwaiting=" + waiting +
-                '}';
     }
 }
