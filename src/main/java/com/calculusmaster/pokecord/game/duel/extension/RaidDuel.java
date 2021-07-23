@@ -81,6 +81,7 @@ public class RaidDuel extends WildDuel
             {
                 this.other = this.players.length - 1;
                 this.moveLogic(i);
+                this.results.add("\n");
             }
 
             this.current = this.other;
