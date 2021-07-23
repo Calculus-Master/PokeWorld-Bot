@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.duel.extension;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.duel.players.WildPokemon;
+import com.calculusmaster.pokecord.game.enums.elements.Room;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
@@ -17,10 +18,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.*;
@@ -71,10 +70,24 @@ public class RaidDuel extends WildDuel
 
             this.getRaidBoss().move = new Move(this.getRaidBoss().active.getAllMoves().get(new Random().nextInt(this.getRaidBoss().active.getAllMoves().size())));
 
-            for(int i = 0; i < this.getNonBotPlayers().length; i++)
+            List<Integer> pool = new ArrayList<>();
+            for(int i = 0; i < this.getNonBotPlayers().length; i++) pool.add(i);
+
+            pool.sort((i1, i2) -> {
+                Move m1 = this.players[i1].move;
+                Move m2 = this.players[i2].move;
+                int speed1 = this.players[i1].active.getStat(Stat.SPD);
+                int speed2 = this.players[i2].active.getStat(Stat.SPD);
+
+                if(m1.getPriority() != m2.getPriority()) return m2.getPriority() - m1.getPriority();
+                else return speed2 - speed1;
+            });
+
+            if(this.room.equals(Room.TRICK_ROOM)) Collections.reverse(pool);
+
+            for(int i : pool)
             {
                 this.other = this.players.length - 1;
-                System.out.println("Attacker: " + this.players[i].active.getName() + ", Defender: " + this.players[this.other].active.getName());
                 this.moveLogic(i);
             }
 
