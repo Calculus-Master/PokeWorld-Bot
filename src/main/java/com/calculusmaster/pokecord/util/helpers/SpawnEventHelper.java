@@ -24,6 +24,9 @@ import java.util.stream.Collectors;
 
 public class SpawnEventHelper
 {
+    public static int RAID_CHANCE;
+    public static int SPAWN_INTERVAL;
+
     private static final Map<String, String> SERVER_SPAWNS = new HashMap<>();
     private static final Map<String, ScheduledFuture<?>> SCHEDULERS = new HashMap<>();
 
@@ -34,7 +37,7 @@ public class SpawnEventHelper
 
     public static void start(Guild g, int initDelay)
     {
-        ScheduledFuture<?> spawnEvent = ThreadPoolHandler.SPAWN.scheduleWithFixedDelay(() -> spawnPokemon(g), initDelay, 450, TimeUnit.SECONDS);
+        ScheduledFuture<?> spawnEvent = ThreadPoolHandler.SPAWN.scheduleWithFixedDelay(() -> spawnPokemon(g), initDelay, SPAWN_INTERVAL, TimeUnit.SECONDS);
 
         SCHEDULERS.put(g.getId(), spawnEvent);
     }
@@ -67,7 +70,7 @@ public class SpawnEventHelper
     {
         if(RaidEventHelper.hasRaid(g.getId())) return;
 
-        if(new Random().nextInt(100) < 1)
+        if(new Random().nextInt(100) < RAID_CHANCE)
         {
             RaidEventHelper.start(g);
             return;

@@ -28,6 +28,8 @@ public class ConfigHelper
             Bounty.POKEPASS_EXP_YIELD = config.getInt("bounty_reward_exp");
             Bounty.BOUNTY_REWARD_MIN = config.getJSONArray("bounty_rewards").getInt(0);
             Bounty.BOUNTY_REWARD_MAX = config.getJSONArray("bounty_rewards").getInt(1);
+            SpawnEventHelper.SPAWN_INTERVAL = config.getInt("spawn_event_interval");
+            SpawnEventHelper.RAID_CHANCE = config.getInt("spawn_event_raid_chance");
 
             LoggerHelper.info(ConfigHelper.class, "Loaded config values!");
         }
@@ -49,6 +51,8 @@ public class ConfigHelper
             Bounty.POKEPASS_EXP_YIELD = 200;
             Bounty.BOUNTY_REWARD_MIN = 50;
             Bounty.BOUNTY_REWARD_MAX = 250;
+            SpawnEventHelper.SPAWN_INTERVAL = 450;
+            SpawnEventHelper.RAID_CHANCE = 1;
         }
     }
 }

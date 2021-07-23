@@ -48,7 +48,7 @@ public class RaidEventHelper
 
     public static boolean hasRaid(String id)
     {
-        return SERVER_RAIDS.containsKey(id);
+        return SERVER_RAIDS.containsKey(id) && SCHEDULERS.containsKey(id) && (!SCHEDULERS.get(id).isCancelled() || !SCHEDULERS.get(id).isDone());
     }
 
     public static boolean isPlayerReady(String serverID, String playerID)
