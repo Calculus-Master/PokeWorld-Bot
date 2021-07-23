@@ -22,7 +22,7 @@ public class EvasionChangeEffect extends MoveEffect
         {
             (this.userChange ? this.user : this.opponent).changeEvasionStage(this.stage);
 
-            return (this.userChange ? this.user : this.opponent).getName() + "'s Evasion " + (this.stage < 0 ? " was lowered by " : " rose by ") + this.stage + (Math.abs(this.stage) != 1 ? " stages" : "stage") + "!";
+            return (this.userChange ? this.user : this.opponent).getName() + "'s Evasion " + (this.stage < 0 ? " was lowered by " : " rose by ") + Math.abs(this.stage) + (Math.abs(this.stage) != 1 ? " stages" : " stage") + "!";
         }
         else return "";
     }

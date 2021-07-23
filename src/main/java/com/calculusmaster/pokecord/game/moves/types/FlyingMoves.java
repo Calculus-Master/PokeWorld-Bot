@@ -134,7 +134,7 @@ public class FlyingMoves
         duel.entryHazards[duel.playerIndexFromUUID(user.getUUID())] = new DuelHelper.EntryHazardHandler();
         duel.entryHazards[duel.playerIndexFromUUID(opponent.getUUID())] = new DuelHelper.EntryHazardHandler();
 
-        return "All Entry Hazards were removed!" + MoveEffectBuilder.make(user, opponent, duel, move)
+        return "All Entry Hazards were removed! " + MoveEffectBuilder.make(user, opponent, duel, move)
                 .addEvasionChangeEffect(-1, 100, false)
                 .execute();
     }
