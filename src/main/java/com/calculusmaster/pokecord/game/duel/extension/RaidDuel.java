@@ -73,15 +73,7 @@ public class RaidDuel extends WildDuel
             List<Integer> pool = new ArrayList<>();
             for(int i = 0; i < this.getNonBotPlayers().length; i++) pool.add(i);
 
-            pool.sort((i1, i2) -> {
-                Move m1 = this.players[i1].move;
-                Move m2 = this.players[i2].move;
-                int speed1 = this.players[i1].active.getStat(Stat.SPD);
-                int speed2 = this.players[i2].active.getStat(Stat.SPD);
-
-                if(m1.getPriority() != m2.getPriority()) return m2.getPriority() - m1.getPriority();
-                else return speed2 - speed1;
-            });
+            pool.sort(Comparator.comparingInt(i -> this.players[(int)i].move.getPriority()).thenComparingInt(i -> this.players[(int)i].active.getStat(Stat.SPD)).reversed());
 
             if(this.room.equals(Room.TRICK_ROOM)) Collections.reverse(pool);
 
