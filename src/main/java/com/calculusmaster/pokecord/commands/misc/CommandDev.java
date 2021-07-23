@@ -3,7 +3,6 @@ package com.calculusmaster.pokecord.commands.misc;
 import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
-import com.calculusmaster.pokecord.game.duel.extension.RaidDuel;
 import com.calculusmaster.pokecord.game.enums.elements.Location;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
@@ -67,13 +66,7 @@ public class CommandDev extends Command
                 Location l = Location.cast(this.msg[2]);
                 if(l != null) LocationEventHelper.forceLocation(this.server, l);
             }
-            case "forceraid" -> {
-                RaidDuel raid = RaidDuel.create();
-                raid.setEvent(this.event);
-
-                RaidDuel.SERVER_RAIDS.put(this.server.getId(), raid);
-            }
-            case "forceraidstart" -> RaidDuel.SERVER_RAIDS.get(this.server.getId()).start();
+            case "forceraid" -> RaidEventHelper.forceRaid(this.server);
         }
 
         this.sendMsg("Successfully ran Developer Command!");

@@ -1,10 +1,13 @@
 package com.calculusmaster.pokecord.game.duel.extension;
 
+import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.duel.players.WildPokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
+import com.calculusmaster.pokecord.util.helpers.RaidEventHelper;
+import com.calculusmaster.pokecord.util.helpers.SpawnEventHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import javax.imageio.ImageIO;
@@ -14,16 +17,16 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.*;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.*;
 
 public class RaidDuel extends WildDuel
 {
-    public static final Map<String, RaidDuel> SERVER_RAIDS = new HashMap<>();
-
     private String duelID;
     private List<String> waiting;
 
@@ -123,6 +126,11 @@ public class RaidDuel extends WildDuel
         }
 
         this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
+
+        DuelHelper.delete(this.players[0].ID);
+        RaidEventHelper.removeServer(this.event.getGuild().getId());
+
+        SpawnEventHelper.start(this.event.getGuild());
     }
 
     @Override
@@ -273,6 +281,11 @@ public class RaidDuel extends WildDuel
     public boolean isPlayerWaiting(String ID)
     {
         return this.waiting.stream().anyMatch(s -> s.equals(ID));
+    }
+
+    public List<String> getWaitingPlayers()
+    {
+        return this.waiting;
     }
 
     private void setID()

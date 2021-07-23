@@ -65,6 +65,14 @@ public class SpawnEventHelper
 
     private static void spawnPokemon(Guild g, String spawn)
     {
+        if(RaidEventHelper.hasRaid(g.getId())) return;
+
+        if(new Random().nextInt(100) < 1)
+        {
+            RaidEventHelper.start(g);
+            return;
+        }
+
         List<TextChannel> channels = new ServerDataQuery(g.getId()).getSpawnChannels().stream().map(g::getTextChannelById).filter(Objects::nonNull).collect(Collectors.toList());
 
         if(channels.isEmpty())
