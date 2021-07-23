@@ -48,6 +48,7 @@ public class Pokemon
     private Map<StatusCondition, Boolean> status;
     private Map<Stat, Integer> statMultiplier = new TreeMap<>();
     public double statBuff;
+    public double hpBuff;
     private boolean isDynamaxed;
     private int accuracyStage;
     private int evasionStage;
@@ -88,6 +89,7 @@ public class Pokemon
         p.setStatusConditions();
         p.setDefaultStatMultipliers();
         p.statBuff = 1.0;
+        p.hpBuff = 1.0;
         p.setDynamax(false);
 
         LoggerHelper.info(Pokemon.class, "Pokemon Built: UUID (" + UUID + "), NAME (" + p.getName() + ")");
@@ -120,6 +122,7 @@ public class Pokemon
         p.setStatusConditions();
         p.setDefaultStatMultipliers();
         p.statBuff = 1.0;
+        p.hpBuff = 1.0;
         p.setDynamax(false);
 
         LoggerHelper.info(Pokemon.class, "Pokemon Created: UUID (" + p.getUUID() + "), NAME (" + name + ")");
@@ -444,7 +447,12 @@ public class Pokemon
     {
         this.health -= amount;
 
-        DuelHelper.instance(this.getUUID()).addDamage(amount, this.getUUID());
+        try {
+            DuelHelper.instance(this.getUUID()).addDamage(amount, this.getUUID());
+        } catch (Exception e)
+        {
+            System.out.println("Could not find " + this.getUUID() + " (" + this.getName() + ") in " + DuelHelper.DUELS);
+        }
     }
 
     public void heal(int amount)
@@ -895,7 +903,7 @@ public class Pokemon
             double maxHP = this.level + 10 + ((this.level * (2 * base + IV + EV / 4.0)) / 100);
 
             double dynamaxBoost = this.isDynamaxed ? 1.0 + (this.getDynamaxLevel() * 0.05 + 0.5) : 1.0;
-            return (int) (maxHP * dynamaxBoost);
+            return (int) (maxHP * dynamaxBoost * hpBuff);
         } else {
             //Stat = Nature * [5 + ((2 * Base + IV + EV / 4) * Level) / 100]
             double nature = this.nature.getMap().get(s);

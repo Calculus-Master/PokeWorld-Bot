@@ -122,7 +122,7 @@ public class WildDuel extends Duel
     @Override
     protected String getHB(int p)
     {
-        StringBuilder sb = new StringBuilder().append(this.players[p].data.getUsername()).append(": ");
+        StringBuilder sb = new StringBuilder().append(this.players[p].data.getUsername()).append("'s ").append(this.players[p].active.getName()).append(": ");
 
         if(this.players[p].active.isFainted()) sb.append("FAINTED");
         else sb.append(this.players[p].active.getHealth()).append(" / ").append(this.players[p].active.getStat(Stat.HP)).append(" HP ").append(this.players[p].active.getActiveStatusConditions());

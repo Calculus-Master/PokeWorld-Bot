@@ -170,7 +170,7 @@ public class Duel
         this.moveLogic(this.current);
     }
 
-    private void moveLogic(int p)
+    protected void moveLogic(int p)
     {
         this.current = p;
         if(!this.players[p].active.isFainted())
@@ -445,7 +445,7 @@ public class Duel
                 int damage = new Move("Future Sight").getDamage(this.players[this.current].active, this.players[this.other].active);
                 this.players[this.other].active.damage(damage);
 
-                turnResult += "Future Sight landed and dealt " + damage + " to " + this.players[this.other].active.getName() + "!\n";
+                turnResult += "Future Sight landed and dealt **" + damage + "** damage to " + this.players[this.other].active.getName() + "!\n";
             }
         }
 
@@ -814,7 +814,11 @@ public class Duel
             }
         }
 
-        this.moveLog.get(this.turn)[this.current] = move.getName();
+        try {
+            this.moveLog.get(this.turn)[this.current] = move.getName();
+        } catch (Exception e) {
+            System.out.println("Move Log not accessible, " + this.current);
+        }
 
         return turnResult;
     }
@@ -846,6 +850,7 @@ public class Duel
         this.terrain = Terrain.NORMAL_TERRAIN;
         this.room = Room.NORMAL_ROOM;
         this.entryHazards = new EntryHazardHandler[]{new EntryHazardHandler(), new EntryHazardHandler()};
+        this.queuedMoves = new HashMap<>();
     }
 
     public void checkDynamax(int p)
@@ -1528,7 +1533,7 @@ public class Duel
         return new ByteArrayInputStream(bytes);
     }
 
-    private String getPokemonURL(int player)
+    protected String getPokemonURL(int player)
     {
         Pokemon p = this.players[player].active;
         Move m = this.players[player].move;
@@ -1556,7 +1561,7 @@ public class Duel
         else return p.getImage();
     }
 
-    private String getHealthBars()
+    protected String getHealthBars()
     {
         String healthBarP1 = this.getHB(0);
         String healthBarP2 = this.getHB(1);
@@ -1588,7 +1593,7 @@ public class Duel
         return this.status;
     }
 
-    protected void setEvent(MessageReceivedEvent event)
+    public void setEvent(MessageReceivedEvent event)
     {
         this.event = event;
         this.turn = 0;

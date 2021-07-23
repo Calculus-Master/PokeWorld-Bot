@@ -147,6 +147,7 @@ public class Move
         {
             System.out.println("Move failed! " + this.getName());
             results += "MOVE FAILED";
+            e.printStackTrace();
         }
 
         return results;

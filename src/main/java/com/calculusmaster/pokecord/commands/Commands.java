@@ -283,6 +283,10 @@ public class Commands
                 .setCommand(CommandGauntlet::new)
                 .setCategory(Category.DUEL);
 
+        register("raidduel", "raid")
+                .setCommand(CommandRaidDuel::new)
+                .setCategory(Category.DUEL);
+
         register("dev")
                 .setCommand(CommandDev::new)
                 .setCategory(Category.MISC);
