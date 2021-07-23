@@ -31,10 +31,9 @@ public class RaidEventHelper
 
         LoggerHelper.info(RaidEventHelper.class, "Creating new Raid in " + g.getName() + " (" + g.getId() + ")");
 
-        EmbedBuilder embed = new EmbedBuilder();
-
-        embed.setTitle("A Raid Has Started!");
-        embed.setDescription("Join the Raid with `p!raid join`! The battle will begin after a little bit!");
+        EmbedBuilder embed = new EmbedBuilder()
+                .setTitle("A Raid Has Started!")
+                .setDescription("Join the Raid with `p!raid join`! The battle will begin after a little bit!");
 
         channel.sendMessageEmbeds(embed.build()).queue();
     }
@@ -69,6 +68,12 @@ public class RaidEventHelper
         {
             SERVER_RAIDS.remove(g.getId());
             RaidDuel.delete(raid.getDuelID());
+
+            EmbedBuilder embed = new EmbedBuilder()
+                    .setTitle("Raid Cancelled")
+                    .setDescription("No players joined the Raid! The Raid Pokemon disappears...");
+
+            channel.sendMessageEmbeds(embed.build()).queue();
             return;
         }
 
