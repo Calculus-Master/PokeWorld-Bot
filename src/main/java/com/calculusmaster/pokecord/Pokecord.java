@@ -87,6 +87,8 @@ public class Pokecord
 
         LoggerHelper.info(Pokecord.class, "Bot Loading Complete (" + (end - start) + "ms)!");
 
+        //PokecordGUI.launch(PokecordGUI.class, args);
+
         for(Guild g : BOT_JDA.getGuilds())
         {
             Thread.sleep(1000);
