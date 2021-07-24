@@ -20,10 +20,7 @@ import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.listener.ButtonListener;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.Button;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -34,7 +31,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.*;
 
@@ -1305,7 +1301,7 @@ public class Duel
             else this.event.getChannel()
                     .sendFile(this.getImage(), "duel.png")
                     .setEmbeds(embed.build())
-                    .flatMap(m -> m.reply("Turn Action Selection:")
+                    /*.flatMap(m -> m.reply("Turn Action Selection:")
                             .setActionRows(
                                     ActionRow.of(
                                             Button.primary(ButtonListener.DUEL_MOVE_BUTTONS.get(0), "Move 1"),
@@ -1319,7 +1315,7 @@ public class Duel
                                     )
                             ))
                     .delay(30, TimeUnit.SECONDS)
-                    .flatMap(Message::delete)
+                    .flatMap(Message::delete)*/
                     .queue();
         }
         catch (Exception e)
