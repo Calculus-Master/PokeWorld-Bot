@@ -33,9 +33,9 @@ public class StatusConditionEffect extends MoveEffect
             if(this.status.equals(StatusCondition.CURSED))
             {
                 Pokemon other = this.userChange ? this.opponent : this.user;
-                p.damage(p.getStat(Stat.HP) / 2);
+                other.damage(p.getStat(Stat.HP) / 2);
 
-                return p.getName() + " sacrificed " + (p.getStat(Stat.HP) / 2) + " HP to curse " + other.getName() + "!";
+                return other.getName() + " sacrificed " + (p.getStat(Stat.HP) / 2) + " HP to curse " + p.getName() + "!";
             }
 
             if(this.status.equals(StatusCondition.NIGHTMARE) && !p.hasStatusCondition(StatusCondition.ASLEEP))
