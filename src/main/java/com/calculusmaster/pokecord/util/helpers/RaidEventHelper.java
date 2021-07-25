@@ -55,7 +55,7 @@ public class RaidEventHelper
 
     public static void forceRaid(Guild g, TextChannel channel)
     {
-        removeServer(g.getId());
+        if(hasRaid(g.getId())) removeServer(g.getId());
 
         createRaid(g, channel);
     }
