@@ -22,11 +22,15 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class PlayerDataQuery extends MongoQuery
 {
+    private Optional<SettingsHelper> settings = Optional.empty();
+    private Optional<PlayerStatisticsQuery> stats = Optional.empty();
+
     public PlayerDataQuery(String playerID)
     {
         super("playerID", playerID, Mongo.PlayerData);
@@ -98,13 +102,15 @@ public class PlayerDataQuery extends MongoQuery
     //Get the SettingsHelper object
     public SettingsHelper getSettings()
     {
-        return new SettingsHelper(this.getID());
+        if(this.settings.isEmpty()) this.settings = Optional.of(new SettingsHelper(this.getID()));
+        return this.settings.get();
     }
 
     //Get the PlayerStatisticsQuery object
     public PlayerStatisticsQuery getStats()
     {
-        return new PlayerStatisticsQuery(this.getID());
+        if(this.stats.isEmpty()) this.stats = Optional.of(new PlayerStatisticsQuery(this.getID()));
+        return this.stats.get();
     }
 
     //key: "playerID"
