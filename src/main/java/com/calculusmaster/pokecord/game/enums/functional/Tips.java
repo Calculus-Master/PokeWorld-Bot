@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game;
+package com.calculusmaster.pokecord.game.enums.functional;
 
 import java.util.Random;
 

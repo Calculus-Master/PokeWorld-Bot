@@ -1,5 +1,6 @@
-package com.calculusmaster.pokecord.game.pokepass;
+package com.calculusmaster.pokecord.game.pokepass.reward;
 
+import com.calculusmaster.pokecord.game.pokepass.TierReward;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 
 public class EmptyReward extends TierReward

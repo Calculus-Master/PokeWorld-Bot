@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.commands;
 
-import com.calculusmaster.pokecord.game.Tips;
+import com.calculusmaster.pokecord.game.enums.functional.Tips;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.Global;

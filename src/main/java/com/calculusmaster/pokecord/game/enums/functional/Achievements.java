@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game;
+package com.calculusmaster.pokecord.game.enums.functional;
 
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;

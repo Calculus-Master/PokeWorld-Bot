@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.commands.misc;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
-import com.calculusmaster.pokecord.game.Achievements;
+import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.util.Mongo;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.bson.Document;

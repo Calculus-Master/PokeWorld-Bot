@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.commands.player;
 
 import com.calculusmaster.pokecord.commands.Command;
-import com.calculusmaster.pokecord.game.Achievements;
+import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;

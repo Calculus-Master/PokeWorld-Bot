@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game;
+package com.calculusmaster.pokecord.game.trade.elements;
 
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Mongo;

@@ -2,10 +2,10 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
-import com.calculusmaster.pokecord.game.Achievements;
 import com.calculusmaster.pokecord.game.bounties.objectives.CatchNameObjective;
 import com.calculusmaster.pokecord.game.bounties.objectives.CatchPoolObjective;
 import com.calculusmaster.pokecord.game.bounties.objectives.CatchTypeObjective;
+import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.mongo.CollectionsQuery;
 import com.calculusmaster.pokecord.util.Global;

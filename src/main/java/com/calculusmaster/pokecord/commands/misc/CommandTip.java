@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.commands.misc;
 
 import com.calculusmaster.pokecord.commands.Command;
-import com.calculusmaster.pokecord.game.Tips;
+import com.calculusmaster.pokecord.game.enums.functional.Tips;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandTip extends Command

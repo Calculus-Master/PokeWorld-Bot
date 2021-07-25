@@ -1,12 +1,12 @@
 package com.calculusmaster.pokecord.mongo;
 
 import com.calculusmaster.pokecord.Pokecord;
-import com.calculusmaster.pokecord.game.Achievements;
-import com.calculusmaster.pokecord.game.PokePass;
 import com.calculusmaster.pokecord.game.bounties.components.Bounty;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
+import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonSkin;
+import com.calculusmaster.pokecord.game.pokepass.PokePass;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;

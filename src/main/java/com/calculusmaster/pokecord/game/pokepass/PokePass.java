@@ -1,8 +1,8 @@
-package com.calculusmaster.pokecord.game;
+package com.calculusmaster.pokecord.game.pokepass;
 
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.pokemon.PokemonSkin;
-import com.calculusmaster.pokecord.game.pokepass.*;
+import com.calculusmaster.pokecord.game.pokepass.reward.*;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 
 import java.util.HashMap;

@@ -1,6 +1,7 @@
-package com.calculusmaster.pokecord.game.pokepass;
+package com.calculusmaster.pokecord.game.pokepass.reward;
 
 import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.pokepass.TierReward;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 
 public class ItemReward extends TierReward
