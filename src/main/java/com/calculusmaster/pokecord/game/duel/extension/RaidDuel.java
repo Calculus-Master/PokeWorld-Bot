@@ -8,7 +8,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Room;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
-import com.calculusmaster.pokecord.util.helpers.RaidEventHelper;
+import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import javax.imageio.ImageIO;

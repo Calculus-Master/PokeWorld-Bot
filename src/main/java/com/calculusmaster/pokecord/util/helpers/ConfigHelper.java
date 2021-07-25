@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.commands.economy.CommandShop;
 import com.calculusmaster.pokecord.game.bounties.components.Bounty;
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import org.json.JSONObject;
 
 public class ConfigHelper

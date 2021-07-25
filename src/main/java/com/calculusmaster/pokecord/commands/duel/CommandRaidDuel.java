@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.commands.duel;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
-import com.calculusmaster.pokecord.util.helpers.RaidEventHelper;
+import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandRaidDuel extends Command

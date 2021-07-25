@@ -10,8 +10,8 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.mongo.CollectionsQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
-import com.calculusmaster.pokecord.util.helpers.SpawnEventHelper;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
+import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Random;

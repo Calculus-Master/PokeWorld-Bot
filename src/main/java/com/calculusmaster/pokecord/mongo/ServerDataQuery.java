@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.mongo;
 
 import com.calculusmaster.pokecord.util.Mongo;
-import com.calculusmaster.pokecord.util.helpers.SpawnEventHelper;
+import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.Guild;
 import org.bson.Document;

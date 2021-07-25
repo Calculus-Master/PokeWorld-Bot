@@ -10,7 +10,7 @@ import com.calculusmaster.pokecord.game.enums.items.PokeItem;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.SpecialEvolutionRegistry;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
-import com.calculusmaster.pokecord.util.helpers.LocationEventHelper;
+import com.calculusmaster.pokecord.util.helpers.event.LocationEventHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;

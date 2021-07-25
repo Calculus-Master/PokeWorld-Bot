@@ -5,7 +5,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Location;
 import com.calculusmaster.pokecord.game.enums.elements.Region;
 import com.calculusmaster.pokecord.game.enums.elements.Time;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.helpers.LocationEventHelper;
+import com.calculusmaster.pokecord.util.helpers.event.LocationEventHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandLocation extends Command

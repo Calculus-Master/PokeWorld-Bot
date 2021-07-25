@@ -1,6 +1,8 @@
-package com.calculusmaster.pokecord.util.helpers;
+package com.calculusmaster.pokecord.util.helpers.event;
 
 import com.calculusmaster.pokecord.game.duel.extension.RaidDuel;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
+import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
