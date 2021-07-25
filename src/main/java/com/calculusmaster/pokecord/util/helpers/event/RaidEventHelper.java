@@ -59,7 +59,7 @@ public class RaidEventHelper
     {
         if(hasRaid(g.getId())) removeServer(g.getId());
 
-        createRaid(g, channel);
+        start(g, channel);
     }
 
     public static void startRaid(Guild g, TextChannel channel)
