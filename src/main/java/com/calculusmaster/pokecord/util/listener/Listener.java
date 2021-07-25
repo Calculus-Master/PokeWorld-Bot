@@ -95,6 +95,8 @@ public class Listener extends ListenerAdapter
 
     private static void expEvent(MessageReceivedEvent event)
     {
+        if(!PlayerDataQuery.isRegistered(event.getAuthor().getId())) return;
+
         PlayerDataQuery data = new PlayerDataQuery(event.getAuthor().getId());
         Pokemon p = data.getSelectedPokemon();
 
