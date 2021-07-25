@@ -106,13 +106,11 @@ public class Listener extends ListenerAdapter
 
         p.addExp(experience);
 
-        ThreadPoolHandler.LISTENER_EVENT.execute(() -> data.updateBountyProgression(b -> {
-            if(b.getType().equals(ObjectiveType.EARN_XP_POKEMON)) b.update(experience);
-        }));
+        data.updateBountyProgression(ObjectiveType.EARN_XP_POKEMON, experience);
 
         if(p.getLevel() != initL)
         {
-            data.updateBountyProgression(ObjectiveType.LEVEL_POKEMON);
+            data.updateBountyProgression(ObjectiveType.LEVEL_POKEMON, p.getLevel() - initL);
 
             event.getChannel().sendMessage(data.getMention() + ": Your " + p.getName() + " is now Level " + p.getLevel() + "!").queue();
         }

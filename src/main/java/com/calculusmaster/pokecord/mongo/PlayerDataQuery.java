@@ -419,9 +419,7 @@ public class PlayerDataQuery extends MongoQuery
     {
         Mongo.PlayerData.updateOne(this.query, Updates.inc("pokepass_exp", amount));
 
-        this.updateBountyProgression(b -> {
-            if(b.getType().equals(ObjectiveType.EARN_XP_POKEPASS)) b.update(amount);
-        });
+        this.updateBountyProgression(ObjectiveType.EARN_XP_POKEPASS, amount);
 
         this.update();
 
@@ -511,11 +509,6 @@ public class PlayerDataQuery extends MongoQuery
         return this.getBountyIDs().stream().map(Bounty::fromDB).collect(Collectors.toList());
     }
 
-    public void updateBountyProgression(final Consumer<Bounty> checker)
-    {
-        ThreadPoolHandler.BOUNTY.execute(() -> this.updateBounty(checker));
-    }
-
     private void updateBounty(Consumer<Bounty> checker)
     {
         if(this.document == null) this.update();
@@ -551,6 +544,11 @@ public class PlayerDataQuery extends MongoQuery
         }
     }
 
+    public void updateBountyProgression(final Consumer<Bounty> checker)
+    {
+        ThreadPoolHandler.BOUNTY.execute(() -> this.updateBounty(checker));
+    }
+
     public void updateBountyProgression(ObjectiveType type, Consumer<Bounty> checker)
     {
         this.updateBountyProgression((b) -> {
@@ -561,6 +559,11 @@ public class PlayerDataQuery extends MongoQuery
     public void updateBountyProgression(ObjectiveType type)
     {
         this.updateBountyProgression(type, Bounty::update);
+    }
+
+    public void updateBountyProgression(ObjectiveType type, int amount)
+    {
+        this.updateBountyProgression(type, b -> b.update(amount));
     }
 
     public void addBounty(String ID)

@@ -773,7 +773,7 @@ public class Duel
 
             if(this.isNonBotPlayer(this.current))
             {
-                this.players[this.current].data.updateBountyProgression((b) -> {
+                this.players[this.current].data.updateBountyProgression(b -> {
                     switch(b.getType())
                     {
                         case DEFEAT_POKEMON -> b.update();
