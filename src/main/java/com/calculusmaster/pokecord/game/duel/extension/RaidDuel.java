@@ -267,7 +267,7 @@ public class RaidDuel extends WildDuel
 
         Player raidBoss = this.players[this.players.length - 1];
 
-        raidBoss.active.statBuff = 2.5;
+        raidBoss.active.statBuff = 2.0;
         raidBoss.active.setIVs(80);
         raidBoss.active.setEVs("50-50-50-50-50-50");
     }
