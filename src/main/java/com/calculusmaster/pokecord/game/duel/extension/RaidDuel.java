@@ -124,11 +124,32 @@ public class RaidDuel extends WildDuel
         {
             for(Player p : this.getNonBotPlayers()) p.data.updateBountyProgression(ObjectiveType.WIN_RAID_DUEL);
 
-            embed.setDescription("You defeated the Raid Pokemon!");
+            int credits = new Random().nextInt(2000) + 1000;
+            int ppXP = new Random().nextInt(1000) + 500;
+            int pokeXP = new Random().nextInt(100) + 500;
+
+            String highestHP = Arrays.stream(this.getNonBotPlayers()).sorted(Comparator.comparingInt(p -> p.active.getHealth())).collect(Collectors.toList()).get(0).ID;
+
+            StringBuilder winnings = new StringBuilder();
+
+            for(Player p : this.getNonBotPlayers())
+            {
+                double multiplier = highestHP.equals(p.ID) ? 1.2 : (p.active.isFainted() ? 0.3 : 1.0);
+
+                p.data.changeCredits((int)(credits * multiplier));
+                p.data.addPokePassExp((int)(ppXP * multiplier), this.event);
+                p.active.addExp((int)(pokeXP * multiplier));
+
+                winnings.append(p.data.getUsername()).append(" - `").append((int)(credits * multiplier)).append("c`\n");
+            }
+
+            winnings.deleteCharAt(winnings.length() - 1);
+
+            embed.setDescription("You defeated the Raid Pokemon!\n\n**Rewards:**\n" + winnings);
         }
         else
         {
-            embed.setDescription("You could not defeat the Raid Pokemon.");
+            embed.setDescription("You could not defeat the Raid Pokemon. No rewards earned!");
         }
 
         for(Player p : this.getNonBotPlayers()) p.data.updateBountyProgression(ObjectiveType.PARTICIPATE_RAID);
