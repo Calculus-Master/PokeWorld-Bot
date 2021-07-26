@@ -41,6 +41,7 @@ public class CommandInfo extends Command
         String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getGenericJSON().getString("growthrate"), chosen.getLevel()) + " XP";
         String type = (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalCase(chosen.getType()[0].toString()) : Global.normalCase(chosen.getType()[0].toString()) + "\n" + Global.normalCase(chosen.getType()[1].toString()));
         String nature = Global.normalCase(chosen.getNature().toString());
+        String gender = Global.normalCase(chosen.getGender().toString());
         String dynamaxLevel = "" + chosen.getDynamaxLevel();
         String item = PokeItem.asItem(chosen.getItem()).getStyledName();
         String tm = (chosen.hasTM() ? "TM" + (chosen.getTM() < 10 ? "0" : "") + chosen.getTM()  + " - " + TM.get(chosen.getTM()).getMoveName() : "None");
@@ -56,7 +57,7 @@ public class CommandInfo extends Command
         this.embed
                 .addField("Experience", exp, true)
                 .addField("Type", type, true)
-                .addField("Nature", nature, true)
+                .addField("Nature/Gender", nature + "\n" + gender, true)
                 .addField("Dynamax Level", dynamaxLevel, true)
                 .addField("Item", item, true)
                 .addField("TM/TR", "TM: " + tm + "\nTR: " + tr, true)
