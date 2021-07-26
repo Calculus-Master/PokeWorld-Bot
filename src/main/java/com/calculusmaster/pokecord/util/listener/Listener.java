@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
@@ -81,6 +82,8 @@ public class Listener extends ListenerAdapter
         }
 
         if(r.nextInt(10) <= 3) ThreadPoolHandler.LISTENER_EVENT.execute(() -> expEvent(event));
+
+        if(r.nextInt(10) < 2) ThreadPoolHandler.LISTENER_EVENT.execute(() -> eggExpEvent(event));
     }
 
     private static void redeemEvent(MessageReceivedEvent event)
@@ -116,5 +119,32 @@ public class Listener extends ListenerAdapter
         }
 
         Pokemon.updateExperience(p);
+    }
+
+    private static void eggExpEvent(MessageReceivedEvent event)
+    {
+        if(!PlayerDataQuery.isRegistered(event.getAuthor().getId())) return;
+
+        PlayerDataQuery data = new PlayerDataQuery(event.getAuthor().getId());
+
+        if(!data.hasActiveEgg()) return;
+
+        int experience = (int)(new Random().nextInt(300) * (1 + Math.random()));
+
+        PokemonEgg egg = data.getActiveEgg();
+
+        egg.addExp(experience);
+
+        if(egg.canHatch())
+        {
+            Pokemon p = egg.hatch();
+
+            Pokemon.uploadPokemon(p);
+            data.addPokemon(p.getUUID());
+            data.removeActiveEgg();
+            data.removeEgg(egg.getEggID());
+
+            event.getChannel().sendMessage(data.getMention() + ": Your Egg hatched into a new " + p.getName() + "!").queue();
+        }
     }
 }

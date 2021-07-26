@@ -61,13 +61,17 @@ public class PokemonEgg
         Mongo.EggData.insertOne(eggData);
     }
 
-    public static Pokemon hatch(String eggID)
+    public Pokemon hatch()
     {
-        PokemonEgg egg = PokemonEgg.fromDB(eggID);
+        Pokemon hatched = Pokemon.create(this.getTarget());
 
-        Pokemon hatched = Pokemon.create(egg.getTarget());
-
+        Mongo.EggData.deleteOne(Filters.eq("eggID", this.getEggID()));
         return hatched;
+    }
+
+    public boolean canHatch()
+    {
+        return this.exp >= this.max;
     }
 
     public void addExp(int amount)

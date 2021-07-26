@@ -718,6 +718,11 @@ public class PlayerDataQuery extends MongoQuery
         return PokemonEgg.fromDB(this.json().getString("active_egg"));
     }
 
+    public boolean hasActiveEgg()
+    {
+        return !this.json().getString("active_egg").equals("");
+    }
+
     public void setActiveEgg(String eggID)
     {
         this.update(Updates.set("active_egg", eggID));
