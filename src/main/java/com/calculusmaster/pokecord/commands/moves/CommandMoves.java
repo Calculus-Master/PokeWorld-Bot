@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.moves;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.extension.RaidDuel;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.Move;
@@ -95,7 +96,7 @@ public class CommandMoves extends Command
             {
                 Duel d = DuelHelper.instance(this.player.getId());
                 int current = d.indexOf(this.player.getId());
-                int other = current == 0 ? 1 : 0;
+                int other = d instanceof RaidDuel ? d.getPlayers().length - 1 : current == 0 ? 1 : 0;
                 selected = d.getPlayers()[current].active;
 
                 movesList.append("**Learned Moves: **\n");

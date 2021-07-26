@@ -287,7 +287,7 @@ public class RaidDuel extends WildDuel
         return players;
     }
 
-    private Player getRaidBoss()
+    public Player getRaidBoss()
     {
         return this.players[this.players.length - 1];
     }
