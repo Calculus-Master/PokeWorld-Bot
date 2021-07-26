@@ -3,7 +3,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -30,25 +30,25 @@ public class CommandActivate extends Command
             return this;
         }
 
-        PokeItem item = PokeItem.asItem(this.playerData.getItemList().get(this.getInt(1) - 1));
+        Item item = Item.asItem(this.playerData.getItemList().get(this.getInt(1) - 1));
         Pokemon s = this.playerData.getSelectedPokemon();
 
         if(item != null && item.nonPokemon)
         {
-           if(item.equals(PokeItem.IV_REROLLER))
+           if(item.equals(Item.IV_REROLLER))
            {
                double minIV = s.getTotalIVRounded() - (s.getTotalIVRounded() / 2);
                s.setIVs((int)minIV);
 
                Pokemon.uploadPokemon(s);
 
-               this.playerData.removeItem(PokeItem.IV_REROLLER.getName());
+               this.playerData.removeItem(Item.IV_REROLLER.getName());
 
                this.event.getChannel().sendMessage(this.playerData.getMention() + ": " + s.getName() + "'s IVs were rerolled to " + s.getTotalIV() + "!").queue();
                this.embed = null;
                return this;
            }
-           else if(item.equals(PokeItem.EV_REALLOCATOR))
+           else if(item.equals(Item.EV_REALLOCATOR))
            {
                 if(this.msg.length == 4 && Stat.cast(this.msg[2]) != null && Stat.cast(this.msg[3]) != null)
                 {
@@ -81,7 +81,7 @@ public class CommandActivate extends Command
 
                     Pokemon.updateEVs(s);
 
-                    this.playerData.removeItem(PokeItem.EV_REALLOCATOR.getName());
+                    this.playerData.removeItem(Item.EV_REALLOCATOR.getName());
 
                     this.embed.setDescription("Transferred " + transferEVs + " " + from.toString() + " EVs to " + s.getName() + "'s " + to.toString() + "!");
                 }
@@ -92,7 +92,7 @@ public class CommandActivate extends Command
                     return this;
                 }
            }
-           else if(item.equals(PokeItem.EV_CLEARER))
+           else if(item.equals(Item.EV_CLEARER))
            {
                if(this.msg.length == 3 && Stat.cast(this.msg[2]) != null)
                {
@@ -109,7 +109,7 @@ public class CommandActivate extends Command
 
                    Pokemon.updateEVs(s);
 
-                   this.playerData.removeItem(PokeItem.EV_CLEARER.getName());
+                   this.playerData.removeItem(Item.EV_CLEARER.getName());
 
                    this.embed.setDescription("Successfully cleared all of " + s.getName() + "'s " + target + " EVs!");
                }

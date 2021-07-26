@@ -6,7 +6,7 @@ import com.calculusmaster.pokecord.commands.pokemon.CommandInfo;
 import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
-import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.trade.elements.MarketEntry;
@@ -88,7 +88,7 @@ public class CommandMarket extends Command
                 String gender = "Gender: " + Global.normalCase(chosen.getGender().toString());
                 String type = "Type: " + (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalCase(chosen.getType()[0].toString()) : Global.normalCase(chosen.getType()[0].toString()) + " | " + Global.normalCase(chosen.getType()[1].toString()));
                 String nature = "Nature: " + Global.normalCase(chosen.getNature().toString());
-                String item = "Held Item: " + PokeItem.asItem(chosen.getItem()).getStyledName();
+                String item = "Held Item: " + Item.asItem(chosen.getItem()).getStyledName();
                 String stats = CommandInfo.getStatsFormatted(chosen, this.playerData.getSettings().getSettingBoolean(SettingsHelper.Setting.CLIENT_DETAILED));
 
                 this.embed.setTitle(title);

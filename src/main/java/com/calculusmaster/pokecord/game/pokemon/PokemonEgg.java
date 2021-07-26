@@ -3,7 +3,7 @@ package com.calculusmaster.pokecord.game.pokemon;
 import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.Gender;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.custom.StatIntMap;
@@ -101,7 +101,7 @@ public class PokemonEgg
     {
         StatIntMap ivs = new StatIntMap();
 
-        int number = PokeItem.asItem(parent1.getItem()).equals(PokeItem.DESTINY_KNOT) || PokeItem.asItem(parent2.getItem()).equals(PokeItem.DESTINY_KNOT) ? 5 : 3;
+        int number = Item.asItem(parent1.getItem()).equals(Item.DESTINY_KNOT) || Item.asItem(parent2.getItem()).equals(Item.DESTINY_KNOT) ? 5 : 3;
 
         List<Stat> stats = new ArrayList<>(Arrays.asList(Stat.values()));
         Collections.shuffle(stats);

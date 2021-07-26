@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import static com.calculusmaster.pokecord.game.enums.items.ItemType.*;
 
-public enum PokeItem
+public enum Item
 {
     NONE(0, MISC),
     //Functional Items (p!activate)
@@ -75,7 +75,7 @@ public enum PokeItem
     public ItemType type;
     public boolean nonPokemon;
 
-    PokeItem(int cost, ItemType type)
+    Item(int cost, ItemType type)
     {
         this.cost = cost;
         this.type = type;
@@ -93,12 +93,12 @@ public enum PokeItem
         return Global.normalCase(this.getName().replaceAll("_", " "));
     }
 
-    public static PokeItem asItem(String s)
+    public static Item asItem(String s)
     {
         return Arrays.stream(values()).filter(i -> i.toString().equals(s.toUpperCase())).collect(Collectors.toList()).get(0);
     }
 
-    public static Type getArceusPlateType(PokeItem item)
+    public static Type getArceusPlateType(Item item)
     {
         return switch(item) {
             case DRACO_PLATE -> Type.DRAGON;
@@ -124,6 +124,6 @@ public enum PokeItem
 
     public boolean isPlateItem()
     {
-        return PokeItem.getArceusPlateType(this) != null;
+        return Item.getArceusPlateType(this) != null;
     }
 }

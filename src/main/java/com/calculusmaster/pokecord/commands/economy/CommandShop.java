@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.commands.economy;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.enums.elements.Nature;
-import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
@@ -22,7 +22,7 @@ public class CommandShop extends Command
 {
     public static OffsetDateTime TIME;
 
-    public static final List<PokeItem> ITEM_ENTRIES = new ArrayList<>();
+    public static final List<Item> ITEM_ENTRIES = new ArrayList<>();
     public static final List<Integer> ITEM_PRICES = new ArrayList<>();
     public static int ITEM_COUNT_MIN;
     public static int ITEM_COUNT_MAX;
@@ -175,9 +175,9 @@ public class CommandShop extends Command
 
         for(int i = 0; i < count; i++)
         {
-            PokeItem item = PokeItem.values()[r.nextInt(PokeItem.values().length)];
+            Item item = Item.values()[r.nextInt(Item.values().length)];
 
-            if(!item.equals(PokeItem.NONE) && !ITEM_ENTRIES.contains(item) && !item.nonPokemon)
+            if(!item.equals(Item.NONE) && !ITEM_ENTRIES.contains(item) && !item.nonPokemon)
             {
                 ITEM_ENTRIES.add(item);
                 ITEM_PRICES.add(item.cost + (r.nextInt(item.cost / 2) * (r.nextInt(10) < 5 ? 1 : -1)));

@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.game.pokemon;
 
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
-import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.Move;
 
 import java.util.ArrayList;
@@ -22,47 +22,47 @@ public class SpecialEvolutionRegistry
 
     public static void init()
     {
-        register("Pikachu", "Raichu", PokeItem.THUNDER_STONE)
+        register("Pikachu", "Raichu", Item.THUNDER_STONE)
                 .another("Charjabug", "Vikavolt")
                 .another("Eelektrik", "Eelektross");
 
-        register("Alolan Sandshrew", "Alolan Sandslash", PokeItem.ICE_STONE)
+        register("Alolan Sandshrew", "Alolan Sandslash", Item.ICE_STONE)
                 .another("Alolan Vulpix", "Alolan Ninetales")
                 .another("Galarian Darumaka", "Galarian Darmanitan");
 
-        register("Nidorina", "Nidoqueen", PokeItem.MOON_STONE)
+        register("Nidorina", "Nidoqueen", Item.MOON_STONE)
                 .another("Nidorino", "Nidoking")
                 .another("Clefairy", "Clefable")
                 .another("Jigglypuff", "Wigglytuff")
                 .another("Skitty", "Delcatty")
                 .another("Munna", "Musharna");
 
-        register("Vulpix", "Ninetales", PokeItem.FIRE_STONE)
+        register("Vulpix", "Ninetales", Item.FIRE_STONE)
                 .another("Growlithe", "Arcanine")
                 .another("Pansear", "Simisear");
 
-        register("Gloom", "Vileplume", PokeItem.LEAF_STONE)
-                .another("Bellossom", PokeItem.SUN_STONE);
+        register("Gloom", "Vileplume", Item.LEAF_STONE)
+                .another("Bellossom", Item.SUN_STONE);
 
-        register("Weepinbell", "Victreebel", PokeItem.LEAF_STONE)
+        register("Weepinbell", "Victreebel", Item.LEAF_STONE)
                 .another("Exeggcute", "Exeggutor")
                 .another("Nuzleaf", "Shiftry")
                 .another("Pansage", "Simisage");
 
-        register("Shellder", "Cloyster", PokeItem.WATER_STONE)
+        register("Shellder", "Cloyster", Item.WATER_STONE)
                 .another("Staryu", "Starmine")
                 .another("Lombre", "Ludicolo")
                 .another("Panpour", "Simipour");
 
-        register("Eevee", "Vaporeon", PokeItem.WATER_STONE)
-                .another("Flareon", PokeItem.FIRE_STONE)
-                .another("Jolteon", PokeItem.THUNDER_STONE)
+        register("Eevee", "Vaporeon", Item.WATER_STONE)
+                .another("Flareon", Item.FIRE_STONE)
+                .another("Jolteon", Item.THUNDER_STONE)
                 .another("Sylveon", p -> p.getLearnedMoves().stream().map(Move::new).anyMatch(m -> m.getType().equals(Type.FAIRY)));
 
-        register("Onix", "Steelix", PokeItem.METAL_COAT)
+        register("Onix", "Steelix", Item.METAL_COAT)
                 .another("Scyther", "Scizor");
 
-        register("Haunter", "Gengar", PokeItem.TRADE_EVOLVER)
+        register("Haunter", "Gengar", Item.TRADE_EVOLVER)
                 .another("Poliwhirl", "Politoed")
                 .another("Kadabra", "Alakazam")
                 .another("Machoke", "Machamp")
@@ -75,12 +75,12 @@ public class SpecialEvolutionRegistry
 
         register("Poipole", "Naganadel", "Dragon Pulse");
 
-        register("Poliwhirl", "Poliwrath", PokeItem.WATER_STONE)
-                .another("Politoed", PokeItem.KINGS_ROCK);
+        register("Poliwhirl", "Poliwrath", Item.WATER_STONE)
+                .another("Politoed", Item.KINGS_ROCK);
 
         register("Aipom", "Ambipom", "Double Hit");
 
-        register("Sunkern", "Sunflora", PokeItem.LEAF_STONE)
+        register("Sunkern", "Sunflora", Item.LEAF_STONE)
                 .another("Cottonee", "Whimsicott")
                 .another("Petilil", "Lilligant")
                 .another("Helioptile", "Heliolisk");
@@ -89,65 +89,65 @@ public class SpecialEvolutionRegistry
                 .another("Piloswine", "Mamoswine")
                 .another("Tangela", "Tangrowth");
 
-        register("Murkrow", "Honchkrow", PokeItem.DUSK_STONE)
+        register("Murkrow", "Honchkrow", Item.DUSK_STONE)
                 .another("Misdreavus", "Mismagius")
                 .another("Lampent", "Chandelure")
                 .another("Doublade", "Aegislash");
 
-        register("Slowpoke", "Slowking", PokeItem.KINGS_ROCK);
+        register("Slowpoke", "Slowking", Item.KINGS_ROCK);
 
-        register("Galarian Slowpoke", "Galarian Slowbro", PokeItem.GALARICA_CUFF)
-                .another("Galarian Slowking", PokeItem.GALARICA_WREATH);
+        register("Galarian Slowpoke", "Galarian Slowbro", Item.GALARICA_CUFF)
+                .another("Galarian Slowking", Item.GALARICA_WREATH);
 
-        register("Gligar", "Gliscor", PokeItem.RAZOR_FANG);
+        register("Gligar", "Gliscor", Item.RAZOR_FANG);
 
-        register("Sneasel", "Weavile", PokeItem.RAZOR_CLAW);
+        register("Sneasel", "Weavile", Item.RAZOR_CLAW);
 
-        register("Seadra", "Kingdra", PokeItem.DRAGON_SCALE);
+        register("Seadra", "Kingdra", Item.DRAGON_SCALE);
 
-        register("Porygon", "Porygon2", PokeItem.UPGRADE);
+        register("Porygon", "Porygon2", Item.UPGRADE);
 
-        register("Porygon", "Porygonz", PokeItem.DUBIOUS_DISC);
+        register("Porygon", "Porygonz", Item.DUBIOUS_DISC);
 
         register("Tyrogue", "Hitmonlee", p -> p.getStat(Stat.ATK) > p.getStat(Stat.DEF))
                 .another("Hitmonchan", p -> p.getStat(Stat.ATK) < p.getStat(Stat.DEF))
                 .another("Hitmontop", p -> p.getStat(Stat.ATK) == p.getStat(Stat.DEF));
 
-        register("Kirlia", "Gallade", PokeItem.DAWN_STONE)
+        register("Kirlia", "Gallade", Item.DAWN_STONE)
                 .another("Snorunt", "Froslass");
 
-        register("Roselia", "Roserade", PokeItem.SHINY_STONE)
+        register("Roselia", "Roserade", Item.SHINY_STONE)
                 .another("Togetic", "Togekiss")
                 .another("Minccino", "Cinccino")
                 .another("Floette", "Florges");
 
-        register("Feebas", "Milotic", PokeItem.PRISM_SCALE);
+        register("Feebas", "Milotic", Item.PRISM_SCALE);
 
-        register("Dusclops", "Dusknoir", PokeItem.REAPER_CLOTH);
+        register("Dusclops", "Dusknoir", Item.REAPER_CLOTH);
 
-        register("Clamperl", "Huntail", PokeItem.DEEP_SEA_TOOTH)
-                .another("Gorebyss", PokeItem.DEEP_SEA_SCALE);
+        register("Clamperl", "Huntail", Item.DEEP_SEA_TOOTH)
+                .another("Gorebyss", Item.DEEP_SEA_SCALE);
 
         register("Bonsly", "Sudowoodo", "Mimic")
                 .another("Mime Jr", "Mr Mime");
 
-        register("Happiny", "Chansey", PokeItem.OVAL_STONE);
+        register("Happiny", "Chansey", Item.OVAL_STONE);
 
         register("Lickitung", "Lickilicky", "Rollout");
 
-        register("Rhydon", "Rhyperior", PokeItem.PROTECTOR);
+        register("Rhydon", "Rhyperior", Item.PROTECTOR);
 
-        register("Electabuzz", "Electivire", PokeItem.ELECTIRIZER);
+        register("Electabuzz", "Electivire", Item.ELECTIRIZER);
 
-        register("Magmar", "Magmortar", PokeItem.MAGMARIZER);
+        register("Magmar", "Magmortar", Item.MAGMARIZER);
 
-        register("Spritzee", "Aromatisse", PokeItem.SACHET);
+        register("Spritzee", "Aromatisse", Item.SACHET);
 
-        register("Swirlix", "Slurpuff", PokeItem.WHIPPED_DREAM);
+        register("Swirlix", "Slurpuff", Item.WHIPPED_DREAM);
 
         register("Steenee", "Tsareena", "Stomp");
 
-        register("Alolan Meowth", "Alolan Persian", PokeItem.FRIENDSHIP_BAND)
+        register("Alolan Meowth", "Alolan Persian", Item.FRIENDSHIP_BAND)
                 .another("Chansey", "Blissey")
                 .another("Golbat", "Crobat")
                 .another("Pichu", "Pikachu")
@@ -170,12 +170,12 @@ public class SpecialEvolutionRegistry
         register("Toxel", "Toxtricity Amped", p -> p.getNature().isAmped())
                 .another("Toxtricity Low Key", p -> !p.getNature().isAmped());
 
-        register("Sinistea", "Polteageist", PokeItem.CRACKED_POT);
+        register("Sinistea", "Polteageist", Item.CRACKED_POT);
 
-        register("Applin", "Flapple", PokeItem.TART_APPLE)
-                .another("Appletun", PokeItem.SWEET_APPLE);
+        register("Applin", "Flapple", Item.TART_APPLE)
+                .another("Appletun", Item.SWEET_APPLE);
 
-        register("Milcery", "Alcremie", PokeItem.SWEET);
+        register("Milcery", "Alcremie", Item.SWEET);
     }
 
     public static String getTarget(Pokemon p)
@@ -201,11 +201,11 @@ public class SpecialEvolutionRegistry
         return register(source, target, p -> p.getLearnedMoves().contains(move));
     }
 
-    private static Evolution register(String source, String target, PokeItem item)
+    private static Evolution register(String source, String target, Item item)
     {
-        EvolutionValidator normal = p -> p.hasItem() && PokeItem.asItem(p.getItem()).equals(item);
-        EvolutionValidator friendship = p -> p.hasItem() && PokeItem.asItem(p.getItem()).equals(item) && hasFriendship(p);
-        return register(source, target, item.equals(PokeItem.FRIENDSHIP_BAND) ? friendship : normal);
+        EvolutionValidator normal = p -> p.hasItem() && Item.asItem(p.getItem()).equals(item);
+        EvolutionValidator friendship = p -> p.hasItem() && Item.asItem(p.getItem()).equals(item) && hasFriendship(p);
+        return register(source, target, item.equals(Item.FRIENDSHIP_BAND) ? friendship : normal);
     }
 
     public static boolean hasFriendship(Pokemon p)
@@ -241,7 +241,7 @@ public class SpecialEvolutionRegistry
             return this;
         }
 
-        Evolution another(String target, PokeItem item)
+        Evolution another(String target, Item item)
         {
             register(this.source, target, item);
             return this;

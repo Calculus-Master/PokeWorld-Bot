@@ -5,7 +5,7 @@ import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.enums.elements.Nature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
-import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
@@ -105,7 +105,7 @@ public class CommandBuy extends Command
             if(this.playerData.getCredits() < cost) this.sendInvalidCredits(cost);
             else
             {
-                PokeItem i = CommandShop.ITEM_ENTRIES.get(this.getInt(2) - 1);
+                Item i = CommandShop.ITEM_ENTRIES.get(this.getInt(2) - 1);
 
                 this.playerData.changeCredits(-1 * cost);
                 this.playerData.addItem(i.toString());

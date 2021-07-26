@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
-import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -26,7 +26,7 @@ public class CommandGive extends Command
             return this;
         }
 
-        PokeItem item = PokeItem.asItem(this.playerData.getItemList().get(this.getInt(1) - 1));
+        Item item = Item.asItem(this.playerData.getItemList().get(this.getInt(1) - 1));
         Pokemon s = this.playerData.getSelectedPokemon();
 
         if(item != null && !item.nonPokemon)

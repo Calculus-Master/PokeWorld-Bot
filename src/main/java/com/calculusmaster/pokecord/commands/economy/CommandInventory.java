@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.commands.economy;
 
 import com.calculusmaster.pokecord.commands.Command;
-import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandInventory extends Command
@@ -19,7 +19,7 @@ public class CommandInventory extends Command
         s.append("`Items`: \n");
         if(this.playerData.getItemList() != null)
         {
-            for(int i = 0; i < this.playerData.getItemList().size(); i++) s.append(i + 1).append(": ").append(PokeItem.asItem(this.playerData.getItemList().get(i)).getStyledName()).append("\n");
+            for(int i = 0; i < this.playerData.getItemList().size(); i++) s.append(i + 1).append(": ").append(Item.asItem(this.playerData.getItemList().get(i)).getStyledName()).append("\n");
             s.append("\n");
         }
         else s.append("You don't own any Items!\n\n");

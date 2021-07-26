@@ -1,14 +1,14 @@
 package com.calculusmaster.pokecord.game.pokepass.reward;
 
-import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.pokepass.TierReward;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 
 public class ItemReward extends TierReward
 {
-    private PokeItem item;
+    private Item item;
 
-    public ItemReward(PokeItem item)
+    public ItemReward(Item item)
     {
         this.item = item;
     }

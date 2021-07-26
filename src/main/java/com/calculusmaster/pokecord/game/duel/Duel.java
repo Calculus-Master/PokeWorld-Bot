@@ -9,7 +9,7 @@ import com.calculusmaster.pokecord.game.duel.extension.WildDuel;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
-import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.TypeEffectiveness;
@@ -244,11 +244,11 @@ public class Duel
         //Arceus Plate
         if(this.players[this.current].active.getAbilities().contains("Multitype"))
         {
-            PokeItem item = PokeItem.asItem(this.players[this.current].active.getItem());
+            Item item = Item.asItem(this.players[this.current].active.getItem());
 
             if(item.isPlateItem())
             {
-                Type t = PokeItem.getArceusPlateType(item);
+                Type t = Item.getArceusPlateType(item);
 
                 this.players[this.current].active.setType(t, 0);
                 this.players[this.current].active.setType(t, 1);
@@ -580,16 +580,16 @@ public class Duel
         //Item-based Buffs
         boolean itemsOff = this.room.equals(Room.MAGIC_ROOM);
 
-        if(!itemsOff && this.players[this.current].active.hasItem() && PokeItem.asItem(this.players[this.current].active.getItem()).equals(PokeItem.METAL_COAT))
+        if(!itemsOff && this.players[this.current].active.hasItem() && Item.asItem(this.players[this.current].active.getItem()).equals(Item.METAL_COAT))
         {
             if(move.getType().equals(Type.STEEL)) move.setPower((int)(move.getPower() * 1.2));
         }
 
         if(!itemsOff && this.players[this.current].active.hasItem() && this.players[this.current].active.getItem().toLowerCase().contains("plate"))
         {
-            PokeItem item = PokeItem.asItem(this.players[this.current].active.getItem());
+            Item item = Item.asItem(this.players[this.current].active.getItem());
 
-            boolean buff = PokeItem.getArceusPlateType(item) != null && PokeItem.getArceusPlateType(item).equals(move.getType());
+            boolean buff = Item.getArceusPlateType(item) != null && Item.getArceusPlateType(item).equals(move.getType());
 
             if(buff) move.setPower(move.getPower() * 1.2);
         }

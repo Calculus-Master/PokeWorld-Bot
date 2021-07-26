@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.game.pokemon;
 
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.*;
-import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.util.Global;
@@ -40,7 +40,7 @@ public class PokemonNew
     private Optional<Map<Stat, Integer>> evs = Optional.empty();
     private Optional<Map<Stat, Integer>> multipliers = Optional.empty();
     private Optional<Integer> dynamaxLevel = Optional.empty();
-    private Optional<PokeItem> item = Optional.empty();
+    private Optional<Item> item = Optional.empty();
     private Optional<Integer> tm = Optional.empty();
     private Optional<Integer> tr = Optional.empty();
     private Optional<List<String>> learnedMoves = Optional.empty();
@@ -72,7 +72,7 @@ public class PokemonNew
         p.setLearnedMoves("Tackle-Tackle-Tackle-Tackle");
         p.setTM(-1);
         p.setTR(-1);
-        p.setItem(PokeItem.NONE);
+        p.setItem(Item.NONE);
         p.setDynamaxLevel(0);
         p.setNickname("");
         p.setGender();
@@ -335,7 +335,7 @@ public class PokemonNew
         moves.addAll(this.data.moves.keySet());
         moves.sort(Comparator.comparingInt(s -> this.data.moves.get(s)));
 
-        if(this.getName().contains("Zygarde") && this.hasItem() && this.getItem().equals(PokeItem.ZYGARDE_CUBE))
+        if(this.getName().contains("Zygarde") && this.hasItem() && this.getItem().equals(Item.ZYGARDE_CUBE))
         {
             moves.addAll(Arrays.asList("Core Enforcer", "Dragon Dance", "Extreme Speed", "Thousand Arrows", "Thousand Waves"));
         }
@@ -350,7 +350,7 @@ public class PokemonNew
         if(this.hasTM()) moves.add(this.getTM().getMoveName());
         if(this.hasTR()) moves.add(this.getTR().getMoveName());
 
-        if(this.getName().contains("Zygarde") && this.hasItem() && this.getItem().equals(PokeItem.ZYGARDE_CUBE))
+        if(this.getName().contains("Zygarde") && this.hasItem() && this.getItem().equals(Item.ZYGARDE_CUBE))
         {
             Collections.addAll(moves, "Core Enforcer", "Dragon Dance", "Extreme Speed", "Thousand Arrows", "Thousand Waves");
         }
@@ -459,24 +459,24 @@ public class PokemonNew
     }
 
     //Items
-    public PokeItem getItem()
+    public Item getItem()
     {
-        return this.item.orElse(PokeItem.asItem(this.specific.getString("item")));
+        return this.item.orElse(Item.asItem(this.specific.getString("item")));
     }
 
-    public void setItem(PokeItem item)
+    public void setItem(Item item)
     {
         this.item = Optional.of(item);
     }
 
     public boolean hasItem()
     {
-        return !this.getItem().equals(PokeItem.NONE);
+        return !this.getItem().equals(Item.NONE);
     }
 
     public void removeItem()
     {
-        this.setItem(PokeItem.NONE);
+        this.setItem(Item.NONE);
     }
 
     //Mega & Forms

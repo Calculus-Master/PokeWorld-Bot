@@ -3,7 +3,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -43,7 +43,7 @@ public class CommandInfo extends Command
         String nature = Global.normalCase(chosen.getNature().toString());
         String gender = Global.normalCase(chosen.getGender().toString());
         String dynamaxLevel = "" + chosen.getDynamaxLevel();
-        String item = PokeItem.asItem(chosen.getItem()).getStyledName();
+        String item = Item.asItem(chosen.getItem()).getStyledName();
         String tm = (chosen.hasTM() ? "TM" + (chosen.getTM() < 10 ? "0" : "") + chosen.getTM()  + " - " + TM.get(chosen.getTM()).getMoveName() : "None");
         String tr =  (chosen.hasTR() ? "TR" + (chosen.getTR() < 10 ? "0" : "") + chosen.getTR()  + " - " + TR.get(chosen.getTR()).getMoveName() : "None");
         String image = chosen.getImage();

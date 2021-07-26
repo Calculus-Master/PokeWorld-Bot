@@ -6,7 +6,7 @@ import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Location;
 import com.calculusmaster.pokecord.game.enums.elements.Region;
 import com.calculusmaster.pokecord.game.enums.elements.Time;
-import com.calculusmaster.pokecord.game.enums.items.PokeItem;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.SpecialEvolutionRegistry;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
@@ -54,10 +54,10 @@ public class CommandEvolve extends Command
 
         if(selected.getName().equals("Eevee"))
         {
-            if(selected.hasItem() && PokeItem.asItem(selected.getItem()).equals(PokeItem.FRIENDSHIP_BAND) && SpecialEvolutionRegistry.hasFriendship(selected) && time.isNight())
+            if(selected.hasItem() && Item.asItem(selected.getItem()).equals(Item.FRIENDSHIP_BAND) && SpecialEvolutionRegistry.hasFriendship(selected) && time.isNight())
                 target = "Umbreon";
 
-            if(selected.hasItem() && PokeItem.asItem(selected.getItem()).equals(PokeItem.FRIENDSHIP_BAND) && SpecialEvolutionRegistry.hasFriendship(selected) && time.isDay())
+            if(selected.hasItem() && Item.asItem(selected.getItem()).equals(Item.FRIENDSHIP_BAND) && SpecialEvolutionRegistry.hasFriendship(selected) && time.isDay())
                 target = "Espeon";
 
             if(target.equals("") && !special && location.isMossyRock()) target = "Leafeon";
@@ -93,7 +93,7 @@ public class CommandEvolve extends Command
         if(selected.getName().equals("Koffing") && selected.getLevel() >= 35 && location.region.equals(Region.GALAR))
             target = "Galarian Weezing";
 
-        if(selected.getName().equals("Exeggcute") && location.region.equals(Region.ALOLA) && selected.hasItem() && PokeItem.asItem(selected.getItem()).equals(PokeItem.LEAF_STONE))
+        if(selected.getName().equals("Exeggcute") && location.region.equals(Region.ALOLA) && selected.hasItem() && Item.asItem(selected.getItem()).equals(Item.LEAF_STONE))
             target = "Alolan Exeggutor";
 
         if(selected.getName().equals("Crabrawler") && location.equals(Location.MOUNT_LANAKILA))
