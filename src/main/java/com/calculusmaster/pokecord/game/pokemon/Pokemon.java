@@ -94,7 +94,7 @@ public class Pokemon
         p.hpBuff = 1.0;
         p.setDynamax(false);
 
-        LoggerHelper.info(Pokemon.class, "Pokemon Built: UUID (" + UUID + "), NAME (" + p.getName() + ")");
+        LoggerHelper.info(Pokemon.class, "Pokemon Built: UUID (" + UUID + "), NAME (" + p.getName() + ")", true);
         return p;
     }
 
@@ -128,7 +128,7 @@ public class Pokemon
         p.hpBuff = 1.0;
         p.setDynamax(false);
 
-        LoggerHelper.info(Pokemon.class, "Pokemon Created: UUID (" + p.getUUID() + "), NAME (" + name + ")");
+        LoggerHelper.info(Pokemon.class, "Pokemon Created: UUID (" + p.getUUID() + "), NAME (" + name + ")", true);
         return p;
     }
 

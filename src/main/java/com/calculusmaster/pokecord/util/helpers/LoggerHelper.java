@@ -34,6 +34,11 @@ public class LoggerHelper
         LoggerFactory.getLogger(clazz).info(msg);
     }
 
+    public static void info(Class<?> clazz, String msg, boolean requireInit)
+    {
+        if(requireInit && Pokecord.INIT_COMPLETE) info(clazz, msg);
+    }
+
     public static void warn(Class<?> clazz, String msg)
     {
         LoggerFactory.getLogger(clazz).warn(msg);

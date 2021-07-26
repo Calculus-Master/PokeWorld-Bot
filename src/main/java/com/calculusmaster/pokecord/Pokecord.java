@@ -34,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 public class Pokecord
 {
     public static JDA BOT_JDA;
+    public static boolean INIT_COMPLETE;
 
     public static void main(String[] args) throws InterruptedException, LoginException
     {
@@ -41,6 +42,8 @@ public class Pokecord
 
         //Initializations
         long start = System.currentTimeMillis();
+
+        INIT_COMPLETE = false;
 
         LoggerHelper.init("Config", ConfigHelper::init);
         LoggerHelper.init("Pokemon Data", DataHelper::createPokemonData, true);
@@ -92,6 +95,8 @@ public class Pokecord
         end = System.currentTimeMillis();
 
         LoggerHelper.info(Pokecord.class, "Bot Loading Complete (" + (end - start) + "ms)!");
+
+        INIT_COMPLETE = true;
 
         //PokecordGUI.launch(PokecordGUI.class, args);
 
