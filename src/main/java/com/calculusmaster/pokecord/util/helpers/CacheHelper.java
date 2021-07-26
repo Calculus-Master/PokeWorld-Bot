@@ -45,7 +45,7 @@ public class CacheHelper
             uuids = UUID_LISTS.get(player);
         }
 
-        pokemon.add(Pokemon.buildCore(UUID, pokemon.size()));
+        pokemon.add(Pokemon.build(UUID));
         uuids.add(UUID);
 
         updateNumbers(player);
