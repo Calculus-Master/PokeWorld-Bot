@@ -6,81 +6,81 @@ import com.calculusmaster.pokecord.util.Global;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import static com.calculusmaster.pokecord.game.enums.items.ItemType.*;
+
 public enum PokeItem
 {
-    NONE(0),
-    //Non-Pokemon Items (p!activate)
-    EV_REALLOCATOR(0, true),
-    IV_REROLLER(0, true),
-    EV_CLEARER(0, true),
+    NONE(0, MISC),
+    //Functional Items (p!activate)
+    EV_REALLOCATOR(0, FUNCTIONAL),
+    IV_REROLLER(0, FUNCTIONAL),
+    EV_CLEARER(0, FUNCTIONAL),
     //Pokemon Items (p!give)
-    FRIENDSHIP_BAND(500),
-    THUNDER_STONE(250),
-    ICE_STONE(250),
-    MOON_STONE(250),
-    FIRE_STONE(250),
-    LEAF_STONE(250),
-    SUN_STONE(250),
-    WATER_STONE(250),
-    DUSK_STONE(250),
-    DAWN_STONE(250),
-    SHINY_STONE(250),
-    OVAL_STONE(250),
-    TRADE_EVOLVER(1000),
-    METAL_COAT(1500),
-    ZYGARDE_CUBE(6000),
-    KINGS_ROCK(250),
-    GALARICA_CUFF(250),
-    GALARICA_WREATH(250),
-    RAZOR_FANG(250),
-    RAZOR_CLAW(250),
-    DRAGON_SCALE(250),
-    UPGRADE(250),
-    DUBIOUS_DISC(250),
-    PRISM_SCALE(250),
-    REAPER_CLOTH(250),
-    DEEP_SEA_TOOTH(250),
-    DEEP_SEA_SCALE(250),
-    PROTECTOR(250),
-    ELECTIRIZER(250),
-    MAGMARIZER(250),
-    SACHET(250),
-    WHIPPED_DREAM(250),
-    CRACKED_POT(250),
-    TART_APPLE(250),
-    SWEET_APPLE(250),
-    SWEET(250),
-    DESTINY_KNOT(1000),
-    DRACO_PLATE(1000),
-    DREAD_PLATE(1000),
-    EARTH_PLATE(1000),
-    FIST_PLATE(1000),
-    FLAME_PLATE(1000),
-    ICICLE_PLATE(1000),
-    INSECT_PLATE(1000),
-    IRON_PLATE(1000),
-    MEADOW_PLATE(1000),
-    MIND_PLATE(1000),
-    PIXIE_PLATE(1000),
-    SKY_PLATE(1000),
-    SPLASH_PLATE(1000),
-    SPOOKY_PLATE(1000),
-    STONE_PLATE(1000),
-    TOXIC_PLATE(1000),
-    ZAP_PLATE(1000);
+    FRIENDSHIP_BAND(500, EVOLUTION),
+    THUNDER_STONE(250, EVOLUTION),
+    ICE_STONE(250, EVOLUTION),
+    MOON_STONE(250, EVOLUTION),
+    FIRE_STONE(250, EVOLUTION),
+    LEAF_STONE(250, EVOLUTION),
+    SUN_STONE(250, EVOLUTION),
+    WATER_STONE(250, EVOLUTION),
+    DUSK_STONE(250, EVOLUTION),
+    DAWN_STONE(250, EVOLUTION),
+    SHINY_STONE(250, EVOLUTION),
+    OVAL_STONE(250, EVOLUTION),
+    TRADE_EVOLVER(1000, EVOLUTION),
+    METAL_COAT(1500, EVOLUTION),
+    KINGS_ROCK(250, EVOLUTION),
+    GALARICA_CUFF(250, EVOLUTION),
+    GALARICA_WREATH(250, EVOLUTION),
+    RAZOR_FANG(250, EVOLUTION),
+    RAZOR_CLAW(250, EVOLUTION),
+    DRAGON_SCALE(250, EVOLUTION),
+    UPGRADE(250, EVOLUTION),
+    DUBIOUS_DISC(250, EVOLUTION),
+    PRISM_SCALE(250, EVOLUTION),
+    REAPER_CLOTH(250, EVOLUTION),
+    DEEP_SEA_TOOTH(250, EVOLUTION),
+    DEEP_SEA_SCALE(250, EVOLUTION),
+    PROTECTOR(250, EVOLUTION),
+    ELECTIRIZER(250, EVOLUTION),
+    MAGMARIZER(250, EVOLUTION),
+    SACHET(250, EVOLUTION),
+    WHIPPED_DREAM(250, EVOLUTION),
+    CRACKED_POT(250, EVOLUTION),
+    TART_APPLE(250, EVOLUTION),
+    SWEET_APPLE(250, EVOLUTION),
+    SWEET(250, EVOLUTION),
+    DESTINY_KNOT(1000, MISC),
+    ZYGARDE_CUBE(6000, MISC),
+    DRACO_PLATE(1000, PLATE),
+    DREAD_PLATE(1000, PLATE),
+    EARTH_PLATE(1000, PLATE),
+    FIST_PLATE(1000, PLATE),
+    FLAME_PLATE(1000, PLATE),
+    ICICLE_PLATE(1000, PLATE),
+    INSECT_PLATE(1000, PLATE),
+    IRON_PLATE(1000, PLATE),
+    MEADOW_PLATE(1000, PLATE),
+    MIND_PLATE(1000, PLATE),
+    PIXIE_PLATE(1000, PLATE),
+    SKY_PLATE(1000, PLATE),
+    SPLASH_PLATE(1000, PLATE),
+    SPOOKY_PLATE(1000, PLATE),
+    STONE_PLATE(1000, PLATE),
+    TOXIC_PLATE(1000, PLATE),
+    ZAP_PLATE(1000, PLATE);
 
     public int cost;
+    public ItemType type;
     public boolean nonPokemon;
 
-    PokeItem(int cost)
-    {
-        this(cost, false);
-    }
-
-    PokeItem(int cost, boolean nonPokemon)
+    PokeItem(int cost, ItemType type)
     {
         this.cost = cost;
-        this.nonPokemon = nonPokemon;
+        this.type = type;
+
+        this.nonPokemon = type.equals(ItemType.FUNCTIONAL);
     }
 
     public String getName()
@@ -96,11 +96,6 @@ public enum PokeItem
     public static PokeItem asItem(String s)
     {
         return Arrays.stream(values()).filter(i -> i.toString().equals(s.toUpperCase())).collect(Collectors.toList()).get(0);
-    }
-
-    public static boolean isItem(String s)
-    {
-        return Arrays.stream(values()).anyMatch(i -> i.toString().equals(s.toUpperCase()));
     }
 
     public static Type getArceusPlateType(PokeItem item)
