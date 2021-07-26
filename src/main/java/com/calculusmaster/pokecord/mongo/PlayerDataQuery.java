@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.bounties.components.Bounty;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
 import com.calculusmaster.pokecord.game.pokemon.PokemonSkin;
 import com.calculusmaster.pokecord.game.pokepass.PokePass;
 import com.calculusmaster.pokecord.util.Mongo;
@@ -67,7 +68,11 @@ public class PlayerDataQuery extends MongoQuery
                 .append("owned_forms", new JSONArray())
                 .append("owned_megas", new JSONArray())
                 .append("bounties", new JSONArray())
-                .append("pursuit", new JSONArray());
+                .append("pursuit", new JSONArray())
+                .append("skins", new JSONArray())
+                .append("equipped_skins", new JSONArray())
+                .append("owned_eggs", new JSONArray())
+                .append("active_egg", "");
 
         Mongo.PlayerData.insertOne(data);
 
@@ -689,5 +694,37 @@ public class PlayerDataQuery extends MongoQuery
         PokemonSkin skin = null;
         for(PokemonSkin s : this.getEquippedSkins()) if(s.pokemon.equals(pokemon)) skin = s;
         this.unequipSkin(skin);
+    }
+
+    //key: "owned_eggs"
+    public List<String> getOwnedEggs()
+    {
+        return this.json().getJSONArray("owned_eggs").toList().stream().map(s -> (String)s).collect(Collectors.toList());
+    }
+
+    public void addEgg(String eggID)
+    {
+        this.update(Updates.push("owned_eggs", eggID));
+    }
+
+    public void removeEgg(String eggID)
+    {
+        this.update(Updates.pull("owned_eggs", eggID));
+    }
+
+    //key: "active_egg"
+    public PokemonEgg getActiveEgg()
+    {
+        return PokemonEgg.fromDB(this.json().getString("active_egg"));
+    }
+
+    public void setActiveEgg(String eggID)
+    {
+        this.update(Updates.set("active_egg", eggID));
+    }
+
+    public void removeActiveEgg()
+    {
+        this.update(Updates.set("active_egg", ""));
     }
 }

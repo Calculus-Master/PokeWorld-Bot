@@ -2,13 +2,17 @@ package com.calculusmaster.pokecord.game.pokemon;
 
 import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.Gender;
+import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
+import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import org.bson.Document;
 
 public class PokemonEgg
 {
+    private String eggID;
     private String target;
     private int exp;
     private int max;
@@ -24,6 +28,7 @@ public class PokemonEgg
 
         PokemonEgg egg = new PokemonEgg();
 
+        egg.setEggID();
         egg.setTarget(target);
         egg.setExp(0);
         egg.setMaxExp((int)(DataHelper.POKEMON_BASE_HATCH_TARGETS.get(DataHelper.dex(target)) * (Math.random() + 1) * 3));
@@ -37,6 +42,7 @@ public class PokemonEgg
 
         PokemonEgg egg = new PokemonEgg();
 
+        egg.setEggID(d.getString("eggID"));
         egg.setTarget(d.getString("target"));
         egg.setExp(d.getInteger("exp"));
         egg.setMaxExp(d.getInteger("max"));
@@ -47,6 +53,7 @@ public class PokemonEgg
     public static void toDB(PokemonEgg egg)
     {
         Document eggData = new Document()
+                .append("eggID", egg.getEggID())
                 .append("target", egg.getTarget())
                 .append("exp", egg.getExp())
                 .append("max", egg.getMaxExp());
@@ -61,6 +68,15 @@ public class PokemonEgg
         Pokemon hatched = Pokemon.create(egg.getTarget());
 
         return hatched;
+    }
+
+    public void addExp(int amount)
+    {
+        if(this.exp >= this.max) return;
+
+        this.exp = Global.clamp(this.exp + amount, 0, this.max);
+
+        Mongo.EggData.updateOne(Filters.eq("eggID", this.getEggID()), Updates.set("exp", this.exp));
     }
 
     public void setExp(int exp)
@@ -91,5 +107,20 @@ public class PokemonEgg
     public String getTarget()
     {
         return this.target;
+    }
+
+    public void setEggID(String eggID)
+    {
+        this.eggID = eggID;
+    }
+
+    public void setEggID()
+    {
+        this.setEggID(IDHelper.numeric(6));
+    }
+
+    public String getEggID()
+    {
+        return this.eggID;
     }
 }
