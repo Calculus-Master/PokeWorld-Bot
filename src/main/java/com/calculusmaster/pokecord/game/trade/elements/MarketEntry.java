@@ -25,7 +25,7 @@ public class MarketEntry
         m.pokemonID = pokemonID;
         m.price = price;
 
-        m.pokemon = Pokemon.buildCore(pokemonID, -1);
+        m.pokemon = Pokemon.build(pokemonID);
         m.marketID = IDHelper.numeric(8);
 
         Document marketData = new Document("marketID", m.marketID).append("sellerID", m.sellerID).append("sellerName", m.sellerName).append("pokemonID", m.pokemonID).append("price", m.price);

@@ -28,4 +28,10 @@ public enum EggGroup
     {
         return this.name;
     }
+
+    public static EggGroup cast(String s)
+    {
+        for(EggGroup g : values()) if(g.toString().equalsIgnoreCase(s) || g.getName().equalsIgnoreCase(s)) return g;
+        return null;
+    }
 }
