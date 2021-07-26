@@ -2,13 +2,17 @@ package com.calculusmaster.pokecord.game.pokemon;
 
 import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.Gender;
+import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.custom.StatIntMap;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
+
+import java.util.Random;
 
 public class PokemonEgg
 {
@@ -16,6 +20,7 @@ public class PokemonEgg
     private String target;
     private int exp;
     private int max;
+    private String ivs;
 
     public static PokemonEgg create(Pokemon parent1, Pokemon parent2)
     {
@@ -32,6 +37,7 @@ public class PokemonEgg
         egg.setTarget(target);
         egg.setExp(0);
         egg.setMaxExp((int)(DataHelper.POKEMON_BASE_HATCH_TARGETS.get(DataHelper.dex(target)) * (Math.random() + 1) * 3));
+        egg.setIVs(parent1, parent2);
 
         return egg;
     }
@@ -46,6 +52,7 @@ public class PokemonEgg
         egg.setTarget(d.getString("target"));
         egg.setExp(d.getInteger("exp"));
         egg.setMaxExp(d.getInteger("max"));
+        egg.setIVs(d.getString("ivs"));
 
         return egg;
     }
@@ -56,7 +63,8 @@ public class PokemonEgg
                 .append("eggID", egg.getEggID())
                 .append("target", egg.getTarget())
                 .append("exp", egg.getExp())
-                .append("max", egg.getMaxExp());
+                .append("max", egg.getMaxExp())
+                .append("ivs", egg.getIVs());
 
         Mongo.EggData.insertOne(eggData);
     }
@@ -64,6 +72,10 @@ public class PokemonEgg
     public Pokemon hatch()
     {
         Pokemon hatched = Pokemon.create(this.getTarget());
+
+        StatIntMap ivOverride = StatIntMap.from(this.ivs);
+        for(Stat s : Stat.values()) if(ivOverride.get(s) == 0) ivOverride.put(s, hatched.getIVs().get(s));
+        hatched.setIVs(StatIntMap.to(ivOverride));
 
         Mongo.EggData.deleteOne(Filters.eq("eggID", this.getEggID()));
         return hatched;
@@ -77,6 +89,32 @@ public class PokemonEgg
     public String getOverview()
     {
         return "ID: " + this.eggID + "\nEXP: `" + this.exp + " / " + this.max + "` XP";
+    }
+
+    public String getIVs()
+    {
+        return this.ivs;
+    }
+
+    public void setIVs(Pokemon parent1, Pokemon parent2)
+    {
+        StatIntMap ivs = new StatIntMap();
+
+        for(int i = 0; i < 3; i++)
+        {
+            Stat s = Stat.values()[new Random().nextInt(Stat.values().length)];
+            int value = (new Random().nextInt(10) < 5 ? parent1 : parent2).getIVs().get(s);
+
+            if(ivs.containsKey(s)) i--;
+            else ivs.put(s, value);
+        }
+
+        this.ivs = StatIntMap.to(ivs);
+    }
+
+    public void setIVs(String ivs)
+    {
+        this.ivs = ivs;
     }
 
     public void addExp(int amount)
