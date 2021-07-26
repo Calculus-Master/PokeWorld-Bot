@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.pokemon.CommandInfo;
 import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
+import com.calculusmaster.pokecord.game.enums.elements.Gender;
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
@@ -200,6 +201,12 @@ public class CommandMarket extends Command
             {
                 Type t = Type.cast(msg.get(msg.indexOf("--sidetype") + 1));
                 display = display.filter(m -> m.pokemon.getType()[1].equals(t));
+            }
+
+            if(msg.contains("--gender") && msg.indexOf("--gender") + 1 < msg.size() && Gender.cast(msg.get(msg.indexOf("--gender") + 1)) != null)
+            {
+                Gender g = Gender.cast(msg.get(msg.indexOf("--gender") + 1));
+                display = display.filter(m -> m.pokemon.getGender().equals(g));
             }
 
             if(msg.contains("--shiny"))

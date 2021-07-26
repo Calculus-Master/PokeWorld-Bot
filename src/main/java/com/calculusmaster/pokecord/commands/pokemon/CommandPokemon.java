@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.game.enums.elements.Gender;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
@@ -159,6 +160,12 @@ public class CommandPokemon extends Command
         {
             Type t = Type.cast(msg.get(msg.indexOf("--sidetype") + 1));
             stream = stream.filter(p -> p.getType()[1].equals(t));
+        }
+
+        if(msg.contains("--gender") && msg.indexOf("--gender") + 1 < msg.size() && Gender.cast(msg.get(msg.indexOf("--gender") + 1)) != null)
+        {
+            Gender g = Gender.cast(msg.get(msg.indexOf("--gender") + 1));
+            stream = stream.filter(p -> p.getGender().equals(g));
         }
 
         if(msg.contains("--shiny"))
