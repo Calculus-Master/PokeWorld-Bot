@@ -49,7 +49,7 @@ public class CommandBreed extends Command
 
                     this.playerData.addEgg(egg.getEggID());
 
-                    this.sendMsg(parent1 + " and " + parent2 + " successfully bred and created an egg!");
+                    this.sendMsg(parent1.getName() + " and " + parent2.getName() + " successfully bred and created an egg!");
                 }
             }
         }
