@@ -287,6 +287,10 @@ public class Commands
                 .setCommand(CommandRaidDuel::new)
                 .setCategory(Category.DUEL);
 
+        register("breed")
+                .setCommand(CommandBreed::new)
+                .setCategory(Category.POKEMON);
+
         register("dev")
                 .setCommand(CommandDev::new)
                 .setCategory(Category.MISC);
