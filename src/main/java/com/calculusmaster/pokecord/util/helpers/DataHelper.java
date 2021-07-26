@@ -45,6 +45,11 @@ public class DataHelper
         return POKEMON_DATA.get(name).copy();
     }
 
+    public static int dex(String name)
+    {
+        return pokeData(name).dex;
+    }
+
     //Server Players
     public static void updateServerPlayers(Guild g)
     {
