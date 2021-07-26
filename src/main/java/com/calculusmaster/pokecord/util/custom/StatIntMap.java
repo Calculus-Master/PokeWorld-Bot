@@ -34,6 +34,11 @@ public class StatIntMap extends ExtendedHashMap<Stat, Integer>
         return map;
     }
 
+    public static StatIntMap empty()
+    {
+        return new StatIntMap();
+    }
+
     public static String to(StatIntMap map)
     {
         StringBuilder condensed = new StringBuilder();

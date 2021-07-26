@@ -9,8 +9,10 @@ import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.custom.ExtendedHashMap;
 import com.calculusmaster.pokecord.util.custom.StatIntMap;
+import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
@@ -39,8 +41,8 @@ public class PokemonNew
     private Optional<Map<Stat, Integer>> multipliers = Optional.empty();
     private Optional<Integer> dynamaxLevel = Optional.empty();
     private Optional<PokeItem> item = Optional.empty();
-    private Optional<TM> tm = Optional.empty();
-    private Optional<TR> tr = Optional.empty();
+    private Optional<Integer> tm = Optional.empty();
+    private Optional<Integer> tr = Optional.empty();
     private Optional<List<String>> learnedMoves = Optional.empty();
     private Optional<Gender> gender = Optional.empty();
 
@@ -48,12 +50,32 @@ public class PokemonNew
     private Optional<Double> boost = Optional.empty();
     private Optional<Boolean> isDynamaxed = Optional.empty();
     private Optional<Map<StatusCondition, Boolean>> status = Optional.empty();
+    private Optional<Integer> accuracy = Optional.empty();
+    private Optional<Integer> evasion = Optional.empty();
+
+    private Optional<Double> multiplierStat = Optional.empty();
+    private Optional<Double> multiplierHealth = Optional.empty();
 
     public static PokemonNew create(String name)
     {
         PokemonNew p = new PokemonNew();
+
         p.setUUID();
         p.setData(name);
+
+        p.setLevel(1);
+        p.setExp(0);
+        p.setShiny(new Random().nextInt(4096) < 1);
+        p.createIVs();
+        p.createEVs();
+        p.setNature();
+        p.setLearnedMoves("Tackle-Tackle-Tackle-Tackle");
+        p.setTM(-1);
+        p.setTR(-1);
+        p.setItem(PokeItem.NONE);
+        p.setDynamaxLevel(0);
+        p.setNickname("");
+        p.setGender();
 
         return p;
     }
@@ -61,14 +83,24 @@ public class PokemonNew
     public static PokemonNew build(String UUID)
     {
         PokemonNew p = new PokemonNew();
+
         p.setUUID(UUID);
         p.setSpecificDocument();
         p.setData(p.getName());
 
-        p.specific = Mongo.PokemonData.find(Filters.eq("UUID", UUID)).first();
-        p.data = DataHelper.pokeData(p.specific.getString("name"));
-
         return p;
+    }
+
+    public PokemonNew forDuel()
+    {
+        this.setHealth(this.getStat(Stat.HP));
+        this.clearStatusConditions();
+        this.setDefaultStages();
+        this.setStatMultiplier(1.0);
+        this.setHealthMultiplier(1.0);
+        this.setDynamax(false);
+
+        return this;
     }
 
     //Database Upload/Delete
@@ -88,7 +120,8 @@ public class PokemonNew
                 .append("tr", p.getTR())
                 .append("item", p.getItem())
                 .append("dynamax_level", p.getDynamaxLevel())
-                .append("nickname", p.getNickname());
+                .append("nickname", p.getNickname())
+                .append("gender", p.getGender());
 
         Mongo.PokemonData.insertOne(data);
     }
@@ -124,6 +157,105 @@ public class PokemonNew
     {
         this.update(Updates.set("level", this.getLevel()));
         this.update(Updates.set("exp", this.getExp()));
+    }
+
+    public void updateMoves()
+    {
+        this.update(Updates.set("moves", this.condense(this.getLearnedMoves())));
+    }
+
+    public void updateEVs()
+    {
+        this.update(Updates.set("evs", StatIntMap.to(this.getEVs())));
+    }
+
+    public void updateTM()
+    {
+        this.update(Updates.set("tm", this.getTMNumber()));
+    }
+
+    public void updateTR()
+    {
+        this.update(Updates.set("tr", this.getTRNumber()));
+    }
+
+    public void updateItem()
+    {
+        this.update(Updates.set("item", this.getItem().toString()));
+    }
+
+    public void updateDynamaxLevel()
+    {
+        this.update(Updates.set("dynamax_level", this.getDynamaxLevel()));
+    }
+
+    //Number
+    public int getNumber()
+    {
+        int index = -1;
+        for(List<Pokemon> player : CacheHelper.POKEMON_LISTS.values()) for(int i = 0; i < player.size(); i++) if(this.getUUID().equals(player.get(i).getUUID())) index = i + 1;
+
+        if(index == -1) LoggerHelper.warn(PokemonNew.class, "Could not find " + this.getName() + " (" + this.getUUID() + ") in any Cached Player List!");
+
+        return index;
+    }
+
+    //Abilities
+    public List<String> getAbilities()
+    {
+        return this.data.abilities;
+    }
+
+    //Modifiers
+    public double getStatMultiplier()
+    {
+        return this.multiplierStat.orElse(1.0);
+    }
+
+    public double getHealthMultiplier()
+    {
+        return this.multiplierHealth.orElse(1.0);
+    }
+
+    public void setStatMultiplier(double multiplier)
+    {
+        this.multiplierStat = Optional.of(multiplier);
+    }
+
+    public void setHealthMultiplier(double multiplier)
+    {
+        this.multiplierHealth = Optional.of(multiplier);
+    }
+
+    //Accuracy and Evasion
+    public int getAccuracyStage()
+    {
+        return this.accuracy.orElse(0);
+    }
+
+    public int getEvasionStage()
+    {
+        return this.evasion.orElse(0);
+    }
+
+    public void setAccuracyStage(int stage)
+    {
+        this.accuracy = Optional.of(stage);
+    }
+
+    public void setEvasionStage(int stage)
+    {
+        this.evasion = Optional.of(stage);
+    }
+
+    public void changeAccuracyStage(int change)
+    {
+        this.setAccuracyStage(Global.clamp(this.getAccuracyStage() + change, -6, 6));
+    }
+
+    public void changeEvasionStage(int change)
+    {
+        this.setEvasionStage(Global.clamp(this.getEvasionStage() + change, -6, 6));
     }
 
     //Egg Group and Gender
@@ -226,6 +358,11 @@ public class PokemonNew
         return moves;
     }
 
+    public void setLearnedMoves(String moves)
+    {
+        this.learnedMoves = Optional.of(this.expand(moves));
+    }
+
     public List<String> getLearnedMoves()
     {
         return this.learnedMoves.orElse(this.expand(this.specific.getString("moves")));
@@ -251,34 +388,44 @@ public class PokemonNew
     }
 
     //TM & TR
-    public TM getTM()
-    {
-        return this.tm.orElse(!this.hasTM() ? null : TM.get(this.getTMNumber()));
-    }
-
     public int getTMNumber()
     {
-        return this.specific.getInteger("tm");
-    }
-
-    public TR getTR()
-    {
-        return this.tr.orElse(!this.hasTR() ? null : TR.get(this.getTRNumber()));
+        return this.tm.orElse(this.specific.getInteger("tm"));
     }
 
     public int getTRNumber()
     {
-        return this.specific.getInteger("tr");
+        return this.tr.orElse(this.specific.getInteger("tr"));
+    }
+
+    public TM getTM()
+    {
+        return this.hasTM() ? TM.get(this.getTMNumber()) : null;
+    }
+
+    public TR getTR()
+    {
+        return this.hasTR() ? TR.get(this.getTRNumber()) : null;
     }
 
     public void setTM(TM tm)
     {
-        this.tm = Optional.of(tm);
+        this.setTM(tm.getNumber());
+    }
+
+    public void setTM(int number)
+    {
+        this.tm = Optional.of(number);
     }
 
     public void setTR(TR tr)
     {
-        this.tr = Optional.of(tr);
+        this.setTR(tr.getNumber());
+    }
+
+    public void setTR(int number)
+    {
+        this.tr = Optional.of(number);
     }
 
     public boolean hasTM()
@@ -324,7 +471,7 @@ public class PokemonNew
 
     public boolean hasItem()
     {
-        return this.item.isEmpty() || !this.getItem().equals(PokeItem.NONE);
+        return !this.getItem().equals(PokeItem.NONE);
     }
 
     public void removeItem()
@@ -499,10 +646,20 @@ public class PokemonNew
         return this.multipliers.orElse(new StatIntMap());
     }
 
+    public void setDefaultStages()
+    {
+        this.multipliers = Optional.of(StatIntMap.empty());
+    }
+
     //EVs
     public Map<Stat, Integer> getEVs()
     {
         return this.evs.orElse(StatIntMap.from(this.specific.getString("evs")));
+    }
+
+    public void createEVs()
+    {
+        this.evs = Optional.of(StatIntMap.empty());
     }
 
     public void addEVs(Stat s, int amount)
@@ -568,6 +725,11 @@ public class PokemonNew
     public void setNature(Nature nature)
     {
         this.nature = Optional.of(nature);
+    }
+
+    public void setNature()
+    {
+        this.setNature(Nature.values()[new Random().nextInt(Nature.values().length)]);
     }
 
     //EXP

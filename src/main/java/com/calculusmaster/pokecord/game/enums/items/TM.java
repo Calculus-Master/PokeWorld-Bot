@@ -121,6 +121,11 @@ public enum TM
         return Move.isMove(this.move) ? Move.MOVES.get(this.move) : Move.MOVES.get("Tackle");
     }
 
+    public int getNumber()
+    {
+        return Integer.parseInt(this.toString().replaceAll("TM", ""));
+    }
+
     public String getShopEntry()
     {
         return "`" + this + "` - " + this.getMoveName();
