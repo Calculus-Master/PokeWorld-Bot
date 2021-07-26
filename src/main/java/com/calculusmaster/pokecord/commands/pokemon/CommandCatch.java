@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.game.bounties.objectives.CatchNameObjective;
 import com.calculusmaster.pokecord.game.bounties.objectives.CatchPoolObjective;
 import com.calculusmaster.pokecord.game.bounties.objectives.CatchTypeObjective;
@@ -10,6 +11,7 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.mongo.CollectionsQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.helpers.SettingsHelper;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -49,6 +51,9 @@ public class CommandCatch extends Command
             ThreadPoolHandler.CATCH.execute(() -> {
                 Pokemon.uploadPokemon(caught);
                 this.playerData.addPokemon(caught.getUUID());
+
+                if(this.playerData.getSettings().getSettingBoolean(SettingsHelper.Setting.CLIENT_CATCH_AUTO_INFO))
+                    Commands.execute("info", this.event, new String[]{"info", "latest"});
             });
 
             //Collections

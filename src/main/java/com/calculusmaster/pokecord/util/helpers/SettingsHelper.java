@@ -31,7 +31,8 @@ public class SettingsHelper
     {
         Document settingsData = new Document()
                 .append("playerID", playerID)
-                .append("detailed", false);
+                .append("detailed", false)
+                .append("autoinfo", false);
 
         Mongo.SettingsData.insertOne(settingsData);
     }
@@ -41,6 +42,7 @@ public class SettingsHelper
     {
         switch(s) {
             case CLIENT_DETAILED -> Mongo.SettingsData.updateOne(this.query, Updates.set("detailed", value));
+            case CLIENT_CATCH_AUTO_INFO -> Mongo.SettingsData.updateOne(this.query, Updates.set("autoinfo", value));
         }
 
         this.update();
@@ -50,6 +52,7 @@ public class SettingsHelper
     {
         return switch(s) {
             case CLIENT_DETAILED -> this.settingsJSON.getBoolean("detailed");
+            case CLIENT_CATCH_AUTO_INFO -> this.settingsJSON.getBoolean("autoinfo");
             default -> false;
         };
     }
@@ -58,6 +61,7 @@ public class SettingsHelper
     {
         //Client
         CLIENT_DETAILED("detailed", "Toggles the display of IVs and EVs throughout the bot"),
+        CLIENT_CATCH_AUTO_INFO("autoinfo", "Toggle automatically sending `p!info latest` after catching a Pokemon"),
         //Server
         SERVER_PREFIX("prefix", "Changes the bot prefix (default `p!`)"),
         SERVER_SPAWNCHANNEL("spawnchannel", "Toggles if spawns are enabled in a specific channel."),

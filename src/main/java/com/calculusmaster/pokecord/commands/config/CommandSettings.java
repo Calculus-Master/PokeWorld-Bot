@@ -67,6 +67,33 @@ public class CommandSettings extends Command
                         else this.sendMsg("Valid arguments: `true` or `false`!");
                     }
                 }
+                else if(CLIENT_CATCH_AUTO_INFO.matches(this.msg[2]))
+                {
+                    //Toggle if no input given
+                    if(this.msg.length == 3)
+                    {
+                        boolean currentValue = settings.getSettingBoolean(CLIENT_CATCH_AUTO_INFO);
+
+                        settings.updateSettingBoolean(CLIENT_CATCH_AUTO_INFO, !currentValue);
+
+                        if(currentValue) this.sendMsg("Disabled automatic info viewing after catch!");
+                        else this.sendMsg("Enabled automatic info viewing after catch!");
+                    }
+                    //Set value to specific input
+                    else if(this.msg.length == 4)
+                    {
+                        if("true".contains(this.msg[3]) || "false".contains(this.msg[3]))
+                        {
+                            boolean newValue = "true".contains(this.msg[3]);
+
+                            settings.updateSettingBoolean(CLIENT_CATCH_AUTO_INFO, newValue);
+
+                            if(newValue) this.sendMsg("Enabled automatic info viewing after catch!");
+                            else this.sendMsg("Disabled automatic info viewing after catch!");
+                        }
+                        else this.sendMsg("Valid arguments: `true` or `false`!");
+                    }
+                }
                 else this.embed.setDescription(CommandInvalid.getShort());
             }
         }
