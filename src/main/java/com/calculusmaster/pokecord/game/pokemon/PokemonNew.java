@@ -42,6 +42,7 @@ public class PokemonNew
     private Optional<TM> tm = Optional.empty();
     private Optional<TR> tr = Optional.empty();
     private Optional<List<String>> learnedMoves = Optional.empty();
+    private Optional<Gender> gender = Optional.empty();
 
     private Optional<Integer> health = Optional.empty();
     private Optional<Double> boost = Optional.empty();
@@ -129,6 +130,22 @@ public class PokemonNew
     public List<EggGroup> getEggGroup()
     {
         return DataHelper.POKEMON_EGG_GROUPS.get(this.data.dex);
+    }
+
+    public Gender getGender()
+    {
+        return this.gender.orElse(Gender.cast(this.specific.getString("gender")));
+    }
+
+    public void setGender(Gender gender)
+    {
+        this.gender = Optional.of(gender);
+    }
+
+    public void setGender()
+    {
+        int rate = DataHelper.POKEMON_GENDER_RATES.get(this.data.dex);
+        this.gender = Optional.of(rate == -1 ? Gender.UNKNOWN : (new Random().nextInt(8) < rate ? Gender.FEMALE : Gender.MALE));
     }
 
     //Status Conditions

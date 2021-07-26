@@ -42,6 +42,7 @@ public class Pokemon
     private String heldItem;
     private int dynamaxLevel;
     private String nickname;
+    private Gender gender;
 
     private int health;
     private Type[] type;
@@ -83,6 +84,7 @@ public class Pokemon
         p.setItem(specific.has("item") ? specific.getString("item") : PokeItem.NONE.getName());
         p.setDynamaxLevel(specific.getInt("dynamax_level"));
         p.setNickname(specific.getString("nickname"));
+        p.setGender(specific.getString("gender"));
 
         p.setHealth(p.getStat(Stat.HP));
         p.setType();
@@ -116,6 +118,7 @@ public class Pokemon
         p.setItem(PokeItem.NONE);
         p.setDynamaxLevel(0);
         p.setNickname("");
+        p.setGender();
 
         p.setHealth(p.getStat(Stat.HP));
         p.setType();
@@ -384,6 +387,22 @@ public class Pokemon
     public List<EggGroup> getEggGroup()
     {
         return DataHelper.POKEMON_EGG_GROUPS.get(this.getData().dex);
+    }
+
+    public Gender getGender()
+    {
+        return this.gender;
+    }
+
+    public void setGender(String gender)
+    {
+        this.gender = Gender.cast(gender);
+    }
+
+    public void setGender()
+    {
+        int rate = DataHelper.POKEMON_GENDER_RATES.get(this.getData().dex);
+        this.gender = rate == -1 ? Gender.UNKNOWN : (new Random().nextInt(8) < rate ? Gender.FEMALE : Gender.MALE);
     }
 
     //Status Conditions
