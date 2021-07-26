@@ -26,6 +26,7 @@ public class DataHelper
     public static final Map<String, GigantamaxData> GIGANTAMAX_DATA = new HashMap<>();
     public static final Map<Integer, List<String>> POKEMON_SPECIES_DESC = new HashMap<>();
     public static final Map<Integer, List<EggGroup>> POKEMON_EGG_GROUPS = new HashMap<>();
+    public static final Map<Integer, Integer> POKEMON_GENDER_RATES = new HashMap<>();
 
     //Pokemon Data
     public static void createPokemonData()
@@ -173,6 +174,25 @@ public class DataHelper
                     .map(id -> EggGroup.values()[id - 1]) //Transform Egg Group ID to EggGroup Enum Object
                     .collect(Collectors.toList());
             POKEMON_EGG_GROUPS.put(dex, group);
+        }
+    }
+
+    //Gender Rates (from CSV)
+    public static void createGenderRateMap()
+    {
+        List<String[]> genderCSV = CSVHelper.readCSV("pokemon_species.csv");
+
+        //id,identifier,generation_id,evolves_from_species_id,evolution_chain_id,color_id,shape_id,habitat_id,gender_rate,capture_rate,base_happiness,is_baby,hatch_counter,has_gender_differences,growth_rate_id,forms_switchable,is_legendary,is_mythical,order,conquest_order
+        for(int i = 1; i < 898; i++)
+        {
+            final int dex = i;
+            int rate = genderCSV.stream()
+                    .filter(l -> l[0].equals(dex + "")) //Find specific dex number
+                    .map(l -> l[8]) //Map to Gender Rate
+                    .map(Integer::parseInt) //Map to Int
+                    .collect(Collectors.toList())
+                    .get(0);
+            POKEMON_GENDER_RATES.put(dex, rate);
         }
     }
 }
