@@ -22,8 +22,8 @@ public class PokemonEgg
         //Assumes breeding conditions have been satisfied
 
         String target;
-        if(parent1.getEggGroup().contains(EggGroup.DITTO)) target = parent2.getName();
-        else if(parent2.getEggGroup().contains(EggGroup.DITTO)) target = parent1.getName();
+        if(parent1.getEggGroup().contains(EggGroup.DITTO)) target = parent2.getName().equals("Manaphy") ? "Phione" : (parent2.getName().equals("Phione") ? "Manaphy" : parent2.getName());
+        else if(parent2.getEggGroup().contains(EggGroup.DITTO)) target = parent1.getName().equals("Manaphy") ? "Phione" : (parent1.getName().equals("Phione") ? "Manaphy" : parent1.getName());
         else target = parent1.getGender().equals(Gender.FEMALE) ? parent1.getName() : parent2.getName();
 
         PokemonEgg egg = new PokemonEgg();
