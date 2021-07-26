@@ -50,6 +50,7 @@ public class Pokecord
         LoggerHelper.init("EV Lists", DataHelper::createEVLists);
         LoggerHelper.init("Type Lists", DataHelper::createTypeLists);
         LoggerHelper.init("Species Descriptions", DataHelper::createSpeciesDescLists, true);
+        LoggerHelper.init("Egg Groups", DataHelper::createEggGroupMap, true);
         LoggerHelper.init("Evolutions", SpecialEvolutionRegistry::init);
         LoggerHelper.init("Daily Trainer", Trainer::setDailyTrainers);
         LoggerHelper.init("Move", Move::init);

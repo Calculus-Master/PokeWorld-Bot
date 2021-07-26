@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.util.helpers;
 
+import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.pokemon.PokemonData;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -24,6 +25,7 @@ public class DataHelper
     public static final Map<Type, List<String>> TYPE_LISTS = new HashMap<>();
     public static final Map<String, GigantamaxData> GIGANTAMAX_DATA = new HashMap<>();
     public static final Map<Integer, List<String>> POKEMON_SPECIES_DESC = new HashMap<>();
+    public static final Map<Integer, EggGroup> POKEMON_EGG_GROUPS = new HashMap<>();
 
     //Pokemon Data
     public static void createPokemonData()
@@ -153,6 +155,25 @@ public class DataHelper
                     .map(s -> s.replaceAll("POKéMON", "Pokemon")) //Fix the weirdly formatted Pokemon word
                     .collect(Collectors.toList());
             POKEMON_SPECIES_DESC.put(dex, lines);
+        }
+    }
+
+    //Egg Groups (from CSV)
+    public static void createEggGroupMap()
+    {
+        List<String[]> eggCSV = CSVHelper.readCSV("pokemon_egg_groups");
+
+        //species_id,egg_group_id
+        for(int i = 1; i < 898; i++)
+        {
+            final int dex = i;
+            EggGroup group = eggCSV.stream()
+                    .filter(l -> l[0].equals(dex + "")) //Find specific dex number
+                    .map(l -> Integer.parseInt(l[1])) //Map to the Egg Group ID
+                    .map(id -> EggGroup.values()[id - 1]) //Transform Egg Group ID to EggGroup Enum Object
+                    .collect(Collectors.toList())
+                    .get(0);
+            POKEMON_EGG_GROUPS.put(dex, group);
         }
     }
 }
