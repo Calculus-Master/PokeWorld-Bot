@@ -248,7 +248,7 @@ public class Duel
 
             if(item.isPlateItem())
             {
-                Type t = Item.getArceusPlateType(item);
+                Type t = item.getArceusPlateType();
 
                 this.players[this.current].active.setType(t, 0);
                 this.players[this.current].active.setType(t, 1);
@@ -589,7 +589,7 @@ public class Duel
         {
             Item item = Item.asItem(this.players[this.current].active.getItem());
 
-            boolean buff = Item.getArceusPlateType(item) != null && Item.getArceusPlateType(item).equals(move.getType());
+            boolean buff = item.getArceusPlateType() != null && item.getArceusPlateType().equals(move.getType());
 
             if(buff) move.setPower(move.getPower() * 1.2);
         }

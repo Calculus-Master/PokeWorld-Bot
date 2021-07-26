@@ -90,7 +90,12 @@ public enum Item
 
     public String getStyledName()
     {
-        return Global.normalCase(this.getName().replaceAll("_", " "));
+        return switch(this) {
+            case EV_REALLOCATOR -> "EV Reallocator";
+            case IV_REROLLER -> "IV Reroller";
+            case EV_CLEARER -> "EV Clearer";
+            default -> Global.normalCase(this.getName().replaceAll("_", " "));
+        };
     }
 
     public static Item asItem(String s)
@@ -98,9 +103,9 @@ public enum Item
         return Arrays.stream(values()).filter(i -> i.toString().equals(s.toUpperCase())).collect(Collectors.toList()).get(0);
     }
 
-    public static Type getArceusPlateType(Item item)
+    public Type getArceusPlateType()
     {
-        return switch(item) {
+        return switch(this) {
             case DRACO_PLATE -> Type.DRAGON;
             case DREAD_PLATE -> Type.DARK;
             case EARTH_PLATE -> Type.GROUND;
@@ -124,6 +129,6 @@ public enum Item
 
     public boolean isPlateItem()
     {
-        return Item.getArceusPlateType(this) != null;
+        return this.type.equals(PLATE);
     }
 }
