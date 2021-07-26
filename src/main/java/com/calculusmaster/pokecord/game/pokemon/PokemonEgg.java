@@ -13,7 +13,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 
-import java.util.Random;
+import java.util.*;
 
 public class PokemonEgg
 {
@@ -102,14 +102,12 @@ public class PokemonEgg
         StatIntMap ivs = new StatIntMap();
 
         int number = PokeItem.asItem(parent1.getItem()).equals(PokeItem.DESTINY_KNOT) || PokeItem.asItem(parent2.getItem()).equals(PokeItem.DESTINY_KNOT) ? 5 : 3;
-        for(int i = 0; i < number; i++)
-        {
-            Stat s = Stat.values()[new Random().nextInt(Stat.values().length)];
-            int value = (new Random().nextInt(10) < 5 ? parent1 : parent2).getIVs().get(s);
 
-            if(ivs.containsKey(s)) i--;
-            else ivs.put(s, value);
-        }
+        List<Stat> stats = new ArrayList<>(Arrays.asList(Stat.values()));
+        Collections.shuffle(stats);
+        stats.subList(0, 6 - number).clear();
+
+        for(Stat s : stats) ivs.put(s, (new Random().nextInt(10) < 5 ? parent1 : parent2).getIVs().get(s));
 
         this.ivs = StatIntMap.to(ivs);
     }
