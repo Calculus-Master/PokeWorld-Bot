@@ -381,7 +381,7 @@ public class Pokemon
     }
 
     //Egg Group and Gender
-    public EggGroup getEggGroup()
+    public List<EggGroup> getEggGroup()
     {
         return DataHelper.POKEMON_EGG_GROUPS.get(this.getData().dex);
     }

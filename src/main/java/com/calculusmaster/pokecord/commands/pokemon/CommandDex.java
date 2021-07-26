@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonData;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class CommandDex extends Command
 {
@@ -51,7 +53,7 @@ public class CommandDex extends Command
                 .setDescription(data.species + "\nHeight: " + data.height + "     |     Weight: " + data.weight + "\n" + flavor)
                 .addField("Type", data.types.get(0).equals(data.types.get(1)) ? data.types.get(0).getStyledName() : data.types.get(0).getStyledName() + "\n" + data.types.get(1).getStyledName(), true)
                 .addField("Abilities", this.listToMultiLineString(data.abilities), true)
-                .addField("Egg Group", DataHelper.POKEMON_EGG_GROUPS.get(data.dex).getName(), true)
+                .addField("Egg Group", this.listToMultiLineString(DataHelper.POKEMON_EGG_GROUPS.get(data.dex).stream().map(EggGroup::getName).collect(Collectors.toList())), true)
                 .addField("Growth Rate", Global.normalCase(data.growthRate.toString().replaceAll("_", "")), true)
                 .addField("EXP Yield", String.valueOf(data.baseEXP), true)
                 .addField("EV Yield", this.getEVYield(data.yield), true)

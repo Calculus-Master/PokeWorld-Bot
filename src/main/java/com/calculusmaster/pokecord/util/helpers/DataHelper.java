@@ -25,7 +25,7 @@ public class DataHelper
     public static final Map<Type, List<String>> TYPE_LISTS = new HashMap<>();
     public static final Map<String, GigantamaxData> GIGANTAMAX_DATA = new HashMap<>();
     public static final Map<Integer, List<String>> POKEMON_SPECIES_DESC = new HashMap<>();
-    public static final Map<Integer, EggGroup> POKEMON_EGG_GROUPS = new HashMap<>();
+    public static final Map<Integer, List<EggGroup>> POKEMON_EGG_GROUPS = new HashMap<>();
 
     //Pokemon Data
     public static void createPokemonData()
@@ -159,7 +159,7 @@ public class DataHelper
     }
 
     //Egg Groups (from CSV)
-    public static void createEggGroupMap()
+    public static void createEggGroupLists()
     {
         List<String[]> eggCSV = CSVHelper.readCSV("pokemon_egg_groups");
 
@@ -167,12 +167,11 @@ public class DataHelper
         for(int i = 1; i < 898; i++)
         {
             final int dex = i;
-            EggGroup group = eggCSV.stream()
+            List<EggGroup> group = eggCSV.stream()
                     .filter(l -> l[0].equals(dex + "")) //Find specific dex number
                     .map(l -> Integer.parseInt(l[1])) //Map to the Egg Group ID
                     .map(id -> EggGroup.values()[id - 1]) //Transform Egg Group ID to EggGroup Enum Object
-                    .collect(Collectors.toList())
-                    .get(0);
+                    .collect(Collectors.toList());
             POKEMON_EGG_GROUPS.put(dex, group);
         }
     }
