@@ -170,6 +170,17 @@ public class CommandMarket extends Command
                 else if (isNumeric(index)) display = display.filter(m -> (int)m.pokemon.getTotalIVRounded() == getInt(index));
             }
 
+            if(msg.contains("--ev") && msg.indexOf("--ev") + 1 < msg.size())
+            {
+                int index = msg.indexOf("--ev") + 1;
+                String after = msg.get(index);
+                boolean validIndex = index + 1 < msg.size();
+
+                if (after.equals(">") && validIndex && isNumeric(index + 1)) display = display.filter(m -> m.pokemon.getEVTotal() > getInt(index + 1));
+                else if (after.equals("<") && validIndex && isNumeric(index + 1)) display = display.filter(m -> m.pokemon.getEVTotal() < getInt(index + 1));
+                else if (isNumeric(index)) display = display.filter(m -> m.pokemon.getEVTotal() == getInt(index));
+            }
+
             display = this.sortIVs(display, msg, "--hpiv", "--healthiv", Stat.HP);
 
             display = this.sortIVs(display, msg, "--atkiv", "--attackiv", Stat.ATK);
@@ -181,6 +192,18 @@ public class CommandMarket extends Command
             display = this.sortIVs(display, msg, "--spdefiv", "--specialdefenseiv", Stat.SPDEF);
 
             display = this.sortIVs(display, msg, "--spdiv", "--speediv", Stat.SPD);
+
+            display = this.sortEVs(display, msg, "--hpev", "--healthev", Stat.HP);
+
+            display = this.sortEVs(display, msg, "--atkev", "--attackev", Stat.ATK);
+
+            display = this.sortEVs(display, msg, "--defev", "--defenseev", Stat.DEF);
+
+            display = this.sortEVs(display, msg, "--spatkev", "--specialattackev", Stat.SPATK);
+
+            display = this.sortEVs(display, msg, "--spdefev", "--specialdefenseev", Stat.SPDEF);
+
+            display = this.sortEVs(display, msg, "--spdev", "--speediv", Stat.SPD);
 
             if(msg.contains("--type") && msg.indexOf("--type") + 1 < msg.size() && Type.cast(msg.get(msg.indexOf("--type") + 1)) != null)
             {
@@ -270,6 +293,24 @@ public class CommandMarket extends Command
             if(after.equals(">") && validIndex && isNumeric(index + 1)) return display.filter(m -> m.pokemon.getIVs().get(iv) > getInt(index + 1));
             else if(after.equals("<") && validIndex && isNumeric(index + 1)) return display.filter(m -> m.pokemon.getIVs().get(iv) < getInt(index + 1));
             else if(isNumeric(index)) return display.filter(m -> m.pokemon.getIVs().get(iv) == getInt(index));
+        }
+
+        return display;
+    }
+
+    private Stream<MarketEntry> sortEVs(Stream<MarketEntry> display, List<String> msg, String tag1, String tag2, Stat ev)
+    {
+        boolean hasTag1 = msg.contains(tag1) && msg.indexOf(tag1) + 1 < msg.size();
+        boolean hasTag2 = msg.contains(tag2) && msg.indexOf(tag2) + 1 < msg.size();
+
+        if(hasTag1 || hasTag2)
+        {
+            int index = msg.indexOf(hasTag1 ? tag1 : tag2) + 1;
+            String after = msg.get(index);
+            boolean validIndex = index + 1 < msg.size();
+            if(after.equals(">") && validIndex && isNumeric(index + 1)) return display.filter(m -> m.pokemon.getEVs().get(ev) > getInt(index + 1));
+            else if(after.equals("<") && validIndex && isNumeric(index + 1)) return display.filter(m -> m.pokemon.getEVs().get(ev) < getInt(index + 1));
+            else if(isNumeric(index)) return display.filter(m -> m.pokemon.getEVs().get(ev) == getInt(index));
         }
 
         return display;

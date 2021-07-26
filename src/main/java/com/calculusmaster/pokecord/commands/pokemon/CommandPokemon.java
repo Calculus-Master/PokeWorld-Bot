@@ -107,6 +107,16 @@ public class CommandPokemon extends Command
             else if(isNumeric(index)) stream = stream.filter(p -> (int)p.getTotalIVRounded() == getInt(index));
         }
 
+        if(msg.contains("--ev") && msg.indexOf("--ev") + 1 < msg.size())
+        {
+            int index = msg.indexOf("--ev") + 1;
+            String after = msg.get(index);
+            boolean validIndex = index + 1 < msg.size();
+            if(after.equals(">") && validIndex && isNumeric(index + 1)) stream = stream.filter(p -> p.getEVTotal() > getInt(index + 1));
+            else if(after.equals("<") && validIndex && isNumeric(index + 1)) stream = stream.filter(p -> p.getEVTotal() < getInt(index + 1));
+            else if(isNumeric(index)) stream = stream.filter(p -> p.getEVTotal() == getInt(index));
+        }
+
         if(msg.contains("--tm") && msg.indexOf("--tm") + 1 < msg.size())
         {
             int index = msg.indexOf("--tm") + 1;
@@ -192,6 +202,18 @@ public class CommandPokemon extends Command
 
         stream = this.sortIVs(stream, msg, "--spdiv", "--speediv", Stat.SPD);
 
+        stream = this.sortEVs(stream, msg, "--hpev", "--healthev", Stat.HP);
+
+        stream = this.sortEVs(stream, msg, "--atkev", "--attackev", Stat.ATK);
+
+        stream = this.sortEVs(stream, msg, "--defev", "--defenseev", Stat.DEF);
+
+        stream = this.sortEVs(stream, msg, "--spatkev", "--specialattackev", Stat.SPATK);
+
+        stream = this.sortEVs(stream, msg, "--spdefev", "--specialdefenseev", Stat.SPDEF);
+
+        stream = this.sortEVs(stream, msg, "--spdev", "--speedev", Stat.SPD);
+
         if(msg.contains("--legendary") || msg.contains("--leg"))
         {
             stream = stream.filter(p -> PokemonRarity.LEGENDARY.contains(p.getName()));
@@ -251,6 +273,24 @@ public class CommandPokemon extends Command
             if(after.equals(">") && validIndex && isNumeric(index + 1)) return stream.filter(p -> p.getIVs().get(iv) > getInt(index + 1));
             else if(after.equals("<") && validIndex && isNumeric(index + 1)) return stream.filter(p -> p.getIVs().get(iv) < getInt(index + 1));
             else if(isNumeric(index)) return stream.filter(p -> p.getIVs().get(iv) == getInt(index));
+        }
+
+        return stream;
+    }
+
+    private Stream<Pokemon> sortEVs(Stream<Pokemon> stream, List<String> msg, String tag1, String tag2, Stat ev)
+    {
+        boolean hasTag1 = msg.contains(tag1) && msg.indexOf(tag1) + 1 < msg.size();
+        boolean hasTag2 = msg.contains(tag2) && msg.indexOf(tag2) + 1 < msg.size();
+
+        if(hasTag1 || hasTag2)
+        {
+            int index = msg.indexOf(hasTag1 ? tag1 : tag2) + 1;
+            String after = msg.get(index);
+            boolean validIndex = index + 1 < msg.size();
+            if(after.equals(">") && validIndex && isNumeric(index + 1)) return stream.filter(p -> p.getEVs().get(ev) > getInt(index + 1));
+            else if(after.equals("<") && validIndex && isNumeric(index + 1)) return stream.filter(p -> p.getEVs().get(ev) < getInt(index + 1));
+            else if(isNumeric(index)) return stream.filter(p -> p.getEVs().get(ev) == getInt(index));
         }
 
         return stream;
