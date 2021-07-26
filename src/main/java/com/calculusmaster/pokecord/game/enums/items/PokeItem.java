@@ -50,6 +50,7 @@ public enum PokeItem
     TART_APPLE(250),
     SWEET_APPLE(250),
     SWEET(250),
+    DESTINY_KNOT(1000),
     DRACO_PLATE(1000),
     DREAD_PLATE(1000),
     EARTH_PLATE(1000),
