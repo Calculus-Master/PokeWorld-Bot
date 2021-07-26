@@ -187,6 +187,7 @@ public class Pokemon
         p.setEVs(d.getString("evs"));
         p.type = new Type[]{DataHelper.pokeData(p.getName()).types.get(0), DataHelper.pokeData(p.getName()).types.get(1)};
         p.setItem(d.getString("item"));
+        p.setGender(d.getString("gender"));
 
         return p;
     }
