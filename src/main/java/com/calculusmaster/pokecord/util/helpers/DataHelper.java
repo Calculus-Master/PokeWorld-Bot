@@ -145,7 +145,7 @@ public class DataHelper
 
         //species_id,version_id,language_id,flavor_text
         //language_id 9 is English
-        for(int i = 1; i < 898; i++)
+        for(int i = 1; i <= 898; i++)
         {
             final int dex = i;
             List<String> lines = speciesCSV.stream()
@@ -165,7 +165,7 @@ public class DataHelper
         List<String[]> eggCSV = CSVHelper.readCSV("pokemon_egg_groups");
 
         //species_id,egg_group_id
-        for(int i = 1; i < 898; i++)
+        for(int i = 1; i <= 898; i++)
         {
             final int dex = i;
             List<EggGroup> group = eggCSV.stream()
@@ -180,10 +180,10 @@ public class DataHelper
     //Gender Rates (from CSV)
     public static void createGenderRateMap()
     {
-        List<String[]> genderCSV = CSVHelper.readCSV("pokemon_species.csv");
+        List<String[]> genderCSV = CSVHelper.readCSV("pokemon_species");
 
         //id,identifier,generation_id,evolves_from_species_id,evolution_chain_id,color_id,shape_id,habitat_id,gender_rate,capture_rate,base_happiness,is_baby,hatch_counter,has_gender_differences,growth_rate_id,forms_switchable,is_legendary,is_mythical,order,conquest_order
-        for(int i = 1; i < 898; i++)
+        for(int i = 1; i <= 898; i++)
         {
             final int dex = i;
             int rate = genderCSV.stream()
