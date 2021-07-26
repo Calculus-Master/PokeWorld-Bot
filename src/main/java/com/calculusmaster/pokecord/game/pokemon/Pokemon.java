@@ -255,7 +255,8 @@ public class Pokemon
                 .append("tr", p.getTR())
                 .append("item", p.getItem())
                 .append("dynamax_level", p.getDynamaxLevel())
-                .append("nickname", p.getNickname());
+                .append("nickname", p.getNickname())
+                .append("gender", p.getGender().toString());
 
         Mongo.PokemonData.insertOne(pokeData);
 
