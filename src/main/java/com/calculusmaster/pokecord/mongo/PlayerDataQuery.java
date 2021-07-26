@@ -61,7 +61,6 @@ public class PlayerDataQuery extends MongoQuery
                 .append("active_zcrystal", "")
                 .append("achievements", new JSONArray())
                 .append("gym_level", 1)
-                .append("gym_progress", new JSONArray())
                 .append("pokepass_exp", 0)
                 .append("pokepass_tier", 0)
                 .append("favorites", new JSONArray())
@@ -697,9 +696,19 @@ public class PlayerDataQuery extends MongoQuery
     }
 
     //key: "owned_eggs"
-    public List<String> getOwnedEggs()
+    public List<String> getOwnedEggIDs()
     {
         return this.json().getJSONArray("owned_eggs").toList().stream().map(s -> (String)s).collect(Collectors.toList());
+    }
+
+    public List<PokemonEgg> getOwnedEggs()
+    {
+        return this.getOwnedEggIDs().stream().map(PokemonEgg::fromDB).collect(Collectors.toList());
+    }
+
+    public boolean hasEggs()
+    {
+        return !this.getOwnedEggIDs().isEmpty();
     }
 
     public void addEgg(String eggID)
@@ -713,9 +722,14 @@ public class PlayerDataQuery extends MongoQuery
     }
 
     //key: "active_egg"
+    public String getActiveEggID()
+    {
+        return this.json().getString("active_egg");
+    }
+
     public PokemonEgg getActiveEgg()
     {
-        return PokemonEgg.fromDB(this.json().getString("active_egg"));
+        return PokemonEgg.fromDB(this.getActiveEggID());
     }
 
     public boolean hasActiveEgg()

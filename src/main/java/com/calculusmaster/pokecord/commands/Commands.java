@@ -291,6 +291,10 @@ public class Commands
                 .setCommand(CommandBreed::new)
                 .setCategory(Category.POKEMON);
 
+        register("eggs", "egg")
+                .setCommand(CommandEggs::new)
+                .setCategory(Category.POKEMON);
+
         register("dev")
                 .setCommand(CommandDev::new)
                 .setCategory(Category.MISC);

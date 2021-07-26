@@ -74,6 +74,11 @@ public class PokemonEgg
         return this.exp >= this.max;
     }
 
+    public String getOverview()
+    {
+        return "ID: " + this.eggID + "\nEXP: `" + this.exp + " / " + this.max + "` XP";
+    }
+
     public void addExp(int amount)
     {
         if(this.exp >= this.max) return;
