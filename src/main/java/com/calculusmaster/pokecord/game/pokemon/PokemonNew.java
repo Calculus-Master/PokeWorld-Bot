@@ -125,6 +125,12 @@ public class PokemonNew
         this.update(Updates.set("exp", this.getExp()));
     }
 
+    //Egg Group and Gender
+    public EggGroup getEggGroup()
+    {
+        return DataHelper.POKEMON_EGG_GROUPS.get(this.data.dex);
+    }
+
     //Status Conditions
     public Map<StatusCondition, Boolean> getStatusConditions()
     {

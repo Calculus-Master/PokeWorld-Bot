@@ -380,6 +380,12 @@ public class Pokemon
         return basePrice;
     }
 
+    //Egg Group and Gender
+    public EggGroup getEggGroup()
+    {
+        return DataHelper.POKEMON_EGG_GROUPS.get(this.getData().dex);
+    }
+
     //Status Conditions
 
     public void addStatusCondition(StatusCondition s)

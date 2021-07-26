@@ -33,8 +33,6 @@ public final class PokemonData
     public final Map<Stat, Integer> yield;
 
     public final Map<String, Integer> moves;
-    //public final List<String> moves;
-    //public final List<Integer> movesLVL;
 
     public final List<TM> validTMs;
     public final List<TR> validTRs;
