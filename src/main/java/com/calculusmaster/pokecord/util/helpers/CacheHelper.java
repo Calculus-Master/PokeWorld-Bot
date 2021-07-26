@@ -45,7 +45,7 @@ public class CacheHelper
             uuids = UUID_LISTS.get(player);
         }
 
-        pokemon.add(Pokemon.build(UUID));
+        pokemon.add(Pokemon.buildCore(UUID, -1));
         uuids.add(UUID);
 
         updateNumbers(player);
@@ -122,6 +122,7 @@ public class CacheHelper
         long init = System.currentTimeMillis();
 
         List<Pokemon> list = new ArrayList<>();
+        //TODO: Switch this to Pokemon#build, remove build logging so it doesn't spam the console on bot startup
         for(int i = 0; i < UUID_LISTS.get(player).size(); i++) list.add(Pokemon.buildCore(UUID_LISTS.get(player).get(i), i + 1));
         POKEMON_LISTS.put(player, list);
 

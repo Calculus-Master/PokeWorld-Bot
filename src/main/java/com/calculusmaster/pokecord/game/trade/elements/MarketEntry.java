@@ -47,7 +47,7 @@ public class MarketEntry
         m.sellerName = doc.getString("sellerName");
         m.pokemonID = doc.getString("pokemonID");
         m.price = doc.getInteger("price");
-        m.pokemon = Pokemon.buildCore(m.pokemonID, -1);
+        m.pokemon = Pokemon.build(m.pokemonID);
 
         return m;
     }

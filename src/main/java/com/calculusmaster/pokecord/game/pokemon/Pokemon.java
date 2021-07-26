@@ -184,6 +184,7 @@ public class Pokemon
         p.setNumber(num + 1);
 
         p.setIVs(d.getString("ivs"));
+        p.setEVs(d.getString("evs"));
         p.type = new Type[]{DataHelper.pokeData(p.getName()).types.get(0), DataHelper.pokeData(p.getName()).types.get(1)};
         p.setItem(d.getString("item"));
 
