@@ -49,6 +49,8 @@ public class Pokecord
         LoggerHelper.init("Pokemon Data", DataHelper::createPokemonData, true);
         LoggerHelper.init("Pokemon", DataHelper::createPokemonList);
         LoggerHelper.init("Pokemon", Pokemon::init);
+        LoggerHelper.init("Move Data", DataHelper::createMoveData, true);
+        LoggerHelper.init("Move", DataHelper::createMoveList);
         LoggerHelper.init("Gigantamax", DataHelper::createGigantamaxDataMap);
         LoggerHelper.init("EV Lists", DataHelper::createEVLists);
         LoggerHelper.init("Type Lists", DataHelper::createTypeLists);

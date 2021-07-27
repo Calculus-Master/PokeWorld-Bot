@@ -76,24 +76,6 @@ public class CSVHelper
                 writePokemonJSONFile(i);
             }
         }
-
-//        Mongo.PerformanceData.deleteMany(Filters.exists("name"));
-//
-//        List<String> moves = new ArrayList<>(Arrays.asList("Healing Wish", "Misty Terrain", "Teleport", "Double Team", "Wish", "Magical Leaf", "Draining Kiss", "Fury Cutter", "Retaliate", "Clanging Scales", "Bide", "Belly Drum", "Sky Uppercut", "Dragon Tail", "Accelerock", "Sand Attack", "Quick Attack", "Howl", "Odor Sleuth", "Stealth Rock", "Rock Climb"));
-//
-//        Move.init();
-//
-//        for(int i = 0; i < moves.size(); i++)
-//        {
-//            if(Move.isMove(moves.get(i)))
-//            {
-//                System.out.println("Removed " + moves.get(i));
-//                moves.remove(i);
-//                i--;
-//            }
-//        }
-//
-//        for(String s : moves) Mongo.PerformanceData.insertOne(getMoveData(s));
     }
 
     public static List<String[]> readCSV(String fileName)
@@ -101,8 +83,10 @@ public class CSVHelper
         String file = "/csv/" + fileName + ".csv";
         try
         {
-            //return new CSVReader(new FileReader(new File(Pokecord.class.getResource(file).toURI()))).readAll();
-            return new CSVReader(new InputStreamReader(Objects.requireNonNull(Pokecord.class.getResourceAsStream(file)))).readAll();
+            List<String[]> list = new CSVReader(new InputStreamReader(Objects.requireNonNull(Pokecord.class.getResourceAsStream(file)))).readAll();
+            list.remove(0);
+
+            return list;
         }
         catch (Exception e)
         {
