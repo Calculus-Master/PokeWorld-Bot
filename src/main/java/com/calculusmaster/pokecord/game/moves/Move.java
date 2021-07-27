@@ -12,6 +12,7 @@ import com.calculusmaster.pokecord.game.moves.types.*;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.helpers.DataHelper;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -44,7 +45,7 @@ public class Move
     public static void init()
     {
         MOVES.clear();
-        Mongo.MoveInfo.find().forEach(d -> MOVES.put(d.getString("name"), new MoveData(d.getString("name"), d.getString("type"), d.getString("category"), d.getInteger("power"), d.getInteger("accuracy"), d.getString("info"))));
+        Mongo.MoveInfo.find().forEach(d -> MOVES.put(d.getString("name"), DataHelper.moveData(d.getString("name"))));
 
         //Incomplete Moves
         INCOMPLETE_MOVES.clear();
@@ -338,8 +339,8 @@ public class Move
     {
         this.type = this.moveData.type;
         this.category = this.moveData.category;
-        this.power = this.moveData.power;
-        this.accuracy = this.moveData.accuracy;
+        this.power = this.moveData.basePower;
+        this.accuracy = this.moveData.baseAccuracy;
         this.hitCrit = false;
         this.critChance = 1;
         this.isZMove = false;
@@ -430,11 +431,6 @@ public class Move
         return this.accuracy;
     }
 
-    public String getInfo()
-    {
-        return this.moveData.info;
-    }
-
     public int getPriority()
     {
         return this.priority;
@@ -444,49 +440,5 @@ public class Move
     {
         List<String> pool = new ArrayList<>(MOVES.keySet());
         return pool.get(new Random().nextInt(pool.size()));
-    }
-
-    @Override
-    public String toString() {
-        return "MoveNew{" +
-                "name='" + name + '\'' +
-                ", type=" + type +
-                ", category=" + category +
-                ", power=" + power +
-                ", accuracy=" + accuracy +
-                ", " + moveData.toString() +
-                '}';
-    }
-
-    public static class MoveData
-    {
-        public String name;
-        public Type type;
-        public Category category;
-        public int power;
-        public int accuracy;
-        public String info;
-
-        MoveData(String name, String type, String category, int power, int accuracy, String info)
-        {
-            this.name = name;
-            this.type = Type.cast(type);
-            this.category = Category.cast(category);
-            this.power = power;
-            this.accuracy = accuracy;
-            this.info = info;
-        }
-
-        @Override
-        public String toString() {
-            return "MoveData{" +
-                    "name='" + name + '\'' +
-                    ", type=" + type +
-                    ", category=" + category +
-                    ", power=" + power +
-                    ", accuracy=" + accuracy +
-                    ", info='" + info + '\'' +
-                    '}';
-        }
     }
 }

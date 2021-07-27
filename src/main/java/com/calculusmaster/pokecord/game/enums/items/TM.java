@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game.enums.items;
 
-import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.MoveData;
+import com.calculusmaster.pokecord.util.helpers.DataHelper;
 
 public enum TM
 {
@@ -116,9 +117,9 @@ public enum TM
         return this.move;
     }
 
-    public Move.MoveData getMoveData()
+    public MoveData getMoveData()
     {
-        return Move.isMove(this.move) ? Move.MOVES.get(this.move) : Move.MOVES.get("Tackle");
+        return DataHelper.moveData(this.move);
     }
 
     public int getNumber()

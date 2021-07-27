@@ -5,8 +5,12 @@ import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.MoveData;
 import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+
+import java.util.Random;
 
 public class CommandMoveInfo extends Command
 {
@@ -24,8 +28,7 @@ public class CommandMoveInfo extends Command
         }
         else
         {
-            String moveString = Global.normalCase(this.getMove());
-            System.out.println(moveString);
+            String moveString = Global.normalCase(this.getMultiWordContent(1));
             boolean isTM = moveString.startsWith("Tm");
             boolean isTR = moveString.startsWith("Tr");
 
@@ -35,14 +38,18 @@ public class CommandMoveInfo extends Command
                 return this;
             }
 
-            Move.MoveData m = isTM ? TM.get(Integer.parseInt(moveString.substring(2))).getMoveData() : (isTR ? TR.get(Integer.parseInt(moveString.substring(2))).getMoveData() : Move.MOVES.get(moveString));
+            MoveData m;
+
+            if(isTM) m = TM.get(Integer.parseInt(moveString.substring(2))).getMoveData();
+            else if(isTR) m = TR.get(Integer.parseInt(moveString.substring(2))).getMoveData();
+            else m = DataHelper.moveData(moveString);
 
             String title = m.name + " Info" + (isTM || isTR ? " (" + moveString.toUpperCase() + ")" : "");
-            String info = m.info;
+            String info = m.flavor.get(new Random().nextInt(m.flavor.size()));
             String type = "Type: " + Global.normalCase(m.type.toString());
             String category = "Category: " + Global.normalCase(m.category.toString());
-            String power = "Power: " + m.power;
-            String accuracy = "Accuracy: " + m.accuracy;
+            String power = "Power: " + m.basePower;
+            String accuracy = "Accuracy: " + m.baseAccuracy;
 
             this.embed.setTitle(title);
             this.embed.setDescription(info + "\n\n" + type + "\n" + category + "\n" + power + "\n" + accuracy);
@@ -51,12 +58,5 @@ public class CommandMoveInfo extends Command
             if(Move.CUSTOM_MOVES.contains(moveString)) this.embed.setFooter("This move has a custom implementation! It may not work exactly as described!");
         }
         return this;
-    }
-
-    private String getMove()
-    {
-        StringBuilder sb = new StringBuilder();
-        for(int i = 1; i < this.msg.length; i++) sb.append(this.msg[i]).append(" ");
-        return sb.toString().trim();
     }
 }
