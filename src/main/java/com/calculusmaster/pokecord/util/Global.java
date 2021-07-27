@@ -64,9 +64,9 @@ public class Global
         return STARTERS.contains(s.toLowerCase());
     }
 
-    public static Object getEnumFromString(Object[] enumValues, String s)
+    public static <E extends Enum<E>> E getEnumFromString(E[] enumValues, String s)
     {
-        for(Object o : enumValues) if(s.toLowerCase().equals(o.toString().toLowerCase())) return o;
+        for(E e : enumValues) if(s.equalsIgnoreCase(e.toString())) return e;
         return null;
     }
 
