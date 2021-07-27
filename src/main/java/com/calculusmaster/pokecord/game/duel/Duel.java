@@ -44,6 +44,7 @@ public class Duel
     protected Map<String, TurnAction> queuedMoves = new HashMap<>();
     protected Map<String, DuelPokemon> pokemonAttributes = new HashMap<>();
     protected Map<String, Integer> expGains = new HashMap<>();
+    protected Map<String, Integer> damageDealt = new HashMap<>();
 
     public int turn;
     public int current;
@@ -688,6 +689,8 @@ public class Duel
             }
 
             int damageDealt = preMoveHP - this.players[this.other].active.getHealth();
+
+            if(damageDealt > 0 && this.isNonBotPlayer(this.current)) this.damageDealt.put(this.players[this.current].active.getUUID(), this.damageDealt.getOrDefault(this.players[this.current].active.getUUID(), 0) + damageDealt);
 
             if(this.data(this.other).bideTurns > 0)
             {

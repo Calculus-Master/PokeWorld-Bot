@@ -128,13 +128,19 @@ public class RaidDuel extends WildDuel
             int ppXP = new Random().nextInt(1000) + 500;
             int pokeXP = new Random().nextInt(100) + 500;
 
-            String highestHP = Arrays.stream(this.getNonBotPlayers()).sorted(Comparator.comparingInt(p -> p.active.getHealth())).collect(Collectors.toList()).get(0).ID;
+            Map<String, String> pokemonToPlayer = new HashMap<>();
+            for(Player p : this.players) pokemonToPlayer.put(p.active.getUUID(), p.ID);
+
+            List<Map.Entry<String, Integer>> sorted = this.damageDealt.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getValue)).collect(Collectors.toList());
+            Collections.reverse(sorted);
+
+            String highestDamage = pokemonToPlayer.get(sorted.get(0).getKey());
 
             StringBuilder winnings = new StringBuilder();
 
             for(Player p : this.getNonBotPlayers())
             {
-                double multiplier = highestHP.equals(p.ID) ? 1.2 : (p.active.isFainted() ? 0.3 : 1.0);
+                double multiplier = highestDamage.equals(p.ID) ? 1.2 : (p.active.isFainted() ? 0.3 : 1.0);
 
                 p.data.changeCredits((int)(credits * multiplier));
                 p.data.addPokePassExp((int)(ppXP * multiplier), this.event);
