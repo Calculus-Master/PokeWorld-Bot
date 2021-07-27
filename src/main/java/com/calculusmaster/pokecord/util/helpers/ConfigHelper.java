@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.util.helpers;
 
 import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.commands.economy.CommandShop;
+import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.bounties.components.Bounty;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
 import com.calculusmaster.pokecord.util.Mongo;
@@ -33,6 +34,7 @@ public class ConfigHelper
             SpawnEventHelper.SPAWN_INTERVAL = config.getInt("spawn_event_interval");
             SpawnEventHelper.RAID_CHANCE = config.getInt("spawn_event_raid_chance");
             PokemonEgg.MAX_EGGS = config.getInt("egg_limit");
+            CommandTeam.MAX_TEAM_SIZE = config.getInt("team_limit");
 
             LoggerHelper.info(ConfigHelper.class, "Loaded config values!");
         }
@@ -57,6 +59,7 @@ public class ConfigHelper
             SpawnEventHelper.SPAWN_INTERVAL = 450;
             SpawnEventHelper.RAID_CHANCE = 1;
             PokemonEgg.MAX_EGGS = 9;
+            CommandTeam.MAX_TEAM_SIZE = 12;
         }
     }
 }

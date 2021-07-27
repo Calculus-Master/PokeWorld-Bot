@@ -21,7 +21,7 @@ public class CommandTeam extends Command
         super(event, msg);
     }
 
-    public static final int MAX_TEAM_SIZE = 12;
+    public static int MAX_TEAM_SIZE;
 
     @Override
     public Command runCommand()
