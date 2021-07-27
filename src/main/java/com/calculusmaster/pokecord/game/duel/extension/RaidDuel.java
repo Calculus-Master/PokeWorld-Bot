@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.duel.players.WildPokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Room;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
@@ -136,6 +137,9 @@ public class RaidDuel extends WildDuel
 
             String highestDamage = pokemonToPlayer.get(sorted.get(0).getKey());
 
+            for(Player p : this.getNonBotPlayers()) Achievements.grant(p.ID, Achievements.WON_FIRST_RAID, this.event);
+            for(Player p : this.getNonBotPlayers()) if(p.ID.equals(highestDamage)) Achievements.grant(p.ID, Achievements.WON_FIRST_RAID_HIGHEST_DAMAGE, this.event);
+
             StringBuilder winnings = new StringBuilder();
 
             for(Player p : this.getNonBotPlayers())
@@ -159,6 +163,7 @@ public class RaidDuel extends WildDuel
         }
 
         for(Player p : this.getNonBotPlayers()) p.data.updateBountyProgression(ObjectiveType.PARTICIPATE_RAID);
+        for(Player p : this.getNonBotPlayers()) Achievements.grant(p.ID, Achievements.COMPLETED_FIRST_RAID, this.event);
 
         this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
 

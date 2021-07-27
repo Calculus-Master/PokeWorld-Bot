@@ -56,6 +56,9 @@ public enum Achievements
     HATCHED_FIRST_GREAT_IV(1500, "Successfully hatched an egg with great IVs!"),
     HATCHED_FIRST_EXCELLENT_IV(2000, "Successfully hatched an egg with excellent IVs!"),
     HATCHED_FIRST_NEARLY_PERFECT_IV(5000, "Successfully hatched an egg with nearly perfect IVs!"),
+    COMPLETED_FIRST_RAID(400, "Completed your first Raid!"),
+    WON_FIRST_RAID(800, "Won your first Raid!"),
+    WON_FIRST_RAID_HIGHEST_DAMAGE(1200, "Won your first Raid and dealt the most damage!"),
     COMPLETED_ALL_ACHIEVEMENTS(100000, "Completed all Achievements!");
 
     public int credits;
