@@ -50,7 +50,8 @@ public class CommandBreed extends Command
                 boolean validEggGroup = false;
                 for(EggGroup g1 : parent1.getEggGroup()) for(EggGroup g2 : parent2.getEggGroup()) if(g1.equals(g2)) validEggGroup = true;
 
-                if(UNABLE_TO_BREED.contains(parent1.getUUID()) || UNABLE_TO_BREED.contains(parent2.getUUID())) this.sendMsg(failed + " Either " + parent1.getName() + " or " + parent2.getName() + " is on a breeding cooldown and cannot breed right now!");
+                if(this.playerData.getOwnedEggIDs().size() >= PokemonEgg.MAX_EGGS) this.sendMsg("You have the maximum number of eggs! To breed more, hatch some of your existing eggs!");
+                else if(UNABLE_TO_BREED.contains(parent1.getUUID()) || UNABLE_TO_BREED.contains(parent2.getUUID())) this.sendMsg(failed + " Either " + parent1.getName() + " or " + parent2.getName() + " is on a breeding cooldown and cannot breed right now!");
                 else if(parent1.getEggGroup().contains(EggGroup.NO_EGGS) || parent2.getEggGroup().contains(EggGroup.NO_EGGS)) this.sendMsg(failed + " Either " + parent1.getName() + " or " + parent2.getName() + " is part of the " + EggGroup.NO_EGGS.getName() + " Egg Group (and cannot breed)!");
                 else if(parent1.getName().equals("Ditto") && parent2.getName().equals("Ditto")) this.sendMsg(failed + " Ditto cannot breed with itself!");
                 else if(!validEggGroup && !parent1.getName().equals(parent2.getName()) && !parent1.getName().equals("Ditto") && !parent2.getName().equals("Ditto")) this.sendMsg(failed + " " + parent1.getName() + " and " + parent2.getName() + " do not share a common Egg Group and therefore cannot breed!");

@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.util.helpers;
 import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.commands.economy.CommandShop;
 import com.calculusmaster.pokecord.game.bounties.components.Bounty;
+import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import org.json.JSONObject;
@@ -31,6 +32,7 @@ public class ConfigHelper
             Bounty.BOUNTY_REWARD_MAX = config.getJSONArray("bounty_rewards").getInt(1);
             SpawnEventHelper.SPAWN_INTERVAL = config.getInt("spawn_event_interval");
             SpawnEventHelper.RAID_CHANCE = config.getInt("spawn_event_raid_chance");
+            PokemonEgg.MAX_EGGS = config.getInt("egg_limit");
 
             LoggerHelper.info(ConfigHelper.class, "Loaded config values!");
         }
@@ -54,6 +56,7 @@ public class ConfigHelper
             Bounty.BOUNTY_REWARD_MAX = 250;
             SpawnEventHelper.SPAWN_INTERVAL = 450;
             SpawnEventHelper.RAID_CHANCE = 1;
+            PokemonEgg.MAX_EGGS = 9;
         }
     }
 }

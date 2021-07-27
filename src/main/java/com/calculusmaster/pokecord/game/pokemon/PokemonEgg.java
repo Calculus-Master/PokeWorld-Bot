@@ -17,6 +17,8 @@ import java.util.*;
 
 public class PokemonEgg
 {
+    public static int MAX_EGGS;
+
     private String eggID;
     private String target;
     private int exp;
