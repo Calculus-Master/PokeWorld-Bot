@@ -12,11 +12,9 @@ import com.calculusmaster.pokecord.util.custom.ExtendedHashMap;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import org.apache.commons.lang3.Range;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DataHelper
@@ -71,7 +69,10 @@ public class DataHelper
         final List<String[]> movesFlavorCSV = CSVHelper.readCSV("move_flavor_text").stream().filter(l -> l[2].equals("9")).collect(Collectors.toList());
 
         //id,identifier,generation_id,type_id,power,pp,accuracy,priority,target_id,damage_class_id,effect_id,effect_chance,contest_type_id,contest_effect_id,super_contest_effect_id
-        List<String[]> movesCSV = CSVHelper.readCSV("moves");
+        final List<Range<Integer>> skipIDs = Arrays.asList(Range.between(622, 658), Range.between(662, 664), Range.between(695, 703), Range.between(719, 719), Range.between(723, 741), Range.between(757, 774), Range.between(10001, 10018));
+        List<String[]> movesCSV = CSVHelper.readCSV("moves").stream()
+                .filter(line -> skipIDs.stream().noneMatch(r -> r.contains(Integer.parseInt(line[0]))))
+                .collect(Collectors.toList());
 
         for(String[] moveLine : movesCSV)
         {
