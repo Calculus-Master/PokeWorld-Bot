@@ -107,7 +107,56 @@ public class Move
     public String logic(Pokemon user, Pokemon opponent, Duel duel)
     {
         //Call specific move method
-        Class<?> typeClass = switch(this.type) {
+        Class<?> typeClass = this.getHostClass();
+
+        String results = this.getMoveUsedResult(user);
+        String moveName = this.getMethodName();
+
+        try
+        {
+            results += (String)(typeClass.getMethod(moveName, Pokemon.class, Pokemon.class, Duel.class, Move.class).invoke(typeClass.getDeclaredConstructor().newInstance(), user, opponent, duel, this));
+        }
+        catch (Exception e)
+        {
+            System.out.println("Move failed! " + this.getName());
+            results += "MOVE FAILED";
+            e.printStackTrace();
+        }
+
+        return results;
+    }
+
+    public static boolean isImplemented(String name)
+    {
+        Move m = new Move(name);
+
+        try
+        {
+            m.getHostClass().getMethod(m.getMethodName(), Pokemon.class, Pokemon.class, Duel.class, Move.class);
+            return true;
+        }
+        catch (NoSuchMethodException e)
+        {
+            return false;
+        }
+    }
+
+    public String getMethodName()
+    {
+        String out = this.name;
+
+        if(this.name.equals("10,000,000 Volt Thunderbolt")) out = "TenMillionVoltThunderbolt";
+
+        out = out.replaceAll("\\s", "").replaceAll("'", "");
+
+        return out;
+    }
+
+    public Class<?> getHostClass()
+    {
+        if(this.isZMove) return ZMoves.class;
+        else if(this.isMaxMove) return MaxMoves.class;
+        return switch(this.type) {
             case BUG -> BugMoves.class;
             case DARK -> DarkMoves.class;
             case DRAGON -> DragonMoves.class;
@@ -127,31 +176,6 @@ public class Move
             case STEEL -> SteelMoves.class;
             case WATER -> WaterMoves.class;
         };
-
-        if(this.isZMove) typeClass = ZMoves.class;
-        if(this.isMaxMove) typeClass = MaxMoves.class;
-
-        String results = this.getMoveUsedResult(user);
-        String moveName = this.name;
-
-        if(moveName.equals("10,000,000 Volt Thunderbolt")) moveName = "TenMillionVoltThunderbolt";
-
-        moveName = moveName.replaceAll("\\s", "").replaceAll("'", "");
-
-        //Special cases
-
-        try
-        {
-            results += (String)(typeClass.getMethod(moveName, Pokemon.class, Pokemon.class, Duel.class, Move.class).invoke(typeClass.getDeclaredConstructor().newInstance(), user, opponent, duel, this));
-        }
-        catch (Exception e)
-        {
-            System.out.println("Move failed! " + this.getName());
-            results += "MOVE FAILED";
-            e.printStackTrace();
-        }
-
-        return results;
     }
 
     //Move logic
