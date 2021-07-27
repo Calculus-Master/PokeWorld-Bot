@@ -32,7 +32,8 @@ public class SettingsHelper
         Document settingsData = new Document()
                 .append("playerID", playerID)
                 .append("detailed", false)
-                .append("autoinfo", false);
+                .append("autoinfo", false)
+                .append("default_order", "NUMBER");
 
         Mongo.SettingsData.insertOne(settingsData);
     }
@@ -48,6 +49,13 @@ public class SettingsHelper
         this.update();
     }
 
+    public void updateSettingString(Setting s, String value)
+    {
+        switch(s) {
+            case CLIENT_DEFAULT_ORDER -> Mongo.SettingsData.updateOne(this.query, Updates.set("default_order", value));
+        }
+    }
+
     public boolean getSettingBoolean(Setting s)
     {
         return switch(s) {
@@ -57,11 +65,20 @@ public class SettingsHelper
         };
     }
 
+    public String getSettingString(Setting s)
+    {
+        return switch(s) {
+            case CLIENT_DEFAULT_ORDER -> this.settingsJSON.getString("default_order");
+            default -> "";
+        };
+    }
+
     public enum Setting
     {
         //Client
-        CLIENT_DETAILED("detailed", "Toggles the display of IVs and EVs throughout the bot"),
-        CLIENT_CATCH_AUTO_INFO("autoinfo", "Toggle automatically sending `p!info latest` after catching a Pokemon"),
+        CLIENT_DETAILED("detailed", "Toggles the display of IVs and EVs throughout the bot."),
+        CLIENT_CATCH_AUTO_INFO("autoinfo", "Toggle automatically sending `p!info latest` after catching a Pokemon."),
+        CLIENT_DEFAULT_ORDER("order", "Set the default ordering of `p!pokemon`. Examples: `name`, `iv`, `level`, `number`, `random`"),
         //Server
         SERVER_PREFIX("prefix", "Changes the bot prefix (default `p!`)"),
         SERVER_SPAWNCHANNEL("spawnchannel", "Toggles if spawns are enabled in a specific channel."),

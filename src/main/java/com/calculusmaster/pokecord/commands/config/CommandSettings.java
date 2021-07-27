@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.config;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.SettingsHelper;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -92,6 +93,21 @@ public class CommandSettings extends Command
                             else this.sendMsg("Disabled automatic info viewing after catch!");
                         }
                         else this.sendMsg("Valid arguments: `true` or `false`!");
+                    }
+                }
+                else if(CLIENT_DEFAULT_ORDER.matches(this.msg[2]))
+                {
+                    if(this.msg.length == 4)
+                    {
+                        CommandPokemon.OrderSort order = CommandPokemon.OrderSort.cast(this.msg[3]);
+
+                        if(order == null) this.sendMsg("Invalid Order!");
+                        else
+                        {
+                            settings.updateSettingString(CLIENT_DEFAULT_ORDER, order.toString());
+
+                            this.sendMsg("Your Pokemon List will now be ordered by `" + order.toString().toLowerCase() + "`!");
+                        }
                     }
                 }
                 else this.embed.setDescription(CommandInvalid.getShort());

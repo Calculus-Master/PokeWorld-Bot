@@ -244,7 +244,7 @@ public class CommandPokemon extends Command
             OrderSort o = OrderSort.cast(order);
             if(o != null) this.sortOrder(o, !asc);
         }
-        else this.sortOrder(OrderSort.RANDOM, false);
+        else this.sortOrder(OrderSort.cast(this.playerData.getSettings().getSettingString(SettingsHelper.Setting.CLIENT_DEFAULT_ORDER)), false);
 
         if(!this.pokemon.isEmpty()) this.createListEmbed();
         else this.embed.setDescription("You have no Pokemon with those characteristics!");
@@ -324,6 +324,8 @@ public class CommandPokemon extends Command
 
     private void sortOrder(OrderSort o, boolean descending)
     {
+        if(o == null) o = OrderSort.RANDOM;
+
         switch (o)
         {
             case NUMBER -> this.pokemon.sort(Comparator.comparingInt(Pokemon::getNumber));
@@ -336,7 +338,7 @@ public class CommandPokemon extends Command
         if(descending) Collections.reverse(this.pokemon);
     }
 
-    enum OrderSort
+    public enum OrderSort
     {
         NUMBER,
         IV,
@@ -344,7 +346,7 @@ public class CommandPokemon extends Command
         NAME,
         RANDOM;
 
-        static OrderSort cast(String s)
+        public static OrderSort cast(String s)
         {
             for(OrderSort o : values()) if(o.toString().equals(s.toUpperCase())) return o;
             return null;
