@@ -10,15 +10,17 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class CommandBreed extends Command
 {
-    public static final List<String> UNABLE_TO_BREED = new ArrayList<>();
+    public static final Vector<String> UNABLE_TO_BREED = new Vector<>();
+    public static final Map<String, ScheduledFuture<?>> BREEDING_COOLDOWNS = new ConcurrentHashMap<>();
 
     public CommandBreed(MessageReceivedEvent event, String[] msg)
     {
@@ -29,6 +31,7 @@ public class CommandBreed extends Command
     public Command runCommand()
     {
         boolean breed = this.msg.length == 3 && this.isNumeric(1) && this.isNumeric(2);
+        boolean cooldown = this.msg.length == 3 && this.msg[1].equals("cooldown") && this.isNumeric(2);
 
         if(breed)
         {
@@ -47,7 +50,7 @@ public class CommandBreed extends Command
                 boolean validEggGroup = false;
                 for(EggGroup g1 : parent1.getEggGroup()) for(EggGroup g2 : parent2.getEggGroup()) if(g1.equals(g2)) validEggGroup = true;
 
-                if(Collections.synchronizedList(UNABLE_TO_BREED).contains(parent1.getUUID()) || Collections.synchronizedList(UNABLE_TO_BREED).contains(parent2.getUUID())) this.sendMsg(failed + " Either " + parent1.getName() + " or " + parent2.getName() + " is on a breeding cooldown and cannot breed right now!");
+                if(UNABLE_TO_BREED.contains(parent1.getUUID()) || UNABLE_TO_BREED.contains(parent2.getUUID())) this.sendMsg(failed + " Either " + parent1.getName() + " or " + parent2.getName() + " is on a breeding cooldown and cannot breed right now!");
                 else if(parent1.getEggGroup().contains(EggGroup.NO_EGGS) || parent2.getEggGroup().contains(EggGroup.NO_EGGS)) this.sendMsg(failed + " Either " + parent1.getName() + " or " + parent2.getName() + " is part of the " + EggGroup.NO_EGGS.getName() + " Egg Group (and cannot breed)!");
                 else if(parent1.getName().equals("Ditto") && parent2.getName().equals("Ditto")) this.sendMsg(failed + " Ditto cannot breed with itself!");
                 else if(!validEggGroup && !parent1.getName().equals(parent2.getName()) && !parent1.getName().equals("Ditto") && !parent2.getName().equals("Ditto")) this.sendMsg(failed + " " + parent1.getName() + " and " + parent2.getName() + " do not share a common Egg Group and therefore cannot breed!");
@@ -66,18 +69,45 @@ public class CommandBreed extends Command
                     if(parent1.getName().equals("Ditto") || parent2.getName().equals("Ditto")) Achievements.grant(this.player.getId(), Achievements.BRED_FIRST_DITTO, this.event);
                     if(parent1.getGender().equals(Gender.UNKNOWN) || parent2.getGender().equals(Gender.UNKNOWN)) Achievements.grant(this.player.getId(), Achievements.BRED_FIRST_UNKNOWN, this.event);
 
-                    Collections.synchronizedList(UNABLE_TO_BREED).add(parent1.getUUID());
-                    Collections.synchronizedList(UNABLE_TO_BREED).add(parent2.getUUID());
-
-                    Executors.newScheduledThreadPool(1).schedule(() -> Collections.synchronizedList(UNABLE_TO_BREED).remove(parent1.getUUID()), 1, TimeUnit.HOURS);
-                    Executors.newScheduledThreadPool(1).schedule(() -> Collections.synchronizedList(UNABLE_TO_BREED).remove(parent2.getUUID()), 1, TimeUnit.HOURS);
+                    this.startCooldown(parent1.getUUID());
+                    this.startCooldown(parent2.getUUID());
 
                     this.sendMsg(parent1.getName() + " and " + parent2.getName() + " successfully bred and created an egg!");
+                }
+            }
+        }
+        else if(cooldown)
+        {
+            if(this.getInt(2) < 1 || this.getInt(2) > this.playerData.getPokemonList().size()) this.sendMsg("Invalid number!");
+            else
+            {
+                Pokemon p = Pokemon.build(this.playerData.getPokemonList().get(this.getInt(2) - 1));
+
+                if(!UNABLE_TO_BREED.contains(p.getUUID()) && !BREEDING_COOLDOWNS.containsKey(p.getUUID())) this.sendMsg(p.getName() + " is able to breed!");
+                else
+                {
+                    int rawSeconds = (int)BREEDING_COOLDOWNS.get(p.getUUID()).getDelay(TimeUnit.SECONDS);
+                    int seconds = rawSeconds % 60;
+                    int minutes = rawSeconds / 60;
+
+                    this.sendMsg(p.getName() + " will be able to breed again in `" + minutes + " min " + seconds + " sec`!");
                 }
             }
         }
         else this.sendMsg(CommandInvalid.getShort());
 
         return this;
+    }
+
+    private void startCooldown(String UUID)
+    {
+        UNABLE_TO_BREED.add(UUID);
+
+        ScheduledFuture<?> cooldown = Executors.newScheduledThreadPool(1).schedule(() -> {
+            UNABLE_TO_BREED.remove(UUID);
+            BREEDING_COOLDOWNS.remove(UUID);
+        }, 1, TimeUnit.HOURS);
+
+        BREEDING_COOLDOWNS.put(UUID, cooldown);
     }
 }
