@@ -330,6 +330,7 @@ public class CommandPokemon extends Command
         {
             case NUMBER -> this.pokemon.sort(Comparator.comparingInt(Pokemon::getNumber));
             case IV -> this.pokemon.sort(Comparator.comparingDouble(Pokemon::getTotalIVRounded));
+            case EV -> this.pokemon.sort(Comparator.comparingInt(Pokemon::getEVTotal));
             case LEVEL -> this.pokemon.sort(Comparator.comparingInt(Pokemon::getLevel));
             case NAME -> this.pokemon.sort(Comparator.comparing(Pokemon::getName));
             case RANDOM -> Collections.shuffle(this.pokemon);
@@ -342,6 +343,7 @@ public class CommandPokemon extends Command
     {
         NUMBER,
         IV,
+        EV,
         LEVEL,
         NAME,
         RANDOM;

@@ -321,6 +321,7 @@ public class CommandMarket extends Command
         switch(o)
         {
             case IV -> entries.sort(Comparator.comparingDouble(m -> m.pokemon.getTotalIVRounded()));
+            case EV -> entries.sort(Comparator.comparingInt(m -> m.pokemon.getEVTotal()));
             case LEVEL -> entries.sort(Comparator.comparingInt(m -> m.pokemon.getLevel()));
             case NAME -> entries.sort(Comparator.comparing(m -> m.pokemon.getName()));
             case PRICE -> entries.sort(Comparator.comparingInt(m -> m.price));
@@ -333,6 +334,7 @@ public class CommandMarket extends Command
     enum OrderSort
     {
         IV,
+        EV,
         LEVEL,
         NAME,
         PRICE,
