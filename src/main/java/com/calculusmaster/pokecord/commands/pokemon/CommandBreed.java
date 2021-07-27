@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.Gender;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -57,6 +58,8 @@ public class CommandBreed extends Command
                     PokemonEgg.toDB(egg);
 
                     this.playerData.addEgg(egg.getEggID());
+
+                    this.playerData.updateBountyProgression(ObjectiveType.BREED_POKEMON);
 
                     Collections.synchronizedList(UNABLE_TO_BREED).add(parent1.getUUID());
                     Collections.synchronizedList(UNABLE_TO_BREED).add(parent2.getUUID());

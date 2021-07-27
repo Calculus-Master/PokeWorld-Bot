@@ -55,7 +55,8 @@ public enum ObjectiveType
     DAMAGE_POKEMON(DamageGenericObjective::new, 100, 3000),
     DAMAGE_POKEMON_TYPE(DamageTypeObjective::new, 100, 1500),
     DAMAGE_POKEMON_CATEGORY(DamageCategoryObjective::new, 100, 2500),
-    PARTICIPATE_RAID(ParticipateRaidObjective::new, 2, 5);
+    PARTICIPATE_RAID(ParticipateRaidObjective::new, 2, 5),
+    BREED_POKEMON(BreedGenericObjective::new, 1, 10);
 
     public Supplier<? extends Objective> constructor;
     private final int min;
