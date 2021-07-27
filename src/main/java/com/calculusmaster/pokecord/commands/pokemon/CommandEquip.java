@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
+import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandEquip extends Command
@@ -40,6 +41,8 @@ public class CommandEquip extends Command
             d.getPlayers()[d.indexOf(this.player.getId())].data.equipZCrystal(z);
         }
         else this.playerData.equipZCrystal(z);
+
+        Achievements.grant(this.player.getId(), Achievements.EQUIP_FIRST_ZCRYSTAL, this.event);
 
         this.event.getChannel().sendMessage(this.playerData.getMention() + ": Equipped " + z + "!").queue();
 
