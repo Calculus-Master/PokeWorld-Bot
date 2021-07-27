@@ -69,14 +69,15 @@ public class DataHelper
         final List<String[]> movesFlavorCSV = CSVHelper.readCSV("move_flavor_text").stream().filter(l -> l[2].equals("9")).collect(Collectors.toList());
 
         //id,identifier,generation_id,type_id,power,pp,accuracy,priority,target_id,damage_class_id,effect_id,effect_chance,contest_type_id,contest_effect_id,super_contest_effect_id
-        final List<Range<Integer>> skipIDs = Arrays.asList(Range.between(622, 658), Range.between(662, 664), Range.between(695, 703), Range.between(719, 719), Range.between(723, 741), Range.between(757, 774), Range.between(10001, 10018));
+        final List<Range<Integer>> skipIDs = Arrays.asList(Range.between(622, 658), Range.between(695, 703), Range.between(719, 719), Range.between(723, 741), Range.between(757, 774), Range.between(10001, 10018));
         List<String[]> movesCSV = CSVHelper.readCSV("moves").stream()
                 .filter(line -> skipIDs.stream().noneMatch(r -> r.contains(Integer.parseInt(line[0]))))
                 .collect(Collectors.toList());
 
         for(String[] moveLine : movesCSV)
         {
-            String name = Global.normalCase(moveLine[1].replaceAll("-", " "));
+            String name = Global.normalCase(moveLine[1].replaceAll("-", " ")).replace("Vice Grip", "Vise Grip");
+
             String type = typeID.get(moveLine[3]);
             String category = categoryID.get(moveLine[9]);
             int power = moveLine[4].equals("") ? 0 : Integer.parseInt(moveLine[4]);
