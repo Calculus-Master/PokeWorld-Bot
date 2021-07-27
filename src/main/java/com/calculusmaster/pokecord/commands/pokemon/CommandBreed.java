@@ -39,8 +39,8 @@ public class CommandBreed extends Command
 
                 if(parent1.getEggGroup().contains(EggGroup.NO_EGGS) || parent2.getEggGroup().contains(EggGroup.NO_EGGS)) this.sendMsg(failed + " Either " + parent1.getName() + " or " + parent2.getName() + " is part of the " + EggGroup.NO_EGGS.getName() + " Egg Group (and cannot breed)!");
                 else if(parent1.getName().equals("Ditto") && parent2.getName().equals("Ditto")) this.sendMsg(failed + " Ditto cannot breed with itself!");
-                else if(!validEggGroup && !parent1.getName().equals(parent2.getName())) this.sendMsg(failed + " " + parent1.getName() + " and " + parent2.getName() + " do not share a common Egg Group and therefore cannot breed!");
-                else if((!parent1.getName().equals("Ditto") && parent2.getGender().equals(Gender.UNKNOWN)) || (!parent2.getName().equals("Ditto") && parent1.getGender().equals(Gender.UNKNOWN))) this.sendMsg(failed + " Either " + parent1.getName() + " or " + parent2.getName() + " has an unknown gender and cannot breed!");
+                else if(!validEggGroup && !parent1.getName().equals(parent2.getName()) && !parent1.getName().equals("Ditto") && !parent2.getName().equals("Ditto")) this.sendMsg(failed + " " + parent1.getName() + " and " + parent2.getName() + " do not share a common Egg Group and therefore cannot breed!");
+                else if((!parent1.getName().equals("Ditto") && parent2.getGender().equals(Gender.UNKNOWN)) && (!parent2.getName().equals("Ditto") && parent1.getGender().equals(Gender.UNKNOWN))) this.sendMsg(failed + " Either " + parent1.getName() + " or " + parent2.getName() + " has an unknown gender and cannot breed!");
                 else if(parent1.getGender().equals(parent2.getGender())) this.sendMsg(failed + " " + parent1.getName() + " and " + parent2.getName() + " are not opposite genders and cannot breed!");
                 else
                 {
