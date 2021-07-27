@@ -129,7 +129,7 @@ public class Listener extends ListenerAdapter
 
         if(!data.hasActiveEgg()) return;
 
-        int experience = (int)(new Random().nextInt(300) * (1 + Math.random()));
+        int experience = new Random().nextInt(250) + 50;
 
         PokemonEgg egg = data.getActiveEgg();
 

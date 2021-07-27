@@ -37,7 +37,7 @@ public class PokemonEgg
         egg.setEggID();
         egg.setTarget(target);
         egg.setExp(0);
-        egg.setMaxExp((int)(DataHelper.POKEMON_BASE_HATCH_TARGETS.get(DataHelper.dex(target)) * (Math.random() + 1) * 3));
+        egg.setMaxExp((int)(DataHelper.POKEMON_BASE_HATCH_TARGETS.get(DataHelper.dex(target)) * (Math.random() + 1)));
         egg.setIVs(parent1, parent2);
 
         return egg;
