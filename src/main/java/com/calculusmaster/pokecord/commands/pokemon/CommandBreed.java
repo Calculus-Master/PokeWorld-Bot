@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.Gender;
+import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -60,6 +61,10 @@ public class CommandBreed extends Command
                     this.playerData.addEgg(egg.getEggID());
 
                     this.playerData.updateBountyProgression(ObjectiveType.BREED_POKEMON);
+
+                    Achievements.grant(this.player.getId(), Achievements.BRED_FIRST_POKEMON, this.event);
+                    if(parent1.getName().equals("Ditto") || parent2.getName().equals("Ditto")) Achievements.grant(this.player.getId(), Achievements.BRED_FIRST_DITTO, this.event);
+                    if(parent1.getGender().equals(Gender.UNKNOWN) || parent2.getGender().equals(Gender.UNKNOWN)) Achievements.grant(this.player.getId(), Achievements.BRED_FIRST_UNKNOWN, this.event);
 
                     Collections.synchronizedList(UNABLE_TO_BREED).add(parent1.getUUID());
                     Collections.synchronizedList(UNABLE_TO_BREED).add(parent2.getUUID());

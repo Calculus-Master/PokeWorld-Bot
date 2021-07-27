@@ -48,6 +48,14 @@ public enum Achievements
     GAUNTLET_FIRST_REACHED_LEVEL_5(1000, "Reached Level 5 in a Gauntlet for the first time!"),
     GAUNTLET_FIRST_REACHED_LEVEL_7(1500, "Reached Level 7 in a Gauntlet for the first time!"),
     GAUNTLET_FIRST_REACHED_LEVEL_10(2000, "Reached Level 10 in a Gauntlet for the first time!"),
+    BRED_FIRST_POKEMON(500, "Successfully bred your first Pokemon!"),
+    BRED_FIRST_DITTO(750, "Successfully bred a Pokemon with Ditto!"),
+    BRED_FIRST_UNKNOWN(1000, "Successfully bred an Unknown Gender Pokemon!"),
+    HATCHED_FIRST_EGG(500, "Hatched your first egg!"),
+    HATCHED_FIRST_DECENT_IV(1000, "Successfully hatched an egg with decent IVs!"),
+    HATCHED_FIRST_GREAT_IV(1500, "Successfully hatched an egg with great IVs!"),
+    HATCHED_FIRST_EXCELLENT_IV(2000, "Successfully hatched an egg with excellent IVs!"),
+    HATCHED_FIRST_NEARLY_PERFECT_IV(5000, "Successfully hatched an egg with nearly perfect IVs!"),
     COMPLETED_ALL_ACHIEVEMENTS(100000, "Completed all Achievements!");
 
     public int credits;

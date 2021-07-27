@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.util.listener;
 import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
+import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -143,6 +144,12 @@ public class Listener extends ListenerAdapter
             data.addPokemon(p.getUUID());
             data.removeActiveEgg();
             data.removeEgg(egg.getEggID());
+
+            Achievements.grant(data.getID(), Achievements.HATCHED_FIRST_EGG, event);
+            if(p.getTotalIVRounded() >= 60) Achievements.grant(data.getID(), Achievements.HATCHED_FIRST_DECENT_IV, event);
+            if(p.getTotalIVRounded() >= 70) Achievements.grant(data.getID(), Achievements.HATCHED_FIRST_GREAT_IV, event);
+            if(p.getTotalIVRounded() >= 80) Achievements.grant(data.getID(), Achievements.HATCHED_FIRST_EXCELLENT_IV, event);
+            if(p.getTotalIVRounded() >= 90) Achievements.grant(data.getID(), Achievements.HATCHED_FIRST_NEARLY_PERFECT_IV, event);
 
             event.getChannel().sendMessage(data.getMention() + ": Your Egg hatched into a new " + p.getName() + "!").queue();
         }
