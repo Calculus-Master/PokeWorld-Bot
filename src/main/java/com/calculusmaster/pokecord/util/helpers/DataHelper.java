@@ -93,6 +93,12 @@ public class DataHelper
         MOVES.addAll(MOVE_DATA.keySet());
     }
 
+    public static void registerNewMove(String name, MoveData data)
+    {
+        MOVES.add(name);
+        MOVE_DATA.put(name, data);
+    }
+
     public static MoveData moveData(String name)
     {
         return MOVE_DATA.get(name).copy();

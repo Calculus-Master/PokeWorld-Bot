@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.enums.elements.EntryHazard;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.registry.ZMoveRegistry;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
 import java.util.*;
@@ -214,114 +215,118 @@ public class DuelHelper
 
         if(z == null) return fallback;
 
-        Move ZMove = fallback;
-
-        int ZPower;
-        if(baseMove.getPower() <= 55) ZPower = 100;
-        else if(baseMove.getPower() <= 65) ZPower = 120;
-        else if(baseMove.getPower() <= 75) ZPower = 140;
-        else if(baseMove.getPower() <= 85) ZPower = 160;
-        else if(baseMove.getPower() <= 95) ZPower = 175;
-        else if(baseMove.getPower() <= 100) ZPower = 180;
-        else if(baseMove.getPower() <= 110) ZPower = 185;
-        else if(baseMove.getPower() <= 125) ZPower = 190;
-        else if(baseMove.getPower() <= 130) ZPower = 195;
-        else ZPower = 200;
-
-        ZPower = switch(baseMove.getName()) {
-            case "Mega Drain" -> 120;
-            case "Core Enforcer" -> 140;
-            case "Weather Ball", "Hex" -> 160;
-            case "Flying Press" -> 170;
-            case "Gear Grind", "Fissure", "Guillotine", "Horn Drill", "Sheer Cold" -> 180;
-            case "V Create" -> 220;
-            default -> ZPower;
-        };
-
-        switch(z)
+        Move ZMove = switch(z)
         {
             //Types
-            case BUGINIUM_Z -> ZMove = new Move("Savage Spin Out", Type.BUG, baseMove.getCategory(), 0);
-            case DARKINIUM_Z -> ZMove = new Move("Black Hole Eclipse", Type.DARK, baseMove.getCategory(), 0);
-            case DRAGONIUM_Z -> ZMove = new Move("Devastating Drake", Type.DRAGON, baseMove.getCategory(), 0);
-            case ELECTRIUM_Z -> ZMove = new Move("Gigavolt Havoc", Type.ELECTRIC, baseMove.getCategory(), 0);
-            case FAIRIUM_Z -> ZMove = new Move("Twinkle Tackle", Type.FAIRY, baseMove.getCategory(), 0);
-            case FIGHTINIUM_Z -> ZMove = new Move("All Out Pummeling", Type.FIGHTING, baseMove.getCategory(), 0);
-            case FIRIUM_Z -> ZMove = new Move("Inferno Overdrive", Type.FIRE, baseMove.getCategory(), 0);
-            case FLYINIUM_Z -> ZMove = new Move("Supersonic Skystrike", Type.FLYING, baseMove.getCategory(), 0);
-            case GHOSTIUM_Z -> ZMove = new Move("Never Ending Nightmare", Type.GHOST, baseMove.getCategory(), 0);
-            case GRASSIUM_Z -> ZMove = new Move("Bloom Doom", Type.GRASS, baseMove.getCategory(), 0);
-            case GROUNDIUM_Z -> ZMove = new Move("Tectonic Rage", Type.GROUND, baseMove.getCategory(), 0);
-            case ICIUM_Z -> ZMove = new Move("Subzero Slammer", Type.ICE, baseMove.getCategory(), 0);
-            case NORMALIUM_Z -> ZMove = new Move("Breakneck Blitz", Type.NORMAL, baseMove.getCategory(), 0);
-            case POISONIUM_Z -> ZMove = new Move("Acid Downpour", Type.POISON, baseMove.getCategory(), 0);
-            case PSYCHIUM_Z -> ZMove = new Move("Shattered Psyche", Type.PSYCHIC, baseMove.getCategory(), 0);
-            case ROCKIUM_Z -> ZMove = new Move("Continental Crush", Type.ROCK, baseMove.getCategory(), 0);
-            case STEELIUM_Z -> ZMove = new Move("Corkscrew Crash", Type.STEEL, baseMove.getCategory(), 0);
-            case WATERIUM_Z -> ZMove = new Move("Hydro Vortex", Type.WATER, baseMove.getCategory(), 0);
+            case BUGINIUM_Z -> new Move("Savage Spin Out");
+            case DARKINIUM_Z -> new Move("Black Hole Eclipse");
+            case DRAGONIUM_Z -> new Move("Devastating Drake");
+            case ELECTRIUM_Z -> new Move("Gigavolt Havoc");
+            case FAIRIUM_Z -> new Move("Twinkle Tackle");
+            case FIGHTINIUM_Z -> new Move("All Out Pummeling");
+            case FIRIUM_Z -> new Move("Inferno Overdrive");
+            case FLYINIUM_Z -> new Move("Supersonic Skystrike");
+            case GHOSTIUM_Z -> new Move("Never Ending Nightmare");
+            case GRASSIUM_Z -> new Move("Bloom Doom");
+            case GROUNDIUM_Z -> new Move("Tectonic Rage");
+            case ICIUM_Z -> new Move("Subzero Slammer");
+            case NORMALIUM_Z -> new Move("Breakneck Blitz");
+            case POISONIUM_Z -> new Move("Acid Downpour");
+            case PSYCHIUM_Z -> new Move("Shattered Psyche");
+            case ROCKIUM_Z -> new Move("Continental Crush");
+            case STEELIUM_Z -> new Move("Corkscrew Crash");
+            case WATERIUM_Z -> new Move("Hydro Vortex");
             //Uniques
-            case ALORAICHIUM_Z -> ZMove = new Move("Stoked Sparksurfer", Type.ELECTRIC, Category.SPECIAL, 175);
-            case DECIDIUM_Z -> ZMove = new Move("Sinister Arrow Raid", Type.GHOST, Category.PHYSICAL, 180);
-            case EEVIUM_Z -> ZMove = new Move("Extreme Evoboost", Type.NORMAL, Category.STATUS, 0);
-            case INCINIUM_Z -> ZMove = new Move("Malicious Moonsault", Type.DARK, Category.PHYSICAL, 180);
-            case KOMMOIUM_Z -> ZMove = new Move("Clangorous Soulblaze", Type.DRAGON, Category.SPECIAL, 185);
-            case LUNALIUM_Z -> ZMove = new Move("Menacing Moonraze Maelstrom", Type.GHOST, Category.SPECIAL, 200);
-            case LYCANIUM_Z -> ZMove = new Move("Splintered Stormshards", Type.ROCK, Category.PHYSICAL, 190);
-            case MARSHADIUM_Z -> ZMove = new Move("Soul Stealing 7 Star Strike", Type.GHOST, Category.PHYSICAL, 195);
-            case MEWNIUM_Z -> ZMove = new Move("Genesis Supernova", Type.PSYCHIC, Category.SPECIAL, 185);
-            case MIMIKIUM_Z -> ZMove = new Move("Let's Snuggle Forever", Type.FAIRY, Category.PHYSICAL, 190);
-            case PIKANIUM_Z -> ZMove = new Move("Catastropika", Type.ELECTRIC, Category.PHYSICAL, 210);
-            case PIKASHUNIUM_Z -> ZMove = new Move("10,000,000 Volt Thunderbolt", Type.ELECTRIC, Category.SPECIAL, 195);
-            case PRIMARIUM_Z -> ZMove = new Move("Oceanic Operetta", Type.WATER, Category.SPECIAL, 195);
-            case SNORLIUM_Z -> ZMove = new Move("Pulverizing Pancake", Type.NORMAL, Category.PHYSICAL, 210);
-            case SOLGANIUM_Z -> ZMove = new Move("Searing Sunraze Smash", Type.STEEL, Category.PHYSICAL, 200);
-            case TAPUNIUM_Z -> ZMove = new Move("Guardian of Alola", Type.FAIRY, Category.SPECIAL, 0);
-            case ULTRANECROZIUM_Z -> {
-                if(baseMove.getName().equals("Photon Geyser")) ZMove = new Move("Light That Burns The Sky", Type.PSYCHIC, Category.SPECIAL, 200);
-                else if(baseMove.getName().equals("Prismatic Laser")) ZMove = new Move("The Blinding One", Type.PSYCHIC, Category.SPECIAL, 220);
-            }
+            case ALORAICHIUM_Z -> new Move("Stoked Sparksurfer");
+            case DECIDIUM_Z -> new Move("Sinister Arrow Raid");
+            case EEVIUM_Z -> new Move("Extreme Evoboost");
+            case INCINIUM_Z -> new Move("Malicious Moonsault");
+            case KOMMOIUM_Z -> new Move("Clangorous Soulblaze");
+            case LUNALIUM_Z -> new Move("Menacing Moonraze Maelstrom");
+            case LYCANIUM_Z -> new Move("Splintered Stormshards");
+            case MARSHADIUM_Z -> new Move("Soul Stealing 7 Star Strike");
+            case MEWNIUM_Z -> new Move("Genesis Supernova");
+            case MIMIKIUM_Z -> new Move("Let's Snuggle Forever");
+            case PIKANIUM_Z -> new Move("Catastropika");
+            case PIKASHUNIUM_Z -> new Move("10,000,000 Volt Thunderbolt");
+            case PRIMARIUM_Z -> new Move("Oceanic Operetta");
+            case SNORLIUM_Z -> new Move("Pulverizing Pancake");
+            case SOLGANIUM_Z -> new Move("Searing Sunraze Smash");
+            case TAPUNIUM_Z -> new Move("Guardian of Alola");
+            case ULTRANECROZIUM_Z -> switch(baseMove.getName()) {
+                case "Photon Geyser" -> new Move("Light That Burns The Sky");
+                case "Prismatic Laser" -> new Move("The Blinding One");
+                default -> fallback;
+            };
             //Custom Uniques
-            case RESHIRIUM_Z -> ZMove = new Move("White Hot Inferno", Type.FIRE, Category.SPECIAL, 200);
-            case ZEKRIUM_Z -> ZMove = new Move("Supercharged Storm Surge", Type.ELECTRIC, Category.PHYSICAL, 200);
-            case KYURIUM_Z -> ZMove = switch (baseMove.getName()) {
-                case "Glaciate" -> new Move("Eternal Winter", Type.ICE, Category.SPECIAL, 180);
-                case "Freeze Shock" -> new Move("Freezing Storm Surge", Type.ICE, Category.PHYSICAL, 210);
-                case "Ice Burn" -> new Move("Blazing Iceferno", Type.ICE, Category.SPECIAL, 210);
-                default -> new Move("Tackle");
+            case RESHIRIUM_Z -> new Move("White Hot Inferno");
+            case ZEKRIUM_Z -> new Move("Supercharged Storm Surge");
+            case KYURIUM_Z -> switch (baseMove.getName()) {
+                case "Glaciate" -> new Move("Eternal Winter");
+                case "Freeze Shock" -> new Move("Freezing Storm Surge");
+                case "Ice Burn" -> new Move("Blazing Iceferno");
+                default -> fallback;
             };
-            case XERNIUM_Z -> ZMove = new Move("Tree Of Life", Type.FAIRY, Category.STATUS, 0);
-            case YVELTIUM_Z -> ZMove = new Move("Cocoon Of Destruction", Type.DARK, Category.SPECIAL, 185);
-            case DIANCIUM_Z -> ZMove = new Move("Dazzling Diamond Barrage", Type.ROCK, Category.PHYSICAL, 180);
-            case ARCEIUM_Z -> ZMove = new Move("Decree Of Arceus", Type.NORMAL, Category.PHYSICAL, 150);
-            case RAYQUAZIUM_Z -> ZMove = new Move("Draconic Ozone Ascent", Type.DRAGON, Category.PHYSICAL, 200);
-            case ZYGARDIUM_Z -> ZMove = switch (baseMove.getName()) {
-                case "Lands Wrath" -> new Move("Tectonic Z Wrath", Type.GROUND, Category.PHYSICAL, 180);
-                case "Core Enforcer" -> new Move("Titanic Z Enforcer", Type.DRAGON, Category.SPECIAL, 195);
-                case "Thousand Arrows" -> new Move("Million Arrow Barrage", Type.GROUND, Category.PHYSICAL, 190);
-                case "Thousand Waves" -> new Move("Million Wave Tsunami", Type.GROUND, Category.PHYSICAL, 190);
-                default -> new Move("Tackle");
+            case XERNIUM_Z -> new Move("Tree Of Life");
+            case YVELTIUM_Z -> new Move("Cocoon Of Destruction");
+            case DIANCIUM_Z -> new Move("Dazzling Diamond Barrage");
+            case ARCEIUM_Z -> new Move("Decree Of Arceus");
+            case RAYQUAZIUM_Z -> new Move("Draconic Ozone Ascent");
+            case ZYGARDIUM_Z -> switch (baseMove.getName()) {
+                case "Lands Wrath" -> new Move("Tectonic Z Wrath");
+                case "Core Enforcer" -> new Move("Titanic Z Enforcer");
+                case "Thousand Arrows" -> new Move("Million Arrow Barrage");
+                case "Thousand Waves" -> new Move("Million Wave Tsunami");
+                default -> fallback;
             };
-            case VOLCANIUM_Z -> ZMove = new Move("Volcanic Steam Geyser", Type.WATER, Category.SPECIAL, 195);
-            case KYOGRIUM_Z -> ZMove = new Move("Primordial Tsunami", Type.WATER, Category.SPECIAL, 195);
-            case GROUDONIUM_Z -> ZMove = new Move("Primordial Landslide", Type.GROUND, Category.PHYSICAL, 195);
-            case GENESECTIUM_Z -> ZMove = new Move("Elemental Techno Overdrive", Type.NORMAL, Category.SPECIAL, 160);
-            case MELMETALIUM_Z -> ZMove = switch (baseMove.getName()) {
-                case "Double Iron Bash" -> new Move("Quadruple Steel Smash", Type.STEEL, Category.PHYSICAL, 75);
-                case "Acid Armor" -> new Move("Metal Liquidation", Type.STEEL, Category.STATUS, 0);
-                default -> new Move("Tackle");
+            case VOLCANIUM_Z -> new Move("Volcanic Steam Geyser");
+            case KYOGRIUM_Z -> new Move("Primordial Tsunami");
+            case GROUDONIUM_Z -> new Move("Primordial Landslide");
+            case GENESECTIUM_Z -> new Move("Elemental Techno Overdrive");
+            case MELMETALIUM_Z -> switch (baseMove.getName()) {
+                case "Double Iron Bash" -> new Move("Quadruple Steel Smash");
+                case "Acid Armor" -> new Move("Metal Liquidation");
+                default -> fallback;
             };
-            case DIALGIUM_Z -> ZMove = new Move("Timeline Shatter", Type.DRAGON, Category.SPECIAL, 200);
-            case PALKIUM_Z -> ZMove = new Move("Ultra Space Hypernova", Type.DRAGON, Category.SPECIAL, 200);
-            case GIRATINIUM_Z -> ZMove = new Move("Dark Matter Explosion", Type.DRAGON, Category.SPECIAL, 270);
-            case ETERNIUM_Z -> ZMove = switch (baseMove.getName()) {
-                case "Eternabeam" -> new Move("The Darkest Day", Type.DRAGON, Category.SPECIAL, 220);
-                case "Dynamax Cannon" -> new Move("Max Particle Beam", Type.DRAGON, Category.SPECIAL, 200);
-                default -> new Move("Tackle");
+            case DIALGIUM_Z -> new Move("Timeline Shatter");
+            case PALKIUM_Z -> new Move("Ultra Space Hypernova");
+            case GIRATINIUM_Z -> new Move("Dark Matter Explosion");
+            case ETERNIUM_Z -> switch (baseMove.getName()) {
+                case "Eternabeam" -> new Move("The Darkest Day");
+                case "Dynamax Cannon" -> new Move("Max Particle Beam");
+                default -> fallback;
             };
-            case DARKRAIUM_Z -> ZMove = new Move("Nightmare Void", Type.DARK, Category.STATUS, 0);
-        }
+            case DARKRAIUM_Z -> new Move("Nightmare Void");
+        };
 
-        if(z.ordinal() <= 17) ZMove.setPower(ZPower);
+        if(ZMoveRegistry.TYPED_ZMOVES.contains(ZMove.getName()))
+        {
+            int ZPower;
+
+            if(baseMove.getPower() <= 55) ZPower = 100;
+            else if(baseMove.getPower() <= 65) ZPower = 120;
+            else if(baseMove.getPower() <= 75) ZPower = 140;
+            else if(baseMove.getPower() <= 85) ZPower = 160;
+            else if(baseMove.getPower() <= 95) ZPower = 175;
+            else if(baseMove.getPower() <= 100) ZPower = 180;
+            else if(baseMove.getPower() <= 110) ZPower = 185;
+            else if(baseMove.getPower() <= 125) ZPower = 190;
+            else if(baseMove.getPower() <= 130) ZPower = 195;
+            else ZPower = 200;
+
+            ZPower = switch(baseMove.getName()) {
+                case "Mega Drain" -> 120;
+                case "Core Enforcer" -> 140;
+                case "Weather Ball", "Hex" -> 160;
+                case "Flying Press" -> 170;
+                case "Gear Grind", "Fissure", "Guillotine", "Horn Drill", "Sheer Cold" -> 180;
+                case "V Create" -> 220;
+                default -> ZPower;
+            };
+
+            ZMove.setPower(ZPower);
+            ZMove.setCategory(baseMove.getCategory());
+        }
 
         return ZMove;
     }
