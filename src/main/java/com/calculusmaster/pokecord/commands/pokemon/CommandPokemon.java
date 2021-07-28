@@ -7,16 +7,16 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.PokemonListSorter;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
+import com.calculusmaster.pokecord.game.pokemon.PokemonSorterFlag;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.SettingsHelper;
-import com.calculusmaster.pokecord.util.interfaces.Transformer;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.commons.collections4.list.TreeList;
 
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -51,75 +51,80 @@ public class CommandPokemon extends Command
         List<String> msg = Arrays.asList(this.msg);
         Stream<Pokemon> stream = this.pokemon.stream();
 
-        stream = this.sortSearchNames(stream, msg, (p, s) -> p.getName().toLowerCase().contains(s), "--name");
+        PokemonListSorter sorter = new PokemonListSorter(stream, msg);
 
-        stream = this.sortSearchNames(stream, msg, (p, s) -> p.getNickname().toLowerCase().contains(s), "--nickname");
+        sorter.sortSearchName(PokemonSorterFlag.NAME, (p, s) -> p.getName().toLowerCase().contains(s));
 
-        stream = this.sortSearchNames(stream, msg, (p, s) -> p.getLearnedMoves().contains(Global.normalCase(s)), "--move");
+        sorter.sortSearchName(PokemonSorterFlag.NICKNAME, (p, s) -> p.getNickname().toLowerCase().contains(s));
 
-        stream = this.sortNumeric(stream, msg, Pokemon::getLevel, "--level", "--lvl");
+        sorter.sortSearchName(PokemonSorterFlag.MOVE, (p, s) -> p.getLearnedMoves().contains(Global.normalCase(s)));
 
-        stream = this.sortNumeric(stream, msg, Pokemon::getDynamaxLevel, "--dlevel", "--dlvl", "--dynamaxlevel");
+        sorter.sortNumeric(PokemonSorterFlag.LEVEL, Pokemon::getLevel);
 
-        stream = this.sortNumeric(stream, msg, p -> (int)(p.getTotalIVRounded()), "--iv");
+        sorter.sortNumeric(PokemonSorterFlag.LEVEL, Pokemon::getDynamaxLevel);
 
-        stream = this.sortNumeric(stream, msg, Pokemon::getEVTotal, "--ev");
+        sorter.sortNumeric(PokemonSorterFlag.IV, p -> (int)(p.getTotalIVRounded()));
 
-        stream = this.sortMachine(stream, msg, "--tm");
+        sorter.sortNumeric(PokemonSorterFlag.EV, Pokemon::getEVTotal);
 
-        stream = this.sortMachine(stream, msg, "--tr");
+        sorter.sortMachine(PokemonSorterFlag.TM);
 
-        stream = this.sortIsUUIDInList(stream, msg, this.team, "--team");
+        sorter.sortMachine(PokemonSorterFlag.TR);
 
-        stream = this.sortIsUUIDInList(stream, msg, this.favorites, "--favorites");
+        sorter.sortIsUUIDInList(PokemonSorterFlag.TEAM, this.team);
 
-        stream = this.sortEnum(stream, msg, Type::cast, Pokemon::isType, "--type");
+        sorter.sortIsUUIDInList(PokemonSorterFlag.FAVORITES, this.favorites);
 
-        stream = this.sortEnum(stream, msg, Type::cast, (p, t) -> p.getType()[0].equals(t), "--maintype", "--mtype");
+        sorter.sortEnum(PokemonSorterFlag.TYPE, Type::cast, Pokemon::isType);
 
-        stream = this.sortEnum(stream, msg, Type::cast, (p, t) -> p.getType()[1].equals(t), "--sidetype", "--stype");
+        sorter.sortEnum(PokemonSorterFlag.MAIN_TYPE, Type::cast, (p, t) -> p.getType()[0].equals(t));
 
-        stream = this.sortEnum(stream, msg, Gender::cast, (p, g) -> p.getGender().equals(g), "--gender", "--g");
+        sorter.sortEnum(PokemonSorterFlag.SIDE_TYPE, Type::cast, (p, t) -> p.getType()[1].equals(t));
 
-        stream = this.sortEnum(stream, msg, EggGroup::cast, (p, e) -> p.getEggGroup().contains(e), "--egggroup", "--egg", "--eg");
+        sorter.sortEnum(PokemonSorterFlag.GENDER, Gender::cast, (p, g) -> p.getGender().equals(g));
 
-        stream = this.sortGeneric(stream, msg, Pokemon::isShiny, "--shiny");
+        sorter.sortEnum(PokemonSorterFlag.EGG_GROUP, EggGroup::cast, (p, e) -> p.getEggGroup().contains(e));
 
-        stream = this.sortNumeric(stream, msg, p -> p.getIVs().get(Stat.HP), "--hpiv", "--healthiv");
+        sorter.sortGeneric(PokemonSorterFlag.SHINY, Pokemon::isShiny);
 
-        stream = this.sortNumeric(stream, msg, p -> p.getIVs().get(Stat.ATK), "--atkiv", "--attackiv");
+        sorter.sortNumeric(PokemonSorterFlag.HPIV, p -> p.getIVs().get(Stat.HP));
 
-        stream = this.sortNumeric(stream, msg, p -> p.getIVs().get(Stat.DEF), "--defiv", "--defenseiv");
+        sorter.sortNumeric(PokemonSorterFlag.ATKIV, p -> p.getIVs().get(Stat.ATK));
 
-        stream = this.sortNumeric(stream, msg, p -> p.getIVs().get(Stat.SPATK), "--spatkiv", "--specialattackiv");
+        sorter.sortNumeric(PokemonSorterFlag.DEFIV, p -> p.getIVs().get(Stat.DEF));
 
-        stream = this.sortNumeric(stream, msg, p -> p.getIVs().get(Stat.SPDEF), "--spdefiv", "--specialdefenseiv");
+        sorter.sortNumeric(PokemonSorterFlag.SPATKIV, p -> p.getIVs().get(Stat.SPATK));
 
-        stream = this.sortNumeric(stream, msg, p -> p.getIVs().get(Stat.SPD), "--spdiv", "--speediv");
+        sorter.sortNumeric(PokemonSorterFlag.SPDEFIV, p -> p.getIVs().get(Stat.SPDEF));
 
-        stream = this.sortNumeric(stream, msg, p -> p.getEVs().get(Stat.HP), "--hpev", "--healthev");
+        sorter.sortNumeric(PokemonSorterFlag.SPDIV, p -> p.getIVs().get(Stat.SPD));
 
-        stream = this.sortNumeric(stream, msg, p -> p.getEVs().get(Stat.ATK), "--atkev", "--attackev");
+        sorter.sortNumeric(PokemonSorterFlag.HPEV, p -> p.getEVs().get(Stat.HP));
 
-        stream = this.sortNumeric(stream, msg, p -> p.getEVs().get(Stat.DEF), "--defev", "--defenseev");
+        sorter.sortNumeric(PokemonSorterFlag.ATKEV, p -> p.getEVs().get(Stat.ATK));
 
-        stream = this.sortNumeric(stream, msg, p -> p.getEVs().get(Stat.SPATK), "--spatkev", "--specialattackev");
+        sorter.sortNumeric(PokemonSorterFlag.DEFEV, p -> p.getEVs().get(Stat.DEF));
 
-        stream = this.sortNumeric(stream, msg, p -> p.getEVs().get(Stat.SPDEF), "--spdefev", "--specialdefenseev");
+        sorter.sortNumeric(PokemonSorterFlag.SPATKEV, p -> p.getEVs().get(Stat.SPATK));
 
-        stream = this.sortNumeric(stream, msg, p -> p.getEVs().get(Stat.SPD), "--spdev", "--speedev");
+        sorter.sortNumeric(PokemonSorterFlag.SPDEFEV, p -> p.getEVs().get(Stat.SPDEF));
 
-        stream = this.sortIsNameInList(stream, msg, PokemonRarity.LEGENDARY, "--legendary", "--leg");
+        sorter.sortNumeric(PokemonSorterFlag.SPDEV, p -> p.getEVs().get(Stat.SPD));
 
-        stream = this.sortIsNameInList(stream, msg, PokemonRarity.MYTHICAL, "--mythical", "--myth");
+        sorter.sortIsNameInList(PokemonSorterFlag.LEGENDARY, PokemonRarity.LEGENDARY);
 
-        stream = this.sortIsNameInList(stream, msg, PokemonRarity.ULTRA_BEAST, "--ub", "--ultrabeast", "--ultra", "--beast");
+        sorter.sortIsNameInList(PokemonSorterFlag.MYTHICAL, PokemonRarity.MYTHICAL);
 
-        stream = this.sortGeneric(stream, msg, p -> p.getName().toLowerCase().contains("mega"), "--mega");
+        sorter.sortIsNameInList(PokemonSorterFlag.ULTRA_BEAST, PokemonRarity.ULTRA_BEAST);
 
-        stream = this.sortGeneric(stream, msg, p -> p.getName().toLowerCase().contains("primal"), "--primal");
+        sorter.sortGeneric(PokemonSorterFlag.MEGA, p -> p.getName().toLowerCase().contains("mega"));
 
-        stream = this.sortGeneric(stream, msg, p -> p.getName().toLowerCase().contains("mega") || p.getName().toLowerCase().contains("primal"), "--mega|primal", "--primal|mega");
+        sorter.sortGeneric(PokemonSorterFlag.PRIMAL, p -> p.getName().toLowerCase().contains("primal"));
+
+        sorter.sortGeneric(PokemonSorterFlag.MEGA_OR_PRIMAL, p -> p.getName().toLowerCase().contains("mega") || p.getName().toLowerCase().contains("primal"));
+
+        //Reobtain the Stream from the PokemonListSorter object
+        stream = sorter.retrieveStream();
 
         //Convert Stream to List
         this.pokemon = stream.collect(Collectors.toList());
@@ -145,107 +150,6 @@ public class CommandPokemon extends Command
         if(owned >= 10000) Achievements.grant(this.player.getId(), Achievements.OWNED_10000_POKEMON, this.event);
 
         return this;
-    }
-
-    private Stream<Pokemon> sortGeneric(Stream<Pokemon> stream, List<String> msg, Predicate<Pokemon> predicate, String... flags)
-    {
-        if(msg.stream().anyMatch(s -> Arrays.asList(flags).contains(s))) return stream.filter(predicate);
-        else return stream;
-    }
-
-    private Stream<Pokemon> sortMachine(Stream<Pokemon> stream, List<String> msg, String flag)
-    {
-        boolean tm = flag.equals("--tm");
-
-        int index = msg.indexOf(flag) + 1;
-        String input = msg.get(index);
-
-        String machineFlag = flag.replaceAll("--", "");
-        if(input.startsWith(machineFlag) && input.length() > machineFlag.length()) input = input.substring(machineFlag.length());
-
-        if(!input.equals("") && input.chars().allMatch(Character::isDigit))
-        {
-            int num = Integer.parseInt(input);
-            if(tm && num >= 1 && num <= 100) return stream.filter(p -> p.getAllValidTMs().contains(num));
-            else if(num >= 0 && num <= 99) return stream.filter(p -> p.getAllValidTRs().contains(num));
-            else return stream;
-        }
-        else return stream;
-    }
-
-    private Stream<Pokemon> sortSearchNames(Stream<Pokemon> stream, List<String> msg, Matcher matcher, String... flags)
-    {
-        String flag = "";
-        for(String s : flags) if(msg.contains(s) && msg.indexOf(s) + 1 < msg.size()) flag = s;
-
-        if(msg.contains(flag) && msg.indexOf(flag) + 1 < msg.size())
-        {
-            final String lambdaFlag = flag;
-            return stream.filter(p -> getSearchNames(msg, lambdaFlag).stream().anyMatch(s -> matcher.match(p, s)));
-        }
-        else return stream;
-    }
-
-    private Stream<Pokemon> sortIsUUIDInList(Stream<Pokemon> stream, List<String> msg, List<String> validList, String... flags)
-    {
-        if(msg.stream().anyMatch(s -> Arrays.asList(flags).contains(s))) return stream.filter(p -> validList.contains(p.getUUID()));
-        else return stream;
-    }
-
-    private Stream<Pokemon> sortIsNameInList(Stream<Pokemon> stream, List<String> msg, List<String> validList, String... flags)
-    {
-        if(msg.stream().anyMatch(s -> Arrays.asList(flags).contains(s))) return stream.filter(p -> validList.contains(p.getName()));
-        else return stream;
-    }
-
-    private <T extends Enum<T>> Stream<Pokemon> sortEnum(Stream<Pokemon> stream, List<String> msg, Caster<T> caster, EnumChecker<T> checker, String... flags)
-    {
-        String flag = "";
-        for(String s : flags) if(msg.contains(s) && msg.indexOf(s) + 1 < msg.size()) flag = s;
-
-        if(!flag.equals(""))
-        {
-            T enumValue = caster.cast(msg.get(msg.indexOf(flag) + 1));
-
-            if(enumValue != null) return stream.filter(p -> checker.has(p, enumValue));
-            else return stream;
-        }
-        else return stream;
-    }
-
-    private interface Matcher
-    {
-        boolean match(Pokemon p, String s);
-    }
-
-    private interface Caster<T extends Enum<T>>
-    {
-        T cast(String s);
-    }
-
-    private interface EnumChecker<E extends Enum<E>>
-    {
-        boolean has(Pokemon p, E value);
-    }
-
-    private Stream<Pokemon> sortNumeric(Stream<Pokemon> stream, List<String> msg, Transformer<Pokemon, Integer> value, String... flags)
-    {
-        String flag = "";
-        for(String s : flags) if(msg.contains(s) && msg.indexOf(s) + 1 < msg.size()) flag = s;
-
-        if(!flag.equals(""))
-        {
-            int index = msg.indexOf(flag) + 1;
-            String after = msg.get(index);
-
-            boolean valid = index + 1 < msg.size();
-
-            if(after.equals(">") && valid && this.isNumeric(index + 1)) return stream.filter(p -> value.transform(p) > this.getInt(index + 1));
-            else if(after.equals("<") && valid && this.isNumeric(index + 1)) return stream.filter(p -> value.transform(p) < this.getInt(index + 1));
-            else if(this.isNumeric(index)) return stream.filter(p -> value.transform(p) == this.getInt(index));
-            else return stream;
-        }
-        else return stream;
     }
 
     public static List<String> getSearchNames(List<String> msg, String flag)
