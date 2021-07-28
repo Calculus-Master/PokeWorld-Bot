@@ -817,7 +817,7 @@ public class PokemonNew
     //Name and Nickname
     public String getName()
     {
-        return this.name.orElse(this.data.name);
+        return this.name.orElse(this.data != null ? this.data.name : this.specific.getString("name"));
     }
 
     public void setName(String name)

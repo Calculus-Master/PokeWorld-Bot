@@ -119,7 +119,7 @@ public class Move
         catch (Exception e)
         {
             System.out.println("Move failed! " + this.getName());
-            results += "MOVE FAILED";
+            results = "An error occurred while using this move (" + this.getName() + "). Defaulting to Tackle..." + new Move("Tackle").logic(user, opponent, duel);
             e.printStackTrace();
         }
 
