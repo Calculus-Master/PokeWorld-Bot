@@ -10,6 +10,7 @@ import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
@@ -203,8 +204,11 @@ public class CommandBuy extends Command
         {
             String move = Global.normalCase(this.getMultiWordContent(1));
 
-            if(!Move.isMove(move)) this.sendMsg(Move.INCOMPLETE_MOVES.contains(move) ? "`" + move + "` has not been implemented yet!" : "Invalid move!");
-            else if(!Move.MOVE_TUTOR_MOVES.containsKey(selected.getName()) || !Move.MOVE_TUTOR_MOVES.get(selected.getName()).test(selected)) this.sendMsg("Your Pokemon cannot learn that Move Tutor move!");
+            if(!Move.isMove(move)) this.sendMsg("Invalid move name!");
+            else if(!Move.isImplemented(move)) this.sendMsg(move + " has not been implemented yet!");
+            else if(!MoveTutorRegistry.MOVE_TUTOR_MOVES.contains(move)) this.sendMsg(move + " cannot be learned from a Move Tutor!");
+            else if(!MoveTutorRegistry.PREDICATES.get(move).test(selected)) this.sendMsg("Your Pokemon cannot learn `" + move + "` from a Move Tutor!");
+            else if(!MoveTutorRegistry.MOVE_TUTOR_MOVES.contains(move) || !MoveTutorRegistry.PREDICATES.get(selected.getName()).test(selected)) this.sendMsg("Your Pokemon cannot learn that Move Tutor move!");
             else if(this.playerData.getCredits() < Prices.SHOP_MOVETUTOR.get()) this.sendInvalidCredits(Prices.SHOP_MOVETUTOR.get());
             else
             {

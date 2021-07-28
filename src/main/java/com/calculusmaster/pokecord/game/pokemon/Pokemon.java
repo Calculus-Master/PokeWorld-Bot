@@ -5,7 +5,7 @@ import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
-import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
@@ -549,7 +549,7 @@ public class Pokemon
 
     public void learnMove(String move, int replace)
     {
-        if (this.getAvailableMoves().contains(move) || Move.MOVE_TUTOR_MOVES.containsKey(move))
+        if (this.getAvailableMoves().contains(move) || MoveTutorRegistry.MOVE_TUTOR_MOVES.contains(move))
             this.learnedMoves.set(replace - 1, move);
     }
 

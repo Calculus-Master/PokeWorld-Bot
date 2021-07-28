@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.commands.moves.CommandAbilityInfo;
 import com.calculusmaster.pokecord.game.duel.players.GymLeader;
 import com.calculusmaster.pokecord.game.duel.players.Trainer;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.SpecialEvolutionRegistry;
@@ -51,6 +52,7 @@ public class Pokecord
         LoggerHelper.init("Pokemon", Pokemon::init);
         LoggerHelper.init("Move Data", DataHelper::createMoveData, true);
         LoggerHelper.init("Move", DataHelper::createMoveList);
+        LoggerHelper.init("Move Tutor", MoveTutorRegistry::init);
         LoggerHelper.init("Gigantamax", DataHelper::createGigantamaxDataMap);
         LoggerHelper.init("EV Lists", DataHelper::createEVLists);
         LoggerHelper.init("Type Lists", DataHelper::createTypeLists);
@@ -60,7 +62,7 @@ public class Pokecord
         LoggerHelper.init("Gender Rates", DataHelper::createGenderRateMap, true);
         LoggerHelper.init("Evolutions", SpecialEvolutionRegistry::init);
         LoggerHelper.init("Daily Trainer", Trainer::setDailyTrainers);
-        LoggerHelper.init("Move", Move::init);
+        LoggerHelper.init("Incomplete Moves", Move::init);
         LoggerHelper.init("Ability Info", CommandAbilityInfo::init);
         LoggerHelper.init("Pokemon Rarity", PokemonRarity::init);
         LoggerHelper.init("Command Handler", Commands::init);

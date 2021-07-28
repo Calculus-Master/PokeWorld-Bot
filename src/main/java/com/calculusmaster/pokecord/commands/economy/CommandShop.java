@@ -6,7 +6,7 @@ import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
-import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.enums.Prices;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
@@ -133,7 +133,7 @@ public class CommandShop extends Command
                             .addField("Info", "Buying a Move Tutor move will automatically add it to the first slot of your Selected Pokemon. If you accidentally replace it, there is no way of retrieving that move without buying it again, so be careful!", false);
 
                     StringBuilder s = new StringBuilder();
-                    for(String move : Move.MOVE_TUTOR_MOVES.keySet()) s.append("`").append(move).append("`\n");
+                    for(String move : MoveTutorRegistry.MOVE_TUTOR_MOVES) s.append("`").append(move).append("`\n");
 
                     this.embed.addField("Moves", s.toString(), false);
                 }
