@@ -155,11 +155,11 @@ public class RaidDuel extends WildDuel
 
             winnings.deleteCharAt(winnings.length() - 1);
 
-            embed.setDescription("You defeated the Raid Pokemon!\n\n**Rewards:**\n" + winnings);
+            embed.setDescription("The Raid Pokemon is defeated!\n\n**Rewards:**\n" + winnings);
         }
         else
         {
-            embed.setDescription("You could not defeat the Raid Pokemon. No rewards earned!");
+            embed.setDescription("Raid Pokemon could not be defeated! No rewards earned!");
         }
 
         for(Player p : this.getNonBotPlayers()) p.data.updateBountyProgression(ObjectiveType.PARTICIPATE_RAID);
