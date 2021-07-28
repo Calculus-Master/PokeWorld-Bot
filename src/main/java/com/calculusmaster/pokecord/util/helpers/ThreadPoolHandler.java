@@ -11,6 +11,8 @@ public class ThreadPoolHandler
     public static int THREAD_POOL_TYPE;
     private static final List<ExecutorService> THREAD_POOLS = new ArrayList<>();
 
+    public static ScheduledExecutorService TIME;
+
     public static ScheduledExecutorService SPAWN;
     public static ScheduledExecutorService LOCATION;
     public static ScheduledExecutorService RAID;
@@ -28,6 +30,9 @@ public class ThreadPoolHandler
         BOUNTY = createThreadPool();
         CATCH = createThreadPool();
         LISTENER_COMMAND = createThreadPool(6);
+
+        TIME = (ScheduledExecutorService)createThreadPool(ThreadPoolType.CUSTOM_TIME_HELPER);
+
         SPAWN = (ScheduledExecutorService)createThreadPool(ThreadPoolType.GUILDS_SCHEDULED);
         LOCATION = (ScheduledExecutorService)createThreadPool(ThreadPoolType.GUILDS_SCHEDULED);
         RAID = (ScheduledExecutorService)createThreadPool(ThreadPoolType.GUILDS_SCHEDULED);
@@ -42,6 +47,7 @@ public class ThreadPoolHandler
             case DEFAULT_FIXED -> Executors.newFixedThreadPool(4);
             case DEFAULT_SCHEDULED -> Executors.newScheduledThreadPool(4);
             case GUILDS_SCHEDULED -> Executors.newScheduledThreadPool(Pokecord.BOT_JDA.getGuilds().size());
+            case CUSTOM_TIME_HELPER -> Executors.newScheduledThreadPool(1);
         };
 
         THREAD_POOLS.add(es);
@@ -74,6 +80,7 @@ public class ThreadPoolHandler
         CUSTOM_CACHED,
         DEFAULT_FIXED,
         DEFAULT_SCHEDULED,
-        GUILDS_SCHEDULED;
+        GUILDS_SCHEDULED,
+        CUSTOM_TIME_HELPER;
     }
 }

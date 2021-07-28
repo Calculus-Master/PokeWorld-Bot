@@ -44,6 +44,9 @@ public class Mongo
     public static final MongoCollection<Document> BountyData = MutableDB.getCollection("BountyData");
     public static final MongoCollection<Document> ConfigData = MutableDB.getCollection("ConfigData");
     public static final MongoCollection<Document> EggData = MutableDB.getCollection("EggData");
+    public static final MongoCollection<Document> TrainerData = MutableDB.getCollection("TrainerData");
+
+    public static final MongoCollection<Document> TimeData = MutableDB.getCollection("TimeData");
 
     public static void main(String[] args)
     {

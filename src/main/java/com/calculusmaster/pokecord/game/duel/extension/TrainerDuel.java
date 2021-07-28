@@ -13,7 +13,6 @@ import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -49,14 +48,11 @@ public class TrainerDuel extends Duel
         //Player won
         if(this.getWinner().ID.equals(this.players[0].ID))
         {
-            //TODO: Trainer Duel per battle credits? (Bonus for defeating all is already a thing)
-            //int c = this.giveWinCredits();
-            int c = 0;
-
             this.uploadEVs(0);
             this.uploadExperience();
 
-            String bot = ((Trainer)this.players[1]).info.name;
+            Trainer botTrainer = (Trainer)this.players[1];
+            String bot = botTrainer.info.name;
 
             embed.setDescription("You defeated " + bot + "!");
 
@@ -81,23 +77,21 @@ public class TrainerDuel extends Duel
             //Regular Daily Trainer
             else
             {
-                List<String> playersDefeatedBot = new ArrayList<>(Trainer.PLAYER_TRAINERS_DEFEATED.get(bot));
+                List<String> playersDefeatedBot = botTrainer.info.playersDefeated;
                 if(!playersDefeatedBot.contains(this.players[0].ID))
                 {
                     playersDefeatedBot.add(this.players[0].ID);
-                    Trainer.PLAYER_TRAINERS_DEFEATED.put(bot, playersDefeatedBot);
+                    Trainer.addPlayerDefeated(botTrainer.ID, this.players[0].ID);
                     this.players[0].data.getStats().incr(PlayerStatistic.TRAINER_DUELS_WON);
 
                     boolean dailyComplete = true;
-                    for(Trainer.TrainerInfo ti : Trainer.DAILY_TRAINERS) if(!Trainer.PLAYER_TRAINERS_DEFEATED.get(ti.name).contains(this.players[0].ID)) dailyComplete = false;
+                    for(Trainer.TrainerInfo ti : Trainer.DAILY_TRAINERS) if(!ti.playersDefeated.contains(this.players[0].ID)) dailyComplete = false;
 
                     if(dailyComplete)
                     {
-                        //TODO: Win Credits
-                        int winCredits = 1;
+                        int winCredits = 1000;
                         this.players[0].data.changeCredits(winCredits);
-                        //TODO: Trainer Duels need to be challenging to players of all levels
-                        this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated all of today's trainers! You earned a bonus " + winCredits + " credits! DAILY BONUS IS CURRENTLY DISABLED!").queue();
+                        this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated all of today's trainers! You earned a bonus " + winCredits + " credits!").queue();
 
                         Achievements.grant(this.players[0].ID, Achievements.DEFEATED_DAILY_TRAINERS, this.event);
                     }

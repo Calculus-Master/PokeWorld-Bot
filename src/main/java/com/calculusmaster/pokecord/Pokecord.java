@@ -63,7 +63,7 @@ public class Pokecord
         LoggerHelper.init("Base Hatch Targets", DataHelper::createBaseEggHatchTargetsMap, true);
         LoggerHelper.init("Gender Rates", DataHelper::createGenderRateMap, true);
         LoggerHelper.init("Evolutions", SpecialEvolutionRegistry::init);
-        LoggerHelper.init("Daily Trainer", Trainer::setDailyTrainers);
+        LoggerHelper.init("Trainer", Trainer::init);
         LoggerHelper.init("Incomplete Moves", Move::init);
         LoggerHelper.init("Ability Info", CommandAbilityInfo::init);
         LoggerHelper.init("Pokemon Rarity", PokemonRarity::init);

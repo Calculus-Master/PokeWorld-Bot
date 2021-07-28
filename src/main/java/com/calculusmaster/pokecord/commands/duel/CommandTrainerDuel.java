@@ -29,8 +29,7 @@ public class CommandTrainerDuel extends Command
         {
             if(DuelHelper.isInDuel(this.player.getId()))
             {
-                this.event.getMessage().getChannel().sendMessage(this.playerData.getMention() + ": You are already in a duel!").queue();
-                this.embed = null;
+                this.sendMsg(this.playerData.getMention() + ": You are already in a duel!");
                 return this;
             }
 
@@ -38,22 +37,19 @@ public class CommandTrainerDuel extends Command
 
             if(this.playerData.getTeam().size() < trainer.pokemon.size())
             {
-                this.event.getMessage().getChannel().sendMessage(this.playerData.getMention() + ": Your team is too small! It needs to be of size " + trainer.pokemon.size() + "!").queue();
-                this.embed = null;
+                this.sendMsg("Your team is too small! It needs to be of size " + trainer.pokemon.size() + "!");
                 return this;
             }
 
             if(!trainer.elite && this.isInvalidTeam(trainer.pokemon.size()))
             {
-                this.event.getMessage().getChannel().sendMessage(this.playerData.getMention() + ": Your team is invalid! You can have a maximum of " + this.getLegendaryCap(trainer.pokemon.size()) + " legendaries and " + this.getMythicalUBCap(trainer.pokemon.size()) + " mythicals/ultra beasts!").queue();
-                this.embed = null;
+                this.sendMsg("Your team is invalid! You can have a maximum of " + this.getLegendaryCap(trainer.pokemon.size()) + " legendaries and " + this.getMythicalUBCap(trainer.pokemon.size()) + " mythicals/ultra beasts!");
                 return this;
             }
 
             Duel d = TrainerDuel.create(this.player.getId(), this.event, trainer);
 
-            this.event.getMessage().getChannel().sendMessage(this.playerData.getMention() + ": You challenged " + trainer.name + " !").queue();
-            this.embed = null;
+            this.sendMsg("You challenged " + trainer.name + " !");
 
             d.sendTurnEmbed();
         }
@@ -61,9 +57,9 @@ public class CommandTrainerDuel extends Command
         {
             StringBuilder sb = new StringBuilder();
 
-            for(int i = 0; i < Trainer.DAILY_TRAINERS.size(); i++) sb.append(i + 1).append(": ").append(Trainer.DAILY_TRAINERS.get(i).name).append(Trainer.PLAYER_TRAINERS_DEFEATED.get(Trainer.DAILY_TRAINERS.get(i).name).contains(this.player.getId()) ? " (Defeated)" : "").append("\n");
+            for(int i = 0; i < Trainer.DAILY_TRAINERS.size(); i++) sb.append(i + 1).append(": ").append(Trainer.DAILY_TRAINERS.get(i).name).append(Trainer.hasPlayerDefeated(Trainer.DAILY_TRAINERS.get(i).trainerID, this.player.getId()) ? " (Defeated)" : "").append("\n");
 
-            sb.append("\n\nElite Trainer: Use p!trainerduel elite to duel an Elite Trainer!");
+            sb.append("\n\nElite Trainer: Use `p!trainerduel elite` to duel an Elite Trainer!");
             this.embed.setDescription(sb.toString());
             this.embed.setTitle("Daily Trainers");
         }

@@ -868,7 +868,8 @@ public class Pokemon
     //Stat
     public int getStat(Stat s)
     {
-        if (s.equals(Stat.HP)) {
+        if (s.equals(Stat.HP))
+        {
             //HP = Level + 10 + [((2 * Base + IV + EV / 4) * Level) / 100]
             double base = this.getBaseStat(Stat.HP);
             int IV = this.IV.get(Stat.HP);
@@ -877,7 +878,9 @@ public class Pokemon
 
             double dynamaxBoost = this.isDynamaxed ? 1.0 + (this.getDynamaxLevel() * 0.05 + 0.5) : 1.0;
             return (int) (maxHP * dynamaxBoost * hpBuff);
-        } else {
+        }
+        else
+        {
             //Stat = Nature * [5 + ((2 * Base + IV + EV / 4) * Level) / 100]
             double nature = this.nature.getMap().get(s);
             double base = this.getBaseStat(s);
