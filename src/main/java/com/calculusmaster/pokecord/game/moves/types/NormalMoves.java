@@ -12,6 +12,7 @@ import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.helpers.DataHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -769,7 +770,7 @@ public class NormalMoves
     public String Metronome(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         List<String> banned = Arrays.asList("After You", "Assist", "Baneful Bunker", "Beak Blast", "Belch", "Bestow", "Celebrate", "Chatter", "Copycat", "Counter", "Covet", "Crafty Shield", "Destiny Bond", "Detect", "Diamond Storm", "Dragon Ascent", "Endure", "Feint", "Fleur Cannon", "Focus Punch", "Follow Me", "Freeze Shock", "Helping Hand", "Hold Hands", "Hyperspace Fury", "Hyperspace Hole", "Ice Burn", "Instruct", "Kings Shield", "Light Of Ruin", "Mat Block", "Me First", "Metronome", "Mimic", "Mind Blown", "Mirror Coat", "Mirror Move", "Nature Power", "Origin Pulse", "Photon Geyser", "Plasma Fists", "Precipice Blades", "Protect", "Quash", "Quick Guard", "Rage Powder", "Relic Song", "Secret Sword", "Shell Trap", "Sketch", "Sleep Talk", "Snarl", "Snatch", "Snore", "Spectral Thief", "Spiky Shield", "Spotlight", "Steam Eruption", "Struggle", "Switcheroo", "Techno Blast", "Thief", "Thousand Arrows", "Thousand Waves", "Transform", "Trick", "V Create", "Wide Guard");
-        List<String> pool = new ArrayList<>(Move.MOVES.keySet()).stream().filter(m -> !banned.contains(m)).collect(Collectors.toList());
+        List<String> pool = DataHelper.MOVES.stream().filter(m -> !banned.contains(m)).collect(Collectors.toList());
 
         move = new Move(pool.get(new Random().nextInt(pool.size())));
 

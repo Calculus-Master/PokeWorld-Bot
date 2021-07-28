@@ -5,13 +5,10 @@ import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
-import com.calculusmaster.pokecord.game.enums.items.TM;
-import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.types.*;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
 
 import java.util.*;
@@ -20,7 +17,6 @@ import java.util.stream.Collectors;
 
 public class Move
 {
-    public static Map<String, MoveData> MOVES = new HashMap<>();
     //TODO: Keep checking the custom moves and see if they can function as close to the original as possible
     public static final List<String> WIP_MOVES = Arrays.asList("Roar", "Safeguard", "Whirlwind", "Rage Powder", "Tailwind", "Light Screen", "Frustration", "Return", "Mind Reader", "Counter", "Magnetic Flux", "After You", "Disable", "Miracle Eye", "Guard Swap", "Power Swap", "Me First", "Yawn", "Gravity", "Spite", "Mean Look", "Foresight", "Wide Guard", "Ingrain", "Forests Curse", "Natural Gift", "Last Resort", "Sand Attack", "Teleport", "Odor Sleuth", "Helping Hand", "Mirror Move", "Stuff Cheeks", "Copycat", "Entrainment", "Block", "Follow Me", "Sky Drop", "Simple Beam", "Fling", "Telekinesis", "Quash", "No Retreat", "Encore", "Substitute", "Magic Coat", "Embargo", "Ally Switch");
     public static final List<String> CUSTOM_MOVES = Arrays.asList("Leech Seed", "Rapid Spin", "Mirror Shot", "Stockpile", "Worry Seed", "Aromatic Mist");
@@ -28,33 +24,28 @@ public class Move
     public static Map<String, Predicate<Pokemon>> MOVE_TUTOR_MOVES = new HashMap<>();
 
     private String name;
-    private MoveData moveData;
+    private MoveData data;
     private Type type;
     private Category category;
     private int power;
     private int accuracy;
+    private int priority;
+
     public boolean isZMove;
     public boolean isMaxMove;
-    private int priority;
+
     private double damageMultiplier;
-    public double accuracyMultiplier;
+    private double accuracyMultiplier;
 
     public int critChance;
     private boolean hitCrit;
 
     public static void init()
     {
-        MOVES.clear();
-        Mongo.MoveInfo.find().forEach(d -> MOVES.put(d.getString("name"), DataHelper.moveData(d.getString("name"))));
-
         //Incomplete Moves
         INCOMPLETE_MOVES.clear();
-        Mongo.PokemonInfo.find().forEach(d -> {
-            for(String s : d.getList("moves", String.class)) if(!Move.isMove(s) && !INCOMPLETE_MOVES.contains(s)) INCOMPLETE_MOVES.add(s);
-        });
 
-        for(TM tm : TM.values()) if(!Move.isMove(tm.getMoveName())) INCOMPLETE_MOVES.add(tm.getMoveName());
-        for(TR tr : TR.values()) if(!Move.isMove(tr.getMoveName())) INCOMPLETE_MOVES.add(tr.getMoveName());
+        for(String m : DataHelper.MOVES) if(!Move.isImplemented(m) && !INCOMPLETE_MOVES.contains(m)) INCOMPLETE_MOVES.add(m);
 
         INCOMPLETE_MOVES = INCOMPLETE_MOVES.stream().distinct().collect(Collectors.toList());
 
@@ -80,28 +71,38 @@ public class Move
         registerMoveTutorMove(name, p -> Arrays.stream(pokemon).anyMatch(s -> p.getName().contains(s)));
     }
 
+    //From Data
     public Move(String name)
     {
-        if(!MOVES.containsKey(name) || WIP_MOVES.contains(name)) name = "Tackle";
+        if(!Move.isMove(name)) name = "Tackle";
 
-        this.moveData = MOVES.get(name);
-        this.name = this.moveData.name;
+        this.data = DataHelper.moveData(name);
+        this.name = this.data.name;
         this.setDefaultValues();
     }
 
-    //Z-Move Constructor
+    //Custom
+    @Deprecated
     public Move(String name, Type type, Category category, int power)
     {
         this.name = name;
         this.type = type;
         this.category = category;
         this.power = power;
+
         this.accuracy = 100;
+
+        //TODO: Add ZMove Registry and MaxMove Registry
         this.isZMove = true;
         this.isMaxMove = false;
+
         this.setPriority();
+
         this.damageMultiplier = 1.0;
+        this.accuracyMultiplier = 1.0;
+
         this.critChance = 1;
+        this.hitCrit = false;
     }
 
     public String logic(Pokemon user, Pokemon opponent, Duel duel)
@@ -128,6 +129,8 @@ public class Move
 
     public static boolean isImplemented(String name)
     {
+        if(WIP_MOVES.contains(name)) return false;
+
         Move m = new Move(name);
 
         try
@@ -288,7 +291,7 @@ public class Move
 
     public static boolean isMove(String move)
     {
-        return MOVES.containsKey(Global.normalCase(move));
+        return DataHelper.MOVES.contains(Global.normalCase(move));
     }
 
     public boolean isAccurate(Pokemon user, Pokemon opponent)
@@ -357,21 +360,76 @@ public class Move
         return (int)(finalDMG + 0.5);
     }
 
-    //Setters
-
     public void setDefaultValues()
     {
-        this.type = this.moveData.type;
-        this.category = this.moveData.category;
-        this.power = this.moveData.basePower;
-        this.accuracy = this.moveData.baseAccuracy;
+        this.type = this.data.type;
+        this.category = this.data.category;
+        this.power = this.data.basePower;
+        this.accuracy = this.data.baseAccuracy;
+
         this.hitCrit = false;
         this.critChance = 1;
+
         this.isZMove = false;
         this.isMaxMove = false;
+
         this.damageMultiplier = 1.0;
         this.accuracyMultiplier = 1.0;
-        this.setPriority();
+    }
+
+    public static String getRandomMove()
+    {
+        return DataHelper.MOVES.get(new Random().nextInt(DataHelper.MOVES.size()));
+    }
+
+    //Other
+    public void setDamageMultiplier(double damageMultiplier)
+    {
+        this.damageMultiplier = damageMultiplier;
+    }
+
+    public void setAccuracyMultiplier(double accuracyMultiplier)
+    {
+        this.accuracyMultiplier = accuracyMultiplier;
+    }
+
+    //Core
+    public int getPriority()
+    {
+        return this.priority;
+    }
+
+    public void setPriority(int priority)
+    {
+        this.priority = priority;
+    }
+
+    public void setPriority()
+    {
+        this.setPriority(switch(this.getName()) {
+            case "Helping Hand" -> 5;
+            case "Baneful Bunker", "Detect", "Endure", "Kings Shield", "Magic Coat", "Protect", "Spiky Shield", "Snatch" -> 4;
+            case "Crafty Shield", "Fake Out", "Quick Guard", "Wide Guard", "Spotlight" -> 3;
+            case "Ally Switch", "Extreme Speed", "Feint", "First Impression", "Follow Me", "Rage Powder" -> 2;
+            case "Accelerock", "Aqua Jet", "Baby Doll Eyes", "Bide", "Bullet Punch", "Ice Shard", "Iron Deluge", "Mach Punch", "Powder", "Quick Attack", "Shadow Sneak", "Sucker Punch", "Vacuum Wave", "Water Shuriken" -> 1;
+            case "Vital Throw" -> -1;
+            case "Beak Blast", "Focus Punch", "Shell Trap" -> -3;
+            case "Avalanche", "Revenge" -> -4;
+            case "Counter", "Mirror Coat" -> -5;
+            case "Circle Throw", "Dragon Tail", "Roar", "Whirlwind" -> -6;
+            case "Trick Room" -> -7;
+            default -> 0;
+        });
+    }
+
+    public String getName()
+    {
+        return this.name;
+    }
+
+    public Type getType()
+    {
+        return this.type;
     }
 
     public void setType(Type t)
@@ -379,9 +437,19 @@ public class Move
         this.type = t;
     }
 
+    public Category getCategory()
+    {
+        return this.category;
+    }
+
     public void setCategory(Category c)
     {
         this.category = c;
+    }
+
+    public int getPower()
+    {
+        return this.power;
     }
 
     public void setPower(int p)
@@ -394,75 +462,13 @@ public class Move
         this.power = (int)(p);
     }
 
-    public void setAccuracy(int a)
-    {
-        this.accuracy = a;
-    }
-
-    public void setPriority(int p)
-    {
-        this.priority = p;
-    }
-
-    public void setPriority()
-    {
-        this.priority = switch(this.getName())
-                {
-                    case "Helping Hand" -> 5;
-                    case "Baneful Bunker", "Detect", "Endure", "Kings Shield", "Magic Coat", "Protect", "Spiky Shield", "Snatch" -> 4;
-                    case "Crafty Shield", "Fake Out", "Quick Guard", "Wide Guard", "Spotlight" -> 3;
-                    case "Ally Switch", "Extreme Speed", "Feint", "First Impression", "Follow Me", "Rage Powder" -> 2;
-                    case "Accelerock", "Aqua Jet", "Baby Doll Eyes", "Bide", "Bullet Punch", "Ice Shard", "Iron Deluge", "Mach Punch", "Powder", "Quick Attack", "Shadow Sneak", "Sucker Punch", "Vacuum Wave", "Water Shuriken" -> 1;
-                    case "Vital Throw" -> -1;
-                    case "Beak Blast", "Focus Punch", "Shell Trap" -> -3;
-                    case "Avalanche", "Revenge" -> -4;
-                    case "Counter", "Mirror Coat" -> -5;
-                    case "Circle Throw", "Dragon Tail", "Roar", "Whirlwind" -> -6;
-                    case "Trick Room" -> -7;
-                    default -> 0;
-                };
-    }
-
-    public void setDamageMultiplier(double d)
-    {
-        this.damageMultiplier = d;
-    }
-
-    //Getters
-
-    public String getName()
-    {
-        return this.name;
-    }
-
-    public Type getType()
-    {
-        return this.type;
-    }
-
-    public Category getCategory()
-    {
-        return this.category;
-    }
-
-    public int getPower()
-    {
-        return this.power;
-    }
-
     public int getAccuracy()
     {
         return this.accuracy;
     }
 
-    public int getPriority()
+    public void setAccuracy(int a)
     {
-        return this.priority;
-    }
-
-    public static String getRandomMove()
-    {
-        List<String> pool = new ArrayList<>(MOVES.keySet());
-        return pool.get(new Random().nextInt(pool.size()));
+        this.accuracy = a;
     }
 }

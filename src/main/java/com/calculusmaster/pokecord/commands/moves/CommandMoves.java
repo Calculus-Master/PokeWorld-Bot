@@ -33,7 +33,7 @@ public class CommandMoves extends Command
             this.embed.setDescription("Note: Not all moves that can be learned by your Pokemon are listed here, because moves that have not been implemented yet are excluded from this. Also, some moves listed here might not be able to be learned by your Pokemon right now due to your Pokemon not being high enough level. Use `p!moves` to see what moves your Pokemon can learn at its current level!");
             this.embed.setTitle("Move Info for " + selected.getName());
 
-            List<Move> moves = selected.getAllMoves().stream().filter(Move::isMove).map(Move::new).collect(Collectors.toList());
+            List<Move> moves = selected.getAllMoves().stream().filter(Move::isImplemented).map(Move::new).collect(Collectors.toList());
 
             List<Move> topDamage = moves.stream().sorted(Comparator.comparingInt(Move::getPower)).collect(Collectors.toList());
             Collections.reverse(topDamage);
@@ -123,8 +123,8 @@ public class CommandMoves extends Command
                 String emote;
                 for (String s : selected.getAllMoves())
                 {
-                    if(selected.getAvailableMoves().contains(s) && Move.isMove(s) && !Move.WIP_MOVES.contains(s)) emote = " ";
-                    else if(!selected.getAvailableMoves().contains(s) && Move.isMove(s) && !Move.WIP_MOVES.contains(s)) emote = " :lock:";
+                    if(selected.getAvailableMoves().contains(s) && Move.isImplemented(s)) emote = " ";
+                    else if(!selected.getAvailableMoves().contains(s) && Move.isImplemented(s)) emote = " :lock:";
                     else emote = " :no_entry_sign:";
 
                     movesList.append(s).append(emote).append("\n");
