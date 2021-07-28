@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.util.helpers;
 
+import com.calculusmaster.pokecord.commands.economy.CommandShop;
 import com.calculusmaster.pokecord.game.duel.players.Trainer;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
@@ -32,7 +33,7 @@ public class TimeHelper
 
             if(interval.target.equals("cache")) return;
 
-            if(now.toSeconds() - cached.toSeconds() >= interval.toSeconds()) TimeTask.cast(interval.target).task.run();
+            if(now.toSeconds() - cached.toSeconds() >= interval.toSeconds()) Objects.requireNonNull(TimeTask.cast(interval.target)).task.run();
         });
 
         SerializedTime.updateCached(now);
@@ -40,7 +41,8 @@ public class TimeHelper
 
     private enum TimeTask
     {
-        DAILY_TRAINERS(Trainer::createDailyTrainers);
+        DAILY_TRAINERS(Trainer::createDailyTrainers),
+        SHOPS(CommandShop::updateShops);
 
         private Runnable task;
         TimeTask(Runnable task)

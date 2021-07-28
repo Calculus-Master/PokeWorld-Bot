@@ -12,7 +12,6 @@ import com.calculusmaster.pokecord.util.enums.Prices;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,8 +19,6 @@ import java.util.Random;
 
 public class CommandShop extends Command
 {
-    public static OffsetDateTime TIME;
-
     public static final List<Item> ITEM_ENTRIES = new ArrayList<>();
     public static final List<Integer> ITEM_PRICES = new ArrayList<>();
     public static int ITEM_COUNT_MIN;
@@ -47,8 +44,6 @@ public class CommandShop extends Command
     @Override
     public Command runCommand()
     {
-        if(this.isShopUpdateTime()) this.updateDailyShops();
-
         if(this.msg.length == 1)
         {
             this.embed.setTitle("Pokecord2 Shop");
@@ -155,11 +150,9 @@ public class CommandShop extends Command
         return this;
     }
 
-    private void updateDailyShops()
+    public static void updateShops()
     {
-        TIME = this.event.getMessage().getTimeCreated();
-
-        LoggerHelper.info(CommandShop.class, "Updating Daily Shops!");
+        LoggerHelper.info(CommandShop.class, "Updating Shop!");
 
         ITEM_ENTRIES.clear();
         TM_ENTRIES.clear();
@@ -216,21 +209,6 @@ public class CommandShop extends Command
 
             if(ZCRYSTAL_ENTRIES.contains(z)) i--;
             else ZCRYSTAL_ENTRIES.add(z);
-        }
-    }
-
-    private boolean isShopUpdateTime()
-    {
-        if(TIME == null) return true;
-        else
-        {
-            OffsetDateTime currentTime = this.event.getMessage().getTimeCreated();
-
-            int lastHours = TIME.getHour() + TIME.getDayOfYear() * 24;
-            int currentHours = currentTime.getHour() + currentTime.getDayOfYear() * 24;
-
-            int interval = 4; //Every <interval> hours, shop updates
-            return currentHours - lastHours >= interval;
         }
     }
 
