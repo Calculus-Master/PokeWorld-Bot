@@ -135,7 +135,7 @@ public class RaidDuel extends WildDuel
             List<Map.Entry<String, Integer>> sorted = this.damageDealt.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getValue)).collect(Collectors.toList());
             Collections.reverse(sorted);
 
-            String highestDamage = pokemonToPlayer.get(sorted.get(0).getKey());
+            String highestDamage = this.getNonBotPlayers().length == 1 ? "" : pokemonToPlayer.get(sorted.get(0).getKey());
 
             for(Player p : this.getNonBotPlayers()) Achievements.grant(p.ID, Achievements.WON_FIRST_RAID, this.event);
             for(Player p : this.getNonBotPlayers()) if(p.ID.equals(highestDamage)) Achievements.grant(p.ID, Achievements.WON_FIRST_RAID_HIGHEST_DAMAGE, this.event);
