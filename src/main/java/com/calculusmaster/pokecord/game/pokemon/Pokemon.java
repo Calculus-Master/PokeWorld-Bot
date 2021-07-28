@@ -22,7 +22,6 @@ import org.json.JSONObject;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Deprecated
 public class Pokemon
 {
     public JSONObject genericJSON;
