@@ -1407,12 +1407,9 @@ public class Duel
         Pokemon p;
         for(String uuid : this.expGains.keySet())
         {
-            p = Pokemon.buildCore(uuid, -1);
-            if(p != null)
-            {
-                p.addExp(this.expGains.get(uuid));
-                Pokemon.updateExperience(p);
-            }
+            p = Pokemon.build(uuid);
+            p.addExp(this.expGains.get(uuid));
+            Pokemon.updateExperience(p);
         }
     }
 

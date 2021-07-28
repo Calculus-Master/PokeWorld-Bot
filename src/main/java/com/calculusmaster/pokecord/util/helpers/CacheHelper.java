@@ -45,7 +45,7 @@ public class CacheHelper
             uuids = UUID_LISTS.get(player);
         }
 
-        pokemon.add(Pokemon.buildCore(UUID, -1));
+        pokemon.add(Pokemon.build(UUID));
         uuids.add(UUID);
 
         updateNumbers(player);
@@ -90,7 +90,7 @@ public class CacheHelper
         List<Pokemon> pokemon = POKEMON_LISTS.get(player);
         int index = UUID_LISTS.get(player).indexOf(UUID);
 
-        try { pokemon.set(index, Pokemon.buildCore(UUID, index + 1)); }
+        try { pokemon.set(index, Pokemon.build(UUID)); }
         catch (NullPointerException e)
         {
             if(DYNAMIC_CACHING_ACTIVE) System.out.println("Update Pokemon failed (Dynamic Caching is Active!");
@@ -122,8 +122,7 @@ public class CacheHelper
         long init = System.currentTimeMillis();
 
         List<Pokemon> list = new ArrayList<>();
-        //TODO: Switch this to Pokemon#build, remove build logging so it doesn't spam the console on bot startup
-        for(int i = 0; i < UUID_LISTS.get(player).size(); i++) list.add(Pokemon.buildCore(UUID_LISTS.get(player).get(i), i + 1));
+        for(int i = 0; i < UUID_LISTS.get(player).size(); i++) list.add(Pokemon.build(UUID_LISTS.get(player).get(i)).withNumber(i + 1));
         POKEMON_LISTS.put(player, list);
 
         LoggerHelper.info(CacheHelper.class, "Pokemon List Init Complete - " + player + " (" + (System.currentTimeMillis() - init) + "ms)!");

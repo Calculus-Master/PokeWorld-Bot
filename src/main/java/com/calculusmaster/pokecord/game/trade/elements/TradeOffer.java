@@ -139,7 +139,7 @@ public class TradeOffer
         {
             for(String p : this.pokemon)
             {
-                Pokemon poke = Pokemon.buildCore(p, -1);
+                Pokemon poke = Pokemon.build(p);
                 sb.append("Level ").append(poke.getLevel()).append(" ").append(poke.getName()).append(" (").append(poke.getTotalIV()).append(")\n");
             }
         }

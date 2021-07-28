@@ -131,66 +131,6 @@ public class Pokemon
         return p;
     }
 
-    //Builder for minimal access
-    //WILL CRASH IF ANY OTHER GETTERS ARE USED
-    public static Pokemon buildCore(String UUID, int num)
-    {
-        Document d = Mongo.PokemonData.find(Filters.eq("UUID", UUID)).first();
-        if (d == null) return null;
-
-        Pokemon p = new Pokemon()
-        {
-            @Override
-            public String getUUID()
-            {
-                return UUID;
-            }
-
-            @Override
-            public int getLevel()
-            {
-                return d.getInteger("level");
-            }
-
-            @Override
-            public String getName()
-            {
-                return d.getString("name");
-            }
-
-            @Override
-            public boolean isShiny()
-            {
-                return d.getBoolean("shiny");
-            }
-
-            @Override
-            public String getNickname()
-            {
-                return d.getString("nickname");
-            }
-
-            @Override
-            public void linkSpecificJSON(String UUID)
-            {
-                this.specificJSON = new JSONObject(d.toJson());
-            }
-        };
-
-        p.genericJSON = new JSONObject(DataHelper.pokeData(p.getName()).document.toJson());
-        p.linkSpecificJSON(UUID);
-
-        p.setNumber(num + 1);
-
-        p.setIVs(d.getString("ivs"));
-        p.setEVs(d.getString("evs"));
-        p.type = new Type[]{DataHelper.pokeData(p.getName()).types.get(0), DataHelper.pokeData(p.getName()).types.get(1)};
-        p.setItem(d.getString("item"));
-        p.setGender(d.getString("gender"));
-
-        return p;
-    }
-
     public PokemonData getData()
     {
         return DataHelper.pokeData(this.getName());
@@ -214,6 +154,12 @@ public class Pokemon
     public void setNumber(int n)
     {
         this.num = n;
+    }
+
+    public Pokemon withNumber(int number)
+    {
+        this.setNumber(number);
+        return this;
     }
 
     //JSONs

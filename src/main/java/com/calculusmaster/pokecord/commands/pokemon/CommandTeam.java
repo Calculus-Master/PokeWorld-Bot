@@ -74,7 +74,7 @@ public class CommandTeam extends Command
 
             this.playerData.addPokemonToTeam(UUID, teamIndex);
 
-            Pokemon p = Pokemon.buildCore(UUID, pokemonIndex);
+            Pokemon p = Pokemon.build(UUID);
             this.embed.setDescription("Added " + p.getName() + " to your team!");
         }
         else if(remove)
@@ -87,7 +87,7 @@ public class CommandTeam extends Command
                 return this;
             }
 
-            Pokemon p = Pokemon.buildCore(this.playerData.getTeam().get(teamIndex - 1), -1);
+            Pokemon p = Pokemon.build(this.playerData.getTeam().get(teamIndex - 1));
 
             this.playerData.removePokemonFromTeam(teamIndex);
 
@@ -147,7 +147,7 @@ public class CommandTeam extends Command
 
                     if(i < teamUUIDs.size())
                     {
-                        p = Pokemon.buildCore(teamUUIDs.get(i), -1);
+                        p = Pokemon.build(teamUUIDs.get(i));
                         team.append("Level ").append(p.getLevel()).append(" ").append(p.getName()).append(this.getTag(p.getName()));
                     }
                     else team.append("None");
