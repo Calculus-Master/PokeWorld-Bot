@@ -115,6 +115,8 @@ public class Pokecord
 
             CommandTarget.generateNewServerTarget(g);
         }
+
+        TimeHelper.start();
     }
 
     public static void close()
