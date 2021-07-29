@@ -87,7 +87,7 @@ public class ZMoveRegistry
 
     private static void registerTyped(String name, Type type)
     {
-        MoveData data = new MoveData(name, type, null, 0, 100, new ArrayList<>());
+        MoveData data = new MoveData(name, type, null, 0, 100, new ArrayList<>(), true, false);
 
         DataHelper.registerNewMove(name, data);
         ZMOVES.add(name);
@@ -96,7 +96,7 @@ public class ZMoveRegistry
 
     private static void registerUnique(String name, Type type, Category category, int power)
     {
-        MoveData data = new MoveData(name, type, category, power, 100, new ArrayList<>());
+        MoveData data = new MoveData(name, type, category, power, 100, new ArrayList<>(), true, false);
 
         DataHelper.registerNewMove(name, data);
         ZMOVES.add(name);

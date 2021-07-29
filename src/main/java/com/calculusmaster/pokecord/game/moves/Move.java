@@ -6,7 +6,6 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
-import com.calculusmaster.pokecord.game.moves.registry.ZMoveRegistry;
 import com.calculusmaster.pokecord.game.moves.types.*;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
@@ -59,7 +58,8 @@ public class Move
 
         this.data = DataHelper.moveData(name);
         this.name = this.data.name;
-        this.isZMove = ZMoveRegistry.ZMOVES.contains(name);
+        this.isZMove = this.data.isZMove;
+        this.isMaxMove = this.data.isMaxMove;
 
         this.setDefaultValues();
     }

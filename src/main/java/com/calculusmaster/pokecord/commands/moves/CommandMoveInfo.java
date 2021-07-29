@@ -48,13 +48,14 @@ public class CommandMoveInfo extends Command
 
             String impl = Move.isImplemented(m.name) ? "" : "***Warning: Move is not implemented! You cannot use " + m.name + " in duels!***\n\n";
             String info = m.flavor.isEmpty() ? "No Move Description" : m.flavor.get(new Random().nextInt(m.flavor.size()));
+            String kind = m.isZMove ? "Z-Powered Move" : (m.isMaxMove ? "Max Move" : "Regular Move");
             String type = "Type: " + Global.normalCase(m.type.toString());
             String category = "Category: " + Global.normalCase(m.category.toString());
             String power = "Power: " + m.basePower;
             String accuracy = "Accuracy: " + m.baseAccuracy;
 
             this.embed.setTitle(title);
-            this.embed.setDescription(impl + info + "\n\n" + type + "\n" + category + "\n" + power + "\n" + accuracy);
+            this.embed.setDescription(impl + info + "\n\n" + kind + "\n" + type + "\n" + category + "\n" + power + "\n" + accuracy);
             this.color = m.type.getColor();
 
             if(Move.CUSTOM_MOVES.contains(moveString)) this.embed.setFooter("This move has a custom implementation! It may not work exactly as described!");

@@ -84,7 +84,7 @@ public class DataHelper
             int accuracy = moveLine[6].equals("") ? 100 : Integer.parseInt(moveLine[6]);
             List<String> flavor = movesFlavorCSV.stream().filter(line -> line[0].equals(moveLine[0])).map(s -> s[3]).map(s -> s.replaceAll("\n", " ")).distinct().collect(Collectors.toList());
 
-            MOVE_DATA.put(name, new MoveData(name, Type.cast(type), Category.cast(category), power, accuracy, flavor));
+            MOVE_DATA.put(name, new MoveData(name, Type.cast(type), Category.cast(category), power, accuracy, flavor, false, false));
         }
     }
 
