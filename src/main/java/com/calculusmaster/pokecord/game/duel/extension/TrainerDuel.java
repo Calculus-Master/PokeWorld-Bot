@@ -78,11 +78,11 @@ public class TrainerDuel extends Duel
             else
             {
                 List<String> playersDefeatedBot = botTrainer.info.playersDefeated;
+
                 if(!playersDefeatedBot.contains(this.players[0].ID))
                 {
                     playersDefeatedBot.add(this.players[0].ID);
                     Trainer.addPlayerDefeated(botTrainer.ID, this.players[0].ID);
-                    this.players[0].data.getStats().incr(PlayerStatistic.TRAINER_DUELS_WON);
 
                     boolean dailyComplete = true;
                     for(Trainer.TrainerInfo ti : Trainer.DAILY_TRAINERS) if(!ti.playersDefeated.contains(this.players[0].ID)) dailyComplete = false;
@@ -96,6 +96,8 @@ public class TrainerDuel extends Duel
                         Achievements.grant(this.players[0].ID, Achievements.DEFEATED_DAILY_TRAINERS, this.event);
                     }
                 }
+
+                this.players[0].data.getStats().incr(PlayerStatistic.TRAINER_DUELS_WON);
             }
         }
         //Player lost
