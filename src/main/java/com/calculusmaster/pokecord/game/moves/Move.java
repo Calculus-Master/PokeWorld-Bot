@@ -143,7 +143,7 @@ public class Move
     {
         if(this.isZMove) return ZMoves.class;
         else if(this.isMaxMove) return MaxMoves.class;
-        return switch(this.type) {
+        else return switch(this.type) {
             case BUG -> BugMoves.class;
             case DARK -> DarkMoves.class;
             case DRAGON -> DragonMoves.class;

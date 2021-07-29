@@ -328,6 +328,8 @@ public class DuelHelper
             ZMove.setCategory(baseMove.getCategory());
         }
 
+        ZMove.isZMove = true;
+        ZMove.isMaxMove = false;
         return ZMove;
     }
 
