@@ -45,7 +45,7 @@ public class CommandMoveInfo extends Command
             else m = DataHelper.moveData(moveString);
 
             String title = m.name + " Info" + (isTM || isTR ? " (" + moveString.toUpperCase() + ")" : "");
-            String info = m.flavor.isEmpty() ? "" : m.flavor.get(new Random().nextInt(m.flavor.size()));
+            String info = m.flavor.isEmpty() ? "No Move Description" : m.flavor.get(new Random().nextInt(m.flavor.size()));
             String type = "Type: " + Global.normalCase(m.type.toString());
             String category = "Category: " + Global.normalCase(m.category.toString());
             String power = "Power: " + m.basePower;
