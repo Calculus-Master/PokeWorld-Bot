@@ -10,6 +10,7 @@ import com.calculusmaster.pokecord.game.moves.types.*;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -102,9 +103,9 @@ public class Move
         }
         catch (Exception e)
         {
-            System.out.println("Move failed! " + this.getName());
+            LoggerHelper.reportError(Move.class, "Could not find Move Method (" + this.getName() + ")", e);
+
             results = "An error occurred while using this move (" + this.getName() + "). Defaulting to Tackle..." + new Move("Tackle").logic(user, opponent, duel);
-            e.printStackTrace();
         }
 
         return results;

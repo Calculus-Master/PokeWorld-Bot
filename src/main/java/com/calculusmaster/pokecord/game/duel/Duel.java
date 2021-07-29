@@ -18,6 +18,7 @@ import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.tournament.Tournament;
 import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.listener.ButtonListener;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -815,10 +816,13 @@ public class Duel
             }
         }
 
-        try {
+        try
+        {
             this.moveLog.get(this.turn)[this.current] = move.getName();
-        } catch (Exception e) {
-            System.out.println("Move Log not accessible, " + this.current);
+        }
+        catch (Exception e)
+        {
+            LoggerHelper.reportError(Duel.class, "Cannot updated Move Log! (Current Player: " + this.current + ")", e);
         }
 
         return turnResult;
@@ -1323,6 +1327,8 @@ public class Duel
         }
         catch (Exception e)
         {
+            LoggerHelper.reportError(Duel.class, "Duel Image generation failed!", e);
+
             this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
         }
     }

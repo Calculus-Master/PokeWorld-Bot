@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.interfaces.IScoreComponent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -219,7 +220,11 @@ public class CommandLeaderboard extends Command
                 double z = (this.raw.get(ID) - this.stats.getMean()) / this.stats.getStandardDeviation();
                 return Double.isNaN(z) ? 0 : z;
             }
-            catch (ArithmeticException e) { return 0; }
+            catch (ArithmeticException e)
+            {
+                LoggerHelper.reportError(CommandLeaderboard.class, "Divide by zero when calculating Z-Score (StdDev is 0)", e);
+                return 0;
+            }
         }
 
         public static void clearLists()

@@ -75,13 +75,15 @@ public class CommandDev extends Command
             case "restartspawns" -> {
                 for(Guild g : Pokecord.BOT_JDA.getGuilds())
                 {
-                    try {
+                    try
+                    {
                         SpawnEventHelper.removeServer(g.getId());
                         Thread.sleep(1000);
                         SpawnEventHelper.start(g);
-                    } catch (Exception e) {
-                        LoggerHelper.error(CommandDev.class, "Could not restart Spawn Event in " + g.getName() + "!");
-                        e.printStackTrace();
+                    }
+                    catch (Exception e)
+                    {
+                        LoggerHelper.reportError(CommandDev.class, "Could not restart Spawn Event in " + g.getName() + "!", e);
                     }
                 }
             }

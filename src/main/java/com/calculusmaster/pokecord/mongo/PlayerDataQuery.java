@@ -99,7 +99,7 @@ public class PlayerDataQuery extends MongoQuery
         }
         catch (Exception e)
         {
-            LoggerHelper.error(this.getClass(), "Failed to DM " + this.getUsername() + " (ID: " + this.getID() + ")!");
+            LoggerHelper.reportError(PlayerDataQuery.class, "Failed to DM " + this.getUsername() + " (ID: " + this.getID() + ")!", e);
         }
     }
 

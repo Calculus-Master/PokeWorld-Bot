@@ -122,8 +122,7 @@ public class SpawnEventHelper
         }
         catch (Exception e)
         {
-            LoggerHelper.error(SpawnEventHelper.class, "Spawn Event failed in " + g.getName() + " (" + g.getId() + ") trying to spawn " + spawn + "!");
-            e.printStackTrace();
+            LoggerHelper.reportError(SpawnEventHelper.class, "Spawn Event failed in " + g.getName() + " (" + g.getId() + ") trying to spawn " + spawn + "!", e);
         }
 
         LoggerHelper.info(SpawnEventHelper.class, "New Spawn Event – " + g.getName() + " (" + g.getId() + ") - " + spawn + " (Shiny? " + shiny + ")!");

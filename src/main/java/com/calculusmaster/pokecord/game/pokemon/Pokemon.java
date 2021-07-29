@@ -420,11 +420,13 @@ public class Pokemon
     {
         this.health -= amount;
 
-        try {
-            DuelHelper.instance(this.getUUID()).addDamage(amount, this.getUUID());
-        } catch (Exception e)
+        try
         {
-            System.out.println("Could not find " + this.getUUID() + " (" + this.getName() + ") in Duel");
+            DuelHelper.instance(this.getUUID()).addDamage(amount, this.getUUID());
+        }
+        catch (Exception e)
+        {
+            LoggerHelper.reportError(Pokemon.class, "Could not find " + this.getUUID() + " (" + this.getName() + ") in any Duels", e);
         }
     }
 

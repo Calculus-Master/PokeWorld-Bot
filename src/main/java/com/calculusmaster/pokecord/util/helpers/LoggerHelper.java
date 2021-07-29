@@ -3,7 +3,13 @@ package com.calculusmaster.pokecord.util.helpers;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.util.Mongo;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.bson.Document;
 import org.slf4j.LoggerFactory;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class LoggerHelper
 {
@@ -26,6 +32,21 @@ public class LoggerHelper
     public static void init(String name, Runnable init)
     {
         init(name, init, false);
+    }
+
+    public static <C, T extends Throwable> void reportError(Class<C> clazz, String error, T exception)
+    {
+        Document crashReport = new Document()
+                .append("error", error)
+                .append("source", clazz.getName())
+                .append("stack", ExceptionUtils.getStackTrace(exception))
+                .append("timestamp", LocalDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME));
+
+        Mongo.CrashData.insertOne(crashReport);
+
+        error(clazz, error);
+
+        exception.printStackTrace();
     }
 
     //Core

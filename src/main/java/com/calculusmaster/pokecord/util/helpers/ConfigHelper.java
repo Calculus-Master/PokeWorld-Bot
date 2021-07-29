@@ -43,8 +43,7 @@ public class ConfigHelper
         }
         catch (Exception e)
         {
-            LoggerHelper.warn(ConfigHelper.class, "Could not load config.json! Setting default values...");
-            e.printStackTrace();
+            LoggerHelper.reportError(ConfigHelper.class, "Could not access Config Database! Setting default values.", e);
 
             ThreadPoolHandler.THREAD_POOL_TYPE = 1;
             CacheHelper.DYNAMIC_CACHING_ACTIVE = false;

@@ -35,7 +35,6 @@ public class Mongo
     public static final MongoCollection<Document> ServerData = MutableDB.getCollection("ServerData");
     public static final MongoCollection<Document> PokemonData = MutableDB.getCollection("PokemonData");
     public static final MongoCollection<Document> ReportData = MutableDB.getCollection("ReportData");
-    public static final MongoCollection<Document> PerformanceData = MutableDB.getCollection("PerformanceData");
     public static final MongoCollection<Document> MarketData = MutableDB.getCollection("MarketData");
     public static final MongoCollection<Document> GymData = MutableDB.getCollection("GymData");
     public static final MongoCollection<Document> DexData = MutableDB.getCollection("DexData");
@@ -45,6 +44,7 @@ public class Mongo
     public static final MongoCollection<Document> ConfigData = MutableDB.getCollection("ConfigData");
     public static final MongoCollection<Document> EggData = MutableDB.getCollection("EggData");
     public static final MongoCollection<Document> TrainerData = MutableDB.getCollection("TrainerData");
+    public static final MongoCollection<Document> CrashData = MutableDB.getCollection("CrashData");
 
     public static final MongoCollection<Document> TimeData = MutableDB.getCollection("TimeData");
 

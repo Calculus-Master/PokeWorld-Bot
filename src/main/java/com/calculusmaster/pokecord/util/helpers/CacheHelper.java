@@ -152,7 +152,7 @@ public class CacheHelper
         pool.shutdown();
 
         try { pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS); }
-        catch (Exception e) { System.out.println("Pokemon List Init failed!"); }
+        catch (Exception e) { LoggerHelper.reportError(CacheHelper.class, "Pokemon List init failed!", e); }
     }
 
     public static void initMarketEntries()
@@ -177,7 +177,7 @@ public class CacheHelper
         for(List<String> l : totalList)
         {
             try {Thread.sleep(100);}
-            catch (Exception e) {System.out.println("Can't Sleep Thread!");}
+            catch (Exception e) { LoggerHelper.reportError(CacheHelper.class, "Market Entry Init Error! Thread cannot be slept!", e); }
 
             pool.execute(() -> { for(String s : l) MARKET_ENTRIES.add(MarketEntry.build(s)); });
         }
@@ -185,7 +185,7 @@ public class CacheHelper
         pool.shutdown();
 
         try { pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS); }
-        catch (Exception e) { System.out.println("CommandMarket Init failed!"); }
+        catch (Exception e) { LoggerHelper.reportError(CacheHelper.class, "Market Entry List init failed!", e); }
     }
 
     public static void initAchievementCache()
