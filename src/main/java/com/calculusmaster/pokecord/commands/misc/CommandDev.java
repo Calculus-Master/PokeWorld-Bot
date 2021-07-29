@@ -54,7 +54,7 @@ public class CommandDev extends Command
             case "randommoves" -> {
                 StringBuilder sb = new StringBuilder();
                 int count = Move.INCOMPLETE_MOVES.size();
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 15; i++)
                     sb.append(Move.INCOMPLETE_MOVES.get(new Random().nextInt(count))).append("   ");
                 this.sendMsg("Moves: " + sb + "\nTotal Remaining: " + count);
                 Move.init();
