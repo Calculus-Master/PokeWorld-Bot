@@ -4,12 +4,9 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
-import org.bson.Document;
 import org.jetbrains.annotations.Nls;
 
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,12 +26,6 @@ public class Global
     public static int clamp(int val, int min, int max)
     {
         return val < min ? min : (val > max ? max : val);
-    }
-
-    private static void addPerformanceEntry(String command, long timeI, long timeF, OffsetDateTime timestamp)
-    {
-        Document data = new Document("command", command).append("time", timeF - timeI).append("timestamp", timestamp.format(DateTimeFormatter.RFC_1123_DATE_TIME));
-        Mongo.PerformanceData.insertOne(data);
     }
 
     public static String getDeerlingImage(boolean shiny)
