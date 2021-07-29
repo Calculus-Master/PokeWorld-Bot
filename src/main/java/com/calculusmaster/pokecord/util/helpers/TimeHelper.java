@@ -9,9 +9,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class TimeHelper
@@ -23,51 +21,54 @@ public class TimeHelper
 
     private static void updateTimes()
     {
-        final SerializedTime now = SerializedTime.now();
-        final SerializedTime cached = SerializedTime.cached();
+        SerializedTime now = SerializedTime.now();
 
-        LoggerHelper.info(TimeHelper.class, "Time Updater Running! Now: " + now + ", Cached: " + cached);
+        LoggerHelper.info(TimeHelper.class, "Time Updater Running! Now: " + now);
 
-        Mongo.TimeData.find().forEach(d -> {
-            SerializedTime interval = new SerializedTime(d);
+        for(TimeTask t : TimeTask.values())
+        {
+            SerializedTime interval = SerializedTime.interval(t.target);
+            SerializedTime cache = SerializedTime.cache(t.target);
 
-            if(interval.target.equals("cache")) return;
+            if(now.toSeconds() - cache.toSeconds() >= interval.toSeconds())
+            {
+                LoggerHelper.info(TimeHelper.class, "Time Updater Task Running - " + t.target + " - Difference: " + (now.toSeconds() - cache.toSeconds()) + ", Minimum: " + interval.toSeconds());
 
-            if(now.toSeconds() - cached.toSeconds() >= interval.toSeconds()) Objects.requireNonNull(TimeTask.cast(interval.target)).task.run();
-        });
+                t.task.run();
 
-        SerializedTime.updateCached(now);
+                cache.update(now);
+            }
+        }
     }
 
     private enum TimeTask
     {
-        DAILY_TRAINERS(Trainer::createDailyTrainers),
-        SHOPS(CommandShop::updateShops);
+        DAILY_TRAINERS("daily_trainers", Trainer::createDailyTrainers),
+        SHOPS("shops", CommandShop::updateShops);
 
-        private Runnable task;
-        TimeTask(Runnable task)
+        private final String target;
+        private final Runnable task;
+        TimeTask(String target, Runnable task)
         {
+            this.target = target;
             this.task = task;
-        }
-
-        static TimeTask cast(String s)
-        {
-            for(TimeTask task : values()) if(task.toString().equalsIgnoreCase(s)) return task;
-            return null;
         }
     }
 
     private static class SerializedTime
     {
         private final String target;
+        private final String type;
+
         private final int days;
         private final int hours;
         private final int minutes;
         private final int seconds;
 
-        SerializedTime(String target, int days, int hours, int minutes, int seconds)
+        SerializedTime(String target, String type, int days, int hours, int minutes, int seconds)
         {
             this.target = target;
+            this.type = type;
 
             this.days = days;
             this.hours = hours;
@@ -75,58 +76,72 @@ public class TimeHelper
             this.seconds = seconds;
         }
 
-        SerializedTime(Document data)
+        SerializedTime(String target, String type, PackagedTime time)
         {
-            this(data.getString("target"), data.getInteger("days"), data.getInteger("hours"), data.getInteger("minutes"), data.getInteger("seconds"));
+            this(target, type, time.days(), time.hours(), time.minutes(), time.seconds());
         }
 
-        public static SerializedTime now()
+        public void update(SerializedTime updatedTime)
         {
-            LocalDateTime current = LocalDateTime.now();
-            return new SerializedTime("now", current.getDayOfYear(), current.getHour(), current.getMinute(), current.getSecond());
-        }
+            List<Bson> updates = List.of(
+                    Updates.set("days", updatedTime.days),
+                    Updates.set("hours", updatedTime.hours),
+                    Updates.set("minutes", updatedTime.minutes),
+                    Updates.set("seconds", updatedTime.seconds)
+            );
 
-        public static SerializedTime cached()
-        {
-            return new SerializedTime(Objects.requireNonNull(Mongo.TimeData.find(Filters.eq("target", "cache")).first()));
-        }
-
-        public static void updateCached(SerializedTime updated)
-        {
-            List<Bson> updates = Arrays.asList(
-                    Updates.set("days", updated.days),
-                    Updates.set("hours", updated.hours),
-                    Updates.set("minutes", updated.minutes),
-                    Updates.set("seconds", updated.seconds));
-
-            Mongo.TimeData.updateOne(Filters.eq("target", "cache"), updates);
+            Mongo.TimeData.updateOne(query(this.target, this.type), updates);
         }
 
         public int toSeconds()
         {
-            return this.days * 24 * 60 * 60 + this.hours * 60 * 60 + this.minutes * 60 + this.seconds;
+            return (((this.days * 24 + this.hours) * 60) + this.minutes) * 60 + this.seconds;
         }
 
-        public Document serialize()
+        static SerializedTime interval(String target)
         {
-            return new Document()
-                    .append("target", this.target)
-                    .append("days", this.days)
-                    .append("hours", this.hours)
-                    .append("minutes", this.minutes)
-                    .append("seconds", this.seconds);
+            Document interval = Mongo.TimeData.find(query(target, "interval")).first();
+
+            if(interval == null) throw new NullPointerException("Time Data is null! Target: " + target + ", Type: Interval");
+
+            return new SerializedTime(target, "interval", new PackagedTime(interval));
+        }
+
+        static SerializedTime cache(String target)
+        {
+            Document cache = Mongo.TimeData.find(query(target, "cache")).first();
+
+            if(cache == null) throw new NullPointerException("Time Data is null! Target: " + target + ", Type: Cache");
+
+            return new SerializedTime(target, "cache", new PackagedTime(cache));
+        }
+
+        static SerializedTime now()
+        {
+            LocalDateTime now = LocalDateTime.now();
+            return new SerializedTime("now", "now", now.getDayOfYear(), now.getHour(), now.getMinute(), now.getSecond());
+        }
+
+        static Bson query(String target, String type)
+        {
+            return Filters.and(
+                    Filters.eq("target", target),
+                    Filters.eq("type", type)
+            );
         }
 
         @Override
         public String toString()
         {
-            return "SerializedTime{" +
-                    "target='" + target + '\'' +
-                    ", days=" + days +
-                    ", hours=" + hours +
-                    ", minutes=" + minutes +
-                    ", seconds=" + seconds +
-                    '}';
+            return "SerializedTime{target=" + this.target + ", type=" + this.type + ", time=%s:%s:%s:%s}".formatted(this.days, this.hours, this.minutes, this.seconds);
+        }
+    }
+
+    private static record PackagedTime(int days, int minutes, int hours, int seconds)
+    {
+        PackagedTime(Document d)
+        {
+            this(d.getInteger("days"), d.getInteger("hours"), d.getInteger("minutes"), d.getInteger("seconds"));
         }
     }
 }
