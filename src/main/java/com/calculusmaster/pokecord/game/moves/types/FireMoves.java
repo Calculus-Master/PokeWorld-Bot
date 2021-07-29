@@ -149,4 +149,12 @@ public class FireMoves
                 .addStatusEffect(StatusCondition.BURNED, 10)
                 .execute();
     }
+
+    public String FireLash(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.DEF, -1, 100, false)
+                .execute();
+    }
 }
