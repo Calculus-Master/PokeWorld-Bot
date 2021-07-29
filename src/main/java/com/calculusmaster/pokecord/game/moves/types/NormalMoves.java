@@ -879,4 +879,11 @@ public class NormalMoves
         user.damage(user.getHealth());
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String SoftBoiled(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFractionHealEffect(1 / 2D)
+                .execute();
+    }
 }
