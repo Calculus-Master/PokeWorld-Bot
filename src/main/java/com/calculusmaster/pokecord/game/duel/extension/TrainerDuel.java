@@ -89,7 +89,7 @@ public class TrainerDuel extends Duel
 
                     if(dailyComplete)
                     {
-                        int winCredits = 1000 * Trainer.DAILY_TRAINERS.size();
+                        int winCredits = (new Random().nextInt(501) + 500) * Trainer.DAILY_TRAINERS.size();
                         this.players[0].data.changeCredits(winCredits);
                         this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated all of today's trainers! You earned a bonus " + winCredits + " credits!").queue();
 
