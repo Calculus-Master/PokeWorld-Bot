@@ -59,8 +59,6 @@ public class Move
 
         this.data = DataHelper.moveData(name);
         this.name = this.data.name;
-        this.isZMove = this.data.isZMove;
-        this.isMaxMove = this.data.isMaxMove;
 
         this.setDefaultValues();
     }
@@ -76,7 +74,7 @@ public class Move
 
         this.accuracy = 100;
 
-        //TODO: Add ZMove Registry and MaxMove Registry
+        //TODO: Add MaxMove Registry
         this.isZMove = true;
         this.isMaxMove = false;
 
@@ -351,11 +349,11 @@ public class Move
         this.power = this.data.basePower;
         this.accuracy = this.data.baseAccuracy;
 
+        this.isZMove = this.data.isZMove;
+        this.isMaxMove = this.data.isMaxMove;
+
         this.hitCrit = false;
         this.critChance = 1;
-
-        this.isZMove = false;
-        this.isMaxMove = false;
 
         this.damageMultiplier = 1.0;
         this.accuracyMultiplier = 1.0;
