@@ -55,7 +55,7 @@ public class WildDuel extends Duel
             this.moveAction(0);
 
             List<Move> botMoves = new ArrayList<>();
-            for(String s : this.players[1].active.getAllMoves()) botMoves.add(new Move(s));
+            for(String s : this.players[1].active.getAllMoves()) if(Move.isImplemented(s)) botMoves.add(new Move(s));
 
             //TODO: Better AI
             Move mostDamage = botMoves.get(0);
