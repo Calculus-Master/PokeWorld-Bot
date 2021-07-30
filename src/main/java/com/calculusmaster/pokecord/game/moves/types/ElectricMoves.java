@@ -165,4 +165,12 @@ public class ElectricMoves
                 .addRecoilEffect(1 / 4D)
                 .execute();
     }
+
+    public String ParabolicCharge(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addDamageHealEffect(1 / 2D)
+                .execute();
+    }
 }

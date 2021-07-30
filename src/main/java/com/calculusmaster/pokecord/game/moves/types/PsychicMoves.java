@@ -317,4 +317,10 @@ public class PsychicMoves
                                 .add(Stat.SPDEF, 1))
                 .execute();
     }
+
+    public String PsychicFangs(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        //TODO: Breaks Light Screen/Reflect
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

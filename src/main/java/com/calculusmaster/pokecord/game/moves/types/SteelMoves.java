@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.moves.types;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.enums.elements.Terrain;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
@@ -167,5 +168,17 @@ public class SteelMoves
     public String GearGrind(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return Move.multihitDamageMove(user, opponent, duel, move, 2);
+    }
+
+    public String SteelRoller(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.terrain.equals(Terrain.NORMAL_TERRAIN)) return move.getNothingResult();
+        else
+        {
+            duel.terrain = Terrain.NORMAL_TERRAIN;
+            duel.terrainTurns = 0;
+
+            return Move.simpleDamageMove(user, opponent, duel, move) + " The current Terrain was destroyed!";
+        }
     }
 }

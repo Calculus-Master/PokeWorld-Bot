@@ -160,4 +160,10 @@ public class WaterMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String SurgingStrikes(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        move.critChance = 24;
+        return Move.multihitDamageMove(user, opponent, duel, move, 3);
+    }
 }
