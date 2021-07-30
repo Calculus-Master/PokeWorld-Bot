@@ -29,8 +29,8 @@ public class CommandMoveInfo extends Command
         else
         {
             String moveString = Global.normalCase(this.getMultiWordContent(1));
-            boolean isTM = moveString.startsWith("Tm");
-            boolean isTR = moveString.startsWith("Tr");
+            boolean isTM = moveString.startsWith("Tm") && (moveString.length() == 4 || moveString.length() == 5);
+            boolean isTR = moveString.startsWith("Tr") && moveString.length() == 4;
 
             if(!Move.isMove(moveString) && !(isTM || isTR))
             {
