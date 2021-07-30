@@ -75,19 +75,17 @@ public class FairyMoves
 
     public String FlowerShield(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(user.isType(Type.GRASS) && opponent.isType(Type.GRASS))
-            return MoveEffectBuilder.make(user, opponent, duel, move)
-                    .addStatChangeEffect(Stat.DEF, 1, 100, true)
-                    .addStatChangeEffect(Stat.DEF, 1, 100, false)
-                    .execute();
-        else if(user.isType(Type.GRASS))
-            return MoveEffectBuilder.make(user, opponent, duel, move)
-                    .addStatChangeEffect(Stat.DEF, 1, 100, true)
-                    .execute();
-        else if(opponent.isType(Type.GRASS))
-            return MoveEffectBuilder.make(user, opponent, duel, move)
-                    .addStatChangeEffect(Stat.DEF, 1, 100, false)
-                    .execute();
-        else return move.getNothingResult();
+        MoveEffectBuilder builder = MoveEffectBuilder.make(user, opponent, duel, move);
+
+        if(user.isType(Type.GRASS))
+            builder.addStatChangeEffect(Stat.DEF, 1, 100, true);
+
+        if(opponent.isType(Type.GRASS))
+            builder.addStatChangeEffect(Stat.DEF, 1, 100, false);
+
+        if(!user.isType(Type.GRASS) && !opponent.isType(Type.GRASS))
+            return move.getNothingResult();
+
+        return builder.execute();
     }
 }

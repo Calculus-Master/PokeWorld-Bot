@@ -76,8 +76,15 @@ public class Listener extends ListenerAdapter
             //Remove prefix from the message array, msg[0] is the raw command name
             msg[0] = msg[0].substring(serverQuery.getPrefix().length());
 
-            if(Commands.COMMAND_THREAD_POOL) ThreadPoolHandler.LISTENER_COMMAND.execute(() -> Commands.execute(msg[0], event, msg));
-            else Commands.execute(msg[0], event, msg);
+            try
+            {
+                if(Commands.COMMAND_THREAD_POOL) ThreadPoolHandler.LISTENER_COMMAND.execute(() -> Commands.execute(msg[0], event, msg));
+                else Commands.execute(msg[0], event, msg);
+            }
+            catch (Exception e)
+            {
+                LoggerHelper.reportError(Listener.class, "Command Execution Failed! (" + Arrays.toString(msg) + ")", e);
+            }
 
             if(r.nextInt(5000) < 1) ThreadPoolHandler.LISTENER_EVENT.execute(() -> redeemEvent(event));
         }
