@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.PrivateInfo;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.ConfigHelper;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
@@ -36,7 +37,7 @@ public class CommandDev extends Command
     @Override
     public Command runCommand()
     {
-        if(!this.player.getId().equals("309135641453527040"))
+        if(!this.player.getId().equals("309135641453527040") && !this.player.getId().equals("423602074811367434"))
         {
             this.sendMsg("You cannot use this command!");
             return this;
@@ -51,7 +52,7 @@ public class CommandDev extends Command
                 else spawn = this.getMultiWordContent(2);
                 SpawnEventHelper.forceSpawn(this.server, spawn);
             }
-            case "deletebotmarket" -> {
+            case PrivateInfo.DEV_WPOQIYWR -> {
                 Mongo.MarketData.deleteMany(Filters.eq("sellerID", "BOT"));
                 CacheHelper.MARKET_ENTRIES.clear();
                 CacheHelper.initMarketEntries();
@@ -85,7 +86,7 @@ public class CommandDev extends Command
                 PlayerDataQuery query = this.mentions.size() > 0 ? new PlayerDataQuery(this.mentions.get(0).getId()) : this.playerData;
                 query.removePursuit();
             }
-            case "close", "shutdown", "stop", "quit" -> Pokecord.close();
+            case PrivateInfo.DEV_ASGKLHA -> Pokecord.close();
             case "reloadconfig" -> ConfigHelper.init();
             case "reloadpokemondata" -> DataHelper.createPokemonData();
             case "forcelocation" -> {
