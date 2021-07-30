@@ -64,4 +64,11 @@ public class FairyMoves
                 .addFractionHealEffect(duel.terrain.equals(Terrain.GRASSY_TERRAIN) ? 2 / 3D : 1 / 2D)
                 .execute();
     }
+
+    public String CraftyShield(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(user.getUUID()).craftyShieldUsed = true;
+
+        return user.getName() + " is protected from Status moves!";
+    }
 }

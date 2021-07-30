@@ -520,6 +520,14 @@ public class Duel
             if(move.getPriority() > 0) otherImmune = !bypass;
         }
 
+        if(this.data(this.other).craftyShieldUsed)
+        {
+            this.data(this.other).craftyShieldUsed = false;
+
+            List<String> bypassStatusMoves = Arrays.asList("Perish Song", "Spikes", "Stealth Rock", "Toxic Spikes", "Sticky Web");
+            if(move.getCategory().equals(Category.STATUS) && !bypassStatusMoves.contains(move.getName())) otherImmune = !bypass;
+        }
+
         if(move.getName().equals("Fusion Bolt") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move != null && this.players[this.other].move.getName().equals("Fusion Flare")) move.setPower(move.getPower() * 2);
 
         if(move.getName().equals("Fusion Flare") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move != null && this.players[this.other].move.getName().equals("Fusion Bolt")) move.setPower(move.getPower() * 2);

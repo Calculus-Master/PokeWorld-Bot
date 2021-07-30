@@ -85,6 +85,7 @@ public class DuelHelper
         public boolean matBlockUsed;
         public boolean doomDesireUsed;
         public int doomDesireTurns;
+        public boolean craftyShieldUsed;
 
         public boolean disguiseActivated;
 
@@ -142,6 +143,7 @@ public class DuelHelper
             this.matBlockUsed = false;
             this.doomDesireUsed = false;
             this.doomDesireTurns = 0;
+            this.craftyShieldUsed = false;
 
             this.disguiseActivated = false;
         }
