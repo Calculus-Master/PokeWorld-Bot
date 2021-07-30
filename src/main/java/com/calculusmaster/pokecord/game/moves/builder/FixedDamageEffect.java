@@ -29,7 +29,7 @@ public class FixedDamageEffect extends MoveEffect
     {
         this.opponent.damage(this.damage);
 
-        if(this.opponent.getHealth() < 0 && this.duel.data(this.opponent.getUUID()).endureUsed)
+        if(this.opponent.getHealth() <= 0 && this.duel.data(this.opponent.getUUID()).endureUsed)
         {
             this.opponent.setHealth(1);
             this.duel.data(this.opponent.getUUID()).endureUsed = false;
