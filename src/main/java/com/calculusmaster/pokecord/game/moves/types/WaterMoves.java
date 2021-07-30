@@ -166,4 +166,11 @@ public class WaterMoves
         move.critChance = 24;
         return Move.multihitDamageMove(user, opponent, duel, move, 3);
     }
+
+    public String LifeDew(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFractionHealEffect(1 / 4D)
+                .execute();
+    }
 }

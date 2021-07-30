@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
@@ -172,5 +173,10 @@ public class GhostMoves
     public String AstralBarrage(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String Poltergeist(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return !Item.asItem(opponent.getItem()).equals(Item.NONE) ? Move.simpleDamageMove(user, opponent, duel, move) : move.getNothingResult();
     }
 }

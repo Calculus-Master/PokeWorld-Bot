@@ -173,4 +173,9 @@ public class ElectricMoves
                 .addDamageHealEffect(1 / 2D)
                 .execute();
     }
+
+    public String Overdrive(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

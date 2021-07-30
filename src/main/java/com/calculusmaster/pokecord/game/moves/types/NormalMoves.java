@@ -886,4 +886,13 @@ public class NormalMoves
                 .addFractionHealEffect(1 / 2D)
                 .execute();
     }
+
+    public String TearfulLook(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.ATK, -1, 100, false)
+                        .add(Stat.SPATK, -1))
+                .execute();
+    }
 }
