@@ -18,8 +18,13 @@ import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import org.apache.commons.collections4.ListUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class CommandDev extends Command
 {
@@ -57,6 +62,22 @@ public class CommandDev extends Command
                 for (int i = 0; i < 15; i++)
                     sb.append(Move.INCOMPLETE_MOVES.get(new Random().nextInt(count))).append("   ");
                 this.sendMsg("Moves: " + sb + "\nTotal Remaining: " + count);
+                Move.init();
+            }
+            case "allmoves" -> {
+                List<StringBuilder> sbs = new ArrayList<>();
+                List<List<String>> chunked = ListUtils.partition(Move.INCOMPLETE_MOVES, 40);
+
+                for(List<String> list : chunked)
+                {
+                    StringBuilder s = new StringBuilder();
+                    for(String m : list) s.append(m).append("              ");
+                    sbs.add(s);
+                }
+
+                for(StringBuilder s : sbs) Executors.newScheduledThreadPool(1).schedule(() -> this.sendMsg(s.toString()), new Random().nextInt(20) + 5, TimeUnit.SECONDS);
+
+                this.sendMsg("Total Remaining: " + Move.INCOMPLETE_MOVES.size());
                 Move.init();
             }
             case "clearduels" -> DuelHelper.DUELS.clear();
