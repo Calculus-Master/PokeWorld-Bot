@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Terrain;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
+import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
 public class FairyMoves
@@ -87,5 +88,15 @@ public class FairyMoves
             return move.getNothingResult();
 
         return builder.execute();
+    }
+
+    public String Geomancy(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.SPATK, 2, 100, true)
+                                .add(Stat.SPDEF, 2)
+                                .add(Stat.SPD, 2))
+                .execute();
     }
 }
