@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.commands.moves.CommandAbilityInfo;
 import com.calculusmaster.pokecord.game.duel.players.GymLeader;
 import com.calculusmaster.pokecord.game.duel.players.Trainer;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.registry.MaxMoveRegistry;
 import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
 import com.calculusmaster.pokecord.game.moves.registry.ZMoveRegistry;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -56,6 +57,7 @@ public class Pokecord
         LoggerHelper.init("Move", DataHelper::createMoveList);
         LoggerHelper.init("Move Tutor", MoveTutorRegistry::init);
         LoggerHelper.init("Z-Move", ZMoveRegistry::init);
+        LoggerHelper.init("Max Move", MaxMoveRegistry::init);
         LoggerHelper.init("Gigantamax", DataHelper::createGigantamaxDataMap);
         LoggerHelper.init("EV Lists", DataHelper::createEVLists);
         LoggerHelper.init("Type Lists", DataHelper::createTypeLists);

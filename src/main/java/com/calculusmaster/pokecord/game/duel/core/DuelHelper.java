@@ -4,9 +4,9 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.EntryHazard;
-import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.registry.MaxMoveRegistry;
 import com.calculusmaster.pokecord.game.moves.registry.ZMoveRegistry;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
@@ -328,8 +328,6 @@ public class DuelHelper
             ZMove.setCategory(baseMove.getCategory());
         }
 
-        ZMove.isZMove = true;
-        ZMove.isMaxMove = false;
         return ZMove;
     }
 
@@ -337,44 +335,16 @@ public class DuelHelper
     {
         Move maxMove;
 
-        String maxName;
-        Type maxType = baseMove.getType();
-        Category maxCategory = baseMove.getCategory();
-        int maxPower = baseMove.getPower();
+        if(baseMove.getCategory().equals(Category.STATUS)) maxMove = new Move("Max Guard");
+        else if(p.canGigantamax() && Pokemon.getGigantamaxData(p.getName()).moveType().equals(baseMove.getType())) maxMove = new Move(Pokemon.getGigantamaxData(p.getName()).move(), Pokemon.getGigantamaxData(p.getName()).moveType(), null, 0);
+        else maxMove = new Move(MaxMoveRegistry.get(baseMove.getType()).name);
 
-        if(baseMove.getCategory().equals(Category.STATUS))
-        {
-            maxName = "Max Guard";
-            maxType = Type.NORMAL;
-        }
-        else if(p.canGigantamax() && Pokemon.getGigantamaxData(p.getName()).moveType().equals(baseMove.getType()))
-        {
-            maxName = Pokemon.getGigantamaxData(p.getName()).move();
-            maxType = Pokemon.getGigantamaxData(p.getName()).moveType();
-        }
-        else maxName = "Max " + switch(baseMove.getType()) {
-            case BUG -> "Flutterby";
-            case DARK -> "Darkness";
-            case DRAGON -> "Wyrmwind";
-            case ELECTRIC -> "Lightning";
-            case FAIRY -> "Starfall";
-            case FIGHTING -> "Knuckle";
-            case FIRE -> "Flare";
-            case FLYING -> "Airstream";
-            case GHOST -> "Phantasm";
-            case GRASS -> "Overgrowth";
-            case GROUND -> "Quake";
-            case ICE -> "Hailstorm";
-            case NORMAL -> "Strike";
-            case POISON -> "Ooze";
-            case PSYCHIC -> "Mindstorm";
-            case ROCK -> "Rockfall";
-            case STEEL -> "Steelspike";
-            case WATER -> "Geyser";
-        };
+        int maxPower;
 
-        boolean isDecreased = Arrays.asList("Max Knuckle", "Max Ooze").contains(maxName);
-        if(baseMove.getPower() <= 40) maxPower = isDecreased ? 70 : 90;
+        boolean isDecreased = Arrays.asList("Max Knuckle", "Max Ooze").contains(maxMove.getName());
+
+        if(baseMove.getCategory().equals(Category.STATUS)) maxPower = 0;
+        else if(baseMove.getPower() <= 40) maxPower = isDecreased ? 70 : 90;
         else if(baseMove.getPower() <= 50) maxPower = isDecreased ? 75 : 100;
         else if(baseMove.getPower() <= 60) maxPower = isDecreased ? 80 : 110;
         else if(baseMove.getPower() <= 70) maxPower = isDecreased ? 85 : 120;
@@ -382,9 +352,8 @@ public class DuelHelper
         else if(baseMove.getPower() <= 140) maxPower = isDecreased ? 95 : 140;
         else maxPower = isDecreased ? 100 : 150;
 
-        maxMove = new Move(maxName, maxType, maxCategory, maxPower);
-        maxMove.isZMove = false;
-        maxMove.isMaxMove = true;
+        maxMove.setPower(maxPower);
+        maxMove.setCategory(baseMove.getCategory());
 
         return maxMove;
     }
