@@ -44,8 +44,6 @@ public class CommandMoveInfo extends Command
             else if(isTR) m = TR.get(Integer.parseInt(moveString.substring(2))).getMoveData();
             else m = DataHelper.moveData(moveString);
 
-            System.out.println(m);
-
             String title = m.name + " Info" + (isTM || isTR ? " (" + moveString.toUpperCase() + ")" : "");
 
             String impl = Move.isImplemented(m.name) ? "" : "***Warning: Move is not implemented! You cannot use " + m.name + " in duels!***\n\n";

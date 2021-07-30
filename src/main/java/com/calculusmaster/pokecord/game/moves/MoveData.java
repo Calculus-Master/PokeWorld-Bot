@@ -27,27 +27,12 @@ public final class MoveData
         this.baseAccuracy = baseAccuracy;
         this.flavor = new ArrayList<>(List.copyOf(flavor));
 
-        this.isZMove = false;
-        this.isMaxMove = false;
+        this.isZMove = isZMove;
+        this.isMaxMove = isMaxMove;
     }
 
     public MoveData copy()
     {
         return new MoveData(this.name, this.type, this.category, this.basePower, this.baseAccuracy, this.flavor, this.isZMove, this.isMaxMove);
-    }
-
-    @Override
-    public String toString()
-    {
-        return "MoveData{" +
-                "name='" + name + '\'' +
-                ", type=" + type +
-                ", category=" + category +
-                ", basePower=" + basePower +
-                ", baseAccuracy=" + baseAccuracy +
-                ", flavor=" + flavor +
-                ", isZMove=" + isZMove +
-                ", isMaxMove=" + isMaxMove +
-                '}';
     }
 }
