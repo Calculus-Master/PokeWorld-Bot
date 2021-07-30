@@ -50,7 +50,7 @@ public class CommandMoveInfo extends Command
             String info = m.flavor.isEmpty() ? "No Move Description" : m.flavor.get(new Random().nextInt(m.flavor.size()));
             String kind = m.isZMove ? "Z-Powered Move" : (m.isMaxMove ? "Max Move" : "Regular Move");
             String type = "Type: " + Global.normalCase(m.type.toString());
-            String category = "Category: " + Global.normalCase(m.category.toString());
+            String category = "Category: " + (m.category != null ? Global.normalCase(m.category.toString()) : "Mirrors Base Move");
             String power = "Power: " + m.basePower;
             String accuracy = "Accuracy: " + m.baseAccuracy;
 
