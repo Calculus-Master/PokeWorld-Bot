@@ -528,6 +528,19 @@ public class Duel
             if(move.getCategory().equals(Category.STATUS) && !bypassStatusMoves.contains(move.getName())) otherImmune = !bypass;
         }
 
+        if(this.data(this.other).auroraVeilUsed)
+        {
+            this.data(this.other).auroraVeilTurns--;
+
+            if(move.getCategory().equals(Category.PHYSICAL) || move.getCategory().equals(Category.SPECIAL)) move.setDamageMultiplier(0.5);
+
+            if(this.data(this.other).auroraVeilTurns <= 0)
+            {
+                this.data(this.other).auroraVeilTurns = 0;
+                this.data(this.other).auroraVeilUsed = false;
+            }
+        }
+
         if(move.getName().equals("Fusion Bolt") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move != null && this.players[this.other].move.getName().equals("Fusion Flare")) move.setPower(move.getPower() * 2);
 
         if(move.getName().equals("Fusion Flare") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move != null && this.players[this.other].move.getName().equals("Fusion Bolt")) move.setPower(move.getPower() * 2);

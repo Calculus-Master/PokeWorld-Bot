@@ -109,4 +109,19 @@ public class IceMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String Avalanche(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.first.equals(opponent.getUUID()) && duel.data(user.getUUID()).lastDamageTaken > 0) move.setPower(2.0);
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String AuroraVeil(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(user.getUUID()).auroraVeilUsed = true;
+        duel.data(user.getUUID()).auroraVeilTurns = 5;
+
+        return user.getName() + " is defended from Physical and Special attacks!";
+    }
 }

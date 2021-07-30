@@ -227,4 +227,20 @@ public class GrassMoves
                 .addDamageHealEffect(1 / 2D)
                 .execute();
     }
+
+    public String TropKick(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.ATK, -1, 100, false)
+                .execute();
+    }
+
+    public String Absorb(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addDamageHealEffect(0.5)
+                .execute();
+    }
 }

@@ -86,6 +86,8 @@ public class DuelHelper
         public boolean doomDesireUsed;
         public int doomDesireTurns;
         public boolean craftyShieldUsed;
+        public boolean auroraVeilUsed;
+        public int auroraVeilTurns;
 
         public boolean disguiseActivated;
 
@@ -144,6 +146,8 @@ public class DuelHelper
             this.doomDesireUsed = false;
             this.doomDesireTurns = 0;
             this.craftyShieldUsed = false;
+            this.auroraVeilUsed = false;
+            this.auroraVeilTurns = 0;
 
             this.disguiseActivated = false;
         }

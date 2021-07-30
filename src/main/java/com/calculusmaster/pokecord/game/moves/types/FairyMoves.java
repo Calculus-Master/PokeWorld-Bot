@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Terrain;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -70,5 +71,23 @@ public class FairyMoves
         duel.data(user.getUUID()).craftyShieldUsed = true;
 
         return user.getName() + " is protected from Status moves!";
+    }
+
+    public String FlowerShield(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(user.isType(Type.GRASS) && opponent.isType(Type.GRASS))
+            return MoveEffectBuilder.make(user, opponent, duel, move)
+                    .addStatChangeEffect(Stat.DEF, 1, 100, true)
+                    .addStatChangeEffect(Stat.DEF, 1, 100, false)
+                    .execute();
+        else if(user.isType(Type.GRASS))
+            return MoveEffectBuilder.make(user, opponent, duel, move)
+                    .addStatChangeEffect(Stat.DEF, 1, 100, true)
+                    .execute();
+        else if(opponent.isType(Type.GRASS))
+            return MoveEffectBuilder.make(user, opponent, duel, move)
+                    .addStatChangeEffect(Stat.DEF, 1, 100, false)
+                    .execute();
+        else return move.getNothingResult();
     }
 }

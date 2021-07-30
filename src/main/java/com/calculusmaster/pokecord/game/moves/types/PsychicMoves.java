@@ -323,4 +323,11 @@ public class PsychicMoves
         //TODO: Breaks Light Screen/Reflect
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String MistBall(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.SPATK, -1, 50, false)
+                .execute();
+    }
 }
