@@ -20,7 +20,6 @@ public class CommandMoveInfo extends Command
     public Command runCommand()
     {
         if(this.msg.length < 2) this.sendMsg("Invalid arguments! You need to include a move name!");
-        else if((this.msg[1].startsWith("tm") || this.msg[1].startsWith("tr")) && (this.msg[1].length() == 4 || this.msg[1].length() == 3)) this.sendMsg("Use `p!tminfo` or `p!trinfo` instead!");
         else
         {
             String input = Global.normalCase(this.getMultiWordContent(1));

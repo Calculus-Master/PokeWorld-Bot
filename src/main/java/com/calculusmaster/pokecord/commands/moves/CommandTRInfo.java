@@ -41,10 +41,10 @@ public class CommandTRInfo extends Command
                     .setDescription(impl + flavor)
                     .addField("Type", Global.normalCase(m.type.toString()), true)
                     .addField("Category",Global.normalCase(m.category.toString()), true)
+                    .addBlankField(true)
                     .addField("Power", String.valueOf(m.basePower), true)
                     .addField("Accuracy", String.valueOf(m.baseAccuracy), true);
 
-            this.embed.setTitle(m.name + " Info");
             this.color = m.type.getColor();
 
             if(Move.CUSTOM_MOVES.contains(m.name)) this.embed.setFooter("This move has a custom implementation! It may not work exactly as described!");
