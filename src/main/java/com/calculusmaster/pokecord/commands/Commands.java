@@ -295,6 +295,14 @@ public class Commands
                 .setCommand(CommandEggs::new)
                 .setCategory(Category.POKEMON);
 
+        register("tminfo", "tmi")
+                .setCommand(CommandTMInfo::new)
+                .setCategory(Category.MOVES);
+
+        register("trinfo", "tri")
+                .setCommand(CommandTRInfo::new)
+                .setCategory(Category.MOVES);
+
         register("dev")
                 .setCommand(CommandDev::new)
                 .setCategory(Category.MISC);
