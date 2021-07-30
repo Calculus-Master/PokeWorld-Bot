@@ -35,4 +35,19 @@ public final class MoveData
     {
         return new MoveData(this.name, this.type, this.category, this.basePower, this.baseAccuracy, this.flavor, this.isZMove, this.isMaxMove);
     }
+
+    @Override
+    public String toString()
+    {
+        return "MoveData{" +
+                "name='" + name + '\'' +
+                ", type=" + type +
+                ", category=" + category +
+                ", basePower=" + basePower +
+                ", baseAccuracy=" + baseAccuracy +
+                ", flavor=" + flavor +
+                ", isZMove=" + isZMove +
+                ", isMaxMove=" + isMaxMove +
+                '}';
+    }
 }

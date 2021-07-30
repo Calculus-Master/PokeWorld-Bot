@@ -8,9 +8,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.bson.Document;
 import org.slf4j.LoggerFactory;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 public class LoggerHelper
 {
     public static void time(Class<?> clazz, String command, long timeI, long timeF)
@@ -39,8 +36,7 @@ public class LoggerHelper
         Document crashReport = new Document()
                 .append("error", error)
                 .append("source", clazz.getName())
-                .append("stack", ExceptionUtils.getStackTrace(exception))
-                .append("timestamp", LocalDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME));
+                .append("stack", ExceptionUtils.getStackTrace(exception));
 
         Mongo.CrashData.insertOne(crashReport);
 
