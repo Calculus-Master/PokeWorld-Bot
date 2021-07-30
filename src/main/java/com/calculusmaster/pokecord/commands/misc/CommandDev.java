@@ -87,6 +87,9 @@ public class CommandDev extends Command
                     }
                 }
             }
+            case "clearcrashreports" -> {
+                Mongo.CrashData.deleteMany(Filters.exists("source"));
+            }
         }
 
         this.sendMsg("Successfully ran Developer Command!");
