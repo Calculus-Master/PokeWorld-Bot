@@ -259,4 +259,12 @@ public class GrassMoves
                 .addStatChangeEffect(Stat.SPDEF, -1, 10, false)
                 .execute();
     }
+
+    public String MegaDrain(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addDamageHealEffect(0.5)
+                .execute();
+    }
 }

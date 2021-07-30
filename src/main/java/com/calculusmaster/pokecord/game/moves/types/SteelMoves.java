@@ -181,4 +181,12 @@ public class SteelMoves
             return Move.simpleDamageMove(user, opponent, duel, move) + " The current Terrain was destroyed!";
         }
     }
+
+    public String SteelWing(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.DEF, 1, 10, true)
+                .execute();
+    }
 }

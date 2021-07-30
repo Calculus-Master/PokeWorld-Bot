@@ -906,4 +906,19 @@ public class NormalMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String Strength(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String Acupressure(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        List<Stat> pool = Arrays.stream(Stat.values()).filter(s -> user.getStageChange(s) != 6).collect(Collectors.toList());
+        Stat s = pool.get(new Random().nextInt(pool.size()));
+
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(s, 2, 100, true)
+                .execute();
+    }
 }

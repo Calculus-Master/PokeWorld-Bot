@@ -191,4 +191,12 @@ public class DarkMoves
     {
         return move.getNotImplementedResult();
     }
+
+    public String Flatter(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.CONFUSED, 100, false)
+                .addStatChangeEffect(Stat.SPATK, 2, 100, false)
+                .execute();
+    }
 }
