@@ -130,4 +130,12 @@ public class BugMoves
     {
         return duel.turn == 1 ? Move.simpleDamageMove(user, opponent, duel, move) : move.getNothingResult();
     }
+
+    public String StruggleBug(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPATK, -1, 100, false)
+                .execute();
+    }
 }

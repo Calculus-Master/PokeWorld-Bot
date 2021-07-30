@@ -103,4 +103,9 @@ public class RockMoves
                 .addRecoilEffect(1 / 2D)
                 .execute();
     }
+
+    public String Accelerock(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

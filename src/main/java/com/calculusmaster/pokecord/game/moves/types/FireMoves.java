@@ -157,4 +157,12 @@ public class FireMoves
                 .addStatChangeEffect(Stat.DEF, -1, 100, false)
                 .execute();
     }
+
+    public String FieryDance(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPATK, 1, 50, true)
+                .execute();
+    }
 }
