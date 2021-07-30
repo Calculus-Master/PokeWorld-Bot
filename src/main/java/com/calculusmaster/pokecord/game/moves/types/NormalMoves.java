@@ -895,4 +895,15 @@ public class NormalMoves
                         .add(Stat.SPATK, -1))
                 .execute();
     }
+
+    public String SmellingSalts(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(opponent.hasStatusCondition(StatusCondition.PARALYZED))
+        {
+            move.setPower(2.0);
+            opponent.removeStatusCondition(StatusCondition.PARALYZED);
+        }
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

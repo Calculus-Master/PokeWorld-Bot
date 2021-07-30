@@ -178,4 +178,12 @@ public class ElectricMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String ZingZap(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.FLINCHED, 30)
+                .execute();
+    }
 }

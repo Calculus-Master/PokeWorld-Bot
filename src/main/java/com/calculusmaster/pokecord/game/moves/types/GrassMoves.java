@@ -243,4 +243,20 @@ public class GrassMoves
                 .addDamageHealEffect(0.5)
                 .execute();
     }
+
+    public String AppleAcid(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPDEF, -1, 100, false)
+                .execute();
+    }
+
+    public String EnergyBall(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPDEF, -1, 10, false)
+                .execute();
+    }
 }

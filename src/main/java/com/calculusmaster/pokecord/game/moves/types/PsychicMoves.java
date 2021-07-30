@@ -330,4 +330,11 @@ public class PsychicMoves
                 .addStatChangeEffect(Stat.SPATK, -1, 50, false)
                 .execute();
     }
+
+    public String Kinesis(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addAccuracyChangeEffect(-1, 100, false)
+                .execute();
+    }
 }
