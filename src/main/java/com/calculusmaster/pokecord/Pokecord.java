@@ -130,6 +130,10 @@ public class Pokecord
         LocationEventHelper.close();
         ThreadPoolHandler.close();
 
-        Executors.newScheduledThreadPool(1).schedule(() -> BOT_JDA.shutdownNow(), 15, TimeUnit.SECONDS);
+        Executors.newScheduledThreadPool(1).schedule(() -> {
+            BOT_JDA.shutdownNow();
+
+            LoggerHelper.info(Pokecord.class, "Bot has shutdown successfully!");
+        }, 15, TimeUnit.SECONDS);
     }
 }
