@@ -110,6 +110,33 @@ public class CommandSettings extends Command
                         }
                     }
                 }
+                else if(CLIENT_POKEMON_LIST_FIELDS.matches(this.msg[2]))
+                {
+                    //Toggle if no input given
+                    if (this.msg.length == 3)
+                    {
+                        boolean currentValue = settings.getSettingBoolean(CLIENT_POKEMON_LIST_FIELDS);
+
+                        settings.updateSettingBoolean(CLIENT_POKEMON_LIST_FIELDS, !currentValue);
+
+                        if (currentValue) this.sendMsg("Pokemon List view is now Text-based!");
+                        else this.sendMsg("Pokemon List view is now Field-based!");
+                    }
+                    //Set value to specific input
+                    else if (this.msg.length == 4)
+                    {
+                        if ("true".contains(this.msg[3]) || "false".contains(this.msg[3]))
+                        {
+                            boolean newValue = "true".contains(this.msg[3]);
+
+                            settings.updateSettingBoolean(CLIENT_POKEMON_LIST_FIELDS, newValue);
+
+                            if (newValue) this.sendMsg("Pokemon List view is now Field-based!");
+                            else this.sendMsg("Pokemon List view is now Text-based!");
+                        }
+                        else this.sendMsg("Valid arguments: `true` or `false`!");
+                    }
+                }
                 else this.embed.setDescription(CommandInvalid.getShort());
             }
         }

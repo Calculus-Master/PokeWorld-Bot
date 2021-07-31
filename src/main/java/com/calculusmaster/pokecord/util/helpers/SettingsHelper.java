@@ -44,6 +44,7 @@ public class SettingsHelper
         switch(s) {
             case CLIENT_DETAILED -> Mongo.SettingsData.updateOne(this.query, Updates.set("detailed", value));
             case CLIENT_CATCH_AUTO_INFO -> Mongo.SettingsData.updateOne(this.query, Updates.set("autoinfo", value));
+            case CLIENT_POKEMON_LIST_FIELDS -> Mongo.SettingsData.updateOne(this.query, Updates.set("listfields", value));
         }
 
         this.update();
@@ -61,6 +62,7 @@ public class SettingsHelper
         return switch(s) {
             case CLIENT_DETAILED -> this.settingsJSON.getBoolean("detailed");
             case CLIENT_CATCH_AUTO_INFO -> this.settingsJSON.getBoolean("autoinfo");
+            case CLIENT_POKEMON_LIST_FIELDS -> this.settingsJSON.getBoolean("listfields");
             default -> false;
         };
     }
@@ -79,6 +81,7 @@ public class SettingsHelper
         CLIENT_DETAILED("detailed", "Toggles the display of IVs and EVs throughout the bot."),
         CLIENT_CATCH_AUTO_INFO("autoinfo", "Toggle automatically sending `p!info latest` after catching a Pokemon."),
         CLIENT_DEFAULT_ORDER("order", "Set the default ordering of `p!pokemon`. Examples: `name`, `iv`, `level`, `number`, `random`"),
+        CLIENT_POKEMON_LIST_FIELDS("listfields", "Toggle p!pokemon view between Fields and a Text-based List"),
         //Server
         SERVER_PREFIX("prefix", "Changes the bot prefix (default `p!`)"),
         SERVER_SPAWNCHANNEL("spawnchannel", "Toggles if spawns are enabled in a specific channel."),

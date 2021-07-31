@@ -13,6 +13,7 @@ import com.calculusmaster.pokecord.game.pokemon.PokemonSorterFlag;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.SettingsHelper;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.commons.collections4.list.TreeList;
 
@@ -223,22 +224,57 @@ public class CommandPokemon extends Command
     //Do sorting before this
     private void createListEmbed()
     {
-        StringBuilder sb = new StringBuilder();
-        boolean hasPage = this.msg.length >= 2 && this.isNumeric(1);
-        int perPage = 20;
-        int startIndex = hasPage ? ((getInt(1) - 1) * perPage > this.pokemon.size() ? 0 : getInt(1)) : 0;
-        if(startIndex != 0) startIndex--;
+        boolean fields = this.playerData.getSettings().getSettingBoolean(SettingsHelper.Setting.CLIENT_POKEMON_LIST_FIELDS);
 
-        startIndex *= perPage;
-        int endIndex = Math.min(startIndex + perPage, this.pokemon.size());
-        for(int i = startIndex; i < endIndex; i++)
-        {
-            sb.append(this.getLine(this.pokemon.get(i)));
-        }
+        boolean hasPage = this.msg.length >= 2 && this.isNumeric(1);
+        int perPage = fields ? 15 : 20;
+
+        int start = 0;
+        if(hasPage && (this.getInt(1) - 1) * perPage <= this.pokemon.size()) start = this.getInt(1);
+        if(start != 0) start--;
+        start *= perPage;
+
+        int end = Math.min(start + perPage, this.pokemon.size());
+
+        if(fields) this.createFieldListEmbed(start, end);
+        else this.createTextListEmbed(start, end);
+
+        this.embed.setTitle(this.player.getName() + "'s Pokemon");
+        this.embed.setFooter("Showing Numbers " + (start + 1) + " to " + end + " out of " + this.pokemon.size() + " Pokemon");
+    }
+
+    private void createFieldListEmbed(int start, int end)
+    {
+        for(int i = start; i < end; i++) this.embed.addField(this.getField(this.pokemon.get(i)));
+    }
+
+    private MessageEmbed.Field getField(Pokemon p)
+    {
+        boolean detailed = this.playerData.getSettings().getSettingBoolean(SettingsHelper.Setting.CLIENT_DETAILED);
+
+        return new MessageEmbed.Field(p.getDisplayName(),
+                this.getCategoryFlags(p) + "\n" +
+                "Number: " + p.getNumber() + " | " +
+                "Level: " + p.getLevel() + "\n" +
+                (detailed ? "IV: " + p.getTotalIV() + "\n" : "") +
+                (detailed ? "EV: " + p.getEVTotal() + "\n" : ""),
+                true);
+    }
+
+    private String getCategoryFlags(Pokemon p)
+    {
+        return (p.isShiny() ? ":star2:" : "") +
+                (this.team.contains(p.getUUID()) ? ":regional_indicator_t: " : "") +
+                (this.favorites.contains(p.getUUID()) ? ":regional_indicator_f: " : "");
+    }
+
+    private void createTextListEmbed(int start, int end)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = start; i < end; i++) sb.append(this.getLine(this.pokemon.get(i)));
 
         this.embed.setDescription(sb.toString());
-        this.embed.setTitle(this.player.getName() + "'s Pokemon");
-        this.embed.setFooter("Showing Numbers " + (startIndex + 1) + " to " + (endIndex) + " out of " + this.pokemon.size() + " Pokemon");
     }
 
     private String getLine(Pokemon p)
