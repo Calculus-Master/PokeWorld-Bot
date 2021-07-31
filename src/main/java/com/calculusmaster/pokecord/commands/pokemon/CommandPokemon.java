@@ -136,7 +136,7 @@ public class CommandPokemon extends Command
             OrderSort o = OrderSort.cast(order);
             if(o != null) this.sortOrder(o, !asc);
         }
-        else this.sortOrder(OrderSort.cast(this.playerData.getSettings().getSettingString(SettingsHelper.Setting.CLIENT_DEFAULT_ORDER)), false);
+        else this.sortOrder();
 
         if(!this.pokemon.isEmpty()) this.createListEmbed();
         else this.embed.setDescription("You have no Pokemon with those characteristics!");
@@ -176,6 +176,15 @@ public class CommandPokemon extends Command
         String delimiter = "\\|"; //Currently the OR delimiter is |
 
         return new ArrayList<>(Arrays.asList(names.toString().trim().split(delimiter))).stream().map(String::trim).map(String::toLowerCase).collect(Collectors.toList());
+    }
+
+    private void sortOrder()
+    {
+        OrderSort o = OrderSort.cast(this.playerData.getSettings().getSettingString(SettingsHelper.Setting.CLIENT_DEFAULT_ORDER));
+
+        if(o == null) o = OrderSort.RANDOM;
+
+        this.sortOrder(o, !Arrays.asList(OrderSort.NAME, OrderSort.RANDOM, OrderSort.NUMBER).contains(o));
     }
 
     private void sortOrder(OrderSort o, boolean descending)
