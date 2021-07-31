@@ -99,4 +99,12 @@ public class FairyMoves
                                 .add(Stat.SPD, 2))
                 .execute();
     }
+
+    public String FleurCannon(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPATK, -2, 100, true)
+                .execute();
+    }
 }

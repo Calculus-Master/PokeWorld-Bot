@@ -298,6 +298,19 @@ public class Duel
             }
         }
 
+        if(move.getName().equals("Terrain Pulse"))
+        {
+            move.setType(switch(this.terrain) {
+                case NORMAL_TERRAIN -> Type.NORMAL;
+                case GRASSY_TERRAIN -> Type.GRASS;
+                case MISTY_TERRAIN -> Type.FAIRY;
+                case ELECRIC_TERRAIN -> Type.ELECTRIC;
+                case PSYCHIC_TERRAIN -> Type.PSYCHIC;
+            });
+
+            if(!this.terrain.equals(Terrain.NORMAL_TERRAIN) && !this.data(this.current).isRaised) move.setPower(2.0);
+        }
+
         //Z-Crystal Event
         if(new Random().nextInt(100) < 5) this.zcrystalEvent(move);
 
@@ -619,7 +632,7 @@ public class Duel
 
         //Main Results
         String name = this.players[this.current].active.getName();
-        List<String> rechargeMoves = Arrays.asList("Hyper Beam", "Blast Burn", "Hydro Cannon", "Frenzy Plant", "Roar Of Time", "Prismatic Laser", "Eternabeam", "Giga Impact", "Meteor Assault");
+        List<String> rechargeMoves = Arrays.asList("Hyper Beam", "Blast Burn", "Hydro Cannon", "Frenzy Plant", "Roar Of Time", "Prismatic Laser", "Eternabeam", "Giga Impact", "Meteor Assault", "Rock Wrecker");
 
         //Ensures the recharge occurs when the recharge move isn't used
         if(this.data(this.current).recharge && !rechargeMoves.contains(move.getName())) this.data(this.current).recharge = false;

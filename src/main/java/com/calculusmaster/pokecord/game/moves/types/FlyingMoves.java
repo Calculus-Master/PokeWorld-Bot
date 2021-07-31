@@ -157,4 +157,9 @@ public class FlyingMoves
                 .addDamageHealEffect(3 / 4D)
                 .execute();
     }
+
+    public String Chatter(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.CONFUSED, 100);
+    }
 }

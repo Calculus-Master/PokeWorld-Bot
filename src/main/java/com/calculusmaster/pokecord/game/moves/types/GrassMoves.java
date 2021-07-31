@@ -267,4 +267,9 @@ public class GrassMoves
                 .addDamageHealEffect(0.5)
                 .execute();
     }
+
+    public String MagicalLeaf(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

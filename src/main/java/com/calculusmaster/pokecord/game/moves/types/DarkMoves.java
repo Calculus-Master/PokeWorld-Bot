@@ -10,6 +10,7 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class DarkMoves
 {
@@ -198,5 +199,21 @@ public class DarkMoves
                 .addStatusEffect(StatusCondition.CONFUSED, 100, false)
                 .addStatChangeEffect(Stat.SPATK, 2, 100, false)
                 .execute();
+    }
+
+    public String WickedBlow(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        Map<Stat, Integer> statChanges = Map.copyOf(opponent.getStatChanges());
+        int accuracy = opponent.getAccuracyStage();
+        int evasion = opponent.getEvasionStage();
+
+        opponent.setDefaultStatMultipliers();
+        String result = Move.simpleDamageMove(user, opponent, duel, move);
+
+        opponent.setStatChanges(statChanges);
+        opponent.changeAccuracyStage(accuracy);
+        opponent.changeEvasionStage(evasion);
+
+        return result;
     }
 }

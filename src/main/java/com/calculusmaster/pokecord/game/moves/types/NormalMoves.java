@@ -921,4 +921,23 @@ public class NormalMoves
                 .addStatChangeEffect(s, 2, 100, true)
                 .execute();
     }
+
+    public String TerrainPulse(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String DoubleTeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addEvasionChangeEffect(1, 100, true)
+                .execute();
+    }
+
+    public String HyperFang(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.FLINCHED, 10, false)
+                .execute();
+    }
 }

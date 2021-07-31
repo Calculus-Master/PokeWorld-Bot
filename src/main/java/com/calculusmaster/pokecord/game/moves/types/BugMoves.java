@@ -138,4 +138,14 @@ public class BugMoves
                 .addStatChangeEffect(Stat.SPATK, -1, 100, false)
                 .execute();
     }
+
+    public String XScissor(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String Megahorn(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

@@ -926,6 +926,16 @@ public class Pokemon
         return this.statMultiplier.get(s);
     }
 
+    public Map<Stat, Integer> getStatChanges()
+    {
+        return this.statMultiplier;
+    }
+
+    public void setStatChanges(Map<Stat, Integer> map)
+    {
+        this.statMultiplier = map;
+    }
+
     public List<String> getAbilities()
     {
         return this.genericJSON.getJSONArray("abilities").toList().stream().map(s -> (String) s).collect(Collectors.toList());

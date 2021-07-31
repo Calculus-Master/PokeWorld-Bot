@@ -150,4 +150,9 @@ public class GroundMoves
                 .addFractionHealEffect(duel.weather.equals(Weather.SANDSTORM) ? 2 / 3D : 1 / 2D)
                 .execute();
     }
+
+    public String LandsWrath(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

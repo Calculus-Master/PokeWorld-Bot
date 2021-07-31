@@ -231,4 +231,16 @@ public class FightingMoves
                 .addRecoilEffect(1 / 4D)
                 .execute();
     }
+
+    public String ForcePalm(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
+    }
+
+    public String StormThrow(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect(24)
+                .execute();
+    }
 }

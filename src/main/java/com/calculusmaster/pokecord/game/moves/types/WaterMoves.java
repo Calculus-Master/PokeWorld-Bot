@@ -173,4 +173,19 @@ public class WaterMoves
                 .addFractionHealEffect(1 / 4D)
                 .execute();
     }
+
+    public String SparklingAria(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(opponent.hasStatusCondition(StatusCondition.BURNED)) opponent.removeStatusCondition(StatusCondition.BURNED);
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String BubbleBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPD, -1, 10, false)
+                .execute();
+    }
 }

@@ -186,4 +186,9 @@ public class ElectricMoves
                 .addStatusEffect(StatusCondition.FLINCHED, 30)
                 .execute();
     }
+
+    public String Nuzzle(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 100);
+    }
 }
