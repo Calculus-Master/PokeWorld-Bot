@@ -24,14 +24,15 @@ repositories {
 
 dependencies {
     implementation 'net.dv8tion:JDA:4.3.0_293'
-    implementation 'org.mongodb:mongodb-driver-sync:4.3.0-beta1'
-    implementation 'org.json:json:20200518'
-    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
-    implementation group: 'com.opencsv', name: 'opencsv', version: '5.3'
+    implementation 'org.mongodb:mongodb-driver-sync:4.3.0'
+    implementation 'org.json:json:20210307'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.5'
+    implementation group: 'com.opencsv', name: 'opencsv', version: '5.5'
     implementation 'com.mojang:brigadier:1.0.17'
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'org.projectlombok:lombok:1.18.20'
     implementation 'org.kohsuke:github-api:1.132'
+    implementation 'me.tongfei:progressbar:0.9.2'
 }
 
 javafx {
