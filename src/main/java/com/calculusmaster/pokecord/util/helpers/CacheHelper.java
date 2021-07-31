@@ -5,7 +5,6 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.trade.elements.MarketEntry;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
-import me.tongfei.progressbar.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -126,7 +125,7 @@ public class CacheHelper
 
         List<Pokemon> list = new ArrayList<>();
 
-        for(String id : ProgressBar.wrap(UUIDs, player)) list.add(Pokemon.build(id).withNumber(UUIDs.indexOf(id) + 1));
+        for(String ID : UUIDs) list.add(Pokemon.build(ID).withNumber(UUIDs.indexOf(ID) + 1));
 
         POKEMON_LISTS.put(player, list);
 
