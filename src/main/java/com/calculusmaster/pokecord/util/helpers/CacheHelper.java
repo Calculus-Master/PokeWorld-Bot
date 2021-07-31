@@ -34,7 +34,7 @@ public class CacheHelper
     public static final Map<String, List<Pokemon>> TEAM_LISTS = new HashMap<>();
 
     //Pokemon List Updates
-    public static void addPokemon(String player, String UUID)
+    synchronized public static void addPokemon(String player, String UUID)
     {
         List<Pokemon> pokemon = POKEMON_LISTS.get(player);
         List<String> uuids = UUID_LISTS.get(player);
@@ -55,7 +55,7 @@ public class CacheHelper
         UUID_LISTS.put(player, uuids);
     }
 
-    public static void removePokemon(String player, String UUID)
+    synchronized public static void removePokemon(String player, String UUID)
     {
         List<Pokemon> pokemon = POKEMON_LISTS.get(player);
         List<String> uuids = UUID_LISTS.get(player);
@@ -77,7 +77,7 @@ public class CacheHelper
         UUID_LISTS.put(player, uuids);
     }
 
-    public static void updatePokemon(String UUID)
+    synchronized public static void updatePokemon(String UUID)
     {
         String player = "";
         for(String p : UUID_LISTS.keySet()) if(UUID_LISTS.get(p).contains(UUID)) player = p;
@@ -107,7 +107,7 @@ public class CacheHelper
         POKEMON_LISTS.put(player, pokemon);
     }
 
-    public static void updateNumbers(String player)
+    synchronized public static void updateNumbers(String player)
     {
         for(Pokemon p : POKEMON_LISTS.get(player)) p.setNumber(UUID_LISTS.get(player).indexOf(p.getUUID()) + 1);
     }
