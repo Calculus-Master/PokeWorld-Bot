@@ -71,6 +71,12 @@ public class RaidDuel extends WildDuel
             List<String> movePool = this.getRaidBoss().active.getAllMoves().stream().filter(Move::isImplemented).collect(Collectors.collectingAndThen(Collectors.toList(), list -> { Collections.shuffle(list); return list; }));
             this.getRaidBoss().move = new Move(movePool.isEmpty() ? "Tackle" : movePool.get(new Random().nextInt(movePool.size())));
 
+            if(Arrays.asList("Explosion", "Self Destruct", "Memento").contains(this.getRaidBoss().move.getName()))
+            {
+                this.getRaidBoss().move = new Move("Tackle");
+                this.getRaidBoss().move.setPower(350);
+            }
+
             List<Integer> pool = new ArrayList<>();
             for(int i = 0; i < this.getNonBotPlayers().length; i++) pool.add(i);
 

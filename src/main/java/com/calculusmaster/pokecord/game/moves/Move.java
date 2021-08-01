@@ -63,6 +63,21 @@ public class Move
         this.setDefaultValues();
     }
 
+    private Move() {}
+
+    //For temporary one-time moves (mainly Raid Pokemon)
+    public static Move create(String name, Type type, Category category, int power, int accuracy)
+    {
+        Move m = new Move();
+
+        m.data = new MoveData(name, type, category, power, accuracy, new ArrayList<>(), false, false);
+        m.name = name;
+
+        m.setDefaultValues();
+
+        return m;
+    }
+
     //Custom
     @Deprecated
     public Move(String name, Type type, Category category, int power)
