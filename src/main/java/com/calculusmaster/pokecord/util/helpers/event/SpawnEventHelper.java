@@ -47,7 +47,7 @@ public class SpawnEventHelper
 
     public static String getSpawn(String id)
     {
-        return SERVER_SPAWNS.get(id);
+        return SERVER_SPAWNS.getOrDefault(id, "");
     }
 
     public static void clearSpawn(String id)
