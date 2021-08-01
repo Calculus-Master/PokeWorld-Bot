@@ -250,8 +250,8 @@ public class RaidDuel extends WildDuel
         for(int i = 0; i < this.waiting.size(); i++) this.players[i] = new Player(this.waiting.get(i), 1);
 
         this.setWildPokemon("");
-        this.players[this.players.length - 1].active.hpBuff = 1.5 + this.waiting.size();
-        this.players[this.players.length - 1].active.statBuff = 1.75 + (0.2 * this.waiting.size());
+        this.players[this.players.length - 1].active.hpBuff = 1.6 + this.waiting.size();
+        this.players[this.players.length - 1].active.statBuff = 1.85 + (0.2 * this.waiting.size());
 
         for(Player p : this.players) p.active.setHealth(p.active.getStat(Stat.HP));
 
