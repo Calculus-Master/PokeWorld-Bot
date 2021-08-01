@@ -311,7 +311,7 @@ public class MaxMoves
     }
 
     //TODO: Ignore Abilities
-    public String GMaxHydroSnipe(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    public String GMaxHydrosnipe(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         move.setPower(160);
         return Move.simpleDamageMove(user, opponent, duel, move);
