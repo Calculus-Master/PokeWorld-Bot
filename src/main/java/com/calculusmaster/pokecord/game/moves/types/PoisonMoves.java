@@ -98,4 +98,19 @@ public class PoisonMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.POISONED, 30);
     }
+
+    public String CrossPoison(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .addStatusEffect(StatusCondition.POISONED, 10)
+                .execute();
+    }
+
+    public String PoisonGas(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.POISONED)
+                .execute();
+    }
 }

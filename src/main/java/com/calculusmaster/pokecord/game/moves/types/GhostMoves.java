@@ -179,4 +179,12 @@ public class GhostMoves
     {
         return !Item.asItem(opponent.getItem()).equals(Item.NONE) ? Move.simpleDamageMove(user, opponent, duel, move) : move.getNothingResult();
     }
+
+    public String ShadowBone(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.DEF, -1, 20, false)
+                .execute();
+    }
 }

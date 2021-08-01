@@ -243,4 +243,37 @@ public class FightingMoves
                 .addCritDamageEffect(24)
                 .execute();
     }
+
+    public String WakeUpSlap(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(opponent.hasStatusCondition(StatusCondition.ASLEEP))
+        {
+            move.setPower(2.0);
+            opponent.removeStatusCondition(StatusCondition.ASLEEP);
+        }
+
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
+    }
+
+    public String VitalThrow(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
+
+    public String CrossChop(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .execute();
+    }
+
+    public String PowerUpPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.ATK, 1, 100, true)
+                .execute();
+    }
 }

@@ -343,4 +343,9 @@ public class PsychicMoves
                 .addStatChangeEffect(Stat.SPDEF, -1, 50, false)
                 .execute();
     }
+
+    public String Synchronoise(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return opponent.isType(user.getType()[0]) || opponent.isType(user.getType()[1]) ? Move.simpleDamageMove(user, opponent, duel, move) : move.getNoEffectResult(opponent);
+    }
 }

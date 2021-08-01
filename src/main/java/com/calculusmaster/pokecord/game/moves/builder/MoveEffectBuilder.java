@@ -106,6 +106,12 @@ public class MoveEffectBuilder
         return this;
     }
 
+    public MoveEffectBuilder addFixedHealEffect(int HP)
+    {
+        this.moveEffects.add(new FixedHealEffect(HP));
+        return this;
+    }
+
     public MoveEffectBuilder addFractionHealEffect(double fraction)
     {
         this.moveEffects.add(new FractionHealEffect(fraction));

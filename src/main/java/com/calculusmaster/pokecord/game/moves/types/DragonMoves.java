@@ -134,4 +134,9 @@ public class DragonMoves
     {
         return Move.multihitDamageMove(user, opponent, duel, move, 2);
     }
+
+    public String DragonHammer(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

@@ -165,4 +165,20 @@ public class FireMoves
                 .addStatChangeEffect(Stat.SPATK, 1, 50, true)
                 .execute();
     }
+
+    public String FlameWheel(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.BURNED, 10)
+                .execute();
+    }
+
+    public String BlueFlare(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.BURNED, 20)
+                .execute();
+    }
 }

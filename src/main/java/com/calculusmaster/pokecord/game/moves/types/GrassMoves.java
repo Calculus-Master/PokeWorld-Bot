@@ -272,4 +272,12 @@ public class GrassMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String StrengthSap(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFixedHealEffect(opponent.getStat(Stat.ATK))
+                .addStatChangeEffect(Stat.ATK, -1, 100, false)
+                .execute();
+    }
 }
