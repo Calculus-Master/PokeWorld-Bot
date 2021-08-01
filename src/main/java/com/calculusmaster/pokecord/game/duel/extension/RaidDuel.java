@@ -162,7 +162,7 @@ public class RaidDuel extends WildDuel
 
                 winnings.append(p.data.getUsername()).append(" - `").append((int)(credits * multiplier)).append("c`\n");
 
-                if(highestDamage.equals(p.ID) && !p.active.isFainted() && new Random().nextInt(100) < 20)
+                if(highestDamage.equals(p.ID) && !p.active.isFainted() && new Random().nextInt(100) < 50)
                 {
                     Pokemon reward = Pokemon.create(this.getRaidBoss().active.getName());
                     reward.setIVs(50);
