@@ -33,7 +33,7 @@ public class CommandActivate extends Command
         Item item = Item.asItem(this.playerData.getItemList().get(this.getInt(1) - 1));
         Pokemon s = this.playerData.getSelectedPokemon();
 
-        if(item != null && item.nonPokemon)
+        if(item != null && item.isFunctionalItem())
         {
            if(item.equals(Item.IV_REROLLER))
            {
@@ -121,7 +121,7 @@ public class CommandActivate extends Command
                }
            }
         }
-        else if(item != null && !item.nonPokemon)
+        else if(item != null)
         {
             this.event.getChannel().sendMessage(this.playerData.getMention() + ": `" + item.getStyledName() + "` must be given to a Pokemon!").queue();
             this.embed = null;

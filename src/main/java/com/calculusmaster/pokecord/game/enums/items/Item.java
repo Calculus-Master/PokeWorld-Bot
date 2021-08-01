@@ -15,7 +15,7 @@ public enum Item
     EV_REALLOCATOR(0, FUNCTIONAL),
     IV_REROLLER(0, FUNCTIONAL),
     EV_CLEARER(0, FUNCTIONAL),
-    //Pokemon Items (p!give)
+    //Pokemon Evolution Items
     FRIENDSHIP_BAND(500, EVOLUTION),
     THUNDER_STONE(250, EVOLUTION),
     ICE_STONE(250, EVOLUTION),
@@ -51,8 +51,10 @@ public enum Item
     TART_APPLE(250, EVOLUTION),
     SWEET_APPLE(250, EVOLUTION),
     SWEET(250, EVOLUTION),
+    //Misc
     DESTINY_KNOT(1000, MISC),
     ZYGARDE_CUBE(6000, MISC),
+    //Arceus Plates
     DRACO_PLATE(1000, PLATE),
     DREAD_PLATE(1000, PLATE),
     EARTH_PLATE(1000, PLATE),
@@ -73,14 +75,11 @@ public enum Item
 
     public int cost;
     public ItemType type;
-    public boolean nonPokemon;
 
     Item(int cost, ItemType type)
     {
         this.cost = cost;
         this.type = type;
-
-        this.nonPokemon = type.equals(ItemType.FUNCTIONAL);
     }
 
     public String getName()
@@ -130,5 +129,10 @@ public enum Item
     public boolean isPlateItem()
     {
         return this.type.equals(PLATE);
+    }
+
+    public boolean isFunctionalItem()
+    {
+        return this.type.equals(FUNCTIONAL);
     }
 }

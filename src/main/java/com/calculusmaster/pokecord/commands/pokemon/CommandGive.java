@@ -29,7 +29,7 @@ public class CommandGive extends Command
         Item item = Item.asItem(this.playerData.getItemList().get(this.getInt(1) - 1));
         Pokemon s = this.playerData.getSelectedPokemon();
 
-        if(item != null && !item.nonPokemon)
+        if(item != null && !item.isFunctionalItem())
         {
             if(s.hasItem()) this.playerData.addItem(s.getItem());
             s.setItem(item);
@@ -40,7 +40,7 @@ public class CommandGive extends Command
             this.event.getChannel().sendMessage(this.playerData.getMention() + ": Gave " + s.getName() + " a `" + item.getStyledName() + "`!").queue();
             this.embed = null;
         }
-        else if(item != null && item.nonPokemon)
+        else if(item != null)
         {
             this.event.getChannel().sendMessage(this.playerData.getMention() + ": `" + item.getStyledName() + "` cannot be given to a Pokemon! Use p!activate instead!").queue();
             this.embed = null;

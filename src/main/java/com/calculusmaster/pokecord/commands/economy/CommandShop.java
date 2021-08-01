@@ -170,7 +170,7 @@ public class CommandShop extends Command
         {
             Item item = Item.values()[r.nextInt(Item.values().length)];
 
-            if(!item.equals(Item.NONE) && !ITEM_ENTRIES.contains(item) && !item.nonPokemon)
+            if(!item.equals(Item.NONE) && !ITEM_ENTRIES.contains(item) && !item.isFunctionalItem())
             {
                 ITEM_ENTRIES.add(item);
                 ITEM_PRICES.add(item.cost + (r.nextInt(item.cost / 2) * (r.nextInt(10) < 5 ? 1 : -1)));
