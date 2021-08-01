@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.util.helpers;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.trade.elements.MarketEntry;
+import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 
@@ -23,11 +24,14 @@ public class CacheHelper
     public static final Map<String, List<String>> UUID_LISTS = new HashMap<>();
     public static final Map<String, List<Pokemon>> POKEMON_LISTS = new HashMap<>();
 
-    //Stored Data Type: MarketEntryp
+    //Stored Data Type: MarketEntry
     public static final List<MarketEntry> MARKET_ENTRIES = new ArrayList<>();
 
     //Stored Data Type: Player IDs
     public static final Map<Achievements, List<String>> ACHIEVEMENT_CACHE = new HashMap<>();
+
+    //Key: playerID     Value: PlayerDataQuery
+    public static final Map<String, PlayerDataQuery> PLAYERS = new HashMap<>();
 
     //Key: playerID     Value: Team
     public static final Map<String, List<Pokemon>> TEAM_LISTS = new HashMap<>();
@@ -195,5 +199,15 @@ public class CacheHelper
     public static void initAchievementCache()
     {
         for(Achievements a : Achievements.values()) ACHIEVEMENT_CACHE.put(a, new ArrayList<>());
+    }
+
+    public static void initPlayerCache()
+    {
+        Mongo.PlayerData.find().forEach(d -> PLAYERS.put(d.getString("playerID"), new PlayerDataQuery(d.getString("playerID"))));
+    }
+
+    synchronized public static void addPlayer(String ID)
+    {
+        PLAYERS.put(ID, new PlayerDataQuery(ID));
     }
 }

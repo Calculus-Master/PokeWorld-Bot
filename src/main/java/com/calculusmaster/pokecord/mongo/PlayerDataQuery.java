@@ -77,6 +77,8 @@ public class PlayerDataQuery extends MongoQuery
 
         SettingsHelper.register(player.getId());
         PlayerStatisticsQuery.register(player.getId());
+
+        CacheHelper.addPlayer(player.getId());
     }
 
     private void update()
