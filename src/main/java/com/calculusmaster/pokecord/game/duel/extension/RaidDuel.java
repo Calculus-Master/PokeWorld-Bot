@@ -9,6 +9,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -256,8 +257,31 @@ public class RaidDuel extends WildDuel
         for(int i = 0; i < this.waiting.size(); i++) this.players[i] = new Player(this.waiting.get(i), 1);
 
         this.setWildPokemon("");
-        this.players[this.players.length - 1].active.hpBuff = 1.6 + this.waiting.size();
-        this.players[this.players.length - 1].active.statBuff = 1.85 + (0.2 * this.waiting.size());
+
+        double baseMultiplierHP = switch(PokemonRarity.POKEMON_RARITIES.getOrDefault(this.getRaidBoss().active.getName(), PokemonRarity.Rarity.EXTREME)) {
+            case COPPER -> 1.3;
+            case SILVER -> 1.4;
+            case GOLD -> 1.5;
+            case DIAMOND -> 1.6;
+            case PLATINUM -> 1.65;
+            case MYTHICAL -> 1.7;
+            case LEGENDARY -> 1.9;
+            case EXTREME -> 2.2;
+        };
+
+        double baseMultiplierStat = switch(PokemonRarity.POKEMON_RARITIES.getOrDefault(this.getRaidBoss().active.getName(), PokemonRarity.Rarity.EXTREME)) {
+            case COPPER -> 1.5;
+            case SILVER -> 1.6;
+            case GOLD -> 1.7;
+            case DIAMOND -> 1.8;
+            case PLATINUM -> 1.9;
+            case MYTHICAL -> 2.6;
+            case LEGENDARY -> 2.2;
+            case EXTREME -> 2.4;
+        };
+
+        this.players[this.players.length - 1].active.hpBuff = baseMultiplierHP + this.waiting.size();
+        this.players[this.players.length - 1].active.statBuff = baseMultiplierStat + (0.2 * this.waiting.size());
 
         for(Player p : this.players) p.active.setHealth(p.active.getStat(Stat.HP));
 
