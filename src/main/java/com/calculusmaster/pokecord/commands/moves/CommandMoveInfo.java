@@ -38,7 +38,8 @@ public class CommandMoveInfo extends Command
                         .addField("Type", Global.normalCase(m.type.toString()), true)
                         .addField("Category", m.category != null ? Global.normalCase(m.category.toString()) : "Mirrors Base Move", true)
                         .addField("Power", m.isZMove || m.isMaxMove ? "Depends on Base Move" : String.valueOf(m.basePower), true)
-                        .addField("Accuracy", m.isZMove || m.isMaxMove ? "Always Hits" : String.valueOf(m.baseAccuracy), true);
+                        .addField("Accuracy", m.isZMove || m.isMaxMove ? "Always Hits" : String.valueOf(m.baseAccuracy), true)
+                        .addBlankField(true);
 
                 this.embed.setTitle(m.name + " Info");
                 this.color = m.type.getColor();
