@@ -47,7 +47,7 @@ public class Move
         //Incomplete Moves
         INCOMPLETE_MOVES.clear();
 
-        for(String m : DataHelper.MOVES) if(!Move.isImplemented(m) && !INCOMPLETE_MOVES.contains(m)) INCOMPLETE_MOVES.add(m);
+        for(String m : DataHelper.MOVES) if(!WIP_MOVES.contains(m) && !Move.isImplemented(m) && !INCOMPLETE_MOVES.contains(m)) INCOMPLETE_MOVES.add(m);
 
         INCOMPLETE_MOVES = INCOMPLETE_MOVES.stream().distinct().collect(Collectors.toList());
     }
