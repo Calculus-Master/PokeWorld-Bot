@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Room;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -142,6 +143,7 @@ public class RaidDuel extends WildDuel
             for(Player p : this.getNonBotPlayers()) if(p.ID.equals(highestDamage)) Achievements.grant(p.ID, Achievements.WON_FIRST_RAID_HIGHEST_DAMAGE, this.event);
 
             StringBuilder winnings = new StringBuilder();
+            String extraWinnings = "";
 
             for(Player p : this.getNonBotPlayers())
             {
@@ -152,11 +154,26 @@ public class RaidDuel extends WildDuel
                 p.active.addExp((int)(pokeXP * multiplier));
 
                 winnings.append(p.data.getUsername()).append(" - `").append((int)(credits * multiplier)).append("c`\n");
+
+                if(highestDamage.equals(p.ID) && !p.active.isFainted() && new Random().nextInt(100) < 20)
+                {
+                    Pokemon reward = Pokemon.create(this.getRaidBoss().active.getName());
+                    reward.setIVs(50);
+                    reward.setLevel(60);
+                    reward.setEVs("20-20-20-20-20-20");
+                    reward.setDynamaxLevel(2);
+                    reward.setNickname("Raid " + reward.getName());
+
+                    Pokemon.uploadPokemon(reward);
+                    p.data.addPokemon(reward.getUUID());
+
+                    extraWinnings = "\n\n**" + p.data.getUsername() + " caught the Raid Pokemon!**";
+                }
             }
 
             winnings.deleteCharAt(winnings.length() - 1);
 
-            embed.setDescription("The Raid Pokemon is defeated!\n\n**Rewards:**\n" + winnings);
+            embed.setDescription("The Raid Pokemon is defeated!\n\n**Rewards:**\n" + winnings + extraWinnings);
         }
         else
         {
