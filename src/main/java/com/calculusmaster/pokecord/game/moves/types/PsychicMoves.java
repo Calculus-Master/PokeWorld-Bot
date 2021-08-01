@@ -10,6 +10,7 @@ import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -235,9 +236,7 @@ public class PsychicMoves
 
     public String StoredPower(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int increases = 0;
-        for(Stat s : Stat.values()) if(user.getStageChange(s) > 0) increases += user.getStageChange(s);
-
+        int increases = Arrays.stream(Stat.values()).mapToInt(user::getStageChange).filter(stage -> stage > 0).sum();
         move.setPower(20 + increases * 20);
 
         return Move.simpleDamageMove(user, opponent, duel, move);
@@ -335,6 +334,13 @@ public class PsychicMoves
     {
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addAccuracyChangeEffect(-1, 100, false)
+                .execute();
+    }
+
+    public String LusterPurge(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.SPDEF, -1, 50, false)
                 .execute();
     }
 }
