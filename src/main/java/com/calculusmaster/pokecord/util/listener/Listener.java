@@ -84,6 +84,7 @@ public class Listener extends ListenerAdapter
             catch (Exception e)
             {
                 LoggerHelper.reportError(Listener.class, "Command Execution Failed! (" + Arrays.toString(msg) + ")", e);
+                event.getChannel().sendMessage("<@" + player.getId() + ">: An error has occurred while using this command. Please report it with `p!report`!").queue();
             }
 
             if(r.nextInt(5000) < 1) ThreadPoolHandler.LISTENER_EVENT.execute(() -> redeemEvent(event));
