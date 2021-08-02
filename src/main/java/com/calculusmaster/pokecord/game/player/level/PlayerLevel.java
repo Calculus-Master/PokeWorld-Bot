@@ -14,6 +14,7 @@ public class PlayerLevel
 
     public static final int REQUIRED_LEVEL_TRADE = 2;
     public static final int REQUIRED_LEVEL_MARKET_LIST = 3;
+    public static final int REQUIRED_LEVEL_TOURNAMENT_CREATE = 5;
 
     public static void init()
     {

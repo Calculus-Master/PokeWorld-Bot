@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
+import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
 import com.calculusmaster.pokecord.game.tournament.Tournament;
 import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -111,6 +112,12 @@ public class CommandTournament extends Command
         }
         else if(create)
         {
+            if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_TOURNAMENT_CREATE)
+            {
+                this.sendMsg("You must be Pokemon Mastery Level " + PlayerLevel.REQUIRED_LEVEL_TOURNAMENT_CREATE + " to create Tournaments!");
+                return this;
+            }
+
             List<String> msg = Arrays.asList(this.msg);
 
             this.mentions = this.mentions.stream().distinct().collect(Collectors.toList());
