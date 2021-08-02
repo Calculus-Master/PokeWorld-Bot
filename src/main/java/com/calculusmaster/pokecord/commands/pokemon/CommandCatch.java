@@ -65,7 +65,7 @@ public class CommandCatch extends Command
             if(amount == -1) this.sendMsg("An error has occurred with collections!");
             else if(amount % 5 == 0)
             {
-                int credits = 200 + 100 * (amount / 5 - 1);
+                int credits = 200 + 150 * (amount / 5 - 1);
                 this.playerData.changeCredits(credits);
 
                 this.sendMsg("Reached Collection Milestone for " + caught.getName() + ": **" + amount + "** (**" + credits + "**c)!");
