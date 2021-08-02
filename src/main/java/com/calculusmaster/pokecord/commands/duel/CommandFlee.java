@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class CommandFlee extends Command
 {
@@ -39,9 +40,19 @@ public class CommandFlee extends Command
                 }
                 else
                 {
-                    DuelHelper.delete(this.player.getId());
+                    if(new Random().nextInt(100) < 66)
+                    {
+                        DuelHelper.delete(this.player.getId());
 
-                    this.sendMsg("Successfully fled from the Wild Pokemon!");
+                        this.sendMsg("Successfully fled from the Wild Pokemon!");
+                    }
+                    else
+                    {
+                        this.sendMsg("You could not escape from the Wild Pokemon!");
+
+                        d.submitMove(this.player.getId(), -1, 'i');
+                        d.checkReady();
+                    }
                 }
             }
             else
