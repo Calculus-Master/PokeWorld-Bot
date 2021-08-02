@@ -11,6 +11,7 @@ import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
+import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
@@ -121,7 +122,8 @@ public class CommandBuy extends Command
         {
             String requestedForm = Global.normalCase(this.getMultiWordContent(2));
 
-            if(!selected.hasForms()) this.sendMsg(selected.getName() + " does not have any forms!");
+            if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_FORM) this.sendInvalidLevel(PlayerLevel.REQUIRED_LEVEL_FORM, "to purchase forms");
+            else if(!selected.hasForms()) this.sendMsg(selected.getName() + " does not have any forms!");
             else if(!Global.POKEMON.contains(requestedForm)) this.sendMsg("Invalid form name!");
             else if(Arrays.asList("Aegislash", "Aegislash Blade").contains(selected.getName())) this.sendMsg(selected.getName() + "'s forms cannot be purchased!");
             else if(this.playerData.getOwnedForms().contains(requestedForm)) this.sendMsg("You already own this form!");
@@ -141,6 +143,7 @@ public class CommandBuy extends Command
         else if(mega)
         {
             if(this.msg.length != 2 && this.msg.length != 3) this.sendMsg(CommandInvalid.getShort());
+            else if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_MEGA) this.sendInvalidLevel(PlayerLevel.REQUIRED_LEVEL_MEGA, "to purchase Mega Evolutions");
             else if(!selected.hasMega()) this.sendMsg(selected.getName() + " cannot Mega Evolve!");
             else if(this.playerData.getCredits() < Prices.SHOP_MEGA.get()) this.sendInvalidCredits(Prices.SHOP_MEGA.get());
             else if(selected.getMegaList().size() == 1 && this.msg.length == 3) this.sendMsg("Use `p!buy mega` instead!");
