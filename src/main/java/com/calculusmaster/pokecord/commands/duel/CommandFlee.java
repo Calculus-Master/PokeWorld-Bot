@@ -5,7 +5,6 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.extension.TrainerDuel;
 import com.calculusmaster.pokecord.game.duel.extension.WildDuel;
-import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
@@ -40,9 +39,6 @@ public class CommandFlee extends Command
                 }
                 else
                 {
-                    //TODO: Random chance of fleeing
-                    Pokemon.uploadPokemon(d.getPlayers()[0].active);
-
                     DuelHelper.delete(this.player.getId());
 
                     this.sendMsg("Successfully fled from the Wild Pokemon!");

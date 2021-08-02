@@ -24,7 +24,6 @@ public class CommandMega extends Command
             else if(selected.getName().contains("Primal")) original = mega.substring("Primal ".length());
 
             selected.changeForm(original);
-            Pokemon.uploadPokemon(selected);
 
             this.playerData.addPokePassExp(200, this.event);
             this.event.getChannel().sendMessage(this.playerData.getMention() + ": " + mega + " has de-evolved into " + original + "!").queue();
