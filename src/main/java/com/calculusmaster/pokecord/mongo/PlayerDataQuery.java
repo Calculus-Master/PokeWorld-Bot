@@ -4,10 +4,10 @@ import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.game.bounties.components.Bounty;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
+import com.calculusmaster.pokecord.game.player.pokepass.PokePass;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
 import com.calculusmaster.pokecord.game.pokemon.PokemonSkin;
-import com.calculusmaster.pokecord.game.pokepass.PokePass;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
@@ -71,7 +71,9 @@ public class PlayerDataQuery extends MongoQuery
                 .append("skins", new JSONArray())
                 .append("equipped_skins", new JSONArray())
                 .append("owned_eggs", new JSONArray())
-                .append("active_egg", "");
+                .append("active_egg", "")
+                .append("level", 1)
+                .append("exp", 0);
 
         Mongo.PlayerData.insertOne(data);
 
@@ -747,5 +749,27 @@ public class PlayerDataQuery extends MongoQuery
     public void removeActiveEgg()
     {
         this.update(Updates.set("active_egg", ""));
+    }
+
+    //key: "level"
+    public int getLevel()
+    {
+        return this.json().getInt("level");
+    }
+
+    public void increaseLevel()
+    {
+        this.update(Updates.inc("level", 1));
+    }
+
+    //key: "exp"
+    public int getExp()
+    {
+        return this.json().getInt("exp");
+    }
+
+    public void addExp(int amount)
+    {
+        this.update(Updates.inc("exp", amount));
     }
 }

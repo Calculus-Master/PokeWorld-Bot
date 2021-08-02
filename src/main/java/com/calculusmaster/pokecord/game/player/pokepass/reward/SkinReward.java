@@ -1,7 +1,7 @@
-package com.calculusmaster.pokecord.game.pokepass.reward;
+package com.calculusmaster.pokecord.game.player.pokepass.reward;
 
+import com.calculusmaster.pokecord.game.player.pokepass.TierReward;
 import com.calculusmaster.pokecord.game.pokemon.PokemonSkin;
-import com.calculusmaster.pokecord.game.pokepass.TierReward;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 
 public class SkinReward extends TierReward

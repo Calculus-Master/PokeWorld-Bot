@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game.pokepass;
+package com.calculusmaster.pokecord.game.player.pokepass;
 
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 

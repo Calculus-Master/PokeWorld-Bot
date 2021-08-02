@@ -1,7 +1,7 @@
-package com.calculusmaster.pokecord.game.pokepass.reward;
+package com.calculusmaster.pokecord.game.player.pokepass.reward;
 
+import com.calculusmaster.pokecord.game.player.pokepass.TierReward;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.game.pokepass.TierReward;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 
 import java.util.ArrayList;

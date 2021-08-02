@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.commands.player;
 
 import com.calculusmaster.pokecord.commands.Command;
-import com.calculusmaster.pokecord.game.pokepass.PokePass;
+import com.calculusmaster.pokecord.game.player.pokepass.PokePass;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandPokePass extends Command
