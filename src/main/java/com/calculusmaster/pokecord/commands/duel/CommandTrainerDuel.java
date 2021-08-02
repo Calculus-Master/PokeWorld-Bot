@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.extension.TrainerDuel;
 import com.calculusmaster.pokecord.game.duel.players.Trainer;
+import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
@@ -34,6 +35,8 @@ public class CommandTrainerDuel extends Command
             }
 
             Trainer.TrainerInfo trainer = elite ? Trainer.createElite() : Trainer.DAILY_TRAINERS.get(this.getInt(1) - 1);
+
+            if(elite && this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_ELITE) this.sendInvalidLevel(PlayerLevel.REQUIRED_LEVEL_ELITE, "to duel an Elite Trainer");
 
             if(this.playerData.getTeam().size() < trainer.pokemon.size())
             {

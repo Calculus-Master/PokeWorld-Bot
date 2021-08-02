@@ -17,7 +17,7 @@ public class PlayerLevel
     public static final int REQUIRED_LEVEL_TOURNAMENT_CREATE = 5;
     public static final int REQUIRED_LEVEL_GAUNTLET = 3;
     public static final int REQUIRED_LEVEL_RAID = 3;
-    public static final int REQUIRED_LEVEL_ELITE = 2;
+    public static final int REQUIRED_LEVEL_ELITE = 3;
     public static final int REQUIRED_LEVEL_MEGA = 2;
     public static final int REQUIRED_LEVEL_FORM = 2;
     public static final int REQUIRED_LEVEL_ACTIVATE = 4;
