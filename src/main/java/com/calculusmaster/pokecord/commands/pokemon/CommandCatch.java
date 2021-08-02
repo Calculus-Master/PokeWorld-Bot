@@ -78,6 +78,10 @@ public class CommandCatch extends Command
                 this.sendMsg("Unlocked Collection for " + caught.getName() + " (**" + credits + "**c)!");
             }
 
+            if(amount >= 10) Achievements.grant(this.player.getId(), Achievements.REACHED_COLLECTION_MILESTONE_10, this.event);
+            if(amount >= 20) Achievements.grant(this.player.getId(), Achievements.REACHED_COLLECTION_MILESTONE_20, this.event);
+            if(amount >= 50) Achievements.grant(this.player.getId(), Achievements.REACHED_COLLECTION_MILESTONE_50, this.event);
+
             if(caught.getTotalIVRounded() >= 90 || (caught.getTotalIVRounded() >= 80 && new Random().nextInt(100) < 20))
             {
                 this.playerData.changeRedeems(1);

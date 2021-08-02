@@ -59,6 +59,9 @@ public enum Achievements
     COMPLETED_FIRST_RAID(400, "Completed your first Raid!"),
     WON_FIRST_RAID(800, "Won your first Raid!"),
     WON_FIRST_RAID_HIGHEST_DAMAGE(1200, "Won your first Raid and dealt the most damage!"),
+    REACHED_COLLECTION_MILESTONE_10(500, "Reached a Collection Milestone of 10 for any Pokemon!"),
+    REACHED_COLLECTION_MILESTONE_20(1500, "Reached a Collection Milestone of 20 for any Pokemon!"),
+    REACHED_COLLECTION_MILESTONE_50(7000, "Reached a Collection Milestone of 50 for any Pokemon!"),
     COMPLETED_ALL_ACHIEVEMENTS(100000, "Completed all Achievements!");
 
     public int credits;
