@@ -259,29 +259,29 @@ public class RaidDuel extends WildDuel
         this.setWildPokemon("");
 
         double baseMultiplierHP = switch(PokemonRarity.POKEMON_RARITIES.getOrDefault(this.getRaidBoss().active.getName(), PokemonRarity.Rarity.EXTREME)) {
-            case COPPER -> 1.3;
-            case SILVER -> 1.4;
-            case GOLD -> 1.5;
-            case DIAMOND -> 1.6;
-            case PLATINUM -> 1.65;
-            case MYTHICAL -> 1.7;
-            case LEGENDARY -> 1.9;
-            case EXTREME -> 2.2;
-        };
-
-        double baseMultiplierStat = switch(PokemonRarity.POKEMON_RARITIES.getOrDefault(this.getRaidBoss().active.getName(), PokemonRarity.Rarity.EXTREME)) {
             case COPPER -> 1.5;
             case SILVER -> 1.6;
             case GOLD -> 1.7;
             case DIAMOND -> 1.8;
-            case PLATINUM -> 1.9;
-            case MYTHICAL -> 2.6;
-            case LEGENDARY -> 2.2;
-            case EXTREME -> 2.4;
+            case PLATINUM -> 1.85;
+            case MYTHICAL -> 1.95;
+            case LEGENDARY -> 2.0;
+            case EXTREME -> 2.3;
         };
 
-        this.players[this.players.length - 1].active.hpBuff = baseMultiplierHP + this.waiting.size();
-        this.players[this.players.length - 1].active.statBuff = baseMultiplierStat + (0.2 * this.waiting.size());
+        double baseMultiplierStat = switch(PokemonRarity.POKEMON_RARITIES.getOrDefault(this.getRaidBoss().active.getName(), PokemonRarity.Rarity.EXTREME)) {
+            case COPPER -> 1.8;
+            case SILVER -> 1.9;
+            case GOLD -> 2.0;
+            case DIAMOND -> 2.1;
+            case PLATINUM -> 2.2;
+            case MYTHICAL -> 2.5;
+            case LEGENDARY -> 2.6;
+            case EXTREME -> 3.0;
+        };
+
+        this.players[this.players.length - 1].active.hpBuff = baseMultiplierHP + (this.waiting.size() - 1);
+        this.players[this.players.length - 1].active.statBuff = baseMultiplierStat + (0.3 * (this.waiting.size() - 1));
 
         for(Player p : this.players) p.active.setHealth(p.active.getStat(Stat.HP));
 
