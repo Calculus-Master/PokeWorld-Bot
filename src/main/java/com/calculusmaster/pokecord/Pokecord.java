@@ -32,6 +32,7 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 import javax.security.auth.login.LoginException;
 import java.util.EnumSet;
+import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -111,9 +112,11 @@ public class Pokecord
 
         //PokecordGUI.launch(PokecordGUI.class, args);
 
+        Random r = new Random();
+
         for(Guild g : BOT_JDA.getGuilds())
         {
-            Thread.sleep(1000);
+            Thread.sleep(r.nextInt(1000) + 500);
 
             SpawnEventHelper.start(g);
             LocationEventHelper.start(g);
