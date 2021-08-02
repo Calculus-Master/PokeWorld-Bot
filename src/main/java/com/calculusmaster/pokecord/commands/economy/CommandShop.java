@@ -62,7 +62,7 @@ public class CommandShop extends Command
                 if(Page.MEGA.matches(this.msg[1]))
                 {
                     this.embed
-                            .addField("Price", "All Mega Evolutions cost " + Prices.SHOP_MEGA.get() + " credits!", false)
+                            .addField("Price", "All Mega Evolutions cost `" + Prices.SHOP_MEGA.get() + "` credits!", false)
                             .addField("Single Mega Evolution", this.getCommandFormatted("buy mega") + " – Buy the Mega Evolution of a Pokemon that does not have an X or Y Mega Evolution.", false)
                             .addField("Mega X Evolution", this.getCommandFormatted("buy mega x") + " - Buy the X Mega Evolution of a Pokemon that has an X or Y Mega Evolution", false)
                             .addField("Mega Y Evolution", this.getCommandFormatted("buy mega y") + " - Buy the Y Mega Evolution of a Pokemon that has an X or Y Mega Evolution", false);
@@ -76,7 +76,7 @@ public class CommandShop extends Command
                 else if(Page.FORMS.matches(this.msg[1]))
                 {
                     this.embed
-                            .addField("Price", "All Forms cost " + Prices.SHOP_FORM.get() + " credits!", false)
+                            .addField("Price", "All Forms cost `" + Prices.SHOP_FORM.get() + "` credits!", false)
                             .addField("Purchase", "To buy a form, type `p!buy form <name>`, where <name> is the name of the form.", false)
                             .addField("Selected Pokemon", selected.getName(), false);
 
@@ -91,7 +91,7 @@ public class CommandShop extends Command
                 else if(Page.NATURE.matches(this.msg[1]))
                 {
                     this.embed
-                            .addField("Price", "All Natures cost " + Prices.SHOP_NATURE.get() + " credits!", false)
+                            .addField("Price", "All Natures cost `" + Prices.SHOP_NATURE.get() + "` credits!", false)
                             .addField("Selected Pokemon", "Nature: `" + selected.getNature().toString() + "`", false);
 
                     for(Nature n : Nature.values()) this.embed.addField(n.toString() + (n.hasNoEffect() ? "*" : ""), n.getShopEntry(), true);
@@ -101,7 +101,7 @@ public class CommandShop extends Command
                 }
                 else if(Page.CANDY.matches(this.msg[1]))
                 {
-                    this.embed.addField("Price", "Rare Candies cost " + Prices.SHOP_CANDY.get() + " each.", false);
+                    this.embed.addField("Price", "Rare Candies cost `" + Prices.SHOP_CANDY.get() + "` each.", false);
                     this.embed.addField("Selected Pokemon", "Level `" + selected.getLevel() + "`\nYou can buy a maximum of `" + (100 - selected.getLevel()) + "` Rare Candies!", false);
                 }
                 else if(Page.ITEMS.matches(this.msg[1]))
@@ -111,12 +111,16 @@ public class CommandShop extends Command
                 }
                 else if(Page.TM.matches(this.msg[1]))
                 {
+                    this.embed.addField("Price", "Each TM costs `" + CommandShop.TM_PRICE + "` credits!", false);
+
                     StringBuilder s = new StringBuilder();
                     for(TM tm : TM_ENTRIES) s.append(tm.getShopEntry()).append("\n");
                     this.embed.addField("Available TMs", s.toString(), false);
                 }
                 else if(Page.TR.matches(this.msg[1]))
                 {
+                    this.embed.addField("Price", "Each TR costs `" + CommandShop.TR_PRICE + "` credits!", false);
+
                     StringBuilder s = new StringBuilder();
                     for(TR tr : TR_ENTRIES) s.append(tr.getShopEntry()).append("\n");
                     this.embed.addField("Available TRs", s.toString(), false);
