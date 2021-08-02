@@ -23,7 +23,7 @@ public class LoggerHelper
         init.run();
 
         long f = System.currentTimeMillis();
-        info(Pokecord.class, "Completed " + name + " Init!" + (time ? " Time: " + (f - i) + " ms!" : ""));
+        if(time) info(Pokecord.class, "Completed " + name + " Init!" + " Time: " + (f - i) + " ms!");
     }
 
     public static void init(String name, Runnable init)
