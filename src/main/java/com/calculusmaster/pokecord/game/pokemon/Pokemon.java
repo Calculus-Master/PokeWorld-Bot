@@ -16,7 +16,6 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
 
 public class Pokemon
 {
-    public JSONObject genericJSON;
+    private PokemonData data;
     protected JSONObject specificJSON;
 
     private String UUID;
@@ -67,7 +66,7 @@ public class Pokemon
         p.setNumber(-1);
 
         p.linkSpecificJSON(UUID);
-        p.linkGenericJSON(p.getSpecificJSON().getString("name"));
+        p.setData(p.getSpecificJSON().getString("name"));
 
         JSONObject specific = p.getSpecificJSON();
 
@@ -103,7 +102,7 @@ public class Pokemon
         p.setUUID();
         p.setNumber(-1);
 
-        p.linkGenericJSON(Global.normalCase(name));
+        p.setData(name);
 
         p.setLevel(1);
         p.setExp(0);
@@ -163,20 +162,15 @@ public class Pokemon
     }
 
     //JSONs
-    public void linkGenericJSON(String name)
+
+    public void setData(String name)
     {
-        //this.genericJSON = Pokemon.genericJSON(name);
-        this.genericJSON = new JSONObject(DataHelper.pokeData(name).document.toJson());
+        this.data = DataHelper.pokeData(Global.normalCase(name)).copy();
     }
 
     public void linkSpecificJSON(String UUID)
     {
         this.specificJSON = Pokemon.specificJSON(UUID);
-    }
-
-    public static JSONObject genericJSON(String name)
-    {
-        return new JSONObject(Mongo.PokemonInfo.find(Filters.eq("name", Global.normalCase(name))).first().toJson());
     }
 
     public static JSONObject specificJSON(String UUID)
@@ -260,11 +254,6 @@ public class Pokemon
     public static void deletePokemon(Pokemon p)
     {
         Mongo.PokemonData.deleteOne(p.getQuery());
-    }
-
-    public JSONObject getGenericJSON()
-    {
-        return this.genericJSON;
     }
 
     public JSONObject getSpecificJSON()
@@ -448,33 +437,30 @@ public class Pokemon
     //Moves
     public List<String> getAvailableMoves()
     {
-        List<String> movesList = new ArrayList<>();
-        JSONArray m = this.genericJSON.getJSONArray("moves");
-        JSONArray mL = this.genericJSON.getJSONArray("movesLVL");
+        List<String> moves = new ArrayList<>(List.copyOf(this.getAllMoves())).stream().filter(s -> this.data.moves.get(s) <= this.getLevel()).sorted(Comparator.comparingInt(s -> this.data.moves.get(s))).collect(Collectors.toList());;
 
-        for (int i = 0; i < m.length(); i++) if (mL.getInt(i) <= this.getLevel()) movesList.add(m.getString(i));
+        if(this.hasTM()) moves.add(TM.get(this.getTM()).getMoveName());
+        if(this.hasTR()) moves.add(TR.get(this.getTR()).getMoveName());
 
-        if (this.hasTM()) movesList.add(Global.normalCase(TM.get(this.heldTM).getMoveName()));
-        if (this.hasTR()) movesList.add(Global.normalCase(TR.get(this.heldTR).getMoveName()));
-
-        if (this.getName().contains("Zygarde") && this.hasItem() && Item.asItem(this.getItem()).equals(Item.ZYGARDE_CUBE)) {
-            Collections.addAll(movesList, "Core Enforcer", "Dragon Dance", "Extreme Speed", "Thousand Arrows", "Thousand Waves");
+        if(this.getName().contains("Zygarde") && this.hasItem() && Item.asItem(this.getItem()).equals(Item.ZYGARDE_CUBE))
+        {
+            Collections.addAll(moves, "Core Enforcer", "Dragon Dance", "Extreme Speed", "Thousand Arrows", "Thousand Waves");
         }
 
-        return movesList;
+        return moves;
     }
 
     public List<String> getAllMoves()
     {
-        JSONArray moves = this.genericJSON.getJSONArray("moves");
-        List<String> movesList = new ArrayList<>();
-        for (int i = 0; i < moves.length(); i++) movesList.add(moves.getString(i));
+        List<String> moves = new ArrayList<>(this.data.moves.keySet());
+        moves.sort(Comparator.comparingInt(s -> this.data.moves.get(s)));
 
-        if (this.getName().contains("Zygarde") && this.hasItem() && Item.asItem(this.getItem()).equals(Item.ZYGARDE_CUBE)) {
-            Collections.addAll(movesList, "Core Enforcer", "Dragon Dance", "Extreme Speed", "Thousand Arrows", "Thousand Waves");
+        if(this.getName().contains("Zygarde") && this.hasItem() && Item.asItem(this.getItem()).equals(Item.ZYGARDE_CUBE))
+        {
+            Collections.addAll(moves, "Core Enforcer", "Dragon Dance", "Extreme Speed", "Thousand Arrows", "Thousand Waves");
         }
 
-        return movesList;
+        return moves;
     }
 
     public String getMovesCondensed()
@@ -532,12 +518,12 @@ public class Pokemon
 
     public List<Integer> getAllValidTMs()
     {
-        return this.genericJSON.getJSONArray("movesTM").toList().stream().map(i -> (int) i).collect(Collectors.toList());
+        return this.data.validTMs.stream().map(TM::getNumber).toList();
     }
 
     public List<Integer> getAllValidTRs()
     {
-        return this.genericJSON.getJSONArray("movesTR").toList().stream().map(i -> (int) i).collect(Collectors.toList());
+        return this.data.validTRs.stream().map(TR::getNumber).toList();
     }
 
     public boolean canLearnTM(int tm)
@@ -622,7 +608,7 @@ public class Pokemon
         if (this.isDynamaxed && this.canGigantamax())
             return this.isShiny() ? DataHelper.GIGANTAMAX_DATA.get(this.getName()).shinyImage() : DataHelper.GIGANTAMAX_DATA.get(this.getName()).normalImage();
 
-        String image = this.genericJSON.getString(this.isShiny() ? "shinyURL" : "normalURL");
+        String image = this.isShiny() ? this.data.shinyURL : this.data.normalURL;
         return image.equals("") ? Pokemon.getWIPImage() : image;
     }
 
@@ -655,19 +641,20 @@ public class Pokemon
     public void addExp(int exp)
     {
         this.exp += exp;
-        int required = GrowthRate.getRequiredExp(this.genericJSON.getString("growthrate"), this.level);
+        int required = GrowthRate.getRequiredExp(this.data.growthRate, this.level);
 
-        while (this.exp >= required && this.level < 100) {
+        while (this.exp >= required && this.level < 100)
+        {
             this.level++;
             this.exp -= required;
-            required = GrowthRate.getRequiredExp(this.genericJSON.getString("growthrate"), this.level);
+            required = GrowthRate.getRequiredExp(this.data.growthRate, this.level);
         }
     }
 
     public int getDuelExp(Pokemon opponent)
     {
         int a = 1;
-        int b = this.genericJSON.getInt("exp");
+        int b = this.data.baseEXP;
         int e = 1;
         int L = opponent.getLevel();
         int Lp = this.getLevel();
@@ -681,28 +668,28 @@ public class Pokemon
     //Megas and Forms
     public boolean hasMega()
     {
-        return this.genericJSON.getJSONArray("mega").length() > 0;
+        return !this.data.megas.isEmpty();
     }
 
     public boolean hasForms()
     {
-        return this.genericJSON.getJSONArray("forms").length() > 0;
+        return !this.data.forms.isEmpty();
     }
 
     public List<String> getMegaList()
     {
-        return this.genericJSON.getJSONArray("mega").toList().stream().map(s -> (String) s).collect(Collectors.toList());
+        return this.data.megas;
     }
 
     public List<String> getFormsList()
     {
-        return this.genericJSON.getJSONArray("forms").toList().stream().map(s -> (String) s).collect(Collectors.toList());
+        return this.data.forms;
     }
 
     public void changeForm(String form)
     {
         form = Global.normalCase(form);
-        this.linkGenericJSON(form);
+        this.setData(form);
         Pokemon.updateName(this, form);
     }
 
@@ -787,12 +774,7 @@ public class Pokemon
 
     public Map<Stat, Integer> getEVYield()
     {
-        JSONArray yield = this.genericJSON.getJSONArray("ev");
-        Map<Stat, Integer> EVYield = new HashMap<>();
-
-        for (int i = 0; i < yield.length(); i++)
-            if (yield.getInt(i) != 0) EVYield.put(Stat.values()[i], yield.getInt(i));
-        return EVYield;
+        return this.data.yield;
     }
 
     public void gainEVs(Pokemon defeated)
@@ -900,7 +882,7 @@ public class Pokemon
 
     public int getBaseStat(Stat s)
     {
-        return this.genericJSON.getJSONArray("stats").getInt(s.ordinal());
+        return this.data.baseStats.get(s);
     }
 
     public void setDefaultStatMultipliers()
@@ -938,7 +920,7 @@ public class Pokemon
 
     public List<String> getAbilities()
     {
-        return this.genericJSON.getJSONArray("abilities").toList().stream().map(s -> (String) s).collect(Collectors.toList());
+        return this.data.abilities;
     }
 
     public int getAccuracyStage()
@@ -964,7 +946,7 @@ public class Pokemon
     //Simple Methods
     public String getName()
     {
-        return this.genericJSON.getString("name");
+        return this.data.name;
     }
 
     public String getNickname()
@@ -1000,7 +982,7 @@ public class Pokemon
 
     public void setType()
     {
-        this.type = new Type[]{Type.cast(this.genericJSON.getJSONArray("type").getString(0)), Type.cast(this.genericJSON.getJSONArray("type").getString(1))};
+        this.type = new Type[]{this.data.types.get(0), this.data.types.get(1)};
     }
 
     public boolean isType(Type t)
@@ -1010,7 +992,7 @@ public class Pokemon
 
     public double getWeight()
     {
-        return Double.parseDouble(this.genericJSON.getString("fillerinfo").split("-")[2]);
+        return this.data.weight;
     }
 
     @Override
