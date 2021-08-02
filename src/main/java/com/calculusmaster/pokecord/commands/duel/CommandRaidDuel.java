@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.duel;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
 import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -21,6 +22,7 @@ public class CommandRaidDuel extends Command
         if(join || leave)
         {
             if(!RaidEventHelper.hasRaid(this.server.getId())) this.sendMsg("There are no active Raid duels in this server!");
+            else if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_RAID) this.sendInvalidLevel(PlayerLevel.REQUIRED_LEVEL_RAID, "to participate in Raids");
             else if(join && RaidEventHelper.isPlayerReady(this.server.getId(), this.player.getId())) this.sendMsg("You are already ready for this server's active Raid duel! To leave, type `p!raidduel leave`.");
             else if(leave && !RaidEventHelper.isPlayerReady(this.server.getId(), this.player.getId())) this.sendMsg("You are not in this server's active Raid duel! To join, type `p!raidduel join`.");
             else

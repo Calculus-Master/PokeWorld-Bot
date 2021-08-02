@@ -106,6 +106,11 @@ public abstract class Command
         this.sendMsg("Insufficient Credits! Needed: `" + req + "`, you have `" + this.playerData.getCredits() + "`!");
     }
 
+    protected void sendInvalidLevel(int req, String after)
+    {
+        this.sendMsg("You must be Pokemon Mastery Level " + req + " " + after + "!");
+    }
+
     protected String getMultiWordContent(int start)
     {
         StringBuilder sb = new StringBuilder();

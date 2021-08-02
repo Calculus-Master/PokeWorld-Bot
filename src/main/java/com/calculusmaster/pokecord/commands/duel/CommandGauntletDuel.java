@@ -4,11 +4,12 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.extension.GauntletDuel;
+import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class CommandGauntlet extends Command
+public class CommandGauntletDuel extends Command
 {
-    public CommandGauntlet(MessageReceivedEvent event, String[] msg)
+    public CommandGauntletDuel(MessageReceivedEvent event, String[] msg)
     {
         super(event, msg);
     }
@@ -33,6 +34,7 @@ public class CommandGauntlet extends Command
         else if(start)
         {
             if(DuelHelper.isInDuel(this.player.getId())) this.sendMsg("You are already in a duel!");
+            else if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_GAUNTLET) this.sendInvalidLevel(PlayerLevel.REQUIRED_LEVEL_GAUNTLET, "to start a Gauntlet Duel");
             else
             {
                 GauntletDuel gauntlet = GauntletDuel.start(this.player.getId(), this.event);

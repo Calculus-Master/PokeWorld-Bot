@@ -280,7 +280,7 @@ public class Commands
                 .setCategory(Category.MISC);
 
         register("gauntlet", "gauntletduel")
-                .setCommand(CommandGauntlet::new)
+                .setCommand(CommandGauntletDuel::new)
                 .setCategory(Category.DUEL);
 
         register("raidduel", "raid")
