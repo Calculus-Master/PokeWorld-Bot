@@ -323,6 +323,8 @@ public class RaidDuel extends WildDuel
     @Override
     public void setWildPokemon(String pokemon)
     {
+        if(new Random().nextInt(100) < 5) pokemon = "Eternamax Eternatus";
+
         this.players[this.players.length - 1] = pokemon.equals("") ? new WildPokemon(100) : new WildPokemon(pokemon, 100);
 
         Player raidBoss = this.players[this.players.length - 1];
