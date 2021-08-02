@@ -71,6 +71,7 @@ public class TrainerDuel extends Duel
                 this.players[0].data.updateBountyProgression(b -> {
                     if(b.getType().equals(ObjectiveType.WIN_ELITE_DUEL) || b.getType().equals(ObjectiveType.COMPLETE_ELITE_DUEL)) b.update();
                 });
+                this.players[0].data.addExp(60, 65);
 
                 this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated the Elite Trainer and earned " + credits + " credits!").queue();
             }
@@ -91,6 +92,7 @@ public class TrainerDuel extends Duel
                     {
                         int winCredits = (new Random().nextInt(501) + 500) * Trainer.DAILY_TRAINERS.size();
                         this.players[0].data.changeCredits(winCredits);
+                        this.players[0].data.addExp(30, 75);
                         this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated all of today's trainers! You earned a bonus " + winCredits + " credits!").queue();
 
                         Achievements.grant(this.players[0].ID, Achievements.DEFEATED_DAILY_TRAINERS, this.event);

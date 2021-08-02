@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.game.bounties.components.Bounty;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
+import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
 import com.calculusmaster.pokecord.game.player.pokepass.PokePass;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
@@ -24,6 +25,7 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -760,6 +762,8 @@ public class PlayerDataQuery extends MongoQuery
     public void increaseLevel()
     {
         this.update(Updates.inc("level", 1));
+
+        this.clearExp();
     }
 
     //key: "exp"
@@ -768,8 +772,28 @@ public class PlayerDataQuery extends MongoQuery
         return this.json().getInt("exp");
     }
 
+    public void clearExp()
+    {
+        this.update(Updates.set("exp", 0));
+    }
+
     public void addExp(int amount)
     {
-        this.update(Updates.inc("exp", amount));
+        this.addExp(amount, 100);
+    }
+
+    public void addExp(int amount, int chance)
+    {
+        if(new Random().nextInt(100) < chance)
+        {
+            this.update(Updates.inc("exp", amount));
+
+            if(PlayerLevel.canPlayerLevelUp(this))
+            {
+                this.increaseLevel();
+
+                this.directMessage("You are now Pokemon Mastery Level " + this.getLevel() + "!");
+            }
+        }
     }
 }

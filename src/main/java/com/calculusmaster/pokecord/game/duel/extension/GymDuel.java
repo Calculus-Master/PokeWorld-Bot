@@ -54,6 +54,8 @@ public class GymDuel extends TrainerDuel
             Achievements.grant(this.players[0].ID, Achievements.DEFEATED_FIRST_GYM_LEADER, this.event);
             this.players[0].data.addPokePassExp(500, this.event);
 
+            this.players[0].data.addExp(50);
+
             Mongo.GymData.updateOne(Filters.eq("name", this.info.name), Updates.push("defeated", this.players[0].ID));
         }
         //Player lost

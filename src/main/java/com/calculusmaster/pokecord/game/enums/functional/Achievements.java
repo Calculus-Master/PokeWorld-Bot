@@ -86,6 +86,8 @@ public enum Achievements
                 p.addAchievement(a);
                 p.changeCredits(a.credits);
 
+                p.addExp(20, 100);
+
                 event.getChannel().sendMessage(p.getMention() + ": Unlocked an achievement: \"" + a.desc + "\"").queue();
             }
             else CacheHelper.ACHIEVEMENT_CACHE.get(a).add(playerID);

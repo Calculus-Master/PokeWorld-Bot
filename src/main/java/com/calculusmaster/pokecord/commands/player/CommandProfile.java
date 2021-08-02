@@ -26,7 +26,9 @@ public class CommandProfile extends Command
         PlayerDataQuery data = targetID.equals(this.player.getId()) ? this.playerData : new PlayerDataQuery(targetID);
         PlayerStatisticsQuery stats = data.getStats();
 
-        this.embed.addField("Joined Discord", player.getUser().getTimeCreated().format(DateTimeFormatter.RFC_1123_DATE_TIME), true)
+        this.embed
+                .addField("Level", "`" + data.getLevel() + "`", true)
+                .addField("Joined Discord", player.getUser().getTimeCreated().format(DateTimeFormatter.RFC_1123_DATE_TIME), true)
                 .addField("Joined Server", player.getTimeJoined().format(DateTimeFormatter.RFC_1123_DATE_TIME), true)
                 .addField("Pokemon Collected", "`" + data.getPokemonList().size() + "`", true)
                 .addField("Pokemon Caught", "`" + stats.get(PlayerStatistic.POKEMON_CAUGHT) + "`", true)

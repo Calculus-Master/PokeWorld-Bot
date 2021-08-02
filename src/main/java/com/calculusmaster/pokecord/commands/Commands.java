@@ -303,6 +303,10 @@ public class Commands
                 .setCommand(CommandTRInfo::new)
                 .setCategory(Category.MOVES);
 
+        register("level")
+                .setCommand(CommandLevel::new)
+                .setCategory(Category.PLAYER);
+
         register("dev")
                 .setCommand(CommandDev::new)
                 .setCategory(Category.MISC);

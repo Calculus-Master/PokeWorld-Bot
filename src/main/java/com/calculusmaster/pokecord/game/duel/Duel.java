@@ -1413,6 +1413,8 @@ public class Duel
         this.players[winner].data.addPokePassExp(1000, this.event);
         this.players[loser].data.addPokePassExp(500, this.event);
 
+        this.players[winner].data.addExp(20);
+
         this.players[winner].data.getStats().incr(PlayerStatistic.PVP_DUELS_WON);
         this.players[winner].data.updateBountyProgression(b -> {
             if(b.getType().equals(ObjectiveType.WIN_PVP_DUEL) || b.getType().equals(ObjectiveType.COMPLETE_PVP_DUEL)) b.update();

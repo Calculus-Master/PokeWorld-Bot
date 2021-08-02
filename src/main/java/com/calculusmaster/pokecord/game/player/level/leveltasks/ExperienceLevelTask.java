@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game.player.leveltasks;
+package com.calculusmaster.pokecord.game.player.level.leveltasks;
 
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 
@@ -19,8 +19,8 @@ public class ExperienceLevelTask extends AbstractLevelTask
     }
 
     @Override
-    public String getDesc()
+    public String getProgressOverview(PlayerDataQuery p)
     {
-        return "Experience: " + this.exp;
+        return p.getExp() + " / " + this.exp + " XP";
     }
 }

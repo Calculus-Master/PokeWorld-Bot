@@ -1,7 +1,6 @@
-package com.calculusmaster.pokecord.game.player;
+package com.calculusmaster.pokecord.game.player.level;
 
-import com.calculusmaster.pokecord.game.player.leveltasks.AbstractLevelTask;
-import com.calculusmaster.pokecord.game.player.leveltasks.ExperienceLevelTask;
+import com.calculusmaster.pokecord.game.player.level.leveltasks.*;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 
 import java.util.ArrayList;
@@ -21,12 +20,32 @@ public class PlayerLevel
 
         registerNew(3)
                 .setExp(250)
+                .add(new PokemonLevelTask(50))
+                .add(new CreditsLevelTask(4000))
+                .completeRegistry();
+
+        registerNew(4)
+                .setExp(500)
+                .add(new PokemonLevelTask(250))
+                .add(new CreditsLevelTask(10000))
+                .completeRegistry();
+
+        registerNew(5)
+                .setExp(1000)
+                .add(new PokemonLevelTask(500))
+                .add(new CreditsLevelTask(15000))
+                .add(new WildLevelTask(25))
                 .completeRegistry();
     }
 
     public static boolean canPlayerLevelUp(PlayerDataQuery p)
     {
-        return LEVEL_REQUIREMENTS.get(p.getLevel() + 1).isPlayerReady(p);
+        return existsNextLevel(p) && LEVEL_REQUIREMENTS.get(p.getLevel() + 1).isPlayerReady(p);
+    }
+
+    public static boolean existsNextLevel(PlayerDataQuery p)
+    {
+        return LEVEL_REQUIREMENTS.containsKey(p.getLevel() + 1);
     }
 
     private static LevelTaskHandler registerNew(int level)
@@ -34,7 +53,7 @@ public class PlayerLevel
         return new LevelTaskHandler(level);
     }
 
-    private static class LevelTaskHandler
+    public static class LevelTaskHandler
     {
         private final List<AbstractLevelTask> tasks;
         private final int level;
@@ -59,6 +78,11 @@ public class PlayerLevel
         {
             this.tasks.add(task);
             return this;
+        }
+
+        public List<AbstractLevelTask> getTasks()
+        {
+            return this.tasks;
         }
 
         private void completeRegistry()
