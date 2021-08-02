@@ -161,7 +161,7 @@ public class Commands
 
         register("trade")
                 .setCommand(CommandTrade::new)
-                .setCategory(Category.MISC);
+                .setCategory(Category.PLAYER);
 
         register("give")
                 .setCommand(CommandGive::new)

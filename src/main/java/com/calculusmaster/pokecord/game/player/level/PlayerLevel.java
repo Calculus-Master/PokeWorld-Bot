@@ -12,6 +12,8 @@ public class PlayerLevel
 {
     public static final Map<Integer, LevelTaskHandler> LEVEL_REQUIREMENTS = new HashMap<>();
 
+    public static final int REQUIRED_LEVEL_TRADE = 2;
+
     public static void init()
     {
         registerNew(2)

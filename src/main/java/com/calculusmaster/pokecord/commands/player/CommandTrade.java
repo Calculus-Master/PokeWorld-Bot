@@ -1,9 +1,10 @@
-package com.calculusmaster.pokecord.commands.misc;
+package com.calculusmaster.pokecord.commands.player;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
+import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
 import com.calculusmaster.pokecord.game.trade.Trade;
 import com.calculusmaster.pokecord.game.trade.TradeHelper;
 import com.calculusmaster.pokecord.game.trade.elements.TradeOffer;
@@ -30,10 +31,17 @@ public class CommandTrade extends Command
             return this;
         }
 
+        if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_TRADE)
+        {
+            this.sendMsg("You need to be Pokemon Mastery Level " + PlayerLevel.REQUIRED_LEVEL_TRADE + " to participate in Trading!");
+            return this;
+        }
+
         if(!TradeHelper.isInTrade(this.player.getId()) && this.mentions.size() > 0)
         {
             String otherID = this.mentions.get(0).getId();
-            String otherName = new PlayerDataQuery(otherID).getUsername();
+            PlayerDataQuery other = new PlayerDataQuery(otherID);
+            String otherName = other.getUsername();
 
             if(TradeHelper.isInTrade(otherID))
             {
@@ -43,12 +51,16 @@ public class CommandTrade extends Command
             {
                 this.sendMsg("You can't trade with yourself!");
             }
+            else if(other.getLevel() < PlayerLevel.REQUIRED_LEVEL_TRADE)
+            {
+                this.sendMsg(otherName + " needs to be Pokemon Mastery Level " + PlayerLevel.REQUIRED_LEVEL_TRADE + " to participate in Trading!");
+            }
             else
             {
                 Trade.create(this.player.getId(), otherID);
 
                 this.embed = null;
-                this.event.getChannel().sendMessage("<@" + otherID + ">: " + this.player.getName() + " requested a trade!").queue();
+                this.event.getChannel().sendMessage(other.getMention() + ": " + this.player.getName() + " requested a trade!").queue();
             }
         }
         else if(TradeHelper.isInTrade(this.player.getId()) && this.msg.length >= 2)
