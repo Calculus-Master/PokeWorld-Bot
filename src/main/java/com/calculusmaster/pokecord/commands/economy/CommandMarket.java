@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.Item;
+import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.trade.elements.MarketEntry;
@@ -38,11 +39,15 @@ public class CommandMarket extends Command
 
         if(list)
         {
-            MarketEntry newEntry = MarketEntry.create(this.player.getId(), this.player.getName(), this.playerData.getPokemonList().get(this.getInt(2) - 1), this.getInt(3));
+            if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_MARKET_LIST) this.sendMsg("You need to be Pokemon Mastery Level " + PlayerLevel.REQUIRED_LEVEL_MARKET_LIST + " to list Pokemon on the market!");
+            else
+            {
+                MarketEntry newEntry = MarketEntry.create(this.player.getId(), this.player.getName(), this.playerData.getPokemonList().get(this.getInt(2) - 1), this.getInt(3));
 
-            this.playerData.removePokemon(newEntry.pokemonID);
+                this.playerData.removePokemon(newEntry.pokemonID);
 
-            this.sendMsg("You successfully listed your Level " + newEntry.pokemon.getLevel() + " " + newEntry.pokemon.getName() + "` for " + newEntry.price + " credits!");
+                this.sendMsg("You successfully listed your Level " + newEntry.pokemon.getLevel() + " " + newEntry.pokemon.getName() + "` for " + newEntry.price + " credits!");
+            }
         }
         else if(buy || collect || info)
         {
