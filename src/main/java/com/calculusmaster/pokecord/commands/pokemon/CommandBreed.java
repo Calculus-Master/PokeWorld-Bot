@@ -47,8 +47,7 @@ public class CommandBreed extends Command
 
                 final String failed = "**Breeding Failed!**";
 
-                boolean validEggGroup = false;
-                for(EggGroup g1 : parent1.getEggGroup()) for(EggGroup g2 : parent2.getEggGroup()) if(g1.equals(g2)) validEggGroup = true;
+                boolean validEggGroup = parent1.getEggGroup().stream().anyMatch(e1 -> parent2.getEggGroup().stream().anyMatch(e1::equals));
 
                 if(this.playerData.getOwnedEggIDs().size() >= PokemonEgg.MAX_EGGS) this.sendMsg("You have the maximum number of eggs! To breed more, hatch some of your existing eggs!");
                 else if(UNABLE_TO_BREED.contains(parent1.getUUID()) || UNABLE_TO_BREED.contains(parent2.getUUID())) this.sendMsg(failed + " Either " + parent1.getName() + " or " + parent2.getName() + " is on a breeding cooldown and cannot breed right now!");
@@ -110,5 +109,11 @@ public class CommandBreed extends Command
         }, 1, TimeUnit.HOURS);
 
         BREEDING_COOLDOWNS.put(UUID, cooldown);
+    }
+
+    public static void close()
+    {
+        BREEDING_COOLDOWNS.values().forEach(future -> future.cancel(true));
+        BREEDING_COOLDOWNS.clear();
     }
 }

@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.commands.duel.CommandTarget;
 import com.calculusmaster.pokecord.commands.economy.CommandShop;
 import com.calculusmaster.pokecord.commands.moves.CommandAbilityInfo;
+import com.calculusmaster.pokecord.commands.pokemon.CommandBreed;
 import com.calculusmaster.pokecord.game.duel.players.GymLeader;
 import com.calculusmaster.pokecord.game.duel.players.Trainer;
 import com.calculusmaster.pokecord.game.moves.Move;
@@ -134,6 +135,7 @@ public class Pokecord
         SpawnEventHelper.close();
         RaidEventHelper.close();
         LocationEventHelper.close();
+        CommandBreed.close();
         ThreadPoolHandler.close();
 
         Executors.newScheduledThreadPool(1).schedule(() -> {
