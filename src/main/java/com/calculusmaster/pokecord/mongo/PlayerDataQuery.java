@@ -19,7 +19,6 @@ import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
@@ -83,18 +82,6 @@ public class PlayerDataQuery extends MongoQuery
         PlayerStatisticsQuery.register(player.getId());
 
         CacheHelper.addPlayer(player.getId());
-    }
-
-    private void update()
-    {
-        this.document = Mongo.PlayerData.find(this.query).first();
-    }
-
-    private void update(Bson update)
-    {
-        Mongo.PlayerData.updateOne(this.query, update);
-
-        this.update();
     }
 
     public void directMessage(String msg)
@@ -164,9 +151,7 @@ public class PlayerDataQuery extends MongoQuery
 
     public void changeRedeems(int amount)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.set("redeems", this.getRedeems() + amount));
-
-        this.update();
+        this.update(Updates.set("redeems", this.getRedeems() + amount));
     }
 
     //key: "selected"
@@ -183,9 +168,7 @@ public class PlayerDataQuery extends MongoQuery
 
     public void setSelected(int num)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.set("selected", num));
-
-        this.update();
+        this.update(Updates.set("selected", num));
     }
 
     public Pokemon getSelectedPokemon()
@@ -240,7 +223,7 @@ public class PlayerDataQuery extends MongoQuery
 
     public void clearTeam()
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.set("team", new JSONArray()));
+        this.update(Updates.set("team", new JSONArray()));
     }
 
     public void addPokemonToTeam(String UUID, int index)
@@ -253,8 +236,7 @@ public class PlayerDataQuery extends MongoQuery
         if(index >= team.size()) team.add(UUID);
         else team.set(index, UUID);
 
-        Mongo.PlayerData.updateOne(this.query, Updates.pushEach("team", team));
-        this.update();
+        this.update(Updates.pushEach("team", team));
     }
 
     public void removePokemonFromTeam(int index)
@@ -266,8 +248,7 @@ public class PlayerDataQuery extends MongoQuery
 
         team.remove(index);
 
-        Mongo.PlayerData.updateOne(this.query, Updates.pushEach("team", team));
-        this.update();
+        this.update(Updates.pushEach("team", team));
     }
 
     public void swapPokemonInTeam(int from, int to)
@@ -282,8 +263,7 @@ public class PlayerDataQuery extends MongoQuery
         team.set(from, team.get(to));
         team.set(to, temp);
 
-        Mongo.PlayerData.updateOne(this.query, Updates.pushEach("team", team));
-        this.update();
+        this.update(Updates.pushEach("team", team));
     }
 
     //key: "items"
@@ -294,9 +274,7 @@ public class PlayerDataQuery extends MongoQuery
 
     public void addItem(String item)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.push("items", item));
-
-        this.update();
+        this.update(Updates.push("items", item));
     }
 
     public void removeItem(String item)
@@ -319,9 +297,7 @@ public class PlayerDataQuery extends MongoQuery
 
     public void addTM(String TM)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.push("tms", TM));
-
-        this.update();
+        this.update(Updates.push("tms", TM));
     }
 
     public void removeTM(String TM)
@@ -344,9 +320,7 @@ public class PlayerDataQuery extends MongoQuery
 
     public void addTR(String TR)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.push("trs", TR));
-
-        this.update();
+        this.update(Updates.push("trs", TR));
     }
 
     //Removes a TR from the player's owned TRs
@@ -375,9 +349,7 @@ public class PlayerDataQuery extends MongoQuery
 
     public void addZCrystal(String z)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.push("zcrystals", z));
-
-        this.update();
+        this.update(Updates.push("zcrystals", z));
     }
 
     //key: "active_zcrystal"
@@ -388,9 +360,7 @@ public class PlayerDataQuery extends MongoQuery
 
     public void equipZCrystal(String z)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.set("active_zcrystal", z));
-
-        this.update();
+        this.update(Updates.set("active_zcrystal", z));
     }
 
     //key: "achievements"
@@ -401,9 +371,7 @@ public class PlayerDataQuery extends MongoQuery
 
     public void addAchievement(Achievements a)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.push("achievements", a.toString()));
-
-        this.update();
+        this.update(Updates.push("achievements", a.toString()));
     }
 
     //key: "gym_level"
@@ -414,9 +382,7 @@ public class PlayerDataQuery extends MongoQuery
 
     public void increaseGymLevel()
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.inc("gym_level", 1));
-
-        this.update();
+        this.update(Updates.inc("gym_level", 1));
     }
 
     //key: "pokepass_exp"
@@ -427,7 +393,7 @@ public class PlayerDataQuery extends MongoQuery
 
     public void addPokePassExp(int amount, MessageReceivedEvent event)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.inc("pokepass_exp", amount));
+        this.update(Updates.inc("pokepass_exp", amount));
 
         this.updateBountyProgression(ObjectiveType.EARN_XP_POKEPASS, amount);
 
@@ -435,7 +401,7 @@ public class PlayerDataQuery extends MongoQuery
 
         if(this.getPokePassExp() >= PokePass.TIER_EXP && PokePass.tierExists(this.getPokePassTier() + 1))
         {
-            Mongo.PlayerData.updateOne(this.query, Updates.set("pokepass_exp", this.getPokePassExp() - PokePass.TIER_EXP));
+            this.update(Updates.set("pokepass_exp", this.getPokePassExp() - PokePass.TIER_EXP));
             this.increasePokePassTier();
 
             event.getChannel().sendMessage(PokePass.reward(this.getPokePassTier() + 1, this)).queue();
@@ -452,7 +418,7 @@ public class PlayerDataQuery extends MongoQuery
 
     public void increasePokePassTier()
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.inc("pokepass_tier", 1));
+        this.update(Updates.inc("pokepass_tier", 1));
     }
 
     //key: "favorites"
@@ -463,23 +429,17 @@ public class PlayerDataQuery extends MongoQuery
 
     public void addPokemonToFavorites(String UUID)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.push("favorites", UUID));
-
-        this.update();
+        this.update(Updates.push("favorites", UUID));
     }
 
     public void removePokemonFromFavorites(String UUID)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.pull("favorites", UUID));
-
-        this.update();
+        this.update(Updates.pull("favorites", UUID));
     }
 
     public void clearFavorites()
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.set("favorites", new JSONArray()));
-
-        this.update();
+        this.update(Updates.set("favorites", new JSONArray()));
     }
 
     //key: "owned_forms"
@@ -490,9 +450,7 @@ public class PlayerDataQuery extends MongoQuery
 
     public void addOwnedForm(String form)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.push("owned_forms", form));
-
-        this.update();
+        this.update(Updates.push("owned_forms", form));
     }
 
     //key: "owned_megas"
@@ -503,9 +461,7 @@ public class PlayerDataQuery extends MongoQuery
 
     public void addOwnedMegas(String mega)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.push("owned_megas", mega));
-
-        this.update();
+        this.update(Updates.push("owned_megas", mega));
     }
 
     //key: "bounties"
@@ -578,16 +534,12 @@ public class PlayerDataQuery extends MongoQuery
 
     public void addBounty(String ID)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.push("bounties", ID));
-
-        this.update();
+        this.update(Updates.push("bounties", ID));
     }
 
     public void removeBounty(String ID)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.pull("bounties", ID));
-
-        this.update();
+        this.update(Updates.pull("bounties", ID));
     }
 
     //key: "pursuit"
@@ -617,7 +569,7 @@ public class PlayerDataQuery extends MongoQuery
     {
         for(String s : this.getPursuitIDs()) Bounty.delete(s);
 
-        Mongo.PlayerData.updateOne(this.query, Updates.set("pursuit", new JSONArray()));
+        this.update(Updates.set("pursuit", new JSONArray()));
 
         this.resetPursuitLevel();
     }
@@ -630,16 +582,12 @@ public class PlayerDataQuery extends MongoQuery
 
     public void increasePursuitLevel()
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.inc("pursuit_level", 1));
-
-        this.update();
+        this.update(Updates.inc("pursuit_level", 1));
     }
 
     public void resetPursuitLevel()
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.set("pursuit_level", 0));
-
-        this.update();
+        this.update(Updates.set("pursuit_level", 0));
     }
 
     //key: "skins"
