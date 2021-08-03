@@ -46,12 +46,11 @@ public class Duel
     protected Map<String, DuelPokemon> pokemonAttributes = new HashMap<>();
     protected Map<String, Integer> expGains = new HashMap<>();
     protected Map<String, Integer> damageDealt = new HashMap<>();
+    protected Map<String, List<String>> movesUsed = new HashMap<>();
 
     public int turn;
     public int current;
     public int other;
-
-    public Map<Integer, String[]> moveLog;
 
     public String first;
 
@@ -603,15 +602,17 @@ public class Duel
         //Lowered Accuracy of Defensive Moves
         List<String> defensiveMoves = Arrays.asList("Endure", "Protect", "Detect", "Wide Guard", "Quick Guard", "Spiky Shield", "Kings Shield", "Baneful Bunker");
 
-        if(defensiveMoves.contains(move.getName()))
-        {
-            int i = this.turn - 1;
-            while(this.moveLog.containsKey(i) && defensiveMoves.contains(this.moveLog.get(i)[this.current]) && (!move.getName().equals("Quick Guard") || !this.moveLog.get(i)[this.current].equals("Quick Guard")))
-            {
-                move.setAccuracy(move.getAccuracy() / 3);
-                i--;
-            }
-        }
+        //TODO: Lowered Accuracy of Defensive Moves
+
+//        if(defensiveMoves.contains(move.getName()))
+//        {
+//            int i = this.turn - 1;
+//            while(this.moveLog.containsKey(i) && defensiveMoves.contains(this.moveLog.get(i)[this.current]) && (!move.getName().equals("Quick Guard") || !this.moveLog.get(i)[this.current].equals("Quick Guard")))
+//            {
+//                move.setAccuracy(move.getAccuracy() / 3);
+//                i--;
+//            }
+//        }
 
         //Item-based Buffs
         boolean itemsOff = this.room.equals(Room.MAGIC_ROOM);
@@ -800,6 +801,9 @@ public class Duel
             }
         }
 
+        //Update Move Log
+        this.movesUsed.get(this.players[this.current].active.getUUID()).add(move.getName());
+
         //Give EVs and EXP if opponent has fainted
         if(this.players[this.other].active.isFainted())
         {
@@ -850,15 +854,6 @@ public class Duel
             }
         }
 
-        try
-        {
-            this.moveLog.get(this.turn)[this.current] = move.getName();
-        }
-        catch (Exception e)
-        {
-            LoggerHelper.reportError(Duel.class, "Cannot updated Move Log! (Current Player: " + this.current + ")", e);
-        }
-
         return turnResult;
     }
 
@@ -892,7 +887,13 @@ public class Duel
         this.queuedMoves = new HashMap<>();
 
         for(Player player : this.players) for(Pokemon p : player.team) p.setHealth(p.getStat(Stat.HP));
-        for(Player p : this.players) p.active.setHealth(p.active.getStat(Stat.HP));
+
+        for(Player p : this.players)
+        {
+            p.active.setHealth(p.active.getStat(Stat.HP));
+
+            for(Pokemon pokemon : p.team) this.movesUsed.put(pokemon.getUUID(), new ArrayList<>());
+        }
     }
 
     public void checkDynamax(int p)
@@ -1274,8 +1275,6 @@ public class Duel
         }
 
         this.turn++;
-
-        this.moveLog.put(this.turn, new String[2]);
     }
 
     private void checkWeatherAbilities()
@@ -1532,6 +1531,11 @@ public class Duel
         return this.entryHazards[this.players[0].active.getUUID().equals(UUID) ? 0 : 1];
     }
 
+    public List<String> getMovesUsed(String UUID)
+    {
+        return this.movesUsed.get(UUID);
+    }
+
     public Player getWinner()
     {
         return this.players[0].lost() ? this.players[1] : this.players[0];
@@ -1640,7 +1644,6 @@ public class Duel
     {
         this.event = event;
         this.turn = 0;
-        this.moveLog = new HashMap<>();
     }
 
     public void setSize(int size)
@@ -1700,7 +1703,6 @@ public class Duel
                 ", turn=" + turn +
                 ", current=" + current +
                 ", other=" + other +
-                ", moveLog=" + moveLog +
                 ", first='" + first + '\'' +
                 ", results=" + results +
                 ", weather=" + weather +

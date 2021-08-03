@@ -862,16 +862,17 @@ public class NormalMoves
 
     public String Sketch(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(duel.moveLog.containsKey(duel.turn) && !duel.moveLog.get(duel.turn)[duel.other].equals(""))
-        {
-            String moveToCopy = duel.moveLog.get(duel.turn)[duel.other];
-            int index = user.getLearnedMoves().indexOf("Sketch");
+        List<String> moves = duel.getMovesUsed(opponent.getUUID());
 
-            user.learnMove(moveToCopy, index + 1);
-            Pokemon.updateMoves(user);
-            return user.getName() + " permanently learned " + move + "!";
-        }
-        else return move.getNothingResult();
+        if(moves.isEmpty()) return move.getNothingResult();
+
+        String moveToCopy = moves.get(moves.size() - 1);
+        int targetIndex = user.getLearnedMoves().indexOf("Sketch") + 1;
+
+        user.learnMove(moveToCopy, targetIndex);
+        Pokemon.updateMoves(user);
+
+        return user.getName() + " permanently learned " + moveToCopy + "!";
     }
 
     public String SelfDestruct(Pokemon user, Pokemon opponent, Duel duel, Move move)
