@@ -141,4 +141,9 @@ public enum TR
     {
         return values()[number];
     }
+
+    public static TR get(String TR)
+    {
+        return get(Integer.parseInt(TR.toLowerCase().replaceAll("tr", "")));
+    }
 }

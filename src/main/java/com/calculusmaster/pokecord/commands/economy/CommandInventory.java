@@ -2,6 +2,8 @@ package com.calculusmaster.pokecord.commands.economy;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.enums.items.Item;
+import com.calculusmaster.pokecord.game.enums.items.TM;
+import com.calculusmaster.pokecord.game.enums.items.TR;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;
@@ -55,7 +57,7 @@ public class CommandInventory extends Command
                 {
                     if(!this.playerData.getTMList().isEmpty())
                     {
-                        for(int i = 0; i < this.playerData.getTMList().size(); i++) s.append(this.playerData.getTMList().get(i)).append("\n");
+                        for(String tm : this.playerData.getTMList()) s.append(tm).append(" - ").append(TM.get(tm).getMoveName()).append("\n");
                         s.deleteCharAt(s.length() - 1);
                     }
                     else s.append("You don't own any Technical Machines (TMs)!");
@@ -64,7 +66,7 @@ public class CommandInventory extends Command
                 {
                     if(!this.playerData.getTRList().isEmpty())
                     {
-                        for (int i = 0; i < this.playerData.getTRList().size(); i++) s.append(this.playerData.getTRList().get(i)).append(", ");
+                        for(String tr : this.playerData.getTRList()) s.append(tr).append(" - ").append(TR.get(tr).getMoveName()).append("\n");
                         s.deleteCharAt(s.length() - 1);
                     }
                     else s.append("You don't own any Technical Records (TRs)!");

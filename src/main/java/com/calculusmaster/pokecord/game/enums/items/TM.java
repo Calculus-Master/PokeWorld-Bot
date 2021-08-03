@@ -141,4 +141,9 @@ public enum TM
     {
         return values()[number - 1];
     }
+
+    public static TM get(String TM)
+    {
+        return get(Integer.parseInt(TM.toLowerCase().replaceAll("tm", "")));
+    }
 }
