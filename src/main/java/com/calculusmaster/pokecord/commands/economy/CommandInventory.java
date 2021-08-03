@@ -4,6 +4,9 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class CommandInventory extends Command
 {
     public CommandInventory(MessageReceivedEvent event, String[] msg)
@@ -14,45 +17,97 @@ public class CommandInventory extends Command
     @Override
     public Command runCommand()
     {
-        StringBuilder s = new StringBuilder();
-
-        s.append("`Items`: \n");
-        if(this.playerData.getItemList() != null)
+        if(this.msg.length == 1)
         {
-            for(int i = 0; i < this.playerData.getItemList().size(); i++) s.append(i + 1).append(": ").append(Item.asItem(this.playerData.getItemList().get(i)).getStyledName()).append("\n");
-            s.append("\n");
+            this.embed.setTitle(this.playerData.getUsername() + "'s Inventory");
+            for(Page p : Page.values()) this.embed.addField(p.title, "`" + this.serverData.getPrefix() + "inventory " + p.commands.get(0) + "`", false);
+            this.embed.setDescription("Use the subcommand for an individual section to see your inventory of that specific kind of item!");
         }
-        else s.append("You don't own any Items!\n\n");
-
-        s.append("`Z-Crystals`: \n");
-        if(this.playerData.getZCrystalList() != null)
+        else
         {
-            for(int i = 0; i < this.playerData.getZCrystalList().size(); i++) s.append(i + 1).append(": ").append(this.playerData.getZCrystalList().get(i)).append("\n");
-            s.append("\n");
-            s.append("Equipped: ").append(this.playerData.getEquippedZCrystal() != null && !this.playerData.getEquippedZCrystal().isEmpty() ? this.playerData.getEquippedZCrystal() : "None");
-            s.append("\n\n");
-        }
-        else s.append("You don't own any Z-Crystals!\n\n");
-        
-        s.append("`TMs`: \n");
-        if(this.playerData.getTeam() != null)
-        {
-            for(int i = 0; i < this.playerData.getTMList().size(); i++) s.append(this.playerData.getTMList().get(i)).append(", ");
-            s.delete(s.length() - 2, s.length()).append("\n\n");
-        }
-        else s.append("You don't own any Technical Machines (TMs)!\n\n");
+            if(Page.isInvalid(this.msg[1])) this.sendMsg("Invalid page! Use `p!inventory` to see the possible inventory pages.");
+            else
+            {
+                Page p = Page.cast(this.msg[1]);
 
-        s.append("`TRs`: \n");
-        if(this.playerData.getTRList() != null)
-        {
-            for (int i = 0; i < this.playerData.getTRList().size(); i++) s.append(this.playerData.getTRList().get(i)).append(", ");
-            s.delete(s.length() - 2, s.length()).append("\n\n");
+                StringBuilder s = new StringBuilder();
+
+                if(Page.ITEMS.matches(this.msg[1]))
+                {
+                    if(!this.playerData.getItemList().isEmpty())
+                    {
+                        for(int i = 0; i < this.playerData.getItemList().size(); i++) s.append(i + 1).append(": ").append(Item.asItem(this.playerData.getItemList().get(i)).getStyledName()).append("\n");
+                        s.append("\n");
+                    }
+                    else s.append("You don't own any Items!");
+                }
+                else if(Page.ZCRYSTALS.matches(this.msg[1]))
+                {
+                    if(!this.playerData.getZCrystalList().isEmpty())
+                    {
+                        for(int i = 0; i < this.playerData.getZCrystalList().size(); i++) s.append(i + 1).append(": ").append(this.playerData.getZCrystalList().get(i)).append("\n");
+                        s.append("\n");
+                        s.append("`Equipped:` ").append(this.playerData.getEquippedZCrystal() != null && !this.playerData.getEquippedZCrystal().isEmpty() ? this.playerData.getEquippedZCrystal() : "None");
+                    }
+                    else s.append("You don't own any Z-Crystals!");
+                }
+                else if(Page.TMS.matches(this.msg[1]))
+                {
+                    if(!this.playerData.getTMList().isEmpty())
+                    {
+                        for(int i = 0; i < this.playerData.getTMList().size(); i++) s.append(this.playerData.getTMList().get(i)).append("\n");
+                        s.deleteCharAt(s.length() - 1);
+                    }
+                    else s.append("You don't own any Technical Machines (TMs)!");
+                }
+                else if(Page.TRS.matches(this.msg[1]))
+                {
+                    if(!this.playerData.getTRList().isEmpty())
+                    {
+                        for (int i = 0; i < this.playerData.getTRList().size(); i++) s.append(this.playerData.getTRList().get(i)).append(", ");
+                        s.deleteCharAt(s.length() - 1);
+                    }
+                    else s.append("You don't own any Technical Records (TRs)!");
+                }
+
+                this.embed.setTitle(this.playerData.getUsername() + "'s Inventory - " + p.title);
+                this.embed.setDescription(s.toString());
+            }
         }
-        else s.append("You don't own any Technical Records (TRs)!\n\n");
 
-
-        this.embed.setDescription(s.toString());
-        this.embed.setTitle(this.player.getName() + "'s Inventory");
         return this;
+    }
+
+    private enum Page
+    {
+        ITEMS("Items", "item", "items", "i"),
+        ZCRYSTALS("Z Crystals", "zcrystal", "zcrystals", "z"),
+        TMS("TMs", "tm", "tms"),
+        TRS("TRs", "tr", "trs");
+
+        private List<String> commands;
+        public String title;
+
+        Page(String title, String... commands)
+        {
+            this.title = title;
+            this.commands = Arrays.asList(commands);
+        }
+
+        public boolean matches(String s)
+        {
+            return this.commands.contains(s);
+        }
+
+        public static boolean isInvalid(String s)
+        {
+            return Arrays.stream(values()).noneMatch(p -> p.matches(s));
+        }
+
+        public static Page cast(String s)
+        {
+            for(Page p : values()) if(p.matches(s)) return p;
+            return null;
+        }
     }
 }

@@ -216,7 +216,7 @@ public class CommandShop extends Command
         }
     }
 
-    enum Page
+    private enum Page
     {
         MEGA("Mega Evolutions", "Buy Mega Evolutions!", "mega"),
         FORMS("Forms", "Buy Forms!", "forms"),
