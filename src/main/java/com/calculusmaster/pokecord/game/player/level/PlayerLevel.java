@@ -32,12 +32,16 @@ public class PlayerLevel
                 .setExp(250)
                 .add(new PokemonLevelTask(50))
                 .add(new CreditsLevelTask(4000))
+                .add(new PvPLevelTask(1))
                 .completeRegistry();
 
         registerNew(4)
                 .setExp(500)
                 .add(new PokemonLevelTask(250))
                 .add(new CreditsLevelTask(10000))
+                .add(new BountiesLevelTask(5))
+                .add(new WildLevelTask(5))
+                .add(new EliteLevelTask(1))
                 .completeRegistry();
 
         registerNew(5)
@@ -45,6 +49,34 @@ public class PlayerLevel
                 .add(new PokemonLevelTask(500))
                 .add(new CreditsLevelTask(15000))
                 .add(new WildLevelTask(25))
+                .add(new BountiesLevelTask(15))
+                .completeRegistry();
+
+        registerNew(6)
+                .setExp(2500)
+                .add(new PokemonLevelTask(800))
+                .add(new CreditsLevelTask(20000))
+                .add(new WildLevelTask(35))
+                .add(new BountiesLevelTask(25))
+                .completeRegistry();
+
+        registerNew(7)
+                .setExp(5000)
+                .add(new PokemonLevelTask(1000))
+                .add(new CreditsLevelTask(22000))
+                .add(new WildLevelTask(45))
+                .add(new BountiesLevelTask(30))
+                .add(new PvPLevelTask(15))
+                .completeRegistry();
+
+        registerNew(8)
+                .setExp(7500)
+                .add(new PokemonLevelTask(1250))
+                .add(new CreditsLevelTask(25000))
+                .add(new WildLevelTask(55))
+                .add(new BountiesLevelTask(40))
+                .add(new PvPLevelTask(20))
+                .add(new EliteLevelTask(10))
                 .completeRegistry();
     }
 
