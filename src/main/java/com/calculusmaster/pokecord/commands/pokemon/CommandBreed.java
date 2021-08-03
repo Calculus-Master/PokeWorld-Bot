@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.Gender;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
+import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -33,7 +34,8 @@ public class CommandBreed extends Command
         boolean breed = this.msg.length == 3 && this.isNumeric(1) && this.isNumeric(2);
         boolean cooldown = this.msg.length == 3 && this.msg[1].equals("cooldown") && this.isNumeric(2);
 
-        if(breed)
+        if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_BREED) this.sendInvalidLevel(PlayerLevel.REQUIRED_LEVEL_BREED, "to breed Pokemon");
+        else if(breed)
         {
             int num1 = this.getInt(1);
             int num2 = this.getInt(2);
