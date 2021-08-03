@@ -21,7 +21,8 @@ public class PlayerStatisticsQuery extends MongoQuery
         Mongo.PlayerStatisticsData.insertOne(statsData);
     }
 
-    private void update()
+    @Override
+    protected void update()
     {
         this.document = Mongo.PlayerStatisticsData.find(this.query).first();
     }

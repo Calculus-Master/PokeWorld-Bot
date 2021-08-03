@@ -41,7 +41,7 @@ public class ServerDataQuery extends MongoQuery
         SpawnEventHelper.start(server);
     }
 
-    private void update()
+    protected void update()
     {
         this.document = Mongo.ServerData.find(this.query).first();
     }
