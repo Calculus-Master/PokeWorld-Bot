@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
+import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -119,6 +120,7 @@ public class CommandDuel extends Command
         }
 
         String opponentID = this.mentions.get(0).getId();
+        PlayerDataQuery other = new PlayerDataQuery(opponentID);
         Member opponent = this.getMember(opponentID);
 
         if(this.playerData.getTeam().size() < size)
@@ -141,6 +143,8 @@ public class CommandDuel extends Command
         {
             this.sendMsg("You cannot duel yourself!");
         }
+        else if(size >= 6 && (this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_UNLIMITED_DUEL_SIZE || other.getLevel() < PlayerLevel.REQUIRED_LEVEL_UNLIMITED_DUEL_SIZE))
+            this.sendMsg("Both you and " + opponent.getEffectiveName() + " must be Pokemon Mastery Level " + PlayerLevel.REQUIRED_LEVEL_UNLIMITED_DUEL_SIZE + " to create duels with teams of more than 6 Pokemon");
         else if(checkTeam && this.isInvalidTeam(size))
         {
             this.createInvalidTeamEmbed(size);

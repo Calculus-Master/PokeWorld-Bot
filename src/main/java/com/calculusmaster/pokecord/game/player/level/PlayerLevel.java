@@ -21,6 +21,7 @@ public class PlayerLevel
     public static final int REQUIRED_LEVEL_MEGA = 2;
     public static final int REQUIRED_LEVEL_FORM = 2;
     public static final int REQUIRED_LEVEL_ACTIVATE = 4;
+    public static final int REQUIRED_LEVEL_UNLIMITED_DUEL_SIZE = 6;
 
     public static void init()
     {
