@@ -182,12 +182,12 @@ public class CommandLeaderboard extends Command
     {
         POKEMON_LISTS(2.5, p -> p.getPokemonList().size(), "Pokemon"),
         ACHIEVEMENTS(2.5, p -> p.getAchievementsList().size(), "Achievements"),
+        MASTERY_LEVEL(1.9, p -> p.getLevel(), "Pokemon Mastery Level"),
         CREDITS(1.25, p -> p.getCredits(), "Credits"),
         REDEEMS(1.85, p -> p.getRedeems(), "Redeems"),
         TMS(1.5, p -> p.getTMList().size(), "TMs"),
         TRS(1.5, p -> p.getTRList().size(), "TRs"),
         ITEMS(0.75, p -> p.getItemList().size(), "Items"),
-        MARKET_SOLD(1.2, p -> p.getStats().get(PlayerStatistic.POKEMON_SOLD_MARKET), "Pokemon Sold"),
         FORMS_OWNED(1.5, p -> p.getOwnedForms().size(), "Owned Forms"),
         MEGA_OWNED(1.5, p -> p.getOwnedMegas().size(), "Owned Mega Evolutions"),
         ZCRYSTALS(1.8, p -> p.getZCrystalList().size(), "Z Crystals"),
