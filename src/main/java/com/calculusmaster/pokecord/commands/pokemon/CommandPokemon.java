@@ -58,7 +58,7 @@ public class CommandPokemon extends Command
 
         sorter.sortSearchName(PokemonSorterFlag.NICKNAME, (p, s) -> p.getNickname().toLowerCase().contains(s));
 
-        sorter.sortSearchName(PokemonSorterFlag.MOVE, (p, s) -> p.getLearnedMoves().contains(Global.normalCase(s)));
+        sorter.sortSearchName(PokemonSorterFlag.MOVE, (p, s) -> p.getAllMoves().contains(Global.normalCase(s)));
 
         sorter.sortNumeric(PokemonSorterFlag.LEVEL, Pokemon::getLevel);
 
