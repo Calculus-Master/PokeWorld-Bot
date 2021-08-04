@@ -71,6 +71,7 @@ public class CommandInfo extends Command
         }
 
         this.embed.setTitle(title);
+        this.embed.setDescription("UUID: " + UUID);
         this.color = chosen.getType()[0].getColor();
         this.embed.setImage(image);
         this.embed.setFooter("Showing Pokemon " + (index + 1) + " / " + this.playerData.getPokemonList().size());
