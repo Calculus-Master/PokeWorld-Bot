@@ -8,6 +8,8 @@ public enum PokemonSorterFlag
     NAME("--name"),
     NICKNAME("--nickname", "--nick"),
     MOVE("--move"),
+    LEARNED_MOVE("--learnedmove", "--lmove"),
+    AVAILABLE_MOVE("--availablemove", "--amove"),
     LEVEL("--level", "--lvl"),
     DYNAMAX_LEVEL("--dynamaxlevel", "--dlevel", "--dlvl"),
     IV("--iv"),
