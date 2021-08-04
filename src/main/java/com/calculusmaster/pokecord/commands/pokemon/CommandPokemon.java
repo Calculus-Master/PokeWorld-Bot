@@ -92,6 +92,8 @@ public class CommandPokemon extends Command
 
         sorter.sortGeneric(PokemonSorterFlag.SHINY, Pokemon::isShiny);
 
+        sorter.sortGeneric(PokemonSorterFlag.MASTERED, Pokemon::isMastered);
+
         sorter.sortNumeric(PokemonSorterFlag.HPIV, p -> p.getIVs().get(Stat.HP));
 
         sorter.sortNumeric(PokemonSorterFlag.ATKIV, p -> p.getIVs().get(Stat.ATK));
@@ -284,7 +286,8 @@ public class CommandPokemon extends Command
     private String getLine(Pokemon p)
     {
         return "**" + p.getDisplayName() + "**" +
-                (p.isShiny() ? ":star2:" : "") + " " +
+                (p.isShiny() ? ":star2:" : "") +
+                (p.isMastered() ? ":trophy:" : "") +
                 (this.team.contains(p.getUUID()) ? ":regional_indicator_t: " : "") +
                 (this.favorites.contains(p.getUUID()) ? ":regional_indicator_f: " : "") +
                 "| Number: " + p.getNumber() +

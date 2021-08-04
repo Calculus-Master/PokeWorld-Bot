@@ -320,6 +320,28 @@ public class Pokemon
         return basePrice;
     }
 
+    //Is the Pokemon complete/mastered - does it have all of its components used / maxed out
+    public boolean isMastered()
+    {
+        //Level must be 100
+        if(this.getLevel() < 100) return false;
+
+        //EVs must be maxed out
+        else if(this.getEVTotal() < 510) return false;
+
+        //Must have 4 moves that aren't Tackle
+        else if(this.getLearnedMoves().stream().anyMatch(s -> s.equals("Tackle"))) return false;
+
+        //Dynamax Level must be 10
+        else if(this.getDynamaxLevel() < 10) return false;
+
+        //Must have an Item
+        else if(Item.asItem(this.getItem()).equals(Item.NONE)) return false;
+
+        //If checks have been passed, the Pokemon has been Mastered
+        else return true;
+    }
+
     //Egg Group and Gender
     public List<EggGroup> getEggGroup()
     {

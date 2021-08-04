@@ -37,7 +37,7 @@ public class CommandInfo extends Command
         String UUID = this.playerData.getPokemonList().get(index);
         Pokemon chosen = Pokemon.build(UUID);
 
-        String title = "**Level " + chosen.getLevel() + " " + chosen.getDisplayName() + "**" + (chosen.isShiny() ? " :star2:" : "");
+        String title = "**Level " + chosen.getLevel() + " " + chosen.getDisplayName() + "**" + (chosen.isShiny() ? ":star2:" : "") + (chosen.isMastered() ? ":trophy:" : "");
         String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getData().growthRate, chosen.getLevel()) + " XP";
         String type = (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalCase(chosen.getType()[0].toString()) : Global.normalCase(chosen.getType()[0].toString()) + "\n" + Global.normalCase(chosen.getType()[1].toString()));
         String nature = Global.normalCase(chosen.getNature().toString());

@@ -24,6 +24,7 @@ public enum PokemonSorterFlag
     GENDER("--gender"),
     EGG_GROUP("--egggroup", "--egg"),
     SHINY("--shiny"),
+    MASTERED("--mastered"),
     HPIV("--healthiv", "--hpiv"),
     ATKIV("--attackiv", "--atkiv"),
     DEFIV("--defenseiv", "--defiv"),
