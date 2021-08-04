@@ -374,6 +374,11 @@ public class PlayerDataQuery extends MongoQuery
         this.update(Updates.push("achievements", a.toString()));
     }
 
+    public void grantAchievement(Achievements a, MessageReceivedEvent event)
+    {
+        Achievements.grant(this.getID(), a, event);
+    }
+
     //key: "gym_level"
     public int getGymLevel()
     {

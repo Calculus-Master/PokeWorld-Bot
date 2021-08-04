@@ -1668,6 +1668,11 @@ public class Duel
         return this.players;
     }
 
+    public Player getPlayer(String ID)
+    {
+        return this.players[this.indexOf(ID)];
+    }
+
     public boolean isNonBotPlayer(int p)
     {
         return this.players[p].ID.chars().allMatch(Character::isDigit);
