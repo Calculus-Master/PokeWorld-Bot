@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.bounties.objectives.CatchPoolObjective;
 import com.calculusmaster.pokecord.game.bounties.objectives.CatchTypeObjective;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.mongo.CollectionsQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
@@ -61,18 +62,19 @@ public class CommandCatch extends Command
 
             collection.increase();
             int amount = collection.getCaughtAmount();
+            int[] rarityCredits = this.collectionCredits(PokemonRarity.POKEMON_RARITIES.getOrDefault(caught.getName(), PokemonRarity.Rarity.EXTREME));
 
             if(amount == -1) this.sendMsg("An error has occurred with collections!");
             else if(amount % 5 == 0)
             {
-                int credits = 200 + 150 * (amount / 5 - 1);
+                int credits = rarityCredits[1] + rarityCredits[2] * (amount / 5 - 1);
                 this.playerData.changeCredits(credits);
 
                 this.sendMsg("Reached Collection Milestone for " + caught.getName() + ": **" + amount + "** (**" + credits + "**c)!");
             }
             else if(amount == 1)
             {
-                int credits = 150;
+                int credits = rarityCredits[0];
                 this.playerData.changeCredits(credits);
 
                 this.sendMsg("Unlocked Collection for " + caught.getName() + " (**" + credits + "**c)!");
@@ -125,5 +127,20 @@ public class CommandCatch extends Command
     private String getPokemon()
     {
         return Global.normalCase(this.getMultiWordContent(1));
+    }
+
+    private int[] collectionCredits(PokemonRarity.Rarity r)
+    {
+        return switch(r) {
+            //Format: new int[] {<new collection>, <base for milestone>, <multiplier per milestone level>}
+            case COPPER -> new int[]{150, 200, 150};
+            case SILVER -> new int[]{175, 215, 165};
+            case GOLD -> new int[]{200, 240, 175};
+            case DIAMOND -> new int[]{225, 260, 190};
+            case PLATINUM -> new int[]{250, 300, 200};
+            case MYTHICAL -> new int[]{300, 350, 250};
+            case LEGENDARY -> new int[]{500, 400, 750};
+            case EXTREME -> new int[]{750, 500, 1500};
+        };
     }
 }
