@@ -40,7 +40,7 @@ public class CommandProfile extends Command
                 .addField("Shop Purchases", "`" + stats.get(PlayerStatistic.SHOP_ITEMS_BOUGHT) + "`", true)
                 .addField("Bounties Completed", "`" + stats.get(PlayerStatistic.BOUNTIES_COMPLETED) + "`", true);
 
-        this.embed.setTitle(player.getUser().getName() + "'s Profile");
+        this.embed.setTitle(player.getUser().getName() + "'s Profile (ID: " + player.getId() + ")");
         this.embed.setThumbnail(player.getUser().getEffectiveAvatarUrl());
 
         if(targetID.equals(this.player.getId())) this.embed.setDescription("This is your profile! To see your pokemon, type `p!pokemon`. To see your balance, type `p!balance`. To see your items, TMs, and TRs, type `p!inventory`. To view the market, type `p!market`. To start a duel, type `p!duel @player`.");

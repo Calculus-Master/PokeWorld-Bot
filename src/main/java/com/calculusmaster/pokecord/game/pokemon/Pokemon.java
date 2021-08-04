@@ -32,8 +32,8 @@ public class Pokemon
     private Nature nature;
     private int level;
     private int exp;
-    private Map<Stat, Integer> IV = new TreeMap<>();
-    private Map<Stat, Integer> EV = new TreeMap<>();
+    private Map<Stat, Integer> IV = new HashMap<>();
+    private Map<Stat, Integer> EV = new HashMap<>();
     private List<String> learnedMoves = new ArrayList<>();
     private int heldTM;
     private int heldTR;
@@ -45,7 +45,7 @@ public class Pokemon
     private int health;
     private Type[] type;
     private Map<StatusCondition, Boolean> status;
-    private Map<Stat, Integer> statMultiplier = new TreeMap<>();
+    private Map<Stat, Integer> statMultiplier = new HashMap<>();
     public double statBuff;
     public double hpBuff;
     private boolean isDynamaxed;
