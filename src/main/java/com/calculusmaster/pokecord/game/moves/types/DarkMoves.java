@@ -216,4 +216,9 @@ public class DarkMoves
 
         return result;
     }
+
+    public String FalseSurrender(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

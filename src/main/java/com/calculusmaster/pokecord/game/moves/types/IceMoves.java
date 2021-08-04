@@ -124,4 +124,16 @@ public class IceMoves
 
         return user.getName() + " is defended from Physical and Special attacks!";
     }
+
+    public String FrostBreath(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect(24)
+                .execute();
+    }
+
+    public String AuroraBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.ATK, -1, 10, false);
+    }
 }

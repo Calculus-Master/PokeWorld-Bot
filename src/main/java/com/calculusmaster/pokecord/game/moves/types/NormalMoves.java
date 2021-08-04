@@ -941,4 +941,9 @@ public class NormalMoves
                 .addStatusEffect(StatusCondition.FLINCHED, 10, false)
                 .execute();
     }
+
+    public String Constrict(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPD, -1, 10, false);
+    }
 }
