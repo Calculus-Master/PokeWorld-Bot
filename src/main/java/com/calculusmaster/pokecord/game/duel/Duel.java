@@ -802,6 +802,7 @@ public class Duel
         }
 
         //Update Move Log
+        if(!this.movesUsed.containsKey(this.players[this.current].active.getUUID())) this.movesUsed.put(this.players[this.current].active.getUUID(), new ArrayList<>());
         this.movesUsed.get(this.players[this.current].active.getUUID()).add(move.getName());
 
         //Give EVs and EXP if opponent has fainted
