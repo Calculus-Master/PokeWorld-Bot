@@ -106,6 +106,7 @@ public class Pokecord
 
         //Initializations Requiring Bot to be Loaded
         LoggerHelper.init("Spawn Event & Location Event Thread Pools", ThreadPoolHandler::init);
+        LoggerHelper.init("Spawn Event Interval Updater", Listener::startSpawnIntervalUpdater);
 
         end = System.currentTimeMillis();
 

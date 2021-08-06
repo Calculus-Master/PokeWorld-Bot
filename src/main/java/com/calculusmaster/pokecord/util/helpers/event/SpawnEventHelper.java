@@ -35,12 +35,12 @@ public class SpawnEventHelper
 
     public static void start(Guild g)
     {
-        start(g, 10);
+        start(g, SPAWN_INTERVAL);
     }
 
-    public static void start(Guild g, int initDelay)
+    private static void start(Guild g, int interval)
     {
-        ScheduledFuture<?> spawnEvent = ThreadPoolHandler.SPAWN.scheduleWithFixedDelay(() -> spawnPokemon(g), initDelay, SPAWN_INTERVAL, TimeUnit.SECONDS);
+        ScheduledFuture<?> spawnEvent = ThreadPoolHandler.SPAWN.scheduleWithFixedDelay(() -> spawnPokemon(g), 10, interval, TimeUnit.SECONDS);
 
         SCHEDULERS.put(g.getId(), spawnEvent);
     }
@@ -66,7 +66,32 @@ public class SpawnEventHelper
 
         spawnPokemon(g, spawn);
 
-        start(g, 120);
+        start(g);
+    }
+
+    public static void updateSpawnRate(Guild g, int messages)
+    {
+        if(g == null)
+        {
+            LoggerHelper.warn(SpawnEventHelper.class, "Failed to change Spawn Rate!");
+            return;
+        }
+
+        removeServer(g.getId());
+
+        double interval = SPAWN_INTERVAL;
+
+        if(messages <= 10) interval *= 3;
+        else if(messages <= 20) interval *= 2;
+        else if(messages <= 50) interval *= 1.25;
+        else if(messages <= 75) interval *= 1.0;
+        else if(messages <= 100) interval *= 0.75;
+        else if(messages <= 200) interval *= 0.5;
+        else interval *= 0.25;
+
+        start(g, (int)interval);
+
+        LoggerHelper.info(SpawnEventHelper.class, "Updating Spawn Rate in " + g.getName() + "! New Interval: " + (int)(interval) + "s!");
     }
 
     private static void spawnPokemon(Guild g, String spawn)

@@ -9,10 +9,13 @@ import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.custom.ExtendedIntegerMap;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
+import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.ISnowflake;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -22,11 +25,28 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class Listener extends ListenerAdapter
 {
     private final Map<String, Long> cooldowns = new HashMap<>();
     int cooldown = 1; //Seconds
+
+    public static void startSpawnIntervalUpdater()
+    {
+        SERVER_RECENT_MESSAGES = new ExtendedIntegerMap<String>().withDefaultKeys(Pokecord.BOT_JDA.getGuilds().stream().map(ISnowflake::getId).collect(Collectors.toList()));
+
+        RECENT_MESSAGE_SCHEDULER = Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
+            SERVER_RECENT_MESSAGES.forEach((server, messages) -> SpawnEventHelper.updateSpawnRate(Pokecord.BOT_JDA.getGuildById(server), messages));
+            SERVER_RECENT_MESSAGES.reset();
+        }, 5, 5, TimeUnit.MINUTES);
+    }
+
+    private static ScheduledFuture<?> RECENT_MESSAGE_SCHEDULER;
+    private static ExtendedIntegerMap<String> SERVER_RECENT_MESSAGES;
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event)
@@ -93,6 +113,8 @@ public class Listener extends ListenerAdapter
         if(r.nextInt(10) <= 3) ThreadPoolHandler.LISTENER_EVENT.execute(() -> expEvent(event));
 
         if(r.nextInt(10) < 2) ThreadPoolHandler.LISTENER_EVENT.execute(() -> eggExpEvent(event));
+
+        SERVER_RECENT_MESSAGES.increase(server.getId());
     }
 
     private static void redeemEvent(MessageReceivedEvent event)
