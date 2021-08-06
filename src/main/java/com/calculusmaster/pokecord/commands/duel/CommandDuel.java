@@ -10,17 +10,23 @@ import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
-import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 public class CommandDuel extends Command
 {
+    private static final Map<String, ScheduledFuture<?>> REQUEST_COOLDOWNS = new HashMap<>();
+
     public CommandDuel(MessageReceivedEvent event, String[] msg)
     {
         super(event, msg);
@@ -78,6 +84,8 @@ public class CommandDuel extends Command
                 {
                     this.sendMsg("Your team needs to contain at least " + d.getSize() + " Pokemon to participate! Deleting duel request!");
 
+                    this.removeRequestExpiry();
+
                     DuelHelper.delete(this.player.getId());
                 }
                 else if(checkTeam && this.isInvalidTeam(d.getSize()))
@@ -86,12 +94,16 @@ public class CommandDuel extends Command
                 }
                 else
                 {
+                    this.removeRequestExpiry();
+
                     d.sendTurnEmbed();
                     this.embed = null;
                 }
             }
             else
             {
+                this.removeRequestExpiry();
+
                 DuelHelper.delete(this.player.getId());
                 this.sendMsg(this.player.getName() + " denied the duel request!");
             }
@@ -153,13 +165,26 @@ public class CommandDuel extends Command
         {
             Duel d = Duel.create(this.player.getId(), opponentID, size, this.event);
 
-            LoggerHelper.info(CommandDuel.class, "Duel Created! " + d);
+            ScheduledFuture<?> request = Executors.newScheduledThreadPool(1).schedule(() -> {
+                DuelHelper.delete(this.player.getId());
+                this.sendMsg("Duel Request expired!");
+            }, 3, TimeUnit.MINUTES);
+            REQUEST_COOLDOWNS.put(opponentID, request);
 
             this.event.getChannel().sendMessage("<@" + opponentID + "> ! " + this.player.getName() + " has challenged you to a duel! Type `p!duel accept` to accept!").queue();
             this.embed = null;
         }
 
         return this;
+    }
+
+    private void removeRequestExpiry()
+    {
+        if(REQUEST_COOLDOWNS.containsKey(this.player.getId()))
+        {
+            REQUEST_COOLDOWNS.get(this.player.getId()).cancel(true);
+            REQUEST_COOLDOWNS.remove(this.player.getId());
+        }
     }
 
     private void createInvalidTeamEmbed(int size)
