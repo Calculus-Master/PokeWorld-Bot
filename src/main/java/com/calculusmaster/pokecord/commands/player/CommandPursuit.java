@@ -25,6 +25,7 @@ public class CommandPursuit extends Command
         boolean start = this.msg.length >= 2 && this.msg[1].equals("start");
         boolean info = this.msg.length == 2 && this.msg[1].equals("info");
         boolean advance = this.msg.length == 2 && Arrays.asList("advance", "continue", "next").contains(this.msg[1]);
+        boolean preview = this.msg.length == 2 && this.msg[1].equals("preview");
 
         if(start)
         {
@@ -96,6 +97,21 @@ public class CommandPursuit extends Command
                     }
                     else this.sendMsg("You are now at Pursuit Level " + this.playerData.getPursuitLevel() + " / " + this.playerData.getPursuitIDs().size() + "!");
                 }
+            }
+        }
+        else if(preview)
+        {
+            int current = this.playerData.getPursuitLevel() - 1;
+            int startIndex = current + 1;
+            int endIndex = Math.min(startIndex + 3, this.playerData.getPursuitIDs().size());
+
+            this.embed.addField("Current (Level " + (current + 1) + ")", this.playerData.getCurrentPursuitBounty().getOverview(), false);
+
+            for(int i = startIndex; i < endIndex; i++)
+            {
+                Bounty b = Bounty.fromDB(this.playerData.getPursuitIDs().get(i));
+
+                this.embed.addField("Level " + (i + 1), b.getOverview(), true);
             }
         }
         else
