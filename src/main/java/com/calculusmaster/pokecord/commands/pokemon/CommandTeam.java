@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
-import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
@@ -12,7 +11,6 @@ import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CommandTeam extends Command
 {
@@ -55,27 +53,30 @@ public class CommandTeam extends Command
 
             if((teamIndex < 1 || (set && teamIndex > MAX_TEAM_SIZE)) || (pokemonIndex < 1 || pokemonIndex > this.playerData.getPokemonList().size()))
             {
-                this.embed.setDescription(CommandInvalid.getShort());
-                return this;
+                return this.sendDefaultInvalid();
             }
             else if(add && this.playerData.getTeam().size() == MAX_TEAM_SIZE)
             {
-                this.embed.setDescription("Your team is full! Use p!team set to change certain slots!");
+                this.sendMsg("Your team is full! Use p!team set to change certain slots!");
                 return this;
             }
-
-            String UUID = this.playerData.getPokemonList().get(pokemonIndex - 1);
-
-            if(this.playerData.getTeam().contains(UUID))
+            else
             {
-                this.embed.setDescription("This Pokemon is already in your team!");
-                return this;
+                String UUID = this.playerData.getPokemonList().get(pokemonIndex - 1);
+
+                if(this.playerData.getTeam().contains(UUID))
+                {
+                    this.sendMsg("This Pokemon is already in your team!");
+                    return this;
+                }
+                else
+                {
+                    this.playerData.addPokemonToTeam(UUID, teamIndex);
+
+                    Pokemon p = Pokemon.build(UUID);
+                    this.sendMsg("Added " + p.getName() + " to your team!");
+                }
             }
-
-            this.playerData.addPokemonToTeam(UUID, teamIndex);
-
-            Pokemon p = Pokemon.build(UUID);
-            this.embed.setDescription("Added " + p.getName() + " to your team!");
         }
         else if(remove)
         {
@@ -83,15 +84,16 @@ public class CommandTeam extends Command
 
             if(teamIndex < 1 || teamIndex > MAX_TEAM_SIZE || teamIndex > this.playerData.getTeam().size())
             {
-                this.embed.setDescription(CommandInvalid.getShort());
-                return this;
+                return this.sendDefaultInvalid();
             }
+            else
+            {
+                Pokemon p = Pokemon.build(this.playerData.getTeam().get(teamIndex - 1));
 
-            Pokemon p = Pokemon.build(this.playerData.getTeam().get(teamIndex - 1));
+                this.playerData.removePokemonFromTeam(teamIndex);
 
-            this.playerData.removePokemonFromTeam(teamIndex);
-
-            this.embed.setDescription("Removed " + p.getName() + " from your team!");
+                this.sendMsg("Removed " + p.getName() + " from your team!");
+            }
         }
         else if(swap)
         {
@@ -100,27 +102,26 @@ public class CommandTeam extends Command
 
             if(fromIndex < 1 || fromIndex > this.playerData.getTeam().size() || toIndex < 1 || toIndex > this.playerData.getTeam().size())
             {
-                this.embed.setDescription(CommandInvalid.getShort());
-                return this;
+                return this.sendDefaultInvalid();
             }
+            else
+            {
+                this.playerData.swapPokemonInTeam(fromIndex, toIndex);
 
-            this.playerData.swapPokemonInTeam(fromIndex, toIndex);
-
-            this.embed.setDescription("Swapped pokemon number " + fromIndex + " and " + toIndex + " in your team!");
+                this.sendMsg("Swapped pokemon number " + fromIndex + " and " + toIndex + " in your team!");
+            }
         }
         else if(clear)
         {
             this.playerData.clearTeam();
 
-            this.event.getChannel().sendMessage(this.playerData.getMention() + ": Your team was successfully cleared!").queue();
-            this.embed = null;
-            return this;
+            this.sendMsg(this.playerData.getMention() + ": Your team was successfully cleared!");
         }
         else
         {
-            if(this.playerData.getTeam() == null)
+            if(this.playerData.getTeam().isEmpty())
             {
-                this.embed.setDescription("You don't have any Pokemon in your team!");
+                this.sendMsg("You don't have any Pokemon in your team! Add Pokemon using `p!team add <number>`!");
                 return this;
             }
 
@@ -164,18 +165,10 @@ public class CommandTeam extends Command
 
     private String getTag(String name)
     {
-        if(DuelHelper.isInDuel(this.player.getId()))
-        {
-            Duel d = DuelHelper.instance(this.player.getId());
-            List<Pokemon> team = d.getPlayers()[d.indexOf(this.player.getId())].team;
-            if(team.stream().filter(p -> p.getName().equals(name)).collect(Collectors.toList()).get(0).isFainted()) return " (Fainted)";
-        }
-
         if(PokemonRarity.LEGENDARY.contains(name)) return " (L)";
-        if(PokemonRarity.MYTHICAL.contains(name)) return " (MY)";
-        if(PokemonRarity.ULTRA_BEAST.contains(name)) return " (UB)";
-        if(PokemonRarity.MEGA.contains(name)) return " (M)";
-
-        return "";
+        else if(PokemonRarity.MYTHICAL.contains(name)) return " (M)";
+        else if(PokemonRarity.ULTRA_BEAST.contains(name)) return " (UB)";
+        else if(name.contains("Mega") || name.contains("Primal")) return " (M|P)";
+        else return "";
     }
 }

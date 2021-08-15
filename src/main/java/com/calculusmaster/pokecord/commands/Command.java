@@ -101,6 +101,12 @@ public abstract class Command
         else if(this.buttonEvent != null)  this.buttonEvent.getChannel().sendMessage(this.playerData.getMention() + ": " + msg).queue();
     }
 
+    protected Command sendDefaultInvalid()
+    {
+        this.sendMsg(CommandInvalid.getShort());
+        return this;
+    }
+
     protected void sendInvalidCredits(int req)
     {
         this.sendMsg("Insufficient Credits! Needed: `" + req + "`, you have `" + this.playerData.getCredits() + "`!");

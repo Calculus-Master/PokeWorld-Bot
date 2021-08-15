@@ -43,7 +43,7 @@ public class CommandDuel extends Command
             this.embed.setDescription("This is a PvP Duel! Duel another player with a Pokemon team of any size, up to a maximum of " + CommandTeam.MAX_TEAM_SIZE + "!");
             this.embed
                     .addField("Limits", "Duel Teams are limited by default. This means, that depending on the size of the Duel, there is a certain maximum number of Legendary and Mythical/Ultra Beast Pokemon you can have on your team. You will be notified about this when you request a duel (if your team violates the limits), and it can be disabled by including the `--nolimit` argument when requesting a duel.", false)
-                    .addField("1v1", "To initiate a simple 1v1 duel, simply use `p!duel <@player> 1`. This will start a duel using you and your opponent's selected Pokemon, and will not involve either of your Pokemon teams.", false)
+                    .addField("1v1", "To initiate a simple 1v1 duel, simply use `p!duel <@player>`. This will start a duel using you and your opponent's selected Pokemon, and will not involve either of your Pokemon teams.", false)
                     .addField("Battling", "While in a duel, you are able to submit a Turn Action using the `p!use` command. A list of the possible Turn Actions can be found by using `p!help use`", false)
                     .addField("Targets", "In every Server, a player is randomly chosen as the Target. `p!target` will show who this player is. To see more information about the Target system, use `p!target info`.", false)
                     .addField("Other Duels", "There are other kinds of duels available (other than PvP). `p!wildduel` initiates a duel against a Wild Pokemon, `p!trainerduel` initiates a duel against an AI Trainer, and `p!gymduel` initiates a duel against a Gym Leader", false);
@@ -168,6 +168,7 @@ public class CommandDuel extends Command
             ScheduledFuture<?> request = Executors.newScheduledThreadPool(1).schedule(() -> {
                 DuelHelper.delete(this.player.getId());
                 this.sendMsg("Duel Request expired!");
+                REQUEST_COOLDOWNS.remove(opponentID);
             }, 3, TimeUnit.MINUTES);
             REQUEST_COOLDOWNS.put(opponentID, request);
 
