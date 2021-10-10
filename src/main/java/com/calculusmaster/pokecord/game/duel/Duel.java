@@ -131,11 +131,19 @@ public class Duel
 
         if(this.isComplete())
         {
-            this.sendTurnEmbed();
-            this.sendWinEmbed();
-            this.setStatus(DuelStatus.COMPLETE);
+            if(this.event == null) LoggerHelper.error(Duel.class, "Duel Error: Cannot send Embeds, MessageReceivedEvent not initialized!");
+            else
+            {
+                this.sendTurnEmbed();
+                this.sendWinEmbed();
+                this.setStatus(DuelStatus.COMPLETE);
+            }
         }
-        else this.sendTurnEmbed();
+        else
+        {
+            if(this.event == null) LoggerHelper.error(Duel.class, "Duel Error: Cannot send Embeds, MessageReceivedEvent not initialized!");
+            else this.sendTurnEmbed();
+        }
 
         this.queuedMoves.clear();
     }
