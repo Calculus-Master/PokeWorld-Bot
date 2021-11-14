@@ -23,8 +23,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'net.dv8tion:JDA:4.3.0_334'
-    implementation 'org.mongodb:mongodb-driver-sync:4.3.2'
+    implementation 'net.dv8tion:JDA:4.3.0_346'
+    implementation 'org.mongodb:mongodb-driver-sync:4.3.4'
     implementation 'org.json:json:20210307'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.5'
     implementation group: 'com.opencsv', name: 'opencsv', version: '5.5'
