@@ -113,4 +113,12 @@ public class PoisonMoves
                 .addStatusEffect(StatusCondition.POISONED)
                 .execute();
     }
+
+    public String Sludge(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.POISONED, 30)
+                .execute();
+    }
 }

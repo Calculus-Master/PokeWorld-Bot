@@ -221,4 +221,10 @@ public class DarkMoves
     {
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    //TODO: Ignores changes to stats
+    public String DarkestLariat(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

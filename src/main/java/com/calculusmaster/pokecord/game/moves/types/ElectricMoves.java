@@ -191,4 +191,11 @@ public class ElectricMoves
     {
         return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 100);
     }
+
+    public String PlasmaFists(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(user.getUUID()).plasmaFistsUsed = true;
+
+        return Move.simpleDamageMove(user, opponent, duel, move);
+    }
 }

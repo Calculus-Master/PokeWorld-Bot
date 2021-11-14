@@ -346,6 +346,8 @@ public class Duel
 
         if(move.getName().equals("Defense Curl")) this.data(this.current).defenseCurlUsed = true;
 
+        if(this.data(this.current).plasmaFistsUsed) move.setType(Type.ELECTRIC);
+
         if(move.getName().equals("Rollout"))
         {
             if(accurate) this.data(this.current).rolloutTurns++;

@@ -946,4 +946,11 @@ public class NormalMoves
     {
         return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPD, -1, 10, false);
     }
+
+    public String Glare(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.PARALYZED)
+                .execute();
+    }
 }
