@@ -8,7 +8,6 @@ import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
-import com.calculusmaster.pokecord.util.PrivateInfo;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.ConfigHelper;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
@@ -52,7 +51,7 @@ public class CommandDev extends Command
                 else spawn = this.getMultiWordContent(2);
                 SpawnEventHelper.forceSpawn(this.server, spawn);
             }
-            case PrivateInfo.DEV_WPOQIYWR -> {
+            case "deletebotmarket" -> {
                 Mongo.MarketData.deleteMany(Filters.eq("sellerID", "BOT"));
                 CacheHelper.MARKET_ENTRIES.clear();
                 CacheHelper.initMarketEntries();
@@ -86,7 +85,7 @@ public class CommandDev extends Command
                 PlayerDataQuery query = this.mentions.size() > 0 ? new PlayerDataQuery(this.mentions.get(0).getId()) : this.playerData;
                 query.removePursuit();
             }
-            case PrivateInfo.DEV_ASGKLHA -> Pokecord.close();
+            case "close" -> Pokecord.close();
             case "reloadconfig" -> ConfigHelper.init();
             case "reloadpokemondata" -> DataHelper.createPokemonData();
             case "forcelocation" -> {
