@@ -266,6 +266,9 @@ public class Duel
             }
         }
 
+        //Plasma Fists Type Change: Normal -> Electric
+        if(this.data(this.current).plasmaFistsUsed && move.getType().equals(Type.NORMAL)) move.setType(Type.ELECTRIC);
+
         //Weather-based Move Changes
         this.moveWeatherEffects(move);
 
@@ -345,8 +348,6 @@ public class Duel
         if(this.data(this.other).imprisonUsed && this.players[this.other].active.getLearnedMoves().contains(move.getName())) cantUse = true;
 
         if(move.getName().equals("Defense Curl")) this.data(this.current).defenseCurlUsed = true;
-
-        if(this.data(this.current).plasmaFistsUsed) move.setType(Type.ELECTRIC);
 
         if(move.getName().equals("Rollout"))
         {
