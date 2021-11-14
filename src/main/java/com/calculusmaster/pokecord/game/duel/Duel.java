@@ -269,6 +269,20 @@ public class Duel
         //Plasma Fists Type Change: Normal -> Electric
         if(this.data(this.current).plasmaFistsUsed && move.getType().equals(Type.NORMAL)) move.setType(Type.ELECTRIC);
 
+        //Terrain Pulse Type Change
+        if(move.getName().equals("Terrain Pulse"))
+        {
+            move.setType(switch(this.terrain) {
+                case NORMAL_TERRAIN -> Type.NORMAL;
+                case GRASSY_TERRAIN -> Type.GRASS;
+                case MISTY_TERRAIN -> Type.FAIRY;
+                case ELECRIC_TERRAIN -> Type.ELECTRIC;
+                case PSYCHIC_TERRAIN -> Type.PSYCHIC;
+            });
+
+            if(!this.terrain.equals(Terrain.NORMAL_TERRAIN) && !this.data(this.current).isRaised) move.setPower(2.0);
+        }
+
         //Weather-based Move Changes
         this.moveWeatherEffects(move);
 
@@ -306,19 +320,6 @@ public class Duel
                 this.players[this.current].active.damage(this.players[this.current].active.getHealth());
                 return turnResult + " Perish Song hit! " + this.players[this.current].active.getName() + " fainted!";
             }
-        }
-
-        if(move.getName().equals("Terrain Pulse"))
-        {
-            move.setType(switch(this.terrain) {
-                case NORMAL_TERRAIN -> Type.NORMAL;
-                case GRASSY_TERRAIN -> Type.GRASS;
-                case MISTY_TERRAIN -> Type.FAIRY;
-                case ELECRIC_TERRAIN -> Type.ELECTRIC;
-                case PSYCHIC_TERRAIN -> Type.PSYCHIC;
-            });
-
-            if(!this.terrain.equals(Terrain.NORMAL_TERRAIN) && !this.data(this.current).isRaised) move.setPower(2.0);
         }
 
         //Z-Crystal Event
