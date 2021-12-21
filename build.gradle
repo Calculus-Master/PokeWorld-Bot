@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id 'application'
     id "com.github.johnrengelman.shadow" version "7.0.0"
-    id 'org.openjfx.javafxplugin' version "0.0.10"
 }
 
 mainClassName = "com.calculusmaster.pokecord.Pokecord"
@@ -24,7 +23,7 @@ repositories {
 
 dependencies {
     implementation 'net.dv8tion:JDA:4.3.0_346'
-    implementation 'org.mongodb:mongodb-driver-sync:4.3.4'
+    implementation 'org.mongodb:mongodb-driver-sync:4.4.0'
     implementation 'org.json:json:20210307'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.5'
     implementation group: 'com.opencsv', name: 'opencsv', version: '5.5'
@@ -32,10 +31,4 @@ dependencies {
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'org.projectlombok:lombok:1.18.20'
     implementation 'org.kohsuke:github-api:1.132'
-    implementation 'me.tongfei:progressbar:0.9.2'
-}
-
-javafx {
-    version = '16'
-    modules = ['javafx.controls']
 }

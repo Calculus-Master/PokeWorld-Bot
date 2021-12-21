@@ -13,7 +13,12 @@ import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import org.apache.commons.lang3.Range;
+import org.bson.Document;
+import org.bson.json.JsonWriterSettings;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,6 +42,7 @@ public class DataHelper
     //Pokemon Data
     public static void createPokemonData()
     {
+        //TODO: Remove the need for this database (write json files and read them on bot init)
         Mongo.PokemonInfo.find().forEach(d -> POKEMON_DATA.put(d.getString("name"), new PokemonData(d)));
     }
 
@@ -53,6 +59,26 @@ public class DataHelper
     public static int dex(String name)
     {
         return pokeData(name).dex;
+    }
+
+    public static void main(String[] args) throws IOException
+    {
+        Document output2 = new Document();
+
+        Mongo.PokemonInfo.find().forEach(d -> {
+            output2.append(d.getString("name"), new Document()
+                    .append("dex", d.getInteger("dex"))
+                    .append("normalURL", d.getString("normalURL"))
+                    .append("shinyURL", d.getString("shinyURL")));
+
+            System.out.println("Created entry for " + d.getInteger("dex") + "!");
+        });
+
+        System.out.println("Writing JSON file...");
+
+        BufferedWriter write2 = new BufferedWriter(new FileWriter("pokemon_image_urls.json"));
+        write2.write(output2.toJson(JsonWriterSettings.builder().indent(true).build()));
+        write2.close();
     }
 
     //Moves
