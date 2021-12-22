@@ -9,7 +9,8 @@ import org.bson.Document;
 
 import java.util.*;
 
-public final class PokemonData
+@Deprecated
+public final class LegacyPokemonData
 {
     public final Document document;
 
@@ -45,7 +46,7 @@ public final class PokemonData
     public final String normalURL;
     public final String shinyURL;
 
-    public PokemonData(Document d)
+    public LegacyPokemonData(Document d)
     {
         this.document = d;
 
@@ -86,8 +87,8 @@ public final class PokemonData
         this.shinyURL = d.getString("shinyURL");
     }
 
-    public PokemonData copy()
+    public LegacyPokemonData copy()
     {
-        return new PokemonData(this.document);
+        return new LegacyPokemonData(this.document);
     }
 }

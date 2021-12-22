@@ -4,7 +4,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.MoveData;
-import com.calculusmaster.pokecord.game.pokemon.PokemonData;
+import com.calculusmaster.pokecord.game.pokemon.LegacyPokemonData;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
@@ -24,7 +24,9 @@ import java.util.stream.Collectors;
 
 public class DataHelper
 {
-    public static final Map<String, PokemonData> POKEMON_DATA = new HashMap<>();
+    @Deprecated
+    public static final Map<String, LegacyPokemonData> POKEMON_DATA = new HashMap<>();
+    @Deprecated
     public static final List<String> POKEMON = new ArrayList<>();
 
     public static final Map<String, MoveData> MOVE_DATA = new HashMap<>();
@@ -34,16 +36,20 @@ public class DataHelper
     public static final List<List<String>> EV_LISTS = new ArrayList<>();
     public static final Map<Type, List<String>> TYPE_LISTS = new HashMap<>();
     public static final Map<String, GigantamaxData> GIGANTAMAX_DATA = new HashMap<>();
+    @Deprecated
     public static final Map<Integer, List<String>> POKEMON_SPECIES_DESC = new HashMap<>();
+    @Deprecated
     public static final Map<Integer, List<EggGroup>> POKEMON_EGG_GROUPS = new HashMap<>();
+    @Deprecated
     public static final Map<Integer, Integer> POKEMON_BASE_HATCH_TARGETS = new HashMap<>();
+    @Deprecated
     public static final Map<Integer, Integer> POKEMON_GENDER_RATES = new HashMap<>();
 
     //Pokemon Data
     public static void createPokemonData()
     {
         //TODO: Remove the need for this database (write json files and read them on bot init)
-        Mongo.PokemonInfo.find().forEach(d -> POKEMON_DATA.put(d.getString("name"), new PokemonData(d)));
+        Mongo.PokemonInfo.find().forEach(d -> POKEMON_DATA.put(d.getString("name"), new LegacyPokemonData(d)));
     }
 
     public static void createPokemonList()
@@ -51,7 +57,7 @@ public class DataHelper
         POKEMON.addAll(POKEMON_DATA.keySet());
     }
 
-    public static PokemonData pokeData(String name)
+    public static LegacyPokemonData pokeData(String name)
     {
         return POKEMON_DATA.get(name).copy();
     }

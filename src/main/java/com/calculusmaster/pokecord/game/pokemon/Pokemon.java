@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 public class Pokemon
 {
-    private PokemonData data;
+    private LegacyPokemonData data;
     protected JSONObject specificJSON;
 
     private String UUID;
@@ -130,7 +130,7 @@ public class Pokemon
         return p;
     }
 
-    public PokemonData getData()
+    public LegacyPokemonData getData()
     {
         return DataHelper.pokeData(this.getName());
     }

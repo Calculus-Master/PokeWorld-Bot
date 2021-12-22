@@ -4,8 +4,8 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.pokemon.LegacyPokemonData;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.game.pokemon.PokemonData;
 import com.calculusmaster.pokecord.mongo.CollectionsQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
@@ -46,7 +46,7 @@ public class CommandDex extends Command
 
         String pokemon = Global.normalCase(this.getPokemonName());
 
-        PokemonData data = DataHelper.pokeData(pokemon);
+        LegacyPokemonData data = DataHelper.pokeData(pokemon);
         String flavor = DataHelper.POKEMON_SPECIES_DESC.get(data.dex).get(new Random().nextInt(DataHelper.POKEMON_SPECIES_DESC.get(data.dex).size()));
 
         this.embed
@@ -112,7 +112,7 @@ public class CommandDex extends Command
         return s.toString();
     }
 
-    private MessageEmbed.Field getStatsField(PokemonData p)
+    private MessageEmbed.Field getStatsField(LegacyPokemonData p)
     {
         StringBuilder sb = new StringBuilder();
         for(Stat s : Stat.values()) sb.append("**").append(s.shortName()).append("**: ").append(p.baseStats.get(s)).append("\n");

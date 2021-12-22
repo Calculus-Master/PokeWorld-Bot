@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class PokemonNew
 {
-    private PokemonData data;
+    private LegacyPokemonData data;
     private Document specific;
 
     private String UUID;
