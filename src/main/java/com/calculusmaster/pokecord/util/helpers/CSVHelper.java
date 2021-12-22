@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class CSVHelper
 {
     private static List<String[]> pokemonInfo = new ArrayList<>();
