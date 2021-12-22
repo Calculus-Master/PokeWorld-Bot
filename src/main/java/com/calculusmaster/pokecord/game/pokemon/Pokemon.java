@@ -53,6 +53,7 @@ public class Pokemon
     private int evasionStage;
 
     //Init Global List
+    @Deprecated
     public static void init()
     {
         Mongo.PokemonInfo.find(Filters.exists("name")).forEach(d -> Global.POKEMON.add(d.getString("name")));

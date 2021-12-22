@@ -16,6 +16,7 @@ import com.calculusmaster.pokecord.game.player.pokepass.PokePass;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.SpecialEvolutionRegistry;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.util.PrivateInfo;
 import com.calculusmaster.pokecord.util.helpers.*;
 import com.calculusmaster.pokecord.util.helpers.event.LocationEventHelper;
@@ -53,9 +54,10 @@ public class Pokecord
         INIT_COMPLETE = false;
 
         LoggerHelper.init("Config", ConfigHelper::init);
-        LoggerHelper.init("Pokemon Data", DataHelper::createPokemonData, true);
-        LoggerHelper.init("Pokemon", DataHelper::createPokemonList);
-        LoggerHelper.init("Pokemon", Pokemon::init);
+        LoggerHelper.init("Pokemon Data", PokemonData::init);
+        LoggerHelper.init("Pokemon Data (Legacy)", DataHelper::createPokemonData, true);
+        LoggerHelper.init("Pokemon (Legacy, DataHelper.POKEMON)", DataHelper::createPokemonList);
+        LoggerHelper.init("Pokemon (Legacy, Global.POKEMON)", Pokemon::init);
         LoggerHelper.init("Move Data", DataHelper::createMoveData, true);
         LoggerHelper.init("Move", DataHelper::createMoveList);
         LoggerHelper.init("Move Tutor", MoveTutorRegistry::init);
@@ -64,10 +66,10 @@ public class Pokecord
         LoggerHelper.init("Gigantamax", DataHelper::createGigantamaxDataMap);
         LoggerHelper.init("EV Lists", DataHelper::createEVLists);
         LoggerHelper.init("Type Lists", DataHelper::createTypeLists);
-        LoggerHelper.init("Species Descriptions", DataHelper::createSpeciesDescLists, true);
-        LoggerHelper.init("Egg Groups", DataHelper::createEggGroupLists, true);
-        LoggerHelper.init("Base Hatch Targets", DataHelper::createBaseEggHatchTargetsMap, true);
-        LoggerHelper.init("Gender Rates", DataHelper::createGenderRateMap, true);
+        LoggerHelper.init("Species Descriptions (Legacy)", DataHelper::createSpeciesDescLists, true);
+        LoggerHelper.init("Egg Groups (Legacy)", DataHelper::createEggGroupLists, true);
+        LoggerHelper.init("Base Hatch Targets (Legacy)", DataHelper::createBaseEggHatchTargetsMap, true);
+        LoggerHelper.init("Gender Rates (Legacy)", DataHelper::createGenderRateMap, true);
         LoggerHelper.init("Evolutions", SpecialEvolutionRegistry::init);
         LoggerHelper.init("Trainer", Trainer::init);
         LoggerHelper.init("Incomplete Moves", Move::init);

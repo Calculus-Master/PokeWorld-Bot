@@ -27,7 +27,7 @@ public final class PokemonData
     public static final List<String> POKEMON = new ArrayList<>();
     public static final LinkedHashMap<String, PokemonData> POKEMON_DATA = new LinkedHashMap<>();
 
-    public static void init() throws IOException, CsvException
+    public static void init()
     {
         try { new CSVReader(new InputStreamReader(Objects.requireNonNull(Pokecord.class.getResourceAsStream("/data_csv/pokemon_data_standard.csv")))).readAll().stream().map(line -> line[0]).forEachOrdered(name -> { POKEMON.add(name); POKEMON_DATA.put(name, new PokemonData(name)); }); }
         catch (IOException | CsvException e) { e.printStackTrace(); LoggerHelper.error(PokemonData.class, "Failed to initialize PokemonData Objects!");}
