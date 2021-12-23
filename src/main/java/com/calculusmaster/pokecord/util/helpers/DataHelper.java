@@ -3,11 +3,10 @@ package com.calculusmaster.pokecord.util.helpers;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.MoveData;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.custom.ExtendedHashMap;
-import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import org.apache.commons.lang3.Range;
@@ -94,21 +93,16 @@ public class DataHelper
     {
         for(int i = 0; i < 6; i++) EV_LISTS.add(new ArrayList<>());
 
-        Mongo.PokemonInfo.find(Filters.exists("ev")).forEach(d -> {
-            List<Integer> j = d.getList("ev", Integer.class);
-            for(int i = 0; i < 6; i++) if(j.get(i) > 0) EV_LISTS.get(i).add(d.getString("name"));
-        });
+        PokemonData.POKEMON.stream().map(PokemonData::get).forEach(data -> data.yield.get().forEach((key, value) -> {
+            if (value > 0) EV_LISTS.get(key.ordinal()).add(data.name);
+        }));
     }
 
     //Type Lists
     public static void createTypeLists()
     {
         for(Type t : Type.values()) TYPE_LISTS.put(t, new ArrayList<>());
-
-        Mongo.PokemonInfo.find().forEach(d -> {
-            List<Type> types = d.getList("type", String.class).stream().distinct().map(Type::cast).collect(Collectors.toList());
-            for(Type t : types) TYPE_LISTS.get(t).add(d.getString("name"));
-        });
+        PokemonData.POKEMON.stream().map(PokemonData::get).forEach(data -> data.types.stream().distinct().forEach(t -> TYPE_LISTS.get(t).add(data.name)));
     }
 
     //Gigantamax

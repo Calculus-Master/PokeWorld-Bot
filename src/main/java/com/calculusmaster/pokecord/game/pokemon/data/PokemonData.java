@@ -6,14 +6,13 @@ import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
-import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
-import com.opencsv.CSVWriter;
-import org.bson.Document;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.stream.Stream;
 
 public final class PokemonData
@@ -158,9 +157,9 @@ public final class PokemonData
     }
 
     //Legacy Code (Converting the Pokemon Info Database to CSV Files)
-
-    private static final List<Document> PokemonInfoDatabase = new ArrayList<>();
-    static { Mongo.PokemonInfo.find().forEach(PokemonInfoDatabase::add); }
+//
+//    private static final List<Document> PokemonInfoDatabase = new ArrayList<>();
+//    static { Mongo.PokemonInfo.find().forEach(PokemonInfoDatabase::add); }
 
     public static void main(String[] args) throws IOException
     {
@@ -278,22 +277,22 @@ public final class PokemonData
 //        });
     }
 
-    private interface DocumentParser { void parse(Document d, int arraySize, List<String[]> outputList); }
-
-    private static void writeCSVFile(String fileName, String[] header, DocumentParser parser) throws IOException
-    {
-        CSVWriter writer = Objects.requireNonNull(PokemonData.createWriter(fileName));
-        writer.writeNext(header);
-
-        List<String[]> data = new ArrayList<>();
-        PokemonInfoDatabase.forEach(d -> parser.parse(d, header.length, data));
-
-        writer.writeAll(data);
-        writer.close();
-    }
-
-    private static CSVWriter createWriter(String fileName) throws IOException
-    {
-        return new CSVWriter(new FileWriter(fileName), ',', CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
-    }
+//    private interface DocumentParser { void parse(Document d, int arraySize, List<String[]> outputList); }
+//
+//    private static void writeCSVFile(String fileName, String[] header, DocumentParser parser) throws IOException
+//    {
+//        CSVWriter writer = Objects.requireNonNull(PokemonData.createWriter(fileName));
+//        writer.writeNext(header);
+//
+//        List<String[]> data = new ArrayList<>();
+//        PokemonInfoDatabase.forEach(d -> parser.parse(d, header.length, data));
+//
+//        writer.writeAll(data);
+//        writer.close();
+//    }
+//
+//    private static CSVWriter createWriter(String fileName) throws IOException
+//    {
+//        return new CSVWriter(new FileWriter(fileName), ',', CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
+//    }
 }
