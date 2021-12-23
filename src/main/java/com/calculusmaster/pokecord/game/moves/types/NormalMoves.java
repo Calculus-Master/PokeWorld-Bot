@@ -78,7 +78,7 @@ public class NormalMoves
 
         move.setType(t);
 
-        return Move.simpleDamageMove(user, opponent, duel, move) + " Hidden Power's type was " + Global.normalCase(t.toString()) + "! ";
+        return Move.simpleDamageMove(user, opponent, duel, move) + " Hidden Power's type was " + Global.normalize(t.toString()) + "! ";
     }
 
     //TODO: Come up with a custom idea for it
@@ -727,7 +727,7 @@ public class NormalMoves
         user.setType(t, 0);
         user.setType(t, 1);
 
-        return user.getName() + " transformed into a " + Global.normalCase(t.toString()) + " Type!";
+        return user.getName() + " transformed into a " + Global.normalize(t.toString()) + " Type!";
     }
 
     public String CometPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)

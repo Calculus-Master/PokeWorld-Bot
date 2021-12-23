@@ -22,7 +22,7 @@ public class CommandRedeem extends Command
         if(this.playerData.getRedeems() < 1) this.sendMsg(this.playerData.getMention() + ": You don't have any redeems!");
         else if(this.msg.length >= 2)
         {
-            String pokemon = Global.normalCase(this.getMultiWordContent(1));
+            String pokemon = Global.normalize(this.getMultiWordContent(1));
 
             if(!this.isPokemon(pokemon)) this.sendMsg("Invalid Pokemon!");
             else

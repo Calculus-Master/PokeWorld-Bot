@@ -18,6 +18,6 @@ public class RoomEffect extends MoveEffect
         this.duel.room = this.room;
         this.duel.roomTurns = 5;
 
-        return this.user.getName() + " created a weird area! (" + Global.normalCase(this.room.toString().replaceAll("_", " ")) + ")!";
+        return this.user.getName() + " created a weird area! (" + Global.normalize(this.room.toString().replaceAll("_", " ")) + ")!";
     }
 }

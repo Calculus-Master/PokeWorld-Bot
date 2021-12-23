@@ -15,7 +15,7 @@ public class CollectionsQuery
 
     public CollectionsQuery(String pokemon, String player)
     {
-        pokemon = Global.normalCase(pokemon);
+        pokemon = Global.normalize(pokemon);
 
         this.query = Filters.eq("name", pokemon);
         this.update();

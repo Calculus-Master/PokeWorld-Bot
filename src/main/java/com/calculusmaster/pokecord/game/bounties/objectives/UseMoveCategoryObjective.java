@@ -14,6 +14,6 @@ public class UseMoveCategoryObjective extends AbstractCategoryObjective
     @Override
     public String getDesc()
     {
-        return "Use " + this.target + " " + Global.normalCase(this.category.toString()) + " Moves";
+        return "Use " + this.target + " " + Global.normalize(this.category.toString()) + " Moves";
     }
 }

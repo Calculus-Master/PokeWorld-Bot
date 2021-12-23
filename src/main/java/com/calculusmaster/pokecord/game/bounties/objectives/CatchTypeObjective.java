@@ -14,6 +14,6 @@ public class CatchTypeObjective extends AbstractTypeObjective
     @Override
     public String getDesc()
     {
-        return "Catch " + this.target + " Pokemon that are " + Global.normalCase(this.type.toString()) + " Type";
+        return "Catch " + this.target + " Pokemon that are " + Global.normalize(this.type.toString()) + " Type";
     }
 }

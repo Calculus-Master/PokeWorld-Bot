@@ -14,6 +14,6 @@ public class DefeatTypeObjective extends AbstractTypeObjective
     @Override
     public String getDesc()
     {
-        return "Defeat any " + this.target + " Pokemon that are " + Global.normalCase(this.type.toString()) + " Type";
+        return "Defeat any " + this.target + " Pokemon that are " + Global.normalize(this.type.toString()) + " Type";
     }
 }

@@ -29,7 +29,7 @@ public class CommandLearn extends Command
         }
 
         Pokemon selected = this.playerData.getSelectedPokemon();
-        String move = Global.normalCase(this.getMultiWordContent(1));
+        String move = Global.normalize(this.getMultiWordContent(1));
 
         if(!Move.isMove(move)) this.sendMsg("Invalid move name!");
         else if(!Move.isImplemented(move)) this.sendMsg("`" + move + "` has not been implemented yet!");

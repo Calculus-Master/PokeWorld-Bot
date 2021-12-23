@@ -39,9 +39,9 @@ public class CommandInfo extends Command
 
         String title = "**Level " + chosen.getLevel() + " " + chosen.getDisplayName() + "**" + (chosen.isShiny() ? ":star2:" : "") + (chosen.isMastered() ? ":trophy:" : "");
         String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getData().growthRate, chosen.getLevel()) + " XP";
-        String type = (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalCase(chosen.getType()[0].toString()) : Global.normalCase(chosen.getType()[0].toString()) + "\n" + Global.normalCase(chosen.getType()[1].toString()));
-        String nature = Global.normalCase(chosen.getNature().toString());
-        String gender = Global.normalCase(chosen.getGender().toString());
+        String type = (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalize(chosen.getType()[0].toString()) : Global.normalize(chosen.getType()[0].toString()) + "\n" + Global.normalize(chosen.getType()[1].toString()));
+        String nature = Global.normalize(chosen.getNature().toString());
+        String gender = Global.normalize(chosen.getGender().toString());
         String dynamaxLevel = "" + chosen.getDynamaxLevel();
         String item = Item.asItem(chosen.getItem()).getStyledName();
         String tm = (chosen.hasTM() ? "TM" + (chosen.getTM() < 10 ? "0" : "") + chosen.getTM()  + " - " + TM.get(chosen.getTM()).getMoveName() : "None");

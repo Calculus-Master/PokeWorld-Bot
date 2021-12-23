@@ -41,6 +41,6 @@ public class CommandForm extends Command
         StringBuilder form = new StringBuilder();
         for(int i = 1; i < this.msg.length; i++) form.append(this.msg[i]).append(" ");
 
-        return Global.normalCase(form.toString().trim());
+        return Global.normalize(form.toString().trim());
     }
 }

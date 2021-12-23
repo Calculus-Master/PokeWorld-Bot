@@ -14,6 +14,6 @@ public class ReleaseTypeObjective extends AbstractTypeObjective
     @Override
     public String getDesc()
     {
-        return "Release " + this.target + " Pokemon that are " + Global.normalCase(this.type.toString()) + " Type";
+        return "Release " + this.target + " Pokemon that are " + Global.normalize(this.type.toString()) + " Type";
     }
 }

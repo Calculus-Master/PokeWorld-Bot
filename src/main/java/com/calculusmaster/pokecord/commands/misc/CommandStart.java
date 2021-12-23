@@ -54,7 +54,7 @@ public class CommandStart extends Command
 
             PlayerDataQuery p = new PlayerDataQuery(this.player.getId());
 
-            Pokemon starter = Pokemon.create(Global.normalCase(this.msg[1]));
+            Pokemon starter = Pokemon.create(Global.normalize(this.msg[1]));
             starter.setLevel(5);
             starter.setIVs(this.getStarterIVs());
 

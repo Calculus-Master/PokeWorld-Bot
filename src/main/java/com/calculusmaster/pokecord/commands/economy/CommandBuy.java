@@ -70,7 +70,7 @@ public class CommandBuy extends Command
 
                 this.playerData.changeCredits(-1 * Prices.SHOP_NATURE.get());
 
-                this.sendMsg(selected.getName() + "'s Nature was changed to " + Global.normalCase(n.toString()));
+                this.sendMsg(selected.getName() + "'s Nature was changed to " + Global.normalize(n.toString()));
             }
         }
         else if(candy)
@@ -120,7 +120,7 @@ public class CommandBuy extends Command
         }
         else if(form)
         {
-            String requestedForm = Global.normalCase(this.getMultiWordContent(2));
+            String requestedForm = Global.normalize(this.getMultiWordContent(2));
 
             if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_FORM) this.sendInvalidLevel(PlayerLevel.REQUIRED_LEVEL_FORM, "to purchase forms");
             else if(!selected.hasForms()) this.sendMsg(selected.getName() + " does not have any forms!");
@@ -205,7 +205,7 @@ public class CommandBuy extends Command
         }
         else if(movetutor)
         {
-            String move = Global.normalCase(this.getMultiWordContent(1));
+            String move = Global.normalize(this.getMultiWordContent(1));
 
             if(!Move.isMove(move)) this.sendMsg("Invalid move name!");
             else if(!Move.isImplemented(move)) this.sendMsg(move + " has not been implemented yet!");
@@ -225,7 +225,7 @@ public class CommandBuy extends Command
         {
             if(this.msg.length != 3 && this.msg.length != 4) this.sendMsg(CommandInvalid.getShort());
 
-            String requestedZCrystal = Global.normalCase(this.msg[2] + " Z");
+            String requestedZCrystal = Global.normalize(this.msg[2] + " Z");
             ZCrystal z = ZCrystal.cast(requestedZCrystal);
 
             if(z == null) this.sendMsg("Invalid Z Crystal!");

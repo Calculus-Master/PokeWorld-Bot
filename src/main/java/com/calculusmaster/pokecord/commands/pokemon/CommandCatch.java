@@ -125,7 +125,7 @@ public class CommandCatch extends Command
 
     private String getPokemon()
     {
-        return Global.normalCase(this.getMultiWordContent(1));
+        return Global.normalize(this.getMultiWordContent(1));
     }
 
     private int[] collectionCredits(PokemonRarity.Rarity r)

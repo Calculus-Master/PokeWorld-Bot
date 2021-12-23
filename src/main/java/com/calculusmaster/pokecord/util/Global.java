@@ -60,7 +60,7 @@ public class Global
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)
-    public static String normalCase(String s)
+    public static String normalize(String s)
     {
         if(s.toLowerCase().startsWith("nidoran"))
         {

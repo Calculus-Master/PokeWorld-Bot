@@ -47,7 +47,7 @@ public class CommandWildDuel extends Command
             {
                 String pokemon;
 
-                if(specific) pokemon = Global.normalCase(this.getMultiWordContent(1));
+                if(specific) pokemon = Global.normalize(this.getMultiWordContent(1));
                 else if(stat)
                 {
                     List<String> statList = DataHelper.EV_LISTS.get(Stat.cast(this.msg[1]).ordinal());

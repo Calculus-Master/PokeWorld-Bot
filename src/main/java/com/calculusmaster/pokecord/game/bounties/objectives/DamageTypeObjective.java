@@ -14,6 +14,6 @@ public class DamageTypeObjective extends AbstractTypeObjective
     @Override
     public String getDesc()
     {
-        return "Deal " + this.target + " damage to opponent Pokemon that are " + Global.normalCase(this.type.toString()) + " Type";
+        return "Deal " + this.target + " damage to opponent Pokemon that are " + Global.normalize(this.type.toString()) + " Type";
     }
 }

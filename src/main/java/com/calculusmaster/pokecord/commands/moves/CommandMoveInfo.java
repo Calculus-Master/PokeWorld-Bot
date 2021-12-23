@@ -21,7 +21,7 @@ public class CommandMoveInfo extends Command
         if(this.msg.length < 2) this.sendMsg("Invalid arguments! You need to include a move name!");
         else
         {
-            String input = Global.normalCase(this.getMultiWordContent(1));
+            String input = Global.normalize(this.getMultiWordContent(1));
 
             if(!Move.isMove(input)) this.sendMsg("`" + input + "` is not a valid Move name!");
             else
@@ -34,8 +34,8 @@ public class CommandMoveInfo extends Command
                 this.embed
                         .setDescription(impl + flavor)
                         .addField("Kind", m.isZMove ? "Z-Move" : (m.isMaxMove ? "Max Move" : "Regular Move"), true)
-                        .addField("Type", Global.normalCase(m.type.toString()), true)
-                        .addField("Category", m.category != null ? Global.normalCase(m.category.toString()) : "Mirrors Base Move", true)
+                        .addField("Type", Global.normalize(m.type.toString()), true)
+                        .addField("Category", m.category != null ? Global.normalize(m.category.toString()) : "Mirrors Base Move", true)
                         .addField("Power", m.isZMove || m.isMaxMove ? "Depends on Base Move" : String.valueOf(m.basePower), true)
                         .addField("Accuracy", m.isZMove || m.isMaxMove ? "Always Hits" : String.valueOf(m.baseAccuracy), true)
                         .addBlankField(true);

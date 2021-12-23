@@ -56,7 +56,7 @@ public class CommandMoves extends Command
             for(Type t : typeMoves.keySet())
             {
                 String mL = typeMoves.get(t).stream().map(Move::getName).collect(Collectors.toList()).toString();
-                type.append(Global.normalCase(t.toString())).append(" - ").append(mL, 1, mL.length() - 1).append("\n");
+                type.append(Global.normalize(t.toString())).append(" - ").append(mL, 1, mL.length() - 1).append("\n");
             }
             type.deleteCharAt(type.length() - 1);
 

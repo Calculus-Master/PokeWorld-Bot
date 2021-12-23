@@ -112,7 +112,7 @@ public class SpawnEventHelper
             return;
         }
 
-        spawn = Global.normalCase(spawn);
+        spawn = Global.normalize(spawn);
         boolean shiny = new Random().nextInt(4096) < 1;
 
         if(LocalDateTime.now(ZoneId.of("America/Los_Angeles")).getHour() == 20)

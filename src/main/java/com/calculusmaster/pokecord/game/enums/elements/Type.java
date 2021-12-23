@@ -37,7 +37,7 @@ public enum Type
 
     public String getStyledName()
     {
-        return Global.normalCase(this.toString());
+        return Global.normalize(this.toString());
     }
 
     public static Type cast(String type)

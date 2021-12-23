@@ -37,13 +37,13 @@ public class CommandDex extends Command
         boolean isShiny = this.msg[1].equalsIgnoreCase("shiny");
         boolean isGigantamax = this.msg[isShiny ? 2 : 1].equalsIgnoreCase("gigantamax");
 
-        if(!isPokemon(this.getPokemonName()) || (isGigantamax && !Pokemon.existsGigantamax(Global.normalCase(this.getPokemonName()))))
+        if(!isPokemon(this.getPokemonName()) || (isGigantamax && !Pokemon.existsGigantamax(Global.normalize(this.getPokemonName()))))
         {
             this.embed.setDescription(CommandInvalid.getShort());
             return this;
         }
 
-        String pokemon = Global.normalCase(this.getPokemonName());
+        String pokemon = Global.normalize(this.getPokemonName());
 
         PokemonData data = PokemonData.get(pokemon);
         String flavor = data.descriptions.get(new Random().nextInt(data.descriptions.size()));
@@ -53,7 +53,7 @@ public class CommandDex extends Command
                 .addField("Type", data.types.get(0).equals(data.types.get(1)) ? data.types.get(0).getStyledName() : data.types.get(0).getStyledName() + "\n" + data.types.get(1).getStyledName(), true)
                 .addField("Abilities", this.listToMultiLineString(data.abilities), true)
                 .addField("Egg Group", this.listToMultiLineString(data.eggGroups.stream().map(EggGroup::getName).toList()), true)
-                .addField("Growth Rate", Global.normalCase(data.growthRate.toString().replaceAll("_", "")), true)
+                .addField("Growth Rate", Global.normalize(data.growthRate.toString().replaceAll("_", "")), true)
                 .addField("EXP Yield", String.valueOf(data.baseEXP), true)
                 .addField("EV Yield", this.getEVYield(data.yield), true)
                 .addField("Evolutions", this.getEvolutionsFormatted(data.evolutions), true)

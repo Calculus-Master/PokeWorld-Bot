@@ -32,9 +32,9 @@ public class CommandGymDuel extends Command
             this.embed.setTitle("Level " + level + " Gym Leaders");
             return this;
         }
-        else if(this.msg.length == 2 && GymLeader.GYM_LEADERS.get(level - 1).stream().anyMatch(l -> l.name.equals(Global.normalCase(this.msg[1]))))
+        else if(this.msg.length == 2 && GymLeader.GYM_LEADERS.get(level - 1).stream().anyMatch(l -> l.name.equals(Global.normalize(this.msg[1]))))
         {
-            GymLeader.LeaderInfo info = GymLeader.GYM_LEADERS.get(level - 1).stream().filter(l -> l.name.equals(Global.normalCase(this.msg[1]))).collect(Collectors.toList()).get(0);
+            GymLeader.LeaderInfo info = GymLeader.GYM_LEADERS.get(level - 1).stream().filter(l -> l.name.equals(Global.normalize(this.msg[1]))).collect(Collectors.toList()).get(0);
 
             if(GymLeader.getPlayersDefeated(info.name).contains(this.player.getId()))
             {

@@ -18,6 +18,6 @@ public class DamageCategoryObjective extends AbstractCategoryObjective
     @Override
     public String getDesc()
     {
-        return "Deal " + this.target + " damage to opponent Pokemon with " + Global.normalCase(this.category.toString()) + " moves";
+        return "Deal " + this.target + " damage to opponent Pokemon with " + Global.normalize(this.category.toString()) + " moves";
     }
 }

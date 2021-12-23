@@ -19,7 +19,7 @@ public final class MoveData
     {
         //id,identifier,generation_id,damage_class_id
         final Map<String, String> typeID = new HashMap<>();
-        CSVHelper.readPokemonCSV("types").forEach(s -> typeID.put(s[0], Global.normalCase(s[1])));
+        CSVHelper.readPokemonCSV("types").forEach(s -> typeID.put(s[0], Global.normalize(s[1])));
 
         //Category (Damage Class)
         final Map<String, String> categoryID = new ExtendedHashMap<String, String>().insert("1", "STATUS").insert("2", "PHYSICAL").insert("3", "SPECIAL");
@@ -33,7 +33,7 @@ public final class MoveData
 
         for(String[] moveLine : movesCSV)
         {
-            String name = Global.normalCase(moveLine[1].replaceAll("-", " ")).replace("Vice Grip", "Vise Grip");
+            String name = Global.normalize(moveLine[1].replaceAll("-", " ")).replace("Vice Grip", "Vise Grip");
 
             String type = typeID.get(moveLine[3]);
             String category = categoryID.get(moveLine[9]);

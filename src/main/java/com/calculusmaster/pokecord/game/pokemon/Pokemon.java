@@ -160,7 +160,7 @@ public class Pokemon
 
     public void setData(String name)
     {
-        this.data = PokemonData.get(Global.normalCase(name));
+        this.data = PokemonData.get(Global.normalize(name));
     }
 
     public void linkSpecificJSON(String UUID)
@@ -223,12 +223,12 @@ public class Pokemon
 
     public static void updateName(Pokemon p, String evolved)
     {
-        update(p, Updates.set("name", Global.normalCase(evolved)));
+        update(p, Updates.set("name", Global.normalize(evolved)));
     }
 
     public static void updateNickname(Pokemon p)
     {
-        update(p, Updates.set("nickname", Global.normalCase(p.getNickname())));
+        update(p, Updates.set("nickname", Global.normalize(p.getNickname())));
     }
 
     public static void updateTMTR(Pokemon p)
@@ -489,7 +489,7 @@ public class Pokemon
 
     public void setLearnedMoves(String moves)
     {
-        for (String s : moves.split("-")) this.learnedMoves.add(Global.normalCase(s));
+        for (String s : moves.split("-")) this.learnedMoves.add(Global.normalize(s));
     }
 
     public List<String> getLearnedMoves()
@@ -705,7 +705,7 @@ public class Pokemon
 
     public void changeForm(String form)
     {
-        form = Global.normalCase(form);
+        form = Global.normalize(form);
         this.setData(form);
         Pokemon.updateName(this, form);
     }

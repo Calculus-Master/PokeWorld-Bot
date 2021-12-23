@@ -93,7 +93,7 @@ public enum Item
             case EV_REALLOCATOR -> "EV Reallocator";
             case IV_REROLLER -> "IV Reroller";
             case EV_CLEARER -> "EV Clearer";
-            default -> Global.normalCase(this.getName().replaceAll("_", " "));
+            default -> Global.normalize(this.getName().replaceAll("_", " "));
         };
     }
 

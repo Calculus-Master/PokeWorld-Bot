@@ -91,9 +91,9 @@ public class CommandMarket extends Command
                 String title = "**Level " + chosen.getLevel() + " " + chosen.getName() + (chosen.hasNickname() ? " (" + chosen.getNickname() + ")" : "") + "**" + (chosen.isShiny() ? " :star2:" : "");
                 String market = "Market ID: " + entry.marketID + " | Price: " + entry.price + "\nSold by: " + entry.sellerName;
                 String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getData().growthRate, chosen.getLevel()) + " XP";
-                String gender = "Gender: " + Global.normalCase(chosen.getGender().toString());
-                String type = "Type: " + (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalCase(chosen.getType()[0].toString()) : Global.normalCase(chosen.getType()[0].toString()) + " | " + Global.normalCase(chosen.getType()[1].toString()));
-                String nature = "Nature: " + Global.normalCase(chosen.getNature().toString());
+                String gender = "Gender: " + Global.normalize(chosen.getGender().toString());
+                String type = "Type: " + (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalize(chosen.getType()[0].toString()) : Global.normalize(chosen.getType()[0].toString()) + " | " + Global.normalize(chosen.getType()[1].toString()));
+                String nature = "Nature: " + Global.normalize(chosen.getNature().toString());
                 String item = "Held Item: " + Item.asItem(chosen.getItem()).getStyledName();
                 String stats = CommandInfo.getStatsFormatted(chosen, this.playerData.getSettings().getSettingBoolean(SettingsHelper.Setting.CLIENT_DETAILED));
 

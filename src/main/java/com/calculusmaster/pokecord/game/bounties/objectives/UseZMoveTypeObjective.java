@@ -14,6 +14,6 @@ public class UseZMoveTypeObjective extends AbstractTypeObjective
     @Override
     public String getDesc()
     {
-        return "Use any " + this.target + " Z-Moves that are " + Global.normalCase(this.type.toString()) + " Type";
+        return "Use any " + this.target + " Z-Moves that are " + Global.normalize(this.type.toString()) + " Type";
     }
 }
