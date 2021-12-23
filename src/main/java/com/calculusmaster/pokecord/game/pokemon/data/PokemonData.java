@@ -86,7 +86,7 @@ public final class PokemonData
         this.dex = Integer.parseInt(standard[1]);
         this.species = standard[2];
         this.height = Double.parseDouble(standard[3]);
-        this.weight = Double.parseDouble(standard[4]);
+        this.weight = this.name.equals("Eternamax Eternatus") ? Double.MAX_VALUE : Double.parseDouble(standard[4]);
         this.types = List.of(Type.cast(standard[5].split("-")[0]), Type.cast(standard[5].split("-")[1]));
         this.growthRate = GrowthRate.cast(standard[6]);
         this.baseEXP = Integer.parseInt(standard[7]);
