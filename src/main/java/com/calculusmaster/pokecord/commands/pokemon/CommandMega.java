@@ -25,7 +25,6 @@ public class CommandMega extends Command
 
             selected.changeForm(original);
 
-            this.playerData.addPokePassExp(200, this.event);
             this.event.getChannel().sendMessage(this.playerData.getMention() + ": " + mega + " has de-evolved into " + original + "!").queue();
             this.embed = null;
         }

@@ -103,7 +103,6 @@ public class WildDuel extends Duel
         Pokemon.updateExperience(p);
 
         Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_WILD_DUEL, this.event);
-        this.players[0].data.addPokePassExp(50, this.event);
         this.players[0].data.addExp(10, 25);
         this.players[0].data.getStats().incr(PlayerStatistic.WILD_DUELS_WON);
         this.players[0].data.updateBountyProgression(b -> {

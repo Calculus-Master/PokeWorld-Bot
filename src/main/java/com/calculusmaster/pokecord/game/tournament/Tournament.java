@@ -111,7 +111,6 @@ public class Tournament
         PlayerDataQuery winner = this.playerQueries.get(this.playerPool.get(0));
 
         winner.changeCredits(credits);
-        winner.addPokePassExp(xp, this.event);
 
         embed.setDescription("The Tournament winner is " + this.playerQueries.get(this.playerPool.get(0)).getUsername() + "! They earned " + credits + " credits!");
         embed.setTitle("Tournament Complete");

@@ -157,7 +157,6 @@ public class RaidDuel extends WildDuel
                 double multiplier = highestDamage.equals(p.ID) ? 1.3 : (p.active.isFainted() ? 0.3 : 1.0);
 
                 p.data.changeCredits((int)(credits * multiplier));
-                p.data.addPokePassExp((int)(ppXP * multiplier), this.event);
                 p.data.addExp((int)(40 * multiplier));
                 p.active.addExp((int)(pokeXP * multiplier));
 

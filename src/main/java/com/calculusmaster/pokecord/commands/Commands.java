@@ -211,10 +211,6 @@ public class Commands
                 .setCommand(CommandActivate::new)
                 .setCategory(Category.POKEMON);
 
-        register("pokepass", "pp", "bp")
-                .setCommand(CommandPokePass::new)
-                .setCategory(Category.PLAYER);
-
         register("favorites", "fav")
                 .setCommand(CommandFavorites::new)
                 .setCategory(Category.POKEMON);
@@ -262,10 +258,6 @@ public class Commands
         register("serverinfo", "server")
                 .setCommand(CommandServerInfo::new)
                 .setCategory(Category.MISC);
-
-        register("skins")
-                .setCommand(CommandSkins::new)
-                .setCategory(Category.POKEMON);
 
         register("profile")
                 .setCommand(CommandProfile::new)

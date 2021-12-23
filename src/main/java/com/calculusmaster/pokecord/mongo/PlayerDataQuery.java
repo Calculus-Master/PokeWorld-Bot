@@ -5,10 +5,8 @@ import com.calculusmaster.pokecord.game.bounties.components.Bounty;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
-import com.calculusmaster.pokecord.game.player.pokepass.PokePass;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
-import com.calculusmaster.pokecord.game.pokemon.PokemonSkin;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
@@ -62,15 +60,11 @@ public class PlayerDataQuery extends MongoQuery
                 .append("active_zcrystal", "")
                 .append("achievements", new JSONArray())
                 .append("gym_level", 1)
-                .append("pokepass_exp", 0)
-                .append("pokepass_tier", 0)
                 .append("favorites", new JSONArray())
                 .append("owned_forms", new JSONArray())
                 .append("owned_megas", new JSONArray())
                 .append("bounties", new JSONArray())
                 .append("pursuit", new JSONArray())
-                .append("skins", new JSONArray())
-                .append("equipped_skins", new JSONArray())
                 .append("owned_eggs", new JSONArray())
                 .append("active_egg", "")
                 .append("level", 1)
@@ -390,42 +384,6 @@ public class PlayerDataQuery extends MongoQuery
         this.update(Updates.inc("gym_level", 1));
     }
 
-    //key: "pokepass_exp"
-    public int getPokePassExp()
-    {
-        return this.json().getInt("pokepass_exp");
-    }
-
-    public void addPokePassExp(int amount, MessageReceivedEvent event)
-    {
-        this.update(Updates.inc("pokepass_exp", amount));
-
-        this.updateBountyProgression(ObjectiveType.EARN_XP_POKEPASS, amount);
-
-        this.update();
-
-        if(this.getPokePassExp() >= PokePass.TIER_EXP && PokePass.tierExists(this.getPokePassTier() + 1))
-        {
-            this.update(Updates.set("pokepass_exp", this.getPokePassExp() - PokePass.TIER_EXP));
-            this.increasePokePassTier();
-
-            event.getChannel().sendMessage(PokePass.reward(this.getPokePassTier() + 1, this)).queue();
-
-            this.update();
-        }
-    }
-
-    //key: "pokepass_tier"
-    public int getPokePassTier()
-    {
-        return this.json().getInt("pokepass_tier");
-    }
-
-    public void increasePokePassTier()
-    {
-        this.update(Updates.inc("pokepass_tier", 1));
-    }
-
     //key: "favorites"
     public List<String> getFavorites()
     {
@@ -593,65 +551,6 @@ public class PlayerDataQuery extends MongoQuery
     public void resetPursuitLevel()
     {
         this.update(Updates.set("pursuit_level", 0));
-    }
-
-    //key: "skins"
-    public List<PokemonSkin> getOwnedSkins()
-    {
-        return this.json().getJSONArray("skins").toList().stream().map(s -> (String)s).map(PokemonSkin::cast).collect(Collectors.toList());
-    }
-
-    public List<PokemonSkin> getOwnedSkins(String pokemon)
-    {
-        return this.getOwnedSkins().stream().filter(s -> s.pokemon.equals(pokemon)).collect(Collectors.toList());
-    }
-
-    public boolean hasSkin(String pokemon)
-    {
-        return this.getOwnedSkins().stream().anyMatch(s -> s.pokemon.equals(pokemon));
-    }
-
-    public boolean hasSkin(PokemonSkin skin)
-    {
-        return this.getOwnedSkins().stream().anyMatch(s -> s.equals(skin));
-    }
-
-    public void addSkin(PokemonSkin skin)
-    {
-        if(!this.hasSkin(skin)) this.update(Updates.push("skins", skin.toString()));
-    }
-
-    //key: "equipped_skins"
-    public List<PokemonSkin> getEquippedSkins()
-    {
-        return this.json().getJSONArray("equipped_skins").toList().stream().map(s -> (String)s).map(PokemonSkin::cast).collect(Collectors.toList());
-    }
-
-    public PokemonSkin getEquippedSkin(String pokemon)
-    {
-        return this.getEquippedSkins().stream().filter(s -> s.pokemon.equals(pokemon)).collect(Collectors.toList()).get(0);
-    }
-
-    public boolean hasEquippedSkin(String pokemon)
-    {
-        return this.getEquippedSkins().stream().anyMatch(s -> s.pokemon.equals(pokemon));
-    }
-
-    public void equipSkin(PokemonSkin skin)
-    {
-        this.update(Updates.push("equipped_skins", skin.toString()));
-    }
-
-    public void unequipSkin(PokemonSkin skin)
-    {
-        this.update(Updates.pull("equipped_skins", skin.toString()));
-    }
-
-    public void unequipSkin(String pokemon)
-    {
-        PokemonSkin skin = null;
-        for(PokemonSkin s : this.getEquippedSkins()) if(s.pokemon.equals(pokemon)) skin = s;
-        this.unequipSkin(skin);
     }
 
     //key: "owned_eggs"

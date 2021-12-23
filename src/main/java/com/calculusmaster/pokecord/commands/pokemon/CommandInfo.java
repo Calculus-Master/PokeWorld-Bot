@@ -48,12 +48,6 @@ public class CommandInfo extends Command
         String tr =  (chosen.hasTR() ? "TR" + (chosen.getTR() < 10 ? "0" : "") + chosen.getTR()  + " - " + TR.get(chosen.getTR()).getMoveName() : "None");
         String image = chosen.getImage();
 
-        if(!chosen.isShiny() && this.playerData.hasEquippedSkin(chosen.getName()))
-        {
-            image = this.playerData.getEquippedSkin(chosen.getName()).URL;
-        }
-
-
         this.embed
                 .addField("Experience", exp, true)
                 .addField("Type", type, true)
@@ -76,7 +70,6 @@ public class CommandInfo extends Command
         this.embed.setImage(image);
         this.embed.setFooter("Showing Pokemon " + (index + 1) + " / " + this.playerData.getPokemonList().size());
 
-        this.playerData.addPokePassExp(50, this.event);
         return this;
     }
 

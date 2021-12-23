@@ -85,7 +85,6 @@ public class CommandPursuit extends Command
                         int creditReward = pursuitSize.finalRewardCredits;
 
                         //Pursuit Final Rewards
-                        this.playerData.addPokePassExp(pursuitSize.getPokePassXPReward(count), this.event);
                         this.playerData.changeCredits(creditReward);
 
                         Achievements.grant(this.player.getId(), Achievements.COMPLETED_FIRST_PURSUIT, this.event);

@@ -1391,7 +1391,6 @@ public class Duel
         if(CommandTarget.isTarget(this.event.getGuild(), this.players[winner].ID))
         {
             c = (new Random().nextInt(201) + 50) * (CommandTarget.SERVER_TARGET_DUELS_WON.get(this.event.getGuild().getId()) + 1);
-            this.players[winner].data.addPokePassExp(200, this.event);
 
             CommandTarget.SERVER_TARGET_DUELS_WON.put(this.event.getGuild().getId(), CommandTarget.SERVER_TARGET_DUELS_WON.get(this.event.getGuild().getId()) + 1);
 
@@ -1402,7 +1401,6 @@ public class Duel
             CommandTarget.SERVER_TARGETS.remove(this.event.getGuild().getId());
 
             c = new Random().nextInt(501) + 500;
-            this.players[winner].data.addPokePassExp(500, this.event);
 
             CommandTarget.generateNewServerTarget(this.event.getGuild());
 
@@ -1421,9 +1419,6 @@ public class Duel
             this.uploadEVs(0);
             this.uploadEVs(1);
         }
-
-        this.players[winner].data.addPokePassExp(1000, this.event);
-        this.players[loser].data.addPokePassExp(500, this.event);
 
         this.players[winner].data.addExp(20);
 
@@ -1613,10 +1608,6 @@ public class Duel
         else if(m != null && p.getName().equals("Eternatus") && m.getName().equals("Eternabeam"))
         {
             return "https://static.wikia.nocookie.net/villains/images/7/76/HOME890E.png/revision/latest/scale-to-width-down/512?cb=20200221025522";
-        }
-        else if(this.isNonBotPlayer(player) && this.players[player].data.hasEquippedSkin(p.getName()))
-        {
-            return this.players[player].data.getEquippedSkin(p.getName()).URL;
         }
         else return p.getImage();
     }

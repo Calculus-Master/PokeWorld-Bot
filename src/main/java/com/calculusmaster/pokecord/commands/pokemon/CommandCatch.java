@@ -97,7 +97,6 @@ public class CommandCatch extends Command
             this.playerData.getStats().incr(PlayerStatistic.POKEMON_CAUGHT);
 
             Achievements.grant(this.player.getId(), Achievements.CAUGHT_FIRST_POKEMON, this.event);
-            this.playerData.addPokePassExp(100, this.event);
 
             this.playerData.addExp(5, 33);
 

@@ -59,7 +59,6 @@ public class GauntletDuel extends WildDuel
             int credits = (int)(Math.pow(this.level, 1.05) * 100);
 
             this.players[0].data.changeCredits(credits);
-            this.players[0].data.addPokePassExp(xp, this.event);
 
             embed.setDescription("You lost! Your Gauntlet Run ended at Level %s! You earned %s credits!".formatted(this.level, credits));
 

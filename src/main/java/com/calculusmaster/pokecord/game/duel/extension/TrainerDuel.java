@@ -58,8 +58,6 @@ public class TrainerDuel extends Duel
 
             Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_TRAINER_DUEL, this.event);
 
-            this.players[0].data.addPokePassExp(500, this.event);
-
             //Elite Trainer
             if(elite)
             {

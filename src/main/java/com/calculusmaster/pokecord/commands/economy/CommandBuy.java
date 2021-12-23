@@ -254,8 +254,6 @@ public class CommandBuy extends Command
 
             Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_ITEM_SHOP, this.event);
             this.playerData.getStats().incr(PlayerStatistic.SHOP_ITEMS_BOUGHT);
-
-            this.playerData.addPokePassExp(200, this.event);
         }
 
         return this;

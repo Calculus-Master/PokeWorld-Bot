@@ -134,8 +134,6 @@ public class CommandMoves extends Command
             this.embed.setDescription(movesList.toString());
             this.embed.setTitle("Level " + selected.getLevel() + " " + selected.getName());
             if(!inDuel) this.embed.setFooter(":lock: signifies moves that are either not unlocked or not implemented! Unlock them by leveling up this Pokemon!");
-
-            this.playerData.addPokePassExp(50, this.event);
         }
 
         return this;
