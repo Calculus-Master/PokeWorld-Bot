@@ -98,7 +98,7 @@ public final class PokemonData
         this.shinyURL = images[2];
 
         //Stats: {"name", "hp", "atk", "def", "spatk", "spdef", "spd"}
-        String[] stats = this.readCSV("images");
+        String[] stats = this.readCSV("stats");
 
         String[] statValues = Arrays.copyOfRange(stats, 1, stats.length);
         this.baseStats = new PokemonStats(Integer.parseInt(statValues[0]), Integer.parseInt(statValues[1]), Integer.parseInt(statValues[2]), Integer.parseInt(statValues[3]), Integer.parseInt(statValues[4]), Integer.parseInt(statValues[5]));
