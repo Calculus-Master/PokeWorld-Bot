@@ -2,8 +2,8 @@ package com.calculusmaster.pokecord.game.duel.players;
 
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
-import com.calculusmaster.pokecord.util.Global;
 
 import java.util.List;
 import java.util.Random;
@@ -12,7 +12,7 @@ public class WildPokemon extends Player
 {
     public WildPokemon(int level)
     {
-        this(Global.POKEMON.get(new Random().nextInt(Global.POKEMON.size())), level);
+        this(PokemonData.POKEMON.get(new Random().nextInt(PokemonData.POKEMON.size())), level);
     }
 
     public WildPokemon(String specific, int level)

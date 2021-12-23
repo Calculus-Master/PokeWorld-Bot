@@ -29,7 +29,7 @@ public class CommandWildDuel extends Command
         boolean random = this.msg.length == 1;
         boolean stat = this.msg.length == 2 && Stat.cast(this.msg[1]) != null;
         boolean type = this.msg.length == 2 && Type.cast(this.msg[1]) != null;
-        boolean specific = this.msg.length >= 2 && Global.POKEMON.contains(Global.normalCase(this.getMultiWordContent(1)));
+        boolean specific = this.msg.length >= 2 && this.isPokemon(this.getMultiWordContent(1));
 
         if(DuelHelper.isInDuel(this.player.getId()))
         {

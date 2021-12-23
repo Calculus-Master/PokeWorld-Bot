@@ -1,6 +1,5 @@
 package com.calculusmaster.pokecord.game.pokemon;
 
-import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 
 import java.util.*;
@@ -1029,10 +1028,7 @@ public class PokemonRarity
     public static void add(String name, Rarity r)
     {
         for(int i = 0; i < r.num; i++) SPAWNS.add(name);
-
         POKEMON_RARITIES.put(name, r);
-
-        if(!Global.POKEMON.contains(name)) System.out.println("Typo in: " + name);
     }
 
     public enum Rarity

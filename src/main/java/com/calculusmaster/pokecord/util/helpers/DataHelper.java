@@ -26,8 +26,6 @@ public class DataHelper
 {
     @Deprecated
     public static final Map<String, LegacyPokemonData> POKEMON_DATA = new HashMap<>();
-    @Deprecated
-    public static final List<String> POKEMON = new ArrayList<>();
 
     public static final Map<String, MoveData> MOVE_DATA = new HashMap<>();
     public static final List<String> MOVES = new ArrayList<>();
@@ -50,11 +48,6 @@ public class DataHelper
     {
         //TODO: Remove the need for this database (write json files and read them on bot init)
         Mongo.PokemonInfo.find().forEach(d -> POKEMON_DATA.put(d.getString("name"), new LegacyPokemonData(d)));
-    }
-
-    public static void createPokemonList()
-    {
-        POKEMON.addAll(POKEMON_DATA.keySet());
     }
 
     public static LegacyPokemonData pokeData(String name)

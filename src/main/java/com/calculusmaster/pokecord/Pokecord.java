@@ -13,7 +13,6 @@ import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
 import com.calculusmaster.pokecord.game.moves.registry.ZMoveRegistry;
 import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
 import com.calculusmaster.pokecord.game.player.pokepass.PokePass;
-import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.SpecialEvolutionRegistry;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
@@ -56,8 +55,6 @@ public class Pokecord
         LoggerHelper.init("Config", ConfigHelper::init);
         LoggerHelper.init("Pokemon Data", PokemonData::init);
         LoggerHelper.init("Pokemon Data (Legacy)", DataHelper::createPokemonData, true);
-        LoggerHelper.init("Pokemon (Legacy, DataHelper.POKEMON)", DataHelper::createPokemonList);
-        LoggerHelper.init("Pokemon (Legacy, Global.POKEMON)", Pokemon::init);
         LoggerHelper.init("Move Data", DataHelper::createMoveData, true);
         LoggerHelper.init("Move", DataHelper::createMoveList);
         LoggerHelper.init("Move Tutor", MoveTutorRegistry::init);

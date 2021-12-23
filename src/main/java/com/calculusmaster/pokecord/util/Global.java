@@ -7,14 +7,12 @@ import net.dv8tion.jda.api.entities.User;
 import org.jetbrains.annotations.Nls;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Global
 {
     public static final List<String> STARTERS = Arrays.asList("bulbasaur", "charmander", "squirtle", "chikorita", "quilava", "totodile", "treecko", "torchic", "mudkip", "turtwig", "chimchar", "piplup", "snivy", "tepig", "oshawott", "chespin", "fennekin", "froakie", "rowlet", "litten", "popplio");
-    public static final List<String> POKEMON = new ArrayList<>();
 
     public static boolean userHasAdmin(Guild server, User player)
     {

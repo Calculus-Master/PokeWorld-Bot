@@ -10,6 +10,7 @@ import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.game.trade.elements.MarketEntry;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
@@ -366,7 +367,7 @@ public class CommandMarket extends Command
 
     public static void addBotEntry()
     {
-        Pokemon p = Pokemon.create(Global.POKEMON.get(new Random().nextInt(Global.POKEMON.size())));
+        Pokemon p = Pokemon.create(PokemonData.POKEMON.get(new Random().nextInt(PokemonData.POKEMON.size())));
         p.setLevel(new Random().nextInt(100) + 1);
 
         Random r = new Random();

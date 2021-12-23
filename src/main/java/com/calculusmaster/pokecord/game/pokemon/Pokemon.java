@@ -52,13 +52,6 @@ public class Pokemon
     private int accuracyStage;
     private int evasionStage;
 
-    //Init Global List
-    @Deprecated
-    public static void init()
-    {
-        Mongo.PokemonInfo.find(Filters.exists("name")).forEach(d -> Global.POKEMON.add(d.getString("name")));
-    }
-
     //Constructors
     public static Pokemon build(String UUID)
     {

@@ -124,7 +124,7 @@ public class CommandBuy extends Command
 
             if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_FORM) this.sendInvalidLevel(PlayerLevel.REQUIRED_LEVEL_FORM, "to purchase forms");
             else if(!selected.hasForms()) this.sendMsg(selected.getName() + " does not have any forms!");
-            else if(!Global.POKEMON.contains(requestedForm)) this.sendMsg("Invalid form name!");
+            else if(!this.isPokemon(requestedForm)) this.sendMsg("Invalid form name!");
             else if(Arrays.asList("Aegislash", "Aegislash Blade").contains(selected.getName())) this.sendMsg(selected.getName() + "'s forms cannot be purchased!");
             else if(this.playerData.getOwnedForms().contains(requestedForm)) this.sendMsg("You already own this form!");
             else if(this.playerData.getCredits() < Prices.SHOP_FORM.get()) this.sendInvalidCredits(Prices.SHOP_FORM.get());

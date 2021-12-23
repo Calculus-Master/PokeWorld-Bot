@@ -24,7 +24,7 @@ public class CommandRedeem extends Command
         {
             String pokemon = Global.normalCase(this.getMultiWordContent(1));
 
-            if(!Global.POKEMON.contains(pokemon)) this.sendMsg("Invalid Pokemon!");
+            if(!this.isPokemon(pokemon)) this.sendMsg("Invalid Pokemon!");
             else
             {
                 Pokemon p = Pokemon.create(pokemon);

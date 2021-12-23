@@ -1,9 +1,9 @@
 package com.calculusmaster.pokecord.commands;
 
 import com.calculusmaster.pokecord.game.enums.functional.Tips;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
-import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -86,7 +86,7 @@ public abstract class Command
 
     protected boolean isPokemon(String pokemon)
     {
-        return Global.POKEMON.contains(Global.normalCase(pokemon));
+        return PokemonData.POKEMON.stream().anyMatch(pokemon::equalsIgnoreCase);
     }
 
     protected int getInt(int index)

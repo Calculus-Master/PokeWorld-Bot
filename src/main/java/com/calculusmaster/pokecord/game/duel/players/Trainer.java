@@ -4,8 +4,8 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
-import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.mongodb.client.model.Filters;
@@ -69,7 +69,7 @@ public class Trainer extends Player
             level = 20 + ((100 - 20) * (i + 1) / count);
 
             team = new String[size];
-            for(int j = 0; j < team.length; j++) team[j] = Global.POKEMON.get(r.nextInt(Global.POKEMON.size()));
+            for(int j = 0; j < team.length; j++) team[j] = PokemonData.POKEMON.get(r.nextInt(PokemonData.POKEMON.size()));
 
             DAILY_TRAINERS.add(new TrainerInfo(name, level, z, 1.2, team));
         }
