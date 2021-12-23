@@ -588,6 +588,12 @@ public class Duel
             if(move.getType().equals(Type.ELECTRIC)) move.setPower(move.getPower() * 0.5);
         }
 
+        if(move.getName().equals("Smart Strike"))
+        {
+            accurate = true;
+            otherImmune = false;
+        }
+
         //Fly, Bounce, Dig and Dive
 
         if(this.data(this.current).flyUsed) move = new Move("Fly");

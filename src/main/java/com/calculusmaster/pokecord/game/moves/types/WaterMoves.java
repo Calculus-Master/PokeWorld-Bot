@@ -188,4 +188,12 @@ public class WaterMoves
                 .addStatChangeEffect(Stat.SPD, -1, 10, false)
                 .execute();
     }
+
+    public String Clamp(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.BOUND)
+                .execute();
+    }
 }
