@@ -1,6 +1,5 @@
 package com.calculusmaster.pokecord.game.pokemon.data;
 
-import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
@@ -8,16 +7,13 @@ import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
-import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
-import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
-import com.opencsv.exceptions.CsvException;
 import org.bson.Document;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,8 +25,13 @@ public final class PokemonData
 
     public static void init()
     {
-        try { new CSVReader(new InputStreamReader(Objects.requireNonNull(Pokecord.class.getResourceAsStream("/data_csv/pokemon_data_standard.csv")))).readAll().stream().dropWhile(line -> line[0].equals("name")).map(line -> line[0]).forEachOrdered(name -> { POKEMON.add(name); POKEMON_DATA.put(name, new PokemonData(name)); }); }
-        catch (IOException | CsvException e) { e.printStackTrace(); LoggerHelper.error(PokemonData.class, "Failed to initialize PokemonData Objects!");}
+        CSVHelper.CSV_POKEMON_DATA_STANDARD
+                .stream()
+                .map(line -> line[0])
+                .forEachOrdered(name -> {
+                    POKEMON.add(name);
+                    POKEMON_DATA.put(name, new PokemonData(name));
+                });
     }
 
     //Fields (Categorized by CSV Data Source)
@@ -81,7 +82,7 @@ public final class PokemonData
         this.name = name;
 
         //Standard: {"name", "dex", "species", "height", "weight", "type", "growth", "yield"}
-        String[] standard = this.readCSV("standard");
+        String[] standard = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_STANDARD);
 
         this.dex = Integer.parseInt(standard[1]);
         this.species = standard[2];
@@ -92,44 +93,44 @@ public final class PokemonData
         this.baseEXP = Integer.parseInt(standard[7]);
 
         //Images: {"name", "normal", "shiny"}
-        String[] images = this.readCSV("images");
+        String[] images = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_IMAGES);
 
         this.normalURL = images[1];
         this.shinyURL = images[2];
 
         //Stats: {"name", "hp", "atk", "def", "spatk", "spdef", "spd"}
-        String[] stats = this.readCSV("stats");
+        String[] stats = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_STATS);
 
         String[] statValues = Arrays.copyOfRange(stats, 1, stats.length);
         this.baseStats = new PokemonStats(Integer.parseInt(statValues[0]), Integer.parseInt(statValues[1]), Integer.parseInt(statValues[2]), Integer.parseInt(statValues[3]), Integer.parseInt(statValues[4]), Integer.parseInt(statValues[5]));
 
         //EVs: {"name", "hp", "atk", "def", "spatk", "spdef", "spd"}
-        String[] evs = this.readCSV("effort_values");
+        String[] evs = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_EFFORT_VALUES);
 
         String[] evValues = Arrays.copyOfRange(evs, 1, evs.length);
         this.yield = new PokemonStats(Integer.parseInt(evValues[0]), Integer.parseInt(evValues[1]), Integer.parseInt(evValues[2]), Integer.parseInt(evValues[3]), Integer.parseInt(evValues[4]), Integer.parseInt(evValues[5]));
 
         //Forms/Megas: {"name", "forms", "megas"}
-        String[] formMega = this.readCSV("forms_megas");
+        String[] formMega = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_FORMS_MEGAS);
 
         this.forms = List.of(formMega[1].split("-"));
         this.megas = List.of(formMega[2].split("-"));
 
         //Breeding: {"name", "gender_rate", "egg_groups", "hatch_target"}
-        String[] breeding = this.readCSV("breeding");
+        String[] breeding = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_BREEDING);
 
         this.genderRate = Integer.parseInt(breeding[1]);
         this.eggGroups = Stream.of(breeding[2].split("-")).map(EggGroup::cast).toList();
         this.hatchTarget = Integer.parseInt(breeding[3]);
 
         //Evolutions: {"name", "evolutions", "levels"}
-        String[] evolutions = this.readCSV("evolutions");
+        String[] evolutions = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_EVOLUTIONS);
 
         this.evolutions = new LinkedHashMap<>();
         if(!evolutions[1].isEmpty()) for(int i = 0; i < evolutions[1].split("-").length; i++) this.evolutions.put(evolutions[1].split("-")[i], Integer.parseInt(evolutions[2].split("-")[i]));
 
         //Moves: {"name", "abilities", "moves", "levels", "tms", "trs"}
-        String[] moves = this.readCSV("moves");
+        String[] moves = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_MOVES);
 
         this.abilities = List.of(moves[1].split("-"));
         this.moves = new LinkedHashMap<>();
@@ -138,20 +139,14 @@ public final class PokemonData
         this.validTRs = moves[5].isEmpty() ? new ArrayList<>() : Stream.of(moves[5].split("-")).map(Integer::parseInt).map(TR::get).toList();
 
         //Descriptions: {"name", "descriptions"}
-        String[] descriptions = this.readCSV("descriptions");
+        String[] descriptions = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_DESCRIPTIONS);
 
         this.descriptions = descriptions == null ? new ArrayList<>() : List.of(descriptions[1].split("-"));
     }
 
-    private String[] readCSV(String fileName)
+    private String[] readCSVLine(List<String[]> full)
     {
-        String file = "/data_csv/pokemon_data_" + fileName + ".csv";
-        List<String[]> lines = new ArrayList<>();
-
-        try { lines = new CSVReader(new InputStreamReader(Objects.requireNonNull(Pokecord.class.getResourceAsStream(file)))).readAll(); }
-        catch (IOException | CsvException e) { e.printStackTrace(); LoggerHelper.error(PokemonData.class, "Could not read CSV: " + fileName); }
-
-        return lines.stream().filter(line -> line[0].equals(this.name)).findFirst().orElse(null);
+        return full.stream().filter(line -> line[0].equals(this.name)).findFirst().orElse(null);
     }
 
     //Legacy Code (Converting the Pokemon Info Database to CSV Files)

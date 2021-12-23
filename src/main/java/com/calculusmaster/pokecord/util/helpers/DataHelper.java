@@ -85,17 +85,17 @@ public class DataHelper
     {
         //id,identifier,generation_id,damage_class_id
         final Map<String, String> typeID = new HashMap<>();
-        CSVHelper.readCSV("types").forEach(s -> typeID.put(s[0], Global.normalCase(s[1])));
+        CSVHelper.readPokemonCSV("types").forEach(s -> typeID.put(s[0], Global.normalCase(s[1])));
 
         //Category (Damage Class)
         final Map<String, String> categoryID = new ExtendedHashMap<String, String>().insert("1", "STATUS").insert("2", "PHYSICAL").insert("3", "SPECIAL");
 
         //move_id,version_group_id,language_id,flavor_text
-        final List<String[]> movesFlavorCSV = CSVHelper.readCSV("move_flavor_text").stream().filter(l -> l[2].equals("9")).collect(Collectors.toList());
+        final List<String[]> movesFlavorCSV = CSVHelper.readPokemonCSV("move_flavor_text").stream().filter(l -> l[2].equals("9")).collect(Collectors.toList());
 
         //id,identifier,generation_id,type_id,power,pp,accuracy,priority,target_id,damage_class_id,effect_id,effect_chance,contest_type_id,contest_effect_id,super_contest_effect_id
         final List<Range<Integer>> skipIDs = Arrays.asList(Range.between(622, 658), Range.between(695, 703), Range.between(719, 719), Range.between(723, 741), Range.between(757, 774), Range.between(10001, 10018));
-        List<String[]> movesCSV = CSVHelper.readCSV("moves").stream()
+        List<String[]> movesCSV = CSVHelper.readPokemonCSV("moves").stream()
                 .filter(line -> skipIDs.stream().noneMatch(r -> r.contains(Integer.parseInt(line[0]))))
                 .collect(Collectors.toList());
 
@@ -226,7 +226,7 @@ public class DataHelper
     //Species Description Lines (from CSV)
     public static void createSpeciesDescLists()
     {
-        List<String[]> speciesCSV = CSVHelper.readCSV("pokemon_species_flavor_text").stream().filter(l -> l[2].equals("9")).collect(Collectors.toList());
+        List<String[]> speciesCSV = CSVHelper.readPokemonCSV("pokemon_species_flavor_text").stream().filter(l -> l[2].equals("9")).collect(Collectors.toList());
 
         //species_id,version_id,language_id,flavor_text
         //language_id 9 is English
@@ -247,7 +247,7 @@ public class DataHelper
     //Egg Groups (from CSV)
     public static void createEggGroupLists()
     {
-        List<String[]> eggCSV = CSVHelper.readCSV("pokemon_egg_groups");
+        List<String[]> eggCSV = CSVHelper.readPokemonCSV("pokemon_egg_groups");
 
         //species_id,egg_group_id
         for(int i = 1; i <= 898; i++)
@@ -265,7 +265,7 @@ public class DataHelper
     //Egg Hatch Targets (from CSV)
     public static void createBaseEggHatchTargetsMap()
     {
-        List<String[]> hatchCSV = CSVHelper.readCSV("pokemon_species");
+        List<String[]> hatchCSV = CSVHelper.readPokemonCSV("pokemon_species");
 
         //id,identifier,generation_id,evolves_from_species_id,evolution_chain_id,color_id,shape_id,habitat_id,gender_rate,capture_rate,base_happiness,is_baby,hatch_counter,has_gender_differences,growth_rate_id,forms_switchable,is_legendary,is_mythical,order,conquest_order
         for(int i = 1; i <= 898; i++)
@@ -284,7 +284,7 @@ public class DataHelper
     //Gender Rates (from CSV)
     public static void createGenderRateMap()
     {
-        List<String[]> genderCSV = CSVHelper.readCSV("pokemon_species");
+        List<String[]> genderCSV = CSVHelper.readPokemonCSV("pokemon_species");
 
         //id,identifier,generation_id,evolves_from_species_id,evolution_chain_id,color_id,shape_id,habitat_id,gender_rate,capture_rate,base_happiness,is_baby,hatch_counter,has_gender_differences,growth_rate_id,forms_switchable,is_legendary,is_mythical,order,conquest_order
         for(int i = 1; i <= 898; i++)
