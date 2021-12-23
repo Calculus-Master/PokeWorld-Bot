@@ -1,10 +1,8 @@
 package com.calculusmaster.pokecord.util.helpers;
 
 import com.calculusmaster.pokecord.game.enums.elements.Category;
-import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.MoveData;
-import com.calculusmaster.pokecord.game.pokemon.LegacyPokemonData;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
@@ -13,20 +11,12 @@ import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import org.apache.commons.lang3.Range;
-import org.bson.Document;
-import org.bson.json.JsonWriterSettings;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class DataHelper
 {
-    @Deprecated
-    public static final Map<String, LegacyPokemonData> POKEMON_DATA = new HashMap<>();
-
     public static final Map<String, MoveData> MOVE_DATA = new HashMap<>();
     public static final List<String> MOVES = new ArrayList<>();
 
@@ -34,51 +24,6 @@ public class DataHelper
     public static final List<List<String>> EV_LISTS = new ArrayList<>();
     public static final Map<Type, List<String>> TYPE_LISTS = new HashMap<>();
     public static final Map<String, GigantamaxData> GIGANTAMAX_DATA = new HashMap<>();
-    @Deprecated
-    public static final Map<Integer, List<String>> POKEMON_SPECIES_DESC = new HashMap<>();
-    @Deprecated
-    public static final Map<Integer, List<EggGroup>> POKEMON_EGG_GROUPS = new HashMap<>();
-    @Deprecated
-    public static final Map<Integer, Integer> POKEMON_BASE_HATCH_TARGETS = new HashMap<>();
-    @Deprecated
-    public static final Map<Integer, Integer> POKEMON_GENDER_RATES = new HashMap<>();
-
-    //Pokemon Data
-    public static void createPokemonData()
-    {
-        //TODO: Remove the need for this database (write json files and read them on bot init)
-        Mongo.PokemonInfo.find().forEach(d -> POKEMON_DATA.put(d.getString("name"), new LegacyPokemonData(d)));
-    }
-
-    public static LegacyPokemonData pokeData(String name)
-    {
-        return POKEMON_DATA.get(name).copy();
-    }
-
-    public static int dex(String name)
-    {
-        return pokeData(name).dex;
-    }
-
-    public static void main(String[] args) throws IOException
-    {
-        Document output2 = new Document();
-
-        Mongo.PokemonInfo.find().forEach(d -> {
-            output2.append(d.getString("name"), new Document()
-                    .append("dex", d.getInteger("dex"))
-                    .append("normalURL", d.getString("normalURL"))
-                    .append("shinyURL", d.getString("shinyURL")));
-
-            System.out.println("Created entry for " + d.getInteger("dex") + "!");
-        });
-
-        System.out.println("Writing JSON file...");
-
-        BufferedWriter write2 = new BufferedWriter(new FileWriter("pokemon_image_urls.json"));
-        write2.write(output2.toJson(JsonWriterSettings.builder().indent(true).build()));
-        write2.close();
-    }
 
     //Moves
     public static void createMoveData()
@@ -221,82 +166,5 @@ public class DataHelper
     private static void registerGigantamax(String name, String move, Type type, String normal)
     {
         registerGigantamax(name, move, type, normal, normal);
-    }
-
-    //Species Description Lines (from CSV)
-    public static void createSpeciesDescLists()
-    {
-        List<String[]> speciesCSV = CSVHelper.readPokemonCSV("pokemon_species_flavor_text").stream().filter(l -> l[2].equals("9")).collect(Collectors.toList());
-
-        //species_id,version_id,language_id,flavor_text
-        //language_id 9 is English
-        for(int i = 1; i <= 898; i++)
-        {
-            final int dex = i;
-            List<String> lines = speciesCSV.stream()
-                    .filter(l -> l[0].equals(dex + "")) //Lines with dex number
-                    .map(l -> l[3]) //Map to the Flavor Text
-                    .distinct()//Remove duplicates
-                    .map(s -> s.replaceAll("\n", " ")) //Replace new line characters with spaces
-                    .map(s -> s.replaceAll("POKéMON", "Pokemon")) //Fix the weirdly formatted Pokemon word
-                    .collect(Collectors.toList());
-            POKEMON_SPECIES_DESC.put(dex, lines);
-        }
-    }
-
-    //Egg Groups (from CSV)
-    public static void createEggGroupLists()
-    {
-        List<String[]> eggCSV = CSVHelper.readPokemonCSV("pokemon_egg_groups");
-
-        //species_id,egg_group_id
-        for(int i = 1; i <= 898; i++)
-        {
-            final int dex = i;
-            List<EggGroup> group = eggCSV.stream()
-                    .filter(l -> l[0].equals(dex + "")) //Find specific dex number
-                    .map(l -> Integer.parseInt(l[1])) //Map to the Egg Group ID
-                    .map(id -> EggGroup.values()[id - 1]) //Transform Egg Group ID to EggGroup Enum Object
-                    .collect(Collectors.toList());
-            POKEMON_EGG_GROUPS.put(dex, group);
-        }
-    }
-
-    //Egg Hatch Targets (from CSV)
-    public static void createBaseEggHatchTargetsMap()
-    {
-        List<String[]> hatchCSV = CSVHelper.readPokemonCSV("pokemon_species");
-
-        //id,identifier,generation_id,evolves_from_species_id,evolution_chain_id,color_id,shape_id,habitat_id,gender_rate,capture_rate,base_happiness,is_baby,hatch_counter,has_gender_differences,growth_rate_id,forms_switchable,is_legendary,is_mythical,order,conquest_order
-        for(int i = 1; i <= 898; i++)
-        {
-            final int dex = i;
-            int target = hatchCSV.stream()
-                    .filter(l -> l[0].equals(dex + "")) //Find specific dex number
-                    .map(l -> Integer.parseInt(l[12])) //Map to the Hatch Counter
-                    .map(count -> count * 257) //Convert Egg Cycles to Steps
-                    .collect(Collectors.toList())
-                    .get(0);
-            POKEMON_BASE_HATCH_TARGETS.put(dex, target);
-        }
-    }
-
-    //Gender Rates (from CSV)
-    public static void createGenderRateMap()
-    {
-        List<String[]> genderCSV = CSVHelper.readPokemonCSV("pokemon_species");
-
-        //id,identifier,generation_id,evolves_from_species_id,evolution_chain_id,color_id,shape_id,habitat_id,gender_rate,capture_rate,base_happiness,is_baby,hatch_counter,has_gender_differences,growth_rate_id,forms_switchable,is_legendary,is_mythical,order,conquest_order
-        for(int i = 1; i <= 898; i++)
-        {
-            final int dex = i;
-            int rate = genderCSV.stream()
-                    .filter(l -> l[0].equals(dex + "")) //Find specific dex number
-                    .map(l -> l[8]) //Map to Gender Rate
-                    .map(Integer::parseInt) //Map to Int
-                    .collect(Collectors.toList())
-                    .get(0);
-            POKEMON_GENDER_RATES.put(dex, rate);
-        }
     }
 }

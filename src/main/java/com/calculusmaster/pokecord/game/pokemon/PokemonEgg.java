@@ -4,10 +4,10 @@ import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.Gender;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.Item;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.custom.StatIntMap;
-import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
@@ -39,7 +39,7 @@ public class PokemonEgg
         egg.setEggID();
         egg.setTarget(target);
         egg.setExp(0);
-        egg.setMaxExp((int)(DataHelper.POKEMON_BASE_HATCH_TARGETS.get(DataHelper.dex(target)) * (Math.random() + 1)));
+        egg.setMaxExp((int)(PokemonData.get(target).hatchTarget * (Math.random() + 1)));
         egg.setIVs(parent1, parent2);
 
         return egg;

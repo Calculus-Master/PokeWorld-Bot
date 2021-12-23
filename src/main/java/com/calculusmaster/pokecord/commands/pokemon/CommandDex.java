@@ -4,11 +4,11 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.pokemon.LegacyPokemonData;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.mongo.CollectionsQuery;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class CommandDex extends Command
 {
@@ -46,14 +45,14 @@ public class CommandDex extends Command
 
         String pokemon = Global.normalCase(this.getPokemonName());
 
-        LegacyPokemonData data = DataHelper.pokeData(pokemon);
-        String flavor = DataHelper.POKEMON_SPECIES_DESC.get(data.dex).get(new Random().nextInt(DataHelper.POKEMON_SPECIES_DESC.get(data.dex).size()));
+        PokemonData data = PokemonData.get(pokemon);
+        String flavor = data.descriptions.get(new Random().nextInt(data.descriptions.size()));
 
         this.embed
                 .setDescription(data.species + "\nHeight: " + data.height + "     |     Weight: " + data.weight + "\n" + flavor)
                 .addField("Type", data.types.get(0).equals(data.types.get(1)) ? data.types.get(0).getStyledName() : data.types.get(0).getStyledName() + "\n" + data.types.get(1).getStyledName(), true)
                 .addField("Abilities", this.listToMultiLineString(data.abilities), true)
-                .addField("Egg Group", this.listToMultiLineString(DataHelper.POKEMON_EGG_GROUPS.get(data.dex).stream().map(EggGroup::getName).collect(Collectors.toList())), true)
+                .addField("Egg Group", this.listToMultiLineString(data.eggGroups.stream().map(EggGroup::getName).toList()), true)
                 .addField("Growth Rate", Global.normalCase(data.growthRate.toString().replaceAll("_", "")), true)
                 .addField("EXP Yield", String.valueOf(data.baseEXP), true)
                 .addField("EV Yield", this.getEVYield(data.yield), true)
@@ -91,8 +90,9 @@ public class CommandDex extends Command
         return s.deleteCharAt(s.length() - 1).toString();
     }
 
-    private String getEVYield(Map<Stat, Integer> yield)
+    private String getEVYield(PokemonStats stats)
     {
+        Map<Stat, Integer> yield = stats.get();
         StringBuilder s = new StringBuilder();
         for(Stat stat : yield.keySet()) if(yield.get(stat) != 0) s.append(stat.toString()).append(": ").append(yield.get(stat)).append("\n");
         return s.deleteCharAt(s.length() - 1).toString();
@@ -112,11 +112,11 @@ public class CommandDex extends Command
         return s.toString();
     }
 
-    private MessageEmbed.Field getStatsField(LegacyPokemonData p)
+    private MessageEmbed.Field getStatsField(PokemonData p)
     {
         StringBuilder sb = new StringBuilder();
-        for(Stat s : Stat.values()) sb.append("**").append(s.shortName()).append("**: ").append(p.baseStats.get(s)).append("\n");
-        sb.append("**Total**: ").append(p.baseStats.values().stream().mapToInt(s -> s).sum());
+        for(Stat s : Stat.values()) sb.append("**").append(s.shortName()).append("**: ").append(p.baseStats.get().get(s)).append("\n");
+        sb.append("**Total**: ").append(p.baseStats.get().values().stream().mapToInt(s -> s).sum());
 
         return new MessageEmbed.Field("Base Stats", sb.toString(), false);
     }

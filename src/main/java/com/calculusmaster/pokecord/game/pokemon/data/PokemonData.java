@@ -8,20 +8,18 @@ import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
-import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import com.opencsv.CSVWriter;
 import org.bson.Document;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class PokemonData
 {
     public static final List<String> POKEMON = new ArrayList<>();
-    public static final LinkedHashMap<String, PokemonData> POKEMON_DATA = new LinkedHashMap<>();
+    private static final LinkedHashMap<String, PokemonData> POKEMON_DATA = new LinkedHashMap<>();
 
     public static void init()
     {
@@ -32,6 +30,11 @@ public final class PokemonData
                     POKEMON.add(name);
                     POKEMON_DATA.put(name, new PokemonData(name));
                 });
+    }
+
+    public static PokemonData get(String name)
+    {
+        return POKEMON_DATA.get(name);
     }
 
     //Fields (Categorized by CSV Data Source)
@@ -141,7 +144,12 @@ public final class PokemonData
         //Descriptions: {"name", "descriptions"}
         String[] descriptions = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_DESCRIPTIONS);
 
-        this.descriptions = descriptions == null ? new ArrayList<>() : List.of(descriptions[1].split("-"));
+        if(descriptions == null) this.descriptions = List.of("No Pokemon description available.");
+        else this.descriptions = List.of(descriptions[1].split("\\|")).stream()
+                .distinct() //Remove duplicates
+                .map(s -> s.replaceAll("\n", " ")) //Replace new line characters with spaces
+                .map(s -> s.replaceAll("POKéMON", "Pokemon")) //Fix the weirdly formatted Pokemon word
+                .toList();
     }
 
     private String[] readCSVLine(List<String[]> full)
@@ -156,118 +164,118 @@ public final class PokemonData
 
     public static void main(String[] args) throws IOException
     {
-        writeCSVFile("pokemon_data_standard.csv", new String[]{"name", "dex", "species", "height", "weight", "type", "growth", "yield"},
-                (d, s, o) -> {
-                    String[] out = new String[s];
-                    out[0] = d.getString("name");
-                    out[1] = String.valueOf(d.getInteger("dex"));
+//        writeCSVFile("pokemon_data_standard.csv", new String[]{"name", "dex", "species", "height", "weight", "type", "growth", "yield"},
+//                (d, s, o) -> {
+//                    String[] out = new String[s];
+//                    out[0] = d.getString("name");
+//                    out[1] = String.valueOf(d.getInteger("dex"));
+//
+//                    String[] filler = d.getString("fillerinfo").split("-");
+//                    out[2] = filler[0];
+//                    out[3] = filler[1];
+//                    out[4] = filler[2];
+//
+//                    out[5] = d.getList("type", String.class).get(0) + "-" + d.getList("type", String.class).get(1);
+//                    out[6] = d.getString("growthrate");
+//                    out[7] = String.valueOf(d.getInteger("exp"));
+//
+//                    o.add(out);
+//        });
+//
+//        writeCSVFile("pokemon_data_images.csv", new String[]{"name", "normal", "shiny"},
+//                (d, s, o) -> {
+//                    String[] out = new String[s];
+//
+//                    out[0] = d.getString("name");
+//                    out[1] = d.getString("normalURL");
+//                    out[2] = d.getString("shinyURL");
+//
+//                    o.add(out);
+//        });
+//
+//        writeCSVFile("pokemon_data_stats.csv", new String[]{"name", "hp", "atk", "def", "spatk", "spdef", "spd"},
+//                (d, s, o) -> {
+//                    String[] out = new String[s];
+//
+//                    out[0] = d.getString("name");
+//                    for(int i = 1; i < out.length; i++) out[i] = String.valueOf(d.getList("stats", Integer.class).get(i - 1));
+//
+//                    o.add(out);
+//        });
+//
+//        writeCSVFile("pokemon_data_effort_values.csv", new String[]{"name", "hp", "atk", "def", "spatk", "spdef", "spd"},
+//                (d, s, o) -> {
+//                    String[] out = new String[s];
+//
+//                    out[0] = d.getString("name");
+//                    for(int i = 1; i < out.length; i++) out[i] = String.valueOf(d.getList("ev", Integer.class).get(i - 1));
+//
+//                    o.add(out);
+//        });
+//
+//        writeCSVFile("pokemon_data_forms_megas.csv", new String[]{"name", "forms", "megas"},
+//                (d, s, o) -> {
+//                    String[] out = new String[s];
+//
+//                    out[0] = d.getString("name");
+//                    out[1] = String.join("-", d.getList("forms", String.class));
+//                    out[2] = String.join("-", d.getList("mega", String.class));
+//
+//                    o.add(out);
+//        });
+//
+//        DataHelper.createGenderRateMap();
+//        DataHelper.createEggGroupLists();
+//        DataHelper.createBaseEggHatchTargetsMap();
+//
+//        writeCSVFile("pokemon_data_breeding.csv", new String[]{"name", "gender_rate", "egg_groups", "hatch_target"},
+//                (d, s, o) -> {
+//                    String[] out = new String[s];
+//
+//                    out[0] = d.getString("name");
+//                    out[1] = DataHelper.POKEMON_GENDER_RATES.get(d.getInteger("dex")).toString();
+//                    out[2] = DataHelper.POKEMON_EGG_GROUPS.get(d.getInteger("dex")).stream().map(EggGroup::toString).collect(Collectors.joining("-"));
+//                    out[3] = DataHelper.POKEMON_BASE_HATCH_TARGETS.get(d.getInteger("dex")).toString();
+//
+//                    o.add(out);
+//        });
+//
+//        writeCSVFile("pokemon_data_evolutions.csv", new String[]{"name", "evolutions", "levels"},
+//                (d, s, o) -> {
+//                    String[] out = new String[s];
+//
+//                    out[0] = d.getString("name");
+//                    out[1] = String.join("-", d.getList("evolutions", String.class));
+//                    out[2] = String.join("-", d.getList("evolutionsLVL", Integer.class).stream().map(String::valueOf).toList());
+//
+//                    o.add(out);
+//        });
+//
+//        writeCSVFile("pokemon_data_moves.csv", new String[]{"name", "abilities", "moves", "levels", "tms", "trs"},
+//                (d, s, o) -> {
+//                    String[] out = new String[s];
+//
+//                    out[0] = d.getString("name");
+//                    out[1] = String.join("-", d.getList("abilities", String.class));
+//                    out[2] = String.join("-", d.getList("moves", String.class));
+//                    out[3] = String.join("-", d.getList("movesLVL", Integer.class).stream().map(String::valueOf).toList());
+//                    out[4] = String.join("-", d.getList("movesTM", Integer.class).stream().map(String::valueOf).toList());
+//                    out[5] = String.join("-", d.getList("movesTR", Integer.class).stream().map(String::valueOf).toList());
+//
+//                    o.add(out);
+//        });
 
-                    String[] filler = d.getString("fillerinfo").split("-");
-                    out[2] = filler[0];
-                    out[3] = filler[1];
-                    out[4] = filler[2];
-
-                    out[5] = d.getList("type", String.class).get(0) + "-" + d.getList("type", String.class).get(1);
-                    out[6] = d.getString("growthrate");
-                    out[7] = String.valueOf(d.getInteger("exp"));
-
-                    o.add(out);
-        });
-
-        writeCSVFile("pokemon_data_images.csv", new String[]{"name", "normal", "shiny"},
-                (d, s, o) -> {
-                    String[] out = new String[s];
-
-                    out[0] = d.getString("name");
-                    out[1] = d.getString("normalURL");
-                    out[2] = d.getString("shinyURL");
-
-                    o.add(out);
-        });
-
-        writeCSVFile("pokemon_data_stats.csv", new String[]{"name", "hp", "atk", "def", "spatk", "spdef", "spd"},
-                (d, s, o) -> {
-                    String[] out = new String[s];
-
-                    out[0] = d.getString("name");
-                    for(int i = 1; i < out.length; i++) out[i] = String.valueOf(d.getList("stats", Integer.class).get(i - 1));
-
-                    o.add(out);
-        });
-
-        writeCSVFile("pokemon_data_effort_values.csv", new String[]{"name", "hp", "atk", "def", "spatk", "spdef", "spd"},
-                (d, s, o) -> {
-                    String[] out = new String[s];
-
-                    out[0] = d.getString("name");
-                    for(int i = 1; i < out.length; i++) out[i] = String.valueOf(d.getList("ev", Integer.class).get(i - 1));
-
-                    o.add(out);
-        });
-
-        writeCSVFile("pokemon_data_forms_megas.csv", new String[]{"name", "forms", "megas"},
-                (d, s, o) -> {
-                    String[] out = new String[s];
-
-                    out[0] = d.getString("name");
-                    out[1] = String.join("-", d.getList("forms", String.class));
-                    out[2] = String.join("-", d.getList("mega", String.class));
-
-                    o.add(out);
-        });
-
-        DataHelper.createGenderRateMap();
-        DataHelper.createEggGroupLists();
-        DataHelper.createBaseEggHatchTargetsMap();
-
-        writeCSVFile("pokemon_data_breeding.csv", new String[]{"name", "gender_rate", "egg_groups", "hatch_target"},
-                (d, s, o) -> {
-                    String[] out = new String[s];
-
-                    out[0] = d.getString("name");
-                    out[1] = DataHelper.POKEMON_GENDER_RATES.get(d.getInteger("dex")).toString();
-                    out[2] = DataHelper.POKEMON_EGG_GROUPS.get(d.getInteger("dex")).stream().map(EggGroup::toString).collect(Collectors.joining("-"));
-                    out[3] = DataHelper.POKEMON_BASE_HATCH_TARGETS.get(d.getInteger("dex")).toString();
-
-                    o.add(out);
-        });
-
-        writeCSVFile("pokemon_data_evolutions.csv", new String[]{"name", "evolutions", "levels"},
-                (d, s, o) -> {
-                    String[] out = new String[s];
-
-                    out[0] = d.getString("name");
-                    out[1] = String.join("-", d.getList("evolutions", String.class));
-                    out[2] = String.join("-", d.getList("evolutionsLVL", Integer.class).stream().map(String::valueOf).toList());
-
-                    o.add(out);
-        });
-
-        writeCSVFile("pokemon_data_moves.csv", new String[]{"name", "abilities", "moves", "levels", "tms", "trs"},
-                (d, s, o) -> {
-                    String[] out = new String[s];
-
-                    out[0] = d.getString("name");
-                    out[1] = String.join("-", d.getList("abilities", String.class));
-                    out[2] = String.join("-", d.getList("moves", String.class));
-                    out[3] = String.join("-", d.getList("movesLVL", Integer.class).stream().map(String::valueOf).toList());
-                    out[4] = String.join("-", d.getList("movesTM", Integer.class).stream().map(String::valueOf).toList());
-                    out[5] = String.join("-", d.getList("movesTR", Integer.class).stream().map(String::valueOf).toList());
-
-                    o.add(out);
-        });
-
-        DataHelper.createSpeciesDescLists();
-
-        writeCSVFile("pokemon_data_descriptions.csv", new String[]{"name", "descriptions"},
-                (d, s, o) -> {
-                    String[] out = new String[s];
-
-                    out[0] = d.getString("name");
-                    out[1] = String.join("-", DataHelper.POKEMON_SPECIES_DESC.get(d.getInteger("dex")));
-
-                    o.add(out);
-        });
+//        DataHelper.createSpeciesDescLists();
+//
+//        writeCSVFile("pokemon_data_descriptions.csv", new String[]{"name", "descriptions"},
+//                (d, s, o) -> {
+//                    String[] out = new String[s];
+//
+//                    out[0] = d.getString("name");
+//                    out[1] = String.join("|", DataHelper.POKEMON_SPECIES_DESC.get(d.getInteger("dex")));
+//
+//                    o.add(out);
+//        });
     }
 
     private interface DocumentParser { void parse(Document d, int arraySize, List<String[]> outputList); }

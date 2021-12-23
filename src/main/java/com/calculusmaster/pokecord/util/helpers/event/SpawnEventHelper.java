@@ -3,9 +3,9 @@ package com.calculusmaster.pokecord.util.helpers.event;
 import com.calculusmaster.pokecord.commands.economy.CommandMarket;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -134,7 +134,7 @@ public class SpawnEventHelper
 
             if(spawn.equals("Deerling")) URLString = Global.getDeerlingImage(shiny);
             else if(spawn.equals("Sawsbuck")) URLString = Global.getSawsbuckImage(shiny);
-            else URLString = shiny ? DataHelper.pokeData(spawn).shinyURL : DataHelper.pokeData(spawn).normalURL;
+            else URLString = shiny ? PokemonData.get(spawn).shinyURL : PokemonData.get(spawn).normalURL;
 
             URL url = new URL(URLString.equals("") ? Pokemon.getWIPImage() : URLString);
             BufferedImage img = ImageIO.read(url);

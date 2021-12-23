@@ -10,7 +10,6 @@ import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.ConfigHelper;
-import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.event.LocationEventHelper;
 import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
@@ -87,7 +86,6 @@ public class CommandDev extends Command
             }
             case "close" -> Pokecord.close();
             case "reloadconfig" -> ConfigHelper.init();
-            case "reloadpokemondata" -> DataHelper.createPokemonData();
             case "forcelocation" -> {
                 Location l = Location.cast(this.msg[2]);
                 if(l != null) LocationEventHelper.forceLocation(this.server, l);

@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
 
 public class Pokemon
 {
-    private LegacyPokemonData data;
+    private PokemonData data;
     protected JSONObject specificJSON;
 
     private String UUID;
@@ -124,9 +125,9 @@ public class Pokemon
         return p;
     }
 
-    public LegacyPokemonData getData()
+    public PokemonData getData()
     {
-        return DataHelper.pokeData(this.getName());
+        return PokemonData.get(this.getName());
     }
 
     public int getNumber()
@@ -159,7 +160,7 @@ public class Pokemon
 
     public void setData(String name)
     {
-        this.data = DataHelper.pokeData(Global.normalCase(name)).copy();
+        this.data = PokemonData.get(Global.normalCase(name));
     }
 
     public void linkSpecificJSON(String UUID)
@@ -339,7 +340,7 @@ public class Pokemon
     //Egg Group and Gender
     public List<EggGroup> getEggGroup()
     {
-        return DataHelper.POKEMON_EGG_GROUPS.get(this.getData().dex);
+        return this.data.eggGroups;
     }
 
     public Gender getGender()
@@ -354,7 +355,7 @@ public class Pokemon
 
     public void setGender()
     {
-        int rate = DataHelper.POKEMON_GENDER_RATES.get(this.getData().dex);
+        int rate = this.data.genderRate;
         this.gender = rate == -1 ? Gender.UNKNOWN : (new Random().nextInt(8) < rate ? Gender.FEMALE : Gender.MALE);
     }
 
@@ -790,7 +791,7 @@ public class Pokemon
 
     public Map<Stat, Integer> getEVYield()
     {
-        return this.data.yield;
+        return this.data.yield.get();
     }
 
     public void gainEVs(Pokemon defeated)
@@ -898,7 +899,7 @@ public class Pokemon
 
     public int getBaseStat(Stat s)
     {
-        return this.data.baseStats.get(s);
+        return this.data.baseStats.get().get(s);
     }
 
     public void setDefaultStatMultipliers()
