@@ -2,7 +2,6 @@ package com.calculusmaster.pokecord.game.moves.registry;
 
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.MoveData;
-import com.calculusmaster.pokecord.util.helpers.DataHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +74,7 @@ public class MaxMoveRegistry
 
     public static MoveData get(Type t)
     {
-        return DataHelper.moveData("Max " + switch(t) {
+        return MoveData.get("Max " + switch(t) {
             case BUG -> "Flutterby";
             case DARK -> "Darkness";
             case DRAGON -> "Wyrmwind";
@@ -103,7 +102,8 @@ public class MaxMoveRegistry
 
         MoveData data = new MoveData(name, type, null, 0, 100, new ArrayList<>(), false, true);
 
-        DataHelper.registerNewMove(name, data);
+        MoveData.registerNew(name, data);
+
         TYPED_MAX_MOVES.add(name);
         MAX_MOVES.add(name);
     }
@@ -114,7 +114,8 @@ public class MaxMoveRegistry
 
         MoveData data = new MoveData(name, type, null, 0, 100, new ArrayList<>(), false, true);
 
-        DataHelper.registerNewMove(name, data);
+        MoveData.registerNew(name, data);
+
         GMAX_MOVES.add(name);
         MAX_MOVES.add(name);
     }

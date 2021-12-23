@@ -4,7 +4,6 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.MoveData;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Random;
@@ -27,7 +26,7 @@ public class CommandMoveInfo extends Command
             if(!Move.isMove(input)) this.sendMsg("`" + input + "` is not a valid Move name!");
             else
             {
-                MoveData m = DataHelper.moveData(input);
+                MoveData m = MoveData.get(input);
 
                 String impl = Move.isImplemented(m.name) ? "" : "***Warning: Move is not implemented! You cannot use " + m.name + " in duels!***\n\n";
                 String flavor = m.flavor.isEmpty() ? "*No Move Description*" : m.flavor.get(new Random().nextInt(m.flavor.size()));

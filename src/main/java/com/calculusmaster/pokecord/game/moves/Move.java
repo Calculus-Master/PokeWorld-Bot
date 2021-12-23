@@ -8,8 +8,6 @@ import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.types.*;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 
 import java.util.ArrayList;
@@ -47,7 +45,7 @@ public class Move
         //Incomplete Moves
         INCOMPLETE_MOVES.clear();
 
-        for(String m : DataHelper.MOVES) if(!WIP_MOVES.contains(m) && !Move.isImplemented(m) && !INCOMPLETE_MOVES.contains(m)) INCOMPLETE_MOVES.add(m);
+        for(String m : MoveData.MOVES) if(!WIP_MOVES.contains(m) && !Move.isImplemented(m) && !INCOMPLETE_MOVES.contains(m)) INCOMPLETE_MOVES.add(m);
 
         INCOMPLETE_MOVES = INCOMPLETE_MOVES.stream().distinct().collect(Collectors.toList());
     }
@@ -57,7 +55,7 @@ public class Move
     {
         if(!Move.isMove(name)) name = "Tackle";
 
-        this.data = DataHelper.moveData(name);
+        this.data = MoveData.get(name);
         this.name = this.data.name;
 
         this.setDefaultValues();
@@ -288,7 +286,7 @@ public class Move
 
     public static boolean isMove(String move)
     {
-        return DataHelper.MOVES.contains(Global.normalCase(move));
+        return MoveData.MOVES.stream().anyMatch(move::equalsIgnoreCase);
     }
 
     public boolean isAccurate(Pokemon user, Pokemon opponent)
@@ -376,7 +374,7 @@ public class Move
 
     public static String getRandomMove()
     {
-        return DataHelper.MOVES.get(new Random().nextInt(DataHelper.MOVES.size()));
+        return MoveData.MOVES.get(new Random().nextInt(MoveData.MOVES.size()));
     }
 
     //Other

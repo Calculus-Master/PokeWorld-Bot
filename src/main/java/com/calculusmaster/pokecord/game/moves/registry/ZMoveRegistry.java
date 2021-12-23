@@ -3,7 +3,6 @@ package com.calculusmaster.pokecord.game.moves.registry;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.MoveData;
-import com.calculusmaster.pokecord.util.helpers.DataHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +88,8 @@ public class ZMoveRegistry
     {
         MoveData data = new MoveData(name, type, null, 0, 100, new ArrayList<>(), true, false);
 
-        DataHelper.registerNewMove(name, data);
+        MoveData.registerNew(name, data);
+
         ZMOVES.add(name);
         TYPED_ZMOVES.add(name);
     }
@@ -98,7 +98,8 @@ public class ZMoveRegistry
     {
         MoveData data = new MoveData(name, type, category, power, 100, new ArrayList<>(), true, false);
 
-        DataHelper.registerNewMove(name, data);
+        MoveData.registerNew(name, data);
+
         ZMOVES.add(name);
         UNIQUE_ZMOVES.add(name);
     }
