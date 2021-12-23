@@ -984,7 +984,18 @@ public class Pokemon
     //Decides between nickname or real name, if the nickname exists or not
     public String getDisplayName()
     {
-        return this.hasNickname() ? "\"" + this.getNickname() + "\"" : this.getName();
+        return this.hasNickname() ? "\"" + this.getNickname() + "\"" : this.applyNameOverride(this.getName());
+    }
+
+    private String applyNameOverride(String name)
+    {
+        return switch(name) {
+            case "Ho Oh" -> "Ho-oh";
+            case "Porygon Z" -> "Porygon-Z";
+            case "Jangmo O" -> "Jangmo-o";
+            case "Hakamo O" -> "Hakamo-o";
+            case "Kommo O" -> "Kommo-o";
+        };
     }
 
     public Type[] getType()
