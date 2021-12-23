@@ -12,13 +12,39 @@ public class PokemonStats
 
     public PokemonStats(int... values)
     {
+        this();
+
         if(values.length != Stat.values().length) throw new IllegalArgumentException("Input integer vararg must have %s elements!".formatted(Stat.values().length));
 
-        this.map = new LinkedHashMap<>();
-        Arrays.stream(Stat.values()).forEach(stat -> this.map.put(stat, values[stat.ordinal()]));
+        Arrays.stream(Stat.values()).forEach(stat -> {
+            this.map.put(stat, values[stat.ordinal()]);
+            this.changes.put(stat, 0);
+        });
+    }
 
+    public PokemonStats()
+    {
+        this.map = new LinkedHashMap<>();
         this.changes = new LinkedHashMap<>();
-        Arrays.stream(Stat.values()).forEach(stat -> this.changes.put(stat, 0));
+
+        Arrays.stream(Stat.values()).forEach(stat -> {
+            this.map.put(stat, 0);
+            this.changes.put(stat, 0);
+        });
+    }
+
+    public PokemonStats(String condensed)
+    {
+        this();
+
+        for(Stat s : Stat.values()) this.map.put(s, Integer.parseInt(condensed.split("-")[s.ordinal()]));
+    }
+
+    public String condense()
+    {
+        StringBuilder condensed = new StringBuilder();
+        for(Stat s : Stat.values()) condensed.append(this.map.get(s)).append("-");
+        return condensed.deleteCharAt(condensed.length() - 1).toString();
     }
 
     public LinkedHashMap<Stat, Integer> get()

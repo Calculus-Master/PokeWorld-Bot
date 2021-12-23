@@ -4,10 +4,10 @@ import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.Gender;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.Item;
+import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
-import com.calculusmaster.pokecord.util.custom.StatIntMap;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
@@ -76,9 +76,9 @@ public class PokemonEgg
     {
         Pokemon hatched = Pokemon.create(this.getTarget());
 
-        StatIntMap ivOverride = StatIntMap.from(this.ivs);
-        for(Stat s : Stat.values()) if(ivOverride.get(s) == 0) ivOverride.put(s, hatched.getIVs().get(s));
-        hatched.setIVs(StatIntMap.to(ivOverride));
+        PokemonStats ivOverride = new PokemonStats(this.ivs);
+        for(Stat s : Stat.values()) if(ivOverride.get().get(s) == 0) ivOverride.get().put(s, hatched.getIVs().get(s));
+        hatched.setIVs(ivOverride.condense());
 
         Mongo.EggData.deleteOne(Filters.eq("eggID", this.getEggID()));
         return hatched;
@@ -101,7 +101,7 @@ public class PokemonEgg
 
     public void setIVs(Pokemon parent1, Pokemon parent2)
     {
-        StatIntMap ivs = new StatIntMap();
+        PokemonStats ivs = new PokemonStats();
 
         int number = Item.asItem(parent1.getItem()).equals(Item.DESTINY_KNOT) || Item.asItem(parent2.getItem()).equals(Item.DESTINY_KNOT) ? 5 : 3;
 
@@ -109,9 +109,9 @@ public class PokemonEgg
         Collections.shuffle(stats);
         stats.subList(0, 6 - number).clear();
 
-        for(Stat s : stats) ivs.put(s, (new Random().nextInt(10) < 5 ? parent1 : parent2).getIVs().get(s));
+        for(Stat s : stats) ivs.get().put(s, (new Random().nextInt(10) < 5 ? parent1 : parent2).getIVs().get(s));
 
-        this.ivs = StatIntMap.to(ivs);
+        this.ivs = ivs.condense();
     }
 
     public void setIVs(String ivs)
