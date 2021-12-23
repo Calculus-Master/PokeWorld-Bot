@@ -35,13 +35,11 @@ public class DataHelper
         final Map<String, String> categoryID = new ExtendedHashMap<String, String>().insert("1", "STATUS").insert("2", "PHYSICAL").insert("3", "SPECIAL");
 
         //move_id,version_group_id,language_id,flavor_text
-        final List<String[]> movesFlavorCSV = CSVHelper.readPokemonCSV("move_flavor_text").stream().filter(l -> l[2].equals("9")).collect(Collectors.toList());
+        final List<String[]> movesFlavorCSV = CSVHelper.readPokemonCSV("move_flavor_text").stream().filter(l -> l[2].equals("9")).toList();
 
         //id,identifier,generation_id,type_id,power,pp,accuracy,priority,target_id,damage_class_id,effect_id,effect_chance,contest_type_id,contest_effect_id,super_contest_effect_id
         final List<Range<Integer>> skipIDs = Arrays.asList(Range.between(622, 658), Range.between(695, 703), Range.between(719, 719), Range.between(723, 741), Range.between(757, 774), Range.between(10001, 10018));
-        List<String[]> movesCSV = CSVHelper.readPokemonCSV("moves").stream()
-                .filter(line -> skipIDs.stream().noneMatch(r -> r.contains(Integer.parseInt(line[0]))))
-                .collect(Collectors.toList());
+        List<String[]> movesCSV = CSVHelper.readPokemonCSV("moves").stream().filter(line -> skipIDs.stream().noneMatch(r -> r.contains(Integer.parseInt(line[0])))).toList();
 
         for(String[] moveLine : movesCSV)
         {
