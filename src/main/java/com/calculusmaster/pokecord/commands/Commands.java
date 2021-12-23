@@ -299,6 +299,10 @@ public class Commands
                 .setCommand(CommandLevel::new)
                 .setCategory(Category.PLAYER);
 
+        register("ztrialduel", "ztrial", "trial", "ztduel")
+                .setCommand(CommandZTrialDuel::new)
+                .setCategory(Category.DUEL);
+
         register("dev")
                 .setCommand(CommandDev::new)
                 .setCategory(Category.MISC);

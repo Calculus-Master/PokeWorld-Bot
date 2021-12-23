@@ -4,13 +4,10 @@ import com.calculusmaster.pokecord.commands.duel.CommandTarget;
 import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
-import com.calculusmaster.pokecord.game.duel.extension.TrainerDuel;
-import com.calculusmaster.pokecord.game.duel.extension.WildDuel;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.Item;
-import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.TypeEffectiveness;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -321,9 +318,6 @@ public class Duel
                 return turnResult + " Perish Song hit! " + this.players[this.current].active.getName() + " fainted!";
             }
         }
-
-        //Z-Crystal Event
-        if(new Random().nextInt(100) < 5) this.zcrystalEvent(move);
 
         //Pre-Move Checks
         boolean accurate = move.isAccurate(this.players[this.current].active, this.players[this.other].active);
@@ -874,26 +868,6 @@ public class Duel
         }
 
         return turnResult;
-    }
-
-    public void zcrystalEvent(Move move)
-    {
-        //Z-Crystals can't be earned from 1v1 Wild Pokemon Duels
-        if(this instanceof WildDuel) return;
-
-        //AI Trainers can't earn Z Crystals
-        if(this instanceof TrainerDuel && this.current == 1) return;
-
-        ZCrystal earnedZ = ZCrystal.getCrystalOfType(move.getType());
-
-        if(!this.players[this.current].data.hasZCrystal(earnedZ.getStyledName()))
-        {
-            this.players[this.current].data.addZCrystal(earnedZ.getStyledName());
-
-            Achievements.grant(this.players[this.current].ID, Achievements.ACQUIRED_FIRST_TYPED_ZCRYSTAL, this.event);
-
-            this.event.getChannel().sendMessage(this.players[this.current].data.getMention() + ": earned a Z-Crystal – " + earnedZ.getStyledName() + "!").queue();
-        }
     }
 
     //Turn Helper Methods

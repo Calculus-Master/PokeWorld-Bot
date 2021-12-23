@@ -23,6 +23,7 @@ public class PlayerLevel
     public static final int REQUIRED_LEVEL_ACTIVATE = 4;
     public static final int REQUIRED_LEVEL_UNLIMITED_DUEL_SIZE = 6;
     public static final int REQUIRED_LEVEL_BREED = 3;
+    public static final int REQUIRED_LEVEL_Z_TRIAL = 4;
 
     public static void init()
     {
