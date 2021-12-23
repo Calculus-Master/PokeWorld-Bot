@@ -29,7 +29,7 @@ public final class PokemonData
 
     public static void init()
     {
-        try { new CSVReader(new InputStreamReader(Objects.requireNonNull(Pokecord.class.getResourceAsStream("/data_csv/pokemon_data_standard.csv")))).readAll().stream().map(line -> line[0]).forEachOrdered(name -> { POKEMON.add(name); POKEMON_DATA.put(name, new PokemonData(name)); }); }
+        try { new CSVReader(new InputStreamReader(Objects.requireNonNull(Pokecord.class.getResourceAsStream("/data_csv/pokemon_data_standard.csv")))).readAll().stream().dropWhile(line -> line[0].equals("name")).map(line -> line[0]).forEachOrdered(name -> { POKEMON.add(name); POKEMON_DATA.put(name, new PokemonData(name)); }); }
         catch (IOException | CsvException e) { e.printStackTrace(); LoggerHelper.error(PokemonData.class, "Failed to initialize PokemonData Objects!");}
     }
 
@@ -94,8 +94,8 @@ public final class PokemonData
         //Images: {"name", "normal", "shiny"}
         String[] images = this.readCSV("images");
 
-        this.normalURL = images[2];
-        this.shinyURL = images[3];
+        this.normalURL = images[1];
+        this.shinyURL = images[2];
 
         //Stats: {"name", "hp", "atk", "def", "spatk", "spdef", "spd"}
         String[] stats = this.readCSV("images");
