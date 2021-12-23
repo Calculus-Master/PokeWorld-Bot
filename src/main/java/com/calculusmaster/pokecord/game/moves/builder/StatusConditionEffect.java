@@ -26,6 +26,8 @@ public class StatusConditionEffect extends MoveEffect
         {
             Pokemon p = this.userChange ? this.user : this.opponent;
 
+            if(p.hasStatusCondition(this.status)) return "";
+
             p.addStatusCondition(this.status);
 
             if(this.status.equals(StatusCondition.BOUND)) this.duel.data(p.getUUID()).boundTurns = 5;
