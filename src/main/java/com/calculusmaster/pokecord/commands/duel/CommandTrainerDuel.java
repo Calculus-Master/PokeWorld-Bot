@@ -36,7 +36,7 @@ public class CommandTrainerDuel extends Command
 
             Trainer.TrainerInfo trainer = elite ? Trainer.createElite() : Trainer.DAILY_TRAINERS.get(this.getInt(1) - 1);
 
-            if(elite && this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_ELITE) this.sendInvalidLevel(PlayerLevel.REQUIRED_LEVEL_ELITE, "to duel an Elite Trainer");
+            if(elite && this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_ELITE) this.invalidMasteryLevel(PlayerLevel.REQUIRED_LEVEL_ELITE, "to duel an Elite Trainer");
 
             if(this.playerData.getTeam().size() < trainer.pokemon.size())
             {

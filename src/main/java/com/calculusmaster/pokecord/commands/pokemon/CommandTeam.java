@@ -53,7 +53,7 @@ public class CommandTeam extends Command
 
             if((teamIndex < 1 || (set && teamIndex > MAX_TEAM_SIZE)) || (pokemonIndex < 1 || pokemonIndex > this.playerData.getPokemonList().size()))
             {
-                return this.sendDefaultInvalid();
+                return this.invalid();
             }
             else if(add && this.playerData.getTeam().size() == MAX_TEAM_SIZE)
             {
@@ -84,7 +84,7 @@ public class CommandTeam extends Command
 
             if(teamIndex < 1 || teamIndex > MAX_TEAM_SIZE || teamIndex > this.playerData.getTeam().size())
             {
-                return this.sendDefaultInvalid();
+                return this.invalid();
             }
             else
             {
@@ -102,7 +102,7 @@ public class CommandTeam extends Command
 
             if(fromIndex < 1 || fromIndex > this.playerData.getTeam().size() || toIndex < 1 || toIndex > this.playerData.getTeam().size())
             {
-                return this.sendDefaultInvalid();
+                return this.invalid();
             }
             else
             {

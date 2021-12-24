@@ -5,11 +5,9 @@ import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -34,9 +32,8 @@ public abstract class Command
     protected PlayerDataQuery playerData;
 
     protected EmbedBuilder embed;
+    protected String response;
     protected Color color;
-
-    private long timeI, timeF;
 
     public Command(MessageReceivedEvent event, String[] msg)
     {
@@ -52,9 +49,8 @@ public abstract class Command
         this.playerData = new PlayerDataQuery(this.player.getId());
 
         this.embed = new EmbedBuilder();
+        this.response = "";
         this.color = null;
-
-        this.timeI = System.currentTimeMillis();
     }
 
     public Command(ButtonClickEvent event, String[] msg)
@@ -71,9 +67,8 @@ public abstract class Command
         this.playerData = new PlayerDataQuery(this.player.getId());
 
         this.embed = new EmbedBuilder();
+        this.response = "";
         this.color = null;
-
-        this.timeI = System.currentTimeMillis();
     }
 
     public abstract Command runCommand();
@@ -95,6 +90,7 @@ public abstract class Command
         return Integer.parseInt(this.msg[index]);
     }
 
+    @Deprecated
     protected void sendMsg(String msg)
     {
         this.embed = null;
@@ -102,20 +98,20 @@ public abstract class Command
         else if(this.buttonEvent != null)  this.buttonEvent.getChannel().sendMessage(this.playerData.getMention() + ": " + msg).queue();
     }
 
-    protected Command sendDefaultInvalid()
+    protected Command invalid()
     {
-        this.sendMsg(CommandInvalid.getShort());
+        this.response = CommandInvalid.getShort();
         return this;
     }
 
-    protected void sendInvalidCredits(int req)
+    protected void invalidCredits(int req)
     {
-        this.sendMsg("Insufficient Credits! Needed: `" + req + "`, you have `" + this.playerData.getCredits() + "`!");
+        this.response = "Insufficient Credits! Needed: `" + req + "`, you have `" + this.playerData.getCredits() + "`!";
     }
 
-    protected void sendInvalidLevel(int req, String after)
+    protected void invalidMasteryLevel(int req, String after)
     {
-        this.sendMsg("You must be Pokemon Mastery Level " + req + " " + after + "!");
+        this.response = "You must be Pokemon Mastery Level " + req + " " + after + "!";
     }
 
     protected String getMultiWordContent(int start)
@@ -144,35 +140,29 @@ public abstract class Command
 
     //Embed-Related
 
-    protected void setAuthor()
+    public void send()
     {
-        List<String> professors = Arrays.asList("Pokecord", "Oak", "Juniper", "Elm", "Birch", "Rowan", "Sycamore", "Kukui", "Magnolia", "Sonia");
-        this.embed.setAuthor("Professor " + professors.get(new Random().nextInt(professors.size())));
-    }
+        if(!this.response.isEmpty())
+        {
+            if(this.event != null) this.event.getChannel().sendMessage(this.response).queue();
+            else if(this.buttonEvent != null) this.buttonEvent.getChannel().sendMessage(this.response).queue();
+        }
+        else if(this.embed != null)
+        {
+            //Author
+            List<String> professors = Arrays.asList("Pokecord", "Oak", "Juniper", "Elm", "Birch", "Rowan", "Sycamore", "Kukui", "Magnolia", "Sonia");
+            this.embed.setAuthor("Professor " + professors.get(new Random().nextInt(professors.size())));
 
-    private void setColor()
-    {
-        this.embed.setColor(this.color == null ? Global.getRandomColor() : this.color);
-    }
+            //Color
+            this.embed.setColor(this.color == null ? Global.getRandomColor() : this.color);
 
-    private void setTipFooter()
-    {
-        if(this.embed.build().getFooter() == null) this.embed.setFooter("Tip: " + Tips.get().tip);
-    }
+            //Tip Footer
+            if(this.embed.build().getFooter() == null) this.embed.setFooter("Tip: " + Tips.get().tip);
 
-    public MessageEmbed getResponseEmbed()
-    {
-        this.timeF = System.currentTimeMillis();
-        LoggerHelper.time(this.getClass(), this.msg[0], this.timeI, this.timeF);
-
-        this.setAuthor();
-        this.setColor();
-        this.setTipFooter();
-        return this.embed.build();
-    }
-
-    public boolean isNull()
-    {
-        return this.embed == null;
+            //Finalize
+            if(this.event != null) this.event.getChannel().sendMessageEmbeds(this.embed.build()).queue();
+            else if(this.buttonEvent != null) this.buttonEvent.getChannel().sendMessageEmbeds(this.embed.build()).queue();
+        }
+        //If this.response.isEmpty() && this.embed == null, another class will handle the Embed or Message response
     }
 }

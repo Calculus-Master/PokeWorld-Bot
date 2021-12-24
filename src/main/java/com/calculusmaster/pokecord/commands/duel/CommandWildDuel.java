@@ -41,7 +41,7 @@ public class CommandWildDuel extends Command
 
             if(price != 0 && this.playerData.getCredits() < price)
             {
-                this.sendInvalidCredits(price);
+                this.invalidCredits(price);
             }
             else
             {

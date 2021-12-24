@@ -34,7 +34,7 @@ public class CommandBreed extends Command
         boolean breed = this.msg.length == 3 && this.isNumeric(1) && this.isNumeric(2);
         boolean cooldown = this.msg.length == 3 && this.msg[1].equals("cooldown") && this.isNumeric(2);
 
-        if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_BREED) this.sendInvalidLevel(PlayerLevel.REQUIRED_LEVEL_BREED, "to breed Pokemon");
+        if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_BREED) this.invalidMasteryLevel(PlayerLevel.REQUIRED_LEVEL_BREED, "to breed Pokemon");
         else if(breed)
         {
             int num1 = this.getInt(1);

@@ -34,7 +34,7 @@ public class CommandGauntletDuel extends Command
         else if(start)
         {
             if(DuelHelper.isInDuel(this.player.getId())) this.sendMsg("You are already in a duel!");
-            else if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_GAUNTLET) this.sendInvalidLevel(PlayerLevel.REQUIRED_LEVEL_GAUNTLET, "to start a Gauntlet Duel");
+            else if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_GAUNTLET) this.invalidMasteryLevel(PlayerLevel.REQUIRED_LEVEL_GAUNTLET, "to start a Gauntlet Duel");
             else
             {
                 GauntletDuel gauntlet = GauntletDuel.start(this.player.getId(), this.event);

@@ -63,7 +63,7 @@ public class CommandBuy extends Command
             Nature n = Nature.cast(this.msg[2]);
 
             if(n == null) this.sendMsg("Invalid nature!");
-            else if(this.playerData.getCredits() < Prices.SHOP_NATURE.get()) this.sendInvalidCredits(Prices.SHOP_NATURE.get());
+            else if(this.playerData.getCredits() < Prices.SHOP_NATURE.get()) this.invalidCredits(Prices.SHOP_NATURE.get());
             else
             {
                 selected.setNature(n.toString());
@@ -82,7 +82,7 @@ public class CommandBuy extends Command
             int cost = num * Prices.SHOP_CANDY.get();
 
             if(num == 0) this.sendMsg(selected.getName() + " is already at the maximum level!");
-            else if(this.playerData.getCredits() < cost) this.sendInvalidCredits(cost);
+            else if(this.playerData.getCredits() < cost) this.invalidCredits(cost);
             else
             {
                 this.playerData.changeCredits(-1 * cost);
@@ -104,7 +104,7 @@ public class CommandBuy extends Command
 
             int cost = CommandShop.ITEM_PRICES.get(this.getInt(2) - 1) * amount;
 
-            if(this.playerData.getCredits() < cost) this.sendInvalidCredits(cost);
+            if(this.playerData.getCredits() < cost) this.invalidCredits(cost);
             else
             {
                 Item i = CommandShop.ITEM_ENTRIES.get(this.getInt(2) - 1);
@@ -122,12 +122,12 @@ public class CommandBuy extends Command
         {
             String requestedForm = Global.normalize(this.getMultiWordContent(2));
 
-            if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_FORM) this.sendInvalidLevel(PlayerLevel.REQUIRED_LEVEL_FORM, "to purchase forms");
+            if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_FORM) this.invalidMasteryLevel(PlayerLevel.REQUIRED_LEVEL_FORM, "to purchase forms");
             else if(!selected.hasForms()) this.sendMsg(selected.getName() + " does not have any forms!");
             else if(!this.isPokemon(requestedForm)) this.sendMsg("Invalid form name!");
             else if(Arrays.asList("Aegislash", "Aegislash Blade").contains(selected.getName())) this.sendMsg(selected.getName() + "'s forms cannot be purchased!");
             else if(this.playerData.getOwnedForms().contains(requestedForm)) this.sendMsg("You already own this form!");
-            else if(this.playerData.getCredits() < Prices.SHOP_FORM.get()) this.sendInvalidCredits(Prices.SHOP_FORM.get());
+            else if(this.playerData.getCredits() < Prices.SHOP_FORM.get()) this.invalidCredits(Prices.SHOP_FORM.get());
             else
             {
                 this.sendMsg(selected.getName() + " transformed into `" + requestedForm + "`!");
@@ -143,9 +143,9 @@ public class CommandBuy extends Command
         else if(mega)
         {
             if(this.msg.length != 2 && this.msg.length != 3) this.sendMsg(CommandInvalid.getShort());
-            else if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_MEGA) this.sendInvalidLevel(PlayerLevel.REQUIRED_LEVEL_MEGA, "to purchase Mega Evolutions");
+            else if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_MEGA) this.invalidMasteryLevel(PlayerLevel.REQUIRED_LEVEL_MEGA, "to purchase Mega Evolutions");
             else if(!selected.hasMega()) this.sendMsg(selected.getName() + " cannot Mega Evolve!");
-            else if(this.playerData.getCredits() < Prices.SHOP_MEGA.get()) this.sendInvalidCredits(Prices.SHOP_MEGA.get());
+            else if(this.playerData.getCredits() < Prices.SHOP_MEGA.get()) this.invalidCredits(Prices.SHOP_MEGA.get());
             else if(selected.getMegaList().size() == 1 && this.msg.length == 3) this.sendMsg("Use `p!buy mega` instead!");
             else if(selected.getMegaList().size() == 2 && this.msg.length == 2) this.sendMsg("Use `p!buy mega x` or `p!buy mega y` instead!");
             else if(this.msg.length == 3 && (!this.msg[2].equals("x") && !this.msg[2].equals("y"))) this.sendMsg("Use either `p!buy mega x` or `p!buy mega y`!");
@@ -175,7 +175,7 @@ public class CommandBuy extends Command
             int cost = tm ? CommandShop.TM_PRICE : CommandShop.TR_PRICE;
 
             if(numberError) this.sendMsg("Invalid " + (tm ? "TM" : "TR") + " number!");
-            else if(this.playerData.getCredits() < cost) this.sendInvalidCredits(cost);
+            else if(this.playerData.getCredits() < cost) this.invalidCredits(cost);
             else if(tm)
             {
                 TM request = TM.get(this.getInt(2));
@@ -212,7 +212,7 @@ public class CommandBuy extends Command
             else if(!MoveTutorRegistry.MOVE_TUTOR_MOVES.contains(move)) this.sendMsg(move + " cannot be learned from a Move Tutor!");
             else if(!MoveTutorRegistry.PREDICATES.get(move).test(selected)) this.sendMsg("Your Pokemon cannot learn `" + move + "` from a Move Tutor!");
             else if(!MoveTutorRegistry.MOVE_TUTOR_MOVES.contains(move) || !MoveTutorRegistry.PREDICATES.get(selected.getName()).test(selected)) this.sendMsg("Your Pokemon cannot learn that Move Tutor move!");
-            else if(this.playerData.getCredits() < Prices.SHOP_MOVETUTOR.get()) this.sendInvalidCredits(Prices.SHOP_MOVETUTOR.get());
+            else if(this.playerData.getCredits() < Prices.SHOP_MOVETUTOR.get()) this.invalidCredits(Prices.SHOP_MOVETUTOR.get());
             else
             {
                 this.playerData.changeCredits(-1 * Prices.SHOP_MOVETUTOR.get());
@@ -231,7 +231,7 @@ public class CommandBuy extends Command
             if(z == null) this.sendMsg("Invalid Z Crystal!");
             else if(!CommandShop.ZCRYSTAL_ENTRIES.contains(z)) this.sendMsg("This Z Crystal is not in the shop right now!");
             else if(this.playerData.getZCrystalList().contains(z.getStyledName())) this.sendMsg("You already own this Z Crystal!");
-            else if(this.playerData.getCredits() < Prices.SHOP_ZCRYSTAL.get()) this.sendInvalidCredits(Prices.SHOP_ZCRYSTAL.get());
+            else if(this.playerData.getCredits() < Prices.SHOP_ZCRYSTAL.get()) this.invalidCredits(Prices.SHOP_ZCRYSTAL.get());
             else
             {
                 this.playerData.addZCrystal(z.getStyledName());

@@ -114,7 +114,7 @@ public class CommandTournament extends Command
         {
             if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_TOURNAMENT_CREATE)
             {
-                this.sendInvalidLevel(PlayerLevel.REQUIRED_LEVEL_TOURNAMENT_CREATE, "to create Tournaments");
+                this.invalidMasteryLevel(PlayerLevel.REQUIRED_LEVEL_TOURNAMENT_CREATE, "to create Tournaments");
                 return this;
             }
 

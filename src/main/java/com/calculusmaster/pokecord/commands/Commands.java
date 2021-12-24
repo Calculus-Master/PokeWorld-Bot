@@ -316,9 +316,7 @@ public class Commands
             msg = new String[]{"start"};
         }
 
-        Command cmd = Commands.getCommand(input, event, msg).runCommand();
-
-        if(!cmd.isNull()) event.getChannel().sendMessageEmbeds(cmd.getResponseEmbed()).queue();
+        Commands.getCommand(input, event, msg).runCommand().send();
     }
 
     public static boolean isValid(String input)

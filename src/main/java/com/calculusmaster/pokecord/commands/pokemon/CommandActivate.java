@@ -32,7 +32,7 @@ public class CommandActivate extends Command
         }
         else if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_ACTIVATE)
         {
-            this.sendInvalidLevel(PlayerLevel.REQUIRED_LEVEL_ACTIVATE, "to activate functional items");
+            this.invalidMasteryLevel(PlayerLevel.REQUIRED_LEVEL_ACTIVATE, "to activate functional items");
             return this;
         }
 
