@@ -45,7 +45,7 @@ public class CommandTournament extends Command
         }
         else if(status)
         {
-            if(!TournamentHelper.isInTournament(this.player.getId())) this.sendMsg("You are not in a Tournament!");
+            if(!TournamentHelper.isInTournament(this.player.getId())) this.response = "You are not in a Tournament!";
             else
             {
                 this.embed = null;
@@ -54,24 +54,24 @@ public class CommandTournament extends Command
         }
         else if(notify)
         {
-            if(!TournamentHelper.isInTournament(this.player.getId())) this.sendMsg("You are not in a Tournament!");
+            if(!TournamentHelper.isInTournament(this.player.getId())) this.response = "You are not in a Tournament!";
             else
             {
                 Tournament t = TournamentHelper.instance(this.player.getId());
 
-                if(!t.getCreator().equals(this.player.getId())) this.sendMsg("You are not the creator of this Tournament!");
+                if(!t.getCreator().equals(this.player.getId())) this.response = "You are not the creator of this Tournament!";
                 else
                 {
                     List<String> players = t.getPlayers().stream().filter(p -> !t.hasPlayerAccepted(p)).collect(Collectors.toList());
                     for(String s : players) t.sendInvite(s);
 
-                    this.sendMsg("Reminded players!");
+                    this.response = "Reminded players!";
                 }
             }
         }
         else if(accept || cancel || deny)
         {
-            if(!TournamentHelper.isInTournament(this.player.getId())) this.sendMsg("You are not in a Tournament!");
+            if(!TournamentHelper.isInTournament(this.player.getId())) this.response = "You are not in a Tournament!";
             else
             {
                 Tournament t = TournamentHelper.instance(this.player.getId());
@@ -88,7 +88,7 @@ public class CommandTournament extends Command
                         t.notifyCreator("Tournament ready to start! Use `p!tournament start` to begin!");
                     }
 
-                    this.sendMsg("You entered this Tournament! It will begin once all players have accepted their invites and the creator starts the Tournament.");
+                    this.response = "You entered this Tournament! It will begin once all players have accepted their invites and the creator starts the Tournament.";
                 }
                 else if(deny)
                 {
@@ -96,7 +96,7 @@ public class CommandTournament extends Command
 
                     t.notifyCreator(this.player.getName() + " left your Tournament!");
 
-                    this.sendMsg("You left this Tournament! You can still join back when ready with `p!tournament accept`!");
+                    this.response = "You left this Tournament! You can still join back when ready with `p!tournament accept`!";
                 }
                 else if(cancel)
                 {
@@ -104,9 +104,9 @@ public class CommandTournament extends Command
                     {
                         TournamentHelper.delete(this.player.getId());
 
-                        this.sendMsg("Your Tournament was deleted!");
+                        this.response = "Your Tournament was deleted!";
                     }
-                    else this.sendMsg("You are not the creator of this Tournament!");
+                    else this.response = "You are not the creator of this Tournament!";
                 }
             }
         }
@@ -122,10 +122,10 @@ public class CommandTournament extends Command
 
             this.mentions = this.mentions.stream().distinct().collect(Collectors.toList());
 
-            if(this.mentions.size() < 3 || this.mentions.size() % 4 != 3) this.sendMsg("You must mention at least 3 members, and the number of total players (including you) must be a multiple of 4!");
-            else if(this.mentions.stream().anyMatch(m -> !PlayerDataQuery.isRegistered(m.getId()))) this.sendMsg("At least one of the mentioned players is not registered!");
-            else if(this.mentions.stream().anyMatch(m -> m.getId().equals(this.player.getId()))) this.sendMsg("You do not need to mention yourself!");
-            else if(this.mentions.stream().anyMatch(m -> DuelHelper.isInDuel(m.getId()))) this.sendMsg("At least one mentioned player is currently in a duel!");
+            if(this.mentions.size() < 3 || this.mentions.size() % 4 != 3) this.response = "You must mention at least 3 members, and the number of total players (including you) must be a multiple of 4!";
+            else if(this.mentions.stream().anyMatch(m -> !PlayerDataQuery.isRegistered(m.getId()))) this.response = "At least one of the mentioned players is not registered!";
+            else if(this.mentions.stream().anyMatch(m -> m.getId().equals(this.player.getId()))) this.response = "You do not need to mention yourself!";
+            else if(this.mentions.stream().anyMatch(m -> DuelHelper.isInDuel(m.getId()))) this.response = "At least one mentioned player is currently in a duel!";
             else
             {
                 List<String> players = this.mentions.stream().map(ISnowflake::getId).collect(Collectors.toList());
@@ -140,31 +140,31 @@ public class CommandTournament extends Command
 
                 Tournament t = Tournament.create(this.player.getId(), players, this.event, teamSize);
 
-                this.sendMsg("Tournament started! Invitations will be sent to the respective players.");
+                this.response = "Tournament started! Invitations will be sent to the respective players.";
 
                 for(String s : t.getPlayers()) if(!s.equals(t.getCreator())) t.sendInvite(s);
             }
         }
         else if(start)
         {
-            if(!TournamentHelper.isInTournament(this.player.getId())) this.sendMsg("You are not in a Tournament!");
+            if(!TournamentHelper.isInTournament(this.player.getId())) this.response = "You are not in a Tournament!";
             else
             {
                 Tournament t = TournamentHelper.instance(this.player.getId());
 
-                if(!t.getCreator().equals(this.player.getId())) this.sendMsg("You are not the manager of this tournament!");
+                if(!t.getCreator().equals(this.player.getId())) this.response = "You are not the manager of this tournament!";
                 else switch(t.getStatus())
                 {
-                    case DUELING -> this.sendMsg("This Tournament is already in progress!");
-                    case WAITING_FOR_PLAYERS -> this.sendMsg("Not all players have accepted the Tournament Request!");
+                    case DUELING -> this.response = "This Tournament is already in progress!";
+                    case WAITING_FOR_PLAYERS -> this.response = "Not all players have accepted the Tournament Request!";
                     case WAITING_FOR_START -> {
                         t.start();
-                        this.sendMsg("The Tournament has started!");
+                        this.response = "The Tournament has started!";
                     }
                 }
             }
         }
-        else this.sendMsg(CommandInvalid.getShort());
+        else this.response = CommandInvalid.getShort();
 
         return this;
     }
