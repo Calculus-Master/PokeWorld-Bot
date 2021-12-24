@@ -1,6 +1,5 @@
 package com.calculusmaster.pokecord.util.helpers.event;
 
-import com.calculusmaster.pokecord.commands.economy.CommandMarket;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
@@ -13,13 +12,12 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
 import java.util.*;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -97,6 +95,7 @@ public class SpawnEventHelper
     private static void spawnPokemon(Guild g, String spawn)
     {
         List<TextChannel> channels = new ServerDataQuery(g.getId()).getSpawnChannels().stream().map(g::getTextChannelById).filter(Objects::nonNull).collect(Collectors.toList());
+        final SplittableRandom random = new SplittableRandom();
 
         if(channels.isEmpty())
         {
@@ -106,26 +105,26 @@ public class SpawnEventHelper
 
         if(RaidEventHelper.hasRaid(g.getId())) return;
 
-        if(new Random().nextInt(100) < RAID_CHANCE)
+        if(random.nextInt(100) < RAID_CHANCE)
         {
             RaidEventHelper.start(g, channels.get(0));
             return;
         }
 
         spawn = Global.normalize(spawn);
-        boolean shiny = new Random().nextInt(4096) < 1;
+        boolean shiny = random.nextInt(4096) < 1;
 
-        if(LocalDateTime.now(ZoneId.of("America/Los_Angeles")).getHour() == 20)
+        if(LocalDateTime.now(ZoneId.of("America/Los_Angeles")).getHour() == 20 && random.nextInt(100) < 1)
         {
-            if(new Random().nextInt(100) < 1) spawn = PokemonRarity.getLegendarySpawn();
+            spawn = PokemonRarity.getLegendarySpawn();
         }
 
-        if(Math.random() < 0.03) new Thread(CommandMarket::addBotEntry).start();
+        //if(Math.random() < 0.03) new Thread(CommandMarket::addBotEntry).start();
 
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("A wild Pokemon spawned!")
                 .setDescription("Try to guess its name and catch it with p!catch <name>!")
-                .setColor(new Color(new Random().nextInt(256), new Random().nextInt(256), new Random().nextInt(256)))
+                .setColor(Global.getRandomColor())
                 .setImage("attachment://pkmn.png");
 
         try
@@ -145,7 +144,7 @@ public class SpawnEventHelper
 
             for(TextChannel c : channels) c.sendFile(bytes, "pkmn.png").setEmbeds(embed.build()).queue();
         }
-        catch (Exception e)
+        catch (IOException e)
         {
             LoggerHelper.reportError(SpawnEventHelper.class, "Spawn Event failed in " + g.getName() + " (" + g.getId() + ") trying to spawn " + spawn + "!", e);
         }

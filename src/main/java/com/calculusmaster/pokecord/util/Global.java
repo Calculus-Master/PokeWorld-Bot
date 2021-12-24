@@ -6,9 +6,11 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import org.jetbrains.annotations.Nls;
 
+import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.SplittableRandom;
 
 public class Global
 {
@@ -57,6 +59,12 @@ public class Global
     {
         for(E e : enumValues) if(s.equalsIgnoreCase(e.toString())) return e;
         return null;
+    }
+
+    public static Color getRandomColor()
+    {
+        final SplittableRandom random = new SplittableRandom();
+        return new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256));
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)
