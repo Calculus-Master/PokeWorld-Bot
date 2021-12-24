@@ -39,13 +39,13 @@ public class CommandTarget extends Command
         {
             CommandTarget.generateNewServerTarget(this.server);
 
-            this.sendMsg("A new Server Target has been chosen! Use `p!target` to see who it is!");
+            this.response = "A new Server Target has been chosen! Use `p!target` to see who it is!";
         }
         else
         {
             Member m = this.getMember(SERVER_TARGETS.get(this.server.getId()));
 
-            this.sendMsg("The Server Target is " + m.getEffectiveName() + " (" + m.getUser().getAsTag() + ")! Defeat them in a PvP Duel to earn extra rewards! If you are the target, winning PvP Duels grants extra credits the more duels you win!");
+            this.response = "The Server Target is " + m.getEffectiveName() + " (" + m.getUser().getAsTag() + ")! Defeat them in a PvP Duel to earn extra rewards! If you are the target, winning PvP Duels grants extra credits the more duels you win!";
         }
 
         return this;
