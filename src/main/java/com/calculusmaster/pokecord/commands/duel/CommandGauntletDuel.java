@@ -33,18 +33,18 @@ public class CommandGauntletDuel extends Command
         }
         else if(start)
         {
-            if(DuelHelper.isInDuel(this.player.getId())) this.sendMsg("You are already in a duel!");
+            if(DuelHelper.isInDuel(this.player.getId())) this.response = "You are already in a duel!";
             else if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_GAUNTLET) this.invalidMasteryLevel(PlayerLevel.REQUIRED_LEVEL_GAUNTLET, "to start a Gauntlet Duel");
             else
             {
                 GauntletDuel gauntlet = GauntletDuel.start(this.player.getId(), this.event);
 
-                this.sendMsg(this.playerData.getSelectedPokemon().getName() + " has started a Gauntlet!");
+                this.response = this.playerData.getSelectedPokemon().getName() + " has started a Gauntlet!";
 
                 gauntlet.sendTurnEmbed();
             }
         }
-        else this.sendMsg(CommandInvalid.getShort());
+        else this.response = CommandInvalid.getShort();
 
         return this;
     }

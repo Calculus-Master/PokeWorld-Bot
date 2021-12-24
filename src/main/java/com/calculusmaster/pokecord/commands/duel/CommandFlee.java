@@ -23,10 +23,7 @@ public class CommandFlee extends Command
     @Override
     public Command runCommand()
     {
-        if(!DuelHelper.isInDuel(this.player.getId()))
-        {
-            this.sendMsg("You aren't in a duel!");
-        }
+        if(!DuelHelper.isInDuel(this.player.getId())) this.response = "You aren't in a duel!";
         else
         {
             Duel d = DuelHelper.instance(this.player.getId());
@@ -34,21 +31,18 @@ public class CommandFlee extends Command
             if(this.msg[0].equals("flee") || this.msg[0].equals("run"))
             {
                 //p!flee or p!run
-                if(!(d instanceof WildDuel))
-                {
-                    this.sendMsg(d instanceof TrainerDuel ? "Use p!concede to leave a Trainer Duel!" : "You cannot flee from this duel!");
-                }
+                if(!(d instanceof WildDuel)) this.response = d instanceof TrainerDuel ? "Use p!concede to leave a Trainer Duel!" : "You cannot flee from this duel!";
                 else
                 {
                     if(new Random().nextInt(100) < 66)
                     {
                         DuelHelper.delete(this.player.getId());
 
-                        this.sendMsg("Successfully fled from the Wild Pokemon!");
+                        this.response = "Successfully fled from the Wild Pokemon!";
                     }
                     else
                     {
-                        this.sendMsg("You could not escape from the Wild Pokemon!");
+                        this.response = "You could not escape from the Wild Pokemon!";
 
                         d.submitMove(this.player.getId(), -1, 'i');
                         d.checkReady();
@@ -64,7 +58,7 @@ public class CommandFlee extends Command
                     {
                         concedeRequests.add(this.player.getId());
 
-                        this.sendMsg("Are you sure you want to concede from this duel? You will lose 500c! (Type `p!concede confirm` or `p!concede deny` to continue)");
+                        this.response = "Are you sure you want to concede from this duel? You will lose 500c! (Type `p!concede confirm` or `p!concede deny` to continue)";
                     }
                     else if(concedeRequests.contains(this.player.getId()) && this.msg.length >= 2)
                     {
@@ -77,21 +71,18 @@ public class CommandFlee extends Command
 
                             DuelHelper.delete(this.player.getId());
 
-                            this.sendMsg("You conceded and lost " + loss + "c!");
+                            this.response = "You conceded and lost " + loss + "c!";
                         }
                         else if(this.msg[1].equals("deny"))
                         {
                             concedeRequests.remove(this.player.getId());
 
-                            this.sendMsg("You chose not to concede! The duel will continue.");
+                            this.response = "You chose not to concede! The duel will continue.";
                         }
-                        else this.sendMsg("Type either `p!concede confirm` or `p!concede deny` to continue!");
+                        else this.response = "Type either `p!concede confirm` or `p!concede deny` to continue!";
                     }
                 }
-                else
-                {
-                    this.sendMsg(d instanceof WildDuel ? "Use p!run to flee from a Wild Pokemon Duel!" : "You cannot flee from this duel!");
-                }
+                else this.response = d instanceof WildDuel ? "Use p!run to flee from a Wild Pokemon Duel!" : "You cannot flee from this duel!";
             }
         }
 

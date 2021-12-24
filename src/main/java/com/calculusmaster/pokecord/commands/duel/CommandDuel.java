@@ -138,7 +138,7 @@ public class CommandDuel extends Command
         {
             Duel.create(this.player.getId(), opponentID, size, this.event);
 
-            ScheduledFuture<?> request = Executors.newScheduledThreadPool(1).schedule(() -> {
+            ScheduledFuture<?> request = Executors.newSingleThreadScheduledExecutor().schedule(() -> {
                 DuelHelper.delete(this.player.getId());
                 this.response = "Duel Request expired!";
                 REQUEST_COOLDOWNS.remove(opponentID);

@@ -50,8 +50,8 @@ public class CommandSettings extends Command
 
                         settings.updateSettingBoolean(CLIENT_DETAILED, !currentValue);
 
-                        if(currentValue) this.sendMsg("Disabled viewing of detailed information!");
-                        else this.sendMsg("Enabled viewing of detailed information!");
+                        if(currentValue) this.response = "Disabled viewing of detailed information!";
+                        else this.response = "Enabled viewing of detailed information!";
                     }
                     //Set value to specific input
                     else if(this.msg.length == 4)
@@ -62,10 +62,10 @@ public class CommandSettings extends Command
 
                             settings.updateSettingBoolean(CLIENT_DETAILED, newValue);
 
-                            if(newValue) this.sendMsg("Enabled viewing of detailed information!");
-                            else this.sendMsg("Disabled viewing of detailed information!");
+                            if(newValue) this.response = "Enabled viewing of detailed information!";
+                            else this.response = "Disabled viewing of detailed information!";
                         }
-                        else this.sendMsg("Valid arguments: `true` or `false`!");
+                        else this.response = "Valid arguments: `true` or `false`!";
                     }
                 }
                 else if(CLIENT_CATCH_AUTO_INFO.matches(this.msg[2]))
@@ -77,8 +77,8 @@ public class CommandSettings extends Command
 
                         settings.updateSettingBoolean(CLIENT_CATCH_AUTO_INFO, !currentValue);
 
-                        if(currentValue) this.sendMsg("Disabled automatic info viewing after catch!");
-                        else this.sendMsg("Enabled automatic info viewing after catch!");
+                        if(currentValue) this.response = "Disabled automatic info viewing after catch!";
+                        else this.response = "Enabled automatic info viewing after catch!";
                     }
                     //Set value to specific input
                     else if(this.msg.length == 4)
@@ -89,10 +89,10 @@ public class CommandSettings extends Command
 
                             settings.updateSettingBoolean(CLIENT_CATCH_AUTO_INFO, newValue);
 
-                            if(newValue) this.sendMsg("Enabled automatic info viewing after catch!");
-                            else this.sendMsg("Disabled automatic info viewing after catch!");
+                            if(newValue) this.response = "Enabled automatic info viewing after catch!";
+                            else this.response = "Disabled automatic info viewing after catch!";
                         }
-                        else this.sendMsg("Valid arguments: `true` or `false`!");
+                        else this.response = "Valid arguments: `true` or `false`!";
                     }
                 }
                 else if(CLIENT_DEFAULT_ORDER.matches(this.msg[2]))
@@ -101,12 +101,12 @@ public class CommandSettings extends Command
                     {
                         CommandPokemon.OrderSort order = CommandPokemon.OrderSort.cast(this.msg[3]);
 
-                        if(order == null) this.sendMsg("Invalid Order!");
+                        if(order == null) this.response = "Invalid Order!";
                         else
                         {
                             settings.updateSettingString(CLIENT_DEFAULT_ORDER, order.toString());
 
-                            this.sendMsg("Your Pokemon List will now be ordered by `" + order.toString().toLowerCase() + "`!");
+                            this.response = "Your Pokemon List will now be ordered by `" + order.toString().toLowerCase() + "`!";
                         }
                     }
                 }
@@ -119,8 +119,8 @@ public class CommandSettings extends Command
 
                         settings.updateSettingBoolean(CLIENT_POKEMON_LIST_FIELDS, !currentValue);
 
-                        if (currentValue) this.sendMsg("Pokemon List view is now Text-based!");
-                        else this.sendMsg("Pokemon List view is now Field-based!");
+                        if (currentValue) this.response = "Pokemon List view is now Text-based!";
+                        else this.response = "Pokemon List view is now Field-based!";
                     }
                     //Set value to specific input
                     else if (this.msg.length == 4)
@@ -131,10 +131,10 @@ public class CommandSettings extends Command
 
                             settings.updateSettingBoolean(CLIENT_POKEMON_LIST_FIELDS, newValue);
 
-                            if (newValue) this.sendMsg("Pokemon List view is now Field-based!");
-                            else this.sendMsg("Pokemon List view is now Text-based!");
+                            if (newValue) this.response = "Pokemon List view is now Field-based!";
+                            else this.response = "Pokemon List view is now Text-based!";
                         }
-                        else this.sendMsg("Valid arguments: `true` or `false`!");
+                        else this.response = "Valid arguments: `true` or `false`!";
                     }
                 }
                 else this.embed.setDescription(CommandInvalid.getShort());
@@ -154,7 +154,7 @@ public class CommandSettings extends Command
             }
             else if(!isUserAdmin)
             {
-                this.sendMsg("You must be an Administrator to change server settings!");
+                this.response = "You must be an Administrator to change server settings!";
             }
             else
             {
@@ -165,7 +165,7 @@ public class CommandSettings extends Command
                     {
                         this.serverData.setPrefix("p!");
 
-                        this.sendMsg("Server prefix has been reset to `p!`");
+                        this.response = "Server prefix has been reset to `p!`";
                     }
                     //Change prefix
                     else if(this.msg.length == 4)
@@ -174,7 +174,7 @@ public class CommandSettings extends Command
 
                         this.serverData.setPrefix(this.msg[3]);
 
-                        this.sendMsg("Server prefix has been changed from `" + oldPrefix + "` to `" + this.msg[3] + "`");
+                        this.response = "Server prefix has been changed from `" + oldPrefix + "` to `" + this.msg[3] + "`";
                     }
                 }
                 else if(SERVER_SPAWNCHANNEL.matches(this.msg[2]))
@@ -186,13 +186,13 @@ public class CommandSettings extends Command
                     {
                         this.serverData.removeSpawnChannel(channel);
 
-                        this.sendMsg(channelName.getAsMention() + " will no longer have Pokemon spawns!");
+                        this.response = channelName.getAsMention() + " will no longer have Pokemon spawns!";
                     }
                     else if(channelName != null)
                     {
                         this.serverData.addSpawnChannel(channel);
 
-                        this.sendMsg(channelName.getAsMention() + " will now have Pokemon spawns!");
+                        this.response = channelName.getAsMention() + " will now have Pokemon spawns!";
                     }
                 }
                 else if(SERVER_ZCRYSTAL_DUEL_EQUIP.matches(this.msg[2]))
@@ -203,7 +203,7 @@ public class CommandSettings extends Command
 
                         this.serverData.setEquipZCrystalDuel(!currentValue);
 
-                        this.sendMsg("Players can " + (this.serverData.canEquipZCrystalDuel() ? "now" : "no longer") + " equip Z Crystals while in a Duel!");
+                        this.response = "Players can " + (this.serverData.canEquipZCrystalDuel() ? "now" : "no longer") + " equip Z Crystals while in a Duel!";
                     }
                     else if(this.msg.length == 4)
                     {
@@ -211,7 +211,7 @@ public class CommandSettings extends Command
 
                         this.serverData.setEquipZCrystalDuel(newValue);
 
-                        this.sendMsg("Players can " + (newValue ? "now" : "no longer") + " equip Z Crystals while in a Duel!");
+                        this.response = "Players can " + (newValue ? "now" : "no longer") + " equip Z Crystals while in a Duel!";
                     }
                 }
                 else if(SERVER_DYNAMAX.matches(this.msg[2]))
@@ -222,7 +222,7 @@ public class CommandSettings extends Command
 
                         this.serverData.setDynamaxEnabled(!currentValue);
 
-                        this.sendMsg("Players can " + (this.serverData.isDynamaxEnabled() ? "now" : "no longer") + " Dynamax their Pokemon in a Duel!");
+                        this.response = "Players can " + (this.serverData.isDynamaxEnabled() ? "now" : "no longer") + " Dynamax their Pokemon in a Duel!";
                     }
                     else if(this.msg.length == 4)
                     {
@@ -230,7 +230,7 @@ public class CommandSettings extends Command
 
                         this.serverData.setDynamaxEnabled(newValue);
 
-                        this.sendMsg("Players can " + (newValue ? "now" : "no longer") + " Dynamax their Pokemon in a Duel!");
+                        this.response = "Players can " + (newValue ? "now" : "no longer") + " Dynamax their Pokemon in a Duel!";
                     }
                 }
                 else if(SERVER_ZMOVE.matches(this.msg[2]))
@@ -241,7 +241,7 @@ public class CommandSettings extends Command
 
                         this.serverData.setZMovesEnabled(!currentValue);
 
-                        this.sendMsg("Players can " + (this.serverData.areZMovesEnabled() ? "now" : "no longer") + " use Z-Moves in a Duel!");
+                        this.response = "Players can " + (this.serverData.areZMovesEnabled() ? "now" : "no longer") + " use Z-Moves in a Duel!";
                     }
                     else if(this.msg.length == 4)
                     {
@@ -249,7 +249,7 @@ public class CommandSettings extends Command
 
                         this.serverData.setZMovesEnabled(newValue);
 
-                        this.sendMsg("Players can " + (newValue ? "now" : "no longer") + " use Z-Moves in a Duel!");
+                        this.response = "Players can " + (newValue ? "now" : "no longer") + " use Z-Moves in a Duel!";
                     }
                 }
                 else if(SERVER_DUELCHANNEL.matches(this.msg[2]))
@@ -261,19 +261,19 @@ public class CommandSettings extends Command
                     {
                         this.serverData.removeDuelChannel(channel);
 
-                        this.sendMsg(this.serverData.getDuelChannels().isEmpty() ? "Duels are now allowed anywhere!" : "Duels are no longer allowed in " + channelName.getAsMention() + "!");
+                        this.response = this.serverData.getDuelChannels().isEmpty() ? "Duels are now allowed anywhere!" : "Duels are no longer allowed in " + channelName.getAsMention() + "!";
                     }
                     else if(channelName != null)
                     {
                         this.serverData.addDuelChannel(channel);
 
-                        this.sendMsg("Duels are now allowed in " + channelName.getAsMention() + "!");
+                        this.response = "Duels are now allowed in " + channelName.getAsMention() + "!";
                     }
                     else if(this.msg.length == 4 && this.msg[3].equals("reset"))
                     {
                         this.serverData.clearDuelChannels();
 
-                        this.sendMsg("Duels are now allowed anywhere!");
+                        this.response = "Duels are now allowed anywhere!";
                     }
                 }
                 else if(SERVER_BOTCHANNEL.matches(this.msg[2]))
@@ -285,19 +285,19 @@ public class CommandSettings extends Command
                     {
                         this.serverData.removeBotChannel(channel);
 
-                        this.sendMsg(this.serverData.getDuelChannels().isEmpty() ? "Bot commands are now allowed anywhere!" : "Bot commands are no longer allowed in " + channelName.getAsMention() + "!");
+                        this.response = this.serverData.getDuelChannels().isEmpty() ? "Bot commands are now allowed anywhere!" : "Bot commands are no longer allowed in " + channelName.getAsMention() + "!";
                     }
                     else if(channelName != null)
                     {
                         this.serverData.addBotChannel(channel);
 
-                        this.sendMsg("Bot commands are now allowed in " + channelName.getAsMention() + "!");
+                        this.response = "Bot commands are now allowed in " + channelName.getAsMention() + "!";
                     }
                     else if(this.msg.length == 4 && this.msg[3].equals("reset"))
                     {
                         this.serverData.clearBotChannels();
 
-                        this.sendMsg("Bot commands are now allowed anywhere!");
+                        this.response = "Bot commands are now allowed anywhere!";
                     }
                 }
                 else this.embed.setDescription(CommandInvalid.getShort());
@@ -305,7 +305,7 @@ public class CommandSettings extends Command
         }
         else
         {
-            this.sendMsg("Type `p!settings client` or `p!settings server` to view all available settings!");
+            this.response = "Type `p!settings client` or `p!settings server` to view all available settings!";
         }
 
         return this;
