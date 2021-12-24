@@ -30,7 +30,7 @@ public class CommandTrainerDuel extends Command
         {
             if(DuelHelper.isInDuel(this.player.getId()))
             {
-                this.sendMsg(this.playerData.getMention() + ": You are already in a duel!");
+                this.response = "You are already in a duel!";
                 return this;
             }
 
@@ -40,19 +40,19 @@ public class CommandTrainerDuel extends Command
 
             if(this.playerData.getTeam().size() < trainer.pokemon.size())
             {
-                this.sendMsg("Your team is too small! It needs to be of size " + trainer.pokemon.size() + "!");
+                this.response = "Your team is too small! It needs to be of size " + trainer.pokemon.size() + "!";
                 return this;
             }
 
             if(!trainer.elite && this.isInvalidTeam(trainer.pokemon.size()))
             {
-                this.sendMsg("Your team is invalid! You can have a maximum of " + this.getLegendaryCap(trainer.pokemon.size()) + " legendaries and " + this.getMythicalUBCap(trainer.pokemon.size()) + " mythicals/ultra beasts!");
+                this.response = "Your team is invalid! You can have a maximum of " + this.getLegendaryCap(trainer.pokemon.size()) + " legendaries and " + this.getMythicalUBCap(trainer.pokemon.size()) + " mythicals/ultra beasts!";
                 return this;
             }
 
             Duel d = TrainerDuel.create(this.player.getId(), this.event, trainer);
 
-            this.sendMsg("You challenged " + trainer.name + " !");
+            this.response = "You challenged " + trainer.name + " !";
 
             d.sendTurnEmbed();
         }
