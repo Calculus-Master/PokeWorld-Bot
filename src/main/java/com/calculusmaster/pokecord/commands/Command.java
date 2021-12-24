@@ -144,6 +144,9 @@ public abstract class Command
     {
         if(!this.response.isEmpty())
         {
+            //Add Player Mention
+            this.response = this.playerData.getMention() + "\n" + this.response;
+
             if(this.event != null) this.event.getChannel().sendMessage(this.response).queue();
             else if(this.buttonEvent != null) this.buttonEvent.getChannel().sendMessage(this.response).queue();
         }
