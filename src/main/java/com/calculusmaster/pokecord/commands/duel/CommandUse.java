@@ -37,7 +37,7 @@ public class CommandUse extends Command
 
         if(!DuelHelper.isInDuel(this.player.getId()))
         {
-            this.sendMsg("You are not in a duel!");
+            this.response = "You are not in a duel!";
             return this;
         }
 
@@ -52,18 +52,18 @@ public class CommandUse extends Command
 
         if(!formatNormal && !formatSwap && !formatZMove && !formatDynamax)
         {
-            this.sendMsg("Invalid Turn Action! Valid formats are: `p!use <num>`, `p!use <s:swap> <index>`, `p!use <z:zmove> <num>`, and `p!use <d:dynamax> <num>`, where `num` is the move number and `index` is the index of the Pokemon in your team");
+            this.response = "Invalid Turn Action! Valid formats are: `p!use <num>`, `p!use <s:swap> <index>`, `p!use <z:zmove> <num>`, and `p!use <d:dynamax> <num>`, where `num` is the move number and `index` is the index of the Pokemon in your team";
             return this;
         }
 
         if(c.checkFailed(NORMAL_MOVESUBMITTED))
         {
-            this.sendMsg(NORMAL_MOVESUBMITTED.getInvalidMessage());
+            this.response = NORMAL_MOVESUBMITTED.getInvalidMessage();
             return this;
         }
         else if(c.checkFailed(NORMAL_FAINTED) && !this.msg[1].equals("swap") && !d.isComplete())
         {
-            this.sendMsg(NORMAL_FAINTED.getInvalidMessage());
+            this.response = NORMAL_FAINTED.getInvalidMessage();
             return this;
         }
 
@@ -75,7 +75,7 @@ public class CommandUse extends Command
         }
         else if(c.checkFailed(NORMAL_WILDDUEL))
         {
-            this.sendMsg(NORMAL_WILDDUEL.getInvalidMessage());
+            this.response = NORMAL_WILDDUEL.getInvalidMessage();
             return this;
         }
 
@@ -84,19 +84,19 @@ public class CommandUse extends Command
         {
             if(c.checkFailed(SWAP_ISABLE))
             {
-                this.sendMsg(SWAP_ISABLE.getInvalidMessage());
+                this.response = SWAP_ISABLE.getInvalidMessage();
                 return this;
             }
 
             if(c.checkFailed(SWAP_BOUND))
             {
-                this.sendMsg(SWAP_BOUND.getInvalidMessage());
+                this.response = SWAP_BOUND.getInvalidMessage();
                 return this;
             }
 
             if(c.checkFailed(SWAP_DYNAMAXED))
             {
-                this.sendMsg(SWAP_DYNAMAXED.getInvalidMessage());
+                this.response = SWAP_DYNAMAXED.getInvalidMessage();
                 return this;
             }
 
@@ -109,25 +109,25 @@ public class CommandUse extends Command
         {
             if(!this.serverData.areZMovesEnabled())
             {
-                this.sendMsg("Z-Moves are not enabled in this server!");
+                this.response = "Z-Moves are not enabled in this server!";
                 return this;
             }
 
             if(c.checkFailed(ZMOVE_CRYSTAL))
             {
-                this.sendMsg(ZMOVE_CRYSTAL.getInvalidMessage());
+                this.response = ZMOVE_CRYSTAL.getInvalidMessage();
                 return this;
             }
 
             if(c.checkFailed(ZMOVE_USED))
             {
-                this.sendMsg(ZMOVE_USED.getInvalidMessage());
+                this.response = ZMOVE_USED.getInvalidMessage();
                 return this;
             }
 
             if(c.checkFailed(ZMOVE_DYNAMAXED))
             {
-                this.sendMsg(ZMOVE_DYNAMAXED.getInvalidMessage());
+                this.response = ZMOVE_DYNAMAXED.getInvalidMessage();
                 return this;
             }
 
@@ -135,7 +135,7 @@ public class CommandUse extends Command
 
             if(c.checkFailed(ZMOVE_MOVE))
             {
-                this.sendMsg(ZMOVE_MOVE.getInvalidMessage());
+                this.response = ZMOVE_MOVE.getInvalidMessage();
                 return this;
             }
 
@@ -148,25 +148,25 @@ public class CommandUse extends Command
         {
             if(!this.serverData.isDynamaxEnabled())
             {
-                this.sendMsg("Dynamaxing is not enabled in this server!");
+                this.response = "Dynamaxing is not enabled in this server!";
                 return this;
             }
 
             if(c.checkFailed(DYNAMAX_USED))
             {
-                this.sendMsg(DYNAMAX_USED.getInvalidMessage());
+                this.response = DYNAMAX_USED.getInvalidMessage();
                 return this;
             }
 
             if(c.checkFailed(DYNAMAX_MEGA))
             {
-                this.sendMsg(DYNAMAX_MEGA.getInvalidMessage());
+                this.response = DYNAMAX_MEGA.getInvalidMessage();
                 return this;
             }
 
             if(c.checkFailed(DYNAMAX_BANLIST))
             {
-                this.sendMsg(DYNAMAX_BANLIST.getInvalidMessage());
+                this.response = DYNAMAX_BANLIST.getInvalidMessage();
                 return this;
             }
 
