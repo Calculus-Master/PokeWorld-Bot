@@ -29,17 +29,17 @@ public class CommandPursuit extends Command
 
         if(start)
         {
-            if(this.playerData.hasPursuit()) this.sendMsg("You already have an active Pursuit!");
+            if(this.playerData.hasPursuit()) this.response = "You already have an active Pursuit!";
             else
             {
                 PursuitSize size = this.msg.length == 3 && PursuitSize.cast(this.msg[2]) != null ? PursuitSize.cast(this.msg[2]) : PursuitSize.AVERAGE;
 
-                this.sendMsg("Generating your Pursuit...");
+                this.response = "Generating your Pursuit...";
                 PursuitBuilder pursuit = PursuitBuilder.create(size);
                 this.playerData.setPursuit(pursuit.getIDs());
                 this.playerData.increasePursuitLevel();
                 pursuit.build();
-                this.sendMsg("Your Pursuit was created!");
+                this.response = "Your Pursuit was created!";
             }
         }
         else if(info)
@@ -57,12 +57,12 @@ public class CommandPursuit extends Command
         }
         else if(advance)
         {
-            if(!this.playerData.hasPursuit()) this.sendMsg(NO_PURSUIT_MESSAGE);
+            if(!this.playerData.hasPursuit()) this.response = NO_PURSUIT_MESSAGE;
             else
             {
                 Bounty b = this.playerData.getCurrentPursuitBounty();
 
-                if(!b.getObjective().isComplete()) this.sendMsg("You have not completed this bounty's objective yet!");
+                if(!b.getObjective().isComplete()) this.response = "You have not completed this bounty's objective yet!";
                 else
                 {
                     int count = this.playerData.getPursuitIDs().size();
@@ -92,9 +92,9 @@ public class CommandPursuit extends Command
 
                         this.playerData.removePursuit();
 
-                        this.sendMsg("You have conquered this Pursuit! You earned " + creditReward + " credits and a large amount of PokePass XP!");
+                        this.response = "You have conquered this Pursuit! You earned " + creditReward + " credits and a large amount of PokePass XP!";
                     }
-                    else this.sendMsg("You are now at Pursuit Level " + this.playerData.getPursuitLevel() + " / " + this.playerData.getPursuitIDs().size() + "!");
+                    else this.response = "You are now at Pursuit Level " + this.playerData.getPursuitLevel() + " / " + this.playerData.getPursuitIDs().size() + "!";
                 }
             }
         }
@@ -115,10 +115,7 @@ public class CommandPursuit extends Command
         }
         else
         {
-            if(!this.playerData.hasPursuit())
-            {
-                this.sendMsg(NO_PURSUIT_MESSAGE);
-            }
+            if(!this.playerData.hasPursuit()) this.response = NO_PURSUIT_MESSAGE;
             else
             {
                 int level = this.playerData.getPursuitLevel();
