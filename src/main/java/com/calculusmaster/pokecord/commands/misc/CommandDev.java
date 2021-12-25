@@ -37,7 +37,7 @@ public class CommandDev extends Command
     {
         if(!this.player.getId().equals("309135641453527040") && !this.player.getId().equals("423602074811367434"))
         {
-            this.sendMsg("You cannot use this command!");
+            this.response = "You cannot use this command!";
             return this;
         }
 
@@ -60,7 +60,7 @@ public class CommandDev extends Command
                 int count = Move.INCOMPLETE_MOVES.size();
                 for (int i = 0; i < 15; i++)
                     sb.append(Move.INCOMPLETE_MOVES.get(new Random().nextInt(count))).append("   ");
-                this.sendMsg("Moves: " + sb + "\nTotal Remaining: " + count);
+                this.response = "Moves: " + sb + "\nTotal Remaining: " + count;
                 Move.init();
             }
             case "allmoves" -> {
@@ -74,9 +74,9 @@ public class CommandDev extends Command
                     sbs.add(s);
                 }
 
-                for(StringBuilder s : sbs) Executors.newScheduledThreadPool(1).schedule(() -> this.sendMsg(s.toString()), new Random().nextInt(20) + 5, TimeUnit.SECONDS);
+                for(StringBuilder s : sbs) Executors.newScheduledThreadPool(1).schedule(() -> this.event.getChannel().sendMessage(s.toString()).queue(), new Random().nextInt(20) + 5, TimeUnit.SECONDS);
 
-                this.sendMsg("Total Remaining: " + Move.INCOMPLETE_MOVES.size());
+                this.response = "Total Remaining: " + Move.INCOMPLETE_MOVES.size();
                 Move.init();
             }
             case "clearduels" -> DuelHelper.DUELS.clear();
@@ -109,7 +109,7 @@ public class CommandDev extends Command
             case "clearcrashreports" -> Mongo.CrashData.deleteMany(Filters.exists("source"));
         }
 
-        this.sendMsg("Successfully ran Developer Command!");
+        this.response = "Successfully ran Developer Command!";
         return this;
     }
 }
