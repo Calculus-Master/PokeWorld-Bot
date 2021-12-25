@@ -27,7 +27,7 @@ public class CommandInventory extends Command
         }
         else
         {
-            if(Page.isInvalid(this.msg[1])) this.sendMsg("Invalid page! Use `p!inventory` to see the possible inventory pages.");
+            if(Page.isInvalid(this.msg[1])) this.response = "Invalid page! Use `p!inventory` to see the possible inventory pages.";
             else
             {
                 Page p = Page.cast(this.msg[1]);
