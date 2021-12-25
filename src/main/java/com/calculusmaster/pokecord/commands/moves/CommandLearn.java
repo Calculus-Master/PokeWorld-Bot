@@ -24,16 +24,16 @@ public class CommandLearn extends Command
     {
         if(this.msg.length < 2)
         {
-            this.sendMsg(CommandInvalid.getShort());
+            this.response = CommandInvalid.getShort();
             return this;
         }
 
         Pokemon selected = this.playerData.getSelectedPokemon();
         String move = Global.normalize(this.getMultiWordContent(1));
 
-        if(!Move.isMove(move)) this.sendMsg("Invalid move name!");
-        else if(!Move.isImplemented(move)) this.sendMsg("`" + move + "` has not been implemented yet!");
-        else if(!selected.getAvailableMoves().contains(move)) this.sendMsg(selected.getName() + " does not know `" + move + "`");
+        if(!Move.isMove(move)) this.response = "Invalid move name!";
+        else if(!Move.isImplemented(move)) this.response = "`" + move + "` has not been implemented yet!";
+        else if(!selected.getAvailableMoves().contains(move)) this.response = selected.getName() + " does not know `" + move + "`";
         else
         {
             StringBuilder movesList = new StringBuilder().append("\n");
