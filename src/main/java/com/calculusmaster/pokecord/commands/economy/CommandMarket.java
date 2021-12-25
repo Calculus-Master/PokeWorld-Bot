@@ -40,14 +40,14 @@ public class CommandMarket extends Command
 
         if(list)
         {
-            if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_MARKET_LIST) this.sendMsg("You need to be Pokemon Mastery Level " + PlayerLevel.REQUIRED_LEVEL_MARKET_LIST + " to list Pokemon on the market!");
+            if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_MARKET_LIST) this.response = "You need to be Pokemon Mastery Level " + PlayerLevel.REQUIRED_LEVEL_MARKET_LIST + " to list Pokemon on the market!";
             else
             {
                 MarketEntry newEntry = MarketEntry.create(this.player.getId(), this.player.getName(), this.playerData.getPokemonList().get(this.getInt(2) - 1), this.getInt(3));
 
                 this.playerData.removePokemon(newEntry.pokemonID);
 
-                this.sendMsg("You successfully listed your Level " + newEntry.pokemon.getLevel() + " " + newEntry.pokemon.getName() + "` for " + newEntry.price + " credits!");
+                this.response = "You successfully listed your Level " + newEntry.pokemon.getLevel() + " " + newEntry.pokemon.getName() + "` for " + newEntry.price + " credits!";
             }
         }
         else if(buy || collect || info)
@@ -73,14 +73,14 @@ public class CommandMarket extends Command
                 Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_POKEMON_MARKET, this.event);
                 this.playerData.getStats().incr(PlayerStatistic.POKEMON_BOUGHT_MARKET);
 
-                this.sendMsg("You successfully bought `Level " + m.pokemon.getLevel() + " " + m.pokemon.getName() + "` for " + m.price + " credits!");
+                this.response = "You successfully bought `Level " + m.pokemon.getLevel() + " " + m.pokemon.getName() + "` for " + m.price + " credits!";
                 MarketEntry.delete(m.marketID);
             }
             else if(collect && m.sellerID.equals(this.player.getId()))
             {
                 this.playerData.addPokemon(m.pokemonID);
 
-                this.sendMsg("You successfully retrieved your `Level " + m.pokemon.getLevel() + " " + m.pokemon.getName() + "` from the market!");
+                this.response = "You successfully retrieved your `Level " + m.pokemon.getLevel() + " " + m.pokemon.getName() + "` from the market!";
                 MarketEntry.delete(m.marketID);
             }
             else if(info)
