@@ -44,10 +44,7 @@ public class CommandBounties extends Command
         {
             Bounty b = bounties.get(this.getInt(2) - 1);
 
-            if(!b.getObjective().isComplete())
-            {
-                this.sendMsg("You have not finished this Bounty's Objective yet!");
-            }
+            if(!b.getObjective().isComplete()) this.response = "You have not finished this Bounty's Objective yet!";
             else
             {
                 this.playerData.changeCredits(b.getReward());
@@ -61,7 +58,7 @@ public class CommandBounties extends Command
 
                 if(new Random().nextInt(50) < 10 && this.playerData.getSelectedPokemon().getLevel() != 100) this.playerData.getSelectedPokemon().addExp(500);
 
-                this.sendMsg("You earned " + b.getReward() + " credits and some PokePass XP for completing this bounty!");
+                this.response = "You earned " + b.getReward() + " credits and some PokePass XP for completing this bounty!";
             }
         }
         else if(reroll)
@@ -77,13 +74,13 @@ public class CommandBounties extends Command
             this.playerData.addBounty(rerolledBounty.getBountyID());
             Bounty.toDB(rerolledBounty);
 
-            this.sendMsg("Rerolled Bounty with lower rewards!");
+            this.response = "Rerolled Bounty with lower rewards!";
         }
         else if(acquire)
         {
             if(bounties.size() == Bounty.MAX_BOUNTIES_HELD)
             {
-                this.sendMsg("You already have the maximum amount of Bounties! Either complete them, or use `p!bounties reroll <num>` to reroll the objective!");
+                this.response = "You already have the maximum amount of Bounties! Either complete them, or use `p!bounties reroll <num>` to reroll the objective!";
                 return this;
             }
 
@@ -104,7 +101,7 @@ public class CommandBounties extends Command
                 this.playerData.addBounty(b.getBountyID());
             }
 
-            this.sendMsg("You acquired " + requested + " new " + (requested > 1 ? "bounties!" : "bounty!"));
+            this.response = "You acquired " + requested + " new " + (requested > 1 ? "bounties!" : "bounty!");
         }
         else
         {
@@ -136,7 +133,7 @@ public class CommandBounties extends Command
                 this.playerData.addBounty(b.getBountyID());
             }
 
-            this.sendMsg("You acquired " + added + " new bounties!");
+            this.response = "You acquired " + added + " new bounties!";
         }
     }
 }
