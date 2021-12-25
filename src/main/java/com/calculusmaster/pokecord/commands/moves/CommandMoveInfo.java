@@ -18,12 +18,12 @@ public class CommandMoveInfo extends Command
     @Override
     public Command runCommand()
     {
-        if(this.msg.length < 2) this.sendMsg("Invalid arguments! You need to include a move name!");
+        if(this.msg.length < 2) this.response = "Invalid arguments! You need to include a move name!";
         else
         {
             String input = Global.normalize(this.getMultiWordContent(1));
 
-            if(!Move.isMove(input)) this.sendMsg("`" + input + "` is not a valid Move name!");
+            if(!Move.isMove(input)) this.response = "`" + input + "` is not a valid Move name!";
             else
             {
                 MoveData m = MoveData.get(input);
