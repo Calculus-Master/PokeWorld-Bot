@@ -31,10 +31,7 @@ public class CommandWildDuel extends Command
         boolean type = this.msg.length == 2 && Type.cast(this.msg[1]) != null;
         boolean specific = this.msg.length >= 2 && this.isPokemon(this.getMultiWordContent(1));
 
-        if(DuelHelper.isInDuel(this.player.getId()))
-        {
-            this.sendMsg(CommandInvalid.ALREADY_IN_DUEL);
-        }
+        if(DuelHelper.isInDuel(this.player.getId())) this.response = CommandInvalid.ALREADY_IN_DUEL;
         else if(random || stat || type || specific)
         {
             int price = stat ? Prices.WILDDUEL_STAT.get() : (type ? Prices.WILDDUEL_TYPE.get() : (specific ? Prices.WILDDUEL_SPECIFIC.get() : 0));
@@ -64,16 +61,13 @@ public class CommandWildDuel extends Command
 
                 if(price != 0) this.playerData.changeCredits(-1 * price);
 
-                this.sendMsg("A wild Pokemon appeared, and it wants to challenge you!");
+                this.response = "A wild Pokemon appeared, and it wants to challenge you!";
 
                 d.sendTurnEmbed();
 
             }
         }
-        else
-        {
-            this.sendMsg("Invalid arguments! Make sure your Pokemon name, Stat name (HP, ATK, DEF, SPATK, SPDEF, and SPD), or Type name is correct.");
-        }
+        else this.response = "Invalid arguments! Make sure your Pokemon name, Stat name (HP, ATK, DEF, SPATK, SPDEF, and SPD), or Type name is correct.";
 
         return this;
     }
