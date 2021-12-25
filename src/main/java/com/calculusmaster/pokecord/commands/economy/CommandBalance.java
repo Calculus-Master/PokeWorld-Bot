@@ -18,7 +18,7 @@ public class CommandBalance extends Command
 
         if(!PlayerDataQuery.isRegistered(targetID))
         {
-            this.sendMsg(this.mentions.get(0).getEffectiveName() + " is not registered!");
+            this.response = this.mentions.get(0).getEffectiveName() + " is not registered!";
             return this;
         }
 
