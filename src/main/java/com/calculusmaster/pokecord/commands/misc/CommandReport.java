@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord.commands.misc;
 
 import com.calculusmaster.pokecord.commands.Command;
-import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.util.Mongo;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -19,15 +18,21 @@ public class CommandReport extends Command
     {
         if(this.msg.length >= 2)
         {
-            Document reportInfo = new Document("user", this.player.getName())
-                    .append("report", this.getMultiWordContent(1));
+            String report = this.getMultiWordContent(1);
 
-            Mongo.ReportData.insertOne(reportInfo);
-            this.sendMsg("Successfully submitted!");
+            if(report.trim().length() < 50) this.response = "Please explain the problem in more detail! Minimum length: 50 characters";
+            else
+            {
+                Document reportInfo = new Document("user", this.player.getName())
+                        .append("report", this.getMultiWordContent(1));
 
-            Achievements.grant(this.player.getId(), Achievements.SUBMITTED_BUG_REPORT, this.event);
+                Mongo.ReportData.insertOne(reportInfo);
+                this.response = "Successfully submitted!";
+
+                Achievements.grant(this.player.getId(), Achievements.SUBMITTED_BUG_REPORT, this.event);
+            }
         }
-        else this.sendMsg(CommandInvalid.getFull());
+        else this.invalid();
 
         return this;
     }
