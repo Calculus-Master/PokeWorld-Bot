@@ -38,8 +38,8 @@ public class CommandCatch extends Command
         String spawn = SpawnEventHelper.getSpawn(this.server.getId());
         String guess = this.getPokemon();
 
-        if(spawn.isEmpty()) this.sendMsg("Nothing has spawned yet in this server!");
-        else if(!guess.equals(spawn)) this.sendMsg("Incorrect name!");
+        if(spawn.isEmpty()) this.response = "Nothing has spawned yet in this server!";
+        else if(!guess.equals(spawn)) this.response = "Incorrect name!";
         else
         {
             String poke = spawn.contains("Shiny") ? spawn.substring("Shiny ".length()) : spawn;
@@ -64,20 +64,20 @@ public class CommandCatch extends Command
             int amount = collection.getCaughtAmount();
             int[] rarityCredits = this.collectionCredits(PokemonRarity.POKEMON_RARITIES.getOrDefault(caught.getName(), PokemonRarity.Rarity.EXTREME));
 
-            if(amount == -1 || amount == 0) this.sendMsg("An error has occurred with collections!");
+            if(amount == -1 || amount == 0) this.response = "An error has occurred with collections!";
             else if(amount % 5 == 0)
             {
                 int credits = rarityCredits[1] + rarityCredits[2] * (amount / 5 - 1);
                 this.playerData.changeCredits(credits);
 
-                this.sendMsg("Reached Collection Milestone for " + caught.getName() + ": **" + amount + "** (**" + credits + "**c)!");
+                this.response = "Reached Collection Milestone for " + caught.getName() + ": **" + amount + "** (**" + credits + "**c)!";
             }
             else if(amount == 1)
             {
                 int credits = rarityCredits[0];
                 this.playerData.changeCredits(credits);
 
-                this.sendMsg("Unlocked Collection for " + caught.getName() + " (**" + credits + "**c)!");
+                this.response = "Unlocked Collection for " + caught.getName() + " (**" + credits + "**c)!";
             }
 
             if(amount >= 10) Achievements.grant(this.player.getId(), Achievements.REACHED_COLLECTION_MILESTONE_10, this.event);
@@ -90,7 +90,7 @@ public class CommandCatch extends Command
 
                 this.playerData.getStats().incr(PlayerStatistic.NATURAL_REDEEMS_EARNED);
 
-                this.sendMsg("You earned a redeem for catching a Pokemon with high IVs!");
+                this.response = "You earned a redeem for catching a Pokemon with high IVs!";
             }
 
             //Statistics
@@ -115,7 +115,7 @@ public class CommandCatch extends Command
                 }
             });
 
-            this.sendMsg("You caught a **Level " + caught.getLevel() + " " + caught.getName() + "** (Collection: " + amount + ")!");
+            this.response = "You caught a **Level " + caught.getLevel() + " " + caught.getName() + "** (Collection: " + amount + ")!";
 
             SpawnEventHelper.clearSpawn(this.server.getId());
         }
