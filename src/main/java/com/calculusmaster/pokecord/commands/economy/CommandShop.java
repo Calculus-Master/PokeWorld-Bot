@@ -52,7 +52,7 @@ public class CommandShop extends Command
         }
         else
         {
-            if(Page.isInvalid(this.msg[1])) this.sendMsg("Invalid page! Use `p!shop` to see the possible shop pages.");
+            if(Page.isInvalid(this.msg[1])) this.response = "Invalid page! Use `p!shop` to see the possible shop pages.";
             else
             {
                 Page p = Page.cast(this.msg[1]);
