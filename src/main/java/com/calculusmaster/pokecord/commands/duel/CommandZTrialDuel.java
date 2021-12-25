@@ -28,24 +28,21 @@ public class CommandZTrialDuel extends Command
             Type type = Type.cast(this.msg[1]);
             ZCrystal crystal = Objects.requireNonNull(ZCrystal.getCrystalOfType(type));
 
-            if(DuelHelper.isInDuel(this.player.getId())) this.sendMsg(CommandInvalid.ALREADY_IN_DUEL);
-            else if(this.playerData.hasZCrystal(crystal.toString())) this.sendMsg("You already have `" + crystal.getStyledName() + "`!");
-            else if(!this.isEligibleForTrial(type)) this.sendMsg("You are not ready for a Z Trial! You will need to have 50 " + type.getStyledName() + " Pokemon, 2000 credits, and be Pokemon Mastery Level 4 to challenge a Trial!");
+            if(DuelHelper.isInDuel(this.player.getId())) this.response = CommandInvalid.ALREADY_IN_DUEL;
+            else if(this.playerData.hasZCrystal(crystal.toString())) this.response = "You already have `" + crystal.getStyledName() + "`!";
+            else if(!this.isEligibleForTrial(type)) this.response = "You are not ready for a Z Trial! You will need to have 50 " + type.getStyledName() + " Pokemon, 2000 credits, and be Pokemon Mastery Level 4 to challenge a Trial!";
             else
             {
                 this.playerData.changeCredits(-1 * 2000);
 
                 Duel d = ZTrialDuel.create(this.player.getId(), this.event, type);
 
-                this.sendMsg("A Trial Leader appears!");
+                this.response = "A Trial Leader appears!";
 
                 d.sendTurnEmbed();
             }
         }
-        else
-        {
-            this.sendMsg("Invalid arguments! Make sure your Type name is correct.");
-        }
+        else this.response = "Invalid arguments! Make sure your Type name is correct.";
 
         return this;
     }
