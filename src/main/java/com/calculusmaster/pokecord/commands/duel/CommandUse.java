@@ -45,12 +45,12 @@ public class CommandUse extends Command
         final DuelChecks c = new DuelChecks(this.player.getId());
         final Player p = d.getPlayers()[d.indexOf(this.player.getId())];
 
-        boolean formatNormal = this.msg.length == 2 && this.isNumeric(1) && this.getInt(1) > 0 && this.getInt(1) < 5;
-        boolean formatSwap = this.msg.length == 3 && (this.msg[1].equals("swap") || this.msg[1].equals("s")) && this.isNumeric(2) && this.getInt(2) > 0 && this.getInt(2) <= d.getSize();
-        boolean formatZMove = this.msg.length == 3 && (this.msg[1].equals("zmove") || this.msg[1].equals("z")) && isNumeric(2) && this.getInt(2) > 0 && this.getInt(2) < 5;
-        boolean formatDynamax = this.msg.length == 3 && (this.msg[1].equals("dynamax") || this.msg[1].equals("d")) && isNumeric(2) && this.getInt(2) > 0 && this.getInt(2) < 5;
+        boolean normal = this.msg.length == 2 && this.isNumeric(1) && this.getInt(1) > 0 && this.getInt(1) < 5;
+        boolean swap = this.msg.length == 3 && (this.msg[1].equals("swap") || this.msg[1].equals("s")) && this.isNumeric(2) && this.getInt(2) > 0 && this.getInt(2) <= d.getSize();
+        boolean zmove = this.msg.length == 3 && (this.msg[1].equals("zmove") || this.msg[1].equals("z")) && isNumeric(2) && this.getInt(2) > 0 && this.getInt(2) < 5;
+        boolean dynamax = this.msg.length == 3 && (this.msg[1].equals("dynamax") || this.msg[1].equals("d")) && isNumeric(2) && this.getInt(2) > 0 && this.getInt(2) < 5;
 
-        if(!formatNormal && !formatSwap && !formatZMove && !formatDynamax)
+        if(!normal && !swap && !zmove && !dynamax)
         {
             this.response = "Invalid Turn Action! Valid formats are: `p!use <num>`, `p!use <s:swap> <index>`, `p!use <z:zmove> <num>`, and `p!use <d:dynamax> <num>`, where `num` is the move number and `index` is the index of the Pokemon in your team";
             return this;
@@ -68,7 +68,7 @@ public class CommandUse extends Command
         }
 
         //Normal Move
-        if(formatNormal)
+        if(normal)
         {
             d.submitMove(this.player.getId(), this.getInt(1), 'm');
             this.deleteOriginal();
@@ -80,7 +80,7 @@ public class CommandUse extends Command
         }
 
         //Swap
-        if(formatSwap)
+        if(swap)
         {
             if(c.checkFailed(SWAP_ISABLE))
             {
@@ -105,7 +105,7 @@ public class CommandUse extends Command
         }
 
         //Z Move
-        if(formatZMove)
+        if(zmove)
         {
             if(!this.serverData.areZMovesEnabled())
             {
@@ -144,7 +144,7 @@ public class CommandUse extends Command
         }
 
         //Dynamax
-        if(formatDynamax)
+        if(dynamax)
         {
             if(!this.serverData.isDynamaxEnabled())
             {
