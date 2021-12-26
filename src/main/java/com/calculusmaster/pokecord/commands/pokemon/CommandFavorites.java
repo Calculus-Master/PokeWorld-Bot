@@ -36,28 +36,28 @@ public class CommandFavorites extends Command
         {
             Pokemon p = Pokemon.build(this.playerData.getPokemonList().get(this.getInt(2) - 1));
 
-            if(favorites.contains(p.getUUID())) this.sendMsg(p.getName() + " is already in your favorites!");
+            if(favorites.contains(p.getUUID())) this.response = p.getName() + " is already in your favorites!";
             else
             {
                 this.playerData.addPokemonToFavorites(p.getUUID());
-                this.sendMsg("Added **Level " + p.getLevel() + " " + p.getName() + "** to your favorites!");
+                this.response = "Added **Level " + p.getLevel() + " " + p.getName() + "** to your favorites!";
             }
         }
         else if(remove)
         {
             Pokemon p = Pokemon.build(this.playerData.getPokemonList().get(this.getInt(2) - 1));
 
-            if(!favorites.contains(p.getUUID())) this.sendMsg(p.getName() + " is not in your favorites!");
+            if(!favorites.contains(p.getUUID())) this.response = p.getName() + " is not in your favorites!";
             else
             {
                 this.playerData.removePokemonFromFavorites(p.getUUID());
-                this.sendMsg("Removed **Level " + p.getLevel() + " " + p.getName() + "** from your favorites!");
+                this.response = "Removed **Level " + p.getLevel() + " " + p.getName() + "** from your favorites!";
             }
         }
         else if(clear)
         {
             this.playerData.clearFavorites();
-            this.sendMsg("Your Favorites list was successfully cleared!");
+            this.response = "Your Favorites list was successfully cleared!";
         }
         else this.embed.setDescription(CommandInvalid.getShort());
 
