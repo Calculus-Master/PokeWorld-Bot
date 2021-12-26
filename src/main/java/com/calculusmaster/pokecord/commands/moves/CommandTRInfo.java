@@ -19,14 +19,14 @@ public class CommandTRInfo extends Command
     @Override
     public Command runCommand()
     {
-        if(this.msg.length < 2) this.sendMsg("Invalid Arguments!");
+        if(this.msg.length < 2) this.response = "Invalid Arguments!";
         else
         {
             String input = this.msg[1].replaceAll("tr", "");
 
             if(!input.chars().allMatch(Character::isDigit) || (Integer.parseInt(input) < 0 || Integer.parseInt(input) > 99))
             {
-                this.sendMsg("Invalid TR Number!");
+                this.response = "Invalid TR Number!";
                 return this;
             }
 

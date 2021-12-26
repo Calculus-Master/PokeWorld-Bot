@@ -19,14 +19,14 @@ public class CommandTMInfo extends Command
     @Override
     public Command runCommand()
     {
-        if(this.msg.length < 2) this.sendMsg("Invalid Arguments!");
+        if(this.msg.length < 2) this.response = "Invalid Arguments!";
         else
         {
             String input = this.msg[1].replaceAll("tm", "");
 
             if(!input.chars().allMatch(Character::isDigit) || (Integer.parseInt(input) < 1 || Integer.parseInt(input) > 100))
             {
-                this.sendMsg("Invalid TM Number!");
+                this.response = "Invalid TM Number!";
                 return this;
             }
 
