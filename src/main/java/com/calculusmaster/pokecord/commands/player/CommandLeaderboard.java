@@ -32,7 +32,7 @@ public class CommandLeaderboard extends Command
         boolean server = this.msg.length == 2 && this.msg[1].equals("server");
         boolean specific = this.msg.length == 2;
 
-        this.sendMsg("Calculating Player Scores...");
+        this.response = "Calculating Player Scores...";
 
         this.reset();
         this.generatePlayerQueries(server);
@@ -52,7 +52,7 @@ public class CommandLeaderboard extends Command
 
                 if(PLAYER_QUERIES.stream().noneMatch(p -> p.getID().equals(targetID)))
                 {
-                    this.sendMsg(this.mentions.get(0).getEffectiveName() + " is not registered!");
+                    this.response = this.mentions.get(0).getEffectiveName() + " is not registered!";
                     return this;
                 }
 
@@ -64,7 +64,7 @@ public class CommandLeaderboard extends Command
                 this.embed.setTitle("Score Calculation for " + PLAYER_QUERIES.stream().filter(p -> p.getID().equals(targetID)).collect(Collectors.toList()).get(0).getUsername());
                 this.embed.setFooter("Higher weight values mean that the component has a larger impact on your overall score value!");
             }
-            else this.sendMsg("Invalid Arguments!");
+            else this.response = "Invalid Arguments!";
         }
         else
         {
