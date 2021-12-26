@@ -21,9 +21,9 @@ public class CommandEquip extends Command
         {
             int num = this.getInt(1);
 
-            if(this.playerData.getZCrystalList().isEmpty()) this.sendMsg("You do not have any Z Crystals!");
-            else if(num < 1 || num > this.playerData.getZCrystalList().size()) this.sendMsg("Invalid number!");
-            else if(!this.serverData.canEquipZCrystalDuel() && DuelHelper.isInDuel(this.player.getId())) this.sendMsg("You can't equip Z Crystals while in a Duel!");
+            if(this.playerData.getZCrystalList().isEmpty()) this.response = "You do not have any Z Crystals!";
+            else if(num < 1 || num > this.playerData.getZCrystalList().size()) this.response = "Invalid number!";
+            else if(!this.serverData.canEquipZCrystalDuel() && DuelHelper.isInDuel(this.player.getId())) this.response = "You can't equip Z Crystals while in a Duel!";
             else
             {
                 String z = this.playerData.getZCrystalList().get(this.getInt(1) - 1);
@@ -34,7 +34,7 @@ public class CommandEquip extends Command
 
                 this.playerData.grantAchievement(Achievements.EQUIP_FIRST_ZCRYSTAL, this.event);
 
-                this.sendMsg("Equipped `" + z + "`!");
+                this.response = "Equipped `" + z + "`!";
             }
         }
 
