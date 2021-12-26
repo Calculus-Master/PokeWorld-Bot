@@ -28,7 +28,7 @@ public class CommandEvolve extends Command
     {
         if(DuelHelper.isInDuel(this.player.getId()))
         {
-            this.sendMsg("You cannot evolve Pokemon while in a duel!");
+            this.response = "You cannot evolve Pokemon while in a duel!";
             return this;
         }
 
@@ -114,9 +114,9 @@ public class CommandEvolve extends Command
 
             this.playerData.updateBountyProgression(ObjectiveType.EVOLVE_POKEMON);
 
-            this.sendMsg("`" + selected.getName() + "` evolved into `" + target + "`!");
+            this.response = "`" + selected.getName() + "` evolved into `" + target + "`!";
         }
-        else this.sendMsg(selected.getName() + " cannot evolve right now!");
+        else this.response = selected.getName() + " cannot evolve right now!";
 
         return this;
     }
