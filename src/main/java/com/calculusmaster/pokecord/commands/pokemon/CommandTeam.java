@@ -41,7 +41,7 @@ public class CommandTeam extends Command
 
             if(t.getStatus().equals(TournamentHelper.TournamentStatus.DUELING) && !t.isPlayerEliminated(this.player.getId()))
             {
-                this.sendMsg("You can't change your team while in a Tournament!");
+                this.response = "You can't change your team while in a Tournament!";
                 return this;
             }
         }
@@ -57,7 +57,7 @@ public class CommandTeam extends Command
             }
             else if(add && this.playerData.getTeam().size() == MAX_TEAM_SIZE)
             {
-                this.sendMsg("Your team is full! Use p!team set to change certain slots!");
+                this.response = "Your team is full! Use p!team set to change certain slots!";
                 return this;
             }
             else
@@ -66,7 +66,7 @@ public class CommandTeam extends Command
 
                 if(this.playerData.getTeam().contains(UUID))
                 {
-                    this.sendMsg("This Pokemon is already in your team!");
+                    this.response = "This Pokemon is already in your team!";
                     return this;
                 }
                 else
@@ -74,7 +74,7 @@ public class CommandTeam extends Command
                     this.playerData.addPokemonToTeam(UUID, teamIndex);
 
                     Pokemon p = Pokemon.build(UUID);
-                    this.sendMsg("Added " + p.getName() + " to your team!");
+                    this.response = "Added " + p.getName() + " to your team!";
                 }
             }
         }
@@ -92,7 +92,7 @@ public class CommandTeam extends Command
 
                 this.playerData.removePokemonFromTeam(teamIndex);
 
-                this.sendMsg("Removed " + p.getName() + " from your team!");
+                this.response = "Removed " + p.getName() + " from your team!";
             }
         }
         else if(swap)
@@ -108,20 +108,20 @@ public class CommandTeam extends Command
             {
                 this.playerData.swapPokemonInTeam(fromIndex, toIndex);
 
-                this.sendMsg("Swapped pokemon number " + fromIndex + " and " + toIndex + " in your team!");
+                this.response = "Swapped pokemon number " + fromIndex + " and " + toIndex + " in your team!";
             }
         }
         else if(clear)
         {
             this.playerData.clearTeam();
 
-            this.sendMsg(this.playerData.getMention() + ": Your team was successfully cleared!");
+            this.response = this.playerData.getMention() + ": Your team was successfully cleared!";
         }
         else
         {
             if(this.playerData.getTeam().isEmpty())
             {
-                this.sendMsg("You don't have any Pokemon in your team! Add Pokemon using `p!team add <number>`!");
+                this.response = "You don't have any Pokemon in your team! Add Pokemon using `p!team add <number>`!";
                 return this;
             }
 
