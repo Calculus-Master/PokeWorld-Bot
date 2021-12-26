@@ -34,7 +34,7 @@ public class CommandRelease extends Command
         {
             if(!hasActiveRequest)
             {
-                this.sendMsg("You don't have any active release requests!");
+                this.response = "You don't have any active release requests!";
                 return this;
             }
 
@@ -64,14 +64,14 @@ public class CommandRelease extends Command
 
                 releaseRequests.remove(this.player.getId());
 
-                this.sendMsg("Released your " + label + "!");
+                this.response = "Released your " + label + "!";
                 return this;
             }
             else if(deny)
             {
                 releaseRequests.remove(this.player.getId());
 
-                this.sendMsg("Cancelled release of your " + label + "!");
+                this.response = "Cancelled release of your " + label + "!";
                 return this;
             }
         }
@@ -79,12 +79,12 @@ public class CommandRelease extends Command
         {
             if(this.playerData.getPokemonList().size() == 1)
             {
-                this.sendMsg("You can't release your last Pokemon!");
+                this.response = "You can't release your last Pokemon!";
                 return this;
             }
             else if(hasActiveRequest)
             {
-                this.sendMsg("You already have an active release request (Type `p!release deny` to remove it)!");
+                this.response = "You already have an active release request (Type `p!release deny` to remove it)!";
                 return this;
             }
             else
@@ -96,7 +96,7 @@ public class CommandRelease extends Command
                 Pokemon p = Pokemon.build(UUID);
                 String label = "**Level " + p.getLevel() + " " + p.getName() + "**";
 
-                this.sendMsg("Do you want to release your " + label + "? Type `p!release confirm` or `p!release deny` to continue!");
+                this.response = "Do you want to release your " + label + "? Type `p!release confirm` or `p!release deny` to continue!";
                 return this;
             }
         }
