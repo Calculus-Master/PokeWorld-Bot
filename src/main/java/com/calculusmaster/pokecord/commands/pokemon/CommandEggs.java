@@ -39,16 +39,16 @@ public class CommandEggs extends Command
         {
             int index = this.getInt(2);
 
-            if(index < 1 || index > this.playerData.getOwnedEggIDs().size()) this.sendMsg("Invalid index!");
-            else if(this.playerData.getActiveEggID().equals(this.playerData.getOwnedEggIDs().get(index - 1))) this.sendMsg("This egg is already your active one!");
+            if(index < 1 || index > this.playerData.getOwnedEggIDs().size()) this.response = "Invalid index!";
+            else if(this.playerData.getActiveEggID().equals(this.playerData.getOwnedEggIDs().get(index - 1))) this.response = "This egg is already your active one!";
             else
             {
                 this.playerData.setActiveEgg(this.playerData.getOwnedEggIDs().get(index - 1));
 
-                this.sendMsg("Successfully set this egg as your active one!");
+                this.response = "Successfully set this egg as your active one!";
             }
         }
-        else this.sendMsg(CommandInvalid.getShort());
+        else this.response = CommandInvalid.getShort();
 
         return this;
     }
