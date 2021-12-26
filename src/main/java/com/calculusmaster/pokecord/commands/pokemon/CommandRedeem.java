@@ -19,12 +19,12 @@ public class CommandRedeem extends Command
     @Override
     public Command runCommand()
     {
-        if(this.playerData.getRedeems() < 1) this.sendMsg(this.playerData.getMention() + ": You don't have any redeems!");
+        if(this.playerData.getRedeems() < 1) this.response = this.playerData.getMention() + ": You don't have any redeems!";
         else if(this.msg.length >= 2)
         {
             String pokemon = Global.normalize(this.getMultiWordContent(1));
 
-            if(!this.isPokemon(pokemon)) this.sendMsg("Invalid Pokemon!");
+            if(!this.isPokemon(pokemon)) this.response = "Invalid Pokemon!";
             else
             {
                 Pokemon p = Pokemon.create(pokemon);
@@ -37,7 +37,7 @@ public class CommandRedeem extends Command
 
                 Achievements.grant(this.player.getId(), Achievements.REDEEMED_FIRST_POKEMON, this.event);
 
-                this.sendMsg(this.playerData.getMention() + ": You redeemed a Level " + p.getLevel() + " " + p.getName() + "!");
+                this.response = this.playerData.getMention() + ": You redeemed a Level " + p.getLevel() + " " + p.getName() + "!";
             }
         }
         else this.embed.setDescription(CommandInvalid.getShort());
