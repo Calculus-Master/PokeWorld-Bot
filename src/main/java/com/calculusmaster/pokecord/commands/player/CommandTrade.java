@@ -33,7 +33,7 @@ public class CommandTrade extends Command
 
         if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_TRADE)
         {
-            this.sendMsg("You need to be Pokemon Mastery Level " + PlayerLevel.REQUIRED_LEVEL_TRADE + " to participate in Trading!");
+            this.response = "You need to be Pokemon Mastery Level " + PlayerLevel.REQUIRED_LEVEL_TRADE + " to participate in Trading!";
             return this;
         }
 
@@ -45,15 +45,15 @@ public class CommandTrade extends Command
 
             if(TradeHelper.isInTrade(otherID))
             {
-                this.sendMsg(otherName + " is already in a trade!");
+                this.response = otherName + " is already in a trade!";
             }
             else if(otherID.equals(this.player.getId()))
             {
-                this.sendMsg("You can't trade with yourself!");
+                this.response = "You can't trade with yourself!";
             }
             else if(other.getLevel() < PlayerLevel.REQUIRED_LEVEL_TRADE)
             {
-                this.sendMsg(otherName + " needs to be Pokemon Mastery Level " + PlayerLevel.REQUIRED_LEVEL_TRADE + " to participate in Trading!");
+                this.response = otherName + " needs to be Pokemon Mastery Level " + PlayerLevel.REQUIRED_LEVEL_TRADE + " to participate in Trading!";
             }
             else
             {
@@ -99,7 +99,7 @@ public class CommandTrade extends Command
                 if(!trade.offer(this.player.getId()).isValid())
                 {
                     trade.offer(this.player.getId()).clear();
-                    this.sendMsg("Your Trade Offer is invalid! It has been reset!");
+                    this.response = "Your Trade Offer is invalid! It has been reset!";
                 }
                 else trade.confirm(this.player.getId());
 
