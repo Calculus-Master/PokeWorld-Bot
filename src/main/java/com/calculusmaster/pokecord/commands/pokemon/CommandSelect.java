@@ -26,14 +26,14 @@ public class CommandSelect extends Command
 
             if(t.getSize() == 1 && t.getStatus().equals(TournamentHelper.TournamentStatus.DUELING) && !t.isPlayerEliminated(this.player.getId()))
             {
-                this.sendMsg("You can't change your selected Pokemon while in a Tournament!");
+                this.response = "You can't change your selected Pokemon while in a Tournament!";
                 return this;
             }
         }
 
         if(number || latest)
         {
-            if(number && this.getInt(1) > this.playerData.getPokemonList().size()) this.sendMsg("That number exceeds the amount of Pokemon you have!");
+            if(number && this.getInt(1) > this.playerData.getPokemonList().size()) this.response = "That number exceeds the amount of Pokemon you have!";
             else
             {
                 int newSelected = latest ? this.playerData.getPokemonList().size() : this.getInt(1);
@@ -41,10 +41,10 @@ public class CommandSelect extends Command
                 this.playerData.setSelected(newSelected);
 
                 Pokemon p = this.playerData.getSelectedPokemon();
-                this.sendMsg("You selected your **Level " + p.getLevel() + " " + p.getName() + "** (#" + newSelected + ")!");
+                this.response = "You selected your **Level " + p.getLevel() + " " + p.getName() + "** (#" + newSelected + ")!";
             }
         }
-        else this.sendMsg(CommandInvalid.getShort());
+        else this.response = CommandInvalid.getShort();
 
         return this;
     }
