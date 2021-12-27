@@ -12,6 +12,82 @@ public class PlayerLevel
 {
     public static final Map<Integer, LevelTaskHandler> LEVEL_REQUIREMENTS = new HashMap<>();
 
+    // Level 1 - Essential Features (p!start)
+    // Catching and Viewing Pokemon – p!catch, p!pokemon, p!evolve, p!select, p!release
+    // Information – p!dex, p!info, p!serverinfo
+    // Moves – p!moves, p!learn, p!replace
+    // Misc Utilities – p!profile, p!level, p!tip, p!report, p!help, p!settings, p!balance
+
+    // Level 2 - Expanded Essential Features (Moves)
+    // Pokemon Evolution and Release – p!evolve, p!release
+    // Move Information – p!abilityinfo, p!moveinfo
+    // Moves – p!moves, p!learn, p!replace
+    // Additional Misc – p!location, p!achievements
+
+    // Level 3 - Player Interaction
+    // PvP Duels (Limited to 1v1) – p!duel, p!use
+    // Trading – p!trade
+
+    // Level 4 – Shop & Inventory
+    // Shop Interaction – p!shop, p!buy
+    // Inventory – p!inventory
+    // Redeems – p!redeem
+
+    // Level 5 – Expanding Duels (PvP)
+    // PvP Duels (Limited to 6v6)
+    // Pokemon Teams – p!team
+    // Pokemon Favorites – p!favorites
+
+    // Level 6 – Bounties
+    // Bounties – p!bounties
+    // Server Targets – p!target
+    // Pursuits (Limited to Mini/Small/Average) – p!pursuit
+
+    // Level 7 – Expanding Duels (PvE)
+    // PvE Duels – p!wild, p!trainer (Daily, not Elite), p!flee
+
+    // Level 8 – Pokemon Forms
+    // Forms – p!forms
+
+    // Level 9 – Basic Pokemon Items
+    // Items – p!inventory, p!give
+
+    // Level 10 – Expanding Duels (PvP)
+    // PvP Duels (Unlimited)
+    // Elite Duels – p!trainer elite / p!elite TODO: Make Elite Duels their own thing
+
+    // Level 11 – Mega Evolution
+    // Mega – p!mega, p!shop
+
+    // Level 12 – Advanced Pokemon Items
+    // TMs / TRs – p!inventory, p!teach, p!tminfo, p!trinfo
+
+    // Level 13 – Market
+    // Market – p!market
+
+    // Level 14 – Z-Crystals
+    // Z-Crystal Access – p!ztrial, p!teach, p!equip, p!inventory
+
+    // Level 15 – Expanding Duels (PvP & PvE)
+    // Raid – p!raid
+    // Gym – p!gym TODO: Remove Gym system
+
+    // Level 16 – Breeding
+    // Breeding – p!breed
+    // Eggs – p!egg
+
+    // Level 17 – Expanding Pursuits
+    // Pursuits (Long/Journey/Legend) – p!pursuit
+
+    // Level 18 – Expanding Duels (PvE)
+    // Gauntlets – p!gauntlet
+
+    // Level 19 – Tournaments
+    // Tournaments – p!tournament
+
+    // Level 20 – The Apex
+    // TODO: Brainstorm other features for this bot – Pokemon Prestige? Endgame Duel Type?
+
     public static final int REQUIRED_LEVEL_TRADE = 2;
     public static final int REQUIRED_LEVEL_MARKET_LIST = 3;
     public static final int REQUIRED_LEVEL_TOURNAMENT_CREATE = 5;
@@ -29,6 +105,8 @@ public class PlayerLevel
     {
         registerNew(2)
                 .setExp(100)
+                .add(new PokemonLevelTask(15))
+                .add(new CreditsLevelTask(2000))
                 .completeRegistry();
 
         registerNew(3)
