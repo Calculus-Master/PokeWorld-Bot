@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands.moves;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.MoveData;
@@ -19,6 +20,8 @@ public class CommandTRInfo extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.ACCESS_TRS)) return this.invalidMasteryLevel(Feature.ACCESS_TRS);
+
         if(this.msg.length < 2) this.response = "Invalid Arguments!";
         else
         {

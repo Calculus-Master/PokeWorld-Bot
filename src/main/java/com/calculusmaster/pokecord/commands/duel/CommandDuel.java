@@ -5,7 +5,7 @@ import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
-import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -35,6 +35,8 @@ public class CommandDuel extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.PVP_DUELS_1V1)) return this.invalidMasteryLevel(Feature.PVP_DUELS_1V1);
+
         boolean info = this.msg.length == 2 && Arrays.asList("info", "tutorial", "how").contains(this.msg[1]);
 
         if(this.msg.length == 1 || info)
@@ -74,7 +76,9 @@ public class CommandDuel extends Command
             {
                 Duel d = DuelHelper.instance(this.player.getId());
 
-                if(d.getSize() != 1 && d.getSize() > this.playerData.getTeam().size())
+                if(d.getSize() > 1 && d.getSize() <= 6 && this.insufficientMasteryLevel(Feature.PVP_DUELS_6v6)) this.invalidMasteryLevel(Feature.PVP_DUELS_6v6);
+                else if(d.getSize() > 6 && this.insufficientMasteryLevel(Feature.PVP_DUELS_UNLIMITED)) return this.invalidMasteryLevel(Feature.PVP_DUELS_UNLIMITED);
+                else if(d.getSize() != 1 && d.getSize() > this.playerData.getTeam().size())
                 {
                     this.response = "Your team needs to contain at least " + d.getSize() + " Pokemon to participate! Deleting duel request!";
 
@@ -105,8 +109,10 @@ public class CommandDuel extends Command
         int size = 1;
 
         if(this.msg.length >= 3) size = this.getInt(2);
-
         if(TournamentHelper.isInTournament(this.player.getId())) size = TournamentHelper.instance(this.player.getId()).getSize();
+
+        if(size > 1 && size <= 6 && this.insufficientMasteryLevel(Feature.PVP_DUELS_6v6)) this.invalidMasteryLevel(Feature.PVP_DUELS_6v6);
+        else if(size > 6 && this.insufficientMasteryLevel(Feature.PVP_DUELS_UNLIMITED)) return this.invalidMasteryLevel(Feature.PVP_DUELS_UNLIMITED);
 
         //Player wants to start a duel with the mention, check all necessary things
 
@@ -131,8 +137,6 @@ public class CommandDuel extends Command
         else if(size != 1 && new PlayerDataQuery(opponentID).getTeam().isEmpty()) this.response = opponent.getEffectiveName() + " needs to create a Pokemon team!";
         else if(DuelHelper.isInDuel(opponentID)) this.response = opponent.getEffectiveName() + " is already in a Duel!";
         else if(this.player.getId().equals(opponentID)) this.response = "You cannot duel yourself!";
-        else if(size >= 6 && (this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_UNLIMITED_DUEL_SIZE || other.getLevel() < PlayerLevel.REQUIRED_LEVEL_UNLIMITED_DUEL_SIZE))
-            this.response = "Both you and " + opponent.getEffectiveName() + " must be Pokemon Mastery Level " + PlayerLevel.REQUIRED_LEVEL_UNLIMITED_DUEL_SIZE + " to create duels with teams of more than 6 Pokemon";
         else if(checkTeam && this.isInvalidTeam(size)) this.createInvalidTeamEmbed(size);
         else
         {

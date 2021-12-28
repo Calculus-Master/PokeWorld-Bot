@@ -7,7 +7,6 @@ import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.Item;
-import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
@@ -33,6 +32,8 @@ public class CommandMarket extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.ACCESS_MARKET)) return this.invalidMasteryLevel(Feature.ACCESS_MARKET);
+
         boolean list = this.msg.length >= 4 && (this.msg[1].equals("list") || this.msg[1].equals("sell")) && this.isNumeric(2) && this.isNumeric(3) && this.getInt(2) >= 1 && this.getInt(2) <= this.playerData.getPokemonList().size();
         boolean buy = this.msg.length == 3 && this.msg[1].equals("buy") && MarketEntry.isValidID(this.msg[2]);
         boolean collect = this.msg.length == 3 && this.msg[1].equals("collect") && MarketEntry.isValidID(this.msg[2]);
@@ -40,15 +41,11 @@ public class CommandMarket extends Command
 
         if(list)
         {
-            if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_MARKET_LIST) this.response = "You need to be Pokemon Mastery Level " + PlayerLevel.REQUIRED_LEVEL_MARKET_LIST + " to list Pokemon on the market!";
-            else
-            {
-                MarketEntry newEntry = MarketEntry.create(this.player.getId(), this.player.getName(), this.playerData.getPokemonList().get(this.getInt(2) - 1), this.getInt(3));
+            MarketEntry newEntry = MarketEntry.create(this.player.getId(), this.player.getName(), this.playerData.getPokemonList().get(this.getInt(2) - 1), this.getInt(3));
 
-                this.playerData.removePokemon(newEntry.pokemonID);
+            this.playerData.removePokemon(newEntry.pokemonID);
 
-                this.response = "You successfully listed your Level " + newEntry.pokemon.getLevel() + " " + newEntry.pokemon.getName() + "` for " + newEntry.price + " credits!";
-            }
+            this.response = "You successfully listed your Level " + newEntry.pokemon.getLevel() + " " + newEntry.pokemon.getName() + "` for " + newEntry.price + " credits!";
         }
         else if(buy || collect || info)
         {

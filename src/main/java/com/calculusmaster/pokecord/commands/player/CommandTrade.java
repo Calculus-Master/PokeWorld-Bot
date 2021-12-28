@@ -2,9 +2,9 @@ package com.calculusmaster.pokecord.commands.player;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
-import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
 import com.calculusmaster.pokecord.game.trade.Trade;
 import com.calculusmaster.pokecord.game.trade.TradeHelper;
 import com.calculusmaster.pokecord.game.trade.elements.TradeOffer;
@@ -25,15 +25,11 @@ public class CommandTrade extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.TRADE)) return this.invalidMasteryLevel(Feature.TRADE);
+
         if(this.msg.length == 1)
         {
             this.embed.setDescription(CommandInvalid.getShort());
-            return this;
-        }
-
-        if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_TRADE)
-        {
-            this.response = "You need to be Pokemon Mastery Level " + PlayerLevel.REQUIRED_LEVEL_TRADE + " to participate in Trading!";
             return this;
         }
 
@@ -43,18 +39,8 @@ public class CommandTrade extends Command
             PlayerDataQuery other = new PlayerDataQuery(otherID);
             String otherName = other.getUsername();
 
-            if(TradeHelper.isInTrade(otherID))
-            {
-                this.response = otherName + " is already in a trade!";
-            }
-            else if(otherID.equals(this.player.getId()))
-            {
-                this.response = "You can't trade with yourself!";
-            }
-            else if(other.getLevel() < PlayerLevel.REQUIRED_LEVEL_TRADE)
-            {
-                this.response = otherName + " needs to be Pokemon Mastery Level " + PlayerLevel.REQUIRED_LEVEL_TRADE + " to participate in Trading!";
-            }
+            if(TradeHelper.isInTrade(otherID)) this.response = otherName + " is already in a trade!";
+            else if(otherID.equals(this.player.getId())) this.response = "You can't trade with yourself!";
             else
             {
                 Trade.create(this.player.getId(), otherID);

@@ -4,7 +4,6 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.Item;
-import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -28,11 +27,6 @@ public class CommandActivate extends Command
         else if(!isNumeric(1) || this.playerData.getItemList().size() <= (Integer.parseInt(this.msg[1]) - 1))
         {
             this.embed.setDescription(CommandInvalid.getShort());
-            return this;
-        }
-        else if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_ACTIVATE)
-        {
-            this.invalidMasteryLevel(PlayerLevel.REQUIRED_LEVEL_ACTIVATE, "to activate functional items");
             return this;
         }
 

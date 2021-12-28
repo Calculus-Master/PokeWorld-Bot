@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.extension.GymDuel;
 import com.calculusmaster.pokecord.game.duel.players.GymLeader;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
@@ -24,6 +25,8 @@ public class CommandGymDuel extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.PVE_DUELS_GYM)) return this.invalidMasteryLevel(Feature.PVE_DUELS_GYM);
+
         int level = this.playerData.getGymLevel();
 
         if(level - 1 >= GymLeader.GYM_LEADERS.size())

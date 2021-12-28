@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands.economy;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
@@ -19,6 +20,8 @@ public class CommandInventory extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.ACCESS_INVENTORY)) return this.invalidMasteryLevel(Feature.ACCESS_INVENTORY);
+
         if(this.msg.length == 1)
         {
             this.embed.setTitle(this.playerData.getUsername() + "'s Inventory");
@@ -45,6 +48,8 @@ public class CommandInventory extends Command
                 }
                 else if(Page.ZCRYSTALS.matches(this.msg[1]))
                 {
+                    if(this.insufficientMasteryLevel(Feature.EQUIP_Z_CRYSTALS)) return this.invalidMasteryLevel(Feature.EQUIP_Z_CRYSTALS);
+
                     if(!this.playerData.getZCrystalList().isEmpty())
                     {
                         for(int i = 0; i < this.playerData.getZCrystalList().size(); i++) s.append(i + 1).append(": ").append(this.playerData.getZCrystalList().get(i)).append("\n");
@@ -55,6 +60,8 @@ public class CommandInventory extends Command
                 }
                 else if(Page.TMS.matches(this.msg[1]))
                 {
+                    if(this.insufficientMasteryLevel(Feature.ACCESS_TMS)) return this.invalidMasteryLevel(Feature.ACCESS_TMS);
+
                     if(!this.playerData.getTMList().isEmpty())
                     {
                         for(String tm : this.playerData.getTMList()) s.append(tm).append(" - ").append(TM.get(tm).getMoveName()).append("\n");
@@ -64,6 +71,8 @@ public class CommandInventory extends Command
                 }
                 else if(Page.TRS.matches(this.msg[1]))
                 {
+                    if(this.insufficientMasteryLevel(Feature.ACCESS_TRS)) return this.invalidMasteryLevel(Feature.ACCESS_TRS);
+
                     if(!this.playerData.getTRList().isEmpty())
                     {
                         for(String tr : this.playerData.getTRList()) s.append(tr).append(" - ").append(TR.get(tr).getMoveName()).append("\n");

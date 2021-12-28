@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands.economy;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -14,6 +15,8 @@ public class CommandBalance extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.VIEW_BALANCE)) return this.invalidMasteryLevel(Feature.VIEW_BALANCE);
+
         String targetID = this.mentions.size() > 0 ? this.mentions.get(0).getId() : this.player.getId();
 
         if(!PlayerDataQuery.isRegistered(targetID))

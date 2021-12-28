@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -17,6 +18,8 @@ public class CommandEggs extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.HATCH_EGGS)) return this.invalidMasteryLevel(Feature.HATCH_EGGS);
+
         //boolean info = this.msg.length == 1 ||  (this.msg.length == 2 && this.msg[1].equals("info"));
         boolean view = this.msg.length == 1 || (this.msg.length == 2 && this.msg[1].equals("view"));
         boolean equip = this.msg.length == 3 && this.msg[1].equals("equip") && this.isNumeric(2);

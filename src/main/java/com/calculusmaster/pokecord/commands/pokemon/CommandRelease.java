@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.bounties.objectives.ReleaseNameObjective;
 import com.calculusmaster.pokecord.game.bounties.objectives.ReleasePoolObjective;
 import com.calculusmaster.pokecord.game.bounties.objectives.ReleaseTypeObjective;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -24,6 +25,8 @@ public class CommandRelease extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.RELEASE_POKEMON)) return this.invalidMasteryLevel(Feature.RELEASE_POKEMON);
+
         boolean hasActiveRequest = releaseRequests.containsKey(this.player.getId());
 
         boolean confirm = this.msg.length == 2 && this.msg[1].equals("confirm");

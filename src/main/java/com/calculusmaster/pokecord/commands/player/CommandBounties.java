@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.player;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.bounties.components.Bounty;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -22,6 +23,8 @@ public class CommandBounties extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.ACCESS_BOUNTIES)) return this.invalidMasteryLevel(Feature.ACCESS_BOUNTIES);
+
         this.checkBountyCount();
         List<Bounty> bounties = this.playerData.getBounties();
 

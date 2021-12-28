@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.moves;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -18,6 +19,8 @@ public class CommandTeach extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.TEACH_TMS_TRS)) return this.invalidMasteryLevel(Feature.TEACH_TMS_TRS);
+
         if(this.msg.length < 3 || (!this.msg[1].equals("tr") && !this.msg[1].equals("tm")) || !this.msg[2].chars().allMatch(Character::isDigit))
         {
             this.embed.setDescription(CommandInvalid.getShort());

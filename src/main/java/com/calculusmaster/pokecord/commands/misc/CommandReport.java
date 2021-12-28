@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands.misc;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.util.Mongo;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -16,6 +17,8 @@ public class CommandReport extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.CREATE_REPORT)) return this.invalidMasteryLevel(Feature.CREATE_REPORT);
+
         if(this.msg.length >= 2)
         {
             String report = this.getMultiWordContent(1);

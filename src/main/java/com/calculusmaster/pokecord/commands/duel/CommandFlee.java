@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.extension.TrainerDuel;
 import com.calculusmaster.pokecord.game.duel.extension.WildDuel;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public class CommandFlee extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.FLEE_TRAINER_DUELS)) return this.invalidMasteryLevel(Feature.FLEE_TRAINER_DUELS);
+
         if(!DuelHelper.isInDuel(this.player.getId())) this.response = "You aren't in a duel!";
         else
         {

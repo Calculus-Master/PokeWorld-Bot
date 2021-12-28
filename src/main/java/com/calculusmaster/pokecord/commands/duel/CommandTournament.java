@@ -4,7 +4,7 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
-import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.tournament.Tournament;
 import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -25,6 +25,8 @@ public class CommandTournament extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.PVP_DUELS_TOURNAMENT)) return this.invalidMasteryLevel(Feature.PVP_DUELS_TOURNAMENT);
+
         boolean info = this.msg.length == 2 && this.msg[1].equals("info");
         boolean start = this.msg.length >= 2 && this.msg[1].equals("start");
         boolean create = this.msg.length >= 2 && this.msg[1].equals("create");
@@ -112,12 +114,6 @@ public class CommandTournament extends Command
         }
         else if(create)
         {
-            if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_TOURNAMENT_CREATE)
-            {
-                this.invalidMasteryLevel(PlayerLevel.REQUIRED_LEVEL_TOURNAMENT_CREATE, "to create Tournaments");
-                return this;
-            }
-
             List<String> msg = Arrays.asList(this.msg);
 
             this.mentions = this.mentions.stream().distinct().collect(Collectors.toList());

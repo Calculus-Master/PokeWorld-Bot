@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands.player;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.PlayerStatisticsQuery;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
@@ -19,6 +20,8 @@ public class CommandProfile extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.VIEW_PROFILE)) return this.invalidMasteryLevel(Feature.VIEW_PROFILE);
+
         String targetID = this.player.getId();
         if(this.mentions.size() > 0 && PlayerDataQuery.isRegistered(this.mentions.get(0).getId())) targetID = this.mentions.get(0).getId();
 

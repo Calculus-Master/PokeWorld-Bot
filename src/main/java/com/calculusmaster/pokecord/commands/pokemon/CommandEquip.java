@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -15,6 +16,8 @@ public class CommandEquip extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.EQUIP_Z_CRYSTALS)) return this.invalidMasteryLevel(Feature.EQUIP_Z_CRYSTALS);
+
         boolean equip = this.msg.length == 2 && this.isNumeric(1);
 
         if(equip)

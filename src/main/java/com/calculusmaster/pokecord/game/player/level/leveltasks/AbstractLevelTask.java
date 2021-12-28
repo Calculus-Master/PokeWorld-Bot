@@ -24,14 +24,17 @@ public abstract class AbstractLevelTask
     {
         EXPERIENCE("Earn Pokemon Mastery Level Experience"),
         POKEMON("Collect Pokemon"),
+        POKEMON_LEVEL("Have Pokemon at a Certain Level"),
         CREDITS("Earn Credits"),
+        SHOP_PURCHASED("Buy Items from the Shop"),
         REDEEMS("Earn Redeems"),
-        PVP_DUELS("Win PvP Duels"),
+        PVP_DUELS("Complete PvP Duels"),
         WILD_DUELS("Win Wild Pokemon Duels"),
         TRAINER_DUELS("Win Trainer Duels"),
         RAIDS("Win Raids"),
         ELITE_DUELS("Win Elite Trainer Duels"),
-        BOUNTIES("Complete Bounties");
+        BOUNTIES("Complete Bounties"),
+        POKEMON_EVOLVED("Evolve Pokemon");
 
         private String desc;
         LevelTaskType(String desc)

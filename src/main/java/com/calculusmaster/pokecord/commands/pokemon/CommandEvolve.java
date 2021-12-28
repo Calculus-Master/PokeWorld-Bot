@@ -3,12 +3,14 @@ package com.calculusmaster.pokecord.commands.pokemon;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Location;
 import com.calculusmaster.pokecord.game.enums.elements.Region;
 import com.calculusmaster.pokecord.game.enums.elements.Time;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.SpecialEvolutionRegistry;
+import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.event.LocationEventHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -26,6 +28,8 @@ public class CommandEvolve extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.EVOLVE_POKEMON)) return this.invalidMasteryLevel(Feature.EVOLVE_POKEMON);
+
         if(DuelHelper.isInDuel(this.player.getId()))
         {
             this.response = "You cannot evolve Pokemon while in a duel!";
@@ -113,6 +117,7 @@ public class CommandEvolve extends Command
             Pokemon.updateName(selected, target);
 
             this.playerData.updateBountyProgression(ObjectiveType.EVOLVE_POKEMON);
+            this.playerData.getStats().incr(PlayerStatistic.POKEMON_EVOLVED);
 
             this.response = "`" + selected.getName() + "` evolved into `" + target + "`!";
         }

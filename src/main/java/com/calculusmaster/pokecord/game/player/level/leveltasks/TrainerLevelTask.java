@@ -3,25 +3,25 @@ package com.calculusmaster.pokecord.game.player.level.leveltasks;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 
-public class PvPLevelTask extends AbstractLevelTask
+public class TrainerLevelTask extends AbstractLevelTask
 {
     private final int amount;
 
-    public PvPLevelTask(int amount)
+    public TrainerLevelTask(int amount)
     {
-        super(LevelTaskType.PVP_DUELS);
+        super(LevelTaskType.TRAINER_DUELS);
         this.amount = amount;
     }
 
     @Override
     public boolean isCompleted(PlayerDataQuery p)
     {
-        return p.getStats().get(PlayerStatistic.PVP_DUELS_COMPLETED) >= this.amount;
+        return p.getStats().get(PlayerStatistic.TRAINER_DUELS_WON) >= this.amount;
     }
 
     @Override
     public String getProgressOverview(PlayerDataQuery p)
     {
-        return p.getStats().get(PlayerStatistic.PVP_DUELS_COMPLETED) + " / " + this.amount + " Players dueled";
+        return p.getStats().get(PlayerStatistic.TRAINER_DUELS_WON) + " / " + this.amount + " Trainers defeated";
     }
 }

@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.moves;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -36,6 +37,8 @@ public class CommandAbilityInfo extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.VIEW_ABILITY_INFO)) return this.invalidMasteryLevel(Feature.VIEW_ABILITY_INFO);
+
         if(this.msg.length >= 2 && ABILITY_INFO.containsKey(this.getAbility()))
         {
             this.embed.setTitle("Ability Info: " + this.getAbility());

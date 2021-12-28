@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -17,6 +18,8 @@ public class CommandFavorites extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.CREATE_POKEMON_FAVORITES)) return this.invalidMasteryLevel(Feature.CREATE_POKEMON_FAVORITES);
+
         //p!fav
         boolean view = this.msg.length == 1;
         //p!fav add number

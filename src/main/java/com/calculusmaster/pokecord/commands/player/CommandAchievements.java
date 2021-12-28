@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands.player;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -19,6 +20,8 @@ public class CommandAchievements extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.VIEW_ACHIEVEMENTS)) return this.invalidMasteryLevel(Feature.VIEW_ACHIEVEMENTS);
+
         List<String> achievementsCompleted = this.playerData.getAchievementsList();
         int completed = achievementsCompleted.size();
         int total = Achievements.values().length;

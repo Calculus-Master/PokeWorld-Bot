@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.commands.player;
 
 import com.calculusmaster.pokecord.commands.Command;
-import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
+import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.player.level.leveltasks.AbstractLevelTask;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -19,10 +19,10 @@ public class CommandLevel extends Command
     {
         this.embed.setTitle(this.playerData.getUsername());
 
-        if(PlayerLevel.existsNextLevel(this.playerData))
+        if(!MasteryLevelManager.isMax(this.playerData))
         {
             int level = this.playerData.getLevel();
-            List<AbstractLevelTask> tasks = PlayerLevel.LEVEL_REQUIREMENTS.get(level + 1).getTasks();
+            List<AbstractLevelTask> tasks = MasteryLevelManager.MASTERY_LEVELS.get(level + 1).getTasks();
 
             this.embed.addField("Level", "You are `Level " + level + "`", false);
 

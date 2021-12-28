@@ -4,7 +4,7 @@ import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.game.bounties.components.Bounty;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
-import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
+import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
 import com.calculusmaster.pokecord.util.Mongo;
@@ -67,7 +67,7 @@ public class PlayerDataQuery extends MongoQuery
                 .append("pursuit", new JSONArray())
                 .append("owned_eggs", new JSONArray())
                 .append("active_egg", "")
-                .append("level", 1)
+                .append("level", 0)
                 .append("exp", 0);
 
         Mongo.PlayerData.insertOne(data);
@@ -640,11 +640,13 @@ public class PlayerDataQuery extends MongoQuery
         {
             this.update(Updates.inc("exp", amount));
 
-            if(PlayerLevel.canPlayerLevelUp(this))
+            if(!MasteryLevelManager.isMax(this) && MasteryLevelManager.MASTERY_LEVELS.get(this.getLevel() + 1).canLevelUp(this))
             {
                 this.increaseLevel();
 
-                this.directMessage("You are now Pokemon Mastery Level " + this.getLevel() + "!");
+                if(this.getLevel() == 20) Achievements.grant(this.getID(), Achievements.REACH_MASTERY_LEVEL_20, null);
+
+                this.directMessage("You are now **Pokemon Mastery Level " + this.getLevel() + "**! You've unlocked the following features:\n" + MasteryLevelManager.MASTERY_LEVELS.get(this.getLevel()).getUnlockedFeaturesOverview());
             }
         }
     }

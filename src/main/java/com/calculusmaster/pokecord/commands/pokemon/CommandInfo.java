@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.Item;
@@ -22,7 +23,10 @@ public class CommandInfo extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.VIEW_UNIQUE_INFO)) return this.invalidMasteryLevel(Feature.VIEW_UNIQUE_INFO);
+
         int index = this.playerData.getSelected();
+
         if(this.msg.length == 2)
         {
             if("latest".contains(this.msg[1])) index = this.playerData.getPokemonList().size() - 1;

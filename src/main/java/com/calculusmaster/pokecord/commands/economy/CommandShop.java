@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands.economy;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Nature;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
@@ -44,6 +45,8 @@ public class CommandShop extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.ACCESS_BUY_SHOP)) return this.invalidMasteryLevel(Feature.ACCESS_BUY_SHOP);
+
         if(this.msg.length == 1)
         {
             this.embed.setTitle("Pokecord2 Shop");
@@ -61,6 +64,8 @@ public class CommandShop extends Command
 
                 if(Page.MEGA.matches(this.msg[1]))
                 {
+                    if(this.insufficientMasteryLevel(Feature.ACQUIRE_POKEMON_MEGA_EVOLUTIONS)) return this.invalidMasteryLevel(Feature.ACQUIRE_POKEMON_MEGA_EVOLUTIONS);
+
                     this.embed
                             .addField("Price", "All Mega Evolutions cost `" + Prices.SHOP_MEGA.get() + "` credits!", false)
                             .addField("Single Mega Evolution", this.getCommandFormatted("buy mega") + " – Buy the Mega Evolution of a Pokemon that does not have an X or Y Mega Evolution.", false)
@@ -75,6 +80,8 @@ public class CommandShop extends Command
                 }
                 else if(Page.FORMS.matches(this.msg[1]))
                 {
+                    if(this.insufficientMasteryLevel(Feature.ACQUIRE_POKEMON_FORMS)) return this.invalidMasteryLevel(Feature.ACQUIRE_POKEMON_FORMS);
+
                     this.embed
                             .addField("Price", "All Forms cost `" + Prices.SHOP_FORM.get() + "` credits!", false)
                             .addField("Purchase", "To buy a form, type `p!buy form <name>`, where <name> is the name of the form.", false)
@@ -106,11 +113,15 @@ public class CommandShop extends Command
                 }
                 else if(Page.ITEMS.matches(this.msg[1]))
                 {
+                    if(this.insufficientMasteryLevel(Feature.GIVE_POKEMON_ITEMS)) return this.invalidMasteryLevel(Feature.GIVE_POKEMON_ITEMS);
+
                     for(int i = 0; i < ITEM_ENTRIES.size(); i++) this.embed.addField(ITEM_ENTRIES.get(i).getStyledName(), "Number: `" + (i + 1) + "`\nPrice: " + ITEM_PRICES.get(i) + "c", true);
                     for(int i = 0; i < ITEM_ENTRIES.size() % 3; i++) this.embed.addBlankField(true);
                 }
                 else if(Page.TM.matches(this.msg[1]))
                 {
+                    if(this.insufficientMasteryLevel(Feature.ACCESS_TMS)) return this.invalidMasteryLevel(Feature.ACCESS_TMS);
+
                     this.embed.addField("Price", "Each TM costs `" + CommandShop.TM_PRICE + "` credits!", false);
 
                     StringBuilder s = new StringBuilder();
@@ -119,6 +130,8 @@ public class CommandShop extends Command
                 }
                 else if(Page.TR.matches(this.msg[1]))
                 {
+                    if(this.insufficientMasteryLevel(Feature.ACCESS_TRS)) return this.invalidMasteryLevel(Feature.ACCESS_TRS);
+
                     this.embed.addField("Price", "Each TR costs `" + CommandShop.TR_PRICE + "` credits!", false);
 
                     StringBuilder s = new StringBuilder();
@@ -127,6 +140,8 @@ public class CommandShop extends Command
                 }
                 else if(Page.MOVETUTOR.matches(this.msg[1]))
                 {
+                    if(this.insufficientMasteryLevel(Feature.PURCHASE_MOVE_TUTOR_MOVES)) return this.invalidMasteryLevel(Feature.PURCHASE_MOVE_TUTOR_MOVES);
+
                     this.embed
                             .addField("Price", "All Move Tutor Moves cost " + Prices.SHOP_MOVETUTOR.get() + " credits!", false)
                             .addField("Info", "Buying a Move Tutor move will automatically add it to the first slot of your Selected Pokemon. If you accidentally replace it, there is no way of retrieving that move without buying it again, so be careful!", false);
@@ -138,6 +153,8 @@ public class CommandShop extends Command
                 }
                 else if(Page.ZCRYSTAL.matches(this.msg[1]))
                 {
+                    if(this.insufficientMasteryLevel(Feature.PURCHASE_Z_CRYSTALS)) return this.invalidMasteryLevel(Feature.PURCHASE_Z_CRYSTALS);
+
                     this.embed.addField("Price", "All Z Crystals cost " + Prices.SHOP_ZCRYSTAL.get() + " credits!", false);
 
                     StringBuilder s = new StringBuilder();

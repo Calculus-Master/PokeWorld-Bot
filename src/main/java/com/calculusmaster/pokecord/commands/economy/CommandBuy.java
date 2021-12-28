@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.economy;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Nature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.Item;
@@ -11,7 +12,6 @@ import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
-import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
@@ -30,6 +30,8 @@ public class CommandBuy extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.ACCESS_BUY_SHOP)) return this.invalidMasteryLevel(Feature.ACCESS_BUY_SHOP);
+
         if(this.msg.length == 1)
         {
             this.embed.setDescription("You have to specify a category! Valid categories are: `nature`, `candy`, `item`, `form`, `mega`, `tm`, `tr`, `movetutor`, `zcrystal`");
@@ -120,10 +122,11 @@ public class CommandBuy extends Command
         }
         else if(form)
         {
+            if(this.insufficientMasteryLevel(Feature.ACQUIRE_POKEMON_FORMS)) return this.invalidMasteryLevel(Feature.ACQUIRE_POKEMON_FORMS);
+
             String requestedForm = Global.normalize(this.getMultiWordContent(2));
 
-            if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_FORM) this.invalidMasteryLevel(PlayerLevel.REQUIRED_LEVEL_FORM, "to purchase forms");
-            else if(!selected.hasForms()) this.response = selected.getName() + " does not have any forms!";
+            if(!selected.hasForms()) this.response = selected.getName() + " does not have any forms!";
             else if(!this.isPokemon(requestedForm)) this.response = "Invalid form name!";
             else if(Arrays.asList("Aegislash", "Aegislash Blade").contains(selected.getName())) this.response = selected.getName() + "'s forms cannot be purchased!";
             else if(this.playerData.getOwnedForms().contains(requestedForm)) this.response = "You already own this form!";
@@ -142,8 +145,8 @@ public class CommandBuy extends Command
         }
         else if(mega)
         {
-            if(this.msg.length != 2 && this.msg.length != 3) this.response = CommandInvalid.getShort();
-            else if(this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_MEGA) this.invalidMasteryLevel(PlayerLevel.REQUIRED_LEVEL_MEGA, "to purchase Mega Evolutions");
+            if(this.insufficientMasteryLevel(Feature.ACQUIRE_POKEMON_MEGA_EVOLUTIONS)) return this.invalidMasteryLevel(Feature.ACQUIRE_POKEMON_MEGA_EVOLUTIONS);
+            else if(this.msg.length != 2 && this.msg.length != 3) this.response = CommandInvalid.getShort();
             else if(!selected.hasMega()) this.response = selected.getName() + " cannot Mega Evolve!";
             else if(this.playerData.getCredits() < Prices.SHOP_MEGA.get()) this.invalidCredits(Prices.SHOP_MEGA.get());
             else if(selected.getMegaList().size() == 1 && this.msg.length == 3) this.response = "Use `p!buy mega` instead!";
@@ -169,6 +172,12 @@ public class CommandBuy extends Command
         }
         else if(tm || tr)
         {
+            if(this.insufficientMasteryLevel(Feature.ACCESS_TMS) || this.insufficientMasteryLevel(Feature.ACCESS_TRS))
+            {
+                this.invalidMasteryLevel(Feature.ACCESS_TMS);
+                return this.invalidMasteryLevel(Feature.ACCESS_TRS);
+            }
+
             this.msg[2] = this.msg[2].replaceAll("tm", "").replaceAll("tr", "").trim();
 
             boolean numberError = !this.isNumeric(2) || ((tm && TM.isOutOfBounds(this.getInt(2))) || (tr && TR.isOutOfBounds(this.getInt(2))));
@@ -205,6 +214,8 @@ public class CommandBuy extends Command
         }
         else if(movetutor)
         {
+            if(this.insufficientMasteryLevel(Feature.PURCHASE_MOVE_TUTOR_MOVES)) return this.invalidMasteryLevel(Feature.PURCHASE_MOVE_TUTOR_MOVES);
+
             String move = Global.normalize(this.getMultiWordContent(1));
 
             if(!Move.isMove(move)) this.response = "Invalid move name!";
@@ -223,6 +234,8 @@ public class CommandBuy extends Command
         }
         else if(zcrystal)
         {
+            if(this.insufficientMasteryLevel(Feature.PURCHASE_Z_CRYSTALS)) return this.invalidMasteryLevel(Feature.PURCHASE_Z_CRYSTALS);
+
             if(this.msg.length != 3 && this.msg.length != 4) this.response = CommandInvalid.getShort();
 
             String requestedZCrystal = Global.normalize(this.msg[2] + " Z");

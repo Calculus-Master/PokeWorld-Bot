@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -16,9 +17,12 @@ public class CommandGive extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.GIVE_POKEMON_ITEMS)) return this.invalidMasteryLevel(Feature.GIVE_POKEMON_ITEMS);
+
         if(this.msg.length == 1)
         {
             this.embed.setDescription("Specify the item you want to give! Use p!inventory to check what items you have.");
+            return this;
         }
         else if(!isNumeric(1) || this.playerData.getItemList().size() <= (Integer.parseInt(this.msg[1]) - 1))
         {

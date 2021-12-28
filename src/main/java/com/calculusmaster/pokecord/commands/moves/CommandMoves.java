@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.extension.RaidDuel;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -24,6 +25,8 @@ public class CommandMoves extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.VIEW_MOVES)) return this.invalidMasteryLevel(Feature.VIEW_MOVES);
+
         boolean analysis = this.msg.length == 2 && Arrays.asList("analysis", "overview", "info", "help").contains(this.msg[1]);
 
         Pokemon selected = this.playerData.getSelectedPokemon();

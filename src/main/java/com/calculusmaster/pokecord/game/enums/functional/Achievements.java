@@ -62,7 +62,8 @@ public enum Achievements
     REACHED_COLLECTION_MILESTONE_10(500, "Reached a Collection Milestone of 10 for any Pokemon!"),
     REACHED_COLLECTION_MILESTONE_20(1500, "Reached a Collection Milestone of 20 for any Pokemon!"),
     REACHED_COLLECTION_MILESTONE_50(7000, "Reached a Collection Milestone of 50 for any Pokemon!"),
-    COMPLETED_ALL_ACHIEVEMENTS(100000, "Completed all Achievements!");
+    REACH_MASTERY_LEVEL_20(50000, "Reached Pokemon Mastery Level 20!"),
+    COMPLETED_ALL_ACHIEVEMENTS(1000000, "Completed all Achievements!");
 
     public int credits;
     public String desc;
@@ -88,7 +89,8 @@ public enum Achievements
 
                 p.addExp(20, 100);
 
-                event.getChannel().sendMessage(p.getMention() + ": Unlocked an achievement: \"" + a.desc + "\"").queue();
+                if(event != null) event.getChannel().sendMessage(p.getMention() + ": Unlocked an achievement: \"" + a.desc + "\"").queue();
+                else p.directMessage("Unlocked an achievement: \"" + a.desc + "\"");
             }
             else CacheHelper.ACHIEVEMENT_CACHE.get(a).add(playerID);
 

@@ -4,11 +4,13 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.bounties.components.Bounty;
 import com.calculusmaster.pokecord.game.bounties.components.PursuitBuilder;
 import com.calculusmaster.pokecord.game.bounties.enums.PursuitSize;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class CommandPursuit extends Command
 {
@@ -22,6 +24,8 @@ public class CommandPursuit extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.ACCESS_PURSUITS_INTRO)) return this.invalidMasteryLevel(Feature.ACCESS_PURSUITS_INTRO);
+
         boolean start = this.msg.length >= 2 && this.msg[1].equals("start");
         boolean info = this.msg.length == 2 && this.msg[1].equals("info");
         boolean advance = this.msg.length == 2 && Arrays.asList("advance", "continue", "next").contains(this.msg[1]);
@@ -33,12 +37,17 @@ public class CommandPursuit extends Command
             else
             {
                 PursuitSize size = this.msg.length == 3 && PursuitSize.cast(this.msg[2]) != null ? PursuitSize.cast(this.msg[2]) : PursuitSize.AVERAGE;
+                if(List.of(PursuitSize.LONG, PursuitSize.JOURNEY, PursuitSize.LEGEND).contains(size) && this.insufficientMasteryLevel(Feature.ACCESS_PURSUITS_FULL)) return this.invalidMasteryLevel(Feature.ACCESS_PURSUITS_FULL);
 
-                this.response = "Generating your Pursuit...";
+                this.event.getChannel().sendMessage("Generating your Pursuit...").queue();
+
                 PursuitBuilder pursuit = PursuitBuilder.create(size);
+
                 this.playerData.setPursuit(pursuit.getIDs());
                 this.playerData.increasePursuitLevel();
+
                 pursuit.build();
+
                 this.response = "Your Pursuit was created!";
             }
         }

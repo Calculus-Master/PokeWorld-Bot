@@ -18,6 +18,7 @@ import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Random;
+import java.util.SplittableRandom;
 
 public class CommandCatch extends Command
 {
@@ -45,7 +46,7 @@ public class CommandCatch extends Command
             String poke = spawn.contains("Shiny") ? spawn.substring("Shiny ".length()) : spawn;
 
             Pokemon caught = Pokemon.create(poke);
-            caught.setLevel(new Random().nextInt(20 + 5 * (this.playerData.getGymLevel() - 1)) + 1);
+            caught.setLevel(new SplittableRandom().nextInt(1, 15));
             if(!caught.isShiny()) caught.setShiny(spawn.contains("Shiny"));
 
             //Longest 2 methods in this entire command (~100-200 ms each) - Thread Pool?

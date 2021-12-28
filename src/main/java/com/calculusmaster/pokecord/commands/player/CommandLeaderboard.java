@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands.player;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
@@ -29,10 +30,12 @@ public class CommandLeaderboard extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.ACCESS_LEADERBOARD)) return this.invalidMasteryLevel(Feature.ACCESS_LEADERBOARD);
+
         boolean server = this.msg.length == 2 && this.msg[1].equals("server");
         boolean specific = this.msg.length == 2;
 
-        this.response = "Calculating Player Scores...";
+        this.event.getChannel().sendMessage("Calculating Player Scores...").queue();
 
         this.reset();
         this.generatePlayerQueries(server);

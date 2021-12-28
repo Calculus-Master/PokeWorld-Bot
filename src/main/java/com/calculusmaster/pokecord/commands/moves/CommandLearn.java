@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.moves;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
@@ -22,6 +23,8 @@ public class CommandLearn extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.LEARN_REPLACE_MOVES)) return this.invalidMasteryLevel(Feature.LEARN_REPLACE_MOVES);
+
         if(this.msg.length < 2)
         {
             this.response = CommandInvalid.getShort();

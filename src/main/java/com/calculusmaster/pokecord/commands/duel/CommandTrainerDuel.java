@@ -5,7 +5,7 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.extension.TrainerDuel;
 import com.calculusmaster.pokecord.game.duel.players.Trainer;
-import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
@@ -23,11 +23,15 @@ public class CommandTrainerDuel extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.PVE_DUELS_TRAINER)) return this.invalidMasteryLevel(Feature.PVE_DUELS_TRAINER);
+
         boolean regular = this.msg.length == 2 && this.isNumeric(1) && this.getInt(1) >= 1 && this.getInt(1) <= Trainer.DAILY_TRAINERS.size();
         boolean elite = this.msg.length == 2 && this.msg[1].equals("elite");
 
         if(this.msg.length == 2 && (elite || regular))
         {
+            if(elite && this.insufficientMasteryLevel(Feature.PVE_DUELS_ELITE)) this.invalidMasteryLevel(Feature.PVE_DUELS_ELITE);
+
             if(DuelHelper.isInDuel(this.player.getId()))
             {
                 this.response = "You are already in a duel!";
@@ -35,8 +39,6 @@ public class CommandTrainerDuel extends Command
             }
 
             Trainer.TrainerInfo trainer = elite ? Trainer.createElite() : Trainer.DAILY_TRAINERS.get(this.getInt(1) - 1);
-
-            if(elite && this.playerData.getLevel() < PlayerLevel.REQUIRED_LEVEL_ELITE) this.invalidMasteryLevel(PlayerLevel.REQUIRED_LEVEL_ELITE, "to duel an Elite Trainer");
 
             if(this.playerData.getTeam().size() < trainer.pokemon.size())
             {

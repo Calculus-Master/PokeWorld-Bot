@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands.misc;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Location;
 import com.calculusmaster.pokecord.game.enums.elements.Region;
 import com.calculusmaster.pokecord.game.enums.elements.Time;
@@ -18,6 +19,8 @@ public class CommandLocation extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.VIEW_LOCATION)) return this.invalidMasteryLevel(Feature.VIEW_LOCATION);
+
         Location l = LocationEventHelper.getLocation(this.server.getId());
         Region r = l.region;
         Time t = LocationEventHelper.getTime();

@@ -12,7 +12,7 @@ import com.calculusmaster.pokecord.game.moves.MoveData;
 import com.calculusmaster.pokecord.game.moves.registry.MaxMoveRegistry;
 import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
 import com.calculusmaster.pokecord.game.moves.registry.ZMoveRegistry;
-import com.calculusmaster.pokecord.game.player.level.PlayerLevel;
+import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.SpecialEvolutionRegistry;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
@@ -74,7 +74,7 @@ public class Pokecord
         LoggerHelper.init("Command Handler", Commands::init);
         LoggerHelper.init("Gym Leader", GymLeader::init);
         LoggerHelper.init("Shops", CommandShop::updateShops);
-        LoggerHelper.init("Pokemon Mastery Level", PlayerLevel::init);
+        LoggerHelper.init("Pokemon Mastery Level", MasteryLevelManager::init);
         LoggerHelper.init("Achievement Cache", CacheHelper::initAchievementCache);
         LoggerHelper.init("Player Cache", CacheHelper::initPlayerCache);
         LoggerHelper.init("Market", CacheHelper::initMarketEntries, true);

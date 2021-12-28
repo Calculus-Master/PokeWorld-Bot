@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.config;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.SettingsHelper;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -21,6 +22,8 @@ public class CommandSettings extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.ACCESS_SETTINGS)) return this.invalidMasteryLevel(Feature.ACCESS_SETTINGS);
+
         boolean isUserAdmin = Global.userHasAdmin(this.server, this.player);
 
         boolean client = this.msg.length >= 2 && (this.msg[1].equals("client") || this.msg[1].equals("c"));

@@ -995,6 +995,7 @@ public class Pokemon
             case "Jangmo O" -> "Jangmo-o";
             case "Hakamo O" -> "Hakamo-o";
             case "Kommo O" -> "Kommo-o";
+            default -> name;
         };
     }
 

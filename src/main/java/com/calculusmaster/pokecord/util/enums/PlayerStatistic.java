@@ -47,7 +47,8 @@ public enum PlayerStatistic
     POKEMON_EXP_EARNED("pokemon_exp_earned"),
     POKEPASS_EXP_EARNED("pokepass_exp_earned"),
     MASTERY_EXP_EARNED("mastery_exp_earned"),
-    MESSAGES_SENT("messages_sent");
+    MESSAGES_SENT("messages_sent"),
+    POKEMON_EVOLVED("pokemon_evolved");
 
     public String key;
     PlayerStatistic(String key)

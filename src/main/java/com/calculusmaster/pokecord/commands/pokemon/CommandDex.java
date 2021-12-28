@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
@@ -27,6 +28,8 @@ public class CommandDex extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.VIEW_DEX_INFO)) return this.invalidMasteryLevel(Feature.VIEW_DEX_INFO);
+
         if(this.msg.length == 1)
         {
             this.embed.setDescription(CommandInvalid.getShort());

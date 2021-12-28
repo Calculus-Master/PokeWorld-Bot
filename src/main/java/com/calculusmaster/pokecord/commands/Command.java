@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.commands;
 
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Tips;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -109,9 +110,15 @@ public abstract class Command
         this.response = "Insufficient Credits! Needed: `" + req + "`, you have `" + this.playerData.getCredits() + "`!";
     }
 
-    protected void invalidMasteryLevel(int req, String after)
+    protected boolean insufficientMasteryLevel(Feature feature)
     {
-        this.response = "You must be Pokemon Mastery Level " + req + " " + after + "!";
+        return this.playerData.getLevel() < feature.getRequiredLevel();
+    }
+
+    protected Command invalidMasteryLevel(Feature feature)
+    {
+        this.response = "This feature requires **Pokemon Mastery Level " + feature.getRequiredLevel() + "**!";
+        return this;
     }
 
     protected String getMultiWordContent(int start)

@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelChecks;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.moves.Move;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -27,6 +28,8 @@ public class CommandUse extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.USE_MOVES)) return this.invalidMasteryLevel(Feature.USE_MOVES);
+
         if(this.msg.length == 1)
         {
             this.embed.setDescription(CommandInvalid.getShort());
@@ -55,6 +58,9 @@ public class CommandUse extends Command
             this.response = "Invalid Turn Action! Valid formats are: `p!use <num>`, `p!use <s:swap> <index>`, `p!use <z:zmove> <num>`, and `p!use <d:dynamax> <num>`, where `num` is the move number and `index` is the index of the Pokemon in your team";
             return this;
         }
+
+        if(zmove && this.insufficientMasteryLevel(Feature.USE_Z_MOVES)) return this.invalidMasteryLevel(Feature.USE_Z_MOVES);
+        if(dynamax && this.insufficientMasteryLevel(Feature.DYNAMAX_POKEMON)) return this.invalidMasteryLevel(Feature.DYNAMAX_POKEMON);
 
         if(c.checkFailed(NORMAL_MOVESUBMITTED))
         {

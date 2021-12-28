@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands.misc;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -19,6 +20,8 @@ public class CommandServerInfo extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.VIEW_SERVER_INFO)) return this.invalidMasteryLevel(Feature.VIEW_SERVER_INFO);
+
         this.server.loadMembers();
         DataHelper.updateServerPlayers(this.server);
 

@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.misc;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.Commands;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ public class CommandHelp extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.VIEW_HELP)) return this.invalidMasteryLevel(Feature.VIEW_HELP);
+
         if(this.msg.length == 2 && Commands.isValid(this.msg[1]))
         {
             Commands.Registry command = Commands.getRegistry(this.msg[1]);
