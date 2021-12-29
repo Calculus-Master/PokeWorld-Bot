@@ -355,7 +355,6 @@ public class RaidDuel extends WildDuel
 
     public void addPlayer(String ID)
     {
-        //TODO: Set the message received event
         if(!this.waiting.contains(ID)) this.waiting.add(ID);
     }
 
