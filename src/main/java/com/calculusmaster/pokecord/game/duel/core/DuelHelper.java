@@ -89,6 +89,8 @@ public class DuelHelper
         public boolean auroraVeilUsed;
         public int auroraVeilTurns;
         public boolean plasmaFistsUsed;
+        public boolean electrifyUsed;
+        public boolean wishUsed;
 
         public boolean disguiseActivated;
 
@@ -150,6 +152,8 @@ public class DuelHelper
             this.auroraVeilUsed = false;
             this.auroraVeilTurns = 0;
             this.plasmaFistsUsed = false;
+            this.electrifyUsed = false;
+            this.wishUsed = false;
 
             this.disguiseActivated = false;
         }

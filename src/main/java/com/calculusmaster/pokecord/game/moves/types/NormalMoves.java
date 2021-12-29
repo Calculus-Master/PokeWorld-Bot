@@ -14,10 +14,7 @@ import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class NormalMoves
@@ -952,5 +949,51 @@ public class NormalMoves
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addStatusEffect(StatusCondition.PARALYZED)
                 .execute();
+    }
+
+    public String Stomp(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.FLINCHED, 30)
+                .execute();
+    }
+
+    public String Wish(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(user.getUUID()).wishUsed = true;
+
+        return user.getName() + " wished for something!";
+    }
+
+    public String Present(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int r = new SplittableRandom().nextInt(100);
+
+        if(r < 10)
+        {
+            move.setPower(120);
+            return "It's a powerful Present! " + Move.simpleDamageMove(user, opponent, duel, move);
+        }
+        else if(r < 40)
+        {
+            move.setPower(80);
+            return "It's an average Present! " + Move.simpleDamageMove(user, opponent, duel, move);
+        }
+        else if(r < 80)
+        {
+            move.setPower(40);
+            return "It's a weak Present! " + Move.simpleDamageMove(user, opponent, duel, move);
+        }
+        else
+        {
+            if(opponent.getHealth() == opponent.getStat(Stat.HP)) return move.getNoEffectResult(opponent);
+            else
+            {
+                int amount = opponent.getStat(Stat.HP) / 4;
+                opponent.heal(amount);
+                return user.getName() + " gave " + opponent.getName() + " a Present and healed it for " + amount + " HP!";
+            }
+        }
     }
 }

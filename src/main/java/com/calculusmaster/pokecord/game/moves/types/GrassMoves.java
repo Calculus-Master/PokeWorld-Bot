@@ -280,4 +280,19 @@ public class GrassMoves
                 .addStatChangeEffect(Stat.ATK, -1, 100, false)
                 .execute();
     }
+
+    public String SnapTrap(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.BOUND)
+                .execute();
+    }
+
+    public String GrassWhistle(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.ASLEEP)
+                .execute();
+    }
 }

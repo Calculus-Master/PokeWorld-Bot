@@ -107,4 +107,12 @@ public class FairyMoves
                 .addStatChangeEffect(Stat.SPATK, -2, 100, true)
                 .execute();
     }
+
+    public String LightOfRuin(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addRecoilEffect(1 / 2D)
+                .execute();
+    }
 }

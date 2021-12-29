@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.EntryHazard;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
@@ -120,5 +121,16 @@ public class PoisonMoves
                 .addDamageEffect()
                 .addStatusEffect(StatusCondition.POISONED, 30)
                 .execute();
+    }
+
+    public String CorrosiveGas(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(opponent.hasItem())
+        {
+            opponent.setItem(Item.NONE);
+
+            return opponent.getName() + "'s Item melted away!";
+        }
+        else return move.getNoEffectResult(opponent);
     }
 }

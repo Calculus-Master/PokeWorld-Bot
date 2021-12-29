@@ -181,4 +181,20 @@ public class FireMoves
                 .addStatusEffect(StatusCondition.BURNED, 20)
                 .execute();
     }
+
+    public String MagmaStorm(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.BOUND)
+                .execute();
+    }
+
+    public String MindBlown(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addRecoilEffect(1 / 2D)
+                .execute();
+    }
 }

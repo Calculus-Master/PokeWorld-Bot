@@ -198,4 +198,15 @@ public class ElectricMoves
 
         return Move.simpleDamageMove(user, opponent, duel, move);
     }
+
+    public String Electrify(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.first.equals(user.getUUID()))
+        {
+            duel.data(user.getUUID()).electrifyUsed = true;
+
+            return user.getName() + " electrified " + opponent.getName() + "'s next move!";
+        }
+        else return move.getNothingResult();
+    }
 }

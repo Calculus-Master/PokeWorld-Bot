@@ -266,6 +266,13 @@ public class Duel
         //Plasma Fists Type Change: Normal -> Electric
         if(this.data(this.current).plasmaFistsUsed && move.getType().equals(Type.NORMAL)) move.setType(Type.ELECTRIC);
 
+        //Electrify Type Change: Normal -> Electric (If Opponent goes after User)
+        if(this.players[this.other].active.getUUID().equals(this.first) && this.data(this.other).electrifyUsed)
+        {
+            move.setType(Type.ELECTRIC);
+            this.data(this.other).electrifyUsed = false;
+        }
+
         //Terrain Pulse Type Change
         if(move.getName().equals("Terrain Pulse"))
         {
@@ -481,6 +488,16 @@ public class Duel
 
                 turnResult += "Doom Desire landed and dealt " + damage + " to " + this.players[this.other].active.getName() + "!\n";
             }
+        }
+
+        if(this.data(this.current).wishUsed)
+        {
+            this.data(this.current).wishUsed = false;
+
+            int heal = this.players[this.current].active.getStat(Stat.HP) / 2;
+            this.players[this.current].active.heal(heal);
+
+            turnResult += this.players[this.current].active.getName() + "'s wish was granted! It healed " + heal + " HP!";
         }
 
         if(this.data(this.current).lockOnUsed)
