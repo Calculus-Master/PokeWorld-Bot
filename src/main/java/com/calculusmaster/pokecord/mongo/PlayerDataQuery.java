@@ -48,27 +48,27 @@ public class PlayerDataQuery extends MongoQuery
         Document data = new Document()
                 .append("playerID", player.getId())
                 .append("username", player.getName())
+                .append("level", 0)
+                .append("exp", 0)
                 .append("credits", 1000)
                 .append("redeems", 0)
                 .append("selected", 1)
                 .append("pokemon", new JSONArray())
                 .append("team", new JSONArray())
+                .append("favorites", new JSONArray())
                 .append("items", new JSONArray())
                 .append("tms", new JSONArray())
                 .append("trs", new JSONArray())
                 .append("zcrystals", new JSONArray())
                 .append("active_zcrystal", "")
                 .append("achievements", new JSONArray())
-                .append("gym_level", 1)
-                .append("favorites", new JSONArray())
                 .append("owned_forms", new JSONArray())
                 .append("owned_megas", new JSONArray())
                 .append("bounties", new JSONArray())
                 .append("pursuit", new JSONArray())
                 .append("owned_eggs", new JSONArray())
                 .append("active_egg", "")
-                .append("level", 0)
-                .append("exp", 0);
+                .append("gym_level", 1);
 
         Mongo.PlayerData.insertOne(data);
 
@@ -119,6 +119,52 @@ public class PlayerDataQuery extends MongoQuery
     public String getUsername()
     {
         return this.json().getString("username");
+    }
+
+    //key: "level"
+    public int getLevel()
+    {
+        return this.json().getInt("level");
+    }
+
+    public void increaseLevel()
+    {
+        this.update(Updates.inc("level", 1));
+
+        this.clearExp();
+    }
+
+    //key: "exp"
+    public int getExp()
+    {
+        return this.json().getInt("exp");
+    }
+
+    public void clearExp()
+    {
+        this.update(Updates.set("exp", 0));
+    }
+
+    public void addExp(int amount)
+    {
+        this.addExp(amount, 100);
+    }
+
+    public void addExp(int amount, int chance)
+    {
+        if(new Random().nextInt(100) < chance)
+        {
+            this.update(Updates.inc("exp", amount));
+
+            if(!MasteryLevelManager.isMax(this) && MasteryLevelManager.MASTERY_LEVELS.get(this.getLevel() + 1).canLevelUp(this))
+            {
+                this.increaseLevel();
+
+                if(this.getLevel() == 20) Achievements.grant(this.getID(), Achievements.REACH_MASTERY_LEVEL_20, null);
+
+                this.directMessage("You are now **Pokemon Mastery Level " + this.getLevel() + "**! You've unlocked the following features:\n" + MasteryLevelManager.MASTERY_LEVELS.get(this.getLevel()).getUnlockedFeaturesOverview());
+            }
+        }
     }
 
     //key: "credits"
@@ -260,6 +306,28 @@ public class PlayerDataQuery extends MongoQuery
         this.update(Updates.pushEach("team", team));
     }
 
+    //key: "favorites"
+    public List<String> getFavorites()
+    {
+        return this.json().getJSONArray("favorites").toList().stream().map(s -> (String)s).collect(Collectors.toList());
+    }
+
+    public void addPokemonToFavorites(String UUID)
+    {
+        this.update(Updates.push("favorites", UUID));
+    }
+
+    public void removePokemonFromFavorites(String UUID)
+    {
+        this.update(Updates.pull("favorites", UUID));
+    }
+
+    public void clearFavorites()
+    {
+        this.update(Updates.set("favorites", new JSONArray()));
+    }
+
+
     //key: "items"
     public List<String> getItemList()
     {
@@ -371,38 +439,6 @@ public class PlayerDataQuery extends MongoQuery
     public void grantAchievement(Achievements a, MessageReceivedEvent event)
     {
         Achievements.grant(this.getID(), a, event);
-    }
-
-    //key: "gym_level"
-    public int getGymLevel()
-    {
-        return this.json().getInt("gym_level");
-    }
-
-    public void increaseGymLevel()
-    {
-        this.update(Updates.inc("gym_level", 1));
-    }
-
-    //key: "favorites"
-    public List<String> getFavorites()
-    {
-        return this.json().getJSONArray("favorites").toList().stream().map(s -> (String)s).collect(Collectors.toList());
-    }
-
-    public void addPokemonToFavorites(String UUID)
-    {
-        this.update(Updates.push("favorites", UUID));
-    }
-
-    public void removePokemonFromFavorites(String UUID)
-    {
-        this.update(Updates.pull("favorites", UUID));
-    }
-
-    public void clearFavorites()
-    {
-        this.update(Updates.set("favorites", new JSONArray()));
     }
 
     //key: "owned_forms"
@@ -605,49 +641,15 @@ public class PlayerDataQuery extends MongoQuery
         this.update(Updates.set("active_egg", ""));
     }
 
-    //key: "level"
-    public int getLevel()
+    //key: "gym_level"
+    public int getGymLevel()
     {
-        return this.json().getInt("level");
+        return this.json().getInt("gym_level");
     }
 
-    public void increaseLevel()
+    public void increaseGymLevel()
     {
-        this.update(Updates.inc("level", 1));
-
-        this.clearExp();
+        this.update(Updates.inc("gym_level", 1));
     }
 
-    //key: "exp"
-    public int getExp()
-    {
-        return this.json().getInt("exp");
-    }
-
-    public void clearExp()
-    {
-        this.update(Updates.set("exp", 0));
-    }
-
-    public void addExp(int amount)
-    {
-        this.addExp(amount, 100);
-    }
-
-    public void addExp(int amount, int chance)
-    {
-        if(new Random().nextInt(100) < chance)
-        {
-            this.update(Updates.inc("exp", amount));
-
-            if(!MasteryLevelManager.isMax(this) && MasteryLevelManager.MASTERY_LEVELS.get(this.getLevel() + 1).canLevelUp(this))
-            {
-                this.increaseLevel();
-
-                if(this.getLevel() == 20) Achievements.grant(this.getID(), Achievements.REACH_MASTERY_LEVEL_20, null);
-
-                this.directMessage("You are now **Pokemon Mastery Level " + this.getLevel() + "**! You've unlocked the following features:\n" + MasteryLevelManager.MASTERY_LEVELS.get(this.getLevel()).getUnlockedFeaturesOverview());
-            }
-        }
-    }
 }
