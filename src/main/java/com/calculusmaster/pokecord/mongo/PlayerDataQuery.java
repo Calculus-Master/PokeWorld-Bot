@@ -66,8 +66,7 @@ public class PlayerDataQuery extends MongoQuery
                 .append("bounties", new JSONArray())
                 .append("pursuit", new JSONArray())
                 .append("owned_eggs", new JSONArray())
-                .append("active_egg", "")
-                .append("gym_level", 1);
+                .append("active_egg", "");
 
         Mongo.PlayerData.insertOne(data);
 
@@ -639,16 +638,4 @@ public class PlayerDataQuery extends MongoQuery
     {
         this.update(Updates.set("active_egg", ""));
     }
-
-    //key: "gym_level"
-    public int getGymLevel()
-    {
-        return this.json().getInt("gym_level");
-    }
-
-    public void increaseGymLevel()
-    {
-        this.update(Updates.inc("gym_level", 1));
-    }
-
 }

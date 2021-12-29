@@ -199,10 +199,6 @@ public class Commands
                 .setCommand(CommandTrainerDuel::new)
                 .setCategory(Category.DUEL);
 
-        register("gymduel", "gym", "challenge")
-                .setCommand(CommandGymDuel::new)
-                .setCategory(Category.DUEL);
-
         register("abilityinfo", "ai")
                 .setCommand(CommandAbilityInfo::new)
                 .setCategory(Category.MOVES);

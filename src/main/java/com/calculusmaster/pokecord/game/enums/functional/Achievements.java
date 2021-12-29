@@ -16,7 +16,6 @@ public enum Achievements
     DEFEATED_DAILY_TRAINERS(5000, "Defeated all daily Trainers for the first time!"),
     COMPLETED_FIRST_TRADE(500, "Completed your first trade!"),
     SUBMITTED_BUG_REPORT(500, "Submitted a bug report/suggestion! Thank you!"),
-    DEFEATED_FIRST_GYM_LEADER(1000, "Defeated your first Gym Leader!"),
     BOUGHT_FIRST_ITEM_SHOP(200, "Bought your first item from the shop!"),
     ACQUIRED_FIRST_TYPED_ZCRYSTAL(1000, "Acquired your first generic Z Crystal!"),
     BOUGHT_FIRST_UNIQUE_ZCRYSTAL(1000, "Bought your first unique Z Crystal from the shop!"),

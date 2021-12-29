@@ -2,7 +2,8 @@ package com.calculusmaster.pokecord.game.player;
 
 import java.util.Arrays;
 
-public enum Settings {
+public enum Settings
+{
     //Client
     CLIENT_DETAILED("detailed", "Toggles the display of IVs and EVs throughout the bot."),
     CLIENT_CATCH_AUTO_INFO("autoinfo", "Toggle automatically sending `p!info latest` after catching a Pokemon."),
@@ -20,32 +21,39 @@ public enum Settings {
     private String command;
     private String desc;
 
-    Settings(String command, String desc) {
+    Settings(String command, String desc)
+    {
         this.command = command;
         this.desc = desc;
     }
 
-    public static boolean isValid(String command) {
-        return Arrays.stream(.values()).anyMatch(s -> s.getCommand().equals(command));
+    public static boolean isValid(String command)
+    {
+        return Arrays.stream(Settings.values()).anyMatch(s -> s.getCommand().equals(command));
     }
 
-    public boolean matches(String input) {
+    public boolean matches(String input)
+    {
         return this.command.equals(input);
     }
 
-    public boolean isClient() {
+    public boolean isClient()
+    {
         return this.toString().contains("CLIENT");
     }
 
-    public boolean isServer() {
+    public boolean isServer()
+    {
         return this.toString().contains("SERVER");
     }
 
-    public String getCommand() {
+    public String getCommand()
+    {
         return this.command;
     }
 
-    public String getDesc() {
+    public String getDesc()
+    {
         return this.desc;
     }
 }

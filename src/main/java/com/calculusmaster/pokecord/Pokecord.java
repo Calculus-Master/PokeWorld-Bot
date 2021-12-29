@@ -5,7 +5,6 @@ import com.calculusmaster.pokecord.commands.duel.CommandTarget;
 import com.calculusmaster.pokecord.commands.economy.CommandShop;
 import com.calculusmaster.pokecord.commands.moves.CommandAbilityInfo;
 import com.calculusmaster.pokecord.commands.pokemon.CommandBreed;
-import com.calculusmaster.pokecord.game.duel.players.GymLeader;
 import com.calculusmaster.pokecord.game.duel.players.Trainer;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.MoveData;
@@ -72,7 +71,6 @@ public class Pokecord
         LoggerHelper.init("Ability Info", CommandAbilityInfo::init);
         LoggerHelper.init("Pokemon Rarity", PokemonRarity::init);
         LoggerHelper.init("Command Handler", Commands::init);
-        LoggerHelper.init("Gym Leader", GymLeader::init);
         LoggerHelper.init("Shops", CommandShop::updateShops);
         LoggerHelper.init("Pokemon Mastery Level", MasteryLevelManager::init);
         LoggerHelper.init("Achievement Cache", CacheHelper::initAchievementCache);
