@@ -158,8 +158,9 @@ public class MasteryLevelManager
 
         // Level 14 – Z-Crystals
         // Z-Crystal Access – p!ztrial, p!equip, p!inventory
+        // Activate Items – p!activate
         PokemonMasteryLevel.create(14)
-                .withFeaturesUnlocked(Feature.PVE_DUELS_ZTRIAL, Feature.PURCHASE_Z_CRYSTALS, Feature.EQUIP_Z_CRYSTALS, Feature.USE_Z_MOVES)
+                .withFeaturesUnlocked(Feature.PVE_DUELS_ZTRIAL, Feature.PURCHASE_Z_CRYSTALS, Feature.EQUIP_Z_CRYSTALS, Feature.USE_Z_MOVES, Feature.ACTIVATE_ITEMS)
                 .withExperienceRequirement(5250)
                 .withPokemonRequirement(525)
                 .withTaskRequirement(new BountiesLevelTask(30))

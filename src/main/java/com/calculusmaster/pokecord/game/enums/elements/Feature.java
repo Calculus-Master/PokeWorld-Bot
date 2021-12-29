@@ -81,6 +81,7 @@ public enum Feature
     PURCHASE_Z_CRYSTALS("Purchase Unique Z-Crystals from the Shop"),
     EQUIP_Z_CRYSTALS("Equip an active Z-Crystal to be able to use it in Duels"),
     USE_Z_MOVES("Use powerful Z-Moves in Duels"),
+    ACTIVATE_ITEMS("Activate certain items that extend beyond Pokemon"),
 
     //Level 15
     PVE_DUELS_RAID("Join other players in a Duel against a Raid Pokemon (these will spawn randomly)"),

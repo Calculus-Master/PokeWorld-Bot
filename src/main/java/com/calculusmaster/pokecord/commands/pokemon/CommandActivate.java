@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -19,6 +20,8 @@ public class CommandActivate extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.ACTIVATE_ITEMS)) return this.invalidMasteryLevel(Feature.ACTIVATE_ITEMS);
+
         if(this.msg.length == 1)
         {
             this.embed.setDescription("Specify the item you want to activate! Use p!inventory to check what items you have.");
@@ -44,8 +47,7 @@ public class CommandActivate extends Command
 
                this.playerData.removeItem(Item.IV_REROLLER.getName());
 
-               this.event.getChannel().sendMessage(this.playerData.getMention() + ": " + s.getName() + "'s IVs were rerolled to " + s.getTotalIV() + "!").queue();
-               this.embed = null;
+               this.response = s.getName() + "'s IVs were rerolled to " + s.getTotalIV() + "!";
                return this;
            }
            else if(item.equals(Item.EV_REALLOCATOR))
@@ -57,14 +59,12 @@ public class CommandActivate extends Command
 
                     if(s.getEVs().get(from) == 0)
                     {
-                        this.event.getChannel().sendMessage(this.playerData.getMention() + ": " + s.getName() + " doesn't have any " + from + " EVs!").queue();
-                        this.embed = null;
+                        this.response = s.getName() + " doesn't have any " + from + " EVs!";
                         return this;
                     }
                     else if(s.getEVs().get(to) >= 252)
                     {
-                        this.event.getChannel().sendMessage(this.playerData.getMention() + ": " + s.getName() + " already has max " + to + " EVs!").queue();
-                        this.embed = null;
+                        this.response = s.getName() + " already has max " + to + " EVs!";
                         return this;
                     }
 
@@ -87,8 +87,7 @@ public class CommandActivate extends Command
                 }
                 else
                 {
-                    this.event.getChannel().sendMessage(this.playerData.getMention() + ": You have to specify the source stat and destination stat! The command is p!activate <number> <source> <destination>").queue();
-                    this.embed = null;
+                    this.response = "You have to specify the source stat and destination stat! The command is p!activate <number> <source> <destination>";
                     return this;
                 }
            }
@@ -113,24 +112,11 @@ public class CommandActivate extends Command
 
                    this.embed.setDescription("Successfully cleared all of " + s.getName() + "'s " + target + " EVs!");
                }
-               else
-               {
-                   this.event.getChannel().sendMessage(this.playerData.getMention() + ": You have to specify the stat! The command is p!activate <number> <stat>").queue();
-                   this.embed = null;
-                   return this;
-               }
+               else this.response = "You have to specify the stat! The command is p!activate <number> <stat>";
            }
         }
-        else if(item != null)
-        {
-            this.event.getChannel().sendMessage(this.playerData.getMention() + ": `" + item.getStyledName() + "` must be given to a Pokemon!").queue();
-            this.embed = null;
-        }
-        else
-        {
-            this.event.getChannel().sendMessage(this.playerData.getMention() + ": You don't have any `" + item.getStyledName() + "`!").queue();
-            this.embed = null;
-        }
+        else if(item != null) this.response = "`" + item.getStyledName() + "` must be given to a Pokemon!";
+        else this.response = "You don't have any `" + item.getStyledName() + "`!";
 
         return this;
     }
