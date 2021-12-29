@@ -619,9 +619,9 @@ public class Duel
 
         if(this.data(this.current).shadowForceUsed) move = new Move("Shadow Force");
 
-        List<String> flyMoves = Arrays.asList("Gust", "Twister", "Thunder", "Sky Uppercut", "Smack Down");
-        List<String> digMoves = Arrays.asList("Earthquake", "Magnitude", "Fissure");
-        List<String> diveMoves = Arrays.asList("Surf", "Whirlpool", "Low Kick");
+        List<String> flyMoves = List.of("Gust", "Twister", "Thunder", "Sky Uppercut", "Smack Down");
+        List<String> digMoves = List.of("Earthquake", "Magnitude", "Fissure");
+        List<String> diveMoves = List.of("Surf", "Whirlpool", "Low Kick");
 
         if((this.data(this.other).flyUsed && !flyMoves.contains(move.getName())) || (this.data(this.other).bounceUsed && !flyMoves.contains(move.getName())) || (this.data(this.other).digUsed && !digMoves.contains(move.getName())) || (this.data(this.other).diveUsed && !diveMoves.contains(move.getName())) || this.data(this.other).phantomForceUsed || this.data(this.other).shadowForceUsed)
         {
@@ -662,7 +662,7 @@ public class Duel
 
         //Main Results
         String name = this.players[this.current].active.getName();
-        List<String> rechargeMoves = Arrays.asList("Hyper Beam", "Blast Burn", "Hydro Cannon", "Frenzy Plant", "Roar Of Time", "Prismatic Laser", "Eternabeam", "Giga Impact", "Meteor Assault", "Rock Wrecker");
+        List<String> rechargeMoves = List.of("Hyper Beam", "Blast Burn", "Hydro Cannon", "Frenzy Plant", "Roar Of Time", "Prismatic Laser", "Eternabeam", "Giga Impact", "Meteor Assault", "Rock Wrecker");
 
         //Ensures the recharge occurs when the recharge move isn't used
         if(this.data(this.current).recharge && !rechargeMoves.contains(move.getName())) this.data(this.current).recharge = false;
