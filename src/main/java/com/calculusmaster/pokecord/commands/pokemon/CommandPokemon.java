@@ -285,9 +285,9 @@ public class CommandPokemon extends Command
 
     private String getLine(Pokemon p)
     {
-        return "**" + p.getDisplayName() + "**" +
-                (p.isShiny() ? ":star2:" : "") +
-                (p.isMastered() ? ":trophy:" : "") +
+        return "**" + p.getDisplayName() + "** " +
+                (p.isShiny() ? ":star2: " : "") +
+                (p.isMastered() ? ":trophy: " : "") +
                 (this.team.contains(p.getUUID()) ? ":regional_indicator_t: " : "") +
                 (this.favorites.contains(p.getUUID()) ? ":regional_indicator_f: " : "") +
                 "| Number: " + p.getNumber() +
