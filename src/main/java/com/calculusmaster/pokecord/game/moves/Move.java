@@ -124,19 +124,20 @@ public class Move
 
     public static boolean isImplemented(String name)
     {
-        if(WIP_MOVES.contains(name)) return false;
+        boolean implemented;
 
-        Move m = new Move(name);
+        if(WIP_MOVES.contains(name)) implemented = false;
+        else
+        {
+            Move m = new Move(name);
 
-        try
-        {
-            m.getHostClass().getMethod(m.getMethodName(), Pokemon.class, Pokemon.class, Duel.class, Move.class);
-            return true;
+            try { m.getHostClass().getMethod(m.getMethodName(), Pokemon.class, Pokemon.class, Duel.class, Move.class); implemented = true; }
+            catch (NoSuchMethodException e) { implemented = false; }
         }
-        catch (NoSuchMethodException e)
-        {
-            return false;
-        }
+
+        if(!implemented) LoggerHelper.warn(Move.class, "Unimplemented Move `" + name + "`!");
+
+        return implemented;
     }
 
     public String getMethodName()
