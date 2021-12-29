@@ -1,6 +1,5 @@
 package com.calculusmaster.pokecord.commands;
 
-import com.calculusmaster.pokecord.commands.config.CommandSettings;
 import com.calculusmaster.pokecord.commands.duel.*;
 import com.calculusmaster.pokecord.commands.economy.*;
 import com.calculusmaster.pokecord.commands.misc.*;
@@ -225,7 +224,7 @@ public class Commands
 
         register("settings", "config")
                 .setCommand(CommandSettings::new)
-                .setCategory(Category.CONFIG);
+                .setCategory(Category.MISC);
 
         register("leaderboard", "lb", "lead")
                 .setCommand(CommandLeaderboard::new)
@@ -392,7 +391,6 @@ public class Commands
 
     enum Category
     {
-        CONFIG,
         DUEL,
         ECONOMY,
         MISC,

@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.commands.config;
+package com.calculusmaster.pokecord.commands.misc;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
