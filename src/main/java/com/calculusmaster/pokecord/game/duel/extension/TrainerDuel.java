@@ -1,6 +1,5 @@
 package com.calculusmaster.pokecord.game.duel.extension;
 
-import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
@@ -43,14 +42,9 @@ public class TrainerDuel extends Duel
     {
         EmbedBuilder embed = new EmbedBuilder();
 
-        boolean elite = ((Trainer)this.players[1]).info.elite;
-
         //Player won
         if(this.getWinner().ID.equals(this.players[0].ID))
         {
-            this.uploadEVs(0);
-            this.uploadExperience();
-
             Trainer botTrainer = (Trainer)this.players[1];
             String bot = botTrainer.info.name;
 
@@ -58,56 +52,37 @@ public class TrainerDuel extends Duel
 
             Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_TRAINER_DUEL, this.event);
 
-            //Elite Trainer
-            if(elite)
-            {
-                int credits = new Random().nextInt(500) + 500;
-                this.players[0].data.changeCredits(credits);
-
-                Achievements.grant(this.players[0].ID, Achievements.DEFEATED_FIRST_ELITE_TRAINER, this.event);
-                this.players[0].data.getStats().incr(PlayerStatistic.ELITE_TRAINER_DUELS_WON);
-                this.players[0].data.updateBountyProgression(b -> {
-                    if(b.getType().equals(ObjectiveType.WIN_ELITE_DUEL) || b.getType().equals(ObjectiveType.COMPLETE_ELITE_DUEL)) b.update();
-                });
-                this.players[0].data.addExp(60, 65);
-
-                this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated the Elite Trainer and earned " + credits + " credits!").queue();
-            }
             //Regular Daily Trainer
-            else
+
+            List<String> playersDefeatedBot = botTrainer.info.playersDefeated;
+
+            if(!playersDefeatedBot.contains(this.players[0].ID))
             {
-                List<String> playersDefeatedBot = botTrainer.info.playersDefeated;
+                playersDefeatedBot.add(this.players[0].ID);
+                Trainer.addPlayerDefeated(botTrainer.ID, this.players[0].ID);
 
-                if(!playersDefeatedBot.contains(this.players[0].ID))
+                boolean dailyComplete = true;
+                for(Trainer.TrainerInfo ti : Trainer.DAILY_TRAINERS) if(!ti.playersDefeated.contains(this.players[0].ID)) dailyComplete = false;
+
+                if(dailyComplete)
                 {
-                    playersDefeatedBot.add(this.players[0].ID);
-                    Trainer.addPlayerDefeated(botTrainer.ID, this.players[0].ID);
+                    int winCredits = (new Random().nextInt(501) + 500) * Trainer.DAILY_TRAINERS.size();
+                    this.players[0].data.changeCredits(winCredits);
+                    this.players[0].data.addExp(30, 75);
+                    this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated all of today's trainers! You earned a bonus " + winCredits + " credits!").queue();
 
-                    boolean dailyComplete = true;
-                    for(Trainer.TrainerInfo ti : Trainer.DAILY_TRAINERS) if(!ti.playersDefeated.contains(this.players[0].ID)) dailyComplete = false;
-
-                    if(dailyComplete)
-                    {
-                        int winCredits = (new Random().nextInt(501) + 500) * Trainer.DAILY_TRAINERS.size();
-                        this.players[0].data.changeCredits(winCredits);
-                        this.players[0].data.addExp(30, 75);
-                        this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated all of today's trainers! You earned a bonus " + winCredits + " credits!").queue();
-
-                        Achievements.grant(this.players[0].ID, Achievements.DEFEATED_DAILY_TRAINERS, this.event);
-                    }
+                    Achievements.grant(this.players[0].ID, Achievements.DEFEATED_DAILY_TRAINERS, this.event);
                 }
-
-                this.players[0].data.getStats().incr(PlayerStatistic.TRAINER_DUELS_WON);
             }
+
+            this.players[0].data.getStats().incr(PlayerStatistic.TRAINER_DUELS_WON);
+
         }
         //Player lost
-        else
-        {
-            this.uploadEVs(0);
+        else embed.setDescription("You were defeated by " + ((Trainer)this.players[1]).info.name + "!");
 
-            if(elite) this.players[0].data.updateBountyProgression(ObjectiveType.COMPLETE_ELITE_DUEL);
-            embed.setDescription("You were defeated by " + ((Trainer)this.players[1]).info.name + "!");
-        }
+        this.uploadEVs(0);
+        this.uploadExperience();
 
         this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
         DuelHelper.delete(this.players[0].ID);
@@ -215,30 +190,6 @@ public class TrainerDuel extends Duel
     private void setTrainer(Trainer.TrainerInfo info)
     {
         this.players[1] = Trainer.create(info);
-        Random r = new Random();
-
-        if(info.elite)
-        {
-            StringBuilder ivs = new StringBuilder();
-            for(int i = 0; i < 6; i++) ivs.append(r.nextInt(12) + 20).append("-");
-            ivs.deleteCharAt(ivs.length() - 1);
-
-            StringBuilder evs = new StringBuilder();
-            for(int i = 0; i < 6; i++) evs.append(r.nextInt(203) + 50).append("-");
-            evs.deleteCharAt(ivs.length() - 1);
-
-            for(int i = 0; i < this.players[1].team.size(); i++)
-            {
-                this.players[1].team.get(i).setIVs(ivs.toString());
-                this.players[1].team.get(i).setEVs(evs.toString());
-                this.players[1].team.get(i).setHealth(this.players[1].team.get(i).getStat(Stat.HP));
-                this.players[1].team.get(i).setShiny(r.nextInt(100) < 33);
-            }
-
-            this.players[1].active = this.players[1].team.get(0);
-
-            return;
-        }
 
         int highest = this.players[0].team.get(0).getEVTotal();
         String condensed = this.players[0].team.get(0).getVCondensed(this.players[0].team.get(0).getEVs());

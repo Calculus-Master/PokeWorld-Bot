@@ -3,7 +3,6 @@ package com.calculusmaster.pokecord.game.duel.players;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
@@ -78,23 +77,6 @@ public class Trainer extends Player
     }
 
     public TrainerInfo info;
-
-    public static TrainerInfo createElite()
-    {
-        List<String> pool = new ArrayList<>();
-        pool.addAll(PokemonRarity.LEGENDARY);
-        pool.addAll(PokemonRarity.MYTHICAL);
-        pool.addAll(PokemonRarity.ULTRA_BEAST);
-        pool.addAll(PokemonRarity.MEGA);
-
-        String[] team = new String[6];
-        for(int i = 0; i < 6; i++) team[i] = pool.get(new Random().nextInt(pool.size()));
-        TrainerInfo info = new TrainerInfo("Elite", 100, ZCrystal.values()[new Random().nextInt(18)], 1.5, team);
-        info.buff = 1.25;
-        info.elite = true;
-
-        return info;
-    }
 
     public static Trainer create(TrainerInfo info)
     {
@@ -172,7 +154,6 @@ public class Trainer extends Player
         public ZCrystal zcrystal;
         public int pokemonLevel;
         public double buff;
-        public boolean elite;
         public List<String> playersDefeated;
 
         public TrainerInfo(String name, int level, ZCrystal z, double buff, String... pokemon)
@@ -183,7 +164,6 @@ public class Trainer extends Player
             this.zcrystal = z;
             this.buff = buff;
             this.pokemon = Arrays.asList(pokemon);
-            this.elite = false;
             this.playersDefeated = new ArrayList<>();
         }
 

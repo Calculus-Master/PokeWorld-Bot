@@ -816,9 +816,19 @@ public class Pokemon
         for (int i = 0; i < 6; i++) this.IV.put(Stat.values()[i], Integer.parseInt(cond.split("-")[i]));
     }
 
+    public void setIV(Stat s, int IV)
+    {
+        this.IV.put(s, IV);
+    }
+
     public void setEVs(String cond)
     {
         for (int i = 0; i < 6; i++) this.EV.put(Stat.values()[i], Integer.parseInt(cond.split("-")[i]));
+    }
+
+    public void setEV(Stat s, int EV)
+    {
+        this.EV.put(s, EV);
     }
 
     public void setIVs()

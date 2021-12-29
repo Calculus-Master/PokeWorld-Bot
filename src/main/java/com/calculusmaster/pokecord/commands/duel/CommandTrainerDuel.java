@@ -26,19 +26,16 @@ public class CommandTrainerDuel extends Command
         if(this.insufficientMasteryLevel(Feature.PVE_DUELS_TRAINER)) return this.invalidMasteryLevel(Feature.PVE_DUELS_TRAINER);
 
         boolean regular = this.msg.length == 2 && this.isNumeric(1) && this.getInt(1) >= 1 && this.getInt(1) <= Trainer.DAILY_TRAINERS.size();
-        boolean elite = this.msg.length == 2 && this.msg[1].equals("elite");
 
-        if(this.msg.length == 2 && (elite || regular))
+        if(regular)
         {
-            if(elite && this.insufficientMasteryLevel(Feature.PVE_DUELS_ELITE)) this.invalidMasteryLevel(Feature.PVE_DUELS_ELITE);
-
             if(DuelHelper.isInDuel(this.player.getId()))
             {
                 this.response = "You are already in a duel!";
                 return this;
             }
 
-            Trainer.TrainerInfo trainer = elite ? Trainer.createElite() : Trainer.DAILY_TRAINERS.get(this.getInt(1) - 1);
+            Trainer.TrainerInfo trainer = Trainer.DAILY_TRAINERS.get(this.getInt(1) - 1);
 
             if(this.playerData.getTeam().size() < trainer.pokemon.size())
             {
@@ -46,16 +43,15 @@ public class CommandTrainerDuel extends Command
                 return this;
             }
 
-            if(!trainer.elite && this.isInvalidTeam(trainer.pokemon.size()))
+            if(this.isInvalidTeam(trainer.pokemon.size()))
             {
                 this.response = "Your team is invalid! You can have a maximum of " + this.getLegendaryCap(trainer.pokemon.size()) + " legendaries and " + this.getMythicalUBCap(trainer.pokemon.size()) + " mythicals/ultra beasts!";
                 return this;
             }
 
             Duel d = TrainerDuel.create(this.player.getId(), this.event, trainer);
-
-            this.response = "You challenged " + trainer.name + " !";
-
+            this.event.getChannel().sendMessage("You challenged %s!".formatted(trainer.name)).queue();
+            this.embed = null;
             d.sendTurnEmbed();
         }
         else

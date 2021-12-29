@@ -121,7 +121,7 @@ public class MasteryLevelManager
 
         // Level 10 – Expanding Duels (PvP)
         // PvP Duels (Unlimited)
-        // Elite Duels – p!trainer elite / p!elite TODO: Make Elite Duels their own thing
+        // Elite Duels – p!elite
         PokemonMasteryLevel.create(10)
                 .withFeaturesUnlocked(Feature.PVP_DUELS_UNLIMITED, Feature.PVE_DUELS_ELITE)
                 .withExperienceRequirement(3000)

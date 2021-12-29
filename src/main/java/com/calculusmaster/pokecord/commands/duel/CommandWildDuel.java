@@ -64,8 +64,9 @@ public class CommandWildDuel extends Command
 
                 if(price != 0) this.playerData.changeCredits(-1 * price);
 
-                this.response = "A wild Pokemon appeared, and it wants to challenge you!";
+                this.event.getChannel().sendMessage("A wild Pokemon appeared, and it wants to challenge you!").queue();
 
+                this.embed = null;
                 d.sendTurnEmbed();
 
             }

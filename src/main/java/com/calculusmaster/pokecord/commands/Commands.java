@@ -303,6 +303,10 @@ public class Commands
                 .setCommand(CommandZTrialDuel::new)
                 .setCategory(Category.DUEL);
 
+        register("eliteduel", "elite")
+                .setCommand(CommandEliteDuel::new)
+                .setCategory(Category.DUEL);
+
         register("dev")
                 .setCommand(CommandDev::new)
                 .setCategory(Category.MISC);

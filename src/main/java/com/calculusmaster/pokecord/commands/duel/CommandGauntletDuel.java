@@ -40,7 +40,7 @@ public class CommandGauntletDuel extends Command
             {
                 GauntletDuel gauntlet = GauntletDuel.start(this.player.getId(), this.event);
 
-                this.response = this.playerData.getSelectedPokemon().getName() + " has started a Gauntlet!";
+                this.event.getChannel().sendMessage(this.playerData.getSelectedPokemon().getName() + " has started a Gauntlet!").queue();
 
                 gauntlet.sendTurnEmbed();
             }
