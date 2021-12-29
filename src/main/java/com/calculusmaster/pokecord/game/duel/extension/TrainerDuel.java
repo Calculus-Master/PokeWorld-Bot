@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game.duel.extension;
 
+import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
@@ -51,6 +52,7 @@ public class TrainerDuel extends Duel
             embed.setDescription("You defeated " + bot + "!");
 
             Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_TRAINER_DUEL, this.event);
+            this.players[0].data.updateBountyProgression(ObjectiveType.WIN_TRAINER_DUEL);
 
             //Regular Daily Trainer
 
@@ -83,6 +85,8 @@ public class TrainerDuel extends Duel
 
         this.uploadEVs(0);
         this.uploadExperience();
+
+        this.players[0].data.updateBountyProgression(ObjectiveType.COMPLETE_TRAINER_DUEL);
 
         this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
         DuelHelper.delete(this.players[0].ID);
