@@ -4,13 +4,13 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
+import com.calculusmaster.pokecord.game.player.Settings;
+import com.calculusmaster.pokecord.mongo.PlayerSettingsQuery;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.helpers.SettingsHelper;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import static com.calculusmaster.pokecord.util.helpers.SettingsHelper.Setting;
-import static com.calculusmaster.pokecord.util.helpers.SettingsHelper.Setting.*;
+import static com.calculusmaster.pokecord.game.player.Settings.*;
 
 public class CommandSettings extends Command
 {
@@ -31,18 +31,18 @@ public class CommandSettings extends Command
 
         if(client)
         {
-            if(this.msg.length == 2 || !Setting.isValid(this.msg[2]))
+            if(this.msg.length == 2 || !Settings.isValid(this.msg[2]))
             {
                 this.embed.setTitle("Client Settings");
 
                 StringBuilder clientSettings = new StringBuilder();
-                for(Setting s : Setting.values()) if(s.isClient()) clientSettings.append("`p!settings client ").append(s.getCommand()).append("` - ").append(s.getDesc()).append("\n");
+                for(Settings s : Settings.values()) if(s.isClient()) clientSettings.append("`p!settings client ").append(s.getCommand()).append("` - ").append(s.getDesc()).append("\n");
 
                 this.embed.setDescription(clientSettings.toString());
             }
             else
             {
-                SettingsHelper settings = this.playerData.getSettings();
+                PlayerSettingsQuery settings = this.playerData.getSettings();
 
                 if(CLIENT_DETAILED.matches(this.msg[2]))
                 {
@@ -145,12 +145,12 @@ public class CommandSettings extends Command
         }
         else if(server)
         {
-            if(this.msg.length == 2 || (isUserAdmin && !Setting.isValid(this.msg[2])))
+            if(this.msg.length == 2 || (isUserAdmin && !Settings.isValid(this.msg[2])))
             {
                 this.embed.setTitle("Server Settings");
 
                 StringBuilder serverSettings = new StringBuilder();
-                for(Setting s : Setting.values()) if(s.isServer()) serverSettings.append("`p!settings server ").append(s.getCommand()).append("` - ").append(s.getDesc()).append("\n");
+                for(Settings s : Settings.values()) if(s.isServer()) serverSettings.append("`p!settings server ").append(s.getCommand()).append("` - ").append(s.getDesc()).append("\n");
 
                 this.embed.setDescription(serverSettings.toString());
                 this.embed.setFooter("Only Administrators can edit these settings!");

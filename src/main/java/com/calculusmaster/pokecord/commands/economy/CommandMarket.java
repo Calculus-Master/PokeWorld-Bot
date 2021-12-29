@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.Item;
+import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
@@ -15,7 +16,6 @@ import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
-import com.calculusmaster.pokecord.util.helpers.SettingsHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.*;
@@ -92,7 +92,7 @@ public class CommandMarket extends Command
                 String type = "Type: " + (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalize(chosen.getType()[0].toString()) : Global.normalize(chosen.getType()[0].toString()) + " | " + Global.normalize(chosen.getType()[1].toString()));
                 String nature = "Nature: " + Global.normalize(chosen.getNature().toString());
                 String item = "Held Item: " + Item.asItem(chosen.getItem()).getStyledName();
-                String stats = CommandInfo.getStatsFormatted(chosen, this.playerData.getSettings().getSettingBoolean(SettingsHelper.Setting.CLIENT_DETAILED));
+                String stats = CommandInfo.getStatsFormatted(chosen, this.playerData.getSettings().getSettingBoolean(Settings.CLIENT_DETAILED));
 
                 this.embed.setTitle(title);
                 this.embed.setDescription(market + "\n" + exp + "\n" + gender + "\n" + type + "\n" + nature + "\n" + item + "\n\n" + stats);
@@ -357,7 +357,7 @@ public class CommandMarket extends Command
         int endIndex = startIndex + 20;
 
         StringBuilder page = new StringBuilder();
-        for(int i = startIndex; i < endIndex; i++) if(i < marketEntries.size()) page.append(marketEntries.get(i).getEntryLine(this.playerData.getSettings().getSettingBoolean(SettingsHelper.Setting.CLIENT_DETAILED))).append("\n");
+        for(int i = startIndex; i < endIndex; i++) if(i < marketEntries.size()) page.append(marketEntries.get(i).getEntryLine(this.playerData.getSettings().getSettingBoolean(Settings.CLIENT_DETAILED))).append("\n");
 
         return page.toString();
     }

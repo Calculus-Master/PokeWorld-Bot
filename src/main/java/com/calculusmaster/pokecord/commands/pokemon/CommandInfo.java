@@ -7,9 +7,9 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
+import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.helpers.SettingsHelper;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -57,7 +57,7 @@ public class CommandInfo extends Command
                 .addField("Held", "Item: %s\nTM: %s\nTR: %s".formatted(item, tm, tr), false)
                 .addField(this.getStatsField(chosen));
 
-        if(this.playerData.getSettings().getSettingBoolean(SettingsHelper.Setting.CLIENT_DETAILED))
+        if(this.playerData.getSettings().getSettingBoolean(Settings.CLIENT_DETAILED))
         {
             this.embed
                     .addField(this.getIVsField(chosen))

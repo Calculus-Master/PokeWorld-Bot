@@ -11,7 +11,6 @@ import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
-import com.calculusmaster.pokecord.util.helpers.SettingsHelper;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.User;
@@ -28,7 +27,7 @@ import java.util.stream.Collectors;
 
 public class PlayerDataQuery extends MongoQuery
 {
-    private Optional<SettingsHelper> settings = Optional.empty();
+    private Optional<PlayerSettingsQuery> settings = Optional.empty();
     private Optional<PlayerStatisticsQuery> stats = Optional.empty();
 
     public PlayerDataQuery(String playerID)
@@ -72,7 +71,7 @@ public class PlayerDataQuery extends MongoQuery
 
         Mongo.PlayerData.insertOne(data);
 
-        SettingsHelper.register(player.getId());
+        PlayerSettingsQuery.register(player.getId());
         PlayerStatisticsQuery.register(player.getId());
 
         CacheHelper.addPlayer(player.getId());
@@ -91,9 +90,9 @@ public class PlayerDataQuery extends MongoQuery
     }
 
     //Get the SettingsHelper object
-    public SettingsHelper getSettings()
+    public PlayerSettingsQuery getSettings()
     {
-        if(this.settings.isEmpty()) this.settings = Optional.of(new SettingsHelper(this.getID()));
+        if(this.settings.isEmpty()) this.settings = Optional.of(new PlayerSettingsQuery(this.getID()));
         return this.settings.get();
     }
 

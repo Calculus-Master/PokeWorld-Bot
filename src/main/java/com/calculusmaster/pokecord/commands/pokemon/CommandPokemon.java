@@ -6,13 +6,13 @@ import com.calculusmaster.pokecord.game.enums.elements.Gender;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
+import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonListSorter;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.PokemonSorterFlag;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
-import com.calculusmaster.pokecord.util.helpers.SettingsHelper;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.commons.collections4.list.TreeList;
@@ -187,7 +187,7 @@ public class CommandPokemon extends Command
 
     private void sortOrder()
     {
-        OrderSort o = OrderSort.cast(this.playerData.getSettings().getSettingString(SettingsHelper.Setting.CLIENT_DEFAULT_ORDER));
+        OrderSort o = OrderSort.cast(this.playerData.getSettings().getSettingString(Settings.CLIENT_DEFAULT_ORDER));
 
         if(o == null) o = OrderSort.RANDOM;
 
@@ -230,7 +230,7 @@ public class CommandPokemon extends Command
     //Do sorting before this
     private void createListEmbed()
     {
-        boolean fields = this.playerData.getSettings().getSettingBoolean(SettingsHelper.Setting.CLIENT_POKEMON_LIST_FIELDS);
+        boolean fields = this.playerData.getSettings().getSettingBoolean(Settings.CLIENT_POKEMON_LIST_FIELDS);
 
         boolean hasPage = this.msg.length >= 2 && this.isNumeric(1);
         int perPage = fields ? 15 : 20;
@@ -256,7 +256,7 @@ public class CommandPokemon extends Command
 
     private MessageEmbed.Field getField(Pokemon p)
     {
-        boolean detailed = this.playerData.getSettings().getSettingBoolean(SettingsHelper.Setting.CLIENT_DETAILED);
+        boolean detailed = this.playerData.getSettings().getSettingBoolean(Settings.CLIENT_DETAILED);
 
         return new MessageEmbed.Field(p.getDisplayName(),
                 this.getCategoryFlags(p) + "\n" +
@@ -292,7 +292,7 @@ public class CommandPokemon extends Command
                 (this.favorites.contains(p.getUUID()) ? ":regional_indicator_f: " : "") +
                 "| Number: " + p.getNumber() +
                 " | Level " + p.getLevel() +
-                (this.playerData.getSettings().getSettingBoolean(SettingsHelper.Setting.CLIENT_DETAILED) ? " | IV: " + p.getTotalIV() : "") +
+                (this.playerData.getSettings().getSettingBoolean(Settings.CLIENT_DETAILED) ? " | IV: " + p.getTotalIV() : "") +
                 "\n";
     }
 }
