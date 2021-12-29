@@ -256,65 +256,6 @@ public class Pokemon
         return this.specificJSON;
     }
 
-    public int getValue()
-    {
-        System.out.println(this.getName());
-        PokemonRarity.Rarity rarity = PokemonRarity.POKEMON_RARITIES.get(this.getName());
-        if (rarity == null)
-            rarity = PokemonRarity.Rarity.values()[new Random().nextInt(PokemonRarity.Rarity.values().length)];
-
-        int basePrice = switch (rarity) {
-            case COPPER -> 500;
-            case SILVER -> 1000;
-            case GOLD -> 2000;
-            case DIAMOND -> 5000;
-            case PLATINUM -> 10000;
-            case MYTHICAL -> 15000;
-            case LEGENDARY -> 20000;
-            case EXTREME -> 50000;
-        };
-
-        int numZero = 0;
-        int numMax = 0;
-        int numSoftMax = 0;
-
-        for (Stat s : this.getIVs().keySet()) {
-            switch (this.getIVs().get(s)) {
-                case 0 -> numZero++;
-                case 31 -> {
-                    numMax++;
-                    numSoftMax++;
-                }
-                case 30, 29, 28 -> numSoftMax++;
-            }
-        }
-
-        switch (numMax) {
-            case 6 -> basePrice *= 15;
-            case 5 -> basePrice *= 10;
-            case 4 -> basePrice *= 7;
-            case 3 -> basePrice *= 5;
-            case 2, 1 -> basePrice += (basePrice / 2);
-        }
-
-        switch (numSoftMax) {
-            case 6 -> basePrice += 7000;
-            case 5 -> basePrice += 5000;
-        }
-
-        switch (numZero) {
-            case 6 -> basePrice *= 15;
-            case 5 -> basePrice *= 10;
-            case 4, 3 -> basePrice *= 5;
-        }
-
-        for (Stat s : this.getEVs().keySet()) basePrice += this.getEVs().get(s) * 100;
-
-        if (this.getName().contains("Mega")) basePrice += 1500;
-
-        return basePrice;
-    }
-
     //Is the Pokemon complete/mastered - does it have all of its components used / maxed out
     public boolean isMastered()
     {

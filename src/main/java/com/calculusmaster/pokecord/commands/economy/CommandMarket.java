@@ -10,7 +10,6 @@ import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
-import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.game.trade.elements.MarketEntry;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
@@ -360,27 +359,5 @@ public class CommandMarket extends Command
         for(int i = startIndex; i < endIndex; i++) if(i < marketEntries.size()) page.append(marketEntries.get(i).getEntryLine(this.playerData.getSettings().getSettingBoolean(Settings.CLIENT_DETAILED))).append("\n");
 
         return page.toString();
-    }
-
-    public static void addBotEntry()
-    {
-        Pokemon p = Pokemon.create(PokemonData.POKEMON.get(new Random().nextInt(PokemonData.POKEMON.size())));
-        p.setLevel(new Random().nextInt(100) + 1);
-
-        Random r = new Random();
-        boolean rare = r.nextInt(100) < 10;
-        StringBuilder condensed = new StringBuilder();
-        for(int i = 0; i < 6; i++) condensed.append(rare ? r.nextInt(100) : r.nextInt(30)).append("-");
-        condensed.deleteCharAt(condensed.length() - 1);
-
-        p.setEVs(condensed.toString());
-
-        Pokemon.uploadPokemon(p);
-
-        int val = p.getValue();
-
-        val += new Random().nextInt(val / 4) * (new Random().nextInt(50) < 25 ? -1 : 1);
-
-        MarketEntry.create("BOT", "BOT", p.getUUID(), val);
     }
 }
