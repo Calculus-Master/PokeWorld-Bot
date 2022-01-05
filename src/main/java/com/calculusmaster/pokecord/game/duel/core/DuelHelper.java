@@ -11,7 +11,6 @@ import com.calculusmaster.pokecord.game.moves.registry.ZMoveRegistry;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class DuelHelper
 {
@@ -25,8 +24,8 @@ public class DuelHelper
 
     public static Duel instance(String id)
     {
-        if(id.chars().allMatch(Character::isDigit)) return DUELS.stream().filter(d -> d.hasPlayer(id)).collect(Collectors.toList()).get(0);
-        else return DUELS.stream().filter(d -> Arrays.stream(d.getPlayers()).anyMatch(p -> p.active.getUUID().equals(id))).collect(Collectors.toList()).get(0);
+        if(id.chars().allMatch(Character::isDigit)) return DUELS.stream().filter(d -> d.hasPlayer(id)).toList().get(0);
+        else return DUELS.stream().filter(d -> Arrays.stream(d.getPlayers()).anyMatch(p -> p.active.getUUID().equals(id))).toList().get(0);
     }
 
     public static void delete(String id)

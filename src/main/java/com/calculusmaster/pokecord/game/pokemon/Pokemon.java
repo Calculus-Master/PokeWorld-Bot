@@ -523,7 +523,7 @@ public class Pokemon
     //UUID
     private void setUUID()
     {
-        StringBuilder uuid = new StringBuilder(this.getName().toLowerCase().substring(0, 4)).append("|");
+        StringBuilder uuid = new StringBuilder();
 
         for (int i = 0; i < 6; i++) uuid.append(IDHelper.alphanumeric(4)).append("-");
 

@@ -10,6 +10,8 @@ import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
+import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -17,9 +19,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.List;
 import java.util.*;
@@ -196,44 +196,143 @@ public class RaidDuel extends WildDuel
         RaidEventHelper.removeServer(this.event.getGuild().getId());
     }
 
-    @Override
-    public InputStream getImage() throws Exception
+    private static void testImageGeneration() throws IOException
     {
+        CSVHelper.init();
+        PokemonData.init();
+        PokemonRarity.init();
+
         //Background is 800 x 480 -> 400 x 240
-        int baseSize = 150;
         int y = 50;
         int spacing = 25;
         int backgroundW = 400;
         int backgroundH = 240;
         int hint = BufferedImage.TYPE_INT_ARGB;
 
-        Image background = ImageIO.read(new URL(BACKGROUND)).getScaledInstance(backgroundW, backgroundH, hint);
-        BufferedImage combined = new BufferedImage(background.getWidth(null), background.getHeight(null), hint);
+        int basePlayerSize = 40;
+        int bossSize = 150;
 
+        Pokemon[] players = new Pokemon[new SplittableRandom().nextInt(5, 9) + 1];
+        for(int i = 0; i < players.length - 1; i++) players[i] = Pokemon.create(PokemonRarity.getSpawn());
+        Pokemon boss = Pokemon.create(PokemonRarity.getLegendarySpawn());
+        players[players.length - 1] = boss;
+
+        for (Pokemon p : players) p.setHealth(p.getStat(Stat.HP));
+
+        Image background = ImageIO.read(new URL(BACKGROUND)).getScaledInstance(backgroundW, backgroundH, hint);
+
+        BufferedImage combined = new BufferedImage(background.getWidth(null), background.getHeight(null), hint);
         combined.getGraphics().drawImage(background, 0, 0, null);
 
-        if(!this.players[0].active.isFainted())
-        {
-            int size = this.players[0].active.isDynamaxed() ? (int)(baseSize * 1.25) : baseSize;
+        List<Image> playerImages = new ArrayList<>();
 
-            Image p1 = ImageIO.read(new URL(this.getPokemonURL(0))).getScaledInstance(size, size, hint);
-            combined.getGraphics().drawImage(p1, spacing, y, null);
+        for(int i = 0; i < players.length - 1; i++)
+        {
+            if(!players[i].isFainted())
+            {
+                int size = players[i].isDynamaxed() ? (int)(basePlayerSize * 1.25) : basePlayerSize;
+                System.out.println("Reading URL – Name: " + players[i].getName() + ", URL: " + players[i].getImage());
+                Image image = ImageIO.read(new URL(players[i].getImage())).getScaledInstance(size, size, hint);
+
+                playerImages.add(image);
+            }
         }
+
+        System.out.println(playerImages.size());
+
+        new RaidDuel().drawPlayerImages(combined, playerImages, backgroundW, backgroundH);
+
+        if(!players[players.length - 1].isFainted())
+        {
+            int size = players[players.length - 1].isDynamaxed() ? (int)(bossSize * 1.25) : bossSize;
+
+            Image p2 = ImageIO.read(new URL(players[players.length - 1].getImage())).getScaledInstance(size, size, hint);
+            combined.getGraphics().drawImage(p2, (backgroundW - spacing) - size, y, null);
+        }
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream(backgroundH * backgroundW * 4);
+        ImageIO.write(combined, "png", out);
+
+        byte[] bytes = out.toByteArray(); //This is the slow line
+
+        try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream("output.png")))
+        {
+            outputStream.write(bytes);
+        }
+    }
+
+    @Override
+    public InputStream getImage() throws Exception
+    {
+        //Background is 800 x 480 -> 400 x 240
+        int y = 50;
+        int spacing = 25;
+        int backgroundW = 400;
+        int backgroundH = 240;
+        int hint = BufferedImage.TYPE_INT_ARGB;
+
+        int basePlayerSize = 40;
+        int bossSize = 150;
+
+        Image background = ImageIO.read(new URL(BACKGROUND)).getScaledInstance(backgroundW, backgroundH, hint);
+
+        BufferedImage combined = new BufferedImage(background.getWidth(null), background.getHeight(null), hint);
+        combined.getGraphics().drawImage(background, 0, 0, null);
+
+        List<Image> playerImages = new ArrayList<>();
+
+        for(int i = 0; i < this.players.length - 1; i++)
+        {
+            if(!this.players[i].active.isFainted())
+            {
+                int size = this.players[i].active.isDynamaxed() ? (int)(basePlayerSize * 1.25) : basePlayerSize;
+                Image image = ImageIO.read(new URL(this.getPokemonURL(i))).getScaledInstance(size, size, hint);
+
+                playerImages.add(image);
+            }
+        }
+
+        this.drawPlayerImages(combined, playerImages, backgroundW, backgroundH);
 
         if(!this.players[this.players.length - 1].active.isFainted())
         {
-            int size = this.players[this.players.length - 1].active.isDynamaxed() ? (int)(baseSize * 1.25) : baseSize;
+            int size = this.players[this.players.length - 1].active.isDynamaxed() ? (int)(bossSize * 1.25) : bossSize;
 
             Image p2 = ImageIO.read(new URL(this.getPokemonURL(this.players.length - 1))).getScaledInstance(size, size, hint);
             combined.getGraphics().drawImage(p2, (backgroundW - spacing) - size, y, null);
         }
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ByteArrayOutputStream out = new ByteArrayOutputStream(backgroundH * backgroundW * 4);
         ImageIO.write(combined, "png", out);
 
         byte[] bytes = out.toByteArray(); //This is the slow line
 
         return new ByteArrayInputStream(bytes);
+    }
+
+    private void drawPlayerImages(BufferedImage combined, List<Image> players, int backW, int backH)
+    {
+        int columnSize = 4;
+        List<List<Image>> imageColumns = new ArrayList<>(); //Columns of 4 images
+        for(int i = 0; i < players.size(); i += columnSize) imageColumns.add(players.subList(i, Math.min(i + columnSize, players.size())));
+
+        int spacing = 5;
+        int size = 40; //Minimum size, spacing should take care of dynamaxed pokemon
+        int y = 20;
+        int x = 25;
+
+        for(List<Image> column : imageColumns)
+        {
+            for (Image image : column)
+            {
+                combined.getGraphics().drawImage(image, x, y, null);
+
+                y += size + spacing;
+            }
+
+            y = 20;
+            x += size + spacing;
+        }
     }
 
     @Override
