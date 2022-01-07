@@ -217,7 +217,9 @@ public class RaidDuel extends WildDuel
         Pokemon boss = Pokemon.create(PokemonRarity.getLegendarySpawn());
         players[players.length - 1] = boss;
 
-        for (Pokemon p : players) p.setHealth(p.getStat(Stat.HP));
+        for(Pokemon p : players) p.setHealth(p.getStat(Stat.HP));
+
+        players[new SplittableRandom().nextInt(players.length - 1)].enterDynamax();
 
         Image background = ImageIO.read(new URL(BACKGROUND)).getScaledInstance(backgroundW, backgroundH, hint);
 
@@ -259,6 +261,12 @@ public class RaidDuel extends WildDuel
         {
             outputStream.write(bytes);
         }
+    }
+
+    public static void main(String[] args) throws IOException
+    {
+        testImageGeneration();
+        //TODO: Fix Dynamax Pokemon not appearing correctly sized
     }
 
     @Override
