@@ -9,7 +9,7 @@ public class PlayerStatisticsQuery extends MongoQuery
 {
     public PlayerStatisticsQuery(String playerID)
     {
-        super("playerID", playerID, Mongo.PlayerStatisticsData);
+        super("playerID", playerID, Mongo.StatisticsData);
     }
 
     public static void register(String playerID)
@@ -18,13 +18,13 @@ public class PlayerStatisticsQuery extends MongoQuery
 
         for(PlayerStatistic s : PlayerStatistic.values()) statsData.append(s.key, 0);
 
-        Mongo.PlayerStatisticsData.insertOne(statsData);
+        Mongo.StatisticsData.insertOne(statsData);
     }
 
     @Override
     protected void update()
     {
-        this.document = Mongo.PlayerStatisticsData.find(this.query).first();
+        this.document = Mongo.StatisticsData.find(this.query).first();
     }
 
     public int get(PlayerStatistic stat)
@@ -34,7 +34,7 @@ public class PlayerStatisticsQuery extends MongoQuery
 
     public void incr(PlayerStatistic stat, int amount)
     {
-        Mongo.PlayerStatisticsData.updateOne(this.query, Updates.inc(stat.key, amount));
+        Mongo.StatisticsData.updateOne(this.query, Updates.inc(stat.key, amount));
 
         this.update();
     }

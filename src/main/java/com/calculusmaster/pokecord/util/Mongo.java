@@ -14,24 +14,45 @@ public class Mongo
     private static final ConnectionString CONNECT_MAIN = new ConnectionString(PrivateInfo.MAIN_USER);
     private static final MongoClient CLIENT_MAIN = MongoClients.create(MongoClientSettings.builder().applyConnectionString(CONNECT_MAIN).retryReads(true).retryWrites(true).build());
 
-    //Databases
-    private static final MongoDatabase ImmutableDB = CLIENT_MAIN.getDatabase("Immutable");
+    private static final MongoDatabase PokecordDB = CLIENT_MAIN.getDatabase("Pokecord2");
+
+    public static final MongoCollection<Document> ConfigData = PokecordDB.getCollection("ConfigData");
+
+    public static final MongoCollection<Document> PlayerData = PokecordDB.getCollection("PlayerData");
+    public static final MongoCollection<Document> ServerData = PokecordDB.getCollection("ServerData");
+    public static final MongoCollection<Document> SettingsData = PokecordDB.getCollection("SettingsData");
+    public static final MongoCollection<Document> StatisticsData = PokecordDB.getCollection("StatisticsData");
+
+    public static final MongoCollection<Document> PokemonData = PokecordDB.getCollection("PokemonData");
+    public static final MongoCollection<Document> MarketData = PokecordDB.getCollection("MarketData");
+    public static final MongoCollection<Document> DexData = PokecordDB.getCollection("DexData");
+
+    public static final MongoCollection<Document> BountyData = PokecordDB.getCollection("BountyData");
+    public static final MongoCollection<Document> EggData = PokecordDB.getCollection("EggData");
+    public static final MongoCollection<Document> TrainerData = PokecordDB.getCollection("TrainerData");
+
+    public static final MongoCollection<Document> TimeData = PokecordDB.getCollection("TimeData");
+
+    public static final MongoCollection<Document> ReportData = PokecordDB.getCollection("ReportData");
+    public static final MongoCollection<Document> CrashData = PokecordDB.getCollection("CrashData");
+
+    //Database Collections - Legacy
+
+    @Deprecated
     private static final MongoDatabase MutableDB = CLIENT_MAIN.getDatabase("Mutable");
 
-    //Database Collections
-    public static final MongoCollection<Document> PlayerData = MutableDB.getCollection("PlayerData");
-    public static final MongoCollection<Document> ServerData = MutableDB.getCollection("ServerData");
-    public static final MongoCollection<Document> PokemonData = MutableDB.getCollection("PokemonData");
-    public static final MongoCollection<Document> ReportData = MutableDB.getCollection("ReportData");
-    public static final MongoCollection<Document> MarketData = MutableDB.getCollection("MarketData");
-    public static final MongoCollection<Document> GymData = MutableDB.getCollection("GymData");
-    public static final MongoCollection<Document> DexData = MutableDB.getCollection("DexData");
-    public static final MongoCollection<Document> SettingsData = MutableDB.getCollection("SettingsData");
-    public static final MongoCollection<Document> PlayerStatisticsData = MutableDB.getCollection("PlayerStatisticsData");
-    public static final MongoCollection<Document> BountyData = MutableDB.getCollection("BountyData");
-    public static final MongoCollection<Document> ConfigData = MutableDB.getCollection("ConfigData");
-    public static final MongoCollection<Document> EggData = MutableDB.getCollection("EggData");
-    public static final MongoCollection<Document> TrainerData = MutableDB.getCollection("TrainerData");
-    public static final MongoCollection<Document> CrashData = MutableDB.getCollection("CrashData");
-    public static final MongoCollection<Document> TimeData = MutableDB.getCollection("TimeData");
+    public static final MongoCollection<Document> LegacyPlayerData = MutableDB.getCollection("PlayerData");
+    public static final MongoCollection<Document> LegacyServerData = MutableDB.getCollection("ServerData");
+    public static final MongoCollection<Document> LegacyPokemonData = MutableDB.getCollection("PokemonData");
+    public static final MongoCollection<Document> LegacyReportData = MutableDB.getCollection("ReportData");
+    public static final MongoCollection<Document> LegacyMarketData = MutableDB.getCollection("MarketData");
+    public static final MongoCollection<Document> LegacyDexData = MutableDB.getCollection("DexData");
+    public static final MongoCollection<Document> LegacySettingsData = MutableDB.getCollection("SettingsData");
+    public static final MongoCollection<Document> LegacyPlayerStatisticsData = MutableDB.getCollection("PlayerStatisticsData");
+    public static final MongoCollection<Document> LegacyBountyData = MutableDB.getCollection("BountyData");
+    public static final MongoCollection<Document> LegacyConfigData = MutableDB.getCollection("ConfigData");
+    public static final MongoCollection<Document> LegacyEggData = MutableDB.getCollection("EggData");
+    public static final MongoCollection<Document> LegacyTrainerData = MutableDB.getCollection("TrainerData");
+    public static final MongoCollection<Document> LegacyCrashData = MutableDB.getCollection("CrashData");
+    public static final MongoCollection<Document> LegacyTimeData = MutableDB.getCollection("TimeData");
 }
