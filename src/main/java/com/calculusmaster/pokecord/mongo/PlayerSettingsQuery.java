@@ -38,6 +38,19 @@ public class PlayerSettingsQuery
     }
 
     //Core
+    public <T> void updateSetting(Settings s, T value)
+    {
+        Mongo.SettingsData.updateOne(this.query, Updates.set(s.getCommand(), value));
+
+        this.update();
+    }
+
+    public <T> T getSetting(Settings s, Class<T> clazz)
+    {
+        return clazz.cast(this.settingsJSON.get(s.getCommand()));
+    }
+
+    @Deprecated
     public void updateSettingBoolean(Settings s, boolean value)
     {
         switch(s) {
@@ -49,6 +62,7 @@ public class PlayerSettingsQuery
         this.update();
     }
 
+    @Deprecated
     public void updateSettingString(Settings s, String value)
     {
         switch(s) {
@@ -56,6 +70,7 @@ public class PlayerSettingsQuery
         }
     }
 
+    @Deprecated
     public boolean getSettingBoolean(Settings s)
     {
         return switch(s) {
@@ -66,6 +81,7 @@ public class PlayerSettingsQuery
         };
     }
 
+    @Deprecated
     public String getSettingString(Settings s)
     {
         return switch(s) {
