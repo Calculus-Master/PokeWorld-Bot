@@ -6,24 +6,21 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.json.JSONObject;
 
 public class PlayerSettingsQuery
 {
-    private String playerID;
-    private Bson query;
-    private JSONObject settingsJSON;
+    private Document document;
+    private final Bson query;
 
     public PlayerSettingsQuery(String playerID)
     {
-        this.playerID = playerID;
         this.query = Filters.eq("playerID", playerID);
         this.update();
     }
 
     private void update()
     {
-        this.settingsJSON = new JSONObject(Mongo.SettingsData.find(this.query).first().toJson());
+        this.document = Mongo.SettingsData.find(this.query).first();
     }
 
     public static void register(String playerID)
@@ -38,15 +35,15 @@ public class PlayerSettingsQuery
     }
 
     //Core
-    public <T> void updateSetting(Settings s, T value)
+    public <T> void update(Settings s, T value)
     {
         Mongo.SettingsData.updateOne(this.query, Updates.set(s.getCommand(), value));
 
         this.update();
     }
 
-    public <T> T getSetting(Settings s, Class<T> clazz)
+    public <T> T get(Settings s, Class<T> clazz)
     {
-        return clazz.cast(this.settingsJSON.get(s.getCommand()));
+        return clazz.cast(this.document.get(s.getCommand()));
     }
 }

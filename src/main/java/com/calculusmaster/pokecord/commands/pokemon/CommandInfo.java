@@ -57,7 +57,7 @@ public class CommandInfo extends Command
                 .addField("Held", "Item: %s\nTM: %s\nTR: %s".formatted(item, tm, tr), false)
                 .addField(this.getStatsField(chosen));
 
-        if(this.playerData.getSettings().getSetting(Settings.CLIENT_DETAILED, Boolean.class))
+        if(this.playerData.getSettings().get(Settings.CLIENT_DETAILED, Boolean.class))
         {
             this.embed
                     .addField(this.getIVsField(chosen))

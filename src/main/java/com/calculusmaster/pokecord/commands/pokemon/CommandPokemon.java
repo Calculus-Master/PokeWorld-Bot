@@ -39,7 +39,8 @@ public class CommandPokemon extends Command
     public Command runCommand()
     {
         List<String> msg = Arrays.asList(this.msg);
-        Stream<Pokemon> stream = this.pokemon.stream();
+        //If the number of search parameters and the size of the search list is large enough, use a parallel stream. Otherwise a sequential stream should be fine
+        Stream<Pokemon> stream = msg.size() > 4 && this.pokemon.size() > 500 ? this.pokemon.parallelStream() : this.pokemon.stream();
 
         PokemonListSorter sorter = new PokemonListSorter(stream, msg);
 
@@ -176,7 +177,7 @@ public class CommandPokemon extends Command
 
     private void sortOrder()
     {
-        OrderSort o = OrderSort.cast(this.playerData.getSettings().getSetting(Settings.CLIENT_DEFAULT_ORDER, String.class));
+        OrderSort o = OrderSort.cast(this.playerData.getSettings().get(Settings.CLIENT_DEFAULT_ORDER, String.class));
 
         if(o == null) o = OrderSort.RANDOM;
 
@@ -219,7 +220,7 @@ public class CommandPokemon extends Command
     //Do sorting before this
     private void createListEmbed()
     {
-        boolean fields = this.playerData.getSettings().getSetting(Settings.CLIENT_POKEMON_LIST_FIELDS, Boolean.class);
+        boolean fields = this.playerData.getSettings().get(Settings.CLIENT_POKEMON_LIST_FIELDS, Boolean.class);
 
         boolean hasPage = this.msg.length >= 2 && this.isNumeric(1);
         int perPage = fields ? 15 : 20;
@@ -245,7 +246,7 @@ public class CommandPokemon extends Command
 
     private MessageEmbed.Field getField(Pokemon p)
     {
-        boolean detailed = this.playerData.getSettings().getSetting(Settings.CLIENT_DETAILED, Boolean.class);
+        boolean detailed = this.playerData.getSettings().get(Settings.CLIENT_DETAILED, Boolean.class);
 
         return new MessageEmbed.Field(p.getDisplayName(),
                 this.getCategoryFlags(p) + "\n" +
@@ -281,7 +282,7 @@ public class CommandPokemon extends Command
                 (this.favorites.contains(p.getUUID()) ? ":regional_indicator_f: " : "") +
                 "| Number: " + p.getNumber() +
                 " | Level " + p.getLevel() +
-                (this.playerData.getSettings().getSetting(Settings.CLIENT_DETAILED, Boolean.class) ? " | IV: " + p.getTotalIV() : "") +
+                (this.playerData.getSettings().get(Settings.CLIENT_DETAILED, Boolean.class) ? " | IV: " + p.getTotalIV() : "") +
                 "\n";
     }
 }

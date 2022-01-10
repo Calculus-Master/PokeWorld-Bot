@@ -91,7 +91,7 @@ public class CommandMarket extends Command
                 String type = "Type: " + (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalize(chosen.getType()[0].toString()) : Global.normalize(chosen.getType()[0].toString()) + " | " + Global.normalize(chosen.getType()[1].toString()));
                 String nature = "Nature: " + Global.normalize(chosen.getNature().toString());
                 String item = "Held Item: " + Item.asItem(chosen.getItem()).getStyledName();
-                String stats = CommandInfo.getStatsFormatted(chosen, this.playerData.getSettings().getSetting(Settings.CLIENT_DETAILED, Boolean.class));
+                String stats = CommandInfo.getStatsFormatted(chosen, this.playerData.getSettings().get(Settings.CLIENT_DETAILED, Boolean.class));
 
                 this.embed.setTitle(title);
                 this.embed.setDescription(market + "\n" + exp + "\n" + gender + "\n" + type + "\n" + nature + "\n" + item + "\n\n" + stats);
@@ -105,11 +105,13 @@ public class CommandMarket extends Command
         else
         {
             List<MarketEntry> marketEntries = new ArrayList<>(List.copyOf(CacheHelper.MARKET_ENTRIES));
-            Stream<MarketEntry> display = marketEntries.stream();
 
             if(this.msg.length == 1) Collections.shuffle(marketEntries);
 
             List<String> msg = new ArrayList<>(Arrays.asList(this.msg));
+
+            //@see CommandPokemon - does the situation warrant the use of a parallel stream
+            Stream<MarketEntry> display = marketEntries.size() > 500 && msg.size() > 4 ? marketEntries.parallelStream() : marketEntries.stream();
 
             //Market Specific Sorting
             if(msg.contains("--listings"))
@@ -356,7 +358,7 @@ public class CommandMarket extends Command
         int endIndex = startIndex + 20;
 
         StringBuilder page = new StringBuilder();
-        for(int i = startIndex; i < endIndex; i++) if(i < marketEntries.size()) page.append(marketEntries.get(i).getEntryLine(this.playerData.getSettings().getSetting(Settings.CLIENT_DETAILED, Boolean.class))).append("\n");
+        for(int i = startIndex; i < endIndex; i++) if(i < marketEntries.size()) page.append(marketEntries.get(i).getEntryLine(this.playerData.getSettings().get(Settings.CLIENT_DETAILED, Boolean.class))).append("\n");
 
         return page.toString();
     }

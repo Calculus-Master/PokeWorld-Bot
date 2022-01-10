@@ -54,7 +54,7 @@ public class CommandCatch extends Command
                 Pokemon.uploadPokemon(caught);
                 this.playerData.addPokemon(caught.getUUID());
 
-                if(this.playerData.getSettings().getSetting(Settings.CLIENT_CATCH_AUTO_INFO, Boolean.class))
+                if(this.playerData.getSettings().get(Settings.CLIENT_CATCH_AUTO_INFO, Boolean.class))
                     Commands.execute("info", this.event, new String[]{"info", "latest"});
             });
 

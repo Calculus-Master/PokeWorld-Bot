@@ -49,9 +49,9 @@ public class CommandSettings extends Command
                     //Toggle if no input given
                     if(this.msg.length == 3)
                     {
-                        boolean currentValue = settings.getSetting(CLIENT_DETAILED, Boolean.class);
+                        boolean currentValue = settings.get(CLIENT_DETAILED, Boolean.class);
 
-                        settings.updateSetting(CLIENT_DETAILED, !currentValue);
+                        settings.update(CLIENT_DETAILED, !currentValue);
 
                         if(currentValue) this.response = "Disabled viewing of detailed information!";
                         else this.response = "Enabled viewing of detailed information!";
@@ -63,7 +63,7 @@ public class CommandSettings extends Command
                         {
                             boolean newValue = "true".contains(this.msg[3]);
 
-                            settings.updateSetting(CLIENT_DETAILED, newValue);
+                            settings.update(CLIENT_DETAILED, newValue);
 
                             if(newValue) this.response = "Enabled viewing of detailed information!";
                             else this.response = "Disabled viewing of detailed information!";
@@ -76,9 +76,9 @@ public class CommandSettings extends Command
                     //Toggle if no input given
                     if(this.msg.length == 3)
                     {
-                        boolean currentValue = settings.getSetting(CLIENT_CATCH_AUTO_INFO, Boolean.class);
+                        boolean currentValue = settings.get(CLIENT_CATCH_AUTO_INFO, Boolean.class);
 
-                        settings.updateSetting(CLIENT_CATCH_AUTO_INFO, !currentValue);
+                        settings.update(CLIENT_CATCH_AUTO_INFO, !currentValue);
 
                         if(currentValue) this.response = "Disabled automatic info viewing after catch!";
                         else this.response = "Enabled automatic info viewing after catch!";
@@ -90,7 +90,7 @@ public class CommandSettings extends Command
                         {
                             boolean newValue = "true".contains(this.msg[3]);
 
-                            settings.updateSetting(CLIENT_CATCH_AUTO_INFO, newValue);
+                            settings.update(CLIENT_CATCH_AUTO_INFO, newValue);
 
                             if(newValue) this.response = "Enabled automatic info viewing after catch!";
                             else this.response = "Disabled automatic info viewing after catch!";
@@ -107,7 +107,7 @@ public class CommandSettings extends Command
                         if(order == null) this.response = "Invalid Order!";
                         else
                         {
-                            settings.updateSetting(CLIENT_DEFAULT_ORDER, order.toString());
+                            settings.update(CLIENT_DEFAULT_ORDER, order.toString());
 
                             this.response = "Your Pokemon List will now be ordered by `" + order.toString().toLowerCase() + "`!";
                         }
@@ -118,9 +118,9 @@ public class CommandSettings extends Command
                     //Toggle if no input given
                     if (this.msg.length == 3)
                     {
-                        boolean currentValue = settings.getSetting(CLIENT_POKEMON_LIST_FIELDS, Boolean.class);
+                        boolean currentValue = settings.get(CLIENT_POKEMON_LIST_FIELDS, Boolean.class);
 
-                        settings.updateSetting(CLIENT_POKEMON_LIST_FIELDS, !currentValue);
+                        settings.update(CLIENT_POKEMON_LIST_FIELDS, !currentValue);
 
                         if (currentValue) this.response = "Pokemon List view is now Text-based!";
                         else this.response = "Pokemon List view is now Field-based!";
@@ -132,7 +132,7 @@ public class CommandSettings extends Command
                         {
                             boolean newValue = "true".contains(this.msg[3]);
 
-                            settings.updateSetting(CLIENT_POKEMON_LIST_FIELDS, newValue);
+                            settings.update(CLIENT_POKEMON_LIST_FIELDS, newValue);
 
                             if (newValue) this.response = "Pokemon List view is now Field-based!";
                             else this.response = "Pokemon List view is now Text-based!";
