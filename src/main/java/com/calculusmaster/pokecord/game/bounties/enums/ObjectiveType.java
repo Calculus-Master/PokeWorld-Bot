@@ -43,7 +43,6 @@ public enum ObjectiveType
     CATCH_POKEMON_TYPE(CatchTypeObjective::new, 20, 40),
     CATCH_POKEMON_NAME(CatchNameObjective::new, 1, 10),
     CATCH_POKEMON_POOL(CatchPoolObjective::new, 1, 15),
-    EARN_XP_POKEPASS(EarnPokePassXPObjective::new, 1000, 15000),
     EARN_XP_POKEMON(EarnPokemonXPObjective::new, 2000, 16000),
     EVOLVE_POKEMON(EvolvePokemonObjective::new, 1, 5),
     LEVEL_POKEMON(LevelPokemonObjective::new, 1, 20),
