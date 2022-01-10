@@ -49,45 +49,4 @@ public class PlayerSettingsQuery
     {
         return clazz.cast(this.settingsJSON.get(s.getCommand()));
     }
-
-    @Deprecated
-    public void updateSettingBoolean(Settings s, boolean value)
-    {
-        switch(s) {
-            case CLIENT_DETAILED -> Mongo.SettingsData.updateOne(this.query, Updates.set("detailed", value));
-            case CLIENT_CATCH_AUTO_INFO -> Mongo.SettingsData.updateOne(this.query, Updates.set("autoinfo", value));
-            case CLIENT_POKEMON_LIST_FIELDS -> Mongo.SettingsData.updateOne(this.query, Updates.set("listfields", value));
-        }
-
-        this.update();
-    }
-
-    @Deprecated
-    public void updateSettingString(Settings s, String value)
-    {
-        switch(s) {
-            case CLIENT_DEFAULT_ORDER -> Mongo.SettingsData.updateOne(this.query, Updates.set("default_order", value));
-        }
-    }
-
-    @Deprecated
-    public boolean getSettingBoolean(Settings s)
-    {
-        return switch(s) {
-            case CLIENT_DETAILED -> this.settingsJSON.getBoolean("detailed");
-            case CLIENT_CATCH_AUTO_INFO -> this.settingsJSON.getBoolean("autoinfo");
-            case CLIENT_POKEMON_LIST_FIELDS -> this.settingsJSON.getBoolean("listfields");
-            default -> false;
-        };
-    }
-
-    @Deprecated
-    public String getSettingString(Settings s)
-    {
-        return switch(s) {
-            case CLIENT_DEFAULT_ORDER -> this.settingsJSON.getString("default_order");
-            default -> "";
-        };
-    }
-
 }
