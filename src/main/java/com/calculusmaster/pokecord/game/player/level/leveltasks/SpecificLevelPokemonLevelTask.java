@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord.game.player.level.leveltasks;
 
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
-import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 
 public class SpecificLevelPokemonLevelTask extends AbstractLevelTask
 {
@@ -18,12 +17,12 @@ public class SpecificLevelPokemonLevelTask extends AbstractLevelTask
     @Override
     public boolean isCompleted(PlayerDataQuery p)
     {
-        return CacheHelper.POKEMON_LISTS.get(p.getID()).stream().filter(pokemon -> pokemon.getLevel() >= this.level).count() >= amount;
+        return p.getPokemon().stream().filter(pokemon -> pokemon.getLevel() >= this.level).count() >= amount;
     }
 
     @Override
     public String getProgressOverview(PlayerDataQuery p)
     {
-        return CacheHelper.POKEMON_LISTS.get(p.getID()).stream().filter(pokemon -> pokemon.getLevel() >= this.level).count() + " / " + this.amount + " Level %s Pokemon".formatted(this.level);
+        return p.getPokemon().stream().filter(pokemon -> pokemon.getLevel() >= this.level).count() + " / " + this.amount + " Level %s Pokemon".formatted(this.level);
     }
 }

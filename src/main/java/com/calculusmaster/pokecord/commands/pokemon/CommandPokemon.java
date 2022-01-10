@@ -12,7 +12,6 @@ import com.calculusmaster.pokecord.game.pokemon.PokemonListSorter;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.PokemonSorterFlag;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.commons.collections4.list.TreeList;
@@ -30,18 +29,8 @@ public class CommandPokemon extends Command
     public CommandPokemon(MessageReceivedEvent event, String[] msg)
     {
         super(event, msg);
-        //this.buildList();
 
-        if(CacheHelper.DYNAMIC_CACHING_ACTIVE && (!CacheHelper.POKEMON_LISTS.containsKey(this.player.getId()) || CacheHelper.UUID_LISTS.get(this.player.getId()).size() != this.playerData.getPokemonList().size()))
-        {
-            event.getChannel().sendMessage(this.playerData.getMention() + ": Initializing your Pokemon list (this may take a while and will only happen once)!").queue();
-
-            CacheHelper.createPokemonList(this.player.getId());
-
-            event.getChannel().sendMessage(this.playerData.getMention() + ": Your pokemon list has been initialized! Running command...").queue();
-        }
-
-        this.pokemon = new TreeList<>(CacheHelper.POKEMON_LISTS.get(this.player.getId()));
+        this.pokemon = new TreeList<>(this.playerData.getPokemon());
         this.team = List.copyOf(this.playerData.getTeam());
         this.favorites = List.copyOf(this.playerData.getFavorites());
     }

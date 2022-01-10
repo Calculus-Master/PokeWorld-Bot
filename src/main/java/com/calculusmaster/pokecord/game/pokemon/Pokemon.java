@@ -9,7 +9,7 @@ import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
-import com.calculusmaster.pokecord.util.helpers.CacheHelper;
+import com.calculusmaster.pokecord.util.cache.PokemonDataCache;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
@@ -28,7 +28,7 @@ public class Pokemon
     protected JSONObject specificJSON;
 
     private String UUID;
-    private int num;
+    private int number;
     private boolean shiny;
     private Nature nature;
     private int level;
@@ -53,41 +53,59 @@ public class Pokemon
     private int accuracyStage;
     private int evasionStage;
 
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(this.UUID, this.level, this.exp);
+    }
+
     //Constructors
     public static Pokemon build(String UUID)
     {
+        return Pokemon.build(UUID, -1);
+    }
+
+    public static Pokemon build(String UUID, int number)
+    {
+        Document cache = PokemonDataCache.getCache(UUID);
+
+        //This usually means that the data wasn't cache on bot initialization
+        if(cache == null)
+        {
+            cache = Mongo.LegacyPokemonData.find(Filters.eq("UUID", UUID)).first();
+            PokemonDataCache.addCacheData(UUID, cache);
+
+            //This most likely means the UUID isn't in the database
+            if(cache == null) LoggerHelper.error(Pokemon.class, "UUID {%s} not found in Database!".formatted(UUID));
+        }
+
+        return cache == null ? null : Pokemon.build(PokemonDataCache.getCache(UUID), number);
+    }
+
+    private static Pokemon build(Document data, int number)
+    {
         Pokemon p = new Pokemon();
-        p.setUUID(UUID);
-        p.setNumber(-1);
 
-        p.linkSpecificJSON(UUID);
-        p.setData(p.getSpecificJSON().getString("name"));
+        p.setUUID(data.getString("UUID"));
+        p.setData(data.getString("name"));
+        p.setNumber(number);
 
-        JSONObject specific = p.getSpecificJSON();
+        p.setLevel(data.getInteger("level"));
+        p.setExp(data.getInteger("exp"));
+        p.setShiny(data.getBoolean("shiny"));
+        p.setIVs(data.getString("ivs"));
+        p.setEVs(data.getString("evs"));
+        p.setNature(data.getString("nature"));
+        p.setLearnedMoves(data.getString("moves"));
+        p.setTM(data.getInteger("tm"));
+        p.setTR(data.getInteger("tr"));
+        p.setItem(data.getString("item"));
+        p.setDynamaxLevel(data.getInteger("dynamax_level"));
+        p.setNickname(data.getString("nickname"));
+        p.setGender(data.getString("gender"));
 
-        p.setLevel(specific.getInt("level"));
-        p.setExp(specific.getInt("exp"));
-        p.setShiny(specific.getBoolean("shiny"));
-        p.setIVs(specific.getString("ivs"));
-        p.setEVs(specific.getString("evs"));
-        p.setNature(specific.getString("nature"));
-        p.setLearnedMoves(specific.getString("moves"));
-        p.setTM(specific.getInt("tm"));
-        p.setTR(specific.getInt("tr"));
-        p.setItem(specific.has("item") ? specific.getString("item") : Item.NONE.getName());
-        p.setDynamaxLevel(specific.getInt("dynamax_level"));
-        p.setNickname(specific.getString("nickname"));
-        p.setGender(specific.getString("gender"));
+        p.setDuelDefaults();
 
-        p.setHealth(p.getStat(Stat.HP));
-        p.setType();
-        p.setStatusConditions();
-        p.setDefaultStatMultipliers();
-        p.statBuff = 1.0;
-        p.hpBuff = 1.0;
-        p.setDynamax(false);
-
-        LoggerHelper.info(Pokemon.class, "Pokemon Built: UUID (" + UUID + "), NAME (" + p.getName() + ")", true);
         return p;
     }
 
@@ -113,16 +131,21 @@ public class Pokemon
         p.setNickname("");
         p.setGender();
 
-        p.setHealth(p.getStat(Stat.HP));
-        p.setType();
-        p.setStatusConditions();
-        p.setDefaultStatMultipliers();
-        p.statBuff = 1.0;
-        p.hpBuff = 1.0;
-        p.setDynamax(false);
+        p.setDuelDefaults();
 
         LoggerHelper.info(Pokemon.class, "Pokemon Created: UUID (" + p.getUUID() + "), NAME (" + name + ")", true);
         return p;
+    }
+
+    private void setDuelDefaults()
+    {
+        this.setHealth(this.getStat(Stat.HP));
+        this.setType();
+        this.setStatusConditions();
+        this.setDefaultStatMultipliers();
+        this.statBuff = 1.0;
+        this.hpBuff = 1.0;
+        this.setDynamax(false);
     }
 
     public PokemonData getData()
@@ -132,22 +155,12 @@ public class Pokemon
 
     public int getNumber()
     {
-        int index = -1;
-
-        String UUID = this.UUID == null ? this.specificJSON.getString("UUID") : this.UUID;
-
-        for (List<Pokemon> list : CacheHelper.POKEMON_LISTS.values())
-            for (int i = 0; i < list.size(); i++) if (list.get(i).getUUID().equals(UUID)) index = i;
-
-        if (index == -1) {
-            LoggerHelper.warn(Pokemon.class, "Could not find number for " + UUID + " (Document: " + this.specificJSON + "!");
-            return this.num;
-        } else return index + 1;
+        return this.number;
     }
 
-    public void setNumber(int n)
+    public void setNumber(int number)
     {
-        this.num = n;
+        this.number = number;
     }
 
     public Pokemon withNumber(int number)
@@ -165,7 +178,7 @@ public class Pokemon
 
     public void linkSpecificJSON(String UUID)
     {
-        this.specificJSON = Pokemon.specificJSON(UUID);
+        this.specificJSON = null;
     }
 
     public static JSONObject specificJSON(String UUID)
@@ -195,6 +208,7 @@ public class Pokemon
                 .append("gender", p.getGender().toString());
 
         Mongo.PokemonData.insertOne(pokeData);
+        PokemonDataCache.addCacheData(p.getUUID(), pokeData);
 
         LoggerHelper.info(Pokemon.class, "Pokemon Uploaded: UUID (" + p.getUUID() + "), NAME (" + p.getName() + ")");
     }
@@ -203,7 +217,7 @@ public class Pokemon
     {
         for (Bson u : update) Mongo.PokemonData.updateOne(p.getQuery(), u);
 
-        CacheHelper.updatePokemon(p.getUUID());
+        PokemonDataCache.updateCache(p.getUUID());
     }
 
     public static void updateExperience(Pokemon p)

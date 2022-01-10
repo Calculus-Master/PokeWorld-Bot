@@ -9,8 +9,8 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.cache.PlayerDataCache;
+import com.calculusmaster.pokecord.util.cache.PokemonDataCache;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
-import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import com.mongodb.client.model.Updates;
@@ -39,14 +39,14 @@ public class PlayerDataQuery extends MongoQuery
     //Cache
     public static PlayerDataQuery of(String playerID)
     {
-        return CacheHelper.PLAYER_DATA.get(playerID).data();
+        return PlayerDataCache.CACHE.get(playerID).data();
     }
 
     //Registered
 
     public static boolean isRegistered(String id)
     {
-        return CacheHelper.PLAYER_DATA.containsKey(id);
+        return PlayerDataCache.CACHE.containsKey(id);
     }
 
     public static void register(User player)
@@ -224,22 +224,21 @@ public class PlayerDataQuery extends MongoQuery
     //key: "pokemon"
     public List<String> getPokemonList()
     {
-        if(CacheHelper.DYNAMIC_CACHING_ACTIVE && (!CacheHelper.POKEMON_LISTS.containsKey(this.getID()) || CacheHelper.UUID_LISTS.get(this.getID()).size() != this.getPokemonList().size()))
-        {
-            this.directMessage("Initializing your Pokemon List! This may take a while, depending on how many Pokemon you have. This will only happen once!");
+        return this.document.getList("pokemon", String.class);
+    }
 
-            CacheHelper.createPokemonList(this.getID());
-
-            this.directMessage("Your pokemon list has been initialized! Running command...");
-        }
-
-        return CacheHelper.UUID_LISTS.get(this.getID());
+    public List<Pokemon> getPokemon()
+    {
+        List<String> in = this.getPokemonList();
+        List<Pokemon> out = new ArrayList<>();
+        for(int i = 0; i < in.size(); i++) out.add(Pokemon.build(in.get(i), i + 1));
+        return out;
     }
 
     public void addPokemon(String UUID)
     {
         Mongo.PlayerData.updateOne(this.query, Updates.push("pokemon", UUID));
-        CacheHelper.addPokemon(this.getID(), UUID);
+        PokemonDataCache.updateCache(UUID);
 
         this.update();
     }
@@ -247,7 +246,7 @@ public class PlayerDataQuery extends MongoQuery
     public void removePokemon(String UUID)
     {
         Mongo.PlayerData.updateOne(this.query, Updates.pull("pokemon", UUID));
-        CacheHelper.removePokemon(this.getID(), UUID);
+        PokemonDataCache.removeCache(UUID);
 
         if(this.getTeam().contains(UUID)) this.removePokemonFromTeam(this.getTeam().indexOf(UUID));
         if(this.getFavorites().contains(UUID)) this.removePokemonFromFavorites(UUID);

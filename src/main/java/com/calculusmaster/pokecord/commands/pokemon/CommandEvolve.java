@@ -11,7 +11,6 @@ import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.SpecialEvolutionRegistry;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
-import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.event.LocationEventHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -91,7 +90,7 @@ public class CommandEvolve extends Command
         if(selected.getName().equals("Cubone") && selected.getLevel() >= 28 && location.region.equals(Region.ALOLA) && time.isNight())
             target = "Alolan Marowak";
 
-        if(selected.getName().equals("Mantyke") && CacheHelper.POKEMON_LISTS.get(this.player.getId()).stream().anyMatch(p -> p.getName().equals("Remoraid")))
+        if(selected.getName().equals("Mantyke") && this.playerData.getPokemon().stream().anyMatch(p -> p.getName().equals("Remoraid")))
             target = "Mantine";
 
         if(selected.getName().equals("Koffing") && selected.getLevel() >= 35 && location.region.equals(Region.GALAR))

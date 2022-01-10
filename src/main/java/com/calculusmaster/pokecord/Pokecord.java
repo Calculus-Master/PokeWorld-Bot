@@ -16,6 +16,7 @@ import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.SpecialEvolutionRegistry;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.util.PrivateInfo;
+import com.calculusmaster.pokecord.util.cache.PokemonDataCache;
 import com.calculusmaster.pokecord.util.helpers.*;
 import com.calculusmaster.pokecord.util.helpers.event.LocationEventHelper;
 import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
@@ -75,7 +76,9 @@ public class Pokecord
         LoggerHelper.init("Pokemon Mastery Level", MasteryLevelManager::init);
         LoggerHelper.init("Achievement Cache", CacheHelper::initAchievementCache);
         LoggerHelper.init("Market", CacheHelper::initMarketEntries, true);
-        LoggerHelper.init("CommandPokemon", CacheHelper::initPokemonLists, true);
+
+        LoggerHelper.init("Pokemon Data Cache", PokemonDataCache::init);
+        //LoggerHelper.init("CommandPokemon", CacheHelper::initPokemonLists, true);
 
         long end = System.currentTimeMillis();
 

@@ -2,10 +2,14 @@ package com.calculusmaster.pokecord.util.cache;
 
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
-import com.calculusmaster.pokecord.util.helpers.CacheHelper;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class PlayerDataCache
 {
+    public static final Map<String, PlayerDataCache> CACHE = new HashMap<>();
+
     public static void init()
     {
         Mongo.PlayerData.find().forEach(d -> new PlayerDataCache(d.getString("playerID")));
@@ -22,7 +26,7 @@ public class PlayerDataCache
     {
         this.data = new PlayerDataQuery(ID);
 
-        CacheHelper.PLAYER_DATA.put(ID, this);
+        PlayerDataCache.CACHE.put(ID, this);
     }
 
     public PlayerDataQuery data()

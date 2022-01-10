@@ -8,7 +8,6 @@ import com.calculusmaster.pokecord.game.duel.extension.ZTrialDuel;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
-import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Objects;
@@ -55,6 +54,6 @@ public class CommandZTrialDuel extends Command
         //50 Pokemon of Type
         //2000 Credits
 
-        return CacheHelper.POKEMON_LISTS.get(this.player.getId()).stream().filter(p -> p.isType(type)).count() >= 50 && this.playerData.getCredits() >= 2000;
+        return this.playerData.getPokemon().stream().filter(p -> p.isType(type)).count() >= 50 && this.playerData.getCredits() >= 2000;
     }
 }
