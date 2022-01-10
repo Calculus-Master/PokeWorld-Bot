@@ -117,7 +117,7 @@ public class CommandEvolve extends Command
             Pokemon.updateName(selected, target);
 
             this.playerData.updateBountyProgression(ObjectiveType.EVOLVE_POKEMON);
-            this.playerData.getStats().incr(PlayerStatistic.POKEMON_EVOLVED);
+            this.playerData.getStatistics().incr(PlayerStatistic.POKEMON_EVOLVED);
 
             this.response = "`" + selected.getName() + "` evolved into `" + target + "`!";
         }

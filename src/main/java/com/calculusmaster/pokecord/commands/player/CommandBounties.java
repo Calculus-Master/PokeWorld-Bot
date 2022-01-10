@@ -55,7 +55,7 @@ public class CommandBounties extends Command
 
                 Bounty.delete(b.getBountyID());
 
-                this.playerData.getStats().incr(PlayerStatistic.BOUNTIES_COMPLETED);
+                this.playerData.getStatistics().incr(PlayerStatistic.BOUNTIES_COMPLETED);
                 Achievements.grant(this.player.getId(), Achievements.COMPLETED_FIRST_BOUNTY, this.event);
                 this.playerData.updateBountyProgression(ObjectiveType.COMPLETE_BOUNTY);
 

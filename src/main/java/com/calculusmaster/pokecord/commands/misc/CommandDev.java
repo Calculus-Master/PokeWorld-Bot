@@ -81,7 +81,7 @@ public class CommandDev extends Command
             }
             case "clearduels" -> DuelHelper.DUELS.clear();
             case "deletepursuit" -> {
-                PlayerDataQuery query = this.mentions.size() > 0 ? new PlayerDataQuery(this.mentions.get(0).getId()) : this.playerData;
+                PlayerDataQuery query = this.mentions.size() > 0 ? PlayerDataQuery.of(this.mentions.get(0).getId()) : this.playerData;
                 query.removePursuit();
             }
             case "close" -> Pokecord.close();

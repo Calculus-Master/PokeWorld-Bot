@@ -16,12 +16,12 @@ public class ShopPurchasedLevelTask extends AbstractLevelTask
     @Override
     public boolean isCompleted(PlayerDataQuery p)
     {
-        return p.getStats().get(PlayerStatistic.SHOP_ITEMS_BOUGHT) >= this.amount;
+        return p.getStatistics().get(PlayerStatistic.SHOP_ITEMS_BOUGHT) >= this.amount;
     }
 
     @Override
     public String getProgressOverview(PlayerDataQuery p)
     {
-        return p.getStats().get(PlayerStatistic.SHOP_ITEMS_BOUGHT) + " / " + this.amount + " Items";
+        return p.getStatistics().get(PlayerStatistic.SHOP_ITEMS_BOUGHT) + " / " + this.amount + " Items";
     }
 }

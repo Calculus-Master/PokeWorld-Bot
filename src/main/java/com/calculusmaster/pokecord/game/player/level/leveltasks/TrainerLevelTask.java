@@ -16,12 +16,12 @@ public class TrainerLevelTask extends AbstractLevelTask
     @Override
     public boolean isCompleted(PlayerDataQuery p)
     {
-        return p.getStats().get(PlayerStatistic.TRAINER_DUELS_WON) >= this.amount;
+        return p.getStatistics().get(PlayerStatistic.TRAINER_DUELS_WON) >= this.amount;
     }
 
     @Override
     public String getProgressOverview(PlayerDataQuery p)
     {
-        return p.getStats().get(PlayerStatistic.TRAINER_DUELS_WON) + " / " + this.amount + " Trainers defeated";
+        return p.getStatistics().get(PlayerStatistic.TRAINER_DUELS_WON) + " / " + this.amount + " Trainers defeated";
     }
 }

@@ -25,7 +25,7 @@ public class CommandBalance extends Command
             return this;
         }
 
-        PlayerDataQuery p = targetID.equals(this.player.getId()) ? this.playerData : new PlayerDataQuery(targetID);
+        PlayerDataQuery p = targetID.equals(this.player.getId()) ? this.playerData : PlayerDataQuery.of(targetID);
 
         this.embed.setTitle(p.getUsername() + "'s Balance");
         this.embed

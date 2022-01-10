@@ -21,6 +21,13 @@ public abstract class MongoQuery
         this.document = idVal.contains("BOT") ? null : database.find(this.query).first();
     }
 
+    public MongoQuery(MongoQuery from)
+    {
+        this.database = from.database;
+        this.query = from.query;
+        this.document = from.document;
+    }
+
     public JSONObject json()
     {
         if(this.document == null) System.out.println(this + ", Query: " + this.query);

@@ -52,7 +52,7 @@ public class CommandStart extends Command
             PlayerDataQuery.register(this.player);
             DataHelper.updateServerPlayers(this.server);
 
-            PlayerDataQuery p = new PlayerDataQuery(this.player.getId());
+            PlayerDataQuery p = PlayerDataQuery.of(this.player.getId());
 
             Pokemon starter = Pokemon.create(Global.normalize(this.msg[1]));
             starter.setLevel(5);

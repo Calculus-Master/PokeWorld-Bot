@@ -207,7 +207,7 @@ public class Tournament
         this.allPlayers.addAll(players);
 
         this.playerQueries = new HashMap<>();
-        for(String s : this.allPlayers) this.playerQueries.put(s, new PlayerDataQuery(s));
+        for(String s : this.allPlayers) this.playerQueries.put(s, PlayerDataQuery.of(s));
 
         this.creator = creator;
 

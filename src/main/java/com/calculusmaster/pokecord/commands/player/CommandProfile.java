@@ -26,8 +26,8 @@ public class CommandProfile extends Command
         if(this.mentions.size() > 0 && PlayerDataQuery.isRegistered(this.mentions.get(0).getId())) targetID = this.mentions.get(0).getId();
 
         Member player = this.getMember(targetID);
-        PlayerDataQuery data = targetID.equals(this.player.getId()) ? this.playerData : new PlayerDataQuery(targetID);
-        PlayerStatisticsQuery stats = data.getStats();
+        PlayerDataQuery data = targetID.equals(this.player.getId()) ? this.playerData : PlayerDataQuery.of(targetID);
+        PlayerStatisticsQuery stats = data.getStatistics();
 
         this.embed
                 .addField("Level", "`" + data.getLevel() + "`", true)

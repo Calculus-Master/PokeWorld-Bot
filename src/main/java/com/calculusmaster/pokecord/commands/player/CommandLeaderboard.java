@@ -170,7 +170,7 @@ public class CommandLeaderboard extends Command
             IDs = IDs.stream().filter(serverMembers::contains).collect(Collectors.toList());
         }
 
-        IDs.stream().map(PlayerDataQuery::new).forEach(PLAYER_QUERIES::add);
+        IDs.stream().map(PlayerDataQuery::of).forEach(PLAYER_QUERIES::add);
     }
 
     private void reset()
@@ -194,10 +194,10 @@ public class CommandLeaderboard extends Command
         FORMS_OWNED(1.5, p -> p.getOwnedForms().size(), "Owned Forms"),
         MEGA_OWNED(1.5, p -> p.getOwnedMegas().size(), "Owned Mega Evolutions"),
         ZCRYSTALS(1.8, p -> p.getZCrystalList().size(), "Z Crystals"),
-        DUELS_PVP_WON(1.75, p -> p.getStats().get(PlayerStatistic.PVP_DUELS_WON), "PvP Duels Won"),
-        DUELS_WILD_WON(0.5, p -> p.getStats().get(PlayerStatistic.WILD_DUELS_WON), "Wild Duels Won"),
-        DUELS_TRAINER_WON(0.75, p -> p.getStats().get(PlayerStatistic.TRAINER_DUELS_WON), "Trainer Duels Won"),
-        DUELS_TRAINER_ELITE_WON(1.25, p -> p.getStats().get(PlayerStatistic.ELITE_TRAINER_DUELS_WON), "Elite Duels Won");
+        DUELS_PVP_WON(1.75, p -> p.getStatistics().get(PlayerStatistic.PVP_DUELS_WON), "PvP Duels Won"),
+        DUELS_WILD_WON(0.5, p -> p.getStatistics().get(PlayerStatistic.WILD_DUELS_WON), "Wild Duels Won"),
+        DUELS_TRAINER_WON(0.75, p -> p.getStatistics().get(PlayerStatistic.TRAINER_DUELS_WON), "Trainer Duels Won"),
+        DUELS_TRAINER_ELITE_WON(1.25, p -> p.getStatistics().get(PlayerStatistic.ELITE_TRAINER_DUELS_WON), "Elite Duels Won");
 
         double weight;
         IScoreComponent value;

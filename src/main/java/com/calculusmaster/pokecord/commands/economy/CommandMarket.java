@@ -57,17 +57,17 @@ public class CommandMarket extends Command
 
                 if(!m.sellerID.equals("BOT"))
                 {
-                    PlayerDataQuery seller = new PlayerDataQuery(m.sellerID);
+                    PlayerDataQuery seller = PlayerDataQuery.of(m.sellerID);
 
                     seller.changeCredits(m.price);
                     seller.directMessage("Your `Level " + m.pokemon.getLevel() + " " + m.pokemon.getName() + "` was sold from your Market Listing to " + this.playerData.getUsername() + " for " + m.price + " credits!");
 
                     Achievements.grant(m.sellerID, Achievements.SOLD_FIRST_POKEMON_MARKET, this.event);
-                    seller.getStats().incr(PlayerStatistic.POKEMON_SOLD_MARKET);
+                    seller.getStatistics().incr(PlayerStatistic.POKEMON_SOLD_MARKET);
                 }
 
                 Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_POKEMON_MARKET, this.event);
-                this.playerData.getStats().incr(PlayerStatistic.POKEMON_BOUGHT_MARKET);
+                this.playerData.getStatistics().incr(PlayerStatistic.POKEMON_BOUGHT_MARKET);
 
                 this.response = "You successfully bought `Level " + m.pokemon.getLevel() + " " + m.pokemon.getName() + "` for " + m.price + " credits!";
                 MarketEntry.delete(m.marketID);

@@ -1419,7 +1419,7 @@ public class Duel
 
         this.players[winner].data.addExp(20);
 
-        this.players[winner].data.getStats().incr(PlayerStatistic.PVP_DUELS_WON);
+        this.players[winner].data.getStatistics().incr(PlayerStatistic.PVP_DUELS_WON);
         this.players[winner].data.updateBountyProgression(b -> {
             if(b.getType().equals(ObjectiveType.WIN_PVP_DUEL) || b.getType().equals(ObjectiveType.COMPLETE_PVP_DUEL)) b.update();
         });

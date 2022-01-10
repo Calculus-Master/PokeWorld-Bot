@@ -77,7 +77,7 @@ public class TrainerDuel extends Duel
                 }
             }
 
-            this.players[0].data.getStats().incr(PlayerStatistic.TRAINER_DUELS_WON);
+            this.players[0].data.getStatistics().incr(PlayerStatistic.TRAINER_DUELS_WON);
 
         }
         //Player lost

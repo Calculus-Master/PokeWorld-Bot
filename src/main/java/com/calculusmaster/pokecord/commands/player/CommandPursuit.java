@@ -80,7 +80,7 @@ public class CommandPursuit extends Command
                     //Bounty Rewards
                     this.playerData.changeCredits((int)(b.getReward() * pursuitSize.multiplier));
 
-                    this.playerData.getStats().incr(PlayerStatistic.BOUNTIES_COMPLETED);
+                    this.playerData.getStatistics().incr(PlayerStatistic.BOUNTIES_COMPLETED);
                     Achievements.grant(this.player.getId(), Achievements.COMPLETED_FIRST_BOUNTY, this.event);
 
                     //Delete the Bounty from DB

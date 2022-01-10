@@ -16,12 +16,12 @@ public class PvPLevelTask extends AbstractLevelTask
     @Override
     public boolean isCompleted(PlayerDataQuery p)
     {
-        return p.getStats().get(PlayerStatistic.PVP_DUELS_COMPLETED) >= this.amount;
+        return p.getStatistics().get(PlayerStatistic.PVP_DUELS_COMPLETED) >= this.amount;
     }
 
     @Override
     public String getProgressOverview(PlayerDataQuery p)
     {
-        return p.getStats().get(PlayerStatistic.PVP_DUELS_COMPLETED) + " / " + this.amount + " Players dueled";
+        return p.getStatistics().get(PlayerStatistic.PVP_DUELS_COMPLETED) + " / " + this.amount + " Players dueled";
     }
 }

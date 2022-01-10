@@ -16,12 +16,12 @@ public class PokemonEvolvedLevelTask extends AbstractLevelTask
     @Override
     public boolean isCompleted(PlayerDataQuery p)
     {
-        return p.getStats().get(PlayerStatistic.POKEMON_EVOLVED) >= this.amount;
+        return p.getStatistics().get(PlayerStatistic.POKEMON_EVOLVED) >= this.amount;
     }
 
     @Override
     public String getProgressOverview(PlayerDataQuery p)
     {
-        return p.getStats().get(PlayerStatistic.POKEMON_EVOLVED) + " / " + this.amount + " Pokemon Evolved";
+        return p.getStatistics().get(PlayerStatistic.POKEMON_EVOLVED) + " / " + this.amount + " Pokemon Evolved";
     }
 }

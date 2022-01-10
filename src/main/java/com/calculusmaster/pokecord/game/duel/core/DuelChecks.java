@@ -32,7 +32,7 @@ public class DuelChecks
     {
         this.d = DuelHelper.instance(ID);
         this.p = this.d.getPlayers()[this.d.indexOf(ID)];
-        this.data = new PlayerDataQuery(ID);
+        this.data = PlayerDataQuery.of(ID);
         this.z = ZCrystal.cast(this.data.getEquippedZCrystal());
 
         this.move = move;

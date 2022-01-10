@@ -32,8 +32,8 @@ public class Trade
         //Transfer Offer from 1 to 0
         this.players[1].offer.transfer(this.players[0].data);
 
-        this.players[0].data.getStats().incr(PlayerStatistic.TRADES_COMPLETED);
-        this.players[1].data.getStats().incr(PlayerStatistic.TRADES_COMPLETED);
+        this.players[0].data.getStatistics().incr(PlayerStatistic.TRADES_COMPLETED);
+        this.players[1].data.getStatistics().incr(PlayerStatistic.TRADES_COMPLETED);
 
         this.players[0].data.updateBountyProgression(ObjectiveType.COMPLETE_TRADE);
         this.players[1].data.updateBountyProgression(ObjectiveType.COMPLETE_TRADE);

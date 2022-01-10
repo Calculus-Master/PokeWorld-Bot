@@ -79,7 +79,7 @@ public enum Achievements
 
             if(CacheHelper.ACHIEVEMENT_CACHE.get(a).contains(playerID)) return;
 
-            PlayerDataQuery p = new PlayerDataQuery(playerID);
+            PlayerDataQuery p = PlayerDataQuery.of(playerID);
 
             if(!p.getAchievementsList().contains(a.toString()))
             {

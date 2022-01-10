@@ -36,7 +36,7 @@ public class CommandTrade extends Command
         if(!TradeHelper.isInTrade(this.player.getId()) && this.mentions.size() > 0)
         {
             String otherID = this.mentions.get(0).getId();
-            PlayerDataQuery other = new PlayerDataQuery(otherID);
+            PlayerDataQuery other = PlayerDataQuery.of(otherID);
             String otherName = other.getUsername();
 
             if(TradeHelper.isInTrade(otherID)) this.response = otherName + " is already in a trade!";

@@ -47,7 +47,7 @@ public abstract class Command
         this.server = event.getGuild();
 
         this.serverData = new ServerDataQuery(this.server.getId());
-        this.playerData = new PlayerDataQuery(this.player.getId());
+        this.playerData = PlayerDataQuery.of(this.player.getId());
 
         this.embed = new EmbedBuilder();
         this.response = "";
@@ -65,7 +65,7 @@ public abstract class Command
         this.server = event.getGuild();
 
         this.serverData = new ServerDataQuery(this.server.getId());
-        this.playerData = new PlayerDataQuery(this.player.getId());
+        this.playerData = PlayerDataQuery.of(this.player.getId());
 
         this.embed = new EmbedBuilder();
         this.response = "";

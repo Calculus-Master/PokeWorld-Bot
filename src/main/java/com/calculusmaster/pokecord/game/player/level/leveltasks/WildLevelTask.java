@@ -16,12 +16,12 @@ public class WildLevelTask extends AbstractLevelTask
     @Override
     public boolean isCompleted(PlayerDataQuery p)
     {
-        return p.getStats().get(PlayerStatistic.WILD_DUELS_WON) >= this.amount;
+        return p.getStatistics().get(PlayerStatistic.WILD_DUELS_WON) >= this.amount;
     }
 
     @Override
     public String getProgressOverview(PlayerDataQuery p)
     {
-        return p.getStats().get(PlayerStatistic.WILD_DUELS_WON) + " / " + this.amount + " Wild Pokemon defeated";
+        return p.getStatistics().get(PlayerStatistic.WILD_DUELS_WON) + " / " + this.amount + " Wild Pokemon defeated";
     }
 }

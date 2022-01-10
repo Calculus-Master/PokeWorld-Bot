@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.cache.PlayerDataCache;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
@@ -28,18 +29,24 @@ import java.util.stream.Collectors;
 public class PlayerDataQuery extends MongoQuery
 {
     private Optional<PlayerSettingsQuery> settings = Optional.empty();
-    private Optional<PlayerStatisticsQuery> stats = Optional.empty();
+    private Optional<PlayerStatisticsQuery> statistics = Optional.empty();
 
     public PlayerDataQuery(String playerID)
     {
         super("playerID", playerID, Mongo.PlayerData);
     }
 
+    //Cache
+    public static PlayerDataQuery of(String playerID)
+    {
+        return CacheHelper.PLAYER_DATA.get(playerID).data();
+    }
+
     //Registered
 
     public static boolean isRegistered(String id)
     {
-        return !new PlayerDataQuery(id).isNull();
+        return CacheHelper.PLAYER_DATA.containsKey(id);
     }
 
     public static void register(User player)
@@ -73,7 +80,7 @@ public class PlayerDataQuery extends MongoQuery
         PlayerSettingsQuery.register(player.getId());
         PlayerStatisticsQuery.register(player.getId());
 
-        CacheHelper.addPlayer(player.getId());
+        PlayerDataCache.addCache(player.getId());
     }
 
     public void directMessage(String msg)
@@ -96,10 +103,10 @@ public class PlayerDataQuery extends MongoQuery
     }
 
     //Get the PlayerStatisticsQuery object
-    public PlayerStatisticsQuery getStats()
+    public PlayerStatisticsQuery getStatistics()
     {
-        if(this.stats.isEmpty()) this.stats = Optional.of(new PlayerStatisticsQuery(this.getID()));
-        return this.stats.get();
+        if(this.statistics.isEmpty()) this.statistics = Optional.of(new PlayerStatisticsQuery(this.getID()));
+        return this.statistics.get();
     }
 
     //key: "playerID"
@@ -175,8 +182,8 @@ public class PlayerDataQuery extends MongoQuery
     {
         Mongo.PlayerData.updateOne(this.query, Updates.set("credits", this.getCredits() + amount));
 
-        if(amount < 0) this.getStats().incr(PlayerStatistic.CREDITS_SPENT, Math.abs(amount));
-        else if(amount > 0) this.getStats().incr(PlayerStatistic.CREDITS_EARNED, Math.abs(amount));
+        if(amount < 0) this.getStatistics().incr(PlayerStatistic.CREDITS_SPENT, Math.abs(amount));
+        else if(amount > 0) this.getStatistics().incr(PlayerStatistic.CREDITS_EARNED, Math.abs(amount));
 
         this.update();
     }

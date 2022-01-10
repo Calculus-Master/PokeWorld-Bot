@@ -129,12 +129,11 @@ public class CommandDuel extends Command
         }
 
         String opponentID = this.mentions.get(0).getId();
-        PlayerDataQuery other = new PlayerDataQuery(opponentID);
         Member opponent = this.getMember(opponentID);
 
         if(this.playerData.getTeam().size() < size) this.response = "Your team needs to have at least " + size + " Pokemon!";
         else if(!PlayerDataQuery.isRegistered(opponentID)) this.response = opponent.getEffectiveName() + " is not registered! Use p!start <starter> to begin!";
-        else if(size != 1 && new PlayerDataQuery(opponentID).getTeam().isEmpty()) this.response = opponent.getEffectiveName() + " needs to create a Pokemon team!";
+        else if(size != 1 && PlayerDataQuery.of(opponentID).getTeam().isEmpty()) this.response = opponent.getEffectiveName() + " needs to create a Pokemon team!";
         else if(DuelHelper.isInDuel(opponentID)) this.response = opponent.getEffectiveName() + " is already in a Duel!";
         else if(this.player.getId().equals(opponentID)) this.response = "You cannot duel yourself!";
         else if(checkTeam && this.isInvalidTeam(size)) this.createInvalidTeamEmbed(size);

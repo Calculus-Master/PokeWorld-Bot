@@ -16,12 +16,12 @@ public class BountiesLevelTask extends AbstractLevelTask
     @Override
     public boolean isCompleted(PlayerDataQuery p)
     {
-        return p.getStats().get(PlayerStatistic.BOUNTIES_COMPLETED) >= this.amount;
+        return p.getStatistics().get(PlayerStatistic.BOUNTIES_COMPLETED) >= this.amount;
     }
 
     @Override
     public String getProgressOverview(PlayerDataQuery p)
     {
-        return p.getStats().get(PlayerStatistic.BOUNTIES_COMPLETED) + " / " + this.amount + " Bounties completed";
+        return p.getStatistics().get(PlayerStatistic.BOUNTIES_COMPLETED) + " / " + this.amount + " Bounties completed";
     }
 }

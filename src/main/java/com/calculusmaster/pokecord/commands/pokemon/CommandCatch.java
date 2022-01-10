@@ -89,13 +89,13 @@ public class CommandCatch extends Command
             {
                 this.playerData.changeRedeems(1);
 
-                this.playerData.getStats().incr(PlayerStatistic.NATURAL_REDEEMS_EARNED);
+                this.playerData.getStatistics().incr(PlayerStatistic.NATURAL_REDEEMS_EARNED);
 
                 this.response = "You earned a redeem for catching a Pokemon with high IVs!";
             }
 
             //Statistics
-            this.playerData.getStats().incr(PlayerStatistic.POKEMON_CAUGHT);
+            this.playerData.getStatistics().incr(PlayerStatistic.POKEMON_CAUGHT);
 
             Achievements.grant(this.player.getId(), Achievements.CAUGHT_FIRST_POKEMON, this.event);
 

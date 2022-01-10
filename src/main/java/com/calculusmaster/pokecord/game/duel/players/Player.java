@@ -22,7 +22,7 @@ public class Player
     public Player(String id, int numPokemon)
     {
         this.ID = id;
-        this.data = new PlayerDataQuery(id);
+        this.data = PlayerDataQuery.of(id);
 
         List<Pokemon> teamBuilder = new ArrayList<>();
 

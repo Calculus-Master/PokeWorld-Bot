@@ -266,7 +266,7 @@ public class CommandBuy extends Command
             Pokemon.uploadPokemon(selected);
 
             Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_ITEM_SHOP, this.event);
-            this.playerData.getStats().incr(PlayerStatistic.SHOP_ITEMS_BOUGHT);
+            this.playerData.getStatistics().incr(PlayerStatistic.SHOP_ITEMS_BOUGHT);
         }
 
         return this;

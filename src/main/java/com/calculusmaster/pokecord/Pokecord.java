@@ -74,7 +74,6 @@ public class Pokecord
         LoggerHelper.init("Shops", CommandShop::updateShops);
         LoggerHelper.init("Pokemon Mastery Level", MasteryLevelManager::init);
         LoggerHelper.init("Achievement Cache", CacheHelper::initAchievementCache);
-        LoggerHelper.init("Player Cache", CacheHelper::initPlayerCache);
         LoggerHelper.init("Market", CacheHelper::initMarketEntries, true);
         LoggerHelper.init("CommandPokemon", CacheHelper::initPokemonLists, true);
 

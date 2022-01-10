@@ -22,7 +22,7 @@ public class TradeOffer
 
     public TradeOffer(String playerID)
     {
-        this.player = new PlayerDataQuery(playerID);
+        this.player = PlayerDataQuery.of(playerID);
 
         this.clear();
     }

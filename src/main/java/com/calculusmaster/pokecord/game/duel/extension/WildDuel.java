@@ -104,7 +104,7 @@ public class WildDuel extends Duel
 
         Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_WILD_DUEL, this.event);
         this.players[0].data.addExp(10, 25);
-        this.players[0].data.getStats().incr(PlayerStatistic.WILD_DUELS_WON);
+        this.players[0].data.getStatistics().incr(PlayerStatistic.WILD_DUELS_WON);
         this.players[0].data.updateBountyProgression(b -> {
             if(b.getType().equals(ObjectiveType.WIN_WILD_DUEL) || b.getType().equals(ObjectiveType.COMPLETE_WILD_DUEL)) b.update();
         });

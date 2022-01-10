@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.trade.elements.MarketEntry;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.cache.PlayerDataCache;
 import com.mongodb.client.model.Filters;
 
 import java.util.ArrayList;
@@ -35,6 +36,10 @@ public class CacheHelper
 
     //Key: playerID     Value: Team
     public static final Map<String, List<Pokemon>> TEAM_LISTS = new HashMap<>();
+
+    //New!
+
+    public static final Map<String, PlayerDataCache> PLAYER_DATA = new HashMap<>();
 
     //Pokemon List Updates
     synchronized public static void addPokemon(String player, String UUID)
@@ -199,15 +204,5 @@ public class CacheHelper
     public static void initAchievementCache()
     {
         for(Achievements a : Achievements.values()) ACHIEVEMENT_CACHE.put(a, new ArrayList<>());
-    }
-
-    public static void initPlayerCache()
-    {
-        Mongo.PlayerData.find().forEach(d -> PLAYERS.put(d.getString("playerID"), new PlayerDataQuery(d.getString("playerID"))));
-    }
-
-    synchronized public static void addPlayer(String ID)
-    {
-        PLAYERS.put(ID, new PlayerDataQuery(ID));
     }
 }
