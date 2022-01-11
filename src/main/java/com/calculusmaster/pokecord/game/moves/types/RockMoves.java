@@ -14,7 +14,7 @@ public class RockMoves
 {
     public String Rollout(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Sandstorm(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -28,7 +28,7 @@ public class RockMoves
     {
         duel.data(opponent.getUUID()).isRaised = false;
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String AncientPower(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -46,12 +46,12 @@ public class RockMoves
 
     public String PowerGem(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String RockBlast(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.multihitDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move);
     }
 
     public String StealthRock(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -63,7 +63,7 @@ public class RockMoves
 
     public String RockThrow(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String RockTomb(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -76,7 +76,7 @@ public class RockMoves
 
     public String RockSlide(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
     }
 
     public String StoneEdge(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -88,7 +88,7 @@ public class RockMoves
 
     public String DiamondStorm(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.DEF, 2, 50, true);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.DEF, 2, 50, true);
     }
 
     public String WideGuard(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -106,11 +106,11 @@ public class RockMoves
 
     public String Accelerock(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String RockWrecker(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 }

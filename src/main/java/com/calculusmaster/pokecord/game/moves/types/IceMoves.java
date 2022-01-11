@@ -19,27 +19,27 @@ public class IceMoves
 
     public String IceBall(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String IcicleCrash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
     }
 
     public String IcicleSpear(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.multihitDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move);
     }
 
     public String IceBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FROZEN, 10);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.FROZEN, 10);
     }
 
     public String Blizzard(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FROZEN, 10);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.FROZEN, 10);
     }
 
     public String SheerCold(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -51,7 +51,7 @@ public class IceMoves
 
     public String PowderSnow(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FROZEN, 10);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.FROZEN, 10);
     }
 
     public String Mist(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -63,12 +63,12 @@ public class IceMoves
 
     public String IceShard(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String FreezeDry(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String IceFang(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -82,39 +82,39 @@ public class IceMoves
 
     public String IcePunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FROZEN, 10);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.FROZEN, 10);
     }
 
     public String Glaciate(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPD, -1, 100, false);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPD, -1, 100, false);
     }
 
     public String FreezeShock(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
     }
 
     public String IceBurn(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 30);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.BURNED, 30);
     }
 
     public String IcyWind(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPD, -1, 100, false);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPD, -1, 100, false);
     }
 
     public String GlacialLance(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Avalanche(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         if(duel.first.equals(opponent.getUUID()) && duel.data(user.getUUID()).lastDamageTaken > 0) move.setPower(2.0);
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String AuroraVeil(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -134,6 +134,6 @@ public class IceMoves
 
     public String AuroraBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.ATK, -1, 10, false);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.ATK, -1, 10, false);
     }
 }

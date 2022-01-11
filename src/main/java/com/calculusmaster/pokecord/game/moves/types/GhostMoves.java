@@ -54,7 +54,7 @@ public class GhostMoves
 
     public String ShadowSneak(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String ShadowClaw(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -69,7 +69,7 @@ public class GhostMoves
         if(duel.data(user.getUUID()).shadowForceUsed)
         {
             duel.data(user.getUUID()).shadowForceUsed = false;
-            return Move.simpleDamageMove(user, opponent, duel, move);
+            return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
         }
         else
         {
@@ -82,17 +82,17 @@ public class GhostMoves
     {
         if(opponent.hasAnyStatusCondition()) move.setPower(130);
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Lick(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
     }
 
     public String ShadowPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Spite(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -125,12 +125,12 @@ public class GhostMoves
             }
         }
 
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + " copied all of " + opponent.getName() + "'s Stat Boosts!";
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + " " + user.getName() + " copied all of " + opponent.getName() + "'s Stat Boosts!";
     }
 
     public String MoongeistBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String ConfuseRay(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -142,12 +142,12 @@ public class GhostMoves
 
     public String Astonish(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
     }
 
     public String SpiritShackle(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String PhantomForce(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -155,7 +155,7 @@ public class GhostMoves
         if(duel.data(user.getUUID()).phantomForceUsed)
         {
             duel.data(user.getUUID()).phantomForceUsed = false;
-            return Move.simpleDamageMove(user, opponent, duel, move);
+            return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
         }
         else
         {
@@ -172,12 +172,12 @@ public class GhostMoves
 
     public String AstralBarrage(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Poltergeist(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return !Item.asItem(opponent.getItem()).equals(Item.NONE) ? Move.simpleDamageMove(user, opponent, duel, move) : move.getNothingResult();
+        return !Item.asItem(opponent.getItem()).equals(Item.NONE) ? MoveEffectBuilder.defaultDamage(user, opponent, duel, move) : move.getNothingResult();
     }
 
     public String ShadowBone(Pokemon user, Pokemon opponent, Duel duel, Move move)

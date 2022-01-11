@@ -23,7 +23,7 @@ public class PoisonMoves
     public String Venoshock(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         if(opponent.hasStatusCondition(StatusCondition.POISONED)) move.setDamageMultiplier(2);
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String PoisonPowder(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -57,7 +57,7 @@ public class PoisonMoves
 
     public String PoisonFang(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BADLY_POISONED, 50);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.BADLY_POISONED, 50);
     }
 
     public String PoisonTail(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -82,7 +82,7 @@ public class PoisonMoves
 
         move.setCategory(specialDamage > physicalDamage ? Category.SPECIAL : Category.PHYSICAL);
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String VenomDrench(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -97,7 +97,7 @@ public class PoisonMoves
 
     public String PoisonSting(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.POISONED, 30);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.POISONED, 30);
     }
 
     public String CrossPoison(Pokemon user, Pokemon opponent, Duel duel, Move move)

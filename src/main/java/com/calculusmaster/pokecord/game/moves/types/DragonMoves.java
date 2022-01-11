@@ -12,7 +12,7 @@ public class DragonMoves
 {
     public String DragonClaw(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String DragonRage(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -24,7 +24,7 @@ public class DragonMoves
 
     public String DragonBreath(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
     }
 
     public String DragonDance(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -47,7 +47,7 @@ public class DragonMoves
     public String Twister(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         if(duel.data(opponent.getUUID()).flyUsed || duel.data(opponent.getUUID()).bounceUsed) move.setPower(2 * move.getPower());
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
     }
 
     public String DracoMeteor(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -60,7 +60,7 @@ public class DragonMoves
 
     public String RoarOfTime(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String SpacialRend(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -74,32 +74,32 @@ public class DragonMoves
     {
         move.setPower((int)(150 * user.getHealth() / (double)user.getStat(Stat.HP)));
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Eternabeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String DragonPulse(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String CoreEnforcer(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String ClangingScales(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.DEF, -1, 100, true);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.DEF, -1, 100, true);
     }
 
     public String DragonTail(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String DragonDarts(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -111,7 +111,7 @@ public class DragonMoves
 
     public String DragonRush(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 20);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.FLINCHED, 20);
     }
 
     public String ScaleShot(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -127,16 +127,16 @@ public class DragonMoves
     {
         if(opponent.isDynamaxed()) move.setPower(move.getPower() * 2);
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String DualChop(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.multihitDamageMove(user, opponent, duel, move, 2);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move, 2);
     }
 
     public String DragonHammer(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 }

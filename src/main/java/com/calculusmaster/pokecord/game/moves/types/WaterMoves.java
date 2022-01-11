@@ -13,7 +13,7 @@ public class WaterMoves
 {
     public String WaterGun(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Withdraw(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -41,7 +41,7 @@ public class WaterMoves
 
     public String AquaTail(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String RainDance(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -53,12 +53,12 @@ public class WaterMoves
 
     public String HydroPump(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String HydroCannon(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     //TODO: Heals 1/16 each turn
@@ -71,18 +71,18 @@ public class WaterMoves
 
     public String MuddyWater(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String OriginPulse(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String WaterSpout(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         move.setPower(150 * user.getHealth() / (double)user.getStat(Stat.HP));
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Dive(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -90,7 +90,7 @@ public class WaterMoves
         if(duel.data(user.getUUID()).diveUsed)
         {
             duel.data(user.getUUID()).diveUsed = false;
-            return Move.simpleDamageMove(user, opponent, duel, move);
+            return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
         }
         else
         {
@@ -101,7 +101,7 @@ public class WaterMoves
 
     public String Surf(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Whirlpool(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -114,12 +114,12 @@ public class WaterMoves
 
     public String WaterShuriken(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.multihitDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move);
     }
 
     public String Scald(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 30);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.BURNED, 30);
     }
 
     public String Octazooka(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -141,7 +141,7 @@ public class WaterMoves
     {
         if(duel.first.equals(user.getUUID())) move.setPower(move.getPower() * 2);
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Soak(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -158,13 +158,13 @@ public class WaterMoves
 
     public String AquaJet(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String SurgingStrikes(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         move.critChance = 24;
-        return Move.multihitDamageMove(user, opponent, duel, move, 3);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move, 3);
     }
 
     public String LifeDew(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -178,7 +178,7 @@ public class WaterMoves
     {
         if(opponent.hasStatusCondition(StatusCondition.BURNED)) opponent.removeStatusCondition(StatusCondition.BURNED);
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String BubbleBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)

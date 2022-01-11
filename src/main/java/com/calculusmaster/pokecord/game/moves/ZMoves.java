@@ -12,92 +12,92 @@ public class ZMoves
 {
     public String SavageSpinOut(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String BlackHoleEclipse(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String DevastatingDrake(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String GigavoltHavoc(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String TwinkleTackle(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String AllOutPummeling(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String InfernoOverdrive(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String SupersonicSkystrike(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String NeverEndingNightmare(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String BloomDoom(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String TectonicRage(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String SubzeroSlammer(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String BreakneckBlitz(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String AcidDownpour(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String ShatteredPsyche(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String ContinentalCrush(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String CorkscrewCrash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String HydroVortex(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String StokedSparksurfer(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -110,7 +110,7 @@ public class ZMoves
 
     public String SinisterArrowRaid(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String ExtremeEvoboost(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -127,7 +127,7 @@ public class ZMoves
 
     public String MaliciousMoonsault(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String ClangorousSoulblaze(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -144,32 +144,32 @@ public class ZMoves
 
     public String MenacingMoonrazeMaelstrom(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String SplinteredStormshards(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String SoulStealing7StarStrike(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String GenesisSupernova(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String LetsSnuggleForever(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Catastropika(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String TenMillionVoltThunderbolt(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -181,17 +181,17 @@ public class ZMoves
 
     public String OceanicOperetta(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String PulverizingPancake(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String SearingSunrazeSmash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String GuardianOfAlola(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -205,7 +205,7 @@ public class ZMoves
     {
         //Custom Addition
         if(opponent.isDynamaxed()) move.setPower(move.getPower() * 2);
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     //Custom
@@ -213,13 +213,13 @@ public class ZMoves
     //Reshiram
     public String WhiteHotInferno(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 40);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.BURNED, 40);
     }
 
     //Zekrom
     public String SuperchargedStormSurge(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 40);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.PARALYZED, 40);
     }
 
     //Kyurem
@@ -276,7 +276,7 @@ public class ZMoves
     //Diancie and Mega Diancie
     public String DazzlingDiamondBarrage(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.DEF, 3, 50, true);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.DEF, 3, 50, true);
     }
 
     //Arceus
@@ -291,7 +291,7 @@ public class ZMoves
         else if(healthRatio <= 0.75) move.setPower(180);
         else move.setPower(150);
 
-        return ((int)(healthRatio * 100) == 69 ? "Nice! " : "") + Move.simpleDamageMove(user, opponent, duel, move);
+        return ((int)(healthRatio * 100) == 69 ? "Nice! " : "") + MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     //Rayquaza and Mega Rayquaza
@@ -299,7 +299,7 @@ public class ZMoves
     {
         if(user.getName().contains("Mega") && (opponent.getName().contains("Kyogre") || opponent.getName().contains("Groudon"))) move.setPower(move.getPower() * 1.25);
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     //Ultra Necrozma (Prismatic Laser)
@@ -307,13 +307,13 @@ public class ZMoves
     {
         if(opponent.getName().contains("Mega") || opponent.getName().contains("Primal")) move.setPower(move.getPower() * 2);
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     //Zygarde (Any Form)
     public String TectonicZWrath(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     //Zygarde Complete
@@ -321,21 +321,21 @@ public class ZMoves
     {
         if(opponent.getName().contains("Zygarde")) move.setPower(move.getPower() * 2);
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String MillionArrowBarrage(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         duel.data(opponent.getUUID()).isRaised = false;
 
-        return Move.multihitDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move);
     }
 
     public String MillionWaveTsunami(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         duel.data(opponent.getUUID()).canSwap = false;
 
-        return Move.multihitDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move);
     }
 
     //Volcanion
@@ -350,31 +350,31 @@ public class ZMoves
 
         move.setType(fireDamage > waterDamage && fireDamage > groundDamage ? Type.FIRE : (waterDamage > fireDamage && waterDamage > groundDamage ? Type.WATER : Type.GROUND));
 
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 60);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.BURNED, 60);
     }
 
     //Kyogre and Primal Kyogre
     public String PrimordialTsunami(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     //Groudon and Primal Groudon
     public String PrimordialLandslide(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     //Genesect
     public String ElementalTechnoOverdrive(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     //Melmetal
     public String QuadrupleSteelSmash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.multihitDamageMove(user, opponent, duel, move, 4);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move, 4);
     }
 
     public String MetalLiquidation(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -396,13 +396,13 @@ public class ZMoves
     //Dialga
     public String TimelineShatter(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     //Palkia
     public String UltraSpaceHypernova(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     //Giratina and Origin Giratina
@@ -420,13 +420,13 @@ public class ZMoves
         if(opponent.isDynamaxed()) move.setPower(move.getPower() * 2);
         if(user.getName().contains("Eternamax")) move.setPower(Math.pow(move.getPower(), 2));
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String MaxParticleBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         if(opponent.isDynamaxed()) move.setPower(move.getPower() * 2);
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     //Darkrai

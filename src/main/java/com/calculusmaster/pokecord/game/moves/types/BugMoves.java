@@ -56,7 +56,7 @@ public class BugMoves
 
     public String PinMissile(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.multihitDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move);
     }
 
     public String FellStinger(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -96,17 +96,17 @@ public class BugMoves
     //TODO: Switch out immediately after attacking
     public String UTurn(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Lunge(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.ATK, -1, 100, false);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.ATK, -1, 100, false);
     }
 
     public String Steamroller(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
     }
 
     public String DefendOrder(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -128,7 +128,7 @@ public class BugMoves
     //TODO: Should work after the user swaps
     public String FirstImpression(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return duel.turn == 1 ? Move.simpleDamageMove(user, opponent, duel, move) : move.getNothingResult();
+        return duel.turn == 1 ? MoveEffectBuilder.defaultDamage(user, opponent, duel, move) : move.getNothingResult();
     }
 
     public String StruggleBug(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -141,11 +141,11 @@ public class BugMoves
 
     public String XScissor(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Megahorn(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 }

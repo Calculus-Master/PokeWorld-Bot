@@ -20,7 +20,7 @@ public class GrassMoves
 
     public String VineWhip(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String LeechSeed(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -48,7 +48,7 @@ public class GrassMoves
 
     public String SeedBomb(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Synthesis(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -74,12 +74,12 @@ public class GrassMoves
 
     public String SolarBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String PetalBlizzard(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String PetalDance(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -99,12 +99,12 @@ public class GrassMoves
 
     public String FrenzyPlant(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Leafage(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String LeafBlade(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -116,7 +116,7 @@ public class GrassMoves
 
     public String LeafStorm(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPATK, -2, 100, true);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPATK, -2, 100, true);
     }
 
     public String Ingrain(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -154,17 +154,17 @@ public class GrassMoves
 
     public String SolarBlade(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String GravApple(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.DEF, -1, 100, false);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.DEF, -1, 100, false);
     }
 
     public String BulletSeed(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.multihitDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move);
     }
 
     public String Spore(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -183,12 +183,12 @@ public class GrassMoves
         else if(opponent.getWeight() < 200) move.setPower(100);
         else move.setPower(120);
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String PowerWhip(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String SpikyShield(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -270,7 +270,7 @@ public class GrassMoves
 
     public String MagicalLeaf(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String StrengthSap(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -294,5 +294,10 @@ public class GrassMoves
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addStatusEffect(StatusCondition.ASLEEP)
                 .execute();
+    }
+
+    public String BranchPoke(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 }

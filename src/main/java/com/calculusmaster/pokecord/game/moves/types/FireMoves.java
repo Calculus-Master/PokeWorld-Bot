@@ -14,7 +14,7 @@ public class FireMoves
 {
     public String Ember(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 10);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.BURNED, 10);
     }
 
     public String FireFang(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -28,27 +28,27 @@ public class FireMoves
 
     public String FlameBurst(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Flamethrower(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 10);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.BURNED, 10);
     }
 
     public String FireSpin(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BOUND, 100);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.BOUND, 100);
     }
 
     public String Inferno(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 100);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.BURNED, 100);
     }
 
     public String HeatWave(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 10);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.BURNED, 10);
     }
 
     public String FlareBlitz(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -72,12 +72,12 @@ public class FireMoves
         if(user.getType()[0].equals(Type.FIRE)) user.setType(Type.NORMAL, 0);
         if(user.getType()[1].equals(Type.FIRE)) user.setType(Type.NORMAL, 1);
 
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + " is no longer a Fire type!";
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + " " + user.getName() + " is no longer a Fire type!";
     }
 
     public String BlastBurn(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String VCreate(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -93,28 +93,28 @@ public class FireMoves
 
     public String FireBlast(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 10);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.BURNED, 10);
     }
 
     public String Eruption(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         move.setPower(150 * user.getHealth() / (double)user.getStat(Stat.HP));
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String LavaPlume(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 30);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.BURNED, 30);
     }
 
     public String FirePunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BURNED, 10);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.BURNED, 10);
     }
 
     public String FusionFlare(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String WillOWisp(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -126,12 +126,12 @@ public class FireMoves
 
     public String Overheat(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPATK, -2, 100, true);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPATK, -2, 100, true);
     }
 
     public String MysticalFire(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPATK, -1, 100, false);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPATK, -1, 100, false);
     }
 
     public String BlazeKick(Pokemon user, Pokemon opponent, Duel duel, Move move)

@@ -50,7 +50,7 @@ public class ElectricMoves
         else if(ratio >= 1) move.setPower(60);
         else move.setPower(40);
 
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + "'s Speed was " + ((int)(ratio * 100) / 100) + " times as fast as " + opponent.getName() + "!";
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + " " + user.getName() + "'s Speed was " + ((int)(ratio * 100) / 100) + " times as fast as " + opponent.getName() + "!";
     }
 
     public String Discharge(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -79,12 +79,12 @@ public class ElectricMoves
 
     public String Thunderbolt(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 10);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.PARALYZED, 10);
     }
 
     public String Thunder(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
     }
 
     public String MagneticFlux(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -110,7 +110,7 @@ public class ElectricMoves
 
     public String ChargeBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPATK, 1, 70, true);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPATK, 1, 70, true);
     }
 
     public String ThunderFang(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -124,38 +124,38 @@ public class ElectricMoves
 
     public String Electroweb(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPD, -1, 100, false);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPD, -1, 100, false);
     }
 
     public String ShockWave(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String ThunderCage(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.BOUND, 100);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.BOUND, 100);
     }
 
     public String ThunderPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 10);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.PARALYZED, 10);
     }
 
     public String FusionBolt(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String BoltStrike(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 20);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.PARALYZED, 20);
     }
 
     //TODO: Change to Dark type when Morpeko in Hangry Mode
     public String AuraWheel(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String ElectricCharge(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -176,7 +176,7 @@ public class ElectricMoves
 
     public String Overdrive(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String ZingZap(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -189,14 +189,14 @@ public class ElectricMoves
 
     public String Nuzzle(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 100);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.PARALYZED, 100);
     }
 
     public String PlasmaFists(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         duel.data(user.getUUID()).plasmaFistsUsed = true;
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Electrify(Pokemon user, Pokemon opponent, Duel duel, Move move)

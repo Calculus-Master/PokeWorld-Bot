@@ -28,7 +28,7 @@ public class PsychicMoves
 
     public String Psyshock(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Confusion(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -101,7 +101,7 @@ public class PsychicMoves
 
     public String FreezingGlare(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FROZEN, 10);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.FROZEN, 10);
     }
 
     public String DreamEater(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -167,12 +167,12 @@ public class PsychicMoves
 
     public String Psystrike(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String ZenHeadbutt(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 20);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.FLINCHED, 20);
     }
 
     public String HealPulse(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -189,17 +189,17 @@ public class PsychicMoves
 
     public String PhotonGeyser(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String PrismaticLaser(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Extrasensory(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 10);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.FLINCHED, 10);
     }
 
     public String Imprison(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -210,7 +210,7 @@ public class PsychicMoves
 
     public String HyperspaceHole(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String TrickRoom(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -239,7 +239,7 @@ public class PsychicMoves
         int increases = Arrays.stream(Stat.values()).mapToInt(user::getStageChange).filter(stage -> stage > 0).sum();
         move.setPower(20 + increases * 20);
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Teleport(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -320,7 +320,7 @@ public class PsychicMoves
     public String PsychicFangs(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         //TODO: Breaks Light Screen/Reflect
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String MistBall(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -346,6 +346,6 @@ public class PsychicMoves
 
     public String Synchronoise(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return opponent.isType(user.getType()[0]) || opponent.isType(user.getType()[1]) ? Move.simpleDamageMove(user, opponent, duel, move) : move.getNoEffectResult(opponent);
+        return opponent.isType(user.getType()[0]) || opponent.isType(user.getType()[1]) ? MoveEffectBuilder.defaultDamage(user, opponent, duel, move) : move.getNoEffectResult(opponent);
     }
 }

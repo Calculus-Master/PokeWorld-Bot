@@ -21,7 +21,7 @@ public class NormalMoves
 {
     public String Tackle(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Growl(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -75,7 +75,7 @@ public class NormalMoves
 
         move.setType(t);
 
-        return Move.simpleDamageMove(user, opponent, duel, move) + " Hidden Power's type was " + Global.normalize(t.toString()) + "! ";
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + " Hidden Power's type was " + Global.normalize(t.toString()) + "! ";
     }
 
     //TODO: Come up with a custom idea for it
@@ -118,7 +118,7 @@ public class NormalMoves
 
     public String Scratch(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Smokescreen(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -234,13 +234,13 @@ public class NormalMoves
 
     public String FuryAttack(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.multihitDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move);
     }
 
     public String Rage(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         duel.data(user.getUUID()).rageUsed = true;
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     //TODO: Temporary: multiplies move crit chance by 3
@@ -290,7 +290,7 @@ public class NormalMoves
             }
         }
 
-        return Move.simpleDamageMove(user, opponent, duel, move) + statusStr;
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + statusStr;
     }
 
     public String SonicBoom(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -326,7 +326,7 @@ public class NormalMoves
 
     public String HyperBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Frustration(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -381,7 +381,7 @@ public class NormalMoves
 
     public String Swift(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String PsychUp(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -400,12 +400,12 @@ public class NormalMoves
 
     public String QuickAttack(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String RelicSong(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.ASLEEP, 10);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.ASLEEP, 10);
     }
 
     public String Yawn(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -422,7 +422,7 @@ public class NormalMoves
 
     public String Headbutt(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
     }
 
     public String MorningSun(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -440,7 +440,7 @@ public class NormalMoves
     {
         move.setPower((int)(120 * (user.getHealth() / (double)user.getStat(Stat.HP))));
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String MeanLook(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -450,7 +450,7 @@ public class NormalMoves
 
     public String ViseGrip(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Thrash(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -471,33 +471,33 @@ public class NormalMoves
 
     public String Slam(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String HyperVoice(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String ExtremeSpeed(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String BodySlam(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
     }
 
     public String CrushGrip(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         move.setPower(120 * opponent.getHealth() / (double)opponent.getStat(Stat.HP));
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String DizzyPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.CONFUSED, 20);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.CONFUSED, 20);
     }
 
     public String Foresight(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -507,7 +507,7 @@ public class NormalMoves
 
     public String GigaImpact(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String NobleRoar(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -521,7 +521,7 @@ public class NormalMoves
 
     public String MegaPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String PerishSong(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -541,7 +541,7 @@ public class NormalMoves
 
     public String Round(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String NaturalGift(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -561,7 +561,7 @@ public class NormalMoves
     //TODO: Silvally Memory Disc
     public String MultiAttack(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Bide(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -583,7 +583,7 @@ public class NormalMoves
 
     public String DoubleHit(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.multihitDamageMove(user, opponent, duel, move, 2);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move, 2);
     }
 
     public String LastResort(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -616,7 +616,7 @@ public class NormalMoves
 
     public String Feint(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Flail(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -631,7 +631,7 @@ public class NormalMoves
         else if(N <= 48) move.setPower(20);
         else move.setPower(5); //Fallback if somehow user health is greater than max
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String OdorSleuth(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -675,12 +675,12 @@ public class NormalMoves
     //Ignore changes to Defense and Evasion
     public String ChipAway(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String MegaKick(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String SuperFang(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -715,7 +715,7 @@ public class NormalMoves
     public String Explosion(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         user.damage(user.getHealth());
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Conversion(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -729,32 +729,32 @@ public class NormalMoves
 
     public String CometPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.multihitDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move);
     }
 
     public String TailSlap(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.multihitDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move);
     }
 
     public String SpikeCannon(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.multihitDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move);
     }
 
     public String DoubleSlap(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.multihitDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move);
     }
 
     public String FurySwipes(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.multihitDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move);
     }
 
     public String Barrage(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.multihitDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move);
     }
 
     public String MilkDrink(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -803,7 +803,7 @@ public class NormalMoves
 
     public String Pound(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Sharpen(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -831,7 +831,7 @@ public class NormalMoves
 
     public String FalseSwipe(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        String s = Move.simpleDamageMove(user, opponent, duel, move);
+        String s = MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
 
         if(opponent.getHealth() <= 0) opponent.setHealth(1);
 
@@ -848,13 +848,13 @@ public class NormalMoves
 
     public String Boomburst(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     //TODO: Genesect Drives and Silvally RKS
     public String TechnoBlast(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Sketch(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -875,7 +875,7 @@ public class NormalMoves
     public String SelfDestruct(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         user.damage(user.getHealth());
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String SoftBoiled(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -902,12 +902,12 @@ public class NormalMoves
             opponent.removeStatusCondition(StatusCondition.PARALYZED);
         }
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Strength(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Acupressure(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -922,7 +922,7 @@ public class NormalMoves
 
     public String TerrainPulse(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String DoubleTeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -941,7 +941,7 @@ public class NormalMoves
 
     public String Constrict(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPD, -1, 10, false);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPD, -1, 10, false);
     }
 
     public String Glare(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -973,17 +973,17 @@ public class NormalMoves
         if(r < 10)
         {
             move.setPower(120);
-            return "It's a powerful Present! " + Move.simpleDamageMove(user, opponent, duel, move);
+            return "It's a powerful Present! " + MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
         }
         else if(r < 40)
         {
             move.setPower(80);
-            return "It's an average Present! " + Move.simpleDamageMove(user, opponent, duel, move);
+            return "It's an average Present! " + MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
         }
         else if(r < 80)
         {
             move.setPower(40);
-            return "It's a weak Present! " + Move.simpleDamageMove(user, opponent, duel, move);
+            return "It's a weak Present! " + MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
         }
         else
         {
@@ -995,5 +995,12 @@ public class NormalMoves
                 return user.getName() + " gave " + opponent.getName() + " a Present and healed it for " + amount + " HP!";
             }
         }
+    }
+
+    public String LovelyKiss(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.ASLEEP)
+                .execute();
     }
 }

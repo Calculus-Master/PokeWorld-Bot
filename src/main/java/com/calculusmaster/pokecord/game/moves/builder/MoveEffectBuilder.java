@@ -32,6 +32,45 @@ public class MoveEffectBuilder
         return new MoveEffectBuilder(user, opponent, duel, move);
     }
 
+    //Move Defaults
+    public static String defaultDamage(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
+    }
+
+    public static String statusDamage(Pokemon user, Pokemon opponent, Duel duel, Move move, StatusCondition status, int percent)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(status, percent)
+                .execute();
+    }
+
+    public static String statChangeDamage(Pokemon user, Pokemon opponent, Duel duel, Move move, Stat s, int stage, int percent, boolean userChange)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(s, stage, percent, userChange)
+                .execute();
+    }
+
+    public static String multiDamage(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addVariableMultiStrikeEffect()
+                .execute();
+    }
+
+    public static String multiDamage(Pokemon user, Pokemon opponent, Duel duel, Move move, int times)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFixedMultiStrikeEffect(times)
+                .execute();
+    }
+
+    //Move Logic
     public MoveEffectBuilder addDamageEffect()
     {
         this.moveEffects.add(new DamageEffect());

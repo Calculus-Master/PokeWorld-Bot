@@ -28,6 +28,7 @@ public abstract class MongoQuery
         this.document = from.document;
     }
 
+    @Deprecated
     public JSONObject json()
     {
         if(this.document == null) System.out.println(this + ", Query: " + this.query);

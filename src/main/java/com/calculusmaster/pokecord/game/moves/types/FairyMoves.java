@@ -25,12 +25,12 @@ public class FairyMoves
 
     public String Moonblast(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPATK, -1, 30, false);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPATK, -1, 30, false);
     }
 
     public String DisarmingVoice(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String NaturesMadness(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -42,7 +42,7 @@ public class FairyMoves
 
     public String StrangeSteam(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.CONFUSED, 20);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.CONFUSED, 20);
     }
 
     public String DrainingKiss(Pokemon user, Pokemon opponent, Duel duel, Move move)

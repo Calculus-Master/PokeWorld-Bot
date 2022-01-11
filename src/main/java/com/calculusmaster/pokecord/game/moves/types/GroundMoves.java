@@ -16,12 +16,12 @@ public class GroundMoves
     public String Earthquake(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         if(duel.data(opponent.getUUID()).digUsed) move.setPower(2 * move.getPower());
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String EarthPower(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPDEF, -1, 20, false);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPDEF, -1, 20, false);
     }
 
     public String Dig(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -29,7 +29,7 @@ public class GroundMoves
         if(duel.data(user.getUUID()).digUsed)
         {
             duel.data(user.getUUID()).digUsed = false;
-            return Move.simpleDamageMove(user, opponent, duel, move);
+            return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
         }
         else
         {
@@ -40,7 +40,7 @@ public class GroundMoves
 
     public String Bulldoze(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPD, -1, 100, false);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPD, -1, 100, false);
     }
 
     public String Fissure(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -52,19 +52,19 @@ public class GroundMoves
 
     public String PrecipiceBlades(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String ThousandArrows(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         duel.data(opponent.getUUID()).isRaised = false;
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String ThousandWaves(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         duel.data(opponent.getUUID()).canSwap = false;
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + opponent.getName() + " cannot flee!";
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + " " + opponent.getName() + " cannot flee!";
     }
 
     public String Magnitude(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -93,7 +93,7 @@ public class GroundMoves
 
         if(duel.data(opponent.getUUID()).digUsed) move.setPower(2 * move.getPower());
 
-        return Move.simpleDamageMove(user, opponent, duel, move) + " Magnitude " + magnitude + "!";
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + " Magnitude " + magnitude + "!";
     }
 
     public String Spikes(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -118,7 +118,7 @@ public class GroundMoves
 
     public String BoneRush(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.multihitDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move);
     }
 
     public String MudBomb(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -153,11 +153,11 @@ public class GroundMoves
 
     public String LandsWrath(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Bonemerang(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.multihitDamageMove(user, opponent, duel, move, 2);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move, 2);
     }
 }

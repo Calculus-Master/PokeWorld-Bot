@@ -29,7 +29,7 @@ public class FightingMoves
 
     public String BrickBreak(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String QuickGuard(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -80,17 +80,17 @@ public class FightingMoves
         else if(hpRatio > 0.04) move.setPower(150);
         else move.setPower(200);
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String AuraSphere(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String SecretSword(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String LowKick(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -102,23 +102,23 @@ public class FightingMoves
         else if(opponent.getWeight() < 200) move.setPower(100);
         else move.setPower(120);
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String HammerArm(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPD, -1, 100, true);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPD, -1, 100, true);
     }
 
     public String FocusBlast(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPDEF, -1, 10, false);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPDEF, -1, 10, false);
     }
 
     public String Revenge(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         if(duel.first.equals(opponent.getUUID())) move.setPower(2 * move.getPower());
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Superpower(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -133,22 +133,22 @@ public class FightingMoves
 
     public String DynamicPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.CONFUSED, 100);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.CONFUSED, 100);
     }
 
     public String SacredSword(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String SkyUppercut(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String MachPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String SeismicToss(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -160,12 +160,12 @@ public class FightingMoves
 
     public String MeteorAssault(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String ArmThrust(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.multihitDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move);
     }
 
     public String KarateChop(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -177,12 +177,12 @@ public class FightingMoves
 
     public String JumpKick(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String HighJumpKick(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String MatBlock(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -198,7 +198,7 @@ public class FightingMoves
 
     public String BodyPress(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String RollingKick(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -216,12 +216,12 @@ public class FightingMoves
 
     public String VacuumWave(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String DoubleKick(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.multihitDamageMove(user, opponent, duel, move, 2);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move, 2);
     }
 
     public String Submission(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -234,7 +234,7 @@ public class FightingMoves
 
     public String ForcePalm(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
     }
 
     public String StormThrow(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -259,7 +259,7 @@ public class FightingMoves
 
     public String VitalThrow(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String CrossChop(Pokemon user, Pokemon opponent, Duel duel, Move move)

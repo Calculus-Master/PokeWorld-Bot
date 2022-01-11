@@ -20,7 +20,7 @@ public class SteelMoves
 
     public String FlashCannon(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPDEF, -1, 10, false);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPDEF, -1, 10, false);
     }
 
     public String MetalBurst(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -32,17 +32,17 @@ public class SteelMoves
 
     public String MetalClaw(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.ATK, 1, 10, true);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.ATK, 1, 10, true);
     }
 
     public String MagnetBomb(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String MirrorShot(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String MetalSound(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -56,7 +56,7 @@ public class SteelMoves
     {
         move.setPower((int)(25 * (double)opponent.getStat(Stat.SPD) / user.getStat(Stat.SPD)));
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String IronTail(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -76,7 +76,7 @@ public class SteelMoves
 
     public String SunsteelStrike(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String HeavySlam(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -89,7 +89,7 @@ public class SteelMoves
         else if(ratio >= 2) move.setPower(40);
         else move.setPower(20);
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String DoubleIronBash(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -103,28 +103,28 @@ public class SteelMoves
     public String BehemothBash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         if(opponent.isDynamaxed()) move.setPower(move.getPower() * 2);
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String BehemothBlade(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         if(opponent.isDynamaxed()) move.setPower(move.getPower() * 2);
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String IronHead(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
     }
 
     public String BulletPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String MeteorMash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.ATK, 1, 20, true);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.ATK, 1, 20, true);
     }
 
     public String KingsShield(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -140,13 +140,13 @@ public class SteelMoves
     {
         int userDamage = user.getHealth() / 2;
         user.damage(userDamage);
-        return Move.simpleDamageMove(user, opponent, duel, move) + " " + user.getName() + " lost " + userDamage + " HP!";
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + " " + user.getName() + " lost " + userDamage + " HP!";
     }
 
     //TODO: Opponent unable to flee
     public String AnchorShot(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String ShiftGear(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -167,7 +167,7 @@ public class SteelMoves
 
     public String GearGrind(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.multihitDamageMove(user, opponent, duel, move, 2);
+        return MoveEffectBuilder.multiDamage(user, opponent, duel, move, 2);
     }
 
     public String SteelRoller(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -178,7 +178,7 @@ public class SteelMoves
             duel.terrain = Terrain.NORMAL_TERRAIN;
             duel.terrainTurns = 0;
 
-            return Move.simpleDamageMove(user, opponent, duel, move) + " The current Terrain was destroyed!";
+            return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + " The current Terrain was destroyed!";
         }
     }
 
@@ -192,6 +192,6 @@ public class SteelMoves
 
     public String SmartStrike(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 }

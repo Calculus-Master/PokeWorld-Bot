@@ -16,19 +16,19 @@ public class DarkMoves
 {
     public String Bite(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.FLINCHED, 30);
     }
 
     public String Pursuit(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Assurance(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         if(duel.data(user.getUUID()).lastDamageTaken > 0) move.setPower(move.getPower() * 2);
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Taunt(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -41,22 +41,22 @@ public class DarkMoves
     {
         if(duel.first.equals(opponent.getUUID())) move.setPower(move.getPower() * 2);
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String SuckerPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String FieryWrath(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 20);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.FLINCHED, 20);
     }
 
     public String NastyPlot(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.SPATK, 2, 100, true);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPATK, 2, 100, true);
     }
 
     public String Memento(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -79,12 +79,12 @@ public class DarkMoves
 
     public String DarkPulse(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.FLINCHED, 20);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.FLINCHED, 20);
     }
 
     public String Crunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.DEF, -1, 20, false);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.DEF, -1, 20, false);
     }
 
     public String Punishment(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -95,7 +95,7 @@ public class DarkMoves
 
         move.setPower(statIncreases * 20 + 60);
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String KnockOff(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -106,17 +106,17 @@ public class DarkMoves
             opponent.removeItem();
         }
 
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String HyperspaceFury(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statChangeDamageMove(user, opponent, duel, move, Stat.DEF, -1, 100, true);
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.DEF, -1, 100, true);
     }
 
     public String FeintAttack(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String BeatUp(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -208,7 +208,7 @@ public class DarkMoves
         int evasion = opponent.getEvasionStage();
 
         opponent.setDefaultStatMultipliers();
-        String result = Move.simpleDamageMove(user, opponent, duel, move);
+        String result = MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
 
         opponent.setStatChanges(statChanges);
         opponent.changeAccuracyStage(accuracy);
@@ -219,12 +219,12 @@ public class DarkMoves
 
     public String FalseSurrender(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     //TODO: Ignores changes to stats
     public String DarkestLariat(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 }

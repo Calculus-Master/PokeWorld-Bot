@@ -22,7 +22,7 @@ public class FlyingMoves
     public String Gust(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         if(duel.data(opponent.getUUID()).flyUsed || duel.data(opponent.getUUID()).bounceUsed) move.setPower(2 * move.getPower());
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Tailwind(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -39,27 +39,27 @@ public class FlyingMoves
 
     public String Hurricane(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.CONFUSED, 30);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.CONFUSED, 30);
     }
 
     public String Peck(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String DrillPeck(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Pluck(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String WingAttack(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String SkyAttack(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -89,7 +89,7 @@ public class FlyingMoves
 
     public String AerialAce(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.simpleDamageMove(user, opponent, duel, move);
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String Fly(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -97,7 +97,7 @@ public class FlyingMoves
         if(duel.data(user.getUUID()).flyUsed)
         {
             duel.data(user.getUUID()).flyUsed = false;
-            return Move.simpleDamageMove(user, opponent, duel, move);
+            return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
         }
         else
         {
@@ -111,7 +111,7 @@ public class FlyingMoves
         if(duel.data(user.getUUID()).bounceUsed)
         {
             duel.data(user.getUUID()).bounceUsed = false;
-            return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
+            return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.PARALYZED, 30);
         }
         else
         {
@@ -160,6 +160,13 @@ public class FlyingMoves
 
     public String Chatter(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return Move.statusDamageMove(user, opponent, duel, move, StatusCondition.CONFUSED, 100);
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.CONFUSED, 100);
+    }
+
+    public String Aeroblast(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .execute();
     }
 }

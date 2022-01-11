@@ -5,7 +5,6 @@ import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
-import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.types.*;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
@@ -176,46 +175,6 @@ public class Move
             case WATER -> WaterMoves.class;
         };
     }
-
-    //Move logic
-    public static String simpleDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move)
-    {
-        return MoveEffectBuilder.make(user, opponent, duel, move)
-                .addDamageEffect()
-                .execute();
-    }
-
-    public static String statusDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move, StatusCondition status, int percent)
-    {
-        return MoveEffectBuilder.make(user, opponent, duel, move)
-                .addDamageEffect()
-                .addStatusEffect(status, percent)
-                .execute();
-    }
-
-    public static String statChangeDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move, Stat s, int stage, int percent, boolean userChange)
-    {
-        return MoveEffectBuilder.make(user, opponent, duel, move)
-                .addDamageEffect()
-                .addStatChangeEffect(s, stage, percent, userChange)
-                .execute();
-    }
-
-    public static String multihitDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move)
-    {
-        return MoveEffectBuilder.make(user, opponent, duel, move)
-                .addVariableMultiStrikeEffect()
-                .execute();
-    }
-
-    public static String multihitDamageMove(Pokemon user, Pokemon opponent, Duel duel, Move move, int times)
-    {
-        return MoveEffectBuilder.make(user, opponent, duel, move)
-                .addFixedMultiStrikeEffect(times)
-                .execute();
-    }
-
-    //Different Move Results
 
     public String getMoveUsedResult(Pokemon user)
     {
