@@ -7,7 +7,6 @@ import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.PrivateInfo;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -72,14 +71,6 @@ public class CommandStart extends Command
 
             starter.upload();
             p.addPokemon(starter.getUUID());
-
-            if(!PrivateInfo.getPlayerMythical(this.player.getId()).equals(""))
-            {
-                Pokemon mythical = Pokemon.create(PrivateInfo.getPlayerMythical(this.player.getId()));
-                mythical.upload(); //TODO: This is no longer needed, delete
-                p.addPokemon(mythical.getUUID());
-                this.event.getChannel().sendMessage("You also acquired a " + mythical.getName() + "!").queue();
-            }
 
             this.response = "You started your journey with " + starter.getName() + "! Check out its stats below!";
 
