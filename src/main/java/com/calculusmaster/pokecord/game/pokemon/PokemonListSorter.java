@@ -1,5 +1,7 @@
 package com.calculusmaster.pokecord.game.pokemon;
 
+import com.calculusmaster.pokecord.game.enums.items.TM;
+import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.util.interfaces.Transformer;
 
 import java.util.ArrayList;
@@ -97,8 +99,8 @@ public class PokemonListSorter
             if(!input.equals("") && input.chars().allMatch(Character::isDigit))
             {
                 int num = Integer.parseInt(input);
-                if(tm && num >= 1 && num <= 100) this.stream = this.stream.filter(p -> p.getAllValidTMs().contains(num));
-                else if(num >= 0 && num <= 99) this.stream = this.stream.filter(p -> p.getAllValidTRs().contains(num));
+                if(tm && num >= 1 && num <= 100) this.stream = this.stream.filter(p -> p.getData().validTMs.contains(TM.get(num)));
+                else if(num >= 0 && num <= 99) this.stream = this.stream.filter(p -> p.getData().validTRs.contains(TR.get(num)));
             }
         }
     }

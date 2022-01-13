@@ -68,7 +68,7 @@ public class CommandBuy extends Command
             else if(this.playerData.getCredits() < Prices.SHOP_NATURE.get()) this.invalidCredits(Prices.SHOP_NATURE.get());
             else
             {
-                selected.setNature(n.toString());
+                selected.setNature(n);
 
                 this.playerData.changeCredits(-1 * Prices.SHOP_NATURE.get());
 
@@ -139,6 +139,7 @@ public class CommandBuy extends Command
                 this.playerData.changeCredits(-1 * Prices.SHOP_FORM.get());
 
                 selected.changeForm(requestedForm);
+                selected.updateName();
 
                 Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_FORM, this.event);
             }
@@ -165,6 +166,7 @@ public class CommandBuy extends Command
                     this.playerData.changeCredits(-1 * Prices.SHOP_MEGA.get());
 
                     selected.changeForm(requestedMega);
+                    selected.updateName();
 
                     Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_MEGA, this.event);
                 }
@@ -226,8 +228,9 @@ public class CommandBuy extends Command
             else if(this.playerData.getCredits() < Prices.SHOP_MOVETUTOR.get()) this.invalidCredits(Prices.SHOP_MOVETUTOR.get());
             else
             {
+                //TODO: Rework this so it doesn't force the move onto the first slot all the time
                 this.playerData.changeCredits(-1 * Prices.SHOP_MOVETUTOR.get());
-                selected.learnMove(move, 1);
+                selected.learnMove(move, 0);
 
                 this.response = selected.getName() + " learned `" + move + "` in its first slot!";
             }
@@ -263,7 +266,7 @@ public class CommandBuy extends Command
 
         if(success)
         {
-            Pokemon.uploadPokemon(selected);
+            selected.completeUpdate();
 
             Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_ITEM_SHOP, this.event);
             this.playerData.getStatistics().incr(PlayerStatistic.SHOP_ITEMS_BOUGHT);

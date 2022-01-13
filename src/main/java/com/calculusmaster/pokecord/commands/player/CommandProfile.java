@@ -35,7 +35,7 @@ public class CommandProfile extends Command
                 .addField("Joined Server", player.getTimeJoined().format(DateTimeFormatter.RFC_1123_DATE_TIME), true)
                 .addField("Pokemon Collected", "`" + data.getPokemonList().size() + "`", true)
                 .addField("Pokemon Caught", "`" + stats.get(PlayerStatistic.POKEMON_CAUGHT) + "`", true)
-                .addField("Duel Wins", "PvP: " + stats.get(PlayerStatistic.PVP_DUELS_WON) + "\nWild: " + stats.get(PlayerStatistic.WILD_DUELS_WON) + "\nTrainer: " + stats.get(PlayerStatistic.TRAINER_DUELS_WON) + "\nElite: " + stats.get(PlayerStatistic.ELITE_TRAINER_DUELS_WON), true)
+                .addField("Duel Wins", "PvP: " + stats.get(PlayerStatistic.PVP_DUELS_WON) + "\nWild: " + stats.get(PlayerStatistic.WILD_DUELS_WON) + "\nTrainer: " + stats.get(PlayerStatistic.TRAINER_DUELS_WON) + "\nElite: " + stats.get(PlayerStatistic.ELITE_DUELS_WON), true)
                 .addField("Credits", "Earned: " + stats.get(PlayerStatistic.CREDITS_EARNED) + "\nSpent: " + stats.get(PlayerStatistic.CREDITS_SPENT) + "\nBalance: " + data.getCredits(), true)
                 .addField("Redeems", "Earned: " + stats.get(PlayerStatistic.NATURAL_REDEEMS_EARNED) + "\nBalance: " + data.getRedeems(), true)
                 .addField("Market", "Bought: " + stats.get(PlayerStatistic.POKEMON_BOUGHT_MARKET) + "\nSold: " + stats.get(PlayerStatistic.POKEMON_SOLD_MARKET), true)

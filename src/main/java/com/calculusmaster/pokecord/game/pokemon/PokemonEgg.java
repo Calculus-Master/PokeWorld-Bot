@@ -30,8 +30,8 @@ public class PokemonEgg
         //Assumes breeding conditions have been satisfied
 
         String target;
-        if(parent1.getEggGroup().contains(EggGroup.DITTO)) target = parent2.getName().equals("Manaphy") ? "Phione" : (parent2.getName().equals("Phione") ? "Manaphy" : parent2.getName());
-        else if(parent2.getEggGroup().contains(EggGroup.DITTO)) target = parent1.getName().equals("Manaphy") ? "Phione" : (parent1.getName().equals("Phione") ? "Manaphy" : parent1.getName());
+        if(parent1.getEggGroups().contains(EggGroup.DITTO)) target = parent2.getName().equals("Manaphy") ? "Phione" : (parent2.getName().equals("Phione") ? "Manaphy" : parent2.getName());
+        else if(parent2.getEggGroups().contains(EggGroup.DITTO)) target = parent1.getName().equals("Manaphy") ? "Phione" : (parent1.getName().equals("Phione") ? "Manaphy" : parent1.getName());
         else target = parent1.getGender().equals(Gender.FEMALE) ? parent1.getName() : parent2.getName();
 
         PokemonEgg egg = new PokemonEgg();
@@ -78,7 +78,7 @@ public class PokemonEgg
 
         PokemonStats ivOverride = new PokemonStats(this.ivs);
         for(Stat s : Stat.values()) if(ivOverride.get().get(s) == 0) ivOverride.get().put(s, hatched.getIVs().get(s));
-        hatched.setIVs(ivOverride.condense());
+        hatched.setIVs(ivOverride.get());
 
         Mongo.EggData.deleteOne(Filters.eq("eggID", this.getEggID()));
         return hatched;
@@ -103,7 +103,7 @@ public class PokemonEgg
     {
         PokemonStats ivs = new PokemonStats();
 
-        int number = Item.asItem(parent1.getItem()).equals(Item.DESTINY_KNOT) || Item.asItem(parent2.getItem()).equals(Item.DESTINY_KNOT) ? 5 : 3;
+        int number = parent1.getItem().equals(Item.DESTINY_KNOT) || parent2.getItem().equals(Item.DESTINY_KNOT) ? 5 : 3;
 
         List<Stat> stats = new ArrayList<>(Arrays.asList(Stat.values()));
         Collections.shuffle(stats);

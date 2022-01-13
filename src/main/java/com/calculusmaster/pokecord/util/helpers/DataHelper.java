@@ -106,4 +106,14 @@ public class DataHelper
     {
         registerGigantamax(name, move, type, normal, normal);
     }
+
+    public static boolean hasGigantamax(String p)
+    {
+        return GIGANTAMAX_DATA.containsKey(p);
+    }
+
+    public static GigantamaxData getGigantamaxData(String p)
+    {
+        return GIGANTAMAX_DATA.get(p);
+    }
 }

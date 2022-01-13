@@ -4,7 +4,6 @@ import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.util.Global;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 import static com.calculusmaster.pokecord.game.enums.items.ItemType.*;
 
@@ -97,9 +96,9 @@ public enum Item
         };
     }
 
-    public static Item asItem(String s)
+    public static Item cast(String input)
     {
-        return Arrays.stream(values()).filter(i -> i.toString().equals(s.toUpperCase())).collect(Collectors.toList()).get(0);
+        return Arrays.stream(values()).filter(i -> i.toString().equalsIgnoreCase(input)).findFirst().orElse(null);
     }
 
     public Type getArceusPlateType()

@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.misc;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.pokemon.CommandInfo;
+import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -10,7 +11,9 @@ import com.calculusmaster.pokecord.util.PrivateInfo;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import java.util.Random;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.SplittableRandom;
 
 public class CommandStart extends Command
 {
@@ -67,13 +70,13 @@ public class CommandStart extends Command
 
             Achievements.grant(this.player.getId(), Achievements.START_JOURNEY, this.event);
 
-            Pokemon.uploadPokemon(starter);
+            starter.upload();
             p.addPokemon(starter.getUUID());
 
             if(!PrivateInfo.getPlayerMythical(this.player.getId()).equals(""))
             {
                 Pokemon mythical = Pokemon.create(PrivateInfo.getPlayerMythical(this.player.getId()));
-                Pokemon.uploadPokemon(mythical);
+                mythical.upload(); //TODO: This is no longer needed, delete
                 p.addPokemon(mythical.getUUID());
                 this.event.getChannel().sendMessage("You also acquired a " + mythical.getName() + "!").queue();
             }
@@ -87,11 +90,11 @@ public class CommandStart extends Command
         return this;
     }
 
-    private String getStarterIVs()
+    private Map<Stat, Integer> getStarterIVs()
     {
-        Random r = new Random();
-        StringBuilder s = new StringBuilder();
-        for(int i = 0; i < 6; i++) s.append(r.nextInt(10) + 22).append("-");
-        return s.deleteCharAt(s.length() - 1).toString().trim();
+        LinkedHashMap<Stat, Integer> ivs = new LinkedHashMap<>();
+        SplittableRandom r = new SplittableRandom();
+        for(Stat s : Stat.values()) ivs.put(s, r.nextInt(22, 32));
+        return ivs;
     }
 }

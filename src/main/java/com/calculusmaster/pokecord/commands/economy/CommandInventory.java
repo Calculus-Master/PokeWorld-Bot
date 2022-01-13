@@ -41,7 +41,7 @@ public class CommandInventory extends Command
                 {
                     if(!this.playerData.getItemList().isEmpty())
                     {
-                        for(int i = 0; i < this.playerData.getItemList().size(); i++) s.append(i + 1).append(": ").append(Item.asItem(this.playerData.getItemList().get(i)).getStyledName()).append("\n");
+                        for(int i = 0; i < this.playerData.getItemList().size(); i++) s.append(i + 1).append(": ").append(Item.cast(this.playerData.getItemList().get(i)).getStyledName()).append("\n");
                         s.append("\n");
                     }
                     else s.append("You don't own any Items!");

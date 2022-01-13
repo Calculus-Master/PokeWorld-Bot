@@ -149,7 +149,7 @@ public class Listener extends ListenerAdapter
             event.getChannel().sendMessage(data.getMention() + ": Your " + p.getName() + " is now Level " + p.getLevel() + "!").queue();
         }
 
-        Pokemon.updateExperience(p);
+        p.updateExperience();
     }
 
     private static void eggExpEvent(MessageReceivedEvent event)
@@ -170,7 +170,7 @@ public class Listener extends ListenerAdapter
         {
             Pokemon p = egg.hatch();
 
-            Pokemon.uploadPokemon(p);
+            p.upload();
             data.addPokemon(p.getUUID());
             data.removeActiveEgg();
             data.removeEgg(egg.getEggID());

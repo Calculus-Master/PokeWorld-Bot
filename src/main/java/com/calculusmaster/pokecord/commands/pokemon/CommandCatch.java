@@ -51,7 +51,7 @@ public class CommandCatch extends Command
 
             //Longest 2 methods in this entire command (~100-200 ms each) - Thread Pool?
             ThreadPoolHandler.CATCH.execute(() -> {
-                Pokemon.uploadPokemon(caught);
+                caught.upload();
                 this.playerData.addPokemon(caught.getUUID());
 
                 if(this.playerData.getSettings().get(Settings.CLIENT_CATCH_AUTO_INFO, Boolean.class))

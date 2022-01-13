@@ -9,10 +9,7 @@ import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 public final class PokemonData
@@ -73,8 +70,8 @@ public final class PokemonData
     //Moves CSV
     public final List<String> abilities;
     public final LinkedHashMap<String, Integer> moves;
-    public final List<TM> validTMs;
-    public final List<TR> validTRs;
+    public final EnumSet<TM> validTMs;
+    public final EnumSet<TR> validTRs;
 
     //Descriptions CSV
     public final List<String> descriptions;
@@ -137,8 +134,8 @@ public final class PokemonData
         this.abilities = List.of(moves[1].split("-"));
         this.moves = new LinkedHashMap<>();
         for(int i = 0; i < moves[2].split("-").length; i++) this.moves.put(moves[2].split("-")[i], Integer.parseInt(moves[3].split("-")[i]));
-        this.validTMs = moves[4].isEmpty() ? new ArrayList<>() : Stream.of(moves[4].split("-")).map(Integer::parseInt).map(TM::get).toList();
-        this.validTRs = moves[5].isEmpty() ? new ArrayList<>() : Stream.of(moves[5].split("-")).map(Integer::parseInt).map(TR::get).toList();
+        this.validTMs = moves[4].isEmpty() ? EnumSet.noneOf(TM.class) : EnumSet.copyOf(Stream.of(moves[4].split("-")).map(Integer::parseInt).map(TM::get).toList());
+        this.validTRs = moves[5].isEmpty() ? EnumSet.noneOf(TR.class) : EnumSet.copyOf(Stream.of(moves[5].split("-")).map(Integer::parseInt).map(TR::get).toList());
 
         //Descriptions: {"name", "descriptions"}
         String[] descriptions = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_DESCRIPTIONS);

@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.game.moves.builder;
 
-public class DamageHealEffect extends FixedHealEffect
+public class DamageHealEffect extends FixedHealEffect implements DamageDependentEffect
 {
     private double fraction;
     private int damageDealt;
@@ -10,7 +10,8 @@ public class DamageHealEffect extends FixedHealEffect
         this.fraction = fraction;
     }
 
-    public void set(int damageDealt)
+    @Override
+    public void setDamageDealt(int damageDealt)
     {
         this.damageDealt = damageDealt;
     }

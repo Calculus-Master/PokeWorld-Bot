@@ -10,6 +10,7 @@ import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.mongo.CollectionsQuery;
 import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -40,7 +41,7 @@ public class CommandDex extends Command
         boolean isShiny = this.msg[1].equalsIgnoreCase("shiny");
         boolean isGigantamax = this.msg[isShiny ? 2 : 1].equalsIgnoreCase("gigantamax");
 
-        if(!isPokemon(this.getPokemonName()) || (isGigantamax && !Pokemon.existsGigantamax(Global.normalize(this.getPokemonName()))))
+        if(!isPokemon(this.getPokemonName()) || (isGigantamax && !DataHelper.hasGigantamax(Global.normalize(this.getPokemonName()))))
         {
             this.embed.setDescription(CommandInvalid.getShort());
             return this;
@@ -66,7 +67,7 @@ public class CommandDex extends Command
                 .addField("TRs", data.validTRs.isEmpty() ? "None" : data.validTRs.toString().substring(1, data.validTRs.toString().length() - 1).replaceAll("TR", ""), false)
                 .addField(this.getStatsField(data));
 
-        String image = isGigantamax ? (isShiny ? Pokemon.getGigantamaxData(pokemon).shinyImage() : Pokemon.getGigantamaxData(pokemon).normalImage()) : (isShiny ? data.shinyURL : data.normalURL);
+        String image = isGigantamax ? (isShiny ? DataHelper.getGigantamaxData(pokemon).shinyImage() : DataHelper.getGigantamaxData(pokemon).normalImage()) : (isShiny ? data.shinyURL : data.normalURL);
 
         if(pokemon.equals("Deerling")) image = Global.getDeerlingImage(isShiny);
         else if(pokemon.equals("Sawsbuck")) image = Global.getSawsbuckImage(isShiny);

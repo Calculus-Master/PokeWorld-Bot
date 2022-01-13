@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.moves.types;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
@@ -90,8 +91,9 @@ public class DarkMoves
     public String Punishment(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int statIncreases = 0;
+        //TODO: Check if this move is correctly implemented
 
-        for(Stat s : Stat.values()) if(opponent.getStatMultiplier(s) > 0) statIncreases += (int)(opponent.getStatMultiplier(s) * 2 - 2);
+        for(Stat s : Stat.values()) if(opponent.changes().get(s) > 0) statIncreases += (int)(opponent.changes().getModifier(s) * 2 - 2);
 
         move.setPower(statIncreases * 20 + 60);
 
@@ -163,7 +165,7 @@ public class DarkMoves
     {
         for(Stat s : Stat.values())
         {
-            opponent.changeStatMultiplier(s, opponent.getStageChange(s) * -1 * 2);
+            opponent.changes().change(s, opponent.changes().get(s) * -1 * 2);
         }
 
         return opponent.getName() + "'s Stat Changes were reversed!";
@@ -171,7 +173,7 @@ public class DarkMoves
 
     public String Switcheroo(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        String temp = user.getItem();
+        Item temp = user.getItem();
         user.setItem(opponent.getItem());
         opponent.setItem(temp);
 
@@ -203,16 +205,16 @@ public class DarkMoves
 
     public String WickedBlow(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        Map<Stat, Integer> statChanges = Map.copyOf(opponent.getStatChanges());
-        int accuracy = opponent.getAccuracyStage();
-        int evasion = opponent.getEvasionStage();
+        Map<Stat, Integer> statChanges = Map.copyOf(opponent.changes().getAll());
+        int accuracy = opponent.changes().getAccuracy();
+        int evasion = opponent.changes().getEvasion();
 
-        opponent.setDefaultStatMultipliers();
+        opponent.changes().clear();
         String result = MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
 
-        opponent.setStatChanges(statChanges);
-        opponent.changeAccuracyStage(accuracy);
-        opponent.changeEvasionStage(evasion);
+        opponent.changes().set(statChanges);
+        opponent.changes().changeAccuracy(accuracy);
+        opponent.changes().changeEvasion(evasion);
 
         return result;
     }

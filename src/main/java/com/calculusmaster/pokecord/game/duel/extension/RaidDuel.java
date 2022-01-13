@@ -69,7 +69,7 @@ public class RaidDuel extends WildDuel
         {
             for(int i = 0; i < this.getNonBotPlayers().length; i++) if(!this.getAction(i).equals(ActionType.IDLE)) this.moveAction(i);
 
-            List<String> movePool = this.getRaidBoss().active.getAllMoves().stream().filter(Move::isImplemented).collect(Collectors.collectingAndThen(Collectors.toList(), list -> { Collections.shuffle(list); return list; }));
+            List<String> movePool = this.getRaidBoss().active.allMoves().stream().filter(Move::isImplemented).collect(Collectors.collectingAndThen(Collectors.toList(), list -> { Collections.shuffle(list); return list; }));
             this.getRaidBoss().move = new Move(movePool.isEmpty() ? "Tackle" : movePool.get(new Random().nextInt(movePool.size())));
 
             if(Arrays.asList("Explosion", "Self Destruct", "Memento").contains(this.getRaidBoss().move.getName()))
@@ -167,11 +167,11 @@ public class RaidDuel extends WildDuel
                     Pokemon reward = Pokemon.create(this.getRaidBoss().active.getName());
                     reward.setIVs(50);
                     reward.setLevel(60);
-                    reward.setEVs("20-20-20-20-20-20");
+                    Arrays.stream(Stat.values()).forEach(s -> reward.setEV(s, 20));
                     reward.setDynamaxLevel(2);
                     reward.setNickname("Raid " + reward.getName());
 
-                    Pokemon.uploadPokemon(reward);
+                    reward.upload();
                     p.data.addPokemon(reward.getUUID());
 
                     extraWinnings = "\n\n**" + p.data.getUsername() + " caught the Raid Pokemon!**";
@@ -387,8 +387,8 @@ public class RaidDuel extends WildDuel
             case EXTREME -> 3.0;
         };
 
-        this.players[this.players.length - 1].active.hpBuff = baseMultiplierHP + (this.waiting.size() - 1);
-        this.players[this.players.length - 1].active.statBuff = baseMultiplierStat + (0.3 * (this.waiting.size() - 1));
+        this.players[this.players.length - 1].active.getBoosts().setHealthBoost(baseMultiplierHP + (this.waiting.size() - 1));
+        this.players[this.players.length - 1].active.getBoosts().setStatBoost(baseMultiplierStat + (0.3 * (this.waiting.size() - 1)));
 
         for(Player p : this.players) p.active.setHealth(p.active.getStat(Stat.HP));
 
@@ -437,7 +437,7 @@ public class RaidDuel extends WildDuel
         Player raidBoss = this.players[this.players.length - 1];
 
         raidBoss.active.setIVs(80);
-        raidBoss.active.setEVs("50-50-50-50-50-50");
+        Arrays.stream(Stat.values()).forEach(s -> raidBoss.active.setEV(s, 50));
     }
 
     @Override

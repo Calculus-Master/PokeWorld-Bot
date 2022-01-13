@@ -72,13 +72,10 @@ public class PsychicMoves
         if(!user.hasAnyStatusCondition()) return move.getNothingResult();
         else
         {
-            for(StatusCondition s : user.getStatusConditionMap().keySet())
+            for(StatusCondition s : user.getStatusConditions())
             {
-                if(user.hasStatusCondition(s))
-                {
-                    opponent.addStatusCondition(s);
-                    user.removeStatusCondition(s);
-                }
+                opponent.addStatusCondition(s);
+                user.removeStatusCondition(s);
             }
 
             return user.getName() + " transferred all Status Conditions to " + opponent.getName() + "!";
@@ -236,7 +233,7 @@ public class PsychicMoves
 
     public String StoredPower(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int increases = Arrays.stream(Stat.values()).mapToInt(user::getStageChange).filter(stage -> stage > 0).sum();
+        int increases = Arrays.stream(Stat.values()).mapToInt(s -> user.changes().get(s)).filter(stage -> stage > 0).sum();
         move.setPower(20 + increases * 20);
 
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
@@ -282,17 +279,17 @@ public class PsychicMoves
 
         for(Stat s : Stat.values())
         {
-            userStats.put(s, user.getStageChange(s));
-            oppStats.put(s, opponent.getStageChange(s));
+            userStats.put(s, user.changes().get(s));
+            oppStats.put(s, opponent.changes().get(s));
         }
 
-        user.setDefaultStatMultipliers();
-        opponent.setDefaultStatMultipliers();
+        user.changes().clear();
+        opponent.changes().clear();
 
         for(Stat s : Stat.values())
         {
-            user.changeStatMultiplier(s, oppStats.get(s));
-            opponent.changeStatMultiplier(s, userStats.get(s));
+            user.changes().change(s, oppStats.get(s));
+            opponent.changes().change(s, userStats.get(s));
         }
 
         return user.getName() + " and " + opponent.getName() + "'s Stat Changes were swapped!";

@@ -33,7 +33,7 @@ public class CommandRedeem extends Command
                 Pokemon p = Pokemon.create(pokemon);
                 p.setLevel(new Random().nextInt(100) + 1);
 
-                Pokemon.uploadPokemon(p);
+                p.upload();
 
                 this.playerData.changeRedeems(-1);
                 this.playerData.addPokemon(p.getUUID());

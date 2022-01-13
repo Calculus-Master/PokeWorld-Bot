@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.game.moves.builder;
 
-public class RecoilEffect extends MoveEffect
+public class RecoilEffect extends MoveEffect implements DamageDependentEffect
 {
     private double fraction;
     private int damageDealt;
@@ -10,7 +10,8 @@ public class RecoilEffect extends MoveEffect
         this.fraction = fraction;
     }
 
-    public void set(int damageDealt)
+    @Override
+    public void setDamageDealt(int damageDealt)
     {
         this.damageDealt = damageDealt;
     }

@@ -27,6 +27,7 @@ public class CommandMega extends Command
             else if(selected.getName().contains("Primal")) original = mega.substring("Primal ".length());
 
             selected.changeForm(original);
+            selected.updateName();
 
             this.event.getChannel().sendMessage(this.playerData.getMention() + ": " + mega + " has de-evolved into " + original + "!").queue();
             this.embed = null;
@@ -41,6 +42,7 @@ public class CommandMega extends Command
                 {
                     this.embed.setDescription(selected.getName() + " mega evolved into " + selected.getMegaList().get(0) + "!");
                     selected.changeForm(selected.getMegaList().get(0));
+                    selected.updateName();
                 }
                 else this.embed.setDescription("You don't own this Mega-Evolved form!");
             }
@@ -57,6 +59,7 @@ public class CommandMega extends Command
                 {
                     this.embed.setDescription(selected.getName() + " mega evolved into " + chosenMega + "!");
                     selected.changeForm(chosenMega);
+                    selected.updateName();
                 }
                 else this.embed.setDescription("You don't own this Mega-Evolved form!");
             }

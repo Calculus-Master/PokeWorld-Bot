@@ -197,7 +197,7 @@ public class CommandLeaderboard extends Command
         DUELS_PVP_WON(1.75, p -> p.getStatistics().get(PlayerStatistic.PVP_DUELS_WON), "PvP Duels Won"),
         DUELS_WILD_WON(0.5, p -> p.getStatistics().get(PlayerStatistic.WILD_DUELS_WON), "Wild Duels Won"),
         DUELS_TRAINER_WON(0.75, p -> p.getStatistics().get(PlayerStatistic.TRAINER_DUELS_WON), "Trainer Duels Won"),
-        DUELS_TRAINER_ELITE_WON(1.25, p -> p.getStatistics().get(PlayerStatistic.ELITE_TRAINER_DUELS_WON), "Elite Duels Won");
+        DUELS_TRAINER_ELITE_WON(1.25, p -> p.getStatistics().get(PlayerStatistic.ELITE_DUELS_WON), "Elite Duels Won");
 
         double weight;
         IScoreComponent value;

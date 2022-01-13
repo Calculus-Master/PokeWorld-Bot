@@ -35,6 +35,8 @@ public class FixedDamageEffect extends MoveEffect
             this.duel.data(this.opponent.getUUID()).endureUsed = false;
         }
 
+        this.duel.data(this.opponent.getUUID()).lastDamageTaken = this.damage;
+
         return this.move.getDamageResult(this.opponent, this.damage);
     }
 }

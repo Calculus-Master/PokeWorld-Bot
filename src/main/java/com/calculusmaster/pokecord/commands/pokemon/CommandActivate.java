@@ -33,7 +33,7 @@ public class CommandActivate extends Command
             return this;
         }
 
-        Item item = Item.asItem(this.playerData.getItemList().get(this.getInt(1) - 1));
+        Item item = Item.cast(this.playerData.getItemList().get(this.getInt(1) - 1));
         Pokemon s = this.playerData.getSelectedPokemon();
 
         if(item != null && item.isFunctionalItem())
@@ -43,7 +43,7 @@ public class CommandActivate extends Command
                double minIV = s.getTotalIVRounded() - (s.getTotalIVRounded() / 2);
                s.setIVs((int)minIV);
 
-               Pokemon.uploadPokemon(s);
+               s.updateIVs();
 
                this.playerData.removeItem(Item.IV_REROLLER.getName());
 
@@ -73,13 +73,13 @@ public class CommandActivate extends Command
 
                     int transferEVs = (int)((new Random().nextInt(100) < 20 ? (new Random().nextInt(26) + 75) / 100D : 1D) * s.getEVs().get(from));
 
-                    s.addEV(to, transferEVs);
-                    s.addEV(from, -1 * transferEVs);
+                    s.addEVs(to, transferEVs);
+                    s.addEVs(from, -1 * transferEVs);
 
                     //Leftovers
-                    s.addEV(from, initialFrom - (s.getEVs().get(to) - initialTo));
+                    s.addEVs(from, initialFrom - (s.getEVs().get(to) - initialTo));
 
-                    Pokemon.updateEVs(s);
+                    s.updateEVs();
 
                     this.playerData.removeItem(Item.EV_REALLOCATOR.getName());
 
@@ -104,9 +104,9 @@ public class CommandActivate extends Command
                        return this;
                    }
 
-                   s.addEV(target, -1 * s.getEVs().get(target));
+                   s.addEVs(target, -1 * s.getEVs().get(target));
 
-                   Pokemon.updateEVs(s);
+                   s.updateEVs();
 
                    this.playerData.removeItem(Item.EV_CLEARER.getName());
 

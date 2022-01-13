@@ -1,11 +1,13 @@
 package com.calculusmaster.pokecord.game.pokemon;
 
-import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
-import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
+import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.pokemon.component.PokemonBoosts;
+import com.calculusmaster.pokecord.game.pokemon.component.PokemonDuelStatChanges;
+import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
@@ -17,49 +19,108 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.json.JSONObject;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Pokemon
 {
+    //Fields
     private PokemonData data;
-    protected JSONObject specificJSON;
 
     private String UUID;
+    private String name;
+    private String nickname;
     private int number;
     private boolean shiny;
+    private Gender gender;
     private Nature nature;
     private int level;
     private int exp;
-    private Map<Stat, Integer> IV = new HashMap<>();
-    private Map<Stat, Integer> EV = new HashMap<>();
-    private List<String> learnedMoves = new ArrayList<>();
-    private int heldTM;
-    private int heldTR;
-    private String heldItem;
     private int dynamaxLevel;
-    private String nickname;
-    private Gender gender;
+    private PokemonStats ivs;
+    private PokemonStats evs;
+    private List<String> moves;
+    private Item item;
+    private TM tm;
+    private TR tr;
 
+    //Duel Fields
     private int health;
     private Type[] type;
-    private Map<StatusCondition, Boolean> status;
-    private Map<Stat, Integer> statMultiplier = new HashMap<>();
-    public double statBuff;
-    public double hpBuff;
+    private PokemonDuelStatChanges statChanges;
+    private PokemonBoosts boosts;
+    private EnumSet<StatusCondition> statusConditions;
     private boolean isDynamaxed;
-    private int accuracyStage;
-    private int evasionStage;
 
-    @Override
-    public int hashCode()
+    //Private Constructor
+    private Pokemon() {}
+
+    //Factory Creator and Builder
+    public static Pokemon create(String name)
     {
-        return Objects.hash(this.UUID, this.level, this.exp);
+        Pokemon p = new Pokemon();
+
+        p.setData(name);
+        p.setUUID();
+        p.setName(name);
+        p.setNickname("");
+        p.setNumber(-1);
+        p.setShiny();
+        p.setGender();
+        p.setNature();
+        p.setLevel(1);
+        p.setExp(0);
+        p.setIVs();
+        p.setEVs();
+        p.setMoves();
+        p.setItem(Item.NONE);
+        p.setTM();
+        p.setTR();
+
+        p.setDuelDefaults();
+
+        return p;
     }
 
-    //Constructors
+    private static Pokemon build(Document data, int number)
+    {
+        Pokemon p = new Pokemon();
+
+        p.setData(data.getString("name"));
+        p.setUUID(data.getString("UUID"));
+        p.setName(data.getString("name"));
+        p.setNickname(data.getString("nickname"));
+        p.setNumber(number);
+        p.setShiny(data.getBoolean("shiny"));
+        p.setGender(Gender.cast(data.getString("gender")));
+        p.setNature(Nature.cast(data.getString("nature")));
+        p.setLevel(data.getInteger("level"));
+        p.setExp(data.getInteger("exp"));
+        p.setIVs(data.get("ivs", Document.class));
+        p.setEVs(data.get("evs", Document.class));
+        p.setMoves(data.getList("moves", String.class));
+        p.setItem(Item.cast(data.getString("item")));
+        p.setTM(data.getInteger("tm") == -1 ? null : TM.get(data.getInteger("tm")));
+        p.setTR(data.getInteger("tr") == -1 ? null : TR.get(data.getInteger("tr")));
+
+        p.setDuelDefaults();
+
+        return p;
+    }
+
+    private void setDuelDefaults()
+    {
+        this.health = this.getMaxHealth();
+        this.type = new Type[]{this.data.types.get(0), this.data.types.get(1)};
+        this.statChanges = new PokemonDuelStatChanges();
+        this.boosts = new PokemonBoosts();
+        this.statusConditions = EnumSet.noneOf(StatusCondition.class);
+        this.isDynamaxed = false;
+    }
+
     public static Pokemon build(String UUID)
     {
         return Pokemon.build(UUID, -1);
@@ -69,208 +130,109 @@ public class Pokemon
     {
         Document cache = PokemonDataCache.getCache(UUID);
 
-        //This usually means that the data wasn't cache on bot initialization
+        //This usually means that the data wasn't cached on bot initialization
         if(cache == null)
         {
             cache = Mongo.LegacyPokemonData.find(Filters.eq("UUID", UUID)).first();
             PokemonDataCache.addCacheData(UUID, cache);
 
             //This most likely means the UUID isn't in the database
-            if(cache == null) LoggerHelper.error(Pokemon.class, "UUID {%s} not found in Database!".formatted(UUID));
+            if(cache == null) LoggerHelper.error(com.calculusmaster.pokecord.game.pokemon.Pokemon.class, "UUID {%s} not found in Database!".formatted(UUID));
         }
 
         return cache == null ? null : Pokemon.build(PokemonDataCache.getCache(UUID), number);
     }
 
-    private static Pokemon build(Document data, int number)
+    //Database
+    public void upload()
     {
-        Pokemon p = new Pokemon();
+        Document data = new Document()
+                .append("UUID", this.UUID)
+                .append("name", this.name)
+                .append("nickname", this.nickname)
+                .append("shiny", this.shiny)
+                .append("gender", this.gender.toString())
+                .append("nature", this.nature.toString())
+                .append("level", this.level)
+                .append("exp", this.exp)
+                .append("dynamaxLevel", this.dynamaxLevel)
+                .append("ivs", this.ivs.serialized())
+                .append("evs", this.evs.serialized())
+                .append("moves", this.moves)
+                .append("item", this.item.toString())
+                .append("tm", this.tm == null ? -1 : this.tm.getNumber())
+                .append("tr", this.tr == null ? -1 : this.tr.getNumber());
 
-        p.setUUID(data.getString("UUID"));
-        p.setData(data.getString("name"));
-        p.setNumber(number);
-
-        p.setLevel(data.getInteger("level"));
-        p.setExp(data.getInteger("exp"));
-        p.setShiny(data.getBoolean("shiny"));
-        p.setIVs(data.getString("ivs"));
-        p.setEVs(data.getString("evs"));
-        p.setNature(data.getString("nature"));
-        p.setLearnedMoves(data.getString("moves"));
-        p.setTM(data.getInteger("tm"));
-        p.setTR(data.getInteger("tr"));
-        p.setItem(data.getString("item"));
-        p.setDynamaxLevel(data.getInteger("dynamax_level"));
-        p.setNickname(data.getString("nickname"));
-        p.setGender(data.getString("gender"));
-
-        p.setDuelDefaults();
-
-        return p;
+        Mongo.PokemonData.insertOne(data);
     }
 
-    public static Pokemon create(String name)
+    public void delete()
     {
-        Pokemon p = new Pokemon();
-        p.setUUID();
-        p.setNumber(-1);
-
-        p.setData(name);
-
-        p.setLevel(1);
-        p.setExp(0);
-        p.setShiny(new Random().nextInt(4096) == 1);
-        p.setIVs();
-        p.setEVs();
-        p.setNature();
-        p.setLearnedMoves("Tackle-Tackle-Tackle-Tackle");
-        p.setTM(-1);
-        p.setTR(-1);
-        p.setItem(Item.NONE);
-        p.setDynamaxLevel(0);
-        p.setNickname("");
-        p.setGender();
-
-        p.setDuelDefaults();
-
-        LoggerHelper.info(Pokemon.class, "Pokemon Created: UUID (" + p.getUUID() + "), NAME (" + name + ")", true);
-        return p;
+        Mongo.PokemonData.deleteOne(this.query());
     }
 
-    private void setDuelDefaults()
+    public void completeUpdate()
     {
-        this.setHealth(this.getStat(Stat.HP));
-        this.setType();
-        this.setStatusConditions();
-        this.setDefaultStatMultipliers();
-        this.statBuff = 1.0;
-        this.hpBuff = 1.0;
-        this.setDynamax(false);
+        this.delete();
+        this.upload();
     }
 
-    public PokemonData getData()
+    private void update(Bson... updates)
     {
-        return PokemonData.get(this.getName());
+        Mongo.PokemonData.updateOne(this.query(), List.of(updates));
     }
 
-    public int getNumber()
+    public void updateName()
     {
-        return this.number;
+        this.update(Updates.set("name", this.name));
     }
 
-    public void setNumber(int number)
+    public void updateNickname()
     {
-        this.number = number;
+        this.update(Updates.set("nickname", this.nickname));
     }
 
-    public Pokemon withNumber(int number)
+    public void updateNature()
     {
-        this.setNumber(number);
-        return this;
+        this.update(Updates.set("nature", this.nature));
     }
 
-    //JSONs
-
-    public void setData(String name)
+    public void updateExperience()
     {
-        this.data = PokemonData.get(Global.normalize(name));
+        this.update(Updates.set("level", this.level), Updates.set("exp", this.exp));
     }
 
-    public void linkSpecificJSON(String UUID)
+    public void updateDynamaxLevel()
     {
-        this.specificJSON = null;
+        this.update(Updates.set("dynamaxLevel", this.dynamaxLevel));
     }
 
-    public static JSONObject specificJSON(String UUID)
+    public void updateEVs()
     {
-        return new JSONObject(Mongo.PokemonData.find(Filters.eq("UUID", UUID)).first().toJson());
+        this.update(Updates.set("evs", this.evs.serialized()));
     }
 
-    public static void uploadPokemon(Pokemon p)
+    public void updateIVs()
     {
-        Pokemon.deletePokemon(p);
-
-        Document pokeData = new Document()
-                .append("UUID", p.getUUID())
-                .append("name", p.getName())
-                .append("shiny", p.isShiny())
-                .append("level", p.getLevel())
-                .append("exp", p.getExp())
-                .append("nature", p.getNature().toString())
-                .append("ivs", p.getVCondensed(p.getIVs()))
-                .append("evs", p.getVCondensed(p.getEVs()))
-                .append("moves", p.getMovesCondensed())
-                .append("tm", p.getTM())
-                .append("tr", p.getTR())
-                .append("item", p.getItem())
-                .append("dynamax_level", p.getDynamaxLevel())
-                .append("nickname", p.getNickname())
-                .append("gender", p.getGender().toString());
-
-        Mongo.PokemonData.insertOne(pokeData);
-        PokemonDataCache.addCacheData(p.getUUID(), pokeData);
-
-        LoggerHelper.info(Pokemon.class, "Pokemon Uploaded: UUID (" + p.getUUID() + "), NAME (" + p.getName() + ")");
+        this.update(Updates.set("ivs", this.ivs.serialized()));
     }
 
-    private static void update(Pokemon p, Bson... update)
+    public void updateMoves()
     {
-        for (Bson u : update) Mongo.PokemonData.updateOne(p.getQuery(), u);
-
-        PokemonDataCache.updateCache(p.getUUID());
+        this.update(Updates.set("moves", this.moves));
     }
 
-    public static void updateExperience(Pokemon p)
+    public void updateItem()
     {
-        update(p, Updates.set("level", p.getLevel()), Updates.set("exp", p.getExp()));
+        this.update(Updates.set("item", this.item.toString()));
     }
 
-    public static void updateMoves(Pokemon p)
+    public void updateTMTR()
     {
-        update(p, Updates.set("moves", p.getMovesCondensed()));
+        this.update(Updates.set("tm", this.tm == null ? -1 : this.tm.getNumber()), Updates.set("tr", this.tr == null ? -1 : this.tr.getNumber()));
     }
 
-    public static void updateEVs(Pokemon p)
-    {
-        update(p, Updates.set("evs", p.getVCondensed(p.getEVs())));
-    }
-
-    public static void updateName(Pokemon p, String evolved)
-    {
-        update(p, Updates.set("name", Global.normalize(evolved)));
-    }
-
-    public static void updateNickname(Pokemon p)
-    {
-        update(p, Updates.set("nickname", Global.normalize(p.getNickname())));
-    }
-
-    public static void updateTMTR(Pokemon p)
-    {
-        update(p, Updates.set("tm", p.getTM()), Updates.set("tr", p.getTR()));
-    }
-
-    public static void updateItem(Pokemon p)
-    {
-        update(p, Updates.set("item", p.getItem()));
-    }
-
-    public static void updateDynamaxLevel(Pokemon p)
-    {
-        update(p, Updates.set("dynamax_level", p.getDynamaxLevel()));
-    }
-
-    public static void deletePokemon(Pokemon p)
-    {
-        Mongo.PokemonData.deleteOne(p.getQuery());
-    }
-
-    public JSONObject getSpecificJSON()
-    {
-        return this.specificJSON;
-    }
-
-    //Is the Pokemon complete/mastered - does it have all of its components used / maxed out
+    //Mastery
     public boolean isMastered()
     {
         //Level must be 100
@@ -280,89 +242,63 @@ public class Pokemon
         else if(this.getEVTotal() < 510) return false;
 
         //Must have 4 moves that aren't Tackle
-        else if(this.getLearnedMoves().stream().anyMatch(s -> s.equals("Tackle"))) return false;
+        else if(this.moves.stream().anyMatch(s -> s.equals("Tackle"))) return false;
 
         //Dynamax Level must be 10
         else if(this.getDynamaxLevel() < 10) return false;
 
         //Must have an Item
-        else if(Item.asItem(this.getItem()).equals(Item.NONE)) return false;
+        else if(this.getItem().equals(Item.NONE)) return false;
 
         //If checks have been passed, the Pokemon has been Mastered
         else return true;
     }
 
-    //Egg Group and Gender
-    public List<EggGroup> getEggGroup()
-    {
-        return this.data.eggGroups;
-    }
-
-    public Gender getGender()
-    {
-        return this.gender;
-    }
-
-    public void setGender(String gender)
-    {
-        this.gender = Gender.cast(gender);
-    }
-
-    public void setGender()
-    {
-        int rate = this.data.genderRate;
-        this.gender = rate == -1 ? Gender.UNKNOWN : (new Random().nextInt(8) < rate ? Gender.FEMALE : Gender.MALE);
-    }
-
-    //Status Conditions
+    //Other
 
     public void addStatusCondition(StatusCondition s)
     {
-        if ((this.isType(Type.ELECTRIC) && s.equals(StatusCondition.PARALYZED)) ||
-                (this.isType(Type.ICE) && s.equals(StatusCondition.FROZEN)) ||
-                (this.isType(Type.FIRE) && s.equals(StatusCondition.BURNED)) ||
-                ((this.isType(Type.POISON) || this.isType(Type.STEEL)) && s.equals(StatusCondition.POISONED))) return;
-        else this.status.put(s, true);
+        List<Predicate<Pokemon>> immunities = List.of(
+                p -> p.isType(Type.ELECTRIC) && s.equals(StatusCondition.PARALYZED),
+                p -> p.isType(Type.ICE) && s.equals(StatusCondition.FROZEN),
+                p -> p.isType(Type.FIRE) && s.equals(StatusCondition.BURNED),
+                p -> (p.isType(Type.POISON) || p.isType(Type.STEEL)) && s.equals(StatusCondition.POISONED)
+        );
+
+        if(immunities.stream().noneMatch(p -> p.test(this))) this.statusConditions.add(s);
     }
 
     public void removeStatusCondition(StatusCondition s)
     {
-        this.status.put(s, false);
-    }
-
-    public void clearStatusConditions()
-    {
-        this.status.replaceAll((s, v) -> false);
+        this.statusConditions.remove(s);
     }
 
     public boolean hasStatusCondition(StatusCondition s)
     {
-        return this.status.get(s);
+        return this.statusConditions.contains(s);
     }
 
     public boolean hasAnyStatusCondition()
     {
-        return Arrays.stream(StatusCondition.values()).noneMatch(this::hasStatusCondition);
+        return !this.statusConditions.isEmpty();
     }
 
-    public Map<StatusCondition, Boolean> getStatusConditionMap()
+    public void clearStatusConditions()
     {
-        return this.status;
+        this.statusConditions.clear();
     }
 
-    public void setStatusConditions()
+    public EnumSet<StatusCondition> getStatusConditions()
     {
-        this.status = new HashMap<>();
-
-        for (StatusCondition sc : StatusCondition.values()) this.status.put(sc, false);
+        return this.statusConditions;
     }
 
     public String getActiveStatusConditions()
     {
         List<String> active = new ArrayList<>();
-        for (StatusCondition s : this.status.keySet()) if (this.status.get(s)) active.add(s.getAbbrev());
+        for(StatusCondition s : this.statusConditions) active.add(s.getAbbrev());
 
-        if (active.isEmpty()) return "";
+        if(active.isEmpty()) return "";
 
         StringBuilder s = new StringBuilder().append("(");
         for (String str : active) s.append(str).append(", ");
@@ -371,34 +307,64 @@ public class Pokemon
         return s.toString();
     }
 
-    //Health
-    public void setHealth(int num)
+    public PokemonDuelStatChanges changes()
     {
-        this.health = num;
+        return this.statChanges;
     }
 
-    public void damage(int amount)
+    public PokemonBoosts getBoosts()
     {
-        this.health -= amount;
+        return this.boosts;
+    }
 
-        try
+    public int getBaseStat(Stat s)
+    {
+        return this.data.baseStats.get(s);
+    }
+
+    public int getStat(Stat s)
+    {
+        if(s.equals(Stat.HP))
         {
-            DuelHelper.instance(this.getUUID()).addDamage(amount, this.getUUID());
+            //HP = Level + 10 + [((2 * Base + IV + EV / 4) * Level) / 100]
+            double base = this.getBaseStat(Stat.HP);
+            int IV = this.ivs.get(Stat.HP);
+            int EV = this.evs.get(Stat.HP);
+            double maxHP = this.level + 10 + ((this.level * (2 * base + IV + EV / 4.0)) / 100);
+
+            double dynamaxBoost = this.isDynamaxed ? 1.0 + (this.getDynamaxLevel() * 0.05 + 0.5) : 1.0;
+            return (int)(maxHP * dynamaxBoost * this.boosts.getHealthBoost());
         }
-        catch (IndexOutOfBoundsException e)
+        else
         {
-            LoggerHelper.reportError(Pokemon.class, "Could not find " + this.getUUID() + " (" + this.getName() + ") in any Duels", e);
+            //Stat = Nature * [5 + ((2 * Base + IV + EV / 4) * Level) / 100]
+            double nature = this.nature.getMap().get(s);
+            double base = this.getBaseStat(s);
+            int IV = this.ivs.get(s);
+            int EV = this.evs.get(s);
+            double stat = nature * (5 + ((this.level * (2 * base + IV + EV / 4.0)) / 100));
+            return (int)(stat * this.statChanges.getModifier(s) * this.boosts.getStatBoost());
         }
+    }
+
+    public int getMaxHealth()
+    {
+        return this.getStat(Stat.HP);
+    }
+
+    public int getTotalStat()
+    {
+        return Arrays.stream(Stat.values()).mapToInt(this::getStat).sum();
     }
 
     public void heal(int amount)
     {
-        this.health = Math.min(this.getStat(Stat.HP), this.health + amount);
+        this.setHealth(Math.min(this.health + amount, this.getMaxHealth()));
     }
 
-    public int getHealth()
+    public void damage(int amount)
     {
-        return this.health;
+        this.setHealth(Math.max(0, this.health - amount));
     }
 
     public boolean isFainted()
@@ -406,238 +372,44 @@ public class Pokemon
         return this.health <= 0;
     }
 
-    //Moves
-    public List<String> getAvailableMoves()
+    public void setHealth(int health)
     {
-        List<String> moves = new ArrayList<>(List.copyOf(this.getAllMoves())).stream().filter(s -> this.data.moves.get(s) <= this.getLevel()).sorted(Comparator.comparingInt(s -> this.data.moves.get(s))).collect(Collectors.toList());;
-
-        if(this.hasTM()) moves.add(TM.get(this.getTM()).getMoveName());
-        if(this.hasTR()) moves.add(TR.get(this.getTR()).getMoveName());
-
-        if(this.getName().contains("Zygarde") && this.hasItem() && Item.asItem(this.getItem()).equals(Item.ZYGARDE_CUBE))
-        {
-            Collections.addAll(moves, "Core Enforcer", "Dragon Dance", "Extreme Speed", "Thousand Arrows", "Thousand Waves");
-        }
-
-        return moves;
+        this.health = health;
     }
 
-    public List<String> getAllMoves()
+    public int getHealth()
     {
-        List<String> moves = new ArrayList<>(this.data.moves.keySet());
-        moves.sort(Comparator.comparingInt(s -> this.data.moves.get(s)));
-
-        if(this.getName().contains("Zygarde") && this.hasItem() && Item.asItem(this.getItem()).equals(Item.ZYGARDE_CUBE))
-        {
-            Collections.addAll(moves, "Core Enforcer", "Dragon Dance", "Extreme Speed", "Thousand Arrows", "Thousand Waves");
-        }
-
-        return moves;
+        return this.health;
     }
 
-    public String getMovesCondensed()
+    public boolean isDynamaxed()
     {
-        StringBuilder s = new StringBuilder();
-        this.learnedMoves.forEach(m -> s.append(m).append("-"));
-        return s.deleteCharAt(s.length() - 1).toString();
+        return this.isDynamaxed;
     }
 
-    public void setLearnedMoves(String moves)
+    public void enterDynamax()
     {
-        for (String s : moves.split("-")) this.learnedMoves.add(Global.normalize(s));
+        double healthRatio = (double)this.getHealth() / this.getStat(Stat.HP);
+
+        this.isDynamaxed = true;
+
+        this.setHealth((int)(healthRatio * this.getStat(Stat.HP)));
     }
 
-    public List<String> getLearnedMoves()
+    public void exitDynamax()
     {
-        return this.learnedMoves;
+        double healthRatio = (double)this.getHealth() / this.getStat(Stat.HP);
+
+        this.isDynamaxed = false;
+
+        this.setHealth((int)(healthRatio * this.getStat(Stat.HP)));
     }
 
-    public void learnMove(String move, int replace)
+    public double getWeight()
     {
-        if (this.getAvailableMoves().contains(move) || MoveTutorRegistry.MOVE_TUTOR_MOVES.contains(move))
-            this.learnedMoves.set(replace - 1, move);
+        return this.data.weight;
     }
 
-    public boolean hasTM()
-    {
-        return this.heldTM != -1;
-    }
-
-    public boolean hasTR()
-    {
-        return this.heldTR != -1;
-    }
-
-    public void setTM(int TM)
-    {
-        this.heldTM = TM;
-    }
-
-    public void setTR(int TR)
-    {
-        this.heldTR = TR;
-    }
-
-    public int getTM()
-    {
-        return this.heldTM;
-    }
-
-    public int getTR()
-    {
-        return this.heldTR;
-    }
-
-    public List<Integer> getAllValidTMs()
-    {
-        return this.data.validTMs.stream().map(TM::getNumber).toList();
-    }
-
-    public List<Integer> getAllValidTRs()
-    {
-        return this.data.validTRs.stream().map(TR::getNumber).toList();
-    }
-
-    public boolean canLearnTM(int tm)
-    {
-        return this.getAllValidTMs().stream().anyMatch(i -> tm == i);
-    }
-
-    public boolean canLearnTR(int tr)
-    {
-        return this.getAllValidTRs().stream().anyMatch(i -> tr == i);
-    }
-
-    //Items
-    public void setItem(String s)
-    {
-        this.heldItem = s;
-    }
-
-    public void setItem(Item item)
-    {
-        this.heldItem = item.getName();
-    }
-
-    public void removeItem()
-    {
-        this.heldItem = Item.NONE.getName();
-    }
-
-    public String getItem()
-    {
-        return this.heldItem;
-    }
-
-    public boolean hasItem()
-    {
-        return !this.getItem().equals(Item.NONE.getName());
-    }
-
-    //UUID
-    private void setUUID()
-    {
-        StringBuilder uuid = new StringBuilder();
-
-        for (int i = 0; i < 6; i++) uuid.append(IDHelper.alphanumeric(4)).append("-");
-
-        this.setUUID(uuid.substring(0, uuid.toString().length() - 1));
-    }
-
-    public void setUUID(String UUID)
-    {
-        this.UUID = UUID;
-    }
-
-    public String getUUID()
-    {
-        return this.UUID;
-    }
-
-    public Bson getQuery()
-    {
-        return Filters.eq("UUID", this.getUUID());
-    }
-
-    //Shiny
-    public void setShiny(boolean isShiny)
-    {
-        this.shiny = isShiny;
-    }
-
-    public boolean isShiny()
-    {
-        return this.shiny;
-    }
-
-    //Image
-    public String getImage()
-    {
-        if (this.getName().equals("Deerling")) return Global.getDeerlingImage(this.isShiny());
-        else if (this.getName().equals("Sawsbuck")) return Global.getSawsbuckImage(this.isShiny());
-
-        //TODO: Basic Dynamax Image
-        if (this.isDynamaxed && this.canGigantamax())
-            return this.isShiny() ? DataHelper.GIGANTAMAX_DATA.get(this.getName()).shinyImage() : DataHelper.GIGANTAMAX_DATA.get(this.getName()).normalImage();
-
-        String image = this.isShiny() ? this.data.shinyURL : this.data.normalURL;
-        return image.equals("") ? Pokemon.getWIPImage() : image;
-    }
-
-    public static String getWIPImage()
-    {
-        return "http://clipart-library.com/img/1657818.png";
-    }
-
-    //Levels and Experience
-    public void setLevel(int level)
-    {
-        this.level = Math.min(level, 100);
-    }
-
-    public int getLevel()
-    {
-        return this.level;
-    }
-
-    public void setExp(int exp)
-    {
-        this.exp = exp;
-    }
-
-    public int getExp()
-    {
-        return this.exp;
-    }
-
-    public void addExp(int exp)
-    {
-        this.exp += exp;
-        int required = GrowthRate.getRequiredExp(this.data.growthRate, this.level);
-
-        while (this.exp >= required && this.level < 100)
-        {
-            this.level++;
-            this.exp -= required;
-            required = GrowthRate.getRequiredExp(this.data.growthRate, this.level);
-        }
-    }
-
-    public int getDuelExp(Pokemon opponent)
-    {
-        int a = 1;
-        int b = this.data.baseEXP;
-        int e = 1;
-        int L = opponent.getLevel();
-        int Lp = this.getLevel();
-        int p = 1;
-        int s = 1;
-        int t = 1;
-
-        return (int) (t * e * p * (1 + (a * b * L / (5.0 * s)) * (Math.pow(2 * L + 10, 2.5) / Math.pow(L + Lp + 10, 2.5))));
-    }
-
-    //Megas and Forms
     public boolean hasMega()
     {
         return !this.data.megas.isEmpty();
@@ -662,146 +434,259 @@ public class Pokemon
     {
         form = Global.normalize(form);
         this.setData(form);
-        Pokemon.updateName(this, form);
+        this.name = form;
     }
 
-    //Dynamax and Gigantamax
-    public boolean isDynamaxed()
+    public void evolve(String evolution)
     {
-        return this.isDynamaxed;
+        this.changeForm(evolution);
     }
 
-    public void setDynamax(boolean dynamaxed)
+    public String getImage()
     {
-        this.isDynamaxed = dynamaxed;
+        if (this.getName().equals("Deerling")) return Global.getDeerlingImage(this.isShiny());
+        else if (this.getName().equals("Sawsbuck")) return Global.getSawsbuckImage(this.isShiny());
+
+        //TODO: Basic Dynamax Image
+        if (this.isDynamaxed && this.canGigantamax())
+            return this.isShiny() ? DataHelper.getGigantamaxData(this.getName()).shinyImage() : DataHelper.getGigantamaxData(this.getName()).normalImage();
+
+        String image = this.isShiny() ? this.data.shinyURL : this.data.normalURL;
+        return image.equals("") ? com.calculusmaster.pokecord.game.pokemon.Pokemon.getWIPImage() : image;
     }
 
-    public int getDynamaxLevel()
+    public static String getWIPImage()
     {
-        return this.dynamaxLevel;
-    }
-
-    public void increaseDynamaxLevel()
-    {
-        if (this.dynamaxLevel <= 9) {
-            this.dynamaxLevel++;
-            Pokemon.updateDynamaxLevel(this);
-        }
-    }
-
-    public void setDynamaxLevel(int level)
-    {
-        this.dynamaxLevel = level;
-    }
-
-    public void enterDynamax()
-    {
-        double healthRatio = (double) this.getHealth() / this.getStat(Stat.HP);
-
-        this.setDynamax(true);
-
-        this.setHealth((int) (healthRatio * this.getStat(Stat.HP)));
-    }
-
-    public void exitDynamax()
-    {
-        double healthRatio = (double) this.getHealth() / this.getStat(Stat.HP);
-
-        this.setDynamax(false);
-
-        this.setHealth((int) (healthRatio * this.getStat(Stat.HP)));
+        return "http://clipart-library.com/img/1657818.png";
     }
 
     public boolean canGigantamax()
     {
-        return Pokemon.existsGigantamax(this.getName());
+        return DataHelper.hasGigantamax(this.getName());
     }
 
-    public static boolean existsGigantamax(String p)
+    public DataHelper.GigantamaxData getGigantamaxData()
     {
-        return DataHelper.GIGANTAMAX_DATA.containsKey(p);
+        return DataHelper.GIGANTAMAX_DATA.get(this.getName());
     }
 
-    public static DataHelper.GigantamaxData getGigantamaxData(String p)
+    public List<String> getAbilities()
     {
-        return DataHelper.GIGANTAMAX_DATA.get(p);
+        return this.data.abilities;
     }
 
-    //IVs and EVs
-    public Map<Stat, Integer> getIVs()
+    //Type
+
+    public Type[] getType()
     {
-        return this.IV;
+        return this.type;
     }
 
-    public Map<Stat, Integer> getEVs()
+    public void setType(Type t, int index)
     {
-        return this.EV;
+        this.type[index] = t;
     }
 
-    public void addEV(Stat s, int amount)
+    public void setType()
     {
-        int newEV = this.EV.get(s) + amount;
-        if (this.getEVTotal() <= 510 && newEV <= 252) this.EV.put(s, this.EV.get(s) + amount);
+        this.type = new Type[]{this.data.types.get(0), this.data.types.get(1)};
     }
 
-    public Map<Stat, Integer> getEVYield()
+    public boolean isType(Type t)
     {
-        return this.data.yield.get();
+        return this.getType()[0].equals(t) || this.getType()[1].equals(t);
     }
 
-    public void gainEVs(Pokemon defeated)
+    //TM & TR
+
+    public boolean canLearnTM(TM tm)
     {
-        for (Stat s : defeated.getEVYield().keySet()) this.addEV(s, defeated.getEVYield().get(s));
+        return this.data.validTMs.contains(tm);
     }
 
-    public int getEVTotal()
+    public boolean canLearnTR(TR tr)
     {
-        return this.EV.keySet().stream().mapToInt(stat -> this.EV.get(stat)).sum();
+        return this.data.validTRs.contains(tr);
     }
 
-    public String getVCondensed(Map<Stat, Integer> v)
+    public boolean hasTM()
     {
-        StringBuilder cond = new StringBuilder();
-        for (int i = 0; i < Stat.values().length; i++) cond.append(v.get(Stat.values()[i])).append("-");
-        return cond.substring(0, cond.length() - 1).trim();
+        return this.tm != null;
     }
 
-    public void setIVs(String cond)
+    public boolean hasTR()
     {
-        for (int i = 0; i < 6; i++) this.IV.put(Stat.values()[i], Integer.parseInt(cond.split("-")[i]));
+        return this.tr != null;
     }
 
-    public void setIV(Stat s, int IV)
+    public void setTM()
     {
-        this.IV.put(s, IV);
+        this.tm = null;
     }
 
-    public void setEVs(String cond)
+    public void setTR()
     {
-        for (int i = 0; i < 6; i++) this.EV.put(Stat.values()[i], Integer.parseInt(cond.split("-")[i]));
+        this.tr = null;
     }
 
-    public void setEV(Stat s, int EV)
+    public void setTM(TM tm)
     {
-        this.EV.put(s, EV);
+        this.tm = tm;
     }
 
-    public void setIVs()
+    public void setTR(TR tr)
     {
-        for (int i = 0; i < 6; i++) this.IV.put(Stat.values()[i], new Random().nextInt(32));
+        this.tr = tr;
+    }
+
+    public TM getTM()
+    {
+        return this.tm;
+    }
+
+    public TR getTR()
+    {
+        return this.tr;
+    }
+
+    //Item
+    public boolean hasItem()
+    {
+        return !this.item.equals(Item.NONE);
+    }
+
+    public void setItem(Item item)
+    {
+        this.item = item;
+    }
+
+    public void removeItem()
+    {
+        this.setItem(Item.NONE);
+    }
+
+    public Item getItem()
+    {
+        return this.item;
+    }
+
+    //Moves
+
+    public List<String> allMoves()
+    {
+        List<String> all = new ArrayList<>(List.copyOf(this.data.moves.keySet()));
+        all.sort(Comparator.comparingInt(s -> this.data.moves.get(s)));
+
+        return this.withMovesOverride(all);
+    }
+
+    public List<String> availableMoves()
+    {
+        List<String> available = new ArrayList<>(this.allMoves().stream().filter(s -> this.data.moves.get(s) <= this.getLevel()).sorted(Comparator.comparingInt(s -> this.data.moves.get(s))).toList());
+
+        if(this.hasTM()) available.add(this.tm.getMoveName());
+        if(this.hasTR()) available.add(this.tr.getMoveName());
+
+        return this.withMovesOverride(available);
+    }
+
+    private List<String> withMovesOverride(List<String> input)
+    {
+        if(this.getName().contains("Zygarde") && this.item.equals(Item.ZYGARDE_CUBE))
+        {
+            Collections.addAll(input, "Core Enforcer", "Dragon Dance", "Extreme Speed", "Thousand Arrows", "Thousand Waves");
+        }
+
+        return input;
+    }
+
+    public void learnMove(String move, int index)
+    {
+        this.moves.set(index - 1, move);
+    }
+
+    public void setMoves()
+    {
+        this.setMoves(List.of("Tackle", "Tackle", "Tackle", "Tackle"));
+    }
+
+    public void setMoves(List<String> moves)
+    {
+        this.moves = new ArrayList<>(moves);
+    }
+
+    public List<String> getMoves()
+    {
+        return this.moves;
+    }
+
+    public Move getMove(int index)
+    {
+        return new Move(this.moves.get(index));
+    }
+
+    //IVs & EVs
+
+    public void setIVs(Document data)
+    {
+        this.ivs = new PokemonStats(data);
     }
 
     public void setIVs(int min)
     {
-        do {
-            this.setIVs();
-        }
-        while (this.getTotalIVRounded() < min);
+        do this.setIVs();
+        while(this.getTotalIVRounded() < min);
+    }
+
+    public void setEVs(Document data)
+    {
+        this.evs = new PokemonStats(data);
+    }
+
+    public void setEVs(Map<Stat, Integer> evs)
+    {
+        evs.forEach((key, value) -> this.evs.set(key, value));
+    }
+
+    public void setIVs()
+    {
+        this.ivs = new PokemonStats();
+        Arrays.stream(Stat.values()).forEach(s -> this.ivs.set(s, new SplittableRandom().nextInt(31) + 1));
+    }
+
+    public void setIVs(Map<Stat, Integer> ivs)
+    {
+        ivs.forEach((key, value) -> this.ivs.set(key, value));
     }
 
     public void setEVs()
     {
-        for (int i = 0; i < 6; i++) this.EV.put(Stat.values()[i], 0);
+        this.evs = new PokemonStats();
+    }
+
+    public void setIV(Stat s, int IV)
+    {
+        this.ivs.set(s, IV);
+    }
+
+    public void setEV(Stat s, int EV)
+    {
+        this.evs.set(s, EV);
+    }
+
+    public void addEVs(Stat stat, int amount)
+    {
+        if(this.getEVTotal() < 510 && this.getEVs().get(stat) + amount <= 252) this.evs.increase(stat, amount);
+    }
+
+    public void gainEVs(Pokemon other)
+    {
+        for(Stat s : other.getEVYield().keySet()) this.addEVs(s, other.getEVYield().get(s));
+    }
+
+    public int getEVTotal()
+    {
+        return this.getEVs().values().stream().mapToInt(i -> i).sum();
     }
 
     public String getTotalIV()
@@ -815,15 +700,98 @@ public class Pokemon
         return Double.parseDouble(iv.substring(0, iv.indexOf("%")));
     }
 
-    //Nature
-    public void setNature(String nature)
+    public LinkedHashMap<Stat, Integer> getEVYield()
     {
-        this.nature = Nature.cast(nature);
+        return this.data.yield.get();
     }
 
+    public LinkedHashMap<Stat, Integer> getIVs()
+    {
+        return this.ivs.get();
+    }
+
+    public LinkedHashMap<Stat, Integer> getEVs()
+    {
+        return this.evs.get();
+    }
+
+    //Dynamax Level
+
+    public void increaseDynamaxLevel()
+    {
+        if(this.dynamaxLevel < 10) this.dynamaxLevel++;
+    }
+
+    public void setDynamaxLevel(int dynamaxLevel)
+    {
+        this.dynamaxLevel = dynamaxLevel;
+    }
+
+    public int getDynamaxLevel()
+    {
+        return this.dynamaxLevel;
+    }
+
+    //Level & Experience
+
+    public void addExp(int exp)
+    {
+        this.exp += exp;
+
+        int req = GrowthRate.getRequiredExp(this.data.growthRate, this.level);
+
+        while(this.exp >= req && this.level < 100)
+        {
+            this.level++;
+            this.exp -= req;
+
+            req = GrowthRate.getRequiredExp(this.data.growthRate, this.level);
+        }
+    }
+
+    public int getDefeatExp(Pokemon other)
+    {
+        int a = 1;
+        int b = this.data.baseEXP;
+        int e = 1;
+        int L = other.getLevel();
+        int Lp = this.getLevel();
+        int p = 1;
+        int s = 1;
+        int t = 1;
+
+        return (int) (t * e * p * (1 + (a * b * L / (5.0 * s)) * (Math.pow(2 * L + 10, 2.5) / Math.pow(L + Lp + 10, 2.5))));
+    }
+
+    public void setExp(int exp)
+    {
+        this.exp = exp;
+    }
+
+    public void setLevel(int level)
+    {
+        this.level = level;
+    }
+
+    public int getExp()
+    {
+        return this.exp;
+    }
+
+    public int getLevel()
+    {
+        return this.level;
+    }
+
+    //Nature
     public void setNature()
     {
-        this.setNature(Nature.values()[new Random().nextInt(Nature.values().length)].toString());
+        this.setNature(Nature.values()[new SplittableRandom().nextInt(Nature.values().length)]);
+    }
+
+    public void setNature(Nature nature)
+    {
+        this.nature = nature;
     }
 
     public Nature getNature()
@@ -831,104 +799,58 @@ public class Pokemon
         return this.nature;
     }
 
-    //Stat
-    public int getStat(Stat s)
+    //Gender
+    public void setGender()
     {
-        if (s.equals(Stat.HP))
-        {
-            //HP = Level + 10 + [((2 * Base + IV + EV / 4) * Level) / 100]
-            double base = this.getBaseStat(Stat.HP);
-            int IV = this.IV.get(Stat.HP);
-            int EV = this.EV.get(Stat.HP);
-            double maxHP = this.level + 10 + ((this.level * (2 * base + IV + EV / 4.0)) / 100);
-
-            double dynamaxBoost = this.isDynamaxed ? 1.0 + (this.getDynamaxLevel() * 0.05 + 0.5) : 1.0;
-            return (int) (maxHP * dynamaxBoost * hpBuff);
-        }
-        else
-        {
-            //Stat = Nature * [5 + ((2 * Base + IV + EV / 4) * Level) / 100]
-            double nature = this.nature.getMap().get(s);
-            double base = this.getBaseStat(s);
-            int IV = this.IV.get(s);
-            int EV = this.EV.get(s);
-            double stat = nature * (5 + ((this.level * (2 * base + IV + EV / 4.0)) / 100));
-            return (int) (stat * this.getStatMultiplier(s) * statBuff);
-        }
+        this.setGender(this.data.genderRate == -1 ? Gender.UNKNOWN : (new SplittableRandom().nextInt(8) < this.data.genderRate ? Gender.FEMALE : Gender.MALE));
     }
 
-    public int getTotalStat()
+    public void setGender(Gender gender)
     {
-        return Arrays.stream(Stat.values()).mapToInt(this::getStat).sum();
+        this.gender = gender;
     }
 
-    public int getBaseStat(Stat s)
+    public Gender getGender()
     {
-        return this.data.baseStats.get().get(s);
+        return this.gender;
     }
 
-    public void setDefaultStatMultipliers()
+    public EnumSet<EggGroup> getEggGroups()
     {
-        for (int i = 0; i < Stat.values().length; i++) this.statMultiplier.put(Stat.values()[i], 0);
-
-        this.accuracyStage = 0;
-        this.evasionStage = 0;
+        return EnumSet.copyOf(this.data.eggGroups);
     }
 
-    public void changeStatMultiplier(Stat s, int stageChange)
+    //Shiny
+    public void setShiny()
     {
-        this.statMultiplier.put(s, (this.statMultiplier.get(s) == -6 && stageChange < 0) || (this.statMultiplier.get(s) == 6 && stageChange > 0) ? this.statMultiplier.get(s) : this.statMultiplier.get(s) + stageChange);
+        this.setShiny(new SplittableRandom().nextInt(4096) < 1);
     }
 
-    public double getStatMultiplier(Stat s)
+    public void setShiny(boolean shiny)
     {
-        return this.statMultiplier.get(s) == 0 ? 1.0 : (double) (this.statMultiplier.get(s) < 0 ? 2 : 2 + Math.abs(this.statMultiplier.get(s))) / (this.statMultiplier.get(s) < 0 ? 2 + Math.abs(this.statMultiplier.get(s)) : 2);
+        this.shiny = shiny;
     }
 
-    public int getStageChange(Stat s)
+    public boolean isShiny()
     {
-        return this.statMultiplier.get(s);
+        return this.shiny;
     }
 
-    public Map<Stat, Integer> getStatChanges()
+    //Number
+    public void setNumber(int number)
     {
-        return this.statMultiplier;
+        this.number = number;
     }
 
-    public void setStatChanges(Map<Stat, Integer> map)
+    public int getNumber()
     {
-        this.statMultiplier = map;
+        return this.number;
     }
 
-    public List<String> getAbilities()
+    //Nickname
+    public void setNickname(String nickname)
     {
-        return this.data.abilities;
-    }
-
-    public int getAccuracyStage()
-    {
-        return this.accuracyStage;
-    }
-
-    public int getEvasionStage()
-    {
-        return this.evasionStage;
-    }
-
-    public void changeAccuracyStage(int change)
-    {
-        this.accuracyStage = Global.clamp(this.accuracyStage + change, -6, 6);
-    }
-
-    public void changeEvasionStage(int change)
-    {
-        this.evasionStage = Global.clamp(this.evasionStage + change, -6, 6);
-    }
-
-    //Simple Methods
-    public String getName()
-    {
-        return this.data.name;
+        this.nickname = nickname;
     }
 
     public String getNickname()
@@ -936,65 +858,87 @@ public class Pokemon
         return this.nickname;
     }
 
-    public void setNickname(String nickname)
-    {
-        this.nickname = nickname;
-    }
-
     public boolean hasNickname()
     {
-        return !this.getNickname().equals("");
+        return !this.nickname.equals("");
     }
 
-    //Decides between nickname or real name, if the nickname exists or not
     public String getDisplayName()
     {
-        return this.hasNickname() ? "\"" + this.getNickname() + "\"" : this.applyNameOverride(this.getName());
+        return this.hasNickname() ? "\"" + this.getNickname() + "\"" : this.getNameWithOverride();
     }
 
-    private String applyNameOverride(String name)
+    //Name
+
+    public void setName(String name)
     {
-        return switch(name) {
+        this.name = name;
+    }
+
+    public String getName()
+    {
+        return this.name;
+    }
+
+    public String getNameWithOverride()
+    {
+        return switch(this.getName()) {
             case "Ho Oh" -> "Ho-oh";
             case "Porygon Z" -> "Porygon-Z";
             case "Jangmo O" -> "Jangmo-o";
             case "Hakamo O" -> "Hakamo-o";
             case "Kommo O" -> "Kommo-o";
-            default -> name;
+            default -> this.getName();
         };
     }
 
-    public Type[] getType()
+    //UUID
+
+    public void setUUID()
     {
-        return this.type;
+        this.setUUID(IntStream.rangeClosed(1, 6).mapToObj(i -> IDHelper.alphanumeric(4)).collect(Collectors.joining("-")));
     }
 
-    public void setType(Type t, int ind)
+    public void setUUID(String UUID)
     {
-        this.type[ind] = t;
+        this.UUID = UUID;
     }
 
-    public void setType()
+    public String getUUID()
     {
-        this.type = new Type[]{this.data.types.get(0), this.data.types.get(1)};
+        return this.UUID;
     }
 
-    public boolean isType(Type t)
+    //Data
+
+    public void setData(String name)
     {
-        return this.getType()[0].equals(t) || this.getType()[1].equals(t);
+        this.data = PokemonData.get(name);
     }
 
-    public double getWeight()
+    public PokemonData getData()
     {
-        return this.data.weight;
+        return this.data;
+    }
+
+    //Core
+
+    private Bson query()
+    {
+        return Filters.eq("UUID", this.UUID);
     }
 
     @Override
     public boolean equals(Object o)
     {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Pokemon pokemon = (Pokemon) o;
-        return UUID.equals(pokemon.UUID);
+        if(this == o) return true;
+        else if(o == null || this.getClass() != o.getClass()) return false;
+        else return this.UUID.equals(((Pokemon)o).UUID);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(this.UUID);
     }
 }

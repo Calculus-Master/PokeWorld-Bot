@@ -386,9 +386,9 @@ public class NormalMoves
 
     public String PsychUp(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.setDefaultStatMultipliers();
+        user.changes().clear();
 
-        for(Stat s : Stat.values()) user.changeStatMultiplier(s, opponent.getStageChange(s));
+        for(Stat s : Stat.values()) user.changes().change(s, opponent.changes().get(s));
 
         return user.getName() + " copied " + opponent.getName() + "'s Stat Changes!";
     }
@@ -576,7 +576,7 @@ public class NormalMoves
         int damage = user.getStat(Stat.HP) / 2;
         user.damage(damage);
 
-        user.changeStatMultiplier(Stat.ATK, 12);
+        user.changes().change(Stat.ATK, 12);
 
         return user.getName() + " sacrificed " + damage + " HP! " + user.getName() + "'s Attack rose to its maximum!";
     }
@@ -696,7 +696,7 @@ public class NormalMoves
         List<String> pool = new ArrayList<>();
         List<Pokemon> team = List.copyOf(duel.getPlayers()[duel.playerIndexFromUUID(user.getUUID())].team);
 
-        for(Pokemon p : team) pool.addAll(p.getLearnedMoves());
+        for(Pokemon p : team) pool.addAll(p.getMoves());
 
         pool = pool.stream().distinct().filter(s -> !banned.contains(s)).collect(Collectors.toList());
 
@@ -720,7 +720,7 @@ public class NormalMoves
 
     public String Conversion(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        Type t = new Move(user.getLearnedMoves().get(0)).getType();
+        Type t = user.getMove(0).getType();
         user.setType(t, 0);
         user.setType(t, 1);
 
@@ -864,10 +864,10 @@ public class NormalMoves
         if(moves.isEmpty()) return move.getNothingResult();
 
         String moveToCopy = moves.get(moves.size() - 1);
-        int targetIndex = user.getLearnedMoves().indexOf("Sketch") + 1;
+        int targetIndex = user.getMoves().indexOf("Sketch");
 
         user.learnMove(moveToCopy, targetIndex);
-        Pokemon.updateMoves(user);
+        user.updateMoves();
 
         return user.getName() + " permanently learned " + moveToCopy + "!";
     }
@@ -912,7 +912,7 @@ public class NormalMoves
 
     public String Acupressure(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        List<Stat> pool = Arrays.stream(Stat.values()).filter(s -> user.getStageChange(s) != 6).collect(Collectors.toList());
+        List<Stat> pool = Arrays.stream(Stat.values()).filter(s -> user.changes().get(s) != 6).toList();
         Stat s = pool.get(new Random().nextInt(pool.size()));
 
         return MoveEffectBuilder.make(user, opponent, duel, move)

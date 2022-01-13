@@ -55,7 +55,7 @@ public class WildDuel extends Duel
             this.moveAction(0);
 
             List<Move> botMoves = new ArrayList<>();
-            for(String s : this.players[1].active.getAllMoves()) if(Move.isImplemented(s)) botMoves.add(new Move(s));
+            for(String s : this.players[1].active.allMoves()) if(Move.isImplemented(s)) botMoves.add(new Move(s));
 
             //TODO: Better AI
             Move mostDamage = botMoves.get(0);
@@ -80,6 +80,8 @@ public class WildDuel extends Duel
         {
             this.onWildDuelWon(true);
 
+            this.players[0].data.getStatistics().incr(PlayerStatistic.WILD_DUELS_WON);
+
             embed.setDescription("You won! Your " + this.players[0].active.getName() + " earned some EVs!");
         }
         //Player lost
@@ -89,22 +91,23 @@ public class WildDuel extends Duel
             embed.setDescription("You lost! Your " + this.players[0].active.getName() + " didn't earn any EVs...");
         }
 
+        this.players[0].data.getStatistics().incr(PlayerStatistic.WILD_DUELS_COMPLETED);
+
         this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
         DuelHelper.delete(this.players[0].ID);
     }
 
     protected void onWildDuelWon(boolean evs)
     {
-        int exp = this.players[0].active.getDuelExp(this.players[1].active);
+        int exp = this.players[0].active.getDefeatExp(this.players[1].active);
         Pokemon p = this.players[0].data.getSelectedPokemon();
         p.addExp(exp);
 
-        if(evs) Pokemon.updateEVs(this.players[this.current].active);
-        Pokemon.updateExperience(p);
+        if(evs) this.players[this.current].active.updateEVs();
+        p.updateExperience();
 
         Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_WILD_DUEL, this.event);
         this.players[0].data.addExp(10, 25);
-        this.players[0].data.getStatistics().incr(PlayerStatistic.WILD_DUELS_WON);
         this.players[0].data.updateBountyProgression(b -> {
             if(b.getType().equals(ObjectiveType.WIN_WILD_DUEL) || b.getType().equals(ObjectiveType.COMPLETE_WILD_DUEL)) b.update();
         });
@@ -153,7 +156,7 @@ public class WildDuel extends Duel
         if(pokemon.equals("")) this.players[1] = new WildPokemon(this.players[0].active.getLevel() + levelBuff);
         else this.players[1] = new WildPokemon(pokemon, this.players[0].active.getLevel() + levelBuff);
 
-        this.players[1].active.statBuff = this.players[1].active.getLevel() > 60 ? Math.random() * 1.5 + 1 : 1;
+        this.players[1].active.getBoosts().setStatBoost(this.players[1].active.getLevel() > 60 ? Math.random() * 1.5 + 1 : 1);
         this.players[1].active.setLevel(this.players[0].active.getLevel());
         this.players[1].active.setHealth(this.players[1].active.getStat(Stat.HP));
     }

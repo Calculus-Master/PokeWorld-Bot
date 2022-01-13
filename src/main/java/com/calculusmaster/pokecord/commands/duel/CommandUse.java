@@ -7,7 +7,6 @@ import com.calculusmaster.pokecord.game.duel.core.DuelChecks;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
-import com.calculusmaster.pokecord.game.moves.Move;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -137,7 +136,7 @@ public class CommandUse extends Command
                 return this;
             }
 
-            c.setMove(new Move(p.active.getLearnedMoves().get(this.getInt(2) - 1)));
+            c.setMove(p.active.getMove(this.getInt(2) - 1));
 
             if(c.checkFailed(ZMOVE_MOVE))
             {

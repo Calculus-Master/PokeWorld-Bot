@@ -65,7 +65,7 @@ public class BugMoves
 
         if(opponent.isFainted())
         {
-            user.changeStatMultiplier(Stat.ATK, 3);
+            user.changes().change(Stat.ATK, 3);
             result += " " + user.getName() + "'s Attack rose by 3 stages!";
         }
 

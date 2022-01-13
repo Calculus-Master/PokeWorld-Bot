@@ -36,11 +36,11 @@ public class CommandLearn extends Command
 
         if(!Move.isMove(move)) this.response = "Invalid move name!";
         else if(!Move.isImplemented(move)) this.response = "`" + move + "` has not been implemented yet!";
-        else if(!selected.getAvailableMoves().contains(move)) this.response = selected.getName() + " does not know `" + move + "`";
+        else if(!selected.availableMoves().contains(move)) this.response = selected.getName() + " does not know `" + move + "`";
         else
         {
             StringBuilder movesList = new StringBuilder().append("\n");
-            for(int i = 0; i < 4; i++) movesList.append(i + 1).append(": ").append(selected.getLearnedMoves().get(i)).append("\n");
+            for(int i = 0; i < 4; i++) movesList.append(i + 1).append(": ").append(selected.getMoves().get(i)).append("\n");
 
             this.embed.setDescription("Which move do you want to replace with " + move + "?" + movesList);
             moveLearnRequests.put(selected.getUUID(), move);

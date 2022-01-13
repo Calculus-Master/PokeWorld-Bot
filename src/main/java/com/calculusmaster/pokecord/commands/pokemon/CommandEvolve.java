@@ -57,10 +57,10 @@ public class CommandEvolve extends Command
 
         if(selected.getName().equals("Eevee"))
         {
-            if(selected.hasItem() && Item.asItem(selected.getItem()).equals(Item.FRIENDSHIP_BAND) && SpecialEvolutionRegistry.hasFriendship(selected) && time.isNight())
+            if(selected.hasItem() && selected.getItem().equals(Item.FRIENDSHIP_BAND) && SpecialEvolutionRegistry.hasFriendship(selected) && time.isNight())
                 target = "Umbreon";
 
-            if(selected.hasItem() && Item.asItem(selected.getItem()).equals(Item.FRIENDSHIP_BAND) && SpecialEvolutionRegistry.hasFriendship(selected) && time.isDay())
+            if(selected.hasItem() && selected.getItem().equals(Item.FRIENDSHIP_BAND) && SpecialEvolutionRegistry.hasFriendship(selected) && time.isDay())
                 target = "Espeon";
 
             if(target.equals("") && !special && location.isMossyRock()) target = "Leafeon";
@@ -96,7 +96,7 @@ public class CommandEvolve extends Command
         if(selected.getName().equals("Koffing") && selected.getLevel() >= 35 && location.region.equals(Region.GALAR))
             target = "Galarian Weezing";
 
-        if(selected.getName().equals("Exeggcute") && location.region.equals(Region.ALOLA) && selected.hasItem() && Item.asItem(selected.getItem()).equals(Item.LEAF_STONE))
+        if(selected.getName().equals("Exeggcute") && location.region.equals(Region.ALOLA) && selected.hasItem() && selected.getItem().equals(Item.LEAF_STONE))
             target = "Alolan Exeggutor";
 
         if(selected.getName().equals("Crabrawler") && location.equals(Location.MOUNT_LANAKILA))
@@ -113,7 +113,8 @@ public class CommandEvolve extends Command
         //Evolve
         if(!target.equals(""))
         {
-            Pokemon.updateName(selected, target);
+            selected.evolve(target);
+            selected.updateName();
 
             this.playerData.updateBountyProgression(ObjectiveType.EVOLVE_POKEMON);
             this.playerData.getStatistics().incr(PlayerStatistic.POKEMON_EVOLVED);

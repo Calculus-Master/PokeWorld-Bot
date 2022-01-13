@@ -53,7 +53,7 @@ public class EliteDuel extends TrainerDuel
 
             this.players[0].data.updateBountyProgression(ObjectiveType.WIN_ELITE_DUEL);
 
-            this.players[0].data.getStatistics().incr(PlayerStatistic.ELITE_TRAINER_DUELS_WON);
+            this.players[0].data.getStatistics().incr(PlayerStatistic.ELITE_DUELS_WON);
             this.players[0].data.getStatistics().incr(PlayerStatistic.TRAINER_DUELS_WON);
 
             embed.setDescription("You defeated the Elite Trainer and earned " + credits + " credits!");

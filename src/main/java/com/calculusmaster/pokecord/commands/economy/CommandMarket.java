@@ -6,7 +6,6 @@ import com.calculusmaster.pokecord.commands.pokemon.CommandInfo;
 import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
-import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
@@ -90,7 +89,7 @@ public class CommandMarket extends Command
                 String gender = "Gender: " + Global.normalize(chosen.getGender().toString());
                 String type = "Type: " + (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalize(chosen.getType()[0].toString()) : Global.normalize(chosen.getType()[0].toString()) + " | " + Global.normalize(chosen.getType()[1].toString()));
                 String nature = "Nature: " + Global.normalize(chosen.getNature().toString());
-                String item = "Held Item: " + Item.asItem(chosen.getItem()).getStyledName();
+                String item = "Held Item: " + chosen.getItem().getStyledName();
                 String stats = CommandInfo.getStatsFormatted(chosen, this.playerData.getSettings().get(Settings.CLIENT_DETAILED, Boolean.class));
 
                 this.embed.setTitle(title);
@@ -236,7 +235,7 @@ public class CommandMarket extends Command
             if(msg.contains("--egggroup") && msg.indexOf("--egggroup") + 1 < msg.size() && EggGroup.cast(msg.get(msg.indexOf("--egggroup") + 1)) != null)
             {
                 EggGroup g = EggGroup.cast(msg.get(msg.indexOf("--egggroup") + 1));
-                display = display.filter(m -> m.pokemon.getEggGroup().contains(g));
+                display = display.filter(m -> m.pokemon.getEggGroups().contains(g));
             }
 
             if(msg.contains("--shiny"))

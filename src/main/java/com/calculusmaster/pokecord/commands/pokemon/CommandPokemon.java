@@ -48,11 +48,11 @@ public class CommandPokemon extends Command
 
         sorter.sortSearchName(PokemonSorterFlag.NICKNAME, (p, s) -> p.getNickname().toLowerCase().contains(s));
 
-        sorter.sortSearchName(PokemonSorterFlag.MOVE, (p, s) -> p.getAllMoves().contains(Global.normalize(s)));
+        sorter.sortSearchName(PokemonSorterFlag.MOVE, (p, s) -> p.allMoves().contains(Global.normalize(s)));
 
-        sorter.sortSearchName(PokemonSorterFlag.LEARNED_MOVE, (p, s) -> p.getLearnedMoves().contains(Global.normalize(s)));
+        sorter.sortSearchName(PokemonSorterFlag.LEARNED_MOVE, (p, s) -> p.getMoves().contains(Global.normalize(s)));
 
-        sorter.sortSearchName(PokemonSorterFlag.AVAILABLE_MOVE, (p, s) -> p.getAvailableMoves().contains(Global.normalize(s)));
+        sorter.sortSearchName(PokemonSorterFlag.AVAILABLE_MOVE, (p, s) -> p.availableMoves().contains(Global.normalize(s)));
 
         sorter.sortNumeric(PokemonSorterFlag.LEVEL, Pokemon::getLevel);
 
@@ -78,7 +78,7 @@ public class CommandPokemon extends Command
 
         sorter.sortEnum(PokemonSorterFlag.GENDER, Gender::cast, (p, g) -> p.getGender().equals(g));
 
-        sorter.sortEnum(PokemonSorterFlag.EGG_GROUP, EggGroup::cast, (p, e) -> p.getEggGroup().contains(e));
+        sorter.sortEnum(PokemonSorterFlag.EGG_GROUP, EggGroup::cast, (p, e) -> p.getEggGroups().contains(e));
 
         sorter.sortGeneric(PokemonSorterFlag.SHINY, Pokemon::isShiny);
 

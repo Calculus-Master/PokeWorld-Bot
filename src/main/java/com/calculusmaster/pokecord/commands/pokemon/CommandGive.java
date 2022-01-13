@@ -30,16 +30,16 @@ public class CommandGive extends Command
             return this;
         }
 
-        Item item = Item.asItem(this.playerData.getItemList().get(this.getInt(1) - 1));
+        Item item = Item.cast(this.playerData.getItemList().get(this.getInt(1) - 1));
         Pokemon s = this.playerData.getSelectedPokemon();
 
         if(item != null && !item.isFunctionalItem())
         {
-            if(s.hasItem()) this.playerData.addItem(s.getItem());
+            if(s.hasItem()) this.playerData.addItem(s.getItem().toString());
             s.setItem(item);
 
             this.playerData.removeItem(item.getName());
-            Pokemon.updateItem(s);
+            s.updateItem();
 
             this.event.getChannel().sendMessage(this.playerData.getMention() + ": Gave " + s.getName() + " a `" + item.getStyledName() + "`!").queue();
             this.embed = null;

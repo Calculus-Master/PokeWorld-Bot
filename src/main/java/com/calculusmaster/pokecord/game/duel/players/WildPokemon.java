@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.SplittableRandom;
@@ -27,10 +28,10 @@ public class WildPokemon extends Player
         p.setHealth(p.getStat(Stat.HP));
         for(int i = 0; i < 4; i++)
         {
-            p.learnMove(p.getAvailableMoves().get(new Random().nextInt(p.getAvailableMoves().size())), i + 1);
+            p.learnMove(p.availableMoves().get(new SplittableRandom().nextInt(p.availableMoves().size())), i);
         }
 
-        if(new Random().nextInt(100) < 1) p.setLearnedMoves("Eternabeam-Prismatic Laser-Soul Stealing 7 Star Strike-Close Combat");
+        if(new Random().nextInt(100) < 1) p.setMoves(List.of("Eternabeam", "Prismatic Laser", "Precipice Blades", "Close Combat"));
 
         this.team = List.of(p);
         this.active = this.team.get(0);
@@ -52,11 +53,11 @@ public class WildPokemon extends Player
         Pokemon p = Pokemon.create(pool.get(new SplittableRandom().nextInt(pool.size())));
 
         p.setLevel(level);
-        p.statBuff = 1.5;
-        p.setEVs("50-50-50-50-50-50");
+        p.getBoosts().setStatBoost(1.5);
+        Arrays.stream(Stat.values()).forEach(s -> p.setEV(s, 50));
         p.setHealth(p.getStat(Stat.HP));
 
-        for(int i = 0; i < 4; i++) p.learnMove(p.getAvailableMoves().get(new Random().nextInt(p.getAvailableMoves().size())), i + 1);
+        for(int i = 0; i < 4; i++) p.learnMove(p.availableMoves().get(new SplittableRandom().nextInt(p.availableMoves().size())), i);
 
         this.team = List.of(p);
         this.active = this.team.get(0);

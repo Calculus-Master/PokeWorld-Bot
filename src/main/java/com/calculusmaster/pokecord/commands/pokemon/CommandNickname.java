@@ -34,7 +34,7 @@ public class CommandNickname extends Command
             this.response = "Reset your Pokemon's nickname!";
         }
 
-        Pokemon.updateNickname(s);
+        s.updateNickname();
         return this;
     }
 }

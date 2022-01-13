@@ -34,6 +34,7 @@ public class CommandForm extends Command
         {
             this.response = s.getName() + " transformed into `" + form + "`!";
             s.changeForm(form);
+            s.updateName();
         }
 
         return this;

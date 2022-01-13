@@ -224,27 +224,23 @@ public class MoveEffectBuilder
         int damageDealt = 0;
         for(MoveEffect e : this.moveEffects)
         {
-            if(!(e instanceof RecoilEffect) && !(e instanceof DamageHealEffect)) results.append(e.get());
+            if(!(e instanceof DamageDependentEffect)) results.append(e.get());
 
-            if(e instanceof FixedDamageEffect)
+            if(e instanceof FixedDamageEffect fde)
             {
-                damageDealt = ((FixedDamageEffect)e).getDamage();
+                damageDealt = fde.getDamage();
             }
 
-            if(e instanceof RecoilEffect)
+            if(e instanceof DamageDependentEffect dde)
             {
-                ((RecoilEffect)e).set(damageDealt);
-                results.append(e.get());
-            }
-
-            if(e instanceof DamageHealEffect)
-            {
-                ((DamageHealEffect)e).set(damageDealt);
+                dde.setDamageDealt(damageDealt);
                 results.append(e.get());
             }
 
             results.append(" ");
         }
+
+        if(this.moveEffects.stream().noneMatch(me -> me instanceof FixedDamageEffect)) this.duel.data(this.opponent.getUUID()).lastDamageTaken = 0;
 
         return results.toString().trim();
     }

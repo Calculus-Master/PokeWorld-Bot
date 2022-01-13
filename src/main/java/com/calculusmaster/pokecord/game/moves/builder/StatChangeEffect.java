@@ -45,7 +45,7 @@ public class StatChangeEffect extends MoveEffect
                     }
                     else
                     {
-                        (this.userChange ? this.user : this.opponent).changeStatMultiplier(s, this.statChanges.get(s));
+                        (this.userChange ? this.user : this.opponent).changes().change(s, this.statChanges.get(s));
                         result.append((this.userChange ? this.user : this.opponent).getName()).append("'s ").append(s.name).append(this.statChanges.get(s) > 0 ? " rose " : " was lowered ").append("by ").append(Math.abs(this.statChanges.get(s))).append(" stage").append(this.statChanges.get(s) > 1 ? "s" : "").append("! ");
                     }
                 }

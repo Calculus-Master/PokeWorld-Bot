@@ -266,7 +266,7 @@ public class Move
 
     public boolean isAccurate(Pokemon user, Pokemon opponent)
     {
-        int combined = user.getAccuracyStage() - opponent.getEvasionStage();
+        int combined = user.changes().getAccuracy() - opponent.changes().getEvasion();
 
         double numerator = 3.0 + combined > 0 ? combined : 0;
         double denominator = 3.0 + combined < 0 ? Math.abs(combined) : 0;

@@ -9,6 +9,7 @@ import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.registry.MaxMoveRegistry;
 import com.calculusmaster.pokecord.game.moves.registry.ZMoveRegistry;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.util.helpers.DataHelper;
 
 import java.util.*;
 
@@ -347,7 +348,7 @@ public class DuelHelper
         Move maxMove;
 
         if(baseMove.getCategory().equals(Category.STATUS)) maxMove = new Move("Max Guard");
-        else if(p.canGigantamax() && Pokemon.getGigantamaxData(p.getName()).moveType().equals(baseMove.getType())) maxMove = new Move(Pokemon.getGigantamaxData(p.getName()).move(), Pokemon.getGigantamaxData(p.getName()).moveType(), null, 0);
+        else if(p.canGigantamax() && DataHelper.getGigantamaxData(p.getName()).moveType().equals(baseMove.getType())) maxMove = new Move(DataHelper.getGigantamaxData(p.getName()).move(), DataHelper.getGigantamaxData(p.getName()).moveType(), null, 0);
         else maxMove = new Move(MaxMoveRegistry.get(baseMove.getType()).name);
 
         int maxPower;

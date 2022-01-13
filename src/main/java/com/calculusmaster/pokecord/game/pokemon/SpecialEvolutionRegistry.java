@@ -57,7 +57,7 @@ public class SpecialEvolutionRegistry
         register("Eevee", "Vaporeon", Item.WATER_STONE)
                 .another("Flareon", Item.FIRE_STONE)
                 .another("Jolteon", Item.THUNDER_STONE)
-                .another("Sylveon", p -> p.getLearnedMoves().stream().map(Move::new).anyMatch(m -> m.getType().equals(Type.FAIRY)));
+                .another("Sylveon", p -> p.getMoves().stream().map(Move::new).anyMatch(m -> m.getType().equals(Type.FAIRY)));
 
         register("Onix", "Steelix", Item.METAL_COAT)
                 .another("Scyther", "Scizor");
@@ -198,13 +198,13 @@ public class SpecialEvolutionRegistry
 
     private static Evolution register(String source, String target, String move)
     {
-        return register(source, target, p -> p.getLearnedMoves().contains(move));
+        return register(source, target, p -> p.getMoves().contains(move));
     }
 
     private static Evolution register(String source, String target, Item item)
     {
-        EvolutionValidator normal = p -> p.hasItem() && Item.asItem(p.getItem()).equals(item);
-        EvolutionValidator friendship = p -> p.hasItem() && Item.asItem(p.getItem()).equals(item) && hasFriendship(p);
+        EvolutionValidator normal = p -> p.getItem().equals(item);
+        EvolutionValidator friendship = p -> p.getItem().equals(item) && hasFriendship(p);
         return register(source, target, item.equals(Item.FRIENDSHIP_BAND) ? friendship : normal);
     }
 

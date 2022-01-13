@@ -36,7 +36,7 @@ public class CommandMoves extends Command
             this.embed.setDescription("Note: Not all moves that can be learned by your Pokemon are listed here, because moves that have not been implemented yet are excluded from this. Also, some moves listed here might not be able to be learned by your Pokemon right now due to your Pokemon not being high enough level. Use `p!moves` to see what moves your Pokemon can learn at its current level!");
             this.embed.setTitle("Move Info for " + selected.getName());
 
-            List<Move> moves = selected.getAllMoves().stream().filter(Move::isImplemented).map(Move::new).collect(Collectors.toList());
+            List<Move> moves = selected.allMoves().stream().filter(Move::isImplemented).map(Move::new).toList();
 
             List<Move> topDamage = moves.stream().sorted(Comparator.comparingInt(Move::getPower)).collect(Collectors.toList());
             Collections.reverse(topDamage);
@@ -108,7 +108,7 @@ public class CommandMoves extends Command
                 {
                     movesList.append(i + 1).append(": ");
 
-                    m = new Move(selected.getLearnedMoves().get(i));
+                    m = selected.getMove(i);
                     if(selected.isDynamaxed()) m = DuelHelper.getMaxMove(selected, m);
 
                     movesList.append(m.getName()).append(" (").append(m.getEffectiveness(d.getPlayers()[other].active)).append(")");
@@ -120,14 +120,14 @@ public class CommandMoves extends Command
             if(!inDuel)
             {
                 movesList.append("**Learned Moves: **\n");
-                for(int i = 0; i < 4; i++) movesList.append("Move ").append(i + 1).append(": ").append(selected.getLearnedMoves().get(i)).append("\n");
+                for(int i = 0; i < 4; i++) movesList.append("Move ").append(i + 1).append(": ").append(selected.getMove(i).getName()).append("\n");
 
                 movesList.append("\n**All Moves: **\n");
                 String emote;
-                for (String s : selected.getAllMoves())
+                for (String s : selected.allMoves())
                 {
-                    if(selected.getAvailableMoves().contains(s) && Move.isImplemented(s)) emote = " ";
-                    else if(!selected.getAvailableMoves().contains(s) && Move.isImplemented(s)) emote = " :lock:";
+                    if(selected.availableMoves().contains(s) && Move.isImplemented(s)) emote = " ";
+                    else if(!selected.availableMoves().contains(s) && Move.isImplemented(s)) emote = " :lock:";
                     else emote = " :no_entry_sign:";
 
                     movesList.append(s).append(emote).append("\n");

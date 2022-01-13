@@ -48,7 +48,7 @@ public class CommandRelease extends Command
             if(confirm)
             {
                 this.playerData.removePokemon(UUID);
-                Pokemon.deletePokemon(p);
+                p.delete();
 
                 this.playerData.updateBountyProgression(b -> {
                     switch(b.getType()) {

@@ -119,12 +119,12 @@ public class Trainer extends Player
         {
             Pokemon p = Pokemon.create(s);
             p.setLevel(level);
-            p.statBuff = statBuff;
+            p.getBoosts().setStatBoost(statBuff);
             p.setHealth(p.getStat(Stat.HP));
 
             for(int i = 0; i < 4; i++)
             {
-                p.learnMove(p.getAvailableMoves().get(new Random().nextInt(p.getAvailableMoves().size())), i + 1);
+                p.learnMove(p.availableMoves().get(new SplittableRandom().nextInt(p.availableMoves().size())), i);
             }
 
             teamBuilder.add(p);

@@ -68,9 +68,9 @@ public class SimulatedDuel extends Duel
         p.team = List.of(active);
         p.active = active;
 
-        List<String> movePool = new ArrayList<>(List.copyOf(p.active.getAllMoves()));
+        List<String> movePool = new ArrayList<>(List.copyOf(p.active.allMoves()));
         Collections.shuffle(movePool);
-        for(int i = 0; i < 4; i++) p.active.learnMove(movePool.get(i), i + 1);
+        for(int i = 0; i < 4; i++) p.active.learnMove(movePool.get(i), i);
 
         return p;
     }

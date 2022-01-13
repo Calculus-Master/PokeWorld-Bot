@@ -13,8 +13,10 @@ import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.SplittableRandom;
 
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.DUELS;
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.DuelStatus;
@@ -87,6 +89,7 @@ public class TrainerDuel extends Duel
         this.uploadExperience();
 
         this.players[0].data.updateBountyProgression(ObjectiveType.COMPLETE_TRAINER_DUEL);
+        this.players[0].data.getStatistics().incr(PlayerStatistic.TRAINER_DUELS_COMPLETED);
 
         this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
         DuelHelper.delete(this.players[0].ID);
@@ -146,7 +149,7 @@ public class TrainerDuel extends Duel
         else if(!this.players[1].usedZMove)
         {
             int ind = new Random().nextInt(4);
-            Move move = new Move(this.players[1].active.getLearnedMoves().get(ind));
+            Move move = new Move(this.players[1].active.getMoves().get(ind));
 
             index = ind + 1;
 
@@ -155,15 +158,15 @@ public class TrainerDuel extends Duel
 
         }
         //Dynamax
-        else if(!this.players[1].usedDynamax && new Random().nextInt(100) < 33)
+        else if(!this.players[1].usedDynamax && new SplittableRandom().nextInt(100) < 33)
         {
-            index = new Random().nextInt(4) + 1;
+            index = new SplittableRandom().nextInt(4) + 1;
             type = 'd';
         }
         //Normal Move
         else
         {
-            index = new Random().nextInt(4) + 1;
+            index = new SplittableRandom().nextInt(4) + 1;
             type = 'm';
         }
 
@@ -196,20 +199,20 @@ public class TrainerDuel extends Duel
         this.players[1] = Trainer.create(info);
 
         int highest = this.players[0].team.get(0).getEVTotal();
-        String condensed = this.players[0].team.get(0).getVCondensed(this.players[0].team.get(0).getEVs());
+        LinkedHashMap<Stat, Integer> evs = this.players[0].team.get(0).getEVs();
         //Copy EVs
         for(int i = 0; i < this.players[0].team.size(); i++)
         {
             if(this.players[1].team.get(i).getEVTotal() > highest)
             {
                 highest = this.players[0].team.get(i).getEVTotal();
-                condensed = this.players[0].team.get(i).getVCondensed(this.players[0].team.get(i).getEVs());
+                evs = this.players[0].team.get(i).getEVs();
             }
         }
 
         for(int i = 0; i < this.players[1].team.size(); i++)
         {
-            this.players[1].team.get(i).setEVs(condensed);
+            this.players[1].team.get(i).setEVs(evs);
             this.players[1].team.get(i).setHealth(this.players[1].team.get(i).getStat(Stat.HP));
         }
 

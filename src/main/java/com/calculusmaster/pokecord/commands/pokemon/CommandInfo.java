@@ -4,9 +4,6 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.items.Item;
-import com.calculusmaster.pokecord.game.enums.items.TM;
-import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
@@ -47,9 +44,9 @@ public class CommandInfo extends Command
         String nature = Global.normalize(chosen.getNature().toString());
         String gender = Global.normalize(chosen.getGender().toString());
         String dynamaxLevel = "" + chosen.getDynamaxLevel();
-        String item = Item.asItem(chosen.getItem()).getStyledName();
-        String tm = (chosen.hasTM() ? "TM" + (chosen.getTM() < 10 ? "0" : "") + chosen.getTM()  + " - " + TM.get(chosen.getTM()).getMoveName() : "None");
-        String tr =  (chosen.hasTR() ? "TR" + (chosen.getTR() < 10 ? "0" : "") + chosen.getTR()  + " - " + TR.get(chosen.getTR()).getMoveName() : "None");
+        String item = chosen.getItem().getStyledName();
+        String tm = (chosen.hasTM() ? "TM" + (chosen.getTM().getNumber() < 10 ? "0" : "") + chosen.getTM()  + " - " + chosen.getTM().getMoveName() : "None");
+        String tr =  (chosen.hasTR() ? "TR" + (chosen.getTR().getNumber() < 10 ? "0" : "") + chosen.getTR()  + " - " + chosen.getTR().getMoveName() : "None");
         String image = chosen.getImage();
 
         this.embed

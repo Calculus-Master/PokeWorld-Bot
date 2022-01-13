@@ -32,13 +32,13 @@ public class CommandReplace extends Command
         }
         else
         {
-            int index = Integer.parseInt(this.msg[1]);
-            String oldMove = selected.getLearnedMoves().get(index - 1);
+            int index = Integer.parseInt(this.msg[1]) - 1;
+            String oldMove = selected.getMoves().get(index);
             String newMove = CommandLearn.moveLearnRequests.get(selected.getUUID());
 
             selected.learnMove(newMove, index);
             CommandLearn.moveLearnRequests.remove(selected.getUUID(), newMove);
-            Pokemon.updateMoves(selected);
+            selected.updateMoves();
 
             this.embed.setDescription("Replaced " + oldMove + " with " + newMove + "!");
             //this.color = Move.asMove(newMove).getType().getColor();

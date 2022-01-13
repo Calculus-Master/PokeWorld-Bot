@@ -33,29 +33,32 @@ public class CommandTeach extends Command
         if((tm && number > 0 && number <= 100 && this.playerData.getTMList().contains(TM.get(number).toString())) || (!tm && number >= 0 && number < 100 && this.playerData.getTRList().contains(TR.get(number).toString())))
         {
             Pokemon selected = this.playerData.getSelectedPokemon();
-            int held;
 
-            if(tm && selected.canLearnTM(number))
+            if(tm && selected.canLearnTM(TM.get(number)))
             {
-                held = selected.getTM();
-                selected.setTM(number);
-                Pokemon.updateTMTR(selected);
+                TM held = selected.getTM();
+                TM target = TM.get(number);
 
-                this.embed.setDescription("Taught " + TM.get(number).toString() + " - " + TM.get(number).getMoveName() + " to " + selected.getName());
+                selected.setTM(target);
+                selected.updateTMTR();
 
-                this.playerData.removeTM(TM.get(number).toString());
-                if(held != -1) this.playerData.addTM(TM.get(held).toString());
+                this.embed.setDescription("Taught " + target.toString() + " - " + target.getMoveName() + " to " + selected.getName());
+
+                this.playerData.removeTM(target.toString());
+                if(selected.hasTM()) this.playerData.addTM(held.toString());
             }
-            else if(!tm && selected.canLearnTR(number))
+            else if(!tm && selected.canLearnTR(TR.get(number)))
             {
-                held = selected.getTR();
-                selected.setTR(number);
-                Pokemon.updateTMTR(selected);
+                TR held = selected.getTR();
+                TR target = TR.get(number);
 
-                this.embed.setDescription("Taught " + TR.get(number).toString() + " - " + TR.get(number).getMoveName() + " to " + selected.getName());
+                selected.setTR(target);
+                selected.updateTMTR();
+
+                this.embed.setDescription("Taught " + target.toString() + " - " + target.getMoveName() + " to " + selected.getName());
 
                 this.playerData.removeTR(TR.get(number).toString());
-                if(held != -1) this.playerData.addTR(TR.get(held).toString());
+                if(selected.hasTR()) this.playerData.addTR(held.toString());
             }
             else this.embed.setDescription(selected.getName() + " cannot learn that " + (tm ? "TM" : "TR") + "!");
         }

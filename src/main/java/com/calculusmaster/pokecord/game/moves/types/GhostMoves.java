@@ -118,14 +118,15 @@ public class GhostMoves
     {
         for(Stat s : Stat.values())
         {
-            if(opponent.getStageChange(s) > 0)
+            if(opponent.changes().get(s) > 0)
             {
-                user.changeStatMultiplier(s, opponent.getStageChange(s));
-                opponent.changeStatMultiplier(s, opponent.getStageChange(s) * -1);
+                int stage = opponent.changes().get(s);
+                user.changes().change(s, stage);
+                opponent.changes().change(s, stage * -1);
             }
         }
 
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + " " + user.getName() + " copied all of " + opponent.getName() + "'s Stat Boosts!";
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + " " + user.getName() + " stole all of " + opponent.getName() + "'s Stat Boosts!";
     }
 
     public String MoongeistBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -177,7 +178,7 @@ public class GhostMoves
 
     public String Poltergeist(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return !Item.asItem(opponent.getItem()).equals(Item.NONE) ? MoveEffectBuilder.defaultDamage(user, opponent, duel, move) : move.getNothingResult();
+        return !opponent.getItem().equals(Item.NONE) ? MoveEffectBuilder.defaultDamage(user, opponent, duel, move) : move.getNothingResult();
     }
 
     public String ShadowBone(Pokemon user, Pokemon opponent, Duel duel, Move move)

@@ -208,7 +208,7 @@ public class Duel
         if(!this.isUsingMove(p)) return;
 
         //Basic Move
-        Move move = new Move(this.players[p].active.getLearnedMoves().get(this.queuedMoves.get(this.players[p].ID).moveInd() - 1));
+        Move move = new Move(this.players[p].active.getMoves().get(this.queuedMoves.get(this.players[p].ID).moveInd() - 1));
 
         //Z Move
         if(this.getAction(p).equals(ActionType.ZMOVE)) move = DuelHelper.getZMove(this.players[p], move);
@@ -250,7 +250,7 @@ public class Duel
         //Arceus Plate
         if(this.players[this.current].active.getAbilities().contains("Multitype"))
         {
-            Item item = Item.asItem(this.players[this.current].active.getItem());
+            Item item = this.players[this.current].active.getItem();
 
             if(item.isPlateItem())
             {
@@ -347,7 +347,7 @@ public class Duel
             Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_DYNAMAX, this.event);
         }
 
-        if(this.data(this.other).imprisonUsed && this.players[this.other].active.getLearnedMoves().contains(move.getName())) cantUse = true;
+        if(this.data(this.other).imprisonUsed && this.players[this.other].active.getMoves().contains(move.getName())) cantUse = true;
 
         if(move.getName().equals("Defense Curl")) this.data(this.current).defenseCurlUsed = true;
 
@@ -371,7 +371,7 @@ public class Duel
 
         if(this.data(this.current).rageUsed && this.data(this.current).lastDamageTaken > 0)
         {
-            this.players[this.current].active.changeStatMultiplier(Stat.ATK, 1);
+            this.players[this.current].active.changes().change(Stat.ATK, 1);
 
             turnResult += this.players[this.current].active.getName() + "'s Attack rose by 1 stage due to Rage!\n";
         }
@@ -513,7 +513,7 @@ public class Duel
 
             if(!move.getCategory().equals(Category.STATUS))
             {
-                this.players[this.current].active.changeStatMultiplier(Stat.ATK, -2);
+                this.players[this.current].active.changes().change(Stat.ATK, -2);
                 otherImmune = !bypass;
 
                 turnResult += this.players[this.current].active.getName() + "'s Attack was lowered by 2 stages due to the King's Shield!\n";
@@ -646,14 +646,14 @@ public class Duel
         //Item-based Buffs
         boolean itemsOff = this.room.equals(Room.MAGIC_ROOM);
 
-        if(!itemsOff && this.players[this.current].active.hasItem() && Item.asItem(this.players[this.current].active.getItem()).equals(Item.METAL_COAT))
+        if(!itemsOff && this.players[this.current].active.getItem().equals(Item.METAL_COAT))
         {
             if(move.getType().equals(Type.STEEL)) move.setPower((int)(move.getPower() * 1.2));
         }
 
-        if(!itemsOff && this.players[this.current].active.hasItem() && this.players[this.current].active.getItem().toLowerCase().contains("plate"))
+        if(!itemsOff && this.players[this.current].active.getItem().isPlateItem())
         {
-            Item item = Item.asItem(this.players[this.current].active.getItem());
+            Item item = this.players[this.current].active.getItem();
 
             boolean buff = item.getArceusPlateType() != null && item.getArceusPlateType().equals(move.getType());
 
@@ -683,6 +683,7 @@ public class Duel
             if(this.players[this.current].active.getName().equals("Aegislash"))
             {
                 this.players[this.current].active.changeForm("Aegislash Blade");
+                this.players[this.current].active.updateName();
             }
         }
 
@@ -831,7 +832,6 @@ public class Duel
         }
 
         //Update Move Log
-        if(!this.movesUsed.containsKey(this.players[this.current].active.getUUID())) this.movesUsed.put(this.players[this.current].active.getUUID(), new ArrayList<>());
         this.movesUsed.get(this.players[this.current].active.getUUID()).add(move.getName());
 
         //Give EVs and EXP if opponent has fainted
@@ -840,7 +840,7 @@ public class Duel
             this.players[this.current].active.gainEVs(this.players[this.other].active);
 
             String UUID = this.players[this.current].active.getUUID();
-            int exp = this.players[this.current].active.getDuelExp(this.players[this.other].active);
+            int exp = this.players[this.current].active.getDefeatExp(this.players[this.other].active);
             this.expGains.put(UUID, (this.expGains.getOrDefault(UUID, 0)) + exp);
 
             if(this.isNonBotPlayer(this.current))
@@ -871,6 +871,7 @@ public class Duel
             if(this.players[this.current].active.isDynamaxed() && this.players[this.current].active.getDynamaxLevel() < 10 && new Random().nextInt(100) < 40)
             {
                 this.players[this.current].active.increaseDynamaxLevel();
+                this.players[this.current].active.updateDynamaxLevel();
 
                 this.event.getChannel().sendMessage(this.players[this.current].data.getMention() + ": " + this.players[this.current].active.getName() + " earned a Dynamax Level!").queue();
             }
@@ -1231,7 +1232,7 @@ public class Duel
 
         if(this.entryHazards[player].hasHazard(EntryHazard.STICKY_WEB) && !this.data(player).isRaised)
         {
-            this.players[player].active.changeStatMultiplier(Stat.SPD, -1);
+            this.players[player].active.changes().change(Stat.SPD, -1);
 
             hazardResults += "Sticky Web lowered " + name + "'s Speed by 1 stage!\n";
         }
@@ -1411,6 +1412,10 @@ public class Duel
         Achievements.grant(this.getWinner().ID, Achievements.WON_FIRST_PVP_DUEL, this.event);
         if(this.size == CommandTeam.MAX_TEAM_SIZE) Achievements.grant(this.getWinner().ID, Achievements.WON_FIRST_DUEL_MAX_SIZE, this.event);
 
+        this.players[winner].data.getStatistics().incr(PlayerStatistic.PVP_DUELS_WON);
+        this.players[winner].data.getStatistics().incr(PlayerStatistic.PVP_DUELS_COMPLETED);
+        this.players[loser].data.getStatistics().incr(PlayerStatistic.PVP_DUELS_COMPLETED);
+
         if(new Random().nextInt(100) < 20)
         {
             this.uploadEVs(0);
@@ -1444,7 +1449,7 @@ public class Duel
     {
         for(Pokemon p : this.players[player].team)
         {
-            Pokemon.updateEVs(p);
+            p.updateEVs();
         }
     }
 
@@ -1455,7 +1460,7 @@ public class Duel
         {
             p = Pokemon.build(uuid);
             p.addExp(this.expGains.get(uuid));
-            Pokemon.updateExperience(p);
+            p.updateExperience();
         }
     }
 
@@ -1499,11 +1504,6 @@ public class Duel
 
             turnHandler();
         }
-    }
-
-    public void addDamage(int damage, String UUID)
-    {
-        this.data(UUID).lastDamageTaken = damage;
     }
 
     public boolean hasPlayerSubmittedMove(String id)
