@@ -16,7 +16,7 @@ public class CommandUse extends Command
 {
     public CommandUse(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg);
+        super(event, msg, true);
     }
 
     public CommandUse(ButtonClickEvent event, String[] msg)

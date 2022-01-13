@@ -16,7 +16,7 @@ public class CommandSettings extends Command
 {
     public CommandSettings(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg);
+        super(event, msg, true);
     }
 
     @Override

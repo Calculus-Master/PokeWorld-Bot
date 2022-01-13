@@ -29,7 +29,7 @@ public class CommandDuel extends Command
 
     public CommandDuel(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg);
+        super(event, msg, true);
     }
 
     @Override

@@ -14,7 +14,7 @@ public class CommandInventory extends Command
 {
     public CommandInventory(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg);
+        super(event, msg, true);
     }
 
     @Override

@@ -14,7 +14,7 @@ public class CommandServerInfo extends Command
 {
     public CommandServerInfo(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg);
+        super(event, msg, true);
     }
 
     @Override

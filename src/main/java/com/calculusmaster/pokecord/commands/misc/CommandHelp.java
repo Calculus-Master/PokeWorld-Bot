@@ -13,7 +13,7 @@ public class CommandHelp extends Command
 {
     public CommandHelp(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg);
+        super(event, msg, true);
     }
 
     @Override

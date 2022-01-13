@@ -36,7 +36,7 @@ public abstract class Command
     protected String response;
     protected Color color;
 
-    public Command(MessageReceivedEvent event, String[] msg)
+    public Command(MessageReceivedEvent event, String[] msg, boolean serverData)
     {
         this.event = event;
         this.buttonEvent = null;
@@ -46,12 +46,17 @@ public abstract class Command
         this.player = event.getAuthor();
         this.server = event.getGuild();
 
-        this.serverData = new ServerDataQuery(this.server.getId());
+        this.serverData = serverData ? new ServerDataQuery(this.server.getId()) : null;
         this.playerData = PlayerDataQuery.of(this.player.getId());
 
         this.embed = new EmbedBuilder();
         this.response = "";
         this.color = null;
+    }
+
+    public Command(MessageReceivedEvent event, String[] msg)
+    {
+        this(event, msg, false);
     }
 
     public Command(ButtonClickEvent event, String[] msg)
@@ -137,6 +142,7 @@ public abstract class Command
 
     protected String getCommandFormatted(String command)
     {
+        if(this.serverData == null) this.serverData = new ServerDataQuery(this.server.getId());
         return "`" + this.serverData.getPrefix() + command + "`";
     }
 
