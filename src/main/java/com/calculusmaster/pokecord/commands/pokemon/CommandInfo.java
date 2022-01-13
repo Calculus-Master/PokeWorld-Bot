@@ -4,11 +4,14 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+
+import java.util.stream.Collectors;
 
 public class CommandInfo extends Command
 {
@@ -40,7 +43,7 @@ public class CommandInfo extends Command
 
         String title = "**Level " + chosen.getLevel() + " " + chosen.getDisplayName() + "**" + (chosen.isShiny() ? ":star2:" : "") + (chosen.isMastered() ? ":trophy:" : "");
         String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getData().growthRate, chosen.getLevel()) + " XP";
-        String type = (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalize(chosen.getType()[0].toString()) : Global.normalize(chosen.getType()[0].toString()) + "\n" + Global.normalize(chosen.getType()[1].toString()));
+        String type = chosen.getType().stream().map(Type::getStyledName).collect(Collectors.joining("\n"));
         String nature = Global.normalize(chosen.getNature().toString());
         String gender = Global.normalize(chosen.getGender().toString());
         String dynamaxLevel = "" + chosen.getDynamaxLevel();
@@ -63,7 +66,7 @@ public class CommandInfo extends Command
 
         this.embed.setTitle(title);
         this.embed.setDescription("UUID: " + UUID);
-        this.color = chosen.getType()[0].getColor();
+        this.color = chosen.getType().get(0).getColor();
         this.embed.setImage(image);
         this.embed.setFooter("Showing Pokemon " + (index + 1) + " / " + this.playerData.getPokemonList().size());
 

@@ -261,8 +261,7 @@ public class PsychicMoves
 
     public String MagicPowder(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        opponent.setType(Type.PSYCHIC, 0);
-        opponent.setType(Type.PSYCHIC, 1);
+        opponent.setType(Type.PSYCHIC);
 
         return opponent.getName() + " is now a Psychic Type!";
     }
@@ -343,6 +342,6 @@ public class PsychicMoves
 
     public String Synchronoise(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return opponent.isType(user.getType()[0]) || opponent.isType(user.getType()[1]) ? MoveEffectBuilder.defaultDamage(user, opponent, duel, move) : move.getNoEffectResult(opponent);
+        return user.getType().stream().anyMatch(opponent::isType) ? MoveEffectBuilder.defaultDamage(user, opponent, duel, move) : move.getNoEffectResult(opponent);
     }
 }

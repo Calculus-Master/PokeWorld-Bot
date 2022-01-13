@@ -20,7 +20,6 @@ public enum PokemonSorterFlag
     FAVORITES("--favorites", "--fav"),
     TYPE("--type"),
     MAIN_TYPE("--maintype"),
-    SIDE_TYPE("--sidetype"),
     GENDER("--gender"),
     EGG_GROUP("--egggroup", "--egg"),
     SHINY("--shiny"),

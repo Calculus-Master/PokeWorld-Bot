@@ -123,10 +123,9 @@ public class DarkMoves
 
     public String BeatUp(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        List<Pokemon> team = List.copyOf(duel.getPlayers()[duel.playerIndexFromUUID(user.getUUID())].team);
-
         List<Integer> basePowers = new ArrayList<>();
-        for(Pokemon p : team) if(!p.hasAnyStatusCondition() && !p.isFainted()) basePowers.add(p.getBaseStat(Stat.ATK) / 10 + 5);
+        for(Pokemon p : duel.getPlayers()[duel.playerIndexFromUUID(user.getUUID())].team)
+            if(!p.hasAnyStatusCondition() && !p.isFainted()) basePowers.add(p.getBaseStat(Stat.ATK) / 10 + 5);
 
         int damage = 0;
         for(int p : basePowers)
@@ -135,8 +134,9 @@ public class DarkMoves
             damage += move.getDamage(user, opponent);
         }
 
-        opponent.damage(damage);
-        return move.getDamageResult(opponent, damage);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFixedDamageEffect(damage)
+                .execute();
     }
 
     public String DarkVoid(Pokemon user, Pokemon opponent, Duel duel, Move move)

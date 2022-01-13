@@ -256,8 +256,7 @@ public class Duel
             {
                 Type t = item.getArceusPlateType();
 
-                this.players[this.current].active.setType(t, 0);
-                this.players[this.current].active.setType(t, 1);
+                this.players[this.current].active.setType(t);
 
                 if(move.getName().equals("Judgement")) move.setType(t);
             }
@@ -1220,7 +1219,7 @@ public class Duel
 
         if(this.entryHazards[player].hasHazard(EntryHazard.STEALTH_ROCK))
         {
-            double rockEffective = TypeEffectiveness.getCombinedMap(this.players[player].active.getType()[0], this.players[player].active.getType()[1]).get(Type.ROCK);
+            double rockEffective = TypeEffectiveness.getEffectiveness(this.players[player].active.getType()).get(Type.ROCK);
             double damagePercent = 0.125 * rockEffective;
 
             int damage = (int)(this.players[player].active.getStat(Stat.HP) * damagePercent);

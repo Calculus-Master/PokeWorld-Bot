@@ -188,4 +188,14 @@ public class GhostMoves
                 .addStatChangeEffect(Stat.DEF, -1, 20, false)
                 .execute();
     }
+
+    public String TrickOrTreat(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(opponent.isType(Type.GHOST)) return move.getNoEffectResult(opponent);
+        else
+        {
+            opponent.addType(Type.GHOST);
+            return opponent.getName() + " is now partially a Ghost Type!";
+        }
+    }
 }

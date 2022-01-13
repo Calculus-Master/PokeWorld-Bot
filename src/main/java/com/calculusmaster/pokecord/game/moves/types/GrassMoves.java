@@ -27,7 +27,7 @@ public class GrassMoves
     {
         //TODO: LeechSeed sucks health each turn, right now its coded to steal max health once
 
-        if(!opponent.getType()[0].equals(Type.GRASS) && !opponent.getType()[1].equals(Type.GRASS))
+        if(!opponent.isType(Type.GRASS))
         {
             int hpGain = opponent.getStat(Stat.HP) / 8;
 
@@ -126,7 +126,12 @@ public class GrassMoves
 
     public String ForestsCurse(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return move.getNotImplementedResult();
+        if(opponent.isType(Type.GRASS)) return move.getNoEffectResult(opponent);
+        else
+        {
+            opponent.addType(Type.GRASS);
+            return opponent.getName() + " is now partially a Grass Type!";
+        }
     }
 
     public String WoodHammer(Pokemon user, Pokemon opponent, Duel duel, Move move)

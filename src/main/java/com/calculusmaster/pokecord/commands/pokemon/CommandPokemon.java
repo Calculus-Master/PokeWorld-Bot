@@ -72,9 +72,7 @@ public class CommandPokemon extends Command
 
         sorter.sortEnum(PokemonSorterFlag.TYPE, Type::cast, Pokemon::isType);
 
-        sorter.sortEnum(PokemonSorterFlag.MAIN_TYPE, Type::cast, (p, t) -> p.getType()[0].equals(t));
-
-        sorter.sortEnum(PokemonSorterFlag.SIDE_TYPE, Type::cast, (p, t) -> p.getType()[1].equals(t));
+        sorter.sortEnum(PokemonSorterFlag.MAIN_TYPE, Type::cast, (p, t) -> p.getType().get(0).equals(t));
 
         sorter.sortEnum(PokemonSorterFlag.GENDER, Gender::cast, (p, g) -> p.getGender().equals(g));
 

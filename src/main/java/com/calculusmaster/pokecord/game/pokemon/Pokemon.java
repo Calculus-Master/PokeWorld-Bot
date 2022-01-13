@@ -49,7 +49,7 @@ public class Pokemon
 
     //Duel Fields
     private int health;
-    private Type[] type;
+    private List<Type> type;
     private PokemonDuelStatChanges statChanges;
     private PokemonBoosts boosts;
     private EnumSet<StatusCondition> statusConditions;
@@ -114,7 +114,7 @@ public class Pokemon
     private void setDuelDefaults()
     {
         this.health = this.getMaxHealth();
-        this.type = new Type[]{this.data.types.get(0), this.data.types.get(1)};
+        this.type = new ArrayList<>(List.copyOf(this.data.types));
         this.statChanges = new PokemonDuelStatChanges();
         this.boosts = new PokemonBoosts();
         this.statusConditions = EnumSet.noneOf(StatusCondition.class);
@@ -477,24 +477,39 @@ public class Pokemon
 
     //Type
 
-    public Type[] getType()
+    public List<Type> getType()
     {
         return this.type;
     }
 
-    public void setType(Type t, int index)
+    //Replaces given type with newType
+    public void replaceType(Type current, Type replacement)
     {
-        this.type[index] = t;
+        this.type.set(this.type.indexOf(current), replacement);
     }
 
-    public void setType()
+    //Remove Types
+    public void removeType(Type remove)
     {
-        this.type = new Type[]{this.data.types.get(0), this.data.types.get(1)};
+        this.replaceType(remove, Type.NORMAL);
+    }
+
+    //Replaces all types with the parameter
+    public void setType(Type t)
+    {
+        this.type = new ArrayList<>(List.of(t));
+    }
+
+    //Adds a third typing to the Pokemon (Forest's Curse and Trick-or-Treat)
+    public void addType(Type t)
+    {
+       if(this.type.size() == 3) this.type.set(2, t);
+       else this.type.add(t);
     }
 
     public boolean isType(Type t)
     {
-        return this.getType()[0].equals(t) || this.getType()[1].equals(t);
+        return this.type.contains(t);
     }
 
     //TM & TR

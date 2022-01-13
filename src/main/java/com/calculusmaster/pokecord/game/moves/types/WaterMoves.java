@@ -148,8 +148,7 @@ public class WaterMoves
     {
         if(!opponent.getAbilities().contains("Multitype"))
         {
-            opponent.setType(Type.WATER, 0);
-            opponent.setType(Type.WATER, 1);
+            opponent.setType(Type.WATER);
 
             return opponent.getName() + " is now a Water type!";
         }

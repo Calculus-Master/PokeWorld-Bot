@@ -69,8 +69,7 @@ public class FireMoves
 
     public String BurnUp(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(user.getType()[0].equals(Type.FIRE)) user.setType(Type.NORMAL, 0);
-        if(user.getType()[1].equals(Type.FIRE)) user.setType(Type.NORMAL, 1);
+        if(user.isType(Type.FIRE)) user.removeType(Type.FIRE);
 
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + " " + user.getName() + " is no longer a Fire type!";
     }

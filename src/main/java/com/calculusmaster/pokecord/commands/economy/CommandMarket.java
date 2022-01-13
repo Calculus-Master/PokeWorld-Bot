@@ -87,14 +87,14 @@ public class CommandMarket extends Command
                 String market = "Market ID: " + entry.marketID + " | Price: " + entry.price + "\nSold by: " + entry.sellerName;
                 String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getData().growthRate, chosen.getLevel()) + " XP";
                 String gender = "Gender: " + Global.normalize(chosen.getGender().toString());
-                String type = "Type: " + (chosen.getType()[0].equals(chosen.getType()[1]) ? Global.normalize(chosen.getType()[0].toString()) : Global.normalize(chosen.getType()[0].toString()) + " | " + Global.normalize(chosen.getType()[1].toString()));
+                String type = "Type: " + chosen.getType().stream().map(Type::getStyledName).collect(Collectors.joining(" | "));
                 String nature = "Nature: " + Global.normalize(chosen.getNature().toString());
                 String item = "Held Item: " + chosen.getItem().getStyledName();
                 String stats = CommandInfo.getStatsFormatted(chosen, this.playerData.getSettings().get(Settings.CLIENT_DETAILED, Boolean.class));
 
                 this.embed.setTitle(title);
                 this.embed.setDescription(market + "\n" + exp + "\n" + gender + "\n" + type + "\n" + nature + "\n" + item + "\n\n" + stats);
-                this.color = chosen.getType()[0].getColor();
+                this.color = chosen.getType().get(0).getColor();
                 this.embed.setImage(chosen.getImage());
                 this.embed.setFooter("Buy this pokemon with `p!market buy " + entry.marketID + "`!");
             }
@@ -217,13 +217,7 @@ public class CommandMarket extends Command
             if(msg.contains("--maintype") && msg.indexOf("--maintype") + 1 < msg.size() && Type.cast(msg.get(msg.indexOf("--maintype") + 1)) != null)
             {
                 Type t = Type.cast(msg.get(msg.indexOf("--maintype") + 1));
-                display = display.filter(m -> m.pokemon.getType()[0].equals(t));
-            }
-
-            if(msg.contains("--sidetype") && msg.indexOf("--sidetype") + 1 < msg.size() && Type.cast(msg.get(msg.indexOf("--sidetype") + 1)) != null)
-            {
-                Type t = Type.cast(msg.get(msg.indexOf("--sidetype") + 1));
-                display = display.filter(m -> m.pokemon.getType()[1].equals(t));
+                display = display.filter(m -> m.pokemon.getType().get(0).equals(t));
             }
 
             if(msg.contains("--gender") && msg.indexOf("--gender") + 1 < msg.size() && Gender.cast(msg.get(msg.indexOf("--gender") + 1)) != null)

@@ -721,10 +721,10 @@ public class NormalMoves
     public String Conversion(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         Type t = user.getMove(0).getType();
-        user.setType(t, 0);
-        user.setType(t, 1);
 
-        return user.getName() + " transformed into a " + Global.normalize(t.toString()) + " Type!";
+        user.setType(t);
+
+        return user.getName() + " transformed into a " + t.getStyledName() + " Type!";
     }
 
     public String CometPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)

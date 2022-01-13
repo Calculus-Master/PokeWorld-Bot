@@ -381,11 +381,7 @@ public class ZMoves
     {
         boolean steelRemoval = opponent.isType(Type.STEEL);
 
-        if(steelRemoval)
-        {
-            if(opponent.getType()[0].equals(Type.STEEL)) opponent.setType(Type.NORMAL, 0);
-            if(opponent.getType()[1].equals(Type.STEEL)) opponent.setType(Type.NORMAL, 1);
-        }
+        if(steelRemoval) opponent.removeType(Type.STEEL);
 
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addStatChangeEffect(Stat.DEF, 2, 100, true)

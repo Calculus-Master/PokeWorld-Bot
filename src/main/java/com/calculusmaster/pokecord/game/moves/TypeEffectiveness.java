@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.moves;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TypeEffectiveness
@@ -56,7 +57,6 @@ public class TypeEffectiveness
             Type[] out = new Type[split.length];
             for(int i = 0; i < split.length; i++) out[i] = Type.cast(split[i]);
 
-            //return (Type[]) Arrays.stream(split).map(Type::cast).toArray();
             return out;
         }
 
@@ -72,13 +72,12 @@ public class TypeEffectiveness
         }
     }
 
-    public static Map<Type, Double> getCombinedMap(Type t1, Type t2)
+    public static Map<Type, Double> getEffectiveness(List<Type> types)
     {
-        Map<Type, Double> mapT1 = EffectType.getEffectForType(t1).getMap();
-        Map<Type, Double> mapT2 = EffectType.getEffectForType(t2).getMap();
+        Map<Type, Double> effectiveness = new HashMap<>();
 
-        Map<Type, Double> out = new HashMap<>();
-        for(Type t : Type.values()) out.put(t, mapT1.get(t) * (t1.equals(t2) ? 1 : mapT2.get(t)));
-        return out;
+        for(Type t : types) EffectType.getEffectForType(t).getMap().forEach((type, effect) -> effectiveness.put(type, effectiveness.getOrDefault(type, 1.0) * effect));
+
+        return effectiveness;
     }
 }
