@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 public class MoveTutorRegistry
 {
     public static final List<String> MOVE_TUTOR_MOVES = new ArrayList<>();
-    public static final Map<String, Predicate<Pokemon>> PREDICATES = new HashMap<>();
+    public static final Map<String, Predicate<Pokemon>> VALIDATORS = new HashMap<>();
 
     public static void init()
     {
@@ -32,6 +32,6 @@ public class MoveTutorRegistry
     private static void register(String name, Predicate<Pokemon> rule)
     {
         MOVE_TUTOR_MOVES.add(name);
-        PREDICATES.put(name, rule);
+        VALIDATORS.put(name, rule);
     }
 }

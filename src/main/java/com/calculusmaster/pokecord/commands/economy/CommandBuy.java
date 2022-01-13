@@ -19,6 +19,7 @@ import com.calculusmaster.pokecord.util.enums.Prices;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class CommandBuy extends Command
 {
@@ -52,10 +53,10 @@ public class CommandBuy extends Command
         boolean tm = this.msg[1].equals("tm");
         //p!buy tm <tr>
         boolean tr = this.msg[1].equals("tr");
-        //p!buy movetutor <move>
-        boolean movetutor = this.msg.length >= 3 && Arrays.asList("movetutor", "move", "tutor", "mt").contains(this.msg[1]);
+        //p!buy movetutor <index> <move>
+        boolean movetutor = this.msg.length >= 4 && List.of("movetutor", "move", "tutor", "mt").contains(this.msg[1]) && this.isNumeric(2);
         //p!buy zcrystal <zcrystal>
-        boolean zcrystal = this.msg.length >= 3 && Arrays.asList("zcrystal", "z", "zc").contains(this.msg[1]);
+        boolean zcrystal = this.msg.length >= 3 && List.of("zcrystal", "z", "zc").contains(this.msg[1]);
 
         Pokemon selected = this.playerData.getSelectedPokemon();
         boolean success = true;
@@ -218,21 +219,21 @@ public class CommandBuy extends Command
         {
             if(this.insufficientMasteryLevel(Feature.PURCHASE_MOVE_TUTOR_MOVES)) return this.invalidMasteryLevel(Feature.PURCHASE_MOVE_TUTOR_MOVES);
 
-            String move = Global.normalize(this.getMultiWordContent(1));
+            String move = Global.normalize(this.getMultiWordContent(3));
 
             if(!Move.isMove(move)) this.response = "Invalid move name!";
             else if(!Move.isImplemented(move)) this.response = move + " has not been implemented yet!";
             else if(!MoveTutorRegistry.MOVE_TUTOR_MOVES.contains(move)) this.response = move + " cannot be learned from a Move Tutor!";
-            else if(!MoveTutorRegistry.PREDICATES.get(move).test(selected)) this.response = "Your Pokemon cannot learn `" + move + "` from a Move Tutor!";
-            else if(!MoveTutorRegistry.MOVE_TUTOR_MOVES.contains(move) || !MoveTutorRegistry.PREDICATES.get(selected.getName()).test(selected)) this.response = "Your Pokemon cannot learn that Move Tutor move!";
+            else if(!MoveTutorRegistry.VALIDATORS.get(move).test(selected)) this.response = "Your Pokemon cannot learn `" + move + "` from a Move Tutor!";
+            else if(!MoveTutorRegistry.MOVE_TUTOR_MOVES.contains(move) || !MoveTutorRegistry.VALIDATORS.get(selected.getName()).test(selected)) this.response = "Your Pokemon cannot learn that Move Tutor move!";
+            else if(this.getInt(2) < 1 || this.getInt(2) > 4) this.response = "Invalid move index!";
             else if(this.playerData.getCredits() < Prices.SHOP_MOVETUTOR.get()) this.invalidCredits(Prices.SHOP_MOVETUTOR.get());
             else
             {
-                //TODO: Rework this so it doesn't force the move onto the first slot all the time
                 this.playerData.changeCredits(-1 * Prices.SHOP_MOVETUTOR.get());
-                selected.learnMove(move, 0);
+                selected.learnMove(move, this.getInt(2) - 1);
 
-                this.response = selected.getName() + " learned `" + move + "` in its first slot!";
+                this.response = selected.getName() + " learned `" + move + "`!";
             }
         }
         else if(zcrystal)
