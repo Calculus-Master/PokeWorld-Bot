@@ -66,6 +66,8 @@ public class CommandPokemon extends Command
 
         sorter.sortNumeric(PokemonSorterFlag.EV, Pokemon::getEVTotal);
 
+        sorter.sortNumeric(PokemonSorterFlag.STAT, Pokemon::getTotalStat);
+
         sorter.sortMachine(PokemonSorterFlag.TM);
 
         sorter.sortMachine(PokemonSorterFlag.TR);

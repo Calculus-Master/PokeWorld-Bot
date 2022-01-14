@@ -14,6 +14,7 @@ public enum PokemonSorterFlag
     DYNAMAX_LEVEL("--dynamaxlevel", "--dlevel", "--dlvl"),
     IV("--iv"),
     EV("--ev"),
+    STAT("--stat"),
     TM("--tm"),
     TR("--tr"),
     TEAM("--team"),
