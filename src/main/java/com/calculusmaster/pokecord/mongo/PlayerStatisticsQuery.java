@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.mongo;
 
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 
@@ -17,6 +18,8 @@ public class PlayerStatisticsQuery extends MongoQuery
         Document statsData = new Document("playerID", playerID);
 
         for(PlayerStatistic s : PlayerStatistic.values()) statsData.append(s.key, 0);
+
+        LoggerHelper.logDatabaseInsert(PlayerStatisticsQuery.class, statsData);
 
         Mongo.StatisticsData.insertOne(statsData);
     }

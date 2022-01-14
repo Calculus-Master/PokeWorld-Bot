@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
@@ -183,6 +184,8 @@ public class Trainer extends Player
                     .append("pokemon_level", trainer.pokemonLevel)
                     .append("buff", trainer.buff)
                     .append("players_defeated", trainer.playersDefeated);
+
+            LoggerHelper.logDatabaseInsert(Trainer.class, data);
 
             Mongo.TrainerData.insertOne(data);
         }

@@ -9,6 +9,7 @@ import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
@@ -68,6 +69,8 @@ public class PokemonEgg
                 .append("exp", egg.getExp())
                 .append("max", egg.getMaxExp())
                 .append("ivs", egg.getIVs());
+
+        LoggerHelper.logDatabaseInsert(PokemonEgg.class, eggData);
 
         Mongo.EggData.insertOne(eggData);
     }

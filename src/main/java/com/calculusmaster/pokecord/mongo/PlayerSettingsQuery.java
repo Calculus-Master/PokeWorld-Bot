@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.mongo;
 
 import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
@@ -30,6 +31,8 @@ public class PlayerSettingsQuery
                 .append("detailed", false)
                 .append("autoinfo", false)
                 .append("default_order", "NUMBER");
+
+        LoggerHelper.logDatabaseInsert(PlayerSettingsQuery.class, settingsData);
 
         Mongo.SettingsData.insertOne(settingsData);
     }

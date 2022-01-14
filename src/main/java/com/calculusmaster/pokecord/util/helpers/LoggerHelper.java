@@ -6,7 +6,11 @@ import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.util.Mongo;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.slf4j.LoggerFactory;
+
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class LoggerHelper
 {
@@ -43,6 +47,16 @@ public class LoggerHelper
         error(clazz, error);
 
         exception.printStackTrace();
+    }
+
+    public static void logDatabaseUpdate(Class<?> clazz, Bson... updates)
+    {
+        LoggerHelper.warn(clazz, "Database Update: " + Stream.of(updates).map(Bson::toString).collect(Collectors.joining(", ")));
+    }
+
+    public static void logDatabaseInsert(Class<?> clazz, Document data)
+    {
+        LoggerHelper.warn(clazz, "Database Insert: " + data.toString());
     }
 
     //Core

@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.bounties.objectives.core.*;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
@@ -62,6 +63,8 @@ public class Bounty
                 .append("reward", this.getReward());
 
         this.objective.addObjectiveData(data);
+
+        LoggerHelper.logDatabaseInsert(Bounty.class, data);
 
         Mongo.BountyData.insertOne(data);
     }

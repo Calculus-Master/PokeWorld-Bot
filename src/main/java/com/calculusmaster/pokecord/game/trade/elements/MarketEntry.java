@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
 import org.bson.Document;
 
@@ -30,6 +31,8 @@ public class MarketEntry
 
         Document marketData = new Document("marketID", m.marketID).append("sellerID", m.sellerID).append("sellerName", m.sellerName).append("pokemonID", m.pokemonID).append("price", m.price);
         Mongo.MarketData.insertOne(marketData);
+
+        LoggerHelper.logDatabaseInsert(MarketEntry.class, marketData);
 
         CacheHelper.MARKET_ENTRIES.add(m);
 

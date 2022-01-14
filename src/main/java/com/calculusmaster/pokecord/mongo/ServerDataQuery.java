@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.mongo;
 
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.Guild;
@@ -35,6 +36,8 @@ public class ServerDataQuery extends MongoQuery
                 .append("zmoves", true)
                 .append("duelchannel", new JSONArray())
                 .append("botchannel", new JSONArray());
+
+        LoggerHelper.logDatabaseInsert(ServerDataQuery.class, serverData);
 
         Mongo.ServerData.insertOne(serverData);
 

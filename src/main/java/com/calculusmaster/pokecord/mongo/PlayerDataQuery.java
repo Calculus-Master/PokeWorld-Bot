@@ -75,6 +75,8 @@ public class PlayerDataQuery extends MongoQuery
                 .append("owned_eggs", new JSONArray())
                 .append("active_egg", "");
 
+        LoggerHelper.logDatabaseInsert(PlayerDataQuery.class, data);
+
         Mongo.PlayerData.insertOne(data);
 
         PlayerSettingsQuery.register(player.getId());

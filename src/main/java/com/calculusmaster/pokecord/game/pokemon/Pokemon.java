@@ -144,9 +144,9 @@ public class Pokemon
     }
 
     //Database
-    public void upload()
+    private Document buildDatabaseDocument()
     {
-        Document data = new Document()
+        return new Document()
                 .append("UUID", this.UUID)
                 .append("name", this.name)
                 .append("nickname", this.nickname)
@@ -162,6 +162,13 @@ public class Pokemon
                 .append("item", this.item.toString())
                 .append("tm", this.tm == null ? -1 : this.tm.getNumber())
                 .append("tr", this.tr == null ? -1 : this.tr.getNumber());
+    }
+
+    public void upload()
+    {
+        Document data = this.buildDatabaseDocument();
+
+        LoggerHelper.logDatabaseInsert(Pokemon.class, data);
 
         Mongo.PokemonData.insertOne(data);
     }
@@ -173,12 +180,13 @@ public class Pokemon
 
     public void completeUpdate()
     {
-        this.delete();
-        this.upload();
+        Mongo.PokemonData.replaceOne(this.query(), this.buildDatabaseDocument());
     }
 
     private void update(Bson... updates)
     {
+        LoggerHelper.logDatabaseUpdate(Pokemon.class, updates);
+
         Mongo.PokemonData.updateOne(this.query(), List.of(updates));
     }
 
