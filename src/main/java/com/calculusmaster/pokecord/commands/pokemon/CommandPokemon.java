@@ -23,10 +23,10 @@ import java.util.stream.Stream;
 public class CommandPokemon extends Command
 {
     private List<Pokemon> pokemon;
-    private List<String> team;
-    private List<String> favorites;
+    private final List<String> team;
+    private final List<String> favorites;
 
-    private boolean detailed;
+    private final boolean detailed;
 
     public CommandPokemon(MessageReceivedEvent event, String[] msg)
     {
