@@ -17,7 +17,7 @@ public class OHKODamageEffect extends FixedDamageEffect
         else
         {
             this.set(this.opponent.getHealth());
-            return "It's a One-Hit Knock Out";
+            return "It's a One-Hit Knock Out!";
         }
     }
 }

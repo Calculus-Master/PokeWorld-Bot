@@ -1,9 +1,0 @@
-{
-    "thread_pool_type": 1,
-    "dynamic_caching": false,
-    "item_counts": [5, 12],
-    "tm_count": 10,
-    "tr_count": 10,
-    "zcrystal_counts": [5, 10],
-    "command_thread_pool": true
-}

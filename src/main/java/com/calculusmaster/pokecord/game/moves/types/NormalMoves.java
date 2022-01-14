@@ -15,6 +15,7 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
 
 import java.util.*;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class NormalMoves
@@ -1002,5 +1003,36 @@ public class NormalMoves
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addStatusEffect(StatusCondition.ASLEEP)
                 .execute();
+    }
+
+    public String PayDay(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        final int amount = new SplittableRandom().nextInt((int)(user.getLevel() * 0.5), (int)(user.getLevel() * 1.5));
+
+        Executors.newSingleThreadExecutor().execute(() -> duel.getPlayers()[duel.playerIndexFromUUID(user.getUUID())].data.changeCredits(amount));
+
+        return user.getName() + " found some coins! " + MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+    }
+
+    public String Guillotine(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addOHKOEffect()
+                .execute();
+    }
+
+    public String Cut(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+    }
+
+    public String HornAttack(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+    }
+
+    public String Wrap(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.BOUND, 100);
     }
 }

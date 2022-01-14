@@ -19,7 +19,7 @@ public class Move
 {
     //TODO: Keep checking the custom moves and see if they can function as close to the original as possible
     public static final List<String> WIP_MOVES = List.of("Roar", "Safeguard", "Whirlwind", "Rage Powder", "Tailwind", "Light Screen", "Frustration", "Return", "Mind Reader", "Counter", "Magnetic Flux", "After You", "Disable", "Miracle Eye", "Guard Swap", "Power Swap", "Me First", "Yawn", "Gravity", "Spite", "Mean Look", "Foresight", "Wide Guard", "Ingrain", "Natural Gift", "Last Resort", "Sand Attack", "Teleport", "Odor Sleuth", "Helping Hand", "Mirror Move", "Stuff Cheeks", "Copycat", "Entrainment", "Block", "Follow Me", "Sky Drop", "Simple Beam", "Fling", "Telekinesis", "Quash", "No Retreat", "Encore", "Substitute", "Magic Coat", "Embargo", "Ally Switch", "Sleep Talk");
-    public static final List<String> CUSTOM_MOVES = List.of("Leech Seed", "Rapid Spin", "Mirror Shot", "Stockpile", "Worry Seed", "Aromatic Mist");
+    public static final List<String> CUSTOM_MOVES = List.of("Leech Seed", "Rapid Spin", "Mirror Shot", "Stockpile", "Worry Seed", "Aromatic Mist", "Pay Day");
     public static List<String> INCOMPLETE_MOVES = new ArrayList<>();
 
     private String name;
