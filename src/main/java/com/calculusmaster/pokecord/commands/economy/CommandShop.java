@@ -13,10 +13,7 @@ import com.calculusmaster.pokecord.util.enums.Prices;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class CommandShop extends Command
 {
@@ -182,7 +179,7 @@ public class CommandShop extends Command
 
         int count;
 
-        Random r = new Random();
+        SplittableRandom r = new SplittableRandom();
 
         //Items
         count = r.nextInt(ITEM_COUNT_MAX - ITEM_COUNT_MIN + 1) + ITEM_COUNT_MIN;
