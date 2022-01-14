@@ -5,9 +5,11 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Location;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.MoveData;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.ConfigHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
@@ -19,6 +21,8 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.commons.collections4.ListUtils;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -111,5 +115,18 @@ public class CommandDev extends Command
 
         this.response = "Successfully ran Developer Command!";
         return this;
+    }
+
+    public static void main(String[] args) throws IOException
+    {
+        CSVHelper.init();
+        MoveData.init();
+        Move.init();
+
+        FileWriter writer = new FileWriter("incomplete_moves.txt");
+        writer.write(String.join("\n", Move.INCOMPLETE_MOVES) + "\n" + "Amount: " + Move.INCOMPLETE_MOVES.size());
+        writer.close();
+
+        System.out.println("Wrote Incomplete Moves to \"incomplete_moves.txt\"");
     }
 }
