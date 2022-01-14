@@ -42,7 +42,7 @@ public class PursuitBuilder
 
     public void build()
     {
-        for(Bounty b : this.bounties) Bounty.toDB(b);
+        for(Bounty b : this.bounties) b.upload();
     }
 
 }

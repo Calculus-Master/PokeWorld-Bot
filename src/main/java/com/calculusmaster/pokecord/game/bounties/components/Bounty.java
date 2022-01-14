@@ -55,20 +55,25 @@ public class Bounty
         return b;
     }
 
-    public static void toDB(Bounty b)
+    public void upload()
     {
         Document data = new Document()
-                .append("bountyID", b.getBountyID())
-                .append("reward", b.getReward());
+                .append("bountyID", this.getBountyID())
+                .append("reward", this.getReward());
 
-        b.objective.addObjectiveData(data);
+        this.objective.addObjectiveData(data);
 
         Mongo.BountyData.insertOne(data);
     }
 
-    public static void delete(String bountyID)
+    public void delete()
     {
-        Mongo.BountyData.deleteOne(Filters.eq("bountyID", bountyID));
+        Mongo.BountyData.deleteOne(Filters.eq("bountyID", this.bountyID));
+    }
+
+    public static void delete(String ID)
+    {
+        Mongo.BountyData.deleteOne(Filters.eq("bountyID", ID));
     }
 
     public void setElite()

@@ -53,7 +53,7 @@ public class CommandBounties extends Command
                 this.playerData.changeCredits(b.getReward());
                 this.playerData.removeBounty(b.getBountyID());
 
-                Bounty.delete(b.getBountyID());
+                b.delete();
 
                 this.playerData.getStatistics().incr(PlayerStatistic.BOUNTIES_COMPLETED);
                 Achievements.grant(this.player.getId(), Achievements.COMPLETED_FIRST_BOUNTY, this.event);
@@ -72,10 +72,10 @@ public class CommandBounties extends Command
             Bounty rerolledBounty = Bounty.create().setReward(newReward);
 
             this.playerData.removeBounty(b.getBountyID());
-            Bounty.delete(b.getBountyID());
+            b.delete();
 
             this.playerData.addBounty(rerolledBounty.getBountyID());
-            Bounty.toDB(rerolledBounty);
+            rerolledBounty.upload();
 
             this.response = "Rerolled Bounty with lower rewards!";
         }
@@ -100,7 +100,7 @@ public class CommandBounties extends Command
                     this.playerData.directMessage("One of your acquired Bounties is an Elite Bounty! Completing it will grant much higher rewards!");
                 }
 
-                Bounty.toDB(b);
+                b.upload();
                 this.playerData.addBounty(b.getBountyID());
             }
 
@@ -132,7 +132,7 @@ public class CommandBounties extends Command
             {
                 Bounty b = Bounty.create();
 
-                Bounty.toDB(b);
+                b.upload();
                 this.playerData.addBounty(b.getBountyID());
             }
 
