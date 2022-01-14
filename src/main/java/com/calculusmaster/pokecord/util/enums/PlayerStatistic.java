@@ -18,7 +18,6 @@ public enum PlayerStatistic
     PVP_DUELS_COMPLETED("pvp_duels_completed"),
     WILD_DUELS_COMPLETED("wild_duels_completed"),
     TRAINER_DUELS_COMPLETED("trainer_duels_completed"),
-    //TODO: Not Implemented
     ELITE_DUELS_COMPLETED("elite_duels_completed"),
     SHOP_TMS_BOUGHT("shop_tms_bought"),
     SHOP_TRS_BOUGHT("shop_trs_bought"),
@@ -28,20 +27,15 @@ public enum PlayerStatistic
     RAIDS_WON_MVP("raids_won_mvp"),
     RAIDS_COMPLETED("raids_completed"),
     POKEMON_BRED("pokemon_bred"),
-    PURSUITS_COMPLETED("pursuits_completed"),
-    PURSUITS_COMPLETED_LEGEND("pursuits_completed_legend"),
+    POKEMON_EVOLVED("pokemon_evolved"),
+    EGGS_HATCHED("eggs_hatched"),
     POKEMON_DEFEATED("pokemon_defeated"),
     POKEMON_FAINTED("pokemon_fainted"),
-    COMMANDS_USED("commands_used"),
-    MOVES_LEARNED("moves_learned"),
     MOVES_USED("moves_used"),
     ZMOVES_USED("zmoves_used"),
     MAX_MOVES_USED("max_moves_used"),
-    DUELS_COMPLETED_MAX_SIZE("duels_completed_max"),
-    EGGS_HATCHED("eggs_hatched"),
-    POKEMON_EXP_EARNED("pokemon_exp_earned"),
-    MASTERY_EXP_EARNED("mastery_exp_earned"),
-    POKEMON_EVOLVED("pokemon_evolved");
+    PURSUITS_COMPLETED("pursuits_completed"),
+    MASTERY_EXP_EARNED("mastery_exp_earned");
 
     public String key;
     PlayerStatistic(String key)

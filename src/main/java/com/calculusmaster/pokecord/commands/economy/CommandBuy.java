@@ -198,6 +198,8 @@ public class CommandBuy extends Command
                     this.playerData.addTM(request.toString());
                     this.playerData.changeCredits(-1 * cost);
 
+                    this.playerData.getStatistics().incr(PlayerStatistic.SHOP_TMS_BOUGHT);
+
                     this.response = "Successfully bought `" + request.getShopEntry().replaceAll("`", "") + "`!";
                 }
             }
@@ -210,6 +212,8 @@ public class CommandBuy extends Command
                 {
                     this.playerData.addTR(request.toString());
                     this.playerData.changeCredits(-1 * cost);
+
+                    this.playerData.getStatistics().incr(PlayerStatistic.SHOP_TRS_BOUGHT);
 
                     this.response = "Successfully bought `" + request.getShopEntry() + "`!";
                 }

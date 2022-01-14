@@ -9,6 +9,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Gender;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
+import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Map;
@@ -67,6 +68,7 @@ public class CommandBreed extends Command
                     this.playerData.addEgg(egg.getEggID());
 
                     this.playerData.updateBountyProgression(ObjectiveType.BREED_POKEMON);
+                    this.playerData.getStatistics().incr(PlayerStatistic.POKEMON_BRED);
 
                     Achievements.grant(this.player.getId(), Achievements.BRED_FIRST_POKEMON, this.event);
                     if(parent1.getName().equals("Ditto") || parent2.getName().equals("Ditto")) Achievements.grant(this.player.getId(), Achievements.BRED_FIRST_DITTO, this.event);

@@ -22,7 +22,7 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
+import java.util.SplittableRandom;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -157,9 +157,11 @@ public class PlayerDataQuery extends MongoQuery
 
     public void addExp(int amount, int chance)
     {
-        if(new Random().nextInt(100) < chance)
+        if(new SplittableRandom().nextInt(100) < chance)
         {
             this.update(Updates.inc("exp", amount));
+
+            this.getStatistics().incr(PlayerStatistic.MASTERY_EXP_EARNED, amount);
 
             if(!MasteryLevelManager.isMax(this) && MasteryLevelManager.MASTERY_LEVELS.get(this.getLevel() + 1).canLevelUp(this))
             {

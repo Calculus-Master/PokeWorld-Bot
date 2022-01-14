@@ -175,6 +175,8 @@ public class Listener extends ListenerAdapter
             data.removeActiveEgg();
             data.removeEgg(egg.getEggID());
 
+            data.getStatistics().incr(PlayerStatistic.EGGS_HATCHED);
+
             Achievements.grant(data.getID(), Achievements.HATCHED_FIRST_EGG, event);
             if(p.getTotalIVRounded() >= 60) Achievements.grant(data.getID(), Achievements.HATCHED_FIRST_DECENT_IV, event);
             if(p.getTotalIVRounded() >= 70) Achievements.grant(data.getID(), Achievements.HATCHED_FIRST_GREAT_IV, event);

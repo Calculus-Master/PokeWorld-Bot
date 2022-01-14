@@ -865,7 +865,11 @@ public class Duel
                         }
                     }
                 });
+
+                this.players[this.current].data.getStatistics().incr(PlayerStatistic.POKEMON_DEFEATED);
             }
+
+            if(this.isNonBotPlayer(this.other)) this.players[this.other].data.getStatistics().incr(PlayerStatistic.POKEMON_FAINTED);
 
             if(this.players[this.current].active.isDynamaxed() && this.players[this.current].active.getDynamaxLevel() < 10 && new Random().nextInt(100) < 40)
             {

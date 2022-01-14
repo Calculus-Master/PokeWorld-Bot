@@ -96,6 +96,7 @@ public class CommandPursuit extends Command
                         //Pursuit Final Rewards
                         this.playerData.changeCredits(creditReward);
 
+                        this.playerData.getStatistics().incr(PlayerStatistic.PURSUITS_COMPLETED);
                         Achievements.grant(this.player.getId(), Achievements.COMPLETED_FIRST_PURSUIT, this.event);
                         if(pursuitSize.equals(PursuitSize.LEGEND)) Achievements.grant(this.player.getId(), Achievements.COMPLETED_FIRST_LEGEND_PURSUIT, this.event);
 

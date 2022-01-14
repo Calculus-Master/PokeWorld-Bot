@@ -67,6 +67,7 @@ public class EliteDuel extends TrainerDuel
         this.uploadExperience();
 
         this.players[0].data.updateBountyProgression(ObjectiveType.COMPLETE_ELITE_DUEL);
+        this.players[0].data.getStatistics().incr(PlayerStatistic.ELITE_DUELS_COMPLETED);
 
         DuelHelper.delete(this.players[0].ID);
     }

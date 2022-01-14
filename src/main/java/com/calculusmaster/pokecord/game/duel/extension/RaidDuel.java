@@ -11,6 +11,7 @@ import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
+import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
@@ -132,10 +133,7 @@ public class RaidDuel extends WildDuel
 
         if(playersWon)
         {
-            for(Player p : this.getNonBotPlayers()) p.data.updateBountyProgression(ObjectiveType.WIN_RAID_DUEL);
-
             int credits = new Random().nextInt(2000) + 1000;
-            int ppXP = new Random().nextInt(1000) + 500;
             int pokeXP = new Random().nextInt(100) + 500;
 
             Map<String, String> pokemonToPlayer = new HashMap<>();
@@ -145,9 +143,6 @@ public class RaidDuel extends WildDuel
             Collections.reverse(sorted);
 
             String highestDamage = this.getNonBotPlayers().length == 1 ? "" : pokemonToPlayer.get(sorted.get(0).getKey());
-
-            for(Player p : this.getNonBotPlayers()) Achievements.grant(p.ID, Achievements.WON_FIRST_RAID, this.event);
-            for(Player p : this.getNonBotPlayers()) if(p.ID.equals(highestDamage)) Achievements.grant(p.ID, Achievements.WON_FIRST_RAID_HIGHEST_DAMAGE, this.event);
 
             StringBuilder winnings = new StringBuilder();
             String extraWinnings = "";
@@ -159,6 +154,10 @@ public class RaidDuel extends WildDuel
                 p.data.changeCredits((int)(credits * multiplier));
                 p.data.addExp((int)(40 * multiplier));
                 p.active.addExp((int)(pokeXP * multiplier));
+
+                p.data.getStatistics().incr(PlayerStatistic.RAIDS_WON);
+                p.data.updateBountyProgression(ObjectiveType.WIN_RAID_DUEL);
+                Achievements.grant(p.ID, Achievements.WON_FIRST_RAID, this.event);
 
                 winnings.append(p.data.getUsername()).append(" - `").append((int)(credits * multiplier)).append("c`\n");
 
@@ -174,6 +173,9 @@ public class RaidDuel extends WildDuel
                     reward.upload();
                     p.data.addPokemon(reward.getUUID());
 
+                    p.data.getStatistics().incr(PlayerStatistic.RAIDS_WON_MVP);
+                    Achievements.grant(p.ID, Achievements.WON_FIRST_RAID_HIGHEST_DAMAGE, this.event);
+
                     extraWinnings = "\n\n**" + p.data.getUsername() + " caught the Raid Pokemon!**";
                 }
             }
@@ -182,13 +184,14 @@ public class RaidDuel extends WildDuel
 
             embed.setDescription("The Raid Pokemon is defeated!\n\n**Rewards:**\n" + winnings + extraWinnings);
         }
-        else
-        {
-            embed.setDescription("Raid Pokemon could not be defeated! No rewards earned!");
-        }
+        else embed.setDescription("Raid Pokemon could not be defeated! No rewards earned!");
 
-        for(Player p : this.getNonBotPlayers()) p.data.updateBountyProgression(ObjectiveType.PARTICIPATE_RAID);
-        for(Player p : this.getNonBotPlayers()) Achievements.grant(p.ID, Achievements.COMPLETED_FIRST_RAID, this.event);
+        for(Player p : this.getNonBotPlayers())
+        {
+            p.data.getStatistics().incr(PlayerStatistic.RAIDS_COMPLETED);
+            p.data.updateBountyProgression(ObjectiveType.PARTICIPATE_RAID);
+            Achievements.grant(p.ID, Achievements.COMPLETED_FIRST_RAID, this.event);
+        }
 
         this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
 
