@@ -195,4 +195,11 @@ public class WaterMoves
                 .addStatusEffect(StatusCondition.BOUND)
                 .execute();
     }
+
+    public String WaterSport(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(user.getUUID()).waterSportUsed = true;
+
+        return "Fire Type moves now have 50% less power!";
+    }
 }

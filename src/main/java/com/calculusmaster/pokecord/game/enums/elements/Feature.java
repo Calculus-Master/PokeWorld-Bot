@@ -85,7 +85,6 @@ public enum Feature
 
     //Level 15
     PVE_DUELS_RAID("Join other players in a Duel against a Raid Pokemon (these will spawn randomly)"),
-    PVE_DUELS_GYM("Duel a Gym Leader (will be removed soon)"),
     PURCHASE_MOVE_TUTOR_MOVES("Purchase Move Tutor moves to teach your Pokemon"),
 
     //Level 16

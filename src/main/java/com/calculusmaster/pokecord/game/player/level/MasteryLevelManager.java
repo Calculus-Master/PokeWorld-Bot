@@ -169,9 +169,8 @@ public class MasteryLevelManager
         // Level 15 – Expanding Duels (PvP & PvE)
         // Raid – p!raid
         // Move Tutor Moves – p!shop movetutor, p!buy movetutor
-        // Gym – p!gym TODO: Remove Gym system
         PokemonMasteryLevel.create(15)
-                .withFeaturesUnlocked(Feature.PVE_DUELS_RAID, Feature.PVE_DUELS_GYM)
+                .withFeaturesUnlocked(Feature.PVE_DUELS_RAID)
                 .withExperienceRequirement(6000)
                 .withPokemonRequirement(600)
                 .withTaskRequirement(new WildLevelTask(50))

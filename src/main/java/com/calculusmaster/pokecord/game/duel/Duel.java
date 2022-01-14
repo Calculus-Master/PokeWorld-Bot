@@ -399,6 +399,8 @@ public class Duel
             }
         }
 
+        if(this.data(this.other).waterSportUsed && move.getType().equals(Type.FIRE)) move.setPower(0.5);
+
         if(move.getName().equals("Sheer Cold"))
         {
             move.setAccuracy((this.players[this.current].active.isType(Type.ICE) ? 30 : 20) + (this.players[this.current].active.getLevel() - this.players[this.other].active.getLevel()));

@@ -305,4 +305,12 @@ public class GrassMoves
     {
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
+
+    public String SeedFlare(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPDEF, -2, 40, false)
+                .execute();
+    }
 }

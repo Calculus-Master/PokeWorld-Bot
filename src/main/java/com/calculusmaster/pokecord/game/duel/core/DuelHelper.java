@@ -91,6 +91,7 @@ public class DuelHelper
         public boolean plasmaFistsUsed;
         public boolean electrifyUsed;
         public boolean wishUsed;
+        public boolean waterSportUsed;
 
         public boolean disguiseActivated;
 
@@ -154,6 +155,7 @@ public class DuelHelper
             this.plasmaFistsUsed = false;
             this.electrifyUsed = false;
             this.wishUsed = false;
+            this.waterSportUsed = false;
 
             this.disguiseActivated = false;
         }

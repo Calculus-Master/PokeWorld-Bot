@@ -209,4 +209,11 @@ public class ElectricMoves
         }
         else return move.getNothingResult();
     }
+
+    public String BoltBeak(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.first.equals(user.getUUID())) move.setPower(2.0);
+
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+    }
 }
