@@ -136,4 +136,16 @@ public class IceMoves
     {
         return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.ATK, -1, 10, false);
     }
+
+    public String Haze(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        user.changes().clear();
+
+        return user.getName() + " has been cleared of all stat changes!";
+    }
+
+    public String IceHammer(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPD, -1, 100, true);
+    }
 }
