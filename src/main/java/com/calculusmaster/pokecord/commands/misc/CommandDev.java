@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Location;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.MoveData;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
@@ -24,10 +25,12 @@ import org.apache.commons.collections4.ListUtils;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class CommandDev extends Command
 {
@@ -123,8 +126,16 @@ public class CommandDev extends Command
         MoveData.init();
         Move.init();
 
+        List<Move> incomplete = Move.INCOMPLETE_MOVES.stream().map(Move::new).toList();
+
         FileWriter writer = new FileWriter("incomplete_moves.txt");
-        writer.write(String.join("\n", Move.INCOMPLETE_MOVES) + "\n" + "Amount: " + Move.INCOMPLETE_MOVES.size());
+
+        Arrays.stream(Type.values()).forEach(t -> {
+            try { writer.write("Type: " + t.getStyledName() + ":\n" + incomplete.stream().filter(m -> m.getType().equals(t)).map(Move::getName).collect(Collectors.joining("\n")) + "\n\n"); }
+            catch (IOException e) { e.printStackTrace(); }
+        });
+
+        writer.write("Amount: " + Move.INCOMPLETE_MOVES.size());
         writer.close();
 
         System.out.println("Wrote Incomplete Moves to \"incomplete_moves.txt\"");
