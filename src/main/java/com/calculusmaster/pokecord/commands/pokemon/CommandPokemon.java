@@ -26,6 +26,8 @@ public class CommandPokemon extends Command
     private List<String> team;
     private List<String> favorites;
 
+    private boolean detailed;
+
     public CommandPokemon(MessageReceivedEvent event, String[] msg)
     {
         super(event, msg);
@@ -33,6 +35,8 @@ public class CommandPokemon extends Command
         this.pokemon = new TreeList<>(this.playerData.getPokemon());
         this.team = List.copyOf(this.playerData.getTeam());
         this.favorites = List.copyOf(this.playerData.getFavorites());
+
+        this.detailed = this.playerData.getSettings().get(Settings.CLIENT_DETAILED, Boolean.class);
     }
 
     @Override
@@ -246,14 +250,12 @@ public class CommandPokemon extends Command
 
     private MessageEmbed.Field getField(Pokemon p)
     {
-        boolean detailed = this.playerData.getSettings().get(Settings.CLIENT_DETAILED, Boolean.class);
-
         return new MessageEmbed.Field(p.getDisplayName(),
                 this.getCategoryFlags(p) + "\n" +
                 "Number: " + p.getNumber() + " | " +
                 "Level: " + p.getLevel() + "\n" +
-                (detailed ? "IV: " + p.getTotalIV() + "\n" : "") +
-                (detailed ? "EV: " + p.getEVTotal() + "\n" : ""),
+                (this.detailed ? "IV: " + p.getTotalIV() + "\n" : "") +
+                (this.detailed ? "EV: " + p.getEVTotal() + "\n" : ""),
                 true);
     }
 
@@ -275,14 +277,27 @@ public class CommandPokemon extends Command
 
     private String getLine(Pokemon p)
     {
-        return "**" + p.getDisplayName() + "** " +
-                (p.isShiny() ? ":star2: " : "") +
-                (p.isMastered() ? ":trophy: " : "") +
-                (this.team.contains(p.getUUID()) ? ":regional_indicator_t: " : "") +
-                (this.favorites.contains(p.getUUID()) ? ":regional_indicator_f: " : "") +
-                "| Number: " + p.getNumber() +
-                " | Level " + p.getLevel() +
-                (this.playerData.getSettings().get(Settings.CLIENT_DETAILED, Boolean.class) ? " | IV: " + p.getTotalIV() : "") +
-                "\n";
+        return Stream.of(
+                "**" + p.getDisplayName() + "** " + this.getTags(p),
+                "Number: " + p.getNumber(),
+                "Level " + p.getLevel(),
+                this.detailed ? "IV: " + p.getTotalIV() : "",
+                this.detailed ? "EV: " + p.getEVTotal() : ""
+        ).filter(String::isEmpty).collect(Collectors.joining(" | "));
+    }
+
+    private String getTags(Pokemon p)
+    {
+        List<String> tags = new ArrayList<>();
+
+        if(p.isShiny()) tags.add(":star2:");
+
+        if(p.isMastered()) tags.add(":trophy:");
+
+        if(this.team.contains(p.getUUID())) tags.add(":regional_indicator_t:");
+
+        if(this.favorites.contains(p.getUUID())) tags.add(":regional_indicator_f:");
+
+        return String.join(" ", tags);
     }
 }
