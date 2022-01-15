@@ -196,4 +196,12 @@ public class FireMoves
                 .addRecoilEffect(1 / 2D)
                 .execute();
     }
+
+    public String SacredFire(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.BURNED, 50)
+                .execute();
+    }
 }
