@@ -283,4 +283,38 @@ public class FightingMoves
                 .addConsecutiveDamageEffect(10, 20, 30)
                 .execute();
     }
+
+    public String DrainPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addDamageHealEffect(1 / 2D)
+                .execute();
+    }
+
+    public String LowSweep(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPD, -1, 100, false)
+                .execute();
+    }
+
+    public String CircleThrow(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        //TODO: Opponent switches, wild Pokemon runs
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
+    }
+
+    public String FinalGambit(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int amount = user.getHealth();
+        user.damage(amount);
+
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFixedDamageEffect(amount)
+                .execute();
+    }
 }
