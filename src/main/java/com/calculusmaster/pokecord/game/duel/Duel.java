@@ -972,33 +972,32 @@ public class Duel
         switch(this.weather)
         {
             case HAIL -> {
-                if(this.isAffectedByHail(0))
-                {
-                    this.players[0].active.damage(this.players[0].active.getStat(Stat.HP) / 16);
-                    weatherResult.append(this.players[0].active.getName()).append(" took damage from the hailstorm!\n");
-                }
-                if(this.isAffectedByHail(1))
-                {
-                    this.players[1].active.damage(this.players[1].active.getStat(Stat.HP) / 16);
-                    weatherResult.append(this.players[1].active.getName()).append(" took damage from the hailstorm!\n");
-                }
+                if(this.isAffectedByHail(0)) this.doHailEffect(weatherResult, 0);
 
+                if(this.isAffectedByHail(1)) this.doHailEffect(weatherResult, 1);
             }
             case SANDSTORM -> {
-                if(this.isAffectedBySandstorm(0))
-                {
-                    this.players[0].active.damage(this.players[0].active.getStat(Stat.HP) / 16);
-                    weatherResult.append(this.players[0].active.getName()).append(" took damage from the sandstorm!\n");
-                }
-                if(this.isAffectedBySandstorm(1))
-                {
-                    this.players[1].active.damage(this.players[1].active.getStat(Stat.HP) / 16);
-                    weatherResult.append(this.players[1].active.getName()).append(" took damage from the sandstorm!\n");
-                }
+                if(this.isAffectedBySandstorm(0)) this.doSandstormEffect(weatherResult, 0);
+
+                if(this.isAffectedBySandstorm(1)) this.doSandstormEffect(weatherResult, 1);
             }
         }
 
         this.results.add("\n" + weatherResult);
+    }
+
+    private void doHailEffect(StringBuilder weatherResult, int p)
+    {
+        int amount = this.players[p].active.getMaxHealth() / 16;
+        this.players[p].active.damage(amount);
+        weatherResult.append(this.players[p].active.getName()).append(" took %s damage from the hailstorm!\n".formatted(amount));
+    }
+
+    private void doSandstormEffect(StringBuilder weatherResult, int p)
+    {
+        int amount = this.players[p].active.getMaxHealth() / 16;
+        this.players[p].active.damage(amount);
+        weatherResult.append(this.players[p].active.getName()).append(" took %s damage from the sandstorm!\n".formatted(amount));
     }
 
     private boolean isAffectedByHail(int p)
