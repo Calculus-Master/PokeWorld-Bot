@@ -317,4 +317,12 @@ public class FightingMoves
                 .addFixedDamageEffect(amount)
                 .execute();
     }
+
+    public String Octolock(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(opponent.getUUID()).canSwap = false;
+        duel.data(opponent.getUUID()).isOctolocked = true;
+
+        return opponent.getName() + " is locked!";
+    }
 }

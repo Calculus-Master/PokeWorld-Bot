@@ -95,6 +95,7 @@ public class DuelHelper
         public boolean meteorBeamUsed;
         public boolean solarBeamUsed;
         public boolean isTarShotTarget;
+        public boolean isOctolocked;
 
         public boolean disguiseActivated;
 
@@ -159,6 +160,7 @@ public class DuelHelper
             this.electrifyUsed = false;
             this.wishUsed = false;
             this.waterSportUsed = false;
+            this.isOctolocked = false;
 
             this.disguiseActivated = false;
         }

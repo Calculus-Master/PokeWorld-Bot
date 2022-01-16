@@ -611,6 +611,14 @@ public class Duel
 
         if(this.data(this.other).isTarShotTarget && move.getType().equals(Type.FIRE)) move.setPower(2.0);
 
+        if(this.data(this.current).isOctolocked)
+        {
+            this.players[this.current].active.changes().change(Stat.DEF, -1);
+            this.players[this.current].active.changes().change(Stat.SPDEF, -1);
+
+            this.results.add(this.players[this.current].active.getName() + " is locked! It's Defense and Special Defense were lowered.");
+        }
+
         //Fly, Bounce, Dig and Dive
 
         if(this.data(this.current).flyUsed) move = new Move("Fly");
