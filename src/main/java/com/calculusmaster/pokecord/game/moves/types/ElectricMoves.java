@@ -216,4 +216,28 @@ public class ElectricMoves
 
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
+
+    public String WildCharge(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addRecoilEffect(1 / 4D)
+                .execute();
+    }
+
+    public String EerieImpulse(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.SPATK, -2, 100, false)
+                .execute();
+    }
+
+    public String RisingVoltage(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.terrain.equals(Terrain.ELECRIC_TERRAIN)) move.setPower(2.0);
+
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
+    }
 }

@@ -10,6 +10,8 @@ import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
+import java.util.Arrays;
+
 public class FireMoves
 {
     public String Ember(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -202,6 +204,69 @@ public class FireMoves
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addDamageEffect()
                 .addStatusEffect(StatusCondition.BURNED, 50)
+                .execute();
+    }
+
+    public String FlameCharge(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPD, 1, 100, true)
+                .execute();
+    }
+
+    public String Incinerate(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        //TODO: Deletes opponent's berry
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
+    }
+
+    public String FirePledge(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        //TODO: Deals extra damage (160 base power) if teammate (2v2/3v3) uses Water/Grass Pledge
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
+    }
+
+    public String HeatCrash(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        double r = user.getWeight() / opponent.getWeight();
+
+        if(r >= 5) move.setPower(120);
+        else if(r >= 4) move.setPower(100);
+        else if(r >= 3) move.setPower(80);
+        else if(r >= 2) move.setPower(60);
+        else move.setPower(40);
+
+
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
+    }
+
+    public String SearingShot(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.BURNED, 30)
+                .execute();
+    }
+
+    public String BurningJealousy(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        String burned = "";
+
+        if(Arrays.stream(Stat.values()).anyMatch(s -> opponent.changes().get(s) > 0))
+        {
+            opponent.addStatusCondition(StatusCondition.BURNED);
+            burned = opponent.getName() + " was burned! ";
+        }
+
+        return burned + MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
                 .execute();
     }
 }
