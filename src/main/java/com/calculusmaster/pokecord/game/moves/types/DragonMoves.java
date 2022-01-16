@@ -8,6 +8,8 @@ import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
+import java.util.Arrays;
+
 public class DragonMoves
 {
     public String DragonClaw(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -138,5 +140,25 @@ public class DragonMoves
     public String DragonHammer(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+    }
+
+    public String ClangorousSoul(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(Arrays.stream(Stat.values()).allMatch(s -> user.changes().get(s) == 6) || user.getHealth() < user.getMaxHealth() / 3) return move.getNoEffectResult(opponent);
+        else
+        {
+            Arrays.stream(Stat.values()).forEach(s -> user.changes().change(s, 1));
+
+            //TODO: Add a MoveEffectBuilder effect for self-damage
+            int damage = user.getMaxHealth() / 3;
+            user.damage(damage);
+
+            return "All of " + user.getName() + "'s Stats were boosted by 1 stage! " + user.getName() + " lost " + damage + " HP!";
+        }
+    }
+
+    public String BreakingSwipe(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.ATK, -1, 100, false);
     }
 }
