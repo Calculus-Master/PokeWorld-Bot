@@ -633,16 +633,17 @@ public class Duel
         List<String> defensiveMoves = Arrays.asList("Endure", "Protect", "Detect", "Wide Guard", "Quick Guard", "Spiky Shield", "Kings Shield", "Baneful Bunker");
 
         //TODO: Lowered Accuracy of Defensive Moves
+        if(defensiveMoves.contains(move.getName()) && !move.getName().equals("Quick Guard"))
+        {
+            List<String> log = this.movesUsed.get(this.players[this.current].active.getUUID());
 
-//        if(defensiveMoves.contains(move.getName()))
-//        {
-//            int i = this.turn - 1;
-//            while(this.moveLog.containsKey(i) && defensiveMoves.contains(this.moveLog.get(i)[this.current]) && (!move.getName().equals("Quick Guard") || !this.moveLog.get(i)[this.current].equals("Quick Guard")))
-//            {
-//                move.setAccuracy(move.getAccuracy() / 3);
-//                i--;
-//            }
-//        }
+            int i = this.turn - 1;
+            while(log.get(i).equals(move.getName()) && !log.get(i).equals("Quick Guard"))
+            {
+                move.setAccuracy(move.getAccuracy() / 3);
+                i--;
+            }
+        }
 
         //Item-based Buffs
         boolean itemsOff = this.room.equals(Room.MAGIC_ROOM);
