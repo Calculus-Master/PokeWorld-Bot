@@ -619,6 +619,23 @@ public class Duel
             this.results.add(this.players[this.current].active.getName() + " is locked! It's Defense and Special Defense were lowered.");
         }
 
+        if(this.data(this.current).unableToUseSoundMoves)
+        {
+            this.data(this.current).unableToUseSoundMovesTurns--;
+
+            List<String> soundMoves = List.of("Boomburst", "Bug Buzz", "Chatter", "Clanging Scales", "Clangorous Soul", "Clangorous Soulblaze", "Confide", "Disarming Voice", "Echoed Voice", "Eerie Spell", "Grass Whistle", "Growl", "Heal Bell", "Howl", "Hyper Voice", "Metal Sound", "Noble Roar", "Overdrive", "Parting Shot", "Perish Song", "Relic Song", "Roar", "Round", "Screech", "Shadow Panic", "Sing", "Snarl", "Snore", "Sparkling Aria", "Supersonic", "Uproar");
+
+            if(soundMoves.contains(move.getName())) cantUse = true;
+
+            if(this.data(this.current).unableToUseSoundMovesTurns <= 0)
+            {
+                this.data(this.current).unableToUseSoundMoves = false;
+                this.data(this.current).unableToUseSoundMovesTurns = 0;
+
+                this.results.add(this.players[this.current].active.getName() + " is able to use Sound-based Moves again.");
+            }
+        }
+
         //Fly, Bounce, Dig and Dive
 
         if(this.data(this.current).flyUsed) move = new Move("Fly");

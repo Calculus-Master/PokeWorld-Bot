@@ -96,6 +96,8 @@ public class DuelHelper
         public boolean solarBeamUsed;
         public boolean isTarShotTarget;
         public boolean isOctolocked;
+        public boolean unableToUseSoundMoves;
+        public int unableToUseSoundMovesTurns;
 
         public boolean disguiseActivated;
 
@@ -161,6 +163,8 @@ public class DuelHelper
             this.wishUsed = false;
             this.waterSportUsed = false;
             this.isOctolocked = false;
+            this.unableToUseSoundMoves = false;
+            this.unableToUseSoundMovesTurns = 0;
 
             this.disguiseActivated = false;
         }

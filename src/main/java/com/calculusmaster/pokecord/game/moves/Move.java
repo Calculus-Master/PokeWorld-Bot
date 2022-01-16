@@ -317,6 +317,9 @@ public class Move
         //Body Press
         if(this.name.equals("Body Press")) atkStat = user.getStat(Stat.DEF);
 
+        //Foul Play
+        if(this.name.equals("Foul Play")) atkStat = opponent.getStat(Stat.ATK);
+
         //Ability: Adaptability
         if(stab == 1.5 && user.getAbilities().contains("Adaptability")) stab = 2.0;
 

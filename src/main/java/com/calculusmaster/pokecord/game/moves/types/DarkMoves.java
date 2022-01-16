@@ -229,4 +229,61 @@ public class DarkMoves
     {
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
+
+    public String Thief(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        String stolenItem = "";
+
+        if(!user.hasItem() && opponent.hasItem())
+        {
+            Item item = opponent.getItem();
+            user.setItem(item);
+            opponent.removeItem();
+
+            stolenItem = user.getName() + " stole " + opponent.getName() + "'s " + item.getStyledName() + "! ";
+        }
+
+        return stolenItem + MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+    }
+
+    public String HoneClaws(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.ATK, 1, 100, true)
+                .addAccuracyChangeEffect(1, 100, true)
+                .execute();
+    }
+
+    public String FoulPlay(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return user.getName() + " is using " + opponent.getName() + "'s Attack power! " + MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+    }
+
+    public String BrutalSwing(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+    }
+
+    public String Snarl(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPATK, -1, 100, false);
+    }
+
+    public String PartingShot(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        //TODO: User switches out of battle
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.ATK, -1, 100, false)
+                        .add(Stat.SPATK, -1))
+                .execute();
+    }
+
+    public String ThroatChop(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(opponent.getUUID()).unableToUseSoundMoves = true;
+        duel.data(opponent.getUUID()).unableToUseSoundMovesTurns = 2;
+
+        return opponent.getName() + " cannot use Sound-based Moves for 2 turns! " + MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+    }
 }
