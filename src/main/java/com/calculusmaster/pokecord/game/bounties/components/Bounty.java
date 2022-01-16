@@ -96,6 +96,16 @@ public class Bounty
         this.objective.update();
     }
 
+    public void updateIf(boolean update)
+    {
+        this.updateIf(update, 1);
+    }
+
+    public void updateIf(boolean update, int amount)
+    {
+        if(update) this.update(amount);
+    }
+
     public void update(int amount)
     {
         for(int i = 0; i < amount; i++) this.update();

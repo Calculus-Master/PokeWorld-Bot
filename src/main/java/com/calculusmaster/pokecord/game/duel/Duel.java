@@ -780,12 +780,8 @@ public class Duel
                 this.players[this.current].data.updateBountyProgression(b -> {
                     switch(b.getType()) {
                         case DAMAGE_POKEMON -> b.update(damageDealt);
-                        case DAMAGE_POKEMON_TYPE -> {
-                            if(this.players[this.other].active.isType(b.getObjective().asTypeObjective().getType())) b.update(damageDealt);
-                        }
-                        case DAMAGE_POKEMON_CATEGORY -> {
-                            if(b.getObjective().asCategoryObjective().getCategory().equals(m.getCategory())) b.update(damageDealt);
-                        }
+                        case DAMAGE_POKEMON_TYPE -> b.updateIf(this.players[this.other].active.isType(b.getObjective().asTypeObjective().getType()), damageDealt);
+                        case DAMAGE_POKEMON_CATEGORY -> b.updateIf(b.getObjective().asCategoryObjective().getCategory().equals(m.getCategory()), damageDealt);
                     }
                 });
             }
@@ -796,45 +792,19 @@ public class Duel
                 this.players[this.current].data.updateBountyProgression(b -> {
                     switch(b.getType()) {
                         case USE_MOVES -> b.update();
-                        case USE_MOVES_TYPE -> {
-                            if(b.getObjective().asTypeObjective().getType().equals(m.getType())) b.update();
-                        }
-                        case USE_MOVES_CATEGORY -> {
-                            if(b.getObjective().asCategoryObjective().getCategory().equals(m.getCategory())) b.update();
-                        }
-                        case USE_MOVES_NAME -> {
-                            if(b.getObjective().asNameObjective().getName().equals(m.getName())) b.update();
-                        }
-                        case USE_MOVES_POOL -> {
-                            if(b.getObjective().asPoolObjective().getPool().contains(m.getName())) b.update();
-                        }
-                        case USE_MOVES_POWER_LESS -> {
-                            if(m.getPower() < b.getObjective().asPowerObjective().getPower()) b.update();
-                        }
-                        case USE_MOVES_POWER_GREATER -> {
-                            if(m.getPower() > b.getObjective().asPowerObjective().getPower()) b.update();
-                        }
-                        case USE_MOVES_ACCURACY_LESS -> {
-                            if(m.getAccuracy() < b.getObjective().asAccuracyObjective().getAccuracy()) b.update();
-                        }
-                        case USE_MOVES_PRIORITY_HIGH -> {
-                            if(m.getPriority() > 0) b.update();
-                        }
-                        case USE_MOVES_PRIORITY_LOW -> {
-                            if(m.getPriority() < 0) b.update();
-                        }
-                        case USE_ZMOVE -> {
-                            if(m.isZMove) b.update();
-                        }
-                        case USE_ZMOVE_TYPE -> {
-                            if(m.isZMove && b.getObjective().asTypeObjective().getType().equals(m.getType())) b.update();
-                        }
-                        case USE_MAX_MOVE -> {
-                            if(m.isMaxMove) b.update();
-                        }
-                        case USE_MAX_MOVE_TYPE -> {
-                            if(m.isMaxMove && b.getObjective().asTypeObjective().getType().equals(m.getType())) b.update();
-                        }
+                        case USE_MOVES_TYPE -> b.updateIf(b.getObjective().asTypeObjective().getType().equals(m.getType()));
+                        case USE_MOVES_CATEGORY -> b.updateIf(b.getObjective().asCategoryObjective().getCategory().equals(m.getCategory()));
+                        case USE_MOVES_NAME -> b.updateIf(b.getObjective().asNameObjective().getName().equals(m.getName()));
+                        case USE_MOVES_POOL -> b.updateIf(b.getObjective().asPoolObjective().getPool().contains(m.getName()));
+                        case USE_MOVES_POWER_LESS -> b.updateIf(m.getPower() < b.getObjective().asPowerObjective().getPower());
+                        case USE_MOVES_POWER_GREATER -> b.updateIf(m.getPower() > b.getObjective().asPowerObjective().getPower());
+                        case USE_MOVES_ACCURACY_LESS -> b.updateIf(m.getAccuracy() < b.getObjective().asAccuracyObjective().getAccuracy());
+                        case USE_MOVES_PRIORITY_HIGH -> b.updateIf(m.getPriority() > 0);
+                        case USE_MOVES_PRIORITY_LOW -> b.updateIf(m.getPriority() < 0);
+                        case USE_ZMOVE -> b.updateIf(m.isZMove);
+                        case USE_ZMOVE_TYPE -> b.updateIf(m.isZMove && b.getObjective().asTypeObjective().getType().equals(m.getType()));
+                        case USE_MAX_MOVE -> b.updateIf(m.isMaxMove);
+                        case USE_MAX_MOVE_TYPE -> b.updateIf(m.isMaxMove && b.getObjective().asTypeObjective().getType().equals(m.getType()));
                     }
                 });
             }
