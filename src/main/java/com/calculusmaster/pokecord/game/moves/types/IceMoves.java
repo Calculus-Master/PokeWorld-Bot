@@ -148,4 +148,11 @@ public class IceMoves
     {
         return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPD, -1, 100, true);
     }
+
+    public String TripleAxel(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addConsecutiveDamageEffect(20, 40, 60)
+                .execute();
+    }
 }

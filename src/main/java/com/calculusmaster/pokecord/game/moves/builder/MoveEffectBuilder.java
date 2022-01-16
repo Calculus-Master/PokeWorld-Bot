@@ -205,6 +205,12 @@ public class MoveEffectBuilder
         return this;
     }
 
+    public MoveEffectBuilder addConsecutiveDamageEffect(int... powers)
+    {
+        this.moveEffects.add(new ConsecutiveDamageEffect(powers));
+        return this;
+    }
+
     public MoveEffectBuilder addCustomEffect(CustomEffect effect)
     {
         this.moveEffects.add(effect);

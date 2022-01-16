@@ -276,4 +276,11 @@ public class FightingMoves
                 .addStatChangeEffect(Stat.ATK, 1, 100, true)
                 .execute();
     }
+
+    public String TripleKick(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addConsecutiveDamageEffect(10, 20, 30)
+                .execute();
+    }
 }
