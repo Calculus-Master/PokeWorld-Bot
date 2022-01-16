@@ -640,7 +640,6 @@ public class Duel
         //Lowered Accuracy of Defensive Moves
         List<String> defensiveMoves = Arrays.asList("Endure", "Protect", "Detect", "Wide Guard", "Quick Guard", "Spiky Shield", "Kings Shield", "Baneful Bunker");
 
-        //TODO: Lowered Accuracy of Defensive Moves
         if(defensiveMoves.contains(move.getName()) && !move.getName().equals("Quick Guard"))
         {
             List<String> log = this.movesUsed.get(this.players[this.current].active.getUUID());
