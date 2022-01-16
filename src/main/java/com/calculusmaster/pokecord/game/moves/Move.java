@@ -430,7 +430,7 @@ public class Move
 
     public void setPower(double p)
     {
-        this.power = (int)(p);
+        this.power = (int)(p * this.power);
     }
 
     public int getAccuracy()
