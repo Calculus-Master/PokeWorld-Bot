@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Terrain;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -74,7 +75,16 @@ public class GrassMoves
 
     public String SolarBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        if(user.getItem().equals(Item.POWER_HERB) || duel.data(user.getUUID()).solarBeamUsed)
+        {
+            duel.data(user.getUUID()).solarBeamUsed = false;
+            return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        }
+        else
+        {
+            duel.data(user.getUUID()).solarBeamUsed = true;
+            return user.getName() + " is absorbing light!";
+        }
     }
 
     public String PetalBlizzard(Pokemon user, Pokemon opponent, Duel duel, Move move)

@@ -635,6 +635,8 @@ public class Duel
 
         if(this.data(this.current).meteorBeamUsed) move = new Move("Meteor Beam");
 
+        if(this.data(this.current).solarBeamUsed) move = new Move("Solar Beam");
+
         //Lowered Accuracy of Defensive Moves
         List<String> defensiveMoves = Arrays.asList("Endure", "Protect", "Detect", "Wide Guard", "Quick Guard", "Spiky Shield", "Kings Shield", "Baneful Bunker");
 
