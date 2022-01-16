@@ -8,7 +8,6 @@ import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.elements.Weather;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.MoveData;
-import com.calculusmaster.pokecord.game.moves.builder.CustomEffect;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -161,13 +160,9 @@ public class NormalMoves
     public String Protect(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.make(user, opponent, duel, move)
-                .addCustomEffect(new CustomEffect() {
-                    @Override
-                    public String get() {
-                        this.duel.data(user.getUUID()).protectUsed = true;
-
-                        return user.getName() + " is now protected!";
-                    }
+                .addCustomEffect(() -> {
+                    duel.data(user.getUUID()).protectUsed = true;
+                    return user.getName() + " is now protected!";
                 })
                 .execute();
     }

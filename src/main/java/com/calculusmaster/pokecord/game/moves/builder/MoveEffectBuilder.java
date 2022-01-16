@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class MoveEffectBuilder
 {
@@ -211,9 +212,9 @@ public class MoveEffectBuilder
         return this;
     }
 
-    public MoveEffectBuilder addCustomEffect(CustomEffect effect)
+    public MoveEffectBuilder addCustomEffect(Supplier<String> effect)
     {
-        this.moveEffects.add(effect);
+        this.moveEffects.add(new CustomEffect(effect));
         return this;
     }
 
