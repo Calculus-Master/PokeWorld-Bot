@@ -187,6 +187,9 @@ public class Duel
         int speed1 = this.players[0].active.getStat(Stat.SPD);
         int speed2 = this.players[1].active.getStat(Stat.SPD);
 
+        if(this.terrain.equals(Terrain.GRASSY_TERRAIN) && this.players[0].move.getName().equals("Grassy Glide")) this.players[0].move.setPriority(1);
+        if(this.terrain.equals(Terrain.GRASSY_TERRAIN) && this.players[1].move.getName().equals("Grassy Glide")) this.players[1].move.setPriority(1);
+
         if(this.players[0].move.getPriority() == this.players[1].move.getPriority())
         {
             this.current = speed1 == speed2 ? (new Random().nextInt(100) < 50 ? 0 : 1) : (speed1 > speed2 ? 0 : 1);

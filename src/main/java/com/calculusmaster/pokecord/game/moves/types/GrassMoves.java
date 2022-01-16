@@ -323,4 +323,52 @@ public class GrassMoves
                 .addStatChangeEffect(Stat.SPDEF, -2, 40, false)
                 .execute();
     }
+
+    public String CottonSpore(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.SPD, -2, 100, false)
+                .execute();
+    }
+
+    public String GrassPledge(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        //TODO: Pledge moves (See Fire Pledge)
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
+    }
+
+    public String LeafTornado(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addAccuracyChangeEffect(-1, 30, false)
+                .execute();
+    }
+
+    public String DrumBeating(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPD, -1, 100, false)
+                .execute();
+    }
+
+    public String GrassyGlide(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
+    }
+
+    public String JungleHealing(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        //TODO: Non-volatile Status Conditions
+        user.clearStatusConditions();
+
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFractionHealEffect(1 / 4D)
+                .execute();
+    }
 }
