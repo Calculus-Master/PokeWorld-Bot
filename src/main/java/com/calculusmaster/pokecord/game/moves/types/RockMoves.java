@@ -113,4 +113,34 @@ public class RockMoves
     {
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
+
+    public String MeteorBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.data(user.getUUID()).meteorBeamUsed)
+        {
+            duel.data(user.getUUID()).meteorBeamUsed = false;
+            return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        }
+        else
+        {
+            duel.data(user.getUUID()).meteorBeamUsed = true;
+            return user.getName() + " is charging up!";
+        }
+    }
+
+    public String TarShot(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(opponent.getUUID()).isTarShotTarget = true;
+
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.SPD, -1, 100, false)
+                .execute();
+    }
+
+    public String RockPolish(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.SPD, 2, 100, true)
+                .execute();
+    }
 }

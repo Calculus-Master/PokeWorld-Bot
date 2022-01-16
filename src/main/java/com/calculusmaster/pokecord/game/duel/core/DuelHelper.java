@@ -92,6 +92,8 @@ public class DuelHelper
         public boolean electrifyUsed;
         public boolean wishUsed;
         public boolean waterSportUsed;
+        public boolean meteorBeamUsed;
+        public boolean isTarShotTarget;
 
         public boolean disguiseActivated;
 

@@ -606,6 +606,8 @@ public class Duel
             otherImmune = false;
         }
 
+        if(this.data(this.other).isTarShotTarget && move.getType().equals(Type.FIRE)) move.setPower(2.0);
+
         //Fly, Bounce, Dig and Dive
 
         if(this.data(this.current).flyUsed) move = new Move("Fly");
@@ -628,6 +630,10 @@ public class Duel
         {
             otherImmune = true;
         }
+
+        //Two-Turn Charge Moves
+
+        if(this.data(this.current).meteorBeamUsed) move = new Move("Meteor Beam");
 
         //Lowered Accuracy of Defensive Moves
         List<String> defensiveMoves = Arrays.asList("Endure", "Protect", "Detect", "Wide Guard", "Quick Guard", "Spiky Shield", "Kings Shield", "Baneful Bunker");
