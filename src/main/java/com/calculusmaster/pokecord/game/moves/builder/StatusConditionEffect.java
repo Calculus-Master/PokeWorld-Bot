@@ -56,17 +56,17 @@ public class StatusConditionEffect extends MoveEffect
             }
 
             return p.getName() + " " + switch(this.status) {
-                case BURNED -> "is burned!";
-                case FROZEN -> "is frozen!";
-                case PARALYZED -> "is paralyzed!";
-                case ASLEEP -> "is asleep!";
-                case CONFUSED -> "is confused!";
-                case POISONED -> "is poisoned!";
+                case BURNED -> "is now burned!";
+                case FROZEN -> "is now frozen!";
+                case PARALYZED -> "is now paralyzed!";
+                case ASLEEP -> "is now asleep!";
+                case CONFUSED -> "is now confused!";
+                case POISONED -> "is now poisoned!";
                 case FLINCHED -> "flinched!";
-                case CURSED -> "is cursed!";
+                case CURSED -> "is now cursed!";
                 case NIGHTMARE -> "has been afflicted with a Nightmare!";
-                case BOUND -> "is bound!";
-                case BADLY_POISONED -> "is badly poisoned!";
+                case BOUND -> "is now bound!";
+                case BADLY_POISONED -> "is now badly poisoned!";
             };
         }
         else return "";
