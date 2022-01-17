@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.duel.extension.RaidDuel;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
@@ -19,7 +20,7 @@ public class CommandMoves extends Command
 {
     public CommandMoves(MessageReceivedEvent event, String[] msg)
     {
-        super(event, msg);
+        super(event, msg, true);
     }
 
     @Override
@@ -58,7 +59,7 @@ public class CommandMoves extends Command
             StringBuilder type = new StringBuilder();
             for(Type t : typeMoves.keySet())
             {
-                String mL = typeMoves.get(t).stream().map(Move::getName).collect(Collectors.toList()).toString();
+                String mL = typeMoves.get(t).stream().map(Move::getName).toList().toString();
                 type.append(Global.normalize(t.toString())).append(" - ").append(mL, 1, mL.length() - 1).append("\n");
             }
             type.deleteCharAt(type.length() - 1);
@@ -115,6 +116,18 @@ public class CommandMoves extends Command
 
                     movesList.append("\n");
                 }
+
+                movesList.append("\nDynamax: ");
+
+                if(this.serverData.isDynamaxEnabled()) movesList.append(d.getPlayers()[current].usedDynamax ? "Already Used!" : "Available!");
+                else movesList.append("Disabled in this Server!");
+
+                ZCrystal z = ZCrystal.cast(this.playerData.getEquippedZCrystal());
+                movesList.append("\nZ-Crystal: ").append(z == null ? "None" : z.getStyledName()).append(" – ");
+
+                if(z == null) movesList.append("*Equip a Z-Crystal to be able to use it in Duels!*");
+                else if(this.serverData.areZMovesEnabled()) movesList.append(d.getPlayers()[current].usedZMove ? "Already Used!" : "Available!");
+                else movesList.append("Disabled in this Server!");
             }
 
             if(!inDuel)
