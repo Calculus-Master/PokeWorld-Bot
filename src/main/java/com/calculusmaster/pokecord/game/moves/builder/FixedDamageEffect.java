@@ -35,6 +35,8 @@ public class FixedDamageEffect extends MoveEffect
             this.duel.data(this.opponent.getUUID()).endureUsed = false;
         }
 
+        if(this.opponent.getHealth() <= 0 && this.move.getName().equals("Hold Back")) this.opponent.setHealth(1);
+
         this.duel.data(this.opponent.getUUID()).lastDamageTaken = this.damage;
 
         return this.move.getDamageResult(this.opponent, this.damage);

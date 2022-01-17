@@ -289,6 +289,20 @@ public class Duel
             if(!this.terrain.equals(Terrain.NORMAL_TERRAIN) && !this.data(this.current).isRaised) move.setPower(2.0);
         }
 
+        //Weather Ball
+        if(move.getName().equals("Weather Ball"))
+        {
+            move.setType(switch(this.weather) {
+                case RAIN, HEAVY_RAIN -> Type.WATER;
+                case HARSH_SUNLIGHT -> Type.FIRE;
+                case SANDSTORM -> Type.ROCK;
+                case HAIL -> Type.ICE;
+                default -> Type.NORMAL;
+            });
+
+            if(!this.weather.equals(Weather.CLEAR)) move.setPower(2.0);
+        }
+
         //Weather-based Move Changes
         this.moveWeatherEffects(move);
 

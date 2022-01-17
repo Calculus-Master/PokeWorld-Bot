@@ -1030,4 +1030,83 @@ public class NormalMoves
     {
         return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.BOUND, 100);
     }
+
+    public String Flash(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addAccuracyChangeEffect(-1, 100, false)
+                .execute();
+    }
+
+    public String HealBell(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCustomEffect(() -> {
+                    duel.getPlayers()[duel.playerIndexFromUUID(user.getUUID())].team.forEach(Pokemon::clearStatusConditions);
+                    return user.getName() + " healed all of its team's Status Conditions!";
+                })
+                .execute();
+    }
+
+    public String RockClimb(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.CONFUSED, 20)
+                .execute();
+    }
+
+    public String EggBomb(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
+    }
+
+    public String WeatherBall(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
+    }
+
+    public String CrushClaw(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.DEF, -1, 50, false)
+                .execute();
+    }
+
+    public String ReflectType(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCustomEffect(() -> {
+                    user.setType(opponent.getType());
+                    return user.getName() + " copied " + opponent.getName() + "'s Types!";
+                })
+                .execute();
+    }
+
+    public String TeeterDance(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.CONFUSED)
+                .execute();
+    }
+
+    public String HoldBack(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
+    }
+
+    public String Celebrate(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        //TODO: Some custom effect?
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCustomEffect(() -> user.getName() + " celebrates!")
+                .execute();
+    }
 }

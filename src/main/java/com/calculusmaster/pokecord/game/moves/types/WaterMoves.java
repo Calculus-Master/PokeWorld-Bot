@@ -202,4 +202,59 @@ public class WaterMoves
 
         return "Fire Type moves now have 50% less power!";
     }
+
+    public String Waterfall(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.FLINCHED, 20)
+                .execute();
+    }
+
+    public String Crabhammer(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .execute();
+    }
+
+    public String Liquidation(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.DEF, -1, 20, false)
+                .execute();
+    }
+
+    public String Brine(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCustomRunnableEffect(() -> move.setPower(opponent.getHealth() < opponent.getMaxHealth() / 2 ? 2.0 : 1.0))
+                .addDamageEffect()
+                .execute();
+    }
+
+    public String RazorShell(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.DEF, -1, 50, false)
+                .execute();
+    }
+
+    public String SteamEruption(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.BURNED, 30)
+                .execute();
+    }
+
+    public String WaterPledge(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        //TODO: Deals extra damage (160 base power) if teammate (2v2/3v3) uses Water/Grass Pledge
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
+    }
 }

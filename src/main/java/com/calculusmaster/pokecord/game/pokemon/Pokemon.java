@@ -505,7 +505,13 @@ public class Pokemon
     //Replaces all types with the parameter
     public void setType(Type t)
     {
-        this.type = new ArrayList<>(List.of(t));
+        this.setType(List.of(t));
+    }
+
+    //Replaces all types with the parameter types
+    public void setType(List<Type> t)
+    {
+        this.type = new ArrayList<>(t);
     }
 
     //Adds a third typing to the Pokemon (Forest's Curse and Trick-or-Treat)

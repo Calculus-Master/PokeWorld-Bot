@@ -218,6 +218,14 @@ public class MoveEffectBuilder
         return this;
     }
 
+    public MoveEffectBuilder addCustomRunnableEffect(Runnable effect)
+    {
+        return this.addCustomEffect(() -> {
+            effect.run();
+            return "";
+        });
+    }
+
     public String execute()
     {
         //Initialization
