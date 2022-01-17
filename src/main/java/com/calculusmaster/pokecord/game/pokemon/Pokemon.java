@@ -9,8 +9,10 @@ import com.calculusmaster.pokecord.game.pokemon.component.PokemonBoosts;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonDuelStatChanges;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
+import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.cache.PlayerDataCache;
 import com.calculusmaster.pokecord.util.cache.PokemonDataCache;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
@@ -141,6 +143,19 @@ public class Pokemon
         }
 
         return cache == null ? null : Pokemon.build(PokemonDataCache.getCache(UUID), number);
+    }
+
+    //Querying for the Player Owner of this Pokemon; if no owner (AI Pokemon), returns null
+    public PlayerDataQuery getOwner()
+    {
+        String poke = "{Name: %s, UUID: %s}".formatted(this.name, this.UUID);
+        LoggerHelper.info(Pokemon.class, "Searching for Player Owner of " + poke);
+
+        PlayerDataQuery out =  PlayerDataCache.CACHE.values().stream().map(PlayerDataCache::data).filter(data -> data.getPokemonList().contains(this.getUUID())).findFirst().orElse(null);
+
+        if(out == null) LoggerHelper.warn(Pokemon.class, "Unable to find Player Owner of " + poke);
+
+        return out;
     }
 
     //Database
