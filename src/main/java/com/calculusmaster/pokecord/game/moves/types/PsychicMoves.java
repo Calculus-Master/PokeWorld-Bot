@@ -1,10 +1,8 @@
 package com.calculusmaster.pokecord.game.moves.types;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
-import com.calculusmaster.pokecord.game.enums.elements.Room;
-import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
-import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.enums.elements.*;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
@@ -343,5 +341,46 @@ public class PsychicMoves
     public String Synchronoise(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return user.getType().stream().anyMatch(opponent::isType) ? MoveEffectBuilder.defaultDamage(user, opponent, duel, move) : move.getNoEffectResult(opponent);
+    }
+
+    public String Trick(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        Item temp = user.getItem();
+
+        user.setItem(opponent.getItem());
+        opponent.setItem(temp);
+
+        return user.getName() + " swapped items with " + opponent.getName() + "!";
+    }
+
+    public String HeartDance(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.FLINCHED, 30)
+                .execute();
+    }
+
+    public String PsychicTerrain(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addTerrainEffect(Terrain.PSYCHIC_TERRAIN)
+                .execute();
+    }
+
+    public String EerieSpell(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        //TODO: Lowers target's last used move PP by 3
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
+    }
+
+    public String ExpandingForce(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.terrain.equals(Terrain.PSYCHIC_TERRAIN) && !duel.data(user.getUUID()).isRaised) move.setPower(1.5);
+
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
     }
 }
