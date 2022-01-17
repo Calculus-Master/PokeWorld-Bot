@@ -24,7 +24,9 @@ public class CommandLevel extends Command
             int level = this.playerData.getLevel();
             List<AbstractLevelTask> tasks = MasteryLevelManager.MASTERY_LEVELS.get(level + 1).getTasks();
 
-            this.embed.addField("Level", "You are `Level " + level + "`", false);
+            this.embed
+                    .addField("Level", "You are `Level " + level + "`", false)
+                    .addField("Features", "You recently unlocked the following features:\n" + MasteryLevelManager.MASTERY_LEVELS.get(level).getUnlockedFeaturesOverview(), false);
 
             for(int i = 0; i < tasks.size(); i++)
             {
@@ -38,7 +40,9 @@ public class CommandLevel extends Command
                 this.embed.addField(title, desc + "\n" + overview, true);
             }
 
-            this.embed.setDescription("Complete the tasks listed below to level up to the next Pokemon Mastery Level! Pokemon Mastery Level is a progression system that unlocks new features and gives you rewards!");
+            this.embed.addField("New Features", "Upon reaching Level " + (level + 1) + ", you will unlock:\n" + MasteryLevelManager.MASTERY_LEVELS.get(level + 1).getUnlockedFeaturesOverview(), false);
+
+            this.embed.setDescription("Complete the tasks listed below to proceed to the next Pokemon Mastery Level! Leveling up your PML will unlock new features!");
         }
         else this.embed.setDescription("You have reached the maximum Pokemon Mastery Level!");
 
