@@ -1182,4 +1182,42 @@ public class NormalMoves
     {
         return user.getName() + " splashed around!";
     }
+
+    public String Judgment(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+    }
+
+    public String Howl(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.ATK, 1, 100, true)
+                .execute();
+    }
+
+    public String PainSplit(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int averageHealth = (user.getHealth() + opponent.getHealth()) / 2;
+
+        user.setHealth(averageHealth);
+        opponent.setHealth(averageHealth);
+
+        return user.getName() + " and " + opponent.getName() + " now have " + averageHealth + " HP!";
+    }
+
+    public String Covet(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        String steal = "";
+
+        if(!user.hasItem() && opponent.hasItem())
+        {
+            user.setItem(opponent.getItem());
+            opponent.removeItem();
+            steal = user.getName() + " stole " + opponent.getName() + "'s " + user.getItem().getStyledName() + "! ";
+        }
+
+        return steal + MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
+    }
 }
