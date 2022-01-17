@@ -101,6 +101,7 @@ public class DuelHelper
         public boolean furyCutterUsed;
         public int furyCutterTurns;
         public boolean isCoveredPowder;
+        public int stockpileCount;
 
         public boolean disguiseActivated;
 
@@ -171,6 +172,7 @@ public class DuelHelper
             this.furyCutterUsed = false;
             this.furyCutterTurns = 0;
             this.isCoveredPowder = false;
+            this.stockpileCount = 0;
 
             this.disguiseActivated = false;
         }

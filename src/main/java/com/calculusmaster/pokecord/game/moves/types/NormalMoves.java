@@ -600,16 +600,6 @@ public class NormalMoves
         return "Entry Hazards were swapped!";
     }
 
-    //TODO: Companion Moves
-    public String Stockpile(Pokemon user, Pokemon opponent, Duel duel, Move move)
-    {
-        return MoveEffectBuilder.make(user, opponent, duel, move)
-                .addStatChangeEffect(
-                        new StatChangeEffect(Stat.DEF, 1, 100, true)
-                                .add(Stat.SPDEF, 1))
-                .execute();
-    }
-
     public String Feint(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
@@ -1108,5 +1098,63 @@ public class NormalMoves
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addCustomEffect(() -> user.getName() + " celebrates!")
                 .execute();
+    }
+
+    public String Stockpile(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.data(user.getUUID()).stockpileCount == 3) return user.getName() + " cannot charge up any more power!";
+        else
+        {
+            duel.data(user.getUUID()).stockpileCount++;
+
+            return user.getName() + " is charging up power! " + MoveEffectBuilder.make(user, opponent, duel, move)
+                    .addStatChangeEffect(
+                            new StatChangeEffect(Stat.DEF, 1, 100, true)
+                            .add(Stat.SPDEF, 1))
+                    .execute();
+        }
+    }
+
+    public String SpitUp(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.data(user.getUUID()).stockpileCount == 0) return user.getName() + " has not charged up any power! " + move.getNothingResult();
+        else
+        {
+            int stockpile = duel.data(user.getUUID()).stockpileCount;
+            move.setPower(stockpile * 100);
+
+            duel.data(user.getUUID()).stockpileCount = 0;
+
+            return user.getName() + " unleashed its charged up power! " + MoveEffectBuilder.make(user, opponent, duel, move)
+                    .addDamageEffect()
+                    .addStatChangeEffect(
+                            new StatChangeEffect(Stat.DEF, -stockpile, 100, true)
+                                    .add(Stat.SPDEF, -stockpile))
+                    .execute();
+        }
+    }
+
+    public String Swallow(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.data(user.getUUID()).stockpileCount == 0) return user.getName() + " has not stored up any power! " + move.getNothingResult();
+        else
+        {
+            int stockpile = duel.data(user.getUUID()).stockpileCount;
+            double healFraction = switch(stockpile) {
+                case 1 -> 1 / 4D;
+                case 2 -> 1 / 2D;
+                case 3 -> 1D;
+                default -> 0D;
+            };
+
+            duel.data(user.getUUID()).stockpileCount = 0;
+
+            return user.getName() + " unleashed its charged up power! " + MoveEffectBuilder.make(user, opponent, duel, move)
+                    .addFractionHealEffect(healFraction)
+                    .addStatChangeEffect(
+                            new StatChangeEffect(Stat.DEF, -stockpile, 100, true)
+                                    .add(Stat.SPDEF, -stockpile))
+                    .execute();
+        }
     }
 }
