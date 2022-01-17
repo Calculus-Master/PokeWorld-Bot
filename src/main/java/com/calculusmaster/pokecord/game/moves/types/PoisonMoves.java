@@ -133,4 +133,93 @@ public class PoisonMoves
         }
         else return move.getNoEffectResult(opponent);
     }
+
+    public String Acid(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPDEF, -1, 10, false)
+                .execute();
+    }
+
+    public String Smog(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.POISONED, 40)
+                .execute();
+    }
+
+    public String SludgeBomb(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.POISONED, 30)
+                .execute();
+    }
+
+    public String GunkShot(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.POISONED, 30)
+                .execute();
+    }
+
+    public String SludgeWave(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.POISONED, 10)
+                .execute();
+    }
+
+    public String Coil(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.ATK, 1, 100, true)
+                        .add(Stat.DEF, 1))
+                .addAccuracyChangeEffect(1, 100, true)
+                .execute();
+    }
+
+    public String AcidSpray(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPDEF, -2, 100, false)
+                .execute();
+    }
+
+    public String ClearSmog(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCustomEffect(() -> {
+                    opponent.changes().clear();
+                    return opponent.getName() + "'s Stat changes were removed!";
+                })
+                .execute();
+    }
+
+    public String ToxicThread(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.SPD, -1, 100, false)
+                .addStatusEffect(StatusCondition.POISONED)
+                .execute();
+    }
+
+    public String Purify(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addConditionalCustomEffect(user.hasAnyStatusCondition(), () -> {
+                    int healAmount = user.getMaxHealth() / 2;
+                    user.heal(healAmount);
+                    user.clearStatusConditions();
+                    return user.getName() + " was cleared of its Status Conditions and " + user.getName() + " healed for " + healAmount + " HP!";
+                }, move::getNothingResult)
+                .addStatusEffect(StatusCondition.POISONED)
+                .execute();
+    }
 }

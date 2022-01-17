@@ -226,6 +226,11 @@ public class MoveEffectBuilder
         });
     }
 
+    public MoveEffectBuilder addConditionalCustomEffect(boolean applyEffect, Supplier<String> ifPass, Supplier<String> ifFailed)
+    {
+        return applyEffect ? this.addCustomEffect(ifPass) : this.addCustomEffect(ifFailed);
+    }
+
     public String execute()
     {
         //Initialization
