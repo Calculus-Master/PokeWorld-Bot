@@ -9,6 +9,8 @@ import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
+import java.util.SplittableRandom;
+
 public class BugMoves
 {
     public String SilverWind(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -147,5 +149,81 @@ public class BugMoves
     public String Megahorn(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+    }
+
+    public String StringShot(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.SPD, -2, 100, false)
+                .execute();
+    }
+
+    public String SpiderWeb(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCustomEffect(() -> {
+                    duel.data(opponent.getUUID()).canSwap = false;
+                    return opponent.getName() + " is trapped by the web!";
+                })
+                .execute();
+    }
+
+    public String FuryCutter(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(user.getUUID()).furyCutterUsed = true;
+        duel.data(user.getUUID()).furyCutterTurns++;
+
+        move.setPower(Math.min(40 * duel.data(user.getUUID()).furyCutterTurns, 160));
+
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
+    }
+
+    public String SignalBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.CONFUSED, 10)
+                .execute();
+    }
+
+    public String AttackOrder(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .execute();
+    }
+
+    public String HealOrder(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFractionHealEffect(1 / 2D)
+                .execute();
+    }
+
+    public String SkitterSmack(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPDEF, -1, 100, false)
+                .execute();
+    }
+
+    public String PollenPuff(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addConditionalEffect(new SplittableRandom().nextInt(100) < 50, MoveEffectBuilder::addDamageEffect, b -> b.addFractionHealEffect(1 / 2D))
+                .execute();
+    }
+
+    public String Powder(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.first.equals(opponent.getUUID())) return  move.getNoEffectResult(opponent);
+        else
+        {
+            duel.data(opponent.getUUID()).isCoveredPowder = true;
+
+            return opponent.getName() + " is covered with Powder!";
+        }
     }
 }

@@ -98,6 +98,9 @@ public class DuelHelper
         public boolean isOctolocked;
         public boolean unableToUseSoundMoves;
         public int unableToUseSoundMovesTurns;
+        public boolean furyCutterUsed;
+        public int furyCutterTurns;
+        public boolean isCoveredPowder;
 
         public boolean disguiseActivated;
 
@@ -165,6 +168,9 @@ public class DuelHelper
             this.isOctolocked = false;
             this.unableToUseSoundMoves = false;
             this.unableToUseSoundMovesTurns = 0;
+            this.furyCutterUsed = false;
+            this.furyCutterTurns = 0;
+            this.isCoveredPowder = false;
 
             this.disguiseActivated = false;
         }

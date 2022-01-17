@@ -650,6 +650,18 @@ public class Duel
             }
         }
 
+        if(move.is(Type.FIRE) && this.data(this.current).isCoveredPowder)
+        {
+            this.data(this.current).isCoveredPowder = false;
+
+            int damage = this.players[this.current].active.getMaxHealth() / 4;
+            this.players[this.current].active.damage(damage);
+
+            this.results.add(this.players[this.current].active.getName() + " took " + damage + " from its Powder covering!");
+
+            cantUse = true;
+        }
+
         //Fly, Bounce, Dig and Dive
 
         if(this.data(this.current).flyUsed) move = new Move("Fly");
@@ -738,6 +750,8 @@ public class Duel
             }
         }
 
+        boolean isMoveSuccess = false;
+
         //Bide
         if(this.data(this.current).bideTurns > 0)
         {
@@ -789,6 +803,8 @@ public class Duel
         //Do main move logic
         else
         {
+            isMoveSuccess = true;
+
             int preMoveHP = this.players[this.other].active.getHealth();
 
             turnResult += move.logic(this.players[this.current].active, this.players[this.other].active, this);
@@ -850,6 +866,13 @@ public class Duel
                     }
                 });
             }
+        }
+
+        //Post-Move Updates
+        if(!isMoveSuccess || (this.data(this.current).furyCutterUsed && !move.getName().equals("Fury Cutter")))
+        {
+            this.data(this.current).furyCutterUsed = false;
+            this.data(this.current).furyCutterTurns = 0;
         }
 
         //Update Move Log

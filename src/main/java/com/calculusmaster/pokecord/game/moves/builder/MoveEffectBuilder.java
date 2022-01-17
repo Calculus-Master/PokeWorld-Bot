@@ -238,6 +238,13 @@ public class MoveEffectBuilder
         return this;
     }
 
+    public MoveEffectBuilder addConditionalEffect(boolean condition, Consumer<MoveEffectBuilder> ifTrue, Consumer<MoveEffectBuilder> ifFalse)
+    {
+        if(condition) ifTrue.accept(this);
+        else ifFalse.accept(this);
+        return this;
+    }
+
     public String execute()
     {
         //Initialization
