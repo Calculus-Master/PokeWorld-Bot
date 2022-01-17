@@ -2,12 +2,15 @@ package com.calculusmaster.pokecord.game.moves.types;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
+import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+
+import java.util.List;
 
 public class FlyingMoves
 {
@@ -167,6 +170,48 @@ public class FlyingMoves
     {
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addCritDamageEffect()
+                .execute();
+    }
+
+    public String AirCutter(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .execute();
+    }
+
+    public String Acrobatics(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCustomRunnableEffect(() -> move.setPower(!user.hasItem() ? 2.0 : 1.0))
+                .addDamageEffect()
+                .execute();
+    }
+
+    public String DualWingbeat(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFixedMultiStrikeEffect(2)
+                .execute();
+    }
+
+    public String BeakBlast(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCustomEffect(() -> {
+                    if(duel.first.equals(opponent.getUUID()))
+                    {
+                        List<String> moves = duel.getMovesUsed(opponent.getUUID());
+                        if(new Move(moves.get(moves.size() - 1)).is(Category.PHYSICAL))
+                        {
+                            opponent.addStatusCondition(StatusCondition.BURNED);
+                            return opponent.getName() + " is burned!";
+                        }
+                        else return "";
+                    }
+                    else return "";
+                })
+                .addDamageEffect()
                 .execute();
     }
 }
