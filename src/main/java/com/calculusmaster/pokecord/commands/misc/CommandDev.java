@@ -130,7 +130,7 @@ public class CommandDev extends Command
 
         FileWriter writer = new FileWriter("incomplete_moves.txt");
 
-        Arrays.stream(Type.values()).forEach(t -> {
+        Arrays.stream(Type.values()).filter(t -> incomplete.stream().anyMatch(m -> m.is(t))).forEach(t -> {
             try { writer.write("Type: " + t.getStyledName() + ":\n" + incomplete.stream().filter(m -> m.getType().equals(t)).map(Move::getName).collect(Collectors.joining("\n")) + "\n\n"); }
             catch (IOException e) { e.printStackTrace(); }
         });
