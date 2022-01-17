@@ -50,6 +50,11 @@ public class StatusConditionEffect extends MoveEffect
                 this.duel.data(opponent.getUUID()).badlyPoisonedTurns++;
             }
 
+            if(this.status.equals(StatusCondition.FLINCHED) && this.duel.first.equals(p.getUUID()))
+            {
+                return p.getName() + " did not flinch!";
+            }
+
             return p.getName() + " " + switch(this.status) {
                 case BURNED -> "is burned!";
                 case FROZEN -> "is frozen!";
