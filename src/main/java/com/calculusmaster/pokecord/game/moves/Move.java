@@ -359,7 +359,7 @@ public class Move
     //Other
     public void setDamageMultiplier(double damageMultiplier)
     {
-        this.damageMultiplier = damageMultiplier;
+        this.damageMultiplier *= damageMultiplier;
     }
 
     public void setAccuracyMultiplier(double accuracyMultiplier)
