@@ -10,8 +10,10 @@ import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class DarkMoves
 {
@@ -285,5 +287,19 @@ public class DarkMoves
         duel.data(opponent.getUUID()).unableToUseSoundMovesTurns = 2;
 
         return opponent.getName() + " cannot use Sound-based Moves for 2 turns! " + MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+    }
+
+    public String PowerTrip(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        AtomicInteger power = new AtomicInteger(20);
+
+        Arrays.stream(Stat.values()).filter(s -> user.changes().get(s) > 0).map(s -> user.changes().get(s)).forEach(i -> power.getAndAdd(20 * i));
+        if(user.changes().getAccuracy() > 0) power.getAndAdd(user.changes().getAccuracy() * 20);
+        if(user.changes().getEvasion() > 0) power.getAndAdd(user.changes().getEvasion() * 20);
+
+        int effectivePower = power.get();
+        move.setPower(effectivePower);
+
+        return "The move power is " + effectivePower + "! " + MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 }
