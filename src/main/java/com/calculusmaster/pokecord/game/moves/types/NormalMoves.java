@@ -2,10 +2,8 @@ package com.calculusmaster.pokecord.game.moves.types;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
-import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
-import com.calculusmaster.pokecord.game.enums.elements.Type;
-import com.calculusmaster.pokecord.game.enums.elements.Weather;
+import com.calculusmaster.pokecord.game.enums.elements.*;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.MoveData;
 import com.calculusmaster.pokecord.game.moves.TypeEffectiveness;
@@ -203,11 +201,6 @@ public class NormalMoves
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addStatusEffect(StatusCondition.CONFUSED)
                 .execute();
-    }
-
-    public String Safeguard(Pokemon user, Pokemon opponent, Duel duel, Move move)
-    {
-        return move.getNotImplementedResult();
     }
 
     public String Whirlwind(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -1219,5 +1212,12 @@ public class NormalMoves
         return steal + MoveEffectBuilder.make(user, opponent, duel, move)
                 .addDamageEffect()
                 .execute();
+    }
+
+    public String Safeguard(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.barriers[duel.playerIndexFromUUID(user.getUUID())].addBarrier(FieldBarrier.SAFEGUARD, user.getItem().equals(Item.LIGHT_CLAY));
+
+        return user.getName() + " set up a Safeguard Barrier!";
     }
 }

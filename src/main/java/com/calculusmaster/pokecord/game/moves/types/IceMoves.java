@@ -1,9 +1,11 @@
 package com.calculusmaster.pokecord.game.moves.types;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.enums.elements.FieldBarrier;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Weather;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -119,10 +121,11 @@ public class IceMoves
 
     public String AuroraVeil(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.data(user.getUUID()).auroraVeilUsed = true;
-        duel.data(user.getUUID()).auroraVeilTurns = 5;
+        if(!duel.weather.equals(Weather.HAIL)) return move.getNothingResult();
 
-        return user.getName() + " is defended from Physical and Special attacks!";
+        duel.barriers[duel.playerIndexFromUUID(user.getUUID())].addBarrier(FieldBarrier.AURORA_VEIL, user.getItem().equals(Item.LIGHT_CLAY));
+
+        return user.getName() + " sets up a Veil, and is defended from Physical and Special attacks!";
     }
 
     public String FrostBreath(Pokemon user, Pokemon opponent, Duel duel, Move move)

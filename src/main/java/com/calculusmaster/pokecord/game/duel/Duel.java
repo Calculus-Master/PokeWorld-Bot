@@ -60,6 +60,7 @@ public class Duel
     public Room room;
     public int roomTurns;
     public EntryHazardHandler[] entryHazards;
+    public FieldBarrierHandler[] barriers;
 
     public static Duel create(String player1ID, String player2ID, int size, MessageReceivedEvent event)
     {
@@ -125,6 +126,9 @@ public class Duel
 
         this.checkDynamax(0);
         this.checkDynamax(1);
+
+        this.barriers[0].updateTurns();
+        this.barriers[1].updateTurns();
 
         if(this.isComplete())
         {
@@ -581,19 +585,6 @@ public class Duel
             if(move.getCategory().equals(Category.STATUS) && !bypassStatusMoves.contains(move.getName())) otherImmune = !bypass;
         }
 
-        if(this.data(this.other).auroraVeilUsed)
-        {
-            this.data(this.other).auroraVeilTurns--;
-
-            if(move.getCategory().equals(Category.PHYSICAL) || move.getCategory().equals(Category.SPECIAL)) move.setDamageMultiplier(0.5);
-
-            if(this.data(this.other).auroraVeilTurns <= 0)
-            {
-                this.data(this.other).auroraVeilTurns = 0;
-                this.data(this.other).auroraVeilUsed = false;
-            }
-        }
-
         if(move.getName().equals("Fusion Bolt") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move != null && this.players[this.other].move.getName().equals("Fusion Flare")) move.setPower(move.getPower() * 2);
 
         if(move.getName().equals("Fusion Flare") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move != null && this.players[this.other].move.getName().equals("Fusion Bolt")) move.setPower(move.getPower() * 2);
@@ -721,6 +712,22 @@ public class Duel
             boolean buff = item.getArceusPlateType() != null && item.getArceusPlateType().equals(move.getType());
 
             if(buff) move.setPower(move.getPower() * 1.2);
+        }
+
+        //Barrier Effects
+        if(this.barriers[this.other].has(FieldBarrier.AURORA_VEIL))
+        {
+            if(move.is(Category.SPECIAL, Category.PHYSICAL)) move.setDamageMultiplier(0.5);
+        }
+
+        if(this.barriers[this.other].has(FieldBarrier.REFLECT))
+        {
+            if(move.is(Category.PHYSICAL)) move.setDamageMultiplier(0.5);
+        }
+
+        if(this.barriers[this.other].has(FieldBarrier.LIGHT_SCREEN))
+        {
+            if(move.is(Category.SPECIAL)) move.setDamageMultiplier(0.5);
         }
 
         //Main Results
@@ -943,6 +950,7 @@ public class Duel
         this.terrain = Terrain.NORMAL_TERRAIN;
         this.room = Room.NORMAL_ROOM;
         this.entryHazards = new EntryHazardHandler[]{new EntryHazardHandler(), new EntryHazardHandler()};
+        this.barriers = new FieldBarrierHandler[]{new FieldBarrierHandler(), new FieldBarrierHandler()};
         this.queuedMoves = new HashMap<>();
 
         for(Player player : this.players) for(Pokemon p : player.team) p.setHealth(p.getStat(Stat.HP));

@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.EntryHazard;
+import com.calculusmaster.pokecord.game.enums.elements.FieldBarrier;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.registry.MaxMoveRegistry;
@@ -31,9 +32,7 @@ public class DuelHelper
 
     public static void delete(String id)
     {
-        int index = -1;
-        for(Duel d : DUELS) if(d.hasPlayer(id)) index = DUELS.indexOf(d);
-        DUELS.remove(index);
+        DUELS.removeIf(d -> Arrays.stream(d.getPlayers()).anyMatch(p -> p.ID.equals(id)));
     }
 
     public static class DuelPokemon
@@ -179,6 +178,44 @@ public class DuelHelper
     }
 
     public record TurnAction(ActionType action, int moveInd, int swapInd) {}
+
+    public static class FieldBarrierHandler
+    {
+        private EnumSet<FieldBarrier> barriers;
+        private Map<FieldBarrier, Integer> barrierTurns;
+
+        public FieldBarrierHandler()
+        {
+            this.barriers = EnumSet.noneOf(FieldBarrier.class);
+            this.barrierTurns = new HashMap<>();
+        }
+
+        public void addBarrier(FieldBarrier barrier, boolean lightClay)
+        {
+            if(this.has(barrier)) return;
+
+            this.barriers.add(barrier);
+            this.barrierTurns.put(barrier, lightClay ? 8 : 5);
+        }
+
+        public void removeBarrier(FieldBarrier barrier)
+        {
+            this.barriers.remove(barrier);
+            this.barrierTurns.remove(barrier);
+        }
+
+        public boolean has(FieldBarrier barrier)
+        {
+            return this.barriers.contains(barrier);
+        }
+
+        public void updateTurns()
+        {
+            this.barrierTurns.replaceAll((barrier, currentTurns) -> currentTurns--);
+
+            for(FieldBarrier b : FieldBarrier.values()) if(this.has(b) && this.barrierTurns.get(b) <= 0) this.removeBarrier(b);
+        }
+    }
 
     public static class EntryHazardHandler
     {

@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game.moves.builder;
 
+import com.calculusmaster.pokecord.game.enums.elements.FieldBarrier;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -27,6 +28,11 @@ public class StatusConditionEffect extends MoveEffect
             Pokemon p = this.userChange ? this.user : this.opponent;
 
             if(p.hasStatusCondition(this.status)) return "";
+
+            if(this.duel.barriers[this.duel.playerIndexFromUUID(p.getUUID())].has(FieldBarrier.SAFEGUARD))
+            {
+                return p.getName() + " was protected by its Safeguard Barrier!";
+            }
 
             p.addStatusCondition(this.status);
 

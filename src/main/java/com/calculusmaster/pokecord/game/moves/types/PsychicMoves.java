@@ -52,11 +52,6 @@ public class PsychicMoves
                 .execute();
     }
 
-    public String LightScreen(Pokemon user, Pokemon opponent, Duel duel, Move move)
-    {
-        return move.getNotImplementedResult();
-    }
-
     public String Psychic(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.make(user, opponent, duel, move)
@@ -382,5 +377,19 @@ public class PsychicMoves
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addDamageEffect()
                 .execute();
+    }
+
+    public String LightScreen(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.barriers[duel.playerIndexFromUUID(user.getUUID())].addBarrier(FieldBarrier.LIGHT_SCREEN, user.getItem().equals(Item.LIGHT_CLAY));
+
+        return user.getName() + " set up a Light Screen Barrier!";
+    }
+
+    public String Reflect(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.barriers[duel.playerIndexFromUUID(user.getUUID())].addBarrier(FieldBarrier.REFLECT, user.getItem().equals(Item.LIGHT_CLAY));
+
+        return user.getName() + " set up a Reflect Barrier!";
     }
 }

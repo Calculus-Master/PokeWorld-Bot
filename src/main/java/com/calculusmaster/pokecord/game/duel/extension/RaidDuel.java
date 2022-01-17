@@ -111,6 +111,9 @@ public class RaidDuel extends WildDuel
 
         this.weatherEffects();
 
+        this.barriers[0].updateTurns();
+        this.barriers[1].updateTurns();
+
         for(int i = 0; i < this.players.length; i++) this.checkDynamax(i);
 
         if(this.isComplete())

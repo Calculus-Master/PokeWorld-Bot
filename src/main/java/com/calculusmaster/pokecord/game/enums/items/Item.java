@@ -54,6 +54,7 @@ public enum Item
     DESTINY_KNOT(1000, MISC),
     ZYGARDE_CUBE(6000, MISC),
     POWER_HERB(4000, MISC),
+    LIGHT_CLAY(5000, MISC),
     //Arceus Plates
     DRACO_PLATE(1000, PLATE),
     DREAD_PLATE(1000, PLATE),
