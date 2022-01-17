@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class MoveEffectBuilder
@@ -229,6 +230,12 @@ public class MoveEffectBuilder
     public MoveEffectBuilder addConditionalCustomEffect(boolean applyEffect, Supplier<String> ifPass, Supplier<String> ifFailed)
     {
         return applyEffect ? this.addCustomEffect(ifPass) : this.addCustomEffect(ifFailed);
+    }
+
+    public MoveEffectBuilder addConditionalEffect(boolean condition, Consumer<MoveEffectBuilder> ifTrue)
+    {
+        if(condition) ifTrue.accept(this);
+        return this;
     }
 
     public String execute()

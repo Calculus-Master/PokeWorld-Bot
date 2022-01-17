@@ -1,12 +1,10 @@
 package com.calculusmaster.pokecord.game.moves.types;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
-import com.calculusmaster.pokecord.game.enums.elements.EntryHazard;
-import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
-import com.calculusmaster.pokecord.game.enums.elements.Weather;
+import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
+import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
 import java.util.Random;
@@ -159,5 +157,62 @@ public class GroundMoves
     public String Bonemerang(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.multiDamage(user, opponent, duel, move, 2);
+    }
+
+    public String MudSport(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCustomEffect(() -> {
+                    duel.data(user.getUUID()).mudSportUsed = true;
+                    return "Electric-Type Moves have become less effective!";
+                })
+                .execute();
+    }
+
+    public String SandTomb(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.BOUND)
+                .execute();
+    }
+
+    public String Rototiller(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addConditionalEffect(user.isType(Type.GRASS), b -> b.addStatChangeEffect(
+                        new StatChangeEffect(Stat.ATK, 1, 100, true)
+                                .add(Stat.SPATK, 1)))
+                .addConditionalEffect(opponent.isType(Type.GRASS), b -> b.addStatChangeEffect(
+                        new StatChangeEffect(Stat.ATK, 1, 100, false)
+                                .add(Stat.SPATK, 1)))
+                .execute();
+    }
+
+    public String StompingTantrum(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        //TODO: If previous move failed, does double damage
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
+    }
+
+    public String ScorchingSands(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.BURNED, 30)
+                .addConditionalCustomEffect(opponent.hasStatusCondition(StatusCondition.FROZEN), () -> {
+                    opponent.removeStatusCondition(StatusCondition.FROZEN);
+                    return "";
+                }, () -> "")
+                .execute();
+    }
+
+    public String HighHorsepower(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
     }
 }
