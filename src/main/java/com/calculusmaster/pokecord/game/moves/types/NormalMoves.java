@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.elements.Weather;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.MoveData;
+import com.calculusmaster.pokecord.game.moves.TypeEffectiveness;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -1156,5 +1157,29 @@ public class NormalMoves
                                     .add(Stat.SPDEF, -stockpile))
                     .execute();
         }
+    }
+
+    public String Conversion2(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        Map<Type, Double> effectiveness = TypeEffectiveness.getEffectiveness(List.of(new Move(duel.getMovesUsed(opponent.getUUID()).get(duel.getMovesUsed(opponent.getUUID()).size() - 1)).getType()));
+
+        List<Type> possibleTypes = effectiveness.entrySet().stream().filter(e -> e.getValue() < 1.0).map(Map.Entry::getKey).toList();
+        Type picked = possibleTypes.get(new SplittableRandom().nextInt(possibleTypes.size()));
+
+        user.setType(picked);
+        return user.getName() + " is now " + picked.getStyledName() + " Type";
+    }
+
+    public String Swagger(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.CONFUSED)
+                .addStatChangeEffect(Stat.ATK, 2, 100, false)
+                .execute();
+    }
+
+    public String Splash(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return user.getName() + " splashed around!";
     }
 }
