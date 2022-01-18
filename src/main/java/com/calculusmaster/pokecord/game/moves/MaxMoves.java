@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.SplittableRandom;
 
 public class MaxMoves
 {
@@ -146,7 +147,7 @@ public class MaxMoves
 
     public String GMaxGoldRush(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int coins = (int)(user.getLevel() * 1.25);
+        int coins = new SplittableRandom().nextInt((int)(user.getLevel() * 1.25), (int)(user.getLevel() * 2.0));
         duel.getPlayers()[duel.playerIndexFromUUID(user.getUUID())].data.changeCredits(coins);
 
         return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.CONFUSED, 100) + " Meowth found " + coins + " credits!";
