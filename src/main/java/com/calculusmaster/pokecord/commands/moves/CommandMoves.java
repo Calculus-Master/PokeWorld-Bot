@@ -112,7 +112,7 @@ public class CommandMoves extends Command
                     m = selected.getMove(i);
                     if(selected.isDynamaxed()) m = DuelHelper.getMaxMove(selected, m);
 
-                    movesList.append(m.getName()).append(" (").append(m.getEffectiveness(d.getPlayers()[other].active)).append(")");
+                    movesList.append(m.getName()).append(" (").append(m.getEffectivenessOverview(d.getPlayers()[other].active)).append(")");
 
                     movesList.append("\n");
                 }

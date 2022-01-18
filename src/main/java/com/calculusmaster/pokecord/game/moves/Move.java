@@ -183,38 +183,27 @@ public class Move
 
     public String getDamageResult(Pokemon opponent, int dmg)
     {
-        //TODO: Combine this method with this.getEffectiveness
-        String effective;
-        double e = TypeEffectiveness.getEffectiveness(opponent.getType()).get(this.type);
-
-        //Freeze Dry
-        if(this.name.equals("Freeze Dry")) e = opponent.isType(Type.WATER) || opponent.isType(Type.GRASS) || opponent.isType(Type.GROUND) || opponent.isType(Type.FLYING) || opponent.isType(Type.DRAGON) ? 2.0 : (opponent.isType(Type.FIRE) || opponent.isType(Type.ICE) || opponent.isType(Type.STEEL) ? 0.5 : 1.0);
-
-        if(e == 4.0) effective = "It's **extremely** effective (4x)!";
-        else if(e == 2.0) effective = "It's **super** effective (2x)!";
-        else if(e == 1.0) effective = "";
-        else if(e == 0.5) effective = "It's **not very** effective (0.5x)!";
-        else if(e == 0.25) effective = "It's **extremely** ineffective (0.25x)!";
-        else if(e == 0.0) effective = this.getNoEffectResult(opponent);
-        else throw new IllegalStateException("Effectiveness multiplier is a strange value: " + e);
-
-
-        return "It dealt **" + dmg + "** damage to " + opponent.getName() + "! " + (dmg > 0 ? effective + (this.hitCrit ? " It was a critical hit!" : "") : "");
+        return "It dealt **" + dmg + "** damage to " + opponent.getName() + "! " + (dmg > 0 ? this.getTypeEffectivenessText(opponent, false) + (this.hitCrit ? " It was a critical hit!" : "") : "");
     }
 
-    public String getEffectiveness(Pokemon opponent)
+    public String getEffectivenessOverview(Pokemon opponent)
     {
-        double e = TypeEffectiveness.getEffectiveness(opponent.getType()).get(this.type);
+        return this.getTypeEffectivenessText(opponent, true);
+    }
+
+    private String getTypeEffectivenessText(Pokemon other, boolean forBattle)
+    {
+        double e = TypeEffectiveness.getEffectiveness(other.getType()).get(this.type);
 
         //Freeze Dry
-        if(this.name.equals("Freeze Dry")) e = opponent.isType(Type.WATER) || opponent.isType(Type.GRASS) || opponent.isType(Type.GROUND) || opponent.isType(Type.FLYING) || opponent.isType(Type.DRAGON) ? 2.0 : (opponent.isType(Type.FIRE) || opponent.isType(Type.ICE) || opponent.isType(Type.STEEL) ? 0.5 : 1.0);
+        if(this.name.equals("Freeze Dry")) e = other.isType(Type.WATER) || other.isType(Type.GRASS) || other.isType(Type.GROUND) || other.isType(Type.FLYING) || other.isType(Type.DRAGON) ? 2.0 : (other.isType(Type.FIRE) || other.isType(Type.ICE) || other.isType(Type.STEEL) ? 0.5 : 1.0);
 
-        if(e == 4.0) return "**Extremely Effective**";
-        else if(e == 2.0) return "**Super Effective**";
-        else if(e == 1.0) return "**Effective**";
-        else if(e == 0.5) return "**Not Very Effective**";
-        else if(e == 0.25) return "**Extremely Ineffective**";
-        else if(e == 0.0) return "**No Effect**";
+        if(e == 4.0) return forBattle ? "**Extremely Effective**" : "It's **extremely** effective (4x)!";
+        else if(e == 2.0) return forBattle ? "**Super Effective**" : "It's **super** effective (2x)!";
+        else if(e == 1.0) return forBattle ? "**Effective**" : "";
+        else if(e == 0.5) return forBattle ? "**Not Very Effective**" : "It's **not very** effective (0.5x)!";
+        else if(e == 0.25) return forBattle ? "**Extremely Ineffective**" : "It's **extremely** ineffective (0.25x)!";
+        else if(e == 0.0) return forBattle ? "**No Effect**" : this.getNoEffectResult(other);
         else throw new IllegalStateException("Effectiveness multiplier is a strange value: " + e);
     }
 
