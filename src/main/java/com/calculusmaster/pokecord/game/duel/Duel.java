@@ -690,7 +690,7 @@ public class Duel
             List<String> log = this.movesUsed.get(this.players[this.current].active.getUUID());
 
             int i = this.turn - 1;
-            while(log.get(i).equals(move.getName()) && !log.get(i).equals("Quick Guard"))
+            while((i > 0 && i < log.size()) && log.get(i).equals(move.getName()) && !log.get(i).equals("Quick Guard"))
             {
                 move.setAccuracy(move.getAccuracy() / 3);
                 i--;
