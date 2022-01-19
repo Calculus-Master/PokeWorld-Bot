@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord.commands.player;
 
 import com.calculusmaster.pokecord.commands.Command;
-import com.calculusmaster.pokecord.commands.pokemon.CommandInfo;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -72,10 +71,7 @@ public class CommandStart extends Command
             starter.upload();
             this.playerData.addPokemon(starter.getUUID());
 
-            this.response = "You started your journey with " + starter.getName() + "! Check out its stats above!";
-
-            //Run a p!info command on the starter
-            new CommandInfo(this.event, new String[]{"info"}).runCommand().send();
+            this.response = "You started your journey with " + starter.getName() + "! Check out its stats using %s!".formatted(this.getCommandFormatted("info latest"));
         }
 
         return this;
