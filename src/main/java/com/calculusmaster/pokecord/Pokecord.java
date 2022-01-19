@@ -15,6 +15,7 @@ import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.SpecialEvolutionRegistry;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
+import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.PrivateInfo;
 import com.calculusmaster.pokecord.util.cache.PokemonDataCache;
 import com.calculusmaster.pokecord.util.helpers.*;
@@ -115,7 +116,7 @@ public class Pokecord
 
         Random r = new Random();
 
-        for(Guild g : BOT_JDA.getGuilds())
+        for(Guild g : BOT_JDA.getGuilds().stream().filter(ServerDataQuery::isRegistered).toList())
         {
             Thread.sleep(r.nextInt(1000) + 500);
 

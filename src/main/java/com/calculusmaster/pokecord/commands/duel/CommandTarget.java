@@ -57,6 +57,12 @@ public class CommandTarget extends Command
 
         List<String> pool = DataHelper.SERVER_PLAYERS.get(g.getId());
 
+        if(pool.isEmpty())
+        {
+            LoggerHelper.warn(CommandTarget.class, "No Server Targets found in " + g.getName() + "!");
+            return;
+        }
+
         String target = pool.get(new Random().nextInt(pool.size()));
 
         SERVER_TARGETS.put(g.getId(), target);
