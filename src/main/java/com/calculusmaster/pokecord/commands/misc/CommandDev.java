@@ -12,6 +12,7 @@ import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.util.cache.PlayerDataCache;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.ConfigHelper;
@@ -122,6 +123,8 @@ public class CommandDev extends Command
 
                 Mongo.PlayerData.deleteMany(Filters.exists("playerID"));
                 Mongo.PokemonData.deleteMany(Filters.in("UUID", UUIDs));
+
+                PlayerDataCache.init();
             }
             case "addpokemon" -> {
                 PlayerDataQuery target = this.mentions.size() > 0 ? PlayerDataQuery.of(this.mentions.get(0).getId()) : this.playerData;
