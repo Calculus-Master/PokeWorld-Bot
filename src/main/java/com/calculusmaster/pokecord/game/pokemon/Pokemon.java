@@ -646,7 +646,7 @@ public class Pokemon
 
     public void learnMove(String move, int index)
     {
-        this.moves.set(index - 1, move);
+        this.moves.set(index, move);
     }
 
     public void setMoves()
