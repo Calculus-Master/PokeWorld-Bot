@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.enums.elements.FieldBarrier;
 import com.calculusmaster.pokecord.game.enums.elements.Gender;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
 import java.util.Random;
@@ -65,6 +66,13 @@ public class StatusConditionEffect extends MoveEffect
             if(this.status.equals(StatusCondition.FLINCHED) && this.duel.first.equals(p.getUUID()))
             {
                 return p.getName() + " did not flinch!";
+            }
+
+            if(this.status.equals(StatusCondition.INFATUATED) && p.getItem().equals(Item.DESTINY_KNOT))
+            {
+                Pokemon other = this.userChange ? this.opponent : this.user;
+                other.addStatusCondition(StatusCondition.INFATUATED);
+                return p.getName() + " is now infatuated! Due to the Destiny Knot, " + other.getName() + " is also now infatuated!";
             }
 
             return p.getName() + " " + switch(this.status) {
