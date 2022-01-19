@@ -237,10 +237,12 @@ public class MaxMoves
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + " " + user.getName() + "'s Status Conditions were removed!";
     }
 
-    //TODO: Trap in Sand Tomb
     public String GMaxSandblast(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.BOUND)
+                .execute();
     }
 
     public String GMaxStunshock(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -249,10 +251,12 @@ public class MaxMoves
         return MoveEffectBuilder.statusDamage(user, opponent, duel, move, status, 100);
     }
 
-    //TODO: Trap in Fire Spin
     public String GMaxCentiferno(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.BOUND)
+                .execute();
     }
 
     public String GMaxSmite(Pokemon user, Pokemon opponent, Duel duel, Move move)
