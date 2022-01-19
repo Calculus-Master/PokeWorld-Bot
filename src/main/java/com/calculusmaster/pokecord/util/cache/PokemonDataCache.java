@@ -20,7 +20,7 @@ public class PokemonDataCache
     {
         ExecutorService pool = Executors.newCachedThreadPool();
 
-        Mongo.LegacyPokemonData.find().forEach(d -> pool.execute(() -> PokemonDataCache.addCacheData(d.getString("UUID"), d)));
+        Mongo.PokemonData.find().forEach(d -> pool.execute(() -> PokemonDataCache.addCacheData(d.getString("UUID"), d)));
 
         pool.shutdown();
 
@@ -40,7 +40,7 @@ public class PokemonDataCache
 
     public synchronized static void updateCache(String UUID)
     {
-        Collections.synchronizedMap(CACHE).put(UUID, Mongo.LegacyPokemonData.find(Filters.eq("UUID", UUID)).first());
+        Collections.synchronizedMap(CACHE).put(UUID, Mongo.PokemonData.find(Filters.eq("UUID", UUID)).first());
     }
 
     public synchronized static void removeCache(String UUID)

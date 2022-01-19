@@ -135,7 +135,7 @@ public class Pokemon
         //This usually means that the data wasn't cached on bot initialization
         if(cache == null)
         {
-            cache = Mongo.LegacyPokemonData.find(Filters.eq("UUID", UUID)).first();
+            cache = Mongo.PokemonData.find(Filters.eq("UUID", UUID)).first();
             PokemonDataCache.addCacheData(UUID, cache);
 
             //This most likely means the UUID isn't in the database

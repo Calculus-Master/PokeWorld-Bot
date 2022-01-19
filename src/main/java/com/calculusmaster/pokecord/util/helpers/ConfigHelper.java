@@ -18,7 +18,7 @@ public class ConfigHelper
     {
         try
         {
-            Document config = Objects.requireNonNull(Mongo.LegacyConfigData.find().first());
+            Document config = Objects.requireNonNull(Mongo.ConfigData.find().first());
 
             ThreadPoolHandler.THREAD_POOL_TYPE = config.getInteger("thread_pool_type");
             CacheHelper.DYNAMIC_CACHING_ACTIVE = config.getBoolean("dynamic_caching");
