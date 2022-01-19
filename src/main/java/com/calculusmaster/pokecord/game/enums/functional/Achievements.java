@@ -5,6 +5,9 @@ import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 public enum Achievements
 {
     START_JOURNEY(250, "Started your journey!"),
@@ -88,8 +91,12 @@ public enum Achievements
 
                 p.addExp(20, 100);
 
-                if(event != null) event.getChannel().sendMessage(p.getMention() + ": Unlocked an achievement: \"" + a.desc + "\"").queue();
-                else p.directMessage("Unlocked an achievement: \"" + a.desc + "\"");
+                String message = "You unlocked an Achievement! \"%s\" (+ %sc)".formatted(a.desc, a.credits);
+
+                Executors.newSingleThreadScheduledExecutor().schedule(() -> {
+                    if(event != null) event.getChannel().sendMessage(p.getMention() + "\n" + message).queue();
+                    else p.directMessage(message);
+                }, 15, TimeUnit.SECONDS);
             }
             else CacheHelper.ACHIEVEMENT_CACHE.get(a).add(playerID);
 
