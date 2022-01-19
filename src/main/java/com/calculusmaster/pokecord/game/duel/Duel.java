@@ -12,6 +12,7 @@ import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.TypeEffectiveness;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
+import com.calculusmaster.pokecord.game.pokemon.component.PokemonDuelAttributes;
 import com.calculusmaster.pokecord.game.tournament.Tournament;
 import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
@@ -40,7 +41,7 @@ public class Duel
     protected int size;
     protected Player[] players;
     protected Map<String, TurnAction> queuedMoves = new HashMap<>();
-    protected Map<String, DuelPokemon> pokemonAttributes = new HashMap<>();
+    protected Map<String, PokemonDuelAttributes> pokemonAttributes = new HashMap<>();
     protected Map<String, Integer> expGains = new HashMap<>();
     protected Map<String, Integer> damageDealt = new HashMap<>();
     protected Map<String, List<String>> movesUsed = new HashMap<>();
@@ -1330,7 +1331,7 @@ public class Duel
     {
         for(Pokemon p : this.players[player].team)
         {
-            this.pokemonAttributes.put(p.getUUID(), new DuelPokemon(p.getUUID()));
+            this.pokemonAttributes.put(p.getUUID(), new PokemonDuelAttributes(p.getUUID()));
             this.data(player).isRaised = p.isType(Type.FLYING) || p.getAbilities().contains("Levitate");
         }
     }
@@ -1587,12 +1588,12 @@ public class Duel
         return this.queuedMoves.get(this.players[player].ID).action();
     }
 
-    public DuelPokemon data(String UUID)
+    public PokemonDuelAttributes data(String UUID)
     {
         return this.pokemonAttributes.get(UUID);
     }
 
-    public DuelPokemon data(int player)
+    public PokemonDuelAttributes data(int player)
     {
         return this.data(this.players[player].active.getUUID());
     }
