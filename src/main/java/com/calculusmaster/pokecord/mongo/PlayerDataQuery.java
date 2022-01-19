@@ -39,7 +39,7 @@ public class PlayerDataQuery extends MongoQuery
     //Cache
     public static PlayerDataQuery of(String playerID)
     {
-        return PlayerDataCache.CACHE.get(playerID).data();
+        return PlayerDataCache.CACHE.containsKey(playerID) ? PlayerDataCache.CACHE.get(playerID).data() : null;
     }
 
     //Registered
