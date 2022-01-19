@@ -12,7 +12,8 @@ public enum StatusCondition
     CURSED("CRS"),
     NIGHTMARE("NTM"),
     BOUND("BND"),
-    BADLY_POISONED("BPSN");
+    BADLY_POISONED("BPSN"),
+    INFATUATED("INF");
 
     private final String abbrev;
     StatusCondition(String abbrev)

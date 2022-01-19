@@ -1225,4 +1225,11 @@ public class NormalMoves
 
         return user.getName() + " set up a Safeguard Barrier!";
     }
+
+    public String Attract(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatusEffect(StatusCondition.INFATUATED)
+                .execute();
+    }
 }

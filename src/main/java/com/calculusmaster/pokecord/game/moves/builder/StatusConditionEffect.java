@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game.moves.builder;
 
 import com.calculusmaster.pokecord.game.enums.elements.FieldBarrier;
+import com.calculusmaster.pokecord.game.enums.elements.Gender;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -33,6 +34,11 @@ public class StatusConditionEffect extends MoveEffect
             {
                 return p.getName() + " was protected by its Safeguard Barrier!";
             }
+
+            if(this.status.equals(StatusCondition.INFATUATED) &&
+                    ((this.user.getGender().equals(Gender.UNKNOWN)) || this.opponent.getGender().equals(Gender.UNKNOWN)) ||
+                    this.user.getGender().equals(this.opponent.getGender()))
+                return p.getName() + " was not infatuated!";
 
             p.addStatusCondition(this.status);
 
@@ -73,6 +79,7 @@ public class StatusConditionEffect extends MoveEffect
                 case NIGHTMARE -> "has been afflicted with a Nightmare!";
                 case BOUND -> "is now bound!";
                 case BADLY_POISONED -> "is now badly poisoned!";
+                case INFATUATED -> "is now infatuated!";
             };
         }
         else return "";

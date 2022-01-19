@@ -176,10 +176,12 @@ public class MaxMoves
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
-    //TODO: Opposite Gender Infatuation
     public String GMaxCuddle(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.INFATUATED)
+                .execute();
     }
 
     //TODO: 50% chance to restore berries

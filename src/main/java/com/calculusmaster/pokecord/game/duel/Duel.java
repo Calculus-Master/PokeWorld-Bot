@@ -319,7 +319,7 @@ public class Duel
         //Unfreeze opponent if this move is a Fire Type, Scald or Steam Eruption
         if(move.getType().equals(Type.FIRE) || move.getName().equals("Scald") || move.getName().equals("Steam Eruption")) this.players[this.other].active.removeStatusCondition(StatusCondition.FROZEN);
 
-        //Use the result from the Status Conditions to determine whether or not the user can move
+        //Use the result from the Status Conditions to determine whether or not the user can move TODO: Do the check right when the turn begins, instead of twice
         if(!this.data(this.current).canUseMove) return "";
 
         //Re-Check Certain Status Conditions
@@ -1219,6 +1219,17 @@ public class Duel
                 }
 
                 status.append(name).append(" is asleep!");
+
+                results.add(status.toString());
+                return false;
+            }
+        }
+
+        if(pokemon.hasStatusCondition(StatusCondition.INFATUATED))
+        {
+            if(r.nextInt(100) < 50)
+            {
+                status.append(name).append(" is infatuated and can't move!");
 
                 results.add(status.toString());
                 return false;
