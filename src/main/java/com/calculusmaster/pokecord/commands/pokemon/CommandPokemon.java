@@ -1,9 +1,6 @@
 package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
-import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
-import com.calculusmaster.pokecord.game.enums.elements.Gender;
-import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -47,47 +44,24 @@ public class CommandPokemon extends Command
         PokemonListSorter sorter = new PokemonListSorter(stream, msg);
 
         sorter.sortSearchName(PokemonSorterFlag.NAME, (p, s) -> p.getName().toLowerCase().contains(s));
-
         sorter.sortSearchName(PokemonSorterFlag.NICKNAME, (p, s) -> p.getNickname().toLowerCase().contains(s));
 
         sorter.sortSearchName(PokemonSorterFlag.MOVE, (p, s) -> p.allMoves().contains(Global.normalize(s)));
-
         sorter.sortSearchName(PokemonSorterFlag.LEARNED_MOVE, (p, s) -> p.getMoves().contains(Global.normalize(s)));
-
         sorter.sortSearchName(PokemonSorterFlag.AVAILABLE_MOVE, (p, s) -> p.availableMoves().contains(Global.normalize(s)));
 
-        sorter.sortNumeric(PokemonSorterFlag.LEVEL, Pokemon::getLevel);
-
-        sorter.sortNumeric(PokemonSorterFlag.LEVEL, Pokemon::getDynamaxLevel);
-
-        sorter.sortNumeric(PokemonSorterFlag.IV, p -> (int)(p.getTotalIVRounded()));
-
-        sorter.sortNumeric(PokemonSorterFlag.EV, Pokemon::getEVTotal);
-
-        sorter.sortNumeric(PokemonSorterFlag.STAT, Pokemon::getTotalStat);
-
         sorter.sortMachine(PokemonSorterFlag.TM);
-
         sorter.sortMachine(PokemonSorterFlag.TR);
 
         sorter.sortIsUUIDInList(PokemonSorterFlag.TEAM, this.team);
-
         sorter.sortIsUUIDInList(PokemonSorterFlag.FAVORITES, this.favorites);
 
-        sorter.sortEnum(PokemonSorterFlag.TYPE, Type::cast, Pokemon::isType);
+        //Standards
 
-        sorter.sortEnum(PokemonSorterFlag.MAIN_TYPE, Type::cast, (p, t) -> p.getType().get(0).equals(t));
-
-        sorter.sortEnum(PokemonSorterFlag.GENDER, Gender::cast, (p, g) -> p.getGender().equals(g));
-
-        sorter.sortEnum(PokemonSorterFlag.EGG_GROUP, EggGroup::cast, (p, e) -> p.getEggGroups().contains(e));
-
-        sorter.sortGeneric(PokemonSorterFlag.SHINY, Pokemon::isShiny);
-
-        sorter.sortGeneric(PokemonSorterFlag.MASTERED, Pokemon::isMastered);
-
+        sorter.sortStandardNumeric();
+        sorter.sortStandardEnum();
+        sorter.sortStandardBoolean();
         sorter.sortStats();
-
         sorter.sortNameCategories();
 
         //Reobtain the Stream from the PokemonListSorter object

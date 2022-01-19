@@ -1,6 +1,9 @@
 package com.calculusmaster.pokecord.game.pokemon.sort;
 
+import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
+import com.calculusmaster.pokecord.game.enums.elements.Gender;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -31,6 +34,29 @@ public class PokemonListSorter
     }
 
     //Common Sorts
+    public void sortStandardNumeric()
+    {
+        this.sortNumeric(PokemonSorterFlag.LEVEL, Pokemon::getLevel);
+        this.sortNumeric(PokemonSorterFlag.LEVEL, Pokemon::getDynamaxLevel);
+        this.sortNumeric(PokemonSorterFlag.IV, p -> (int)(p.getTotalIVRounded()));
+        this.sortNumeric(PokemonSorterFlag.EV, Pokemon::getEVTotal);
+        this.sortNumeric(PokemonSorterFlag.STAT, Pokemon::getTotalStat);
+    }
+
+    public void sortStandardEnum()
+    {
+        this.sortEnum(PokemonSorterFlag.TYPE, Type::cast, Pokemon::isType);
+        this.sortEnum(PokemonSorterFlag.MAIN_TYPE, Type::cast, (p, t) -> p.getType().get(0).equals(t));
+        this.sortEnum(PokemonSorterFlag.GENDER, Gender::cast, (p, g) -> p.getGender().equals(g));
+        this.sortEnum(PokemonSorterFlag.EGG_GROUP, EggGroup::cast, (p, e) -> p.getEggGroups().contains(e));
+    }
+
+    public void sortStandardBoolean()
+    {
+        this.sortGeneric(PokemonSorterFlag.SHINY, Pokemon::isShiny);
+        this.sortGeneric(PokemonSorterFlag.MASTERED, Pokemon::isMastered);
+    }
+
     public void sortStats()
     {
         this.sortNumeric(PokemonSorterFlag.HPIV, p -> p.getIVs().get(Stat.HP));

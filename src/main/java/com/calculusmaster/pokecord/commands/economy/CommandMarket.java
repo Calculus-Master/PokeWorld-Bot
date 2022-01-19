@@ -3,7 +3,9 @@ package com.calculusmaster.pokecord.commands.economy;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.pokemon.CommandInfo;
-import com.calculusmaster.pokecord.game.enums.elements.*;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
+import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -130,30 +132,11 @@ public class CommandMarket extends Command
 
             pokemonSorter.sortSearchName(PokemonSorterFlag.MOVE, (p, s) -> p.allMoves().contains(Global.normalize(s)));
 
-            pokemonSorter.sortNumeric(PokemonSorterFlag.LEVEL, Pokemon::getLevel);
-
-            pokemonSorter.sortNumeric(PokemonSorterFlag.LEVEL, Pokemon::getDynamaxLevel);
-
-            pokemonSorter.sortNumeric(PokemonSorterFlag.IV, p -> (int)(p.getTotalIVRounded()));
-
-            pokemonSorter.sortNumeric(PokemonSorterFlag.EV, Pokemon::getEVTotal);
-
-            pokemonSorter.sortNumeric(PokemonSorterFlag.STAT, Pokemon::getTotalStat);
-
-            pokemonSorter.sortEnum(PokemonSorterFlag.TYPE, Type::cast, Pokemon::isType);
-
-            pokemonSorter.sortEnum(PokemonSorterFlag.MAIN_TYPE, Type::cast, (p, t) -> p.getType().get(0).equals(t));
-
-            pokemonSorter.sortEnum(PokemonSorterFlag.GENDER, Gender::cast, (p, g) -> p.getGender().equals(g));
-
-            pokemonSorter.sortEnum(PokemonSorterFlag.EGG_GROUP, EggGroup::cast, (p, e) -> p.getEggGroups().contains(e));
-
-            pokemonSorter.sortGeneric(PokemonSorterFlag.SHINY, Pokemon::isShiny);
-
-            pokemonSorter.sortGeneric(PokemonSorterFlag.MASTERED, Pokemon::isMastered);
-
+            //Standards
+            pokemonSorter.sortStandardNumeric();
+            pokemonSorter.sortStandardEnum();
+            pokemonSorter.sortStandardBoolean();
             pokemonSorter.sortStats();
-
             pokemonSorter.sortNameCategories();
 
             //Convert Pokemon Stream back into a MarketEntry Stream
