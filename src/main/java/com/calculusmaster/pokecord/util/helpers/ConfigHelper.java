@@ -5,15 +5,20 @@ import com.calculusmaster.pokecord.commands.economy.CommandShop;
 import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.bounties.components.Bounty;
 import com.calculusmaster.pokecord.game.duel.players.Trainer;
+import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import org.bson.Document;
 
+import java.util.List;
 import java.util.Objects;
 
 public class ConfigHelper
 {
+    public static boolean DEV_MODE;
+    public static List<String> DEV_PLAYERS;
+
     public static void init()
     {
         try
@@ -39,6 +44,7 @@ public class ConfigHelper
             CommandTeam.MAX_TEAM_SIZE = config.getInteger("team_limit");
             Trainer.BASE_COUNT = config.getInteger("base_daily_trainer_count");
             Trainer.COUNT_DEVIATION = config.getInteger("daily_trainer_deviation");
+            MasteryLevelManager.ACTIVE = config.getBoolean("mastery_levels");
 
             LoggerHelper.info(ConfigHelper.class, "Loaded config values!");
         }

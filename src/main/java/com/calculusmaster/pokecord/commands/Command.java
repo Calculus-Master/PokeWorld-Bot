@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands;
 
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Tips;
+import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
@@ -117,7 +118,7 @@ public abstract class Command
 
     protected boolean insufficientMasteryLevel(Feature feature)
     {
-        return this.playerData.getLevel() < feature.getRequiredLevel();
+        return MasteryLevelManager.ACTIVE && this.playerData.getLevel() < feature.getRequiredLevel();
     }
 
     protected Command invalidMasteryLevel(Feature feature)

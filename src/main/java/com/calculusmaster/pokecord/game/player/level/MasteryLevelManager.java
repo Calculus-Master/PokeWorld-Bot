@@ -9,6 +9,7 @@ import java.util.List;
 
 public class MasteryLevelManager
 {
+    public static boolean ACTIVE;
     public static final List<PokemonMasteryLevel> MASTERY_LEVELS = new ArrayList<>();
 
     public static void init()
