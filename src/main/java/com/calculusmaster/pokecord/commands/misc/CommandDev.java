@@ -7,8 +7,10 @@ import com.calculusmaster.pokecord.game.enums.elements.Location;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.MoveData;
+import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
@@ -120,6 +122,16 @@ public class CommandDev extends Command
 
                 Mongo.PlayerData.deleteMany(Filters.exists("playerID"));
                 Mongo.PokemonData.deleteMany(Filters.in("UUID", UUIDs));
+            }
+            case "addpokemon" -> {
+                PlayerDataQuery target = this.mentions.size() > 0 ? PlayerDataQuery.of(this.mentions.get(0).getId()) : this.playerData;
+                List<String> msg = new ArrayList<>(List.of(this.msg));
+                msg.removeIf(s -> s.contains("@"));
+
+                String name = Global.normalize(this.mentions.size() > 0 ? this.getMultiWordContent(3) : this.getMultiWordContent(2));
+                Pokemon p = Pokemon.create(name);
+                target.addPokemon(p.getUUID());
+                p.upload();
             }
         }
 
