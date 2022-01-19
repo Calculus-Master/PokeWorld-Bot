@@ -1,8 +1,10 @@
 package com.calculusmaster.pokecord.game.pokemon.sort;
 
+import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.util.interfaces.Transformer;
 
 import java.util.ArrayList;
@@ -26,6 +28,33 @@ public class PokemonListSorter
     public Stream<Pokemon> retrieveStream()
     {
         return this.stream;
+    }
+
+    //Common Sorts
+    public void sortStats()
+    {
+        this.sortNumeric(PokemonSorterFlag.HPIV, p -> p.getIVs().get(Stat.HP));
+        this.sortNumeric(PokemonSorterFlag.ATKIV, p -> p.getIVs().get(Stat.ATK));
+        this.sortNumeric(PokemonSorterFlag.DEFIV, p -> p.getIVs().get(Stat.DEF));
+        this.sortNumeric(PokemonSorterFlag.SPATKIV, p -> p.getIVs().get(Stat.SPATK));
+        this.sortNumeric(PokemonSorterFlag.SPDEFIV, p -> p.getIVs().get(Stat.SPDEF));
+        this.sortNumeric(PokemonSorterFlag.SPDIV, p -> p.getIVs().get(Stat.SPD));
+        this.sortNumeric(PokemonSorterFlag.HPEV, p -> p.getEVs().get(Stat.HP));
+        this.sortNumeric(PokemonSorterFlag.ATKEV, p -> p.getEVs().get(Stat.ATK));
+        this.sortNumeric(PokemonSorterFlag.DEFEV, p -> p.getEVs().get(Stat.DEF));
+        this.sortNumeric(PokemonSorterFlag.SPATKEV, p -> p.getEVs().get(Stat.SPATK));
+        this.sortNumeric(PokemonSorterFlag.SPDEFEV, p -> p.getEVs().get(Stat.SPDEF));
+        this.sortNumeric(PokemonSorterFlag.SPDEV, p -> p.getEVs().get(Stat.SPD));
+    }
+
+    public void sortNameCategories()
+    {
+        this.sortIsNameInList(PokemonSorterFlag.LEGENDARY, PokemonRarity.LEGENDARY);
+        this.sortIsNameInList(PokemonSorterFlag.MYTHICAL, PokemonRarity.MYTHICAL);
+        this.sortIsNameInList(PokemonSorterFlag.ULTRA_BEAST, PokemonRarity.ULTRA_BEAST);
+        this.sortGeneric(PokemonSorterFlag.MEGA, p -> p.getName().toLowerCase().contains("mega"));
+        this.sortGeneric(PokemonSorterFlag.PRIMAL, p -> p.getName().toLowerCase().contains("primal"));
+        this.sortGeneric(PokemonSorterFlag.MEGA_OR_PRIMAL, p -> p.getName().toLowerCase().contains("mega") || p.getName().toLowerCase().contains("primal"));
     }
 
     //Sorters

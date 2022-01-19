@@ -7,7 +7,6 @@ import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.sort.MarketListSorter;
 import com.calculusmaster.pokecord.game.pokemon.sort.MarketSorterFlag;
 import com.calculusmaster.pokecord.game.pokemon.sort.PokemonListSorter;
@@ -129,6 +128,8 @@ public class CommandMarket extends Command
 
             pokemonSorter.sortSearchName(PokemonSorterFlag.NAME, (p, s) -> p.getName().toLowerCase().contains(s));
 
+            pokemonSorter.sortSearchName(PokemonSorterFlag.MOVE, (p, s) -> p.allMoves().contains(Global.normalize(s)));
+
             pokemonSorter.sortNumeric(PokemonSorterFlag.LEVEL, Pokemon::getLevel);
 
             pokemonSorter.sortNumeric(PokemonSorterFlag.LEVEL, Pokemon::getDynamaxLevel);
@@ -151,30 +152,9 @@ public class CommandMarket extends Command
 
             pokemonSorter.sortGeneric(PokemonSorterFlag.MASTERED, Pokemon::isMastered);
 
-            pokemonSorter.sortNumeric(PokemonSorterFlag.HPIV, p -> p.getIVs().get(Stat.HP));
-            pokemonSorter.sortNumeric(PokemonSorterFlag.ATKIV, p -> p.getIVs().get(Stat.ATK));
-            pokemonSorter.sortNumeric(PokemonSorterFlag.DEFIV, p -> p.getIVs().get(Stat.DEF));
-            pokemonSorter.sortNumeric(PokemonSorterFlag.SPATKIV, p -> p.getIVs().get(Stat.SPATK));
-            pokemonSorter.sortNumeric(PokemonSorterFlag.SPDEFIV, p -> p.getIVs().get(Stat.SPDEF));
-            pokemonSorter.sortNumeric(PokemonSorterFlag.SPDIV, p -> p.getIVs().get(Stat.SPD));
-            pokemonSorter.sortNumeric(PokemonSorterFlag.HPEV, p -> p.getEVs().get(Stat.HP));
-            pokemonSorter.sortNumeric(PokemonSorterFlag.ATKEV, p -> p.getEVs().get(Stat.ATK));
-            pokemonSorter.sortNumeric(PokemonSorterFlag.DEFEV, p -> p.getEVs().get(Stat.DEF));
-            pokemonSorter.sortNumeric(PokemonSorterFlag.SPATKEV, p -> p.getEVs().get(Stat.SPATK));
-            pokemonSorter.sortNumeric(PokemonSorterFlag.SPDEFEV, p -> p.getEVs().get(Stat.SPDEF));
-            pokemonSorter.sortNumeric(PokemonSorterFlag.SPDEV, p -> p.getEVs().get(Stat.SPD));
+            pokemonSorter.sortStats();
 
-            pokemonSorter.sortIsNameInList(PokemonSorterFlag.LEGENDARY, PokemonRarity.LEGENDARY);
-
-            pokemonSorter.sortIsNameInList(PokemonSorterFlag.MYTHICAL, PokemonRarity.MYTHICAL);
-
-            pokemonSorter.sortIsNameInList(PokemonSorterFlag.ULTRA_BEAST, PokemonRarity.ULTRA_BEAST);
-
-            pokemonSorter.sortGeneric(PokemonSorterFlag.MEGA, p -> p.getName().toLowerCase().contains("mega"));
-
-            pokemonSorter.sortGeneric(PokemonSorterFlag.PRIMAL, p -> p.getName().toLowerCase().contains("primal"));
-
-            pokemonSorter.sortGeneric(PokemonSorterFlag.MEGA_OR_PRIMAL, p -> p.getName().toLowerCase().contains("mega") || p.getName().toLowerCase().contains("primal"));
+            pokemonSorter.sortNameCategories();
 
             //Convert Pokemon Stream back into a MarketEntry Stream
             display = marketSorter.rebuildStream();

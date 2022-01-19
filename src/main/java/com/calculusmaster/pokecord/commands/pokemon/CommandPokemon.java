@@ -3,12 +3,10 @@ package com.calculusmaster.pokecord.commands.pokemon;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.Gender;
-import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.sort.PokemonListSorter;
 import com.calculusmaster.pokecord.game.pokemon.sort.PokemonSorterFlag;
 import com.calculusmaster.pokecord.util.Global;
@@ -88,41 +86,9 @@ public class CommandPokemon extends Command
 
         sorter.sortGeneric(PokemonSorterFlag.MASTERED, Pokemon::isMastered);
 
-        sorter.sortNumeric(PokemonSorterFlag.HPIV, p -> p.getIVs().get(Stat.HP));
+        sorter.sortStats();
 
-        sorter.sortNumeric(PokemonSorterFlag.ATKIV, p -> p.getIVs().get(Stat.ATK));
-
-        sorter.sortNumeric(PokemonSorterFlag.DEFIV, p -> p.getIVs().get(Stat.DEF));
-
-        sorter.sortNumeric(PokemonSorterFlag.SPATKIV, p -> p.getIVs().get(Stat.SPATK));
-
-        sorter.sortNumeric(PokemonSorterFlag.SPDEFIV, p -> p.getIVs().get(Stat.SPDEF));
-
-        sorter.sortNumeric(PokemonSorterFlag.SPDIV, p -> p.getIVs().get(Stat.SPD));
-
-        sorter.sortNumeric(PokemonSorterFlag.HPEV, p -> p.getEVs().get(Stat.HP));
-
-        sorter.sortNumeric(PokemonSorterFlag.ATKEV, p -> p.getEVs().get(Stat.ATK));
-
-        sorter.sortNumeric(PokemonSorterFlag.DEFEV, p -> p.getEVs().get(Stat.DEF));
-
-        sorter.sortNumeric(PokemonSorterFlag.SPATKEV, p -> p.getEVs().get(Stat.SPATK));
-
-        sorter.sortNumeric(PokemonSorterFlag.SPDEFEV, p -> p.getEVs().get(Stat.SPDEF));
-
-        sorter.sortNumeric(PokemonSorterFlag.SPDEV, p -> p.getEVs().get(Stat.SPD));
-
-        sorter.sortIsNameInList(PokemonSorterFlag.LEGENDARY, PokemonRarity.LEGENDARY);
-
-        sorter.sortIsNameInList(PokemonSorterFlag.MYTHICAL, PokemonRarity.MYTHICAL);
-
-        sorter.sortIsNameInList(PokemonSorterFlag.ULTRA_BEAST, PokemonRarity.ULTRA_BEAST);
-
-        sorter.sortGeneric(PokemonSorterFlag.MEGA, p -> p.getName().toLowerCase().contains("mega"));
-
-        sorter.sortGeneric(PokemonSorterFlag.PRIMAL, p -> p.getName().toLowerCase().contains("primal"));
-
-        sorter.sortGeneric(PokemonSorterFlag.MEGA_OR_PRIMAL, p -> p.getName().toLowerCase().contains("mega") || p.getName().toLowerCase().contains("primal"));
+        sorter.sortNameCategories();
 
         //Reobtain the Stream from the PokemonListSorter object
         stream = sorter.retrieveStream();
