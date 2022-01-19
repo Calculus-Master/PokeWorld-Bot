@@ -114,6 +114,13 @@ public class CommandDev extends Command
                 }
             }
             case "clearcrashreports" -> Mongo.CrashData.deleteMany(Filters.exists("source"));
+            case "resetplayers" -> {
+                List<String> UUIDs = new ArrayList<>();
+                Mongo.PlayerData.find().forEach(d -> UUIDs.addAll(d.getList("pokemon", String.class)));
+
+                Mongo.PlayerData.deleteMany(Filters.exists("playerID"));
+                Mongo.PokemonData.deleteMany(Filters.in("UUID", UUIDs));
+            }
         }
 
         this.response = "Successfully ran Developer Command!";
