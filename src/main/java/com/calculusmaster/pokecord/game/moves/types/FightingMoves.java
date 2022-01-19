@@ -310,11 +310,9 @@ public class FightingMoves
 
     public String FinalGambit(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int amount = user.getHealth();
-        user.damage(amount);
-
         return MoveEffectBuilder.make(user, opponent, duel, move)
-                .addFixedDamageEffect(amount)
+                .addSelfFaintEffect()
+                .addFixedDamageEffect(user.getHealth())
                 .execute();
     }
 

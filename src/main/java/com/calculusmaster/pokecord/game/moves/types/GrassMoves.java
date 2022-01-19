@@ -30,12 +30,10 @@ public class GrassMoves
 
         if(!opponent.isType(Type.GRASS))
         {
-            int hpGain = opponent.getStat(Stat.HP) / 8;
-
-            user.heal(hpGain);
-            opponent.damage(hpGain);
-
-            return user.getName() + " leeched " + hpGain + " HP from " + opponent.getName() + "!";
+            return MoveEffectBuilder.make(user, opponent, duel, move)
+                    .addFixedDamageEffect(opponent.getMaxHealth() / 8)
+                    .addFractionHealEffect(1D)
+                    .execute();
         }
         else return move.getNoEffectResult(opponent);
     }

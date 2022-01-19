@@ -64,9 +64,8 @@ public class DarkMoves
 
     public String Memento(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.damage(user.getHealth());
-
-        return user.getName() + " fainted and " + MoveEffectBuilder.make(user, opponent, duel, move)
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addSelfFaintEffect()
                 .addStatChangeEffect(
                         new StatChangeEffect(Stat.ATK, -3, 100, false)
                                 .add(Stat.SPATK, -3))
@@ -93,11 +92,12 @@ public class DarkMoves
     public String Punishment(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int statIncreases = 0;
-        //TODO: Check if this move is correctly implemented
 
-        for(Stat s : Stat.values()) if(opponent.changes().get(s) > 0) statIncreases += (int)(opponent.changes().getModifier(s) * 2 - 2);
+        for(Stat s : Stat.values()) if(opponent.changes().get(s) > 0) statIncreases += opponent.changes().get(s);
+        if(opponent.changes().getAccuracy() > 0) statIncreases += opponent.changes().getAccuracy();
+        if(opponent.changes().getEvasion() > 0) statIncreases += opponent.changes().getEvasion();
 
-        move.setPower(statIncreases * 20 + 60);
+        move.setPower(Math.min(statIncreases * 20 + 60, 200));
 
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }

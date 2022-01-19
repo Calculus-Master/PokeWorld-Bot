@@ -563,12 +563,13 @@ public class NormalMoves
 
     public String BellyDrum(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int damage = user.getStat(Stat.HP) / 2;
-        user.damage(damage);
-
-        user.changes().change(Stat.ATK, 12);
-
-        return user.getName() + " sacrificed " + damage + " HP! " + user.getName() + "'s Attack rose to its maximum!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFractionSelfDamageEffect(1 / 2D)
+                .addCustomEffect(() -> {
+                    user.changes().change(Stat.ATK, 12);
+                    return user.getName() + "'s Attack rose to the maximum!";
+                })
+                .execute();
     }
 
     public String DoubleHit(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -694,8 +695,10 @@ public class NormalMoves
 
     public String Explosion(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.damage(user.getHealth());
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addSelfFaintEffect()
+                .addDamageEffect()
+                .execute();
     }
 
     public String Conversion(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -854,8 +857,10 @@ public class NormalMoves
 
     public String SelfDestruct(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        user.damage(user.getHealth());
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addSelfFaintEffect()
+                .addDamageEffect()
+                .execute();
     }
 
     public String SoftBoiled(Pokemon user, Pokemon opponent, Duel duel, Move move)

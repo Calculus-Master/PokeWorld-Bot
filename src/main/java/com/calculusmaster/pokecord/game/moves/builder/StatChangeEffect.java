@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.game.moves.builder;
 
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -19,6 +20,12 @@ public class StatChangeEffect extends MoveEffect
 
         this.percent = percent;
         this.userChange = userChange;
+    }
+
+    public StatChangeEffect(int stage, int percent, boolean userChange)
+    {
+        this(Stat.HP, stage, percent, userChange);
+        Arrays.stream(Stat.values()).filter(s -> !s.equals(Stat.HP)).forEach(s -> this.add(s, stage));
     }
 
     public StatChangeEffect add(Stat s, int stage)

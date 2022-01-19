@@ -178,9 +178,8 @@ public class FairyMoves
     {
         if(duel.terrain.equals(Terrain.MISTY_TERRAIN)) move.setPower(1.5);
 
-        user.damage(user.getHealth());
-
-        return user.getName() + " fainted! " + MoveEffectBuilder.make(user, opponent, duel, move)
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addSelfFaintEffect()
                 .addDamageEffect()
                 .execute();
     }

@@ -147,13 +147,10 @@ public class DragonMoves
         if(Arrays.stream(Stat.values()).allMatch(s -> user.changes().get(s) == 6) || user.getHealth() < user.getMaxHealth() / 3) return move.getNoEffectResult(opponent);
         else
         {
-            Arrays.stream(Stat.values()).forEach(s -> user.changes().change(s, 1));
-
-            //TODO: Add a MoveEffectBuilder effect for self-damage
-            int damage = user.getMaxHealth() / 3;
-            user.damage(damage);
-
-            return "All of " + user.getName() + "'s Stats were boosted by 1 stage! " + user.getName() + " lost " + damage + " HP!";
+            return MoveEffectBuilder.make(user, opponent, duel, move)
+                    .addFractionSelfDamageEffect(1 / 3D)
+                    .addStatChangeEffect(new StatChangeEffect(1, 100, true))
+                    .execute();
         }
     }
 

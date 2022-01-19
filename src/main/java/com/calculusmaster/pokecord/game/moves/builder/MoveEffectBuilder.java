@@ -245,6 +245,24 @@ public class MoveEffectBuilder
         return this;
     }
 
+    public MoveEffectBuilder addSelfFaintEffect()
+    {
+        this.moveEffects.add(new SelfFaintEffect());
+        return this;
+    }
+
+    public MoveEffectBuilder addFixedSelfDamageEffect(int damage)
+    {
+        this.moveEffects.add(new FixedSelfDamageEffect(damage));
+        return this;
+    }
+
+    public MoveEffectBuilder addFractionSelfDamageEffect(double fraction)
+    {
+        this.moveEffects.add(new FractionSelfDamageEffect(fraction));
+        return this;
+    }
+
     public String execute()
     {
         //Initialization

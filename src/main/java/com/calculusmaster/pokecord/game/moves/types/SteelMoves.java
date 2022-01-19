@@ -142,9 +142,10 @@ public class SteelMoves
 
     public String SteelBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int userDamage = user.getHealth() / 2;
-        user.damage(userDamage);
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + " " + user.getName() + " lost " + userDamage + " HP!";
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFractionSelfDamageEffect(1 / 2D)
+                .addDamageEffect()
+                .execute();
     }
 
     //TODO: Opponent unable to flee
