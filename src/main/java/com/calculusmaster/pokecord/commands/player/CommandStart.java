@@ -28,7 +28,7 @@ public class CommandStart extends Command
         boolean isRegistered = PlayerDataQuery.isRegistered(this.player.getId());
 
         if(isRegistered) this.response = "You have already started your journey!";
-        else if(this.msg.length != 2 || !this.msg[0].equals("start"))
+        else if(this.msg.length != 2 || !this.msg[0].contains("start"))
         {
             this.embed
                     .setTitle("Welcome to the world of Pokemon!")
@@ -61,7 +61,7 @@ public class CommandStart extends Command
             PlayerDataQuery.register(this.player);
             DataHelper.updateServerPlayers(this.server);
 
-            PlayerDataQuery p = PlayerDataQuery.of(this.player.getId());
+            this.playerData = PlayerDataQuery.of(this.player.getId());
 
             Pokemon starter = Pokemon.create(Global.normalize(this.msg[1]));
             starter.setLevel(5);
@@ -70,7 +70,7 @@ public class CommandStart extends Command
             Achievements.grant(this.player.getId(), Achievements.START_JOURNEY, this.event);
 
             starter.upload();
-            p.addPokemon(starter.getUUID());
+            this.playerData.addPokemon(starter.getUUID());
 
             this.response = "You started your journey with " + starter.getName() + "! Check out its stats below!";
 

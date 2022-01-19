@@ -50,10 +50,10 @@ public class Pokemon
     private TR tr;
 
     //Duel Fields
-    private int health;
     private List<Type> type;
     private PokemonDuelStatChanges statChanges;
     private PokemonBoosts boosts;
+    private int health;
     private EnumSet<StatusCondition> statusConditions;
     private boolean isDynamaxed;
 
@@ -115,10 +115,10 @@ public class Pokemon
 
     private void setDuelDefaults()
     {
-        this.health = this.getMaxHealth();
         this.type = new ArrayList<>(List.copyOf(this.data.types));
         this.statChanges = new PokemonDuelStatChanges();
         this.boosts = new PokemonBoosts();
+        this.health = this.getMaxHealth();
         this.statusConditions = EnumSet.noneOf(StatusCondition.class);
         this.isDynamaxed = false;
     }
