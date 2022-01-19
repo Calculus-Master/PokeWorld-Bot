@@ -17,7 +17,7 @@ public class MoveTutorRegistry
         register("Hydro Cannon", "Blastoise", "Feraligatr", "Swampert", "Empoleon", "Samurott", "Greninja", "Primarina");
         register("Frenzy Plant", "Venusaur", "Meganium", "Sceptile", "Torterra", "Serperior", "Chesnaught", "Decidueye");
         register("Draco Meteor", p -> p.getType().get(0).equals(Type.DRAGON));
-        register("Steel Beam", p -> p.getType().get(0).equals(Type.STEEL));
+        register("Steel Beam", p -> p.getType().get(0).equals(Type.STEEL) && !p.getName().equals("Dusk Mane Necrozma"));
         register("Volt Tackle", p -> p.getName().contains("Pikachu"));
         register("Dragon Ascent", p -> p.getName().contains("Rayquaza"));
         register("Secret Sword", p -> p.getName().contains("Keldeo"));
