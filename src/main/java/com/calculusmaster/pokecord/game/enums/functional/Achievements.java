@@ -91,7 +91,7 @@ public enum Achievements
 
                 p.addExp(20, 100);
 
-                String message = "You unlocked an Achievement! \"%s\" (+ %sc)".formatted(a.desc, a.credits);
+                String message = "You unlocked an Achievement!\n`\"%s\"`\n*You earned %sc.*".formatted(a.desc, a.credits);
 
                 Executors.newSingleThreadScheduledExecutor().schedule(() -> {
                     if(event != null) event.getChannel().sendMessage(p.getMention() + "\n" + message).queue();
