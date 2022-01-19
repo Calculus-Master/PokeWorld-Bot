@@ -13,6 +13,7 @@ import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.cache.PlayerDataCache;
+import com.calculusmaster.pokecord.util.cache.PokemonDataCache;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.ConfigHelper;
@@ -135,6 +136,10 @@ public class CommandDev extends Command
                 Pokemon p = Pokemon.create(name);
                 target.addPokemon(p.getUUID());
                 p.upload();
+            }
+            case "updatepokemoncache" -> {
+                PokemonDataCache.CACHE.clear();
+                PokemonDataCache.init();
             }
         }
 
