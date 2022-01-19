@@ -72,7 +72,7 @@ public class CommandStart extends Command
             starter.upload();
             this.playerData.addPokemon(starter.getUUID());
 
-            this.response = "You started your journey with " + starter.getName() + "! Check out its stats below!";
+            this.response = "You started your journey with " + starter.getName() + "! Check out its stats above!";
 
             //Run a p!info command on the starter
             new CommandInfo(this.event, new String[]{"info"}).runCommand().send();

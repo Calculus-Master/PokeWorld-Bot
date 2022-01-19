@@ -17,6 +17,7 @@ import com.calculusmaster.pokecord.game.pokemon.SpecialEvolutionRegistry;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.PrivateInfo;
+import com.calculusmaster.pokecord.util.cache.PlayerDataCache;
 import com.calculusmaster.pokecord.util.cache.PokemonDataCache;
 import com.calculusmaster.pokecord.util.helpers.*;
 import com.calculusmaster.pokecord.util.helpers.event.LocationEventHelper;
@@ -66,6 +67,8 @@ public class Pokecord
 
         LoggerHelper.init("EV Lists", DataHelper::createEVLists);
         LoggerHelper.init("Type Lists", DataHelper::createTypeLists);
+
+        LoggerHelper.init("Player Data Cache", PlayerDataCache::init);
 
         LoggerHelper.init("Evolutions", SpecialEvolutionRegistry::init);
         LoggerHelper.init("Trainer", Trainer::init);
