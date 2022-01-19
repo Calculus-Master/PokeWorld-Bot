@@ -3,12 +3,15 @@ package com.calculusmaster.pokecord.commands.economy;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.pokemon.CommandInfo;
-import com.calculusmaster.pokecord.commands.pokemon.CommandPokemon;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
+import com.calculusmaster.pokecord.game.pokemon.sort.MarketListSorter;
+import com.calculusmaster.pokecord.game.pokemon.sort.MarketSorterFlag;
+import com.calculusmaster.pokecord.game.pokemon.sort.PokemonListSorter;
+import com.calculusmaster.pokecord.game.pokemon.sort.PokemonSorterFlag;
 import com.calculusmaster.pokecord.game.trade.elements.MarketEntry;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
@@ -112,150 +115,69 @@ public class CommandMarket extends Command
             //@see CommandPokemon - does the situation warrant the use of a parallel stream
             Stream<MarketEntry> display = marketEntries.size() > 500 && msg.size() > 4 ? marketEntries.parallelStream() : marketEntries.stream();
 
-            //Market Specific Sorting
-            if(msg.contains("--listings"))
-            {
-                display = display.filter(m -> m.sellerID.equals(this.player.getId()));
-            }
+            //Market Sorting
+            MarketListSorter marketSorter = new MarketListSorter(display, msg);
 
-            if(msg.contains("--bot"))
-            {
-                display = display.filter(m -> m.sellerID.equals("BOT"));
-            }
+            marketSorter.sortGeneric(MarketSorterFlag.LISTINGS, m -> m.sellerID.equals(this.player.getId()));
 
-            if(msg.contains("--price") && msg.indexOf("--price") + 1 < msg.size())
-            {
-                int index = msg.indexOf("--price") + 1;
-                String after = msg.get(index);
-                boolean validIndex = index + 1 < msg.size();
+            marketSorter.sortGeneric(MarketSorterFlag.BOT, m -> m.sellerID.equals("BOT"));
 
-                if (after.equals(">") && validIndex && isNumeric(index + 1)) display = display.filter(m -> m.price > getInt(index + 1));
-                else if (after.equals("<") && validIndex && isNumeric(index + 1)) display = display.filter(m -> m.price < getInt(index + 1));
-                else if (isNumeric(index)) display = display.filter(m -> m.price == getInt(index));
-            }
+            marketSorter.sortNumeric(MarketSorterFlag.PRICE, m -> m.price);
 
-            //General Sorting (Common with CommandPokemon)
-            if(msg.contains("--name") && msg.indexOf("--name") + 1 < msg.size())
-            {
-                display = display.filter(m -> CommandPokemon.getSearchNames(msg, "--name").stream().anyMatch(s -> m.pokemon.getName().toLowerCase().contains(s)));
-            }
+            //Prepare for Pokemon Sorting
+            PokemonListSorter pokemonSorter = marketSorter.convert();
 
-            if(msg.contains("--level") && msg.indexOf("--level") + 1 < msg.size())
-            {
-                int index = msg.indexOf("--level") + 1;
-                String after = msg.get(index);
-                boolean validIndex = index + 1 < msg.size();
+            pokemonSorter.sortSearchName(PokemonSorterFlag.NAME, (p, s) -> p.getName().toLowerCase().contains(s));
 
-                if (after.equals(">") && validIndex && isNumeric(index + 1)) display = display.filter(m -> m.pokemon.getLevel() > getInt(index + 1));
-                else if (after.equals("<") && validIndex && isNumeric(index + 1)) display = display.filter(m -> m.pokemon.getLevel() < getInt(index + 1));
-                else if (isNumeric(index)) display = display.filter(m -> m.pokemon.getLevel() == getInt(index));
-            }
+            pokemonSorter.sortNumeric(PokemonSorterFlag.LEVEL, Pokemon::getLevel);
 
-            if(msg.contains("--dlevel") && msg.indexOf("--dlevel") + 1 < msg.size())
-            {
-                int index = msg.indexOf("--dlevel") + 1;
-                String after = msg.get(index);
-                boolean validIndex = index + 1 < msg.size();
+            pokemonSorter.sortNumeric(PokemonSorterFlag.LEVEL, Pokemon::getDynamaxLevel);
 
-                if (after.equals(">") && validIndex && isNumeric(index + 1)) display = display.filter(m -> m.pokemon.getDynamaxLevel() > getInt(index + 1));
-                else if (after.equals("<") && validIndex && isNumeric(index + 1)) display = display.filter(m -> m.pokemon.getDynamaxLevel() < getInt(index + 1));
-                else if (isNumeric(index)) display = display.filter(m -> m.pokemon.getDynamaxLevel() == getInt(index));
-            }
+            pokemonSorter.sortNumeric(PokemonSorterFlag.IV, p -> (int)(p.getTotalIVRounded()));
 
-            if(msg.contains("--iv") && msg.indexOf("--iv") + 1 < msg.size())
-            {
-                int index = msg.indexOf("--iv") + 1;
-                String after = msg.get(index);
-                boolean validIndex = index + 1 < msg.size();
+            pokemonSorter.sortNumeric(PokemonSorterFlag.EV, Pokemon::getEVTotal);
 
-                if (after.equals(">") && validIndex && isNumeric(index + 1)) display = display.filter(m -> m.pokemon.getTotalIVRounded() > getInt(index + 1));
-                else if (after.equals("<") && validIndex && isNumeric(index + 1)) display = display.filter(m -> m.pokemon.getTotalIVRounded() < getInt(index + 1));
-                else if (isNumeric(index)) display = display.filter(m -> (int)m.pokemon.getTotalIVRounded() == getInt(index));
-            }
+            pokemonSorter.sortNumeric(PokemonSorterFlag.STAT, Pokemon::getTotalStat);
 
-            if(msg.contains("--ev") && msg.indexOf("--ev") + 1 < msg.size())
-            {
-                int index = msg.indexOf("--ev") + 1;
-                String after = msg.get(index);
-                boolean validIndex = index + 1 < msg.size();
+            pokemonSorter.sortEnum(PokemonSorterFlag.TYPE, Type::cast, Pokemon::isType);
 
-                if (after.equals(">") && validIndex && isNumeric(index + 1)) display = display.filter(m -> m.pokemon.getEVTotal() > getInt(index + 1));
-                else if (after.equals("<") && validIndex && isNumeric(index + 1)) display = display.filter(m -> m.pokemon.getEVTotal() < getInt(index + 1));
-                else if (isNumeric(index)) display = display.filter(m -> m.pokemon.getEVTotal() == getInt(index));
-            }
+            pokemonSorter.sortEnum(PokemonSorterFlag.MAIN_TYPE, Type::cast, (p, t) -> p.getType().get(0).equals(t));
 
-            display = this.sortIVs(display, msg, "--hpiv", "--healthiv", Stat.HP);
+            pokemonSorter.sortEnum(PokemonSorterFlag.GENDER, Gender::cast, (p, g) -> p.getGender().equals(g));
 
-            display = this.sortIVs(display, msg, "--atkiv", "--attackiv", Stat.ATK);
+            pokemonSorter.sortEnum(PokemonSorterFlag.EGG_GROUP, EggGroup::cast, (p, e) -> p.getEggGroups().contains(e));
 
-            display = this.sortIVs(display, msg, "--defiv", "--defenseiv", Stat.DEF);
+            pokemonSorter.sortGeneric(PokemonSorterFlag.SHINY, Pokemon::isShiny);
 
-            display = this.sortIVs(display, msg, "--spatkiv", "--specialattackiv", Stat.SPATK);
+            pokemonSorter.sortGeneric(PokemonSorterFlag.MASTERED, Pokemon::isMastered);
 
-            display = this.sortIVs(display, msg, "--spdefiv", "--specialdefenseiv", Stat.SPDEF);
+            pokemonSorter.sortNumeric(PokemonSorterFlag.HPIV, p -> p.getIVs().get(Stat.HP));
+            pokemonSorter.sortNumeric(PokemonSorterFlag.ATKIV, p -> p.getIVs().get(Stat.ATK));
+            pokemonSorter.sortNumeric(PokemonSorterFlag.DEFIV, p -> p.getIVs().get(Stat.DEF));
+            pokemonSorter.sortNumeric(PokemonSorterFlag.SPATKIV, p -> p.getIVs().get(Stat.SPATK));
+            pokemonSorter.sortNumeric(PokemonSorterFlag.SPDEFIV, p -> p.getIVs().get(Stat.SPDEF));
+            pokemonSorter.sortNumeric(PokemonSorterFlag.SPDIV, p -> p.getIVs().get(Stat.SPD));
+            pokemonSorter.sortNumeric(PokemonSorterFlag.HPEV, p -> p.getEVs().get(Stat.HP));
+            pokemonSorter.sortNumeric(PokemonSorterFlag.ATKEV, p -> p.getEVs().get(Stat.ATK));
+            pokemonSorter.sortNumeric(PokemonSorterFlag.DEFEV, p -> p.getEVs().get(Stat.DEF));
+            pokemonSorter.sortNumeric(PokemonSorterFlag.SPATKEV, p -> p.getEVs().get(Stat.SPATK));
+            pokemonSorter.sortNumeric(PokemonSorterFlag.SPDEFEV, p -> p.getEVs().get(Stat.SPDEF));
+            pokemonSorter.sortNumeric(PokemonSorterFlag.SPDEV, p -> p.getEVs().get(Stat.SPD));
 
-            display = this.sortIVs(display, msg, "--spdiv", "--speediv", Stat.SPD);
+            pokemonSorter.sortIsNameInList(PokemonSorterFlag.LEGENDARY, PokemonRarity.LEGENDARY);
 
-            display = this.sortEVs(display, msg, "--hpev", "--healthev", Stat.HP);
+            pokemonSorter.sortIsNameInList(PokemonSorterFlag.MYTHICAL, PokemonRarity.MYTHICAL);
 
-            display = this.sortEVs(display, msg, "--atkev", "--attackev", Stat.ATK);
+            pokemonSorter.sortIsNameInList(PokemonSorterFlag.ULTRA_BEAST, PokemonRarity.ULTRA_BEAST);
 
-            display = this.sortEVs(display, msg, "--defev", "--defenseev", Stat.DEF);
+            pokemonSorter.sortGeneric(PokemonSorterFlag.MEGA, p -> p.getName().toLowerCase().contains("mega"));
 
-            display = this.sortEVs(display, msg, "--spatkev", "--specialattackev", Stat.SPATK);
+            pokemonSorter.sortGeneric(PokemonSorterFlag.PRIMAL, p -> p.getName().toLowerCase().contains("primal"));
 
-            display = this.sortEVs(display, msg, "--spdefev", "--specialdefenseev", Stat.SPDEF);
+            pokemonSorter.sortGeneric(PokemonSorterFlag.MEGA_OR_PRIMAL, p -> p.getName().toLowerCase().contains("mega") || p.getName().toLowerCase().contains("primal"));
 
-            display = this.sortEVs(display, msg, "--spdev", "--speediv", Stat.SPD);
-
-            if(msg.contains("--type") && msg.indexOf("--type") + 1 < msg.size() && Type.cast(msg.get(msg.indexOf("--type") + 1)) != null)
-            {
-                Type t = Type.cast(msg.get(msg.indexOf("--type") + 1));
-                display = display.filter(m -> m.pokemon.isType(t));
-            }
-
-            if(msg.contains("--maintype") && msg.indexOf("--maintype") + 1 < msg.size() && Type.cast(msg.get(msg.indexOf("--maintype") + 1)) != null)
-            {
-                Type t = Type.cast(msg.get(msg.indexOf("--maintype") + 1));
-                display = display.filter(m -> m.pokemon.getType().get(0).equals(t));
-            }
-
-            if(msg.contains("--gender") && msg.indexOf("--gender") + 1 < msg.size() && Gender.cast(msg.get(msg.indexOf("--gender") + 1)) != null)
-            {
-                Gender g = Gender.cast(msg.get(msg.indexOf("--gender") + 1));
-                display = display.filter(m -> m.pokemon.getGender().equals(g));
-            }
-
-            if(msg.contains("--egggroup") && msg.indexOf("--egggroup") + 1 < msg.size() && EggGroup.cast(msg.get(msg.indexOf("--egggroup") + 1)) != null)
-            {
-                EggGroup g = EggGroup.cast(msg.get(msg.indexOf("--egggroup") + 1));
-                display = display.filter(m -> m.pokemon.getEggGroups().contains(g));
-            }
-
-            if(msg.contains("--shiny"))
-            {
-                display = display.filter(m -> m.pokemon.isShiny());
-            }
-
-            if(msg.contains("--legendary") || msg.contains("--leg"))
-            {
-                display = display.filter(m -> PokemonRarity.LEGENDARY.contains(m.pokemon.getName()));
-            }
-
-            if(msg.contains("--mythical"))
-            {
-                display = display.filter(m -> PokemonRarity.MYTHICAL.contains(m.pokemon.getName()));
-            }
-
-            if(msg.contains("--ub") || msg.contains("--ultrabeast"))
-            {
-                display = display.filter(m -> PokemonRarity.ULTRA_BEAST.contains(m.pokemon.getName()));
-            }
-
-            if(msg.contains("--mega"))
-            {
-                display = display.filter(m -> PokemonRarity.MEGA.contains(m.pokemon.getName()));
-            }
+            //Convert Pokemon Stream back into a MarketEntry Stream
+            display = marketSorter.rebuildStream();
 
             //Convert Stream back to List
             marketEntries = display.collect(Collectors.toList());
@@ -277,48 +199,13 @@ public class CommandMarket extends Command
         return this;
     }
 
-    private Stream<MarketEntry> sortIVs(Stream<MarketEntry> display, List<String> msg, String tag1, String tag2, Stat iv)
-    {
-        boolean hasTag1 = msg.contains(tag1) && msg.indexOf(tag1) + 1 < msg.size();
-        boolean hasTag2 = msg.contains(tag2) && msg.indexOf(tag2) + 1 < msg.size();
-
-        if(hasTag1 || hasTag2)
-        {
-            int index = msg.indexOf(hasTag1 ? tag1 : tag2) + 1;
-            String after = msg.get(index);
-            boolean validIndex = index + 1 < msg.size();
-            if(after.equals(">") && validIndex && isNumeric(index + 1)) return display.filter(m -> m.pokemon.getIVs().get(iv) > getInt(index + 1));
-            else if(after.equals("<") && validIndex && isNumeric(index + 1)) return display.filter(m -> m.pokemon.getIVs().get(iv) < getInt(index + 1));
-            else if(isNumeric(index)) return display.filter(m -> m.pokemon.getIVs().get(iv) == getInt(index));
-        }
-
-        return display;
-    }
-
-    private Stream<MarketEntry> sortEVs(Stream<MarketEntry> display, List<String> msg, String tag1, String tag2, Stat ev)
-    {
-        boolean hasTag1 = msg.contains(tag1) && msg.indexOf(tag1) + 1 < msg.size();
-        boolean hasTag2 = msg.contains(tag2) && msg.indexOf(tag2) + 1 < msg.size();
-
-        if(hasTag1 || hasTag2)
-        {
-            int index = msg.indexOf(hasTag1 ? tag1 : tag2) + 1;
-            String after = msg.get(index);
-            boolean validIndex = index + 1 < msg.size();
-            if(after.equals(">") && validIndex && isNumeric(index + 1)) return display.filter(m -> m.pokemon.getEVs().get(ev) > getInt(index + 1));
-            else if(after.equals("<") && validIndex && isNumeric(index + 1)) return display.filter(m -> m.pokemon.getEVs().get(ev) < getInt(index + 1));
-            else if(isNumeric(index)) return display.filter(m -> m.pokemon.getEVs().get(ev) == getInt(index));
-        }
-
-        return display;
-    }
-
     private void sortOrder(List<MarketEntry> entries, OrderSort o, boolean desc)
     {
         switch(o)
         {
             case IV -> entries.sort(Comparator.comparingDouble(m -> m.pokemon.getTotalIVRounded()));
             case EV -> entries.sort(Comparator.comparingInt(m -> m.pokemon.getEVTotal()));
+            case STAT -> entries.sort(Comparator.comparingInt(m -> m.pokemon.getTotalStat()));
             case LEVEL -> entries.sort(Comparator.comparingInt(m -> m.pokemon.getLevel()));
             case NAME -> entries.sort(Comparator.comparing(m -> m.pokemon.getName()));
             case PRICE -> entries.sort(Comparator.comparingInt(m -> m.price));
@@ -332,6 +219,7 @@ public class CommandMarket extends Command
     {
         IV,
         EV,
+        STAT,
         LEVEL,
         NAME,
         PRICE,

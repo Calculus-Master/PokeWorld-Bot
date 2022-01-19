@@ -8,9 +8,9 @@ import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.game.pokemon.PokemonListSorter;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
-import com.calculusmaster.pokecord.game.pokemon.PokemonSorterFlag;
+import com.calculusmaster.pokecord.game.pokemon.sort.PokemonListSorter;
+import com.calculusmaster.pokecord.game.pokemon.sort.PokemonSorterFlag;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -151,32 +151,6 @@ public class CommandPokemon extends Command
         if(owned >= 10000) Achievements.grant(this.player.getId(), Achievements.OWNED_10000_POKEMON, this.event);
 
         return this;
-    }
-
-    public static List<String> getSearchNames(List<String> msg, String flag)
-    {
-        int start = msg.indexOf(flag) + 1;
-        int end = msg.size() - 1;
-
-        for(int i = start; i < msg.size(); i++)
-        {
-            if(msg.get(i).contains("--"))
-            {
-                end = i - 1;
-                i = msg.size();
-            }
-        }
-
-        StringBuilder names = new StringBuilder();
-
-        for(int i = start; i <= end; i++)
-        {
-            names.append(msg.get(i)).append(" ");
-        }
-
-        String delimiter = "\\|"; //Currently the OR delimiter is |
-
-        return new ArrayList<>(Arrays.asList(names.toString().trim().split(delimiter))).stream().map(String::trim).map(String::toLowerCase).collect(Collectors.toList());
     }
 
     private void sortOrder()

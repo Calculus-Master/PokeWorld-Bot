@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game.pokemon;
+package com.calculusmaster.pokecord.game.pokemon.sort;
 
 import java.util.Arrays;
 import java.util.List;
