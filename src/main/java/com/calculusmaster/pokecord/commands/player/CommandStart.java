@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.commands.misc;
+package com.calculusmaster.pokecord.commands.player;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.pokemon.CommandInfo;
@@ -33,7 +33,7 @@ public class CommandStart extends Command
             this.embed
                     .setTitle("Welcome to the world of Pokemon!")
                     .addField("Starter", """
-                            To being, use the `p!start <starter>` command to select your starter Pokemon. Replace <starter> with the name of the starter you pick.
+                            To begin, use the `p!start <starter>` command to select your starter Pokemon. Replace <starter> with the name of the starter you pick.
                             Possible Starters:\s
                             Generation 1: **Bulbasaur** | **Charmander** | **Squirtle**
                             Generation 2: **Chikorita** | **Cyndaquil** | **Totodile**
