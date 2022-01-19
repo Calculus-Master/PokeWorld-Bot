@@ -136,6 +136,7 @@ public class Listener extends ListenerAdapter
 
         int initL = p.getLevel();
 
+        //TODO: This should scale with Pokemon level
         int experience = (int)(new Random().nextInt(200) * (1 + Math.random()));
 
         p.addExp(experience);

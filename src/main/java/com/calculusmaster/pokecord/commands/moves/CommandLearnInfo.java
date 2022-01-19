@@ -22,6 +22,7 @@ public class CommandLearnInfo extends Command
 
         String move = Global.normalize(this.getMultiWordContent(1));
 
+        //TODO: Replace this with p!movedex – p!movedex will also show all the moves that <input> Pokemon can learn
         if(!Move.isMove(move)) this.response = "Invalid move name!";
         else
         {
