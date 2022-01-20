@@ -18,6 +18,6 @@ public class TerrainEffect extends MoveEffect
         this.duel.terrain = this.terrain;
         this.duel.terrainTurns = 5;
 
-        return this.user.getName() + " created " + Global.normalize(this.terrain.toString().replaceAll("_", " "));
+        return this.user.getName() + " created a " + Global.normalize(this.terrain.toString().replaceAll("_", " ") + "!");
     }
 }
