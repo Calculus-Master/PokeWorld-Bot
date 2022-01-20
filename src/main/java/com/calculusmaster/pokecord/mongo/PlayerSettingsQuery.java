@@ -30,7 +30,8 @@ public class PlayerSettingsQuery
                 .append("playerID", playerID)
                 .append("detailed", false)
                 .append("autoinfo", false)
-                .append("default_order", "NUMBER");
+                .append("default_order", "NUMBER")
+                .append("listfields", false);
 
         LoggerHelper.logDatabaseInsert(PlayerSettingsQuery.class, settingsData);
 
