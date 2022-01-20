@@ -53,8 +53,8 @@ public class CommandInfo extends Command
         String image = chosen.getImage();
 
         this.embed
-                .addField("General Info", "Experience: %s\nType: %s\nNature: %s\nGender: %s\nDynamax Level: %s".formatted(exp, type, nature, gender, dynamaxLevel), false)
-                .addField("Held", "Item: %s\nTM: %s\nTR: %s".formatted(item, tm, tr), false)
+                .addField("General Info", "**Experience:** %s\n**Type:** %s\n**Nature:** %s\n**Gender:** %s\n**Dynamax Level** %s".formatted(exp, type, nature, gender, dynamaxLevel), false)
+                .addField("Held", "**Item:** %s\n**TM:** %s\n**TR:** %s".formatted(item, tm, tr), false)
                 .addField(this.getStatsField(chosen));
 
         if(this.playerData.getSettings().get(Settings.CLIENT_DETAILED, Boolean.class))
