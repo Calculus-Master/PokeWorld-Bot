@@ -7,7 +7,7 @@ public enum Settings
     //Client
     CLIENT_DETAILED("detailed", "Toggles the display of IVs and EVs throughout the bot."),
     CLIENT_CATCH_AUTO_INFO("autoinfo", "Toggle automatically sending `p!info latest` after catching a Pokemon."),
-    CLIENT_DEFAULT_ORDER("order", "Set the default ordering of `p!pokemon`. Examples: `name`, `iv`, `level`, `number`, `random`"),
+    CLIENT_DEFAULT_ORDER("default_order", "Set the default ordering of `p!pokemon`. Examples: `name`, `iv`, `level`, `number`, `random`"),
     CLIENT_POKEMON_LIST_FIELDS("listfields", "Toggle p!pokemon view between Fields and a Text-based List"),
     //Server
     SERVER_PREFIX("prefix", "Changes the bot prefix (default `p!`)"),
