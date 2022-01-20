@@ -134,6 +134,7 @@ public class CommandDev extends Command
 
                 String name = Global.normalize(this.mentions.size() > 0 ? this.getMultiWordContent(3) : this.getMultiWordContent(2));
                 Pokemon p = Pokemon.create(name);
+                p.setLevel(100);
                 target.addPokemon(p.getUUID());
                 p.upload();
             }
