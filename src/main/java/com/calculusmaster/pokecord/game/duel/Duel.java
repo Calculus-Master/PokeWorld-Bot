@@ -514,7 +514,7 @@ public class Duel
                 int damage = new Move("Doom Desire").getDamage(this.players[this.current].active, this.players[this.other].active);
                 this.players[this.other].active.damage(damage);
 
-                turnResult += "Doom Desire landed and dealt " + damage + " to " + this.players[this.other].active.getName() + "!\n";
+                turnResult += "Doom Desire landed and dealt **" + damage + "** damage to " + this.players[this.other].active.getName() + "!\n";
             }
         }
 
