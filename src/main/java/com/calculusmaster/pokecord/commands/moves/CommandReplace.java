@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.moves;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
+import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -41,7 +42,7 @@ public class CommandReplace extends Command
             selected.updateMoves();
 
             this.embed.setDescription("Replaced " + oldMove + " with " + newMove + "!");
-            //this.color = Move.asMove(newMove).getType().getColor();
+            this.color = new Move(newMove).getType().getColor();
         }
 
         return this;

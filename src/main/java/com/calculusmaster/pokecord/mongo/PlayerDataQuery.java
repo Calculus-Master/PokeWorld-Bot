@@ -242,7 +242,6 @@ public class PlayerDataQuery extends MongoQuery
     public void addPokemon(String UUID)
     {
         Mongo.PlayerData.updateOne(this.query, Updates.push("pokemon", UUID));
-        PokemonDataCache.updateCache(UUID);
 
         this.update();
     }

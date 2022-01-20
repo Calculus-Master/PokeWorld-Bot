@@ -186,6 +186,8 @@ public class Pokemon
         LoggerHelper.logDatabaseInsert(Pokemon.class, data);
 
         Mongo.PokemonData.insertOne(data);
+
+        PokemonDataCache.addCacheData(this.getUUID(), data);
     }
 
     public void delete()
@@ -196,6 +198,8 @@ public class Pokemon
     public void completeUpdate()
     {
         Mongo.PokemonData.replaceOne(this.query(), this.buildDatabaseDocument());
+
+        PokemonDataCache.updateCache(this.getUUID());
     }
 
     private void update(Bson... updates)
@@ -203,6 +207,8 @@ public class Pokemon
         LoggerHelper.logDatabaseUpdate(Pokemon.class, updates);
 
         Mongo.PokemonData.updateOne(this.query(), List.of(updates));
+
+        PokemonDataCache.updateCache(this.getUUID());
     }
 
     public void updateName()
