@@ -946,6 +946,8 @@ public class Duel
             }
         }
 
+        turnResult += "\n\n";
+
         return turnResult;
     }
 
