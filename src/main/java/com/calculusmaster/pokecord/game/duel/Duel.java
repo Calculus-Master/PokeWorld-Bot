@@ -946,7 +946,7 @@ public class Duel
             }
         }
 
-        turnResult += "\n\n";
+        if(this.first.equals(this.players[this.current].active.getUUID())) turnResult += "\n\n";
 
         return turnResult;
     }
