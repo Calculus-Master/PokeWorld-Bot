@@ -24,8 +24,7 @@ public class PokemonListSorter
 
     public PokemonListSorter(Stream<Pokemon> stream, List<String> msg)
     {
-        List<Pokemon> temp = stream.toList();
-        this.stream = temp.stream();
+        this.stream = stream;
         this.msg = msg;
     }
 
