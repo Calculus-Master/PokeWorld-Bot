@@ -4,8 +4,12 @@ import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.util.interfaces.ZCrystalValidator;
+import org.jooq.lambda.Seq;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public enum ZCrystal
 {
@@ -130,9 +134,6 @@ public enum ZCrystal
 
     public static ZCrystal getRandomUniqueZCrystal()
     {
-        List<ZCrystal> uniques = new ArrayList<>(Arrays.asList(values()).subList(18, values().length));
-        Collections.shuffle(uniques);
-
-        return uniques.get(0);
+        return Seq.seq(Arrays.stream(values())).filter(z -> z.type == null).shuffle().findFirst().orElse(ZCrystal.NORMALIUM_Z);
     }
 }
