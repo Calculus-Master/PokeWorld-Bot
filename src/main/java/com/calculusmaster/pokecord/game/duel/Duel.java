@@ -334,6 +334,11 @@ public class Duel
             if(new Random().nextInt(100) < 20) return this.players[this.current].active.getName() + " is paralyzed!";
         }
 
+        if(this.players[this.current].active.hasStatusCondition(StatusCondition.INFATUATED))
+        {
+            if(new Random().nextInt(100) < 50) return this.players[this.current].active.getName() + " is infatuated and will not attack!";
+        }
+
         if(this.data(this.current).perishSongTurns > 0)
         {
             this.data(this.current).perishSongTurns--;
