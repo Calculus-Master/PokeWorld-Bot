@@ -184,11 +184,10 @@ public class CommandPokemon extends Command
 
     private void createTextListEmbed(int start, int end)
     {
-        StringBuilder sb = new StringBuilder();
+        List<String> lines = new ArrayList<>();
+        for(int i = start; i < end; i++) lines.add(this.getLine(this.pokemon.get(i)));
 
-        for(int i = start; i < end; i++) sb.append(this.getLine(this.pokemon.get(i)));
-
-        this.embed.setDescription(sb.toString());
+        this.embed.setDescription(String.join("\n", lines));
     }
 
     private String getLine(Pokemon p)
@@ -199,7 +198,7 @@ public class CommandPokemon extends Command
                 "Level " + p.getLevel(),
                 this.detailed ? "IV: " + p.getTotalIV() : "",
                 this.detailed ? "EV: " + p.getEVTotal() : ""
-        ).filter(String::isEmpty).collect(Collectors.joining(" | "));
+        ).filter(s -> !s.isEmpty()).collect(Collectors.joining(" | "));
     }
 
     private String getTags(Pokemon p)
