@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.util.listener;
 import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
+import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
@@ -21,10 +22,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -136,8 +134,32 @@ public class Listener extends ListenerAdapter
 
         int initL = p.getLevel();
 
-        //TODO: This should scale with Pokemon level
-        int experience = (int)(new Random().nextInt(200) * (1 + Math.random()));
+        int experience;
+        int required = GrowthRate.getRequiredExp(p.getData().growthRate, p.getLevel());
+        final SplittableRandom r = new SplittableRandom();
+
+        //Messages: 0.1% - 10% of the required exp
+        if(p.getLevel() < 25)
+        {
+            double fraction = r.nextInt(1, 100) / 1000D;
+            experience = (int)(fraction * required);
+        }
+        //Messages: 50% to 150% of 5% of the required exp
+        else if(p.getLevel() < 40)
+        {
+            int base = required / 100 * 5;
+            experience = r.nextInt((int)(base * 0.5), (int)(base * 1.5));
+        }
+        //Messages: 50% to 150% of 20% of the required exp from 5 levels below
+        else if(p.getLevel() < 80)
+        {
+            required = GrowthRate.getRequiredExp(p.getData().growthRate, p.getLevel() - 5);
+            int base = (int)(required * 0.2);
+            experience = r.nextInt((int)(base * 0.5), (int)(base * 1.5));
+        }
+        else experience = new SplittableRandom().nextInt(1000, 5000);
+
+        if(experience == 0) experience = 50;
 
         p.addExp(experience);
 
