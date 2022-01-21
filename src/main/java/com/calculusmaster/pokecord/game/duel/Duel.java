@@ -446,6 +446,12 @@ public class Duel
             accurate = move.isAccurate(this.players[this.current].active, this.players[this.other].active);
         }
 
+        if(move.getName().equals("Guillotine"))
+        {
+            move.setAccuracy(30 + (this.players[this.current].active.getLevel() - this.players[this.other].active.getLevel()));
+            accurate = move.isAccurate(this.players[this.current].active, this.players[this.other].active);
+        }
+
         boolean bypass = (move.getName().equals("Phantom Force") && this.data(this.current).phantomForceUsed) || (move.getName().equals("Shadow Force") && this.data(this.current).shadowForceUsed) || move.getName().equals("Feint");
 
         if(this.data(this.other).detectUsed)
