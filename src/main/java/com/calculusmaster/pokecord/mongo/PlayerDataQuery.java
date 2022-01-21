@@ -13,16 +13,14 @@ import com.calculusmaster.pokecord.util.cache.PokemonDataCache;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.bson.Document;
 import org.json.JSONArray;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.SplittableRandom;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -39,7 +37,15 @@ public class PlayerDataQuery extends MongoQuery
     //Cache
     public static PlayerDataQuery of(String playerID)
     {
-        return PlayerDataCache.CACHE.containsKey(playerID) ? PlayerDataCache.CACHE.get(playerID).data() : null;
+        if(PlayerDataCache.CACHE.containsKey(playerID)) return PlayerDataCache.CACHE.get(playerID).data();
+        else
+        {
+            try { LoggerHelper.info(PlayerDataQuery.class, "Cache does not contain " + playerID + "! Searching for: " + Objects.requireNonNull(Mongo.PlayerData.find(Filters.eq("playerID", playerID)).first())); }
+            catch(NullPointerException e) { return null; }
+
+            PlayerDataCache.addCache(playerID);
+            return PlayerDataQuery.of(playerID);
+        }
     }
 
     //Registered
