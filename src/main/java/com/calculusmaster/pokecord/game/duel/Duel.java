@@ -352,6 +352,38 @@ public class Duel
             }
         }
 
+        if(this.data(this.current).futureSightUsed)
+        {
+            this.data(this.current).futureSightTurns--;
+
+            if(this.data(this.current).futureSightTurns <= 0)
+            {
+                this.data(this.current).futureSightTurns = 0;
+                this.data(this.current).futureSightUsed = false;
+
+                int damage = new Move("Future Sight").getDamage(this.players[this.current].active, this.players[this.other].active);
+                this.players[this.other].active.damage(damage);
+
+                turnResult += "Future Sight landed and dealt **" + damage + "** damage to " + this.players[this.other].active.getName() + "!\n";
+            }
+        }
+
+        if(this.data(this.current).doomDesireUsed)
+        {
+            this.data(this.current).doomDesireTurns--;
+
+            if(this.data(this.current).doomDesireTurns <= 0)
+            {
+                this.data(this.current).doomDesireTurns = 0;
+                this.data(this.current).doomDesireUsed = false;
+
+                int damage = new Move("Doom Desire").getDamage(this.players[this.current].active, this.players[this.other].active);
+                this.players[this.other].active.damage(damage);
+
+                turnResult += "Doom Desire landed and dealt **" + damage + "** damage to " + this.players[this.other].active.getName() + "!\n";
+            }
+        }
+
         //Pre-Move Checks
         boolean accurate = move.isAccurate(this.players[this.current].active, this.players[this.other].active);
         boolean otherImmune = false;
@@ -489,38 +521,6 @@ public class Duel
             if(this.data(this.current).statImmuneTurns <= 0)
             {
                 this.data(this.current).statImmuneTurns = 0;
-            }
-        }
-
-        if(this.data(this.current).futureSightUsed)
-        {
-            this.data(this.current).futureSightTurns--;
-
-            if(this.data(this.current).futureSightTurns <= 0)
-            {
-                this.data(this.current).futureSightTurns = 0;
-                this.data(this.current).futureSightUsed = false;
-
-                int damage = new Move("Future Sight").getDamage(this.players[this.current].active, this.players[this.other].active);
-                this.players[this.other].active.damage(damage);
-
-                turnResult += "Future Sight landed and dealt **" + damage + "** damage to " + this.players[this.other].active.getName() + "!\n";
-            }
-        }
-
-        if(this.data(this.current).doomDesireUsed)
-        {
-            this.data(this.current).doomDesireTurns--;
-
-            if(this.data(this.current).doomDesireTurns <= 0)
-            {
-                this.data(this.current).doomDesireTurns = 0;
-                this.data(this.current).doomDesireUsed = false;
-
-                int damage = new Move("Doom Desire").getDamage(this.players[this.current].active, this.players[this.other].active);
-                this.players[this.other].active.damage(damage);
-
-                turnResult += "Doom Desire landed and dealt **" + damage + "** damage to " + this.players[this.other].active.getName() + "!\n";
             }
         }
 
