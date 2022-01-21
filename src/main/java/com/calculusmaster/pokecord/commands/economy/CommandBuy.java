@@ -244,7 +244,7 @@ public class CommandBuy extends Command
         {
             if(this.insufficientMasteryLevel(Feature.PURCHASE_Z_CRYSTALS)) return this.invalidMasteryLevel(Feature.PURCHASE_Z_CRYSTALS);
 
-            if(this.msg.length != 3 && this.msg.length != 4) this.response = CommandInvalid.getShort();
+            if(this.msg.length != 3 && this.msg.length != 4) return this.invalid();
 
             String requestedZCrystal = Global.normalize(this.msg[2] + " Z");
             ZCrystal z = ZCrystal.cast(requestedZCrystal);

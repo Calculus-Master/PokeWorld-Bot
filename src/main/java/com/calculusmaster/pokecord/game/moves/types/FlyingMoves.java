@@ -131,13 +131,16 @@ public class FlyingMoves
                 .execute();
     }
 
-    //TODO: Removes barriers - barrier moves: mist, light screen, reflect, safeguard
+    //TODO: Removes barriers - barrier moves: mist, safeguard
     public String Defog(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.entryHazards[duel.playerIndexFromUUID(user.getUUID())] = new DuelHelper.EntryHazardHandler();
-        duel.entryHazards[duel.playerIndexFromUUID(opponent.getUUID())] = new DuelHelper.EntryHazardHandler();
+        for(int i = 0; i < duel.getPlayers().length; i++)
+        {
+            duel.entryHazards[i] = new DuelHelper.EntryHazardHandler();
+            duel.barriers[i] = new DuelHelper.FieldBarrierHandler();
+        }
 
-        return "All Entry Hazards were removed! " + MoveEffectBuilder.make(user, opponent, duel, move)
+        return "All Entry Hazards and Barriers were removed! " + MoveEffectBuilder.make(user, opponent, duel, move)
                 .addEvasionChangeEffect(-1, 100, false)
                 .execute();
     }
