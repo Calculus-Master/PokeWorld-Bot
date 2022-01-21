@@ -381,6 +381,11 @@ public class Pokemon
         return this.getStat(Stat.HP);
     }
 
+    public int getMaxHealth(double fraction)
+    {
+        return (int)(this.getMaxHealth() * fraction);
+    }
+
     public int getTotalStat()
     {
         return Arrays.stream(Stat.values()).mapToInt(this::getStat).sum();

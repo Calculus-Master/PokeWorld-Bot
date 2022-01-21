@@ -44,10 +44,6 @@ public class WildDuel extends Duel
     {
         this.turnSetup();
 
-        //Status Conditions
-        if(!this.players[0].active.isFainted()) this.data(0).canUseMove = this.statusConditionEffects(0);
-        if(!this.players[1].active.isFainted()) this.data(1).canUseMove = this.statusConditionEffects(1);
-
         //No swapping, No Z-Moves
         if(!this.isComplete())
         {

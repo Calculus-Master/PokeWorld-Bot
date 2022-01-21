@@ -63,9 +63,6 @@ public class RaidDuel extends WildDuel
 
         for(Player p : this.players) if (p.active.isFainted()) this.queuedMoves.put(p.ID, new TurnAction(ActionType.IDLE, -1, -1));
 
-        //Status Conditions
-        for(int i = 0; i < this.players.length; i++) if(!this.players[i].active.isFainted()) this.data(i).canUseMove = this.statusConditionEffects(i);
-
         if(!this.isComplete())
         {
             for(int i = 0; i < this.getNonBotPlayers().length; i++) if(!this.getAction(i).equals(ActionType.IDLE)) this.moveAction(i);

@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.*;
+import java.util.function.BiFunction;
 
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.*;
 
@@ -82,10 +83,6 @@ public class Duel
     public void turnHandler()
     {
         this.turnSetup();
-
-        //Status Conditions
-        if(!this.players[0].active.isFainted()) this.data(0).canUseMove = this.statusConditionEffects(0);
-        if(!this.players[1].active.isFainted()) this.data(1).canUseMove = this.statusConditionEffects(1);
 
         //Both players are using a move
         if(this.isUsingMove(0) && this.isUsingMove(1))
@@ -255,6 +252,10 @@ public class Duel
     {
         String turnResult = "";
 
+        //Setup
+        Pokemon c = this.players[this.current].active;
+        Pokemon o = this.players[this.other].active;
+
         //Arceus Plate
         if(this.players[this.current].active.getAbilities().contains("Multitype"))
         {
@@ -320,8 +321,166 @@ public class Duel
         //Unfreeze opponent if this move is a Fire Type, Scald or Steam Eruption
         if(move.getType().equals(Type.FIRE) || move.getName().equals("Scald") || move.getName().equals("Steam Eruption")) this.players[this.other].active.removeStatusCondition(StatusCondition.FROZEN);
 
-        //Use the result from the Status Conditions to determine whether or not the user can move TODO: Do the check right when the turn begins, instead of twice
-        if(!this.data(this.current).canUseMove) return "";
+        //Check Status Conditions
+        if(this.players[this.current].active.hasAnyStatusCondition())
+        {
+            List<String> statusResults = new ArrayList<>();
+            SplittableRandom r = new SplittableRandom();
+            int statusDamage;
+
+            BiFunction<String, List<String>, String> compileResults = (turn, status) -> {
+                this.results.add(turn);
+                this.results.add(String.join(" ", status));
+                return "";
+            };
+
+            //Damage Status Conditions
+            if(c.hasStatusCondition(StatusCondition.BURNED))
+            {
+                statusDamage = c.getMaxHealth(1 / 16.);
+                c.damage(statusDamage);
+
+                statusResults.add("%s is burned! The burn dealt %s damage!".formatted(c.getName(), statusDamage));
+            }
+
+            if(c.hasStatusCondition(StatusCondition.POISONED))
+            {
+                statusDamage = c.getMaxHealth(1 / 8.);
+                c.damage(statusDamage);
+
+                statusResults.add("%s is poisoned! The poison dealt %s damage!".formatted(c.getName(), statusDamage));
+            }
+
+            if(c.hasStatusCondition(StatusCondition.BADLY_POISONED))
+            {
+                statusDamage = c.getMaxHealth(1 / 16.) * this.data(this.current).badlyPoisonedTurns;
+                c.damage(statusDamage);
+
+                statusResults.add("%s is badly poisoned! The poison dealt %s damage!".formatted(c.getName(), statusDamage));
+            }
+
+            if(c.hasStatusCondition(StatusCondition.CURSED))
+            {
+                statusDamage = c.getMaxHealth(1 / 4.);
+                c.damage(statusDamage);
+
+                statusResults.add("%s is cursed! The curse dealt %s damage!".formatted(c.getName(), statusDamage));
+            }
+
+            if(c.hasStatusCondition(StatusCondition.BOUND))
+            {
+                this.data(this.current).boundTurns++;
+
+                if(this.data(this.current).boundTurns == 5)
+                {
+                    this.data(this.current).boundTurns = 0;
+
+                    statusResults.add(c.getName() + " is no longer bound!");
+                }
+                else
+                {
+                    statusDamage = c.getMaxHealth(1 / 8.);
+                    c.damage(statusDamage);
+
+                    statusResults.add("%s is bound! The binding dealt %s damage!".formatted(c.getName(), statusDamage));
+                }
+            }
+
+            //Termination-Capable Status Conditions
+
+            if(c.hasStatusCondition(StatusCondition.CONFUSED))
+            {
+                if(r.nextInt(100) < 33)
+                {
+                    statusDamage = new Move("Tackle").getDamage(c, c);
+                    c.damage(statusDamage);
+
+                    statusResults.add("%s is confused! %s hurt itself in its confusion for %s damage!".formatted(c.getName(), c.getName(), statusDamage));
+
+                    return compileResults.apply(turnResult, statusResults);
+                }
+                else if(r.nextInt(100) < 50) c.removeStatusCondition(StatusCondition.CONFUSED);
+            }
+
+            if(c.hasStatusCondition(StatusCondition.FROZEN))
+            {
+                if(r.nextInt(100) < 20 || this.weather.equals(Weather.HARSH_SUNLIGHT))
+                {
+                    c.removeStatusCondition(StatusCondition.FROZEN);
+
+                    statusResults.add("%s has thawed out%s!".formatted(c.getName(), this.weather.equals(Weather.HARSH_SUNLIGHT) ? " due to the Harsh Sunlight" : ""));
+                }
+                else
+                {
+                    statusResults.add("%s is frozen and cannot move!");
+                    return compileResults.apply(turnResult, statusResults);
+                }
+            }
+
+            if(c.hasStatusCondition(StatusCondition.ASLEEP))
+            {
+                if(this.data(this.current).asleepTurns == 2 || this.terrain.equals(Terrain.ELECRIC_TERRAIN))
+                {
+                    c.removeStatusCondition(StatusCondition.ASLEEP);
+                    this.data(this.current).asleepTurns = 0;
+
+                    statusResults.add("%s woke up%s!".formatted(c.getName(), this.terrain.equals(Terrain.ELECRIC_TERRAIN) ? " due to the Electric Terrain" : ""));
+
+                    if(c.hasStatusCondition(StatusCondition.NIGHTMARE))
+                    {
+                        c.removeStatusCondition(StatusCondition.NIGHTMARE);
+                        statusResults.add("%s's nightmare has ended!".formatted(c.getName()));
+                    }
+                }
+                else
+                {
+                    this.data(this.current).asleepTurns++;
+
+                    if(c.hasStatusCondition(StatusCondition.NIGHTMARE))
+                    {
+                        statusDamage = c.getMaxHealth(1 / 4.);
+                        c.damage(statusDamage);
+
+                        statusResults.add("%s is in a nightmare! The nightmare dealt %s damage!".formatted(c.getName(), statusDamage));
+                    }
+
+                    statusResults.add("%s is asleep!".formatted(c.getName()));
+
+                    return compileResults.apply(turnResult, statusResults);
+                }
+            }
+
+            if(c.hasStatusCondition(StatusCondition.INFATUATED))
+            {
+                if(r.nextInt(100) < 50)
+                {
+                    statusResults.add("%s is infatuated and will not attack!".formatted(c.getName()));
+
+                    return compileResults.apply(turnResult, statusResults);
+                }
+            }
+
+            if(c.hasStatusCondition(StatusCondition.PARALYZED))
+            {
+                if(r.nextInt(100) < 25)
+                {
+                    statusResults.add("%s is paralyzed!".formatted(c.getName()));
+
+                    return compileResults.apply(turnResult, statusResults);
+                }
+            }
+
+            if(c.hasStatusCondition(StatusCondition.FLINCHED))
+            {
+                c.removeStatusCondition(StatusCondition.FLINCHED);
+
+                statusResults.add("%s flinched and cannot move!".formatted(c.getName()));
+
+                return compileResults.apply(turnResult, statusResults);
+            }
+
+            this.results.add(String.join(" ", statusResults));
+        }
 
         //Re-Check Certain Status Conditions
         if(this.players[this.current].active.hasStatusCondition(StatusCondition.ASLEEP))
@@ -1113,166 +1272,6 @@ public class Duel
                 if(move.getType().equals(Type.PSYCHIC)) move.setPower(move.getPower() * 1.5);
             }
         }
-    }
-
-    //Returns true if the pokemon can attack
-    public boolean statusConditionEffects(int p)
-    {
-        StringBuilder status = new StringBuilder();
-        Random r = new Random();
-        int statusDamage;
-
-        String name = this.players[p].active.getName();
-        Pokemon pokemon = this.players[p].active;
-
-        if(pokemon.hasStatusCondition(StatusCondition.BURNED))
-        {
-            statusDamage = (int)(this.players[0].active.getStat(Stat.HP) / 16.);
-            pokemon.damage(statusDamage);
-
-            status.append(name).append(" is burned! The burn dealt ").append(statusDamage).append(" damage!\n");
-        }
-
-        if(pokemon.hasStatusCondition(StatusCondition.POISONED))
-        {
-            statusDamage = (int)(pokemon.getStat(Stat.HP) / 8.);
-            pokemon.damage(statusDamage);
-
-            status.append(name).append(" is poisoned! The poison dealt ").append(statusDamage).append(" damage!\n");
-        }
-
-        if(pokemon.hasStatusCondition(StatusCondition.BADLY_POISONED))
-        {
-            statusDamage = (int)(pokemon.getStat(Stat.HP) / 16.) * this.data(p).badlyPoisonedTurns;
-            pokemon.damage(statusDamage);
-
-            status.append(name).append(" is badly poisoned! The poison dealt ").append(statusDamage).append(" damage!\n");
-        }
-
-        if(pokemon.hasStatusCondition(StatusCondition.CURSED))
-        {
-            statusDamage = pokemon.getStat(Stat.HP) / 4;
-            pokemon.damage(statusDamage);
-
-            status.append(name).append(" is cursed! The curse dealt ").append(statusDamage).append(" damage!\n");
-        }
-
-        if(pokemon.hasStatusCondition(StatusCondition.BOUND))
-        {
-            this.data(p).boundTurns++;
-
-            if(this.data(p).boundTurns == 5)
-            {
-                this.data(p).boundTurns = 0;
-
-                status.append(name).append(" is no longer bound!");
-            }
-            else
-            {
-                statusDamage = pokemon.getStat(Stat.HP) / 8;
-                pokemon.damage(statusDamage);
-
-                status.append(name).append(" is bound! The binding dealt ").append(statusDamage).append(" damage!\n");
-            }
-        }
-
-        if(pokemon.hasStatusCondition(StatusCondition.CONFUSED))
-        {
-            if(r.nextInt(100) < 33)
-            {
-                statusDamage = new Move("Tackle").getDamage(pokemon, pokemon);
-                pokemon.damage(statusDamage);
-
-                status.append(name).append(" is confused! It hurt itself in its confusion for ").append(statusDamage).append(" damage!\n");
-                results.add(status.toString());
-                return false;
-            }
-            else if(r.nextInt(100) < 50) pokemon.removeStatusCondition(StatusCondition.CONFUSED);
-        }
-
-        if(pokemon.hasStatusCondition(StatusCondition.FROZEN))
-        {
-            if(r.nextInt(100) < 20 || this.weather.equals(Weather.HARSH_SUNLIGHT))
-            {
-                pokemon.removeStatusCondition(StatusCondition.FROZEN);
-
-                status.append(name).append(" has thawed out").append(this.weather.equals(Weather.HARSH_SUNLIGHT) ? " due to the harsh sunlight!" : "!");
-            }
-            else
-            {
-                status.append(name).append(" is frozen and can't use any moves!");
-                results.add(status.toString());
-                return false;
-            }
-        }
-
-        if(pokemon.hasStatusCondition(StatusCondition.ASLEEP))
-        {
-            if(this.data(p).asleepTurns == 2 || this.terrain.equals(Terrain.ELECRIC_TERRAIN))
-            {
-                pokemon.removeStatusCondition(StatusCondition.ASLEEP);
-                this.data(p).asleepTurns = 0;
-
-                status.append(name).append(" woke up").append(this.terrain.equals(Terrain.ELECRIC_TERRAIN) ? " due to the Electric Field!\n" : "!\n");
-                if(pokemon.hasStatusCondition(StatusCondition.NIGHTMARE))
-                {
-                    pokemon.removeStatusCondition(StatusCondition.NIGHTMARE);
-                    status.append("The nightmare was removed!\n");
-                }
-            }
-            else
-            {
-                this.data(p).asleepTurns++;
-
-                if(pokemon.hasStatusCondition(StatusCondition.NIGHTMARE))
-                {
-                    statusDamage = pokemon.getStat(Stat.HP) / 4;
-                    pokemon.damage(statusDamage);
-
-                    status.append(name).append(" has a nightmare!").append("The nightmare dealt ").append(statusDamage).append(" damage!");
-                }
-
-                status.append(name).append(" is asleep!");
-
-                results.add(status.toString());
-                return false;
-            }
-        }
-
-        if(pokemon.hasStatusCondition(StatusCondition.INFATUATED))
-        {
-            if(r.nextInt(100) < 50)
-            {
-                status.append(name).append(" is infatuated and can't move!");
-
-                results.add(status.toString());
-                return false;
-            }
-        }
-
-        if(pokemon.hasStatusCondition(StatusCondition.PARALYZED))
-        {
-            if(r.nextInt(100) < 25)
-            {
-                status.append(name).append(" is paralyzed and can't move!");
-
-                results.add(status.toString());
-                return false;
-            }
-        }
-
-        if(pokemon.hasStatusCondition(StatusCondition.FLINCHED))
-        {
-            pokemon.removeStatusCondition(StatusCondition.FLINCHED);
-
-            status.append(name).append(" flinched and can't move!");
-
-            results.add(status.toString());
-            return false;
-        }
-
-        results.add(status.toString());
-        return true;
     }
 
     public void entryHazardEffects(int player)

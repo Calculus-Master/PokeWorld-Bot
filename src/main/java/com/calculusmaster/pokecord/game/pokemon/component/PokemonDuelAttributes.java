@@ -3,7 +3,6 @@ package com.calculusmaster.pokecord.game.pokemon.component;
 public class PokemonDuelAttributes
 {
     public String UUID;
-    public boolean canUseMove;
     public int lastDamageTaken;
     public int statImmuneTurns;
     public boolean recharge;
@@ -71,7 +70,6 @@ public class PokemonDuelAttributes
 
     public void setDefaults()
     {
-        this.canUseMove = true;
         this.lastDamageTaken = 0;
         this.statImmuneTurns = 0;
         this.recharge = false;
