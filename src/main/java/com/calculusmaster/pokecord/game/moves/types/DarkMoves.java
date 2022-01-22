@@ -302,4 +302,12 @@ public class DarkMoves
 
         return "The move power is " + effectivePower + "! " + MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
+
+    public String JawLock(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(user.getUUID()).canSwap = false;
+        duel.data(opponent.getUUID()).canSwap = false;
+
+        return user.getName() + " and " + opponent.getName() + " are prevented from swapping out! " + MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+    }
 }

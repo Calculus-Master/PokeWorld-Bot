@@ -217,4 +217,12 @@ public class GroundMoves
                 .addDamageEffect()
                 .execute();
     }
+
+    public String MudShot(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPD, -1, 100, false)
+                .execute();
+    }
 }

@@ -46,7 +46,7 @@ public class StatChangeEffect extends MoveEffect
             {
                 if(this.statChanges.containsKey(s))
                 {
-                    if(this.statChanges.get(s) < 0 && this.duel.data(this.opponent.getUUID()).statImmuneTurns > 0)
+                    if(this.statChanges.get(s) < 0 && this.duel.data(this.opponent.getUUID()).mistTurns > 0)
                     {
                         result.append(this.opponent.getName()).append(" is immune to the change in ").append(s.name);
                     }

@@ -196,7 +196,7 @@ public class Move
         double e = TypeEffectiveness.getEffectiveness(other.getType()).get(this.type);
 
         //Freeze Dry
-        if(this.name.equals("Freeze Dry")) e = other.isType(Type.WATER) || other.isType(Type.GRASS) || other.isType(Type.GROUND) || other.isType(Type.FLYING) || other.isType(Type.DRAGON) ? 2.0 : (other.isType(Type.FIRE) || other.isType(Type.ICE) || other.isType(Type.STEEL) ? 0.5 : 1.0);
+        if(this.name.equals("Freeze Dry")) e = this.getEffectivenessOverride(other);
 
         if(e == 4.0) return forBattle ? "**Extremely Effective**" : "It's **extremely** effective (4x)!";
         else if(e == 2.0) return forBattle ? "**Super Effective**" : "It's **super** effective (2x)!";
@@ -298,7 +298,7 @@ public class Move
         if(this.name.equals("Photon Geyser") || this.name.equals("Light That Burns The Sky")) atkStat = Math.max(user.getStat(Stat.ATK), user.getStat(Stat.SPATK));
 
         //Freeze Dry
-        if(this.name.equals("Freeze Dry")) type = opponent.isType(Type.WATER) || opponent.isType(Type.GRASS) || opponent.isType(Type.GROUND) || opponent.isType(Type.FLYING) || opponent.isType(Type.DRAGON) ? 2.0 : (opponent.isType(Type.FIRE) || opponent.isType(Type.ICE) || opponent.isType(Type.STEEL) ? 0.5 : 1.0);
+        if(this.name.equals("Freeze Dry")) type = this.getEffectivenessOverride(opponent);
 
         //Gensect Z-Move: Elemental Techno Overdrive
         if(this.name.equals("Elemental Techno Overdrive")) stab = Math.random() + 1;
@@ -321,6 +321,14 @@ public class Move
 
         finalDMG *= this.damageMultiplier;
         return (int)(finalDMG + 0.5);
+    }
+
+    private double getEffectivenessOverride(Pokemon other)
+    {
+        return switch(this.getName()) {
+            case "Freeze Dry" -> Stream.of(Type.WATER, Type.GRASS, Type.GROUND, Type.FLYING, Type.DRAGON).anyMatch(other::isType) ? 2.0 : (Stream.of(Type.FIRE, Type.ICE, Type.STEEL).anyMatch(other::isType) ? 0.5 : 1.0);
+            case "Flying Press" -> Stream.of(Type.NORMAL, Type.GRASS, Type.ICE, Type.FIGHTING, Type.DARK).anyMatch(other::isType) ? 2.0 : (Stream.of(Type.ELECTRIC, Type.POISON, Type.FLYING, Type.PSYCHIC, Type.FAIRY).anyMatch(other::isType) ? 0.5 : (other.isType(Type.GHOST) ? 0.0 : 1.0));
+        };
     }
 
     public void setDefaultValues()

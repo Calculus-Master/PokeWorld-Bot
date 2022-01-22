@@ -4,7 +4,6 @@ public class PokemonDuelAttributes
 {
     public String UUID;
     public int lastDamageTaken;
-    public int statImmuneTurns;
     public boolean recharge;
     public boolean isRaised;
     public boolean canSwap;
@@ -67,13 +66,13 @@ public class PokemonDuelAttributes
     public int stockpileCount;
     public boolean ingrainUsed;
     public boolean isMinimized;
+    public int mistTurns;
 
     public boolean disguiseActivated;
 
     public void setDefaults()
     {
         this.lastDamageTaken = 0;
-        this.statImmuneTurns = 0;
         this.recharge = false;
         this.isRaised = false;
         this.canSwap = true;
@@ -133,6 +132,7 @@ public class PokemonDuelAttributes
         this.stockpileCount = 0;
         this.ingrainUsed = false;
         this.isMinimized = false;
+        this.mistTurns = 0;
 
         this.disguiseActivated = false;
     }

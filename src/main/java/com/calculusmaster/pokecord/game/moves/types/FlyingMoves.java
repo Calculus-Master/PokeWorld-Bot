@@ -132,13 +132,14 @@ public class FlyingMoves
                 .execute();
     }
 
-    //TODO: Removes barriers - barrier moves: mist, safeguard
     public String Defog(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         for(int i = 0; i < duel.getPlayers().length; i++)
         {
             duel.entryHazards[i] = new EntryHazardHandler();
             duel.barriers[i] = new FieldBarrierHandler();
+
+            duel.data(i).mistTurns = 0;
         }
 
         return "All Entry Hazards and Barriers were removed! " + MoveEffectBuilder.make(user, opponent, duel, move)

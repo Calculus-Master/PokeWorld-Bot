@@ -680,13 +680,13 @@ public class Duel
             if(move.getType().equals(Type.ELECTRIC)) move.setPower(move.getPower() * 2);
         }
 
-        if(this.data(this.current).statImmuneTurns > 0)
+        if(this.data(this.current).mistTurns > 0)
         {
-            this.data(this.current).statImmuneTurns--;
+            this.data(this.current).mistTurns--;
 
-            if(this.data(this.current).statImmuneTurns <= 0)
+            if(this.data(this.current).mistTurns <= 0)
             {
-                this.data(this.current).statImmuneTurns = 0;
+                this.data(this.current).mistTurns = 0;
             }
         }
 

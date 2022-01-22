@@ -504,4 +504,12 @@ public class PsychicMoves
 
         return user.getName() + " and " + opponent.getName() + "'s Speed stats were swapped!";
     }
+
+    public String HeartStamp(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.FLINCHED, 30)
+                .execute();
+    }
 }

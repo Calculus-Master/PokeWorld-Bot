@@ -323,4 +323,11 @@ public class FightingMoves
 
         return opponent.getName() + " is locked!";
     }
+
+    public String FlyingPress(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
+    }
 }
