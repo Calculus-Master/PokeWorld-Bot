@@ -250,7 +250,7 @@ public class Duel
     //Always use this.current!
     public String turn(Move move)
     {
-        String turnResult = "";
+        List<String> turnResult = new ArrayList<>();
 
         //Setup
         Pokemon c = this.players[this.current].active;
@@ -328,8 +328,8 @@ public class Duel
             SplittableRandom r = new SplittableRandom();
             int statusDamage;
 
-            BiFunction<String, List<String>, String> compileResults = (turn, status) -> {
-                this.results.add(turn);
+            BiFunction<List<String>, List<String>, String> compileResults = (turn, status) -> {
+                this.results.add(String.join(" ", turn));
                 this.results.add(String.join(" ", status));
                 return "";
             };
@@ -523,7 +523,7 @@ public class Duel
                 int damage = new Move("Future Sight").getDamage(this.players[this.current].active, this.players[this.other].active);
                 this.players[this.other].active.damage(damage);
 
-                turnResult += "Future Sight landed and dealt **" + damage + "** damage to " + this.players[this.other].active.getName() + "!\n";
+                turnResult.add("Future Sight landed and dealt **" + damage + "** damage to " + this.players[this.other].active.getName() + "!");
             }
         }
 
@@ -539,7 +539,7 @@ public class Duel
                 int damage = new Move("Doom Desire").getDamage(this.players[this.current].active, this.players[this.other].active);
                 this.players[this.other].active.damage(damage);
 
-                turnResult += "Doom Desire landed and dealt **" + damage + "** damage to " + this.players[this.other].active.getName() + "!\n";
+                turnResult.add("Doom Desire landed and dealt **" + damage + "** damage to " + this.players[this.other].active.getName() + "!");
             }
         }
 
@@ -590,7 +590,7 @@ public class Duel
         {
             this.players[this.current].active.changes().change(Stat.ATK, 1);
 
-            turnResult += this.players[this.current].active.getName() + "'s Attack rose by 1 stage due to Rage!\n";
+            turnResult.add(this.players[this.current].active.getName() + "'s Attack rose by 1 stage due to Rage!");
         }
 
         if(this.data(this.other).magnetRiseTurns > 0)
@@ -690,7 +690,7 @@ public class Duel
             int heal = this.players[this.current].active.getStat(Stat.HP) / 2;
             this.players[this.current].active.heal(heal);
 
-            turnResult += this.players[this.current].active.getName() + "'s wish was granted! It healed " + heal + " HP!";
+            turnResult.add(this.players[this.current].active.getName() + "'s wish was granted! It healed " + heal + " HP!");
         }
 
         if(this.data(this.current).lockOnUsed)
@@ -709,7 +709,7 @@ public class Duel
                 this.players[this.current].active.changes().change(Stat.ATK, -2);
                 otherImmune = !bypass;
 
-                turnResult += this.players[this.current].active.getName() + "'s Attack was lowered by 2 stages due to the King's Shield!\n";
+                turnResult.add(this.players[this.current].active.getName() + "'s Attack was lowered by 2 stages due to the King's Shield!");
             }
         }
 
@@ -722,7 +722,7 @@ public class Duel
                 this.players[this.current].active.addStatusCondition(StatusCondition.POISONED);
                 otherImmune = !bypass;
 
-                turnResult += this.players[this.current].active.getName() + " was poisoned due to the Baneful Bunker!";
+                turnResult.add(this.players[this.current].active.getName() + " was poisoned due to the Baneful Bunker!");
             }
         }
 
@@ -737,7 +737,7 @@ public class Duel
 
                 otherImmune = !bypass;
 
-                turnResult += this.players[this.current].active.getName() + " took " + damage + " damage due to the Spiky Shield!";
+                turnResult.add(this.players[this.current].active.getName() + " took " + damage + " damage due to the Spiky Shield!");
             }
         }
 
@@ -764,7 +764,7 @@ public class Duel
         {
             this.players[this.current].active.damage(this.data(this.other).bideDamage);
 
-            turnResult += this.players[this.other].active.getName() + " unleashed stored energy and dealt " + this.data(this.other).bideDamage + " damage!\n";
+            turnResult.add(this.players[this.other].active.getName() + " unleashed stored energy and dealt " + this.data(this.other).bideDamage + " damage!");
 
             this.data(this.other).bideTurns = 0;
             this.data(this.other).bideDamage = 0;
@@ -822,6 +822,58 @@ public class Duel
             this.results.add(this.players[this.current].active.getName() + " took " + damage + " from its Powder covering!");
 
             cantUse = true;
+        }
+
+        if(this.data(this.current).gmaxWildfireTurns > 0)
+        {
+            this.data(this.current).gmaxWildfireTurns--;
+
+            if(!o.isType(Type.FIRE))
+            {
+                int damage = this.players[this.other].active.getMaxHealth(1 / 6.);
+                this.players[this.other].active.damage(damage);
+
+                turnResult.add(this.players[this.other].active.getName() + " took " + damage + " from the G-Max Wildfire!");
+            }
+        }
+
+        if(this.data(this.current).gmaxVineLashTurns > 0)
+        {
+            this.data(this.current).gmaxVineLashTurns--;
+
+            if(!o.isType(Type.GRASS))
+            {
+                int damage = this.players[this.other].active.getMaxHealth(1 / 6.);
+                this.players[this.other].active.damage(damage);
+
+                turnResult.add(this.players[this.other].active.getName() + " took " + damage + " from the G-Max Vine Lash!");
+            }
+        }
+
+        if(this.data(this.current).gmaxCannonadeTurns > 0)
+        {
+            this.data(this.current).gmaxCannonadeTurns--;
+
+            if(!o.isType(Type.WATER))
+            {
+                int damage = this.players[this.other].active.getMaxHealth(1 / 6.);
+                this.players[this.other].active.damage(damage);
+
+                turnResult.add(this.players[this.other].active.getName() + " took " + damage + " from the G-Max Cannonade!");
+            }
+        }
+
+        if(this.data(this.current).gmaxVolcalithTurns > 0)
+        {
+            this.data(this.current).gmaxVolcalithTurns--;
+
+            if(!o.isType(Type.ROCK))
+            {
+                int damage = this.players[this.other].active.getMaxHealth(1 / 6.);
+                this.players[this.other].active.damage(damage);
+
+                turnResult.add(this.players[this.other].active.getName() + " took " + damage + " from the G-Max Volcalith!");
+            }
         }
 
         //Fly, Bounce, Dig and Dive
@@ -933,19 +985,19 @@ public class Duel
         //Bide
         if(this.data(this.current).bideTurns > 0)
         {
-            turnResult += this.players[this.current].active.getName() + " is storing energy!";
+            turnResult.add(this.players[this.current].active.getName() + " is storing energy!");
         }
         //Ability: Disguise (Mimikyu)
         if(this.players[this.other].active.getAbilities().contains("Disguise") && !this.data(this.other).disguiseActivated && !move.getCategory().equals(Category.STATUS))
         {
             this.data(this.other).disguiseActivated = true;
 
-            turnResult += "Mimikyu's Disguise was activated and absorbed the attack!";
+            turnResult.add("Mimikyu's Disguise was activated and absorbed the attack!");
         }
         //Check if user has to recharge
         else if(this.data(this.current).recharge && rechargeMoves.contains(move.getName()))
         {
-            turnResult += name + " can't use " + move.getName() + " because it needs to recharge!";
+            turnResult.add(name + " can't use " + move.getName() + " because it needs to recharge!");
             this.data(this.current).recharge = false;
 
             this.data(this.other).lastDamageTaken = 0;
@@ -953,18 +1005,18 @@ public class Duel
         //Check if something earlier made user not able to use its move
         else if(cantUse)
         {
-            turnResult += name + " can't use " + move.getName() + " right now!";
+            turnResult.add(name + " can't use " + move.getName() + " right now!");
 
             this.data(this.other).lastDamageTaken = 0;
         }
         //Check if the user missed its move
         else if(!accurate)
         {
-            turnResult += move.getMissedResult(this.players[this.current].active);
+            turnResult.add(move.getMissedResult(this.players[this.current].active));
 
             if(move.getName().equals("Jump Kick") || move.getName().equals("High Jump Kick"))
             {
-                turnResult += " " + this.players[this.current].active.getName() + " kept going and crashed!";
+                turnResult.add(" " + this.players[this.current].active.getName() + " kept going and crashed!");
 
                 this.players[this.current].active.damage(this.players[this.current].active.getStat(Stat.HP) / 2);
             }
@@ -974,7 +1026,7 @@ public class Duel
         //Check if opponent is immune
         else if(otherImmune)
         {
-            turnResult += move.getMoveUsedResult(this.players[this.current].active) + " " + this.players[this.other].active.getName() + " is immune to the attack!";
+            turnResult.add(move.getMoveUsedResult(this.players[this.current].active) + " " + this.players[this.other].active.getName() + " is immune to the attack!");
 
             this.data(this.other).lastDamageTaken = 0;
         }
@@ -985,7 +1037,7 @@ public class Duel
 
             int preMoveHP = this.players[this.other].active.getHealth();
 
-            turnResult += move.logic(this.players[this.current].active, this.players[this.other].active, this);
+            turnResult.add(move.logic(this.players[this.current].active, this.players[this.other].active, this));
 
             if(move.getCategory().equals(Category.STATUS)) this.data(this.other).lastDamageTaken = 0;
 
@@ -996,7 +1048,7 @@ public class Duel
                 int dmg = this.players[this.current].active.getStat(Stat.HP) / 8;
                 this.players[this.current].active.damage(dmg);
 
-                turnResult += "\n" + this.players[this.current].active.getName() + " took " + dmg + " damage from the Iron Barbs!";
+                turnResult.add(this.players[this.current].active.getName() + " took " + dmg + " damage from the Iron Barbs!");
             }
 
             int damageDealt = preMoveHP - this.players[this.other].active.getHealth();
@@ -1107,13 +1159,13 @@ public class Duel
                 this.data(this.other).destinyBondUsed = false;
 
                 this.players[this.current].active.damage(this.players[this.current].active.getHealth());
-                turnResult += " " + this.players[this.current].active.getName() + " fainted from the Destiny Bond!";
+                turnResult.add(this.players[this.current].active.getName() + " fainted from the Destiny Bond!");
             }
         }
 
-        if(this.first.equals(this.players[this.current].active.getUUID())) turnResult += "\n\n";
+        if(this.first.equals(this.players[this.current].active.getUUID())) turnResult.add("\n\n");
 
-        return turnResult;
+        return String.join(" ", turnResult);
     }
 
     //Turn Helper Methods

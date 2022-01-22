@@ -128,9 +128,9 @@ public class MaxMoves
     }
 
     //G-Max Moves
-    //TODO: Damage Over 4 Turns on Non-Fire Opponents
     public String GMaxWildfire(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        duel.data(user.getUUID()).gmaxWildfireTurns = 4;
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
@@ -219,9 +219,9 @@ public class MaxMoves
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + " " + user.getName() + " laid a Stealth Rock trap!";
     }
 
-    //TODO: Damage Over 4 Turns on Non-Rock Opponents
     public String GMaxVolcalith(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        duel.data(user.getUUID()).gmaxVolcalithTurns = 4;
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
@@ -291,15 +291,15 @@ public class MaxMoves
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
-    //TODO: Damage Over 4 Turns on Non-Grass Opponents
     public String GMaxVineLash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        duel.data(user.getUUID()).gmaxVineLashTurns = 4;
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
-    //TODO: Damage Over 4 Turns on Non-Water Opponents
     public String GMaxCannonade(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        duel.data(user.getUUID()).gmaxCannonadeTurns = 4;
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
