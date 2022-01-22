@@ -1264,4 +1264,12 @@ public class NormalMoves
                             .execute();
         }
     }
+
+    public String Snore(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return user.hasStatusCondition(StatusCondition.ASLEEP) ? MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.FLINCHED)
+                .execute() : move.getNothingResult();
+    }
 }

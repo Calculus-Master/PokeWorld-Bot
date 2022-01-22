@@ -450,7 +450,10 @@ public class Duel
 
                     statusResults.add("%s is asleep!".formatted(c.getName()));
 
-                    return compileResults.apply(turnResult, statusResults);
+                    if(!move.getName().equals("Snore"))
+                    {
+                        return compileResults.apply(turnResult, statusResults);
+                    }
                 }
             }
 
