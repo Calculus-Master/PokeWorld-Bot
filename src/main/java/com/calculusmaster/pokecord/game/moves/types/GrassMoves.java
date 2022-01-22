@@ -127,11 +127,6 @@ public class GrassMoves
         return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPATK, -2, 100, true);
     }
 
-    public String Ingrain(Pokemon user, Pokemon opponent, Duel duel, Move move)
-    {
-        return move.getNotImplementedResult();
-    }
-
     public String ForestsCurse(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         if(opponent.isType(Type.GRASS)) return move.getNoEffectResult(opponent);
@@ -368,5 +363,13 @@ public class GrassMoves
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addFractionHealEffect(1 / 4D)
                 .execute();
+    }
+
+    public String Ingrain(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(user.getUUID()).canSwap = false;
+        duel.data(user.getUUID()).ingrainUsed = true;
+
+        return user.getName() + " extends its roots!";
     }
 }

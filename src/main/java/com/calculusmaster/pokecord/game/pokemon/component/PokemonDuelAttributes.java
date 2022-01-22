@@ -65,6 +65,7 @@ public class PokemonDuelAttributes
     public int furyCutterTurns;
     public boolean isCoveredPowder;
     public int stockpileCount;
+    public boolean ingrainUsed;
 
     public boolean disguiseActivated;
 
@@ -129,6 +130,7 @@ public class PokemonDuelAttributes
         this.furyCutterTurns = 0;
         this.isCoveredPowder = false;
         this.stockpileCount = 0;
+        this.ingrainUsed = false;
 
         this.disguiseActivated = false;
     }

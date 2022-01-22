@@ -841,6 +841,14 @@ public class Duel
             }
         }
 
+        if(this.data(this.current).ingrainUsed)
+        {
+            int amount = this.players[this.current].active.getMaxHealth(1 / 16.);
+            this.players[this.current].active.heal(amount);
+
+            turnResult.add(this.players[this.current].active.getName() + " healed for " + amount + " HP due to its roots!");
+        }
+
         //Fly, Bounce, Dig and Dive
 
         if(this.data(this.current).flyUsed) move = new Move("Fly");
