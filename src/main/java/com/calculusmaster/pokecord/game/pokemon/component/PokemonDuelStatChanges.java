@@ -50,6 +50,11 @@ public class PokemonDuelStatChanges
         this.checkInvalidChange(s);
     }
 
+    public void clear(Stat s)
+    {
+        this.changes.put(s, 0);
+    }
+
     public void clear()
     {
         this.changes.clear();

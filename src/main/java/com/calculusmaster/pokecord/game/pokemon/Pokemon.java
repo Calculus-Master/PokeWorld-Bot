@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonBoosts;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonDuelStatChanges;
+import com.calculusmaster.pokecord.game.pokemon.component.PokemonDuelStatOverrides;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -56,6 +57,7 @@ public class Pokemon
     private int health;
     private EnumSet<StatusCondition> statusConditions;
     private boolean isDynamaxed;
+    private PokemonDuelStatOverrides statOverrides;
 
     //Private Constructor
     private Pokemon() {}
@@ -121,6 +123,7 @@ public class Pokemon
         this.health = this.getMaxHealth();
         this.statusConditions = EnumSet.noneOf(StatusCondition.class);
         this.isDynamaxed = false;
+        this.statOverrides = new PokemonDuelStatOverrides();
     }
 
     public static Pokemon build(String UUID)
@@ -336,6 +339,11 @@ public class Pokemon
         return s.toString();
     }
 
+    public PokemonDuelStatOverrides overrides()
+    {
+        return this.statOverrides;
+    }
+
     public PokemonDuelStatChanges changes()
     {
         return this.statChanges;
@@ -353,6 +361,8 @@ public class Pokemon
 
     public int getStat(Stat s)
     {
+        if(this.statOverrides.has(s)) return this.statOverrides.get(s);
+
         if(s.equals(Stat.HP))
         {
             //HP = Level + 10 + [((2 * Base + IV + EV / 4) * Level) / 100]

@@ -131,16 +131,6 @@ public class PsychicMoves
         return move.getNotImplementedResult();
     }
 
-    public String GuardSwap(Pokemon user, Pokemon opponent, Duel duel, Move move)
-    {
-        return move.getNotImplementedResult();
-    }
-
-    public String PowerSwap(Pokemon user, Pokemon opponent, Duel duel, Move move)
-    {
-        return move.getNotImplementedResult();
-    }
-
     public String Barrier(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.make(user, opponent, duel, move)
@@ -391,5 +381,97 @@ public class PsychicMoves
         duel.barriers[duel.playerIndexFromUUID(user.getUUID())].addBarrier(FieldBarrier.REFLECT, user.getItem().equals(Item.LIGHT_CLAY));
 
         return user.getName() + " set up a Reflect Barrier!";
+    }
+
+    public String GuardSplit(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        double userDEF = user.getStat(Stat.DEF) / user.changes().getModifier(Stat.DEF);
+        double opponentDEF = opponent.getStat(Stat.DEF) / opponent.changes().getModifier(Stat.DEF);
+
+        double userSPDEF = user.getStat(Stat.SPDEF) / user.changes().getModifier(Stat.SPDEF);
+        double opponentSPDEF = opponent.getStat(Stat.SPDEF) / opponent.changes().getModifier(Stat.SPDEF);
+
+        double avgDEF = (userDEF + opponentDEF) / 2;
+        double avgSPDEF = (userSPDEF + opponentSPDEF) / 2;
+
+        int def = (int)(avgDEF);
+        int spdef = (int)(avgSPDEF);
+
+        user.overrides().set(Stat.DEF, def);
+        opponent.overrides().set(Stat.DEF, def);
+
+        user.overrides().set(Stat.SPDEF, spdef);
+        opponent.overrides().set(Stat.SPDEF, spdef);
+
+        return user.getName() + " and " + opponent.getName() + "'s Defense and Special Defense were averaged!";
+    }
+
+    public String PowerSplit(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        double userATK = user.getStat(Stat.ATK) / user.changes().getModifier(Stat.ATK);
+        double opponentATK = opponent.getStat(Stat.ATK) / opponent.changes().getModifier(Stat.ATK);
+
+        double userSPATK = user.getStat(Stat.SPATK) / user.changes().getModifier(Stat.SPATK);
+        double opponentSPATK = opponent.getStat(Stat.SPATK) / opponent.changes().getModifier(Stat.SPATK);
+
+        double avgATK = (userATK + opponentATK) / 2;
+        double avgSPATK = (userSPATK + opponentSPATK) / 2;
+
+        int atk = (int)(avgATK);
+        int spatk = (int)(avgSPATK);
+
+        user.overrides().set(Stat.DEF, atk);
+        opponent.overrides().set(Stat.DEF, atk);
+
+        user.overrides().set(Stat.SPDEF, spatk);
+        opponent.overrides().set(Stat.SPDEF, spatk);
+
+        return user.getName() + " and " + opponent.getName() + "'s Attack and Special Attack were averaged!";
+    }
+
+    public String GuardSwap(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int userDEF = user.changes().get(Stat.DEF);
+        int opponentDEF = opponent.changes().get(Stat.DEF);
+
+        int userSPDEF = user.changes().get(Stat.SPDEF);
+        int opponentSPDEF = user.changes().get(Stat.SPDEF);
+
+        user.changes().clear(Stat.DEF);
+        opponent.changes().clear(Stat.DEF);
+
+        user.changes().clear(Stat.SPDEF);
+        opponent.changes().clear(Stat.SPDEF);
+
+        user.changes().change(Stat.DEF, opponentDEF);
+        opponent.changes().change(Stat.DEF, userDEF);
+
+        user.changes().change(Stat.SPDEF, opponentSPDEF);
+        opponent.changes().change(Stat.SPDEF, userSPDEF);
+
+        return user.getName() + " and " + opponent.getName() + "'s Defense and Special Defense stages were swapped!";
+    }
+
+    public String PowerSwap(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int userATK = user.changes().get(Stat.ATK);
+        int opponentATK = opponent.changes().get(Stat.ATK);
+
+        int userSPATK = user.changes().get(Stat.SPATK);
+        int opponentSPATK = user.changes().get(Stat.SPATK);
+
+        user.changes().clear(Stat.ATK);
+        opponent.changes().clear(Stat.ATK);
+
+        user.changes().clear(Stat.SPATK);
+        opponent.changes().clear(Stat.SPATK);
+
+        user.changes().change(Stat.ATK, opponentATK);
+        opponent.changes().change(Stat.ATK, userATK);
+
+        user.changes().change(Stat.SPATK, opponentSPATK);
+        opponent.changes().change(Stat.SPATK, userSPATK);
+
+        return user.getName() + " and " + opponent.getName() + "'s Attack and Special Attack stages were swapped!";
     }
 }
