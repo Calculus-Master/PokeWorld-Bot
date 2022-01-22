@@ -328,6 +328,7 @@ public class Move
         return switch(this.getName()) {
             case "Freeze Dry" -> Stream.of(Type.WATER, Type.GRASS, Type.GROUND, Type.FLYING, Type.DRAGON).anyMatch(other::isType) ? 2.0 : (Stream.of(Type.FIRE, Type.ICE, Type.STEEL).anyMatch(other::isType) ? 0.5 : 1.0);
             case "Flying Press" -> Stream.of(Type.NORMAL, Type.GRASS, Type.ICE, Type.FIGHTING, Type.DARK).anyMatch(other::isType) ? 2.0 : (Stream.of(Type.ELECTRIC, Type.POISON, Type.FLYING, Type.PSYCHIC, Type.FAIRY).anyMatch(other::isType) ? 0.5 : (other.isType(Type.GHOST) ? 0.0 : 1.0));
+            default -> 1.0;
         };
     }
 
