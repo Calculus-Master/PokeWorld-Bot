@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game.moves;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.duel.component.GMaxDoTType;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -130,8 +131,10 @@ public class MaxMoves
     //G-Max Moves
     public String GMaxWildfire(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.data(user.getUUID()).gmaxWildfireTurns = 4;
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addGMaxDoTEffect(GMaxDoTType.WILDFIRE)
+                .execute();
     }
 
     public String GMaxBefuddle(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -221,8 +224,10 @@ public class MaxMoves
 
     public String GMaxVolcalith(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.data(user.getUUID()).gmaxVolcalithTurns = 4;
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addGMaxDoTEffect(GMaxDoTType.VOLCALITH)
+                .execute();
     }
 
     public String GMaxTartness(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -293,14 +298,18 @@ public class MaxMoves
 
     public String GMaxVineLash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.data(user.getUUID()).gmaxVineLashTurns = 4;
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addGMaxDoTEffect(GMaxDoTType.VINE_LASH)
+                .execute();
     }
 
     public String GMaxCannonade(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        duel.data(user.getUUID()).gmaxCannonadeTurns = 4;
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addGMaxDoTEffect(GMaxDoTType.CANNONADE)
+                .execute();
     }
 
     //TODO: Ignore Abilities

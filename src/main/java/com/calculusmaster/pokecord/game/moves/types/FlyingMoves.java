@@ -1,7 +1,8 @@
 package com.calculusmaster.pokecord.game.moves.types;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
-import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.component.EntryHazardHandler;
+import com.calculusmaster.pokecord.game.duel.component.FieldBarrierHandler;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
@@ -136,8 +137,8 @@ public class FlyingMoves
     {
         for(int i = 0; i < duel.getPlayers().length; i++)
         {
-            duel.entryHazards[i] = new DuelHelper.EntryHazardHandler();
-            duel.barriers[i] = new DuelHelper.FieldBarrierHandler();
+            duel.entryHazards[i] = new EntryHazardHandler();
+            duel.barriers[i] = new FieldBarrierHandler();
         }
 
         return "All Entry Hazards and Barriers were removed! " + MoveEffectBuilder.make(user, opponent, duel, move)

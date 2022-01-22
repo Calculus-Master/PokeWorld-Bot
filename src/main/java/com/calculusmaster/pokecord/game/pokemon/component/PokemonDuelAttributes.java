@@ -65,10 +65,6 @@ public class PokemonDuelAttributes
     public int furyCutterTurns;
     public boolean isCoveredPowder;
     public int stockpileCount;
-    public int gmaxWildfireTurns;
-    public int gmaxVineLashTurns;
-    public int gmaxCannonadeTurns;
-    public int gmaxVolcalithTurns;
 
     public boolean disguiseActivated;
 
@@ -133,10 +129,6 @@ public class PokemonDuelAttributes
         this.furyCutterTurns = 0;
         this.isCoveredPowder = false;
         this.stockpileCount = 0;
-        this.gmaxWildfireTurns = 0;
-        this.gmaxVineLashTurns = 0;
-        this.gmaxCannonadeTurns = 0;
-        this.gmaxVolcalithTurns = 0;
 
         this.disguiseActivated = false;
     }

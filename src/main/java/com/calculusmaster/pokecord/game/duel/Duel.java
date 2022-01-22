@@ -3,6 +3,9 @@ package com.calculusmaster.pokecord.game.duel;
 import com.calculusmaster.pokecord.commands.duel.CommandTarget;
 import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
+import com.calculusmaster.pokecord.game.duel.component.EntryHazardHandler;
+import com.calculusmaster.pokecord.game.duel.component.FieldBarrierHandler;
+import com.calculusmaster.pokecord.game.duel.component.FieldGMaxDoTHandler;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.enums.elements.*;
@@ -63,6 +66,7 @@ public class Duel
     public int roomTurns;
     public EntryHazardHandler[] entryHazards;
     public FieldBarrierHandler[] barriers;
+    public FieldGMaxDoTHandler[] gmaxDoT;
 
     public static Duel create(String player1ID, String player2ID, int size, MessageReceivedEvent event)
     {
@@ -819,60 +823,21 @@ public class Duel
             int damage = this.players[this.current].active.getMaxHealth() / 4;
             this.players[this.current].active.damage(damage);
 
-            this.results.add(this.players[this.current].active.getName() + " took " + damage + " from its Powder covering!");
+            this.results.add(this.players[this.current].active.getName() + " took " + damage + " damage from its Powder covering!");
 
             cantUse = true;
         }
 
-        if(this.data(this.current).gmaxWildfireTurns > 0)
+        if(this.gmaxDoT[this.current].exists())
         {
-            this.data(this.current).gmaxWildfireTurns--;
+            this.gmaxDoT[this.current].updateTurns();
 
-            if(!o.isType(Type.FIRE))
+            if(this.gmaxDoT[this.current].applies(this.players[this.current].active))
             {
-                int damage = this.players[this.other].active.getMaxHealth(1 / 6.);
-                this.players[this.other].active.damage(damage);
+                int damage = this.players[this.current].active.getMaxHealth(1 / 6.);
+                this.players[this.current].active.damage(damage);
 
-                turnResult.add(this.players[this.other].active.getName() + " took " + damage + " from the G-Max Wildfire!");
-            }
-        }
-
-        if(this.data(this.current).gmaxVineLashTurns > 0)
-        {
-            this.data(this.current).gmaxVineLashTurns--;
-
-            if(!o.isType(Type.GRASS))
-            {
-                int damage = this.players[this.other].active.getMaxHealth(1 / 6.);
-                this.players[this.other].active.damage(damage);
-
-                turnResult.add(this.players[this.other].active.getName() + " took " + damage + " from the G-Max Vine Lash!");
-            }
-        }
-
-        if(this.data(this.current).gmaxCannonadeTurns > 0)
-        {
-            this.data(this.current).gmaxCannonadeTurns--;
-
-            if(!o.isType(Type.WATER))
-            {
-                int damage = this.players[this.other].active.getMaxHealth(1 / 6.);
-                this.players[this.other].active.damage(damage);
-
-                turnResult.add(this.players[this.other].active.getName() + " took " + damage + " from the G-Max Cannonade!");
-            }
-        }
-
-        if(this.data(this.current).gmaxVolcalithTurns > 0)
-        {
-            this.data(this.current).gmaxVolcalithTurns--;
-
-            if(!o.isType(Type.ROCK))
-            {
-                int damage = this.players[this.other].active.getMaxHealth(1 / 6.);
-                this.players[this.other].active.damage(damage);
-
-                turnResult.add(this.players[this.other].active.getName() + " took " + damage + " from the G-Max Volcalith!");
+                turnResult.add(this.players[this.current].active.getName() + " took " + damage + " damage from the G-Max " + this.gmaxDoT[this.current].getEffectName() + "!");
             }
         }
 
@@ -1176,6 +1141,7 @@ public class Duel
         this.room = Room.NORMAL_ROOM;
         this.entryHazards = new EntryHazardHandler[]{new EntryHazardHandler(), new EntryHazardHandler()};
         this.barriers = new FieldBarrierHandler[]{new FieldBarrierHandler(), new FieldBarrierHandler()};
+        this.gmaxDoT = new FieldGMaxDoTHandler[]{new FieldGMaxDoTHandler(), new FieldGMaxDoTHandler()};
         this.queuedMoves = new HashMap<>();
 
         for(Player player : this.players) for(Pokemon p : player.team) p.setHealth(p.getStat(Stat.HP));

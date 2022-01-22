@@ -3,8 +3,6 @@ package com.calculusmaster.pokecord.game.duel.core;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
-import com.calculusmaster.pokecord.game.enums.elements.EntryHazard;
-import com.calculusmaster.pokecord.game.enums.elements.FieldBarrier;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.registry.MaxMoveRegistry;
@@ -12,7 +10,9 @@ import com.calculusmaster.pokecord.game.moves.registry.ZMoveRegistry;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class DuelHelper
 {
@@ -35,88 +35,9 @@ public class DuelHelper
         DUELS.removeIf(d -> Arrays.stream(d.getPlayers()).anyMatch(p -> p.ID.equals(id)));
     }
 
+    //Core Components
+
     public record TurnAction(ActionType action, int moveInd, int swapInd) {}
-
-    public static class FieldBarrierHandler
-    {
-        private EnumSet<FieldBarrier> barriers;
-        private Map<FieldBarrier, Integer> barrierTurns;
-
-        public FieldBarrierHandler()
-        {
-            this.barriers = EnumSet.noneOf(FieldBarrier.class);
-            this.barrierTurns = new HashMap<>();
-        }
-
-        public void addBarrier(FieldBarrier barrier, boolean lightClay)
-        {
-            if(this.has(barrier)) return;
-
-            this.barriers.add(barrier);
-            this.barrierTurns.put(barrier, lightClay ? 8 : 5);
-        }
-
-        public void removeBarrier(FieldBarrier barrier)
-        {
-            this.barriers.remove(barrier);
-            this.barrierTurns.remove(barrier);
-        }
-
-        public boolean has(FieldBarrier barrier)
-        {
-            return this.barriers.contains(barrier);
-        }
-
-        public void updateTurns()
-        {
-            this.barrierTurns.replaceAll((barrier, currentTurns) -> currentTurns--);
-
-            for(FieldBarrier b : FieldBarrier.values()) if(this.has(b) && this.barrierTurns.get(b) <= 0) this.removeBarrier(b);
-        }
-    }
-
-    public static class EntryHazardHandler
-    {
-        private Map<EntryHazard, Integer> entryHazards;
-
-        public EntryHazardHandler()
-        {
-            this.entryHazards = new HashMap<>();
-
-            this.clearHazards();
-        }
-
-        public void addHazard(EntryHazard hazard)
-        {
-            int current = this.entryHazards.get(hazard);
-            int hazardLimit = hazard.equals(EntryHazard.SPIKES) ? 3 : (hazard.equals(EntryHazard.TOXIC_SPIKES) ? 2 : 1);
-
-            this.entryHazards.put(hazard, Math.min(hazardLimit, current + 1));
-        }
-
-        public boolean hasHazard(EntryHazard hazard)
-        {
-            return this.entryHazards.get(hazard) > 0;
-        }
-
-        public int getHazard(EntryHazard hazard)
-        {
-            return this.entryHazards.get(hazard);
-        }
-
-        public void removeHazard(EntryHazard hazard)
-        {
-            this.entryHazards.put(hazard, 0);
-        }
-
-        public void clearHazards()
-        {
-            this.removeHazard(EntryHazard.SPIKES);
-            this.removeHazard(EntryHazard.STEALTH_ROCK);
-            this.removeHazard(EntryHazard.STICKY_WEB);
-            this.removeHazard(EntryHazard.TOXIC_SPIKES);
-        }
-    }
 
     public enum ActionType
     {
@@ -133,6 +54,8 @@ public class DuelHelper
         DUELING,
         COMPLETE
     }
+
+    //Z-Moves and Max Moves
 
     public static Move getZMove(Player p, Move baseMove)
     {

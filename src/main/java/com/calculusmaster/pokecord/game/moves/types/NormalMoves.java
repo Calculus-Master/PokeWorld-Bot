@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.game.moves.types;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
-import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.component.EntryHazardHandler;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.Move;
@@ -588,7 +588,7 @@ public class NormalMoves
         int current = duel.playerIndexFromUUID(user.getUUID());
         int other = current == 0 ? 1 : 0;
 
-        DuelHelper.EntryHazardHandler temp = duel.entryHazards[current];
+        EntryHazardHandler temp = duel.entryHazards[current];
         duel.entryHazards[current] = duel.entryHazards[other];
         duel.entryHazards[other] = temp;
 

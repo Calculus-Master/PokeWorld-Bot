@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game.moves.builder;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.duel.component.GMaxDoTType;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -260,6 +261,12 @@ public class MoveEffectBuilder
     public MoveEffectBuilder addFractionSelfDamageEffect(double fraction)
     {
         this.moveEffects.add(new FractionSelfDamageEffect(fraction));
+        return this;
+    }
+
+    public MoveEffectBuilder addGMaxDoTEffect(GMaxDoTType type)
+    {
+        this.moveEffects.add(new GMaxDoTEffect(type));
         return this;
     }
 
