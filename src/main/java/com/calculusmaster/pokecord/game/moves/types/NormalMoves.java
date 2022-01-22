@@ -1232,4 +1232,36 @@ public class NormalMoves
                 .addStatusEffect(StatusCondition.INFATUATED)
                 .execute();
     }
+
+    public String Mimic(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        List<String> moveLog = duel.getMovesUsed(opponent.getUUID());
+
+        List<String> banned = new ArrayList<>(List.of("Sketch", "Transform", "Struggle", "Metronome"));
+        banned.addAll(user.getMoves());
+
+        if(moveLog.isEmpty() || banned.contains(moveLog.get(moveLog.size() - 1))) return move.getNothingResult();
+        else
+        {
+            String newMove = moveLog.get(moveLog.size() - 1);
+
+            user.learnMove(newMove, user.getMoves().indexOf("Mimic"));
+
+            return user.getName() + " learned " + newMove + "!";
+        }
+    }
+
+    public String Minimize(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.data(user.getUUID()).isMinimized) return move.getNothingResult();
+        else
+        {
+            duel.data(user.getUUID()).isMinimized = true;
+
+            return user.getName() + " shrunk! " +
+                    MoveEffectBuilder.make(user, opponent, duel, move)
+                            .addEvasionChangeEffect(2, 100, true)
+                            .execute();
+        }
+    }
 }

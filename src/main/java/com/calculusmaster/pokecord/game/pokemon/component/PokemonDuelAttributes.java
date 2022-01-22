@@ -66,6 +66,7 @@ public class PokemonDuelAttributes
     public boolean isCoveredPowder;
     public int stockpileCount;
     public boolean ingrainUsed;
+    public boolean isMinimized;
 
     public boolean disguiseActivated;
 
@@ -131,6 +132,7 @@ public class PokemonDuelAttributes
         this.isCoveredPowder = false;
         this.stockpileCount = 0;
         this.ingrainUsed = false;
+        this.isMinimized = false;
 
         this.disguiseActivated = false;
     }

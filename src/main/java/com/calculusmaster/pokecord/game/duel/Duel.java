@@ -849,6 +849,9 @@ public class Duel
             turnResult.add(this.players[this.current].active.getName() + " healed for " + amount + " HP due to its roots!");
         }
 
+        List<String> minimizeBoostMoves = List.of("Body Slam", "Stomp", "Dragon Rush", "Steamroller", "Heat Crash", "Heavy Slam", "Flying Press", "Malicious Moonsault", "Double Iron Bash");
+        if(this.data(this.other).isMinimized && minimizeBoostMoves.contains(move.getName())) move.setPower(2.0);
+
         //Fly, Bounce, Dig and Dive
 
         if(this.data(this.current).flyUsed) move = new Move("Fly");
