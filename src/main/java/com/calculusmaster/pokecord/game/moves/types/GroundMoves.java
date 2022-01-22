@@ -103,7 +103,9 @@ public class GroundMoves
 
     public String SandAttack(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return move.getNotImplementedResult();
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addAccuracyChangeEffect(-1, 100, false)
+                .execute();
     }
 
     public String MudSlap(Pokemon user, Pokemon opponent, Duel duel, Move move)

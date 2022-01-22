@@ -474,4 +474,34 @@ public class PsychicMoves
 
         return user.getName() + " and " + opponent.getName() + "'s Attack and Special Attack stages were swapped!";
     }
+
+    public String PsychoBoost(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.SPATK, -2, 100, true)
+                .execute();
+    }
+
+    public String PowerTrick(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        double userATK = user.getStat(Stat.ATK) / user.changes().getModifier(Stat.ATK);
+        double userDEF = user.getStat(Stat.DEF) / user.changes().getModifier(Stat.DEF);
+
+        user.overrides().set(Stat.ATK, (int)userDEF);
+        user.overrides().set(Stat.DEF, (int)userATK);
+
+        return user.getName() + "'s Attack and Defense were swapped!";
+    }
+
+    public String SpeedSwap(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        double userSPD = user.getStat(Stat.SPD) / user.changes().getModifier(Stat.SPD);
+        double opponentSPD = opponent.getStat(Stat.SPD) / opponent.changes().getModifier(Stat.SPD);
+
+        user.overrides().set(Stat.SPD, (int)opponentSPD);
+        opponent.overrides().set(Stat.SPD, (int)userSPD);
+
+        return user.getName() + " and " + opponent.getName() + "'s Speed stats were swapped!";
+    }
 }
