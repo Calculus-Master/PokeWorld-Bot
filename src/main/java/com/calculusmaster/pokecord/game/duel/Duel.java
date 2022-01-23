@@ -961,18 +961,19 @@ public class Duel
 
         boolean isMoveSuccess = false;
 
+        //Focus Punch
+        if(move.getName().equals("Focus Punch") && this.data(this.current).isFocusPunchFailed)
+        {
+            turnResult.add(this.players[this.current].active.getName() + " lost its focus!");
+
+            this.data(this.other).lastDamageTaken = 0;
+        }
         //Bide
-        if(this.data(this.current).bideTurns > 0)
+        else if(this.data(this.current).bideTurns > 0)
         {
             turnResult.add(this.players[this.current].active.getName() + " is storing energy!");
         }
-        //Ability: Disguise (Mimikyu)
-        if(this.players[this.other].active.getAbilities().contains("Disguise") && !this.data(this.other).disguiseActivated && !move.getCategory().equals(Category.STATUS))
-        {
-            this.data(this.other).disguiseActivated = true;
-
-            turnResult.add("Mimikyu's Disguise was activated and absorbed the attack!");
-        }
+        //Torment
         else if(this.data(this.current).isTormented && this.getLastUsedMove(this.players[this.current].active.getUUID()).equals(move.getName()))
         {
             turnResult.add(name + " can't use " + move.getName() + " due to Torment!");
@@ -1014,6 +1015,13 @@ public class Duel
             turnResult.add(move.getMoveUsedResult(this.players[this.current].active) + " " + this.players[this.other].active.getName() + " is immune to the attack!");
 
             this.data(this.other).lastDamageTaken = 0;
+        }
+        //Ability: Disguise (Mimikyu)
+        else if(this.players[this.other].active.getAbilities().contains("Disguise") && !this.data(this.other).disguiseActivated && !move.getCategory().equals(Category.STATUS))
+        {
+            this.data(this.other).disguiseActivated = true;
+
+            turnResult.add("Mimikyu's Disguise was activated and absorbed the attack!");
         }
         //Do main move logic
         else

@@ -330,4 +330,11 @@ public class FightingMoves
                 .addDamageEffect()
                 .execute();
     }
+
+    public String FocusPunch(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .execute();
+    }
 }
