@@ -338,7 +338,8 @@ public class NormalMoves
 
     public String MindReader(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return move.getNotImplementedResult();
+        duel.data(user.getUUID()).mindReaderUsed = true;
+        return user.getName() + " is guaranteed to hit its next attack!";
     }
 
     public String Leer(Pokemon user, Pokemon opponent, Duel duel, Move move)

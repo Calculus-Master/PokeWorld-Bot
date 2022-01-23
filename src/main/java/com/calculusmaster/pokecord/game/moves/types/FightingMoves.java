@@ -49,7 +49,13 @@ public class FightingMoves
 
     public String Counter(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return move.getNotImplementedResult();
+        if(duel.getLastUsedMove(opponent.getUUID()).isEmpty() && duel.data(user.getUUID()).lastDamageTaken == 0) return move.getNothingResult();
+        else
+        {
+            return MoveEffectBuilder.make(user, opponent, duel, move)
+                    .addFixedDamageEffect(duel.data(user.getUUID()).lastDamageTaken * 2)
+                    .execute();
+        }
     }
 
     public String Detect(Pokemon user, Pokemon opponent, Duel duel, Move move)

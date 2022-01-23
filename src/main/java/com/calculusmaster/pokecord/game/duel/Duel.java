@@ -949,6 +949,15 @@ public class Duel
             otherImmune = false;
         }
 
+        //Mind Reader
+        if(this.data(this.current).mindReaderUsed)
+        {
+            this.data(this.current).mindReaderUsed = false;
+
+            accurate = true;
+            otherImmune = false;
+        }
+
         //Ability: Stance Change (Aegislash)
         if(!move.getCategory().equals(Category.STATUS) && this.players[this.current].active.getAbilities().contains("Stance Change"))
         {
