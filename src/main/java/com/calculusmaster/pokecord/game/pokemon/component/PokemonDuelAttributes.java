@@ -67,6 +67,7 @@ public class PokemonDuelAttributes
     public boolean ingrainUsed;
     public boolean isMinimized;
     public int mistTurns;
+    public boolean isTormented;
 
     public boolean disguiseActivated;
 
@@ -133,6 +134,7 @@ public class PokemonDuelAttributes
         this.ingrainUsed = false;
         this.isMinimized = false;
         this.mistTurns = 0;
+        this.isTormented = false;
 
         this.disguiseActivated = false;
     }

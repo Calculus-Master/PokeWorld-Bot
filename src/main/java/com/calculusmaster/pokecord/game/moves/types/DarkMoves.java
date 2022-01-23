@@ -310,4 +310,10 @@ public class DarkMoves
 
         return user.getName() + " and " + opponent.getName() + " are prevented from swapping out! " + MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
+
+    public String Torment(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(opponent.getUUID()).isTormented = true;
+        return opponent.getName() + " was tormented! " + opponent.getName() + " can't use the same move twice in a row!";
+    }
 }

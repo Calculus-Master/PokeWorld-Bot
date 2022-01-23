@@ -973,6 +973,12 @@ public class Duel
 
             turnResult.add("Mimikyu's Disguise was activated and absorbed the attack!");
         }
+        else if(this.data(this.current).isTormented && this.getLastUsedMove(this.players[this.current].active.getUUID()).equals(move.getName()))
+        {
+            turnResult.add(name + " can't use " + move.getName() + " due to Torment!");
+
+            this.data(this.other).lastDamageTaken = 0;
+        }
         //Check if user has to recharge
         else if(this.data(this.current).recharge && rechargeMoves.contains(move.getName()))
         {
@@ -1650,6 +1656,11 @@ public class Duel
     public List<String> getMovesUsed(String UUID)
     {
         return this.movesUsed.get(UUID);
+    }
+
+    public String getLastUsedMove(String UUID)
+    {
+        return this.getMovesUsed(UUID).isEmpty() ? "" : this.getMovesUsed(UUID).get(this.getMovesUsed(UUID).size() - 1);
     }
 
     public Player getWinner()
