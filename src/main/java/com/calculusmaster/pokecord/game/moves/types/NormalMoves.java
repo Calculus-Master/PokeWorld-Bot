@@ -399,11 +399,6 @@ public class NormalMoves
         return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.ASLEEP, 10);
     }
 
-    public String Yawn(Pokemon user, Pokemon opponent, Duel duel, Move move)
-    {
-        return move.getNotImplementedResult();
-    }
-
     public String SlackOff(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.make(user, opponent, duel, move)
@@ -1278,5 +1273,11 @@ public class NormalMoves
     {
         duel.data(opponent.getUUID()).canSwap = false;
         return opponent.getName() + " is blocked from swapping out!";
+    }
+
+    public String Yawn(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(user.getUUID()).yawnTurns++;
+        return user.getName() + " is feeling drowsy!";
     }
 }

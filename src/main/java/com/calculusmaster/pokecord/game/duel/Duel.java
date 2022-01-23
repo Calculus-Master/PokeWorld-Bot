@@ -1128,6 +1128,21 @@ public class Duel
             }
         }
 
+        if(this.data(this.current).yawnTurns > 0)
+        {
+            this.data(this.current).yawnTurns++;
+
+            if(this.data(this.current).yawnTurns >= 2)
+            {
+                this.data(this.current).yawnTurns = 0;
+
+                this.players[this.current].active.addStatusCondition(StatusCondition.ASLEEP);
+                this.data(this.current).asleepTurns = 0;
+
+                turnResult.add(this.players[this.current].active.getName() + " has fallen asleep!");
+            }
+        }
+
         //Update Move Log
         this.movesUsed.get(this.players[this.current].active.getUUID()).add(move.getName());
 

@@ -70,6 +70,7 @@ public class PokemonDuelAttributes
     public boolean isTormented;
     public boolean isFocusPunchFailed;
     public boolean mindReaderUsed;
+    public int yawnTurns;
 
     public boolean disguiseActivated;
 
@@ -139,6 +140,7 @@ public class PokemonDuelAttributes
         this.isTormented = false;
         this.isFocusPunchFailed = false;
         this.mindReaderUsed = false;
+        this.yawnTurns = 0;
 
         this.disguiseActivated = false;
     }
