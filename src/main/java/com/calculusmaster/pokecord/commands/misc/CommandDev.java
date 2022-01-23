@@ -163,7 +163,11 @@ public class CommandDev extends Command
             catch (IOException e) { e.printStackTrace(); }
         });
 
-        writer.write("Amount: " + Move.INCOMPLETE_MOVES.size());
+        writer.write("Amount: " + Move.INCOMPLETE_MOVES.size() + "\n\n\n");
+
+        writer.write("Work In Progress Moves: \n\n" + String.join("\n", Move.WIP_MOVES));
+        writer.write("\n\nAmount: " + Move.WIP_MOVES.size());
+
         writer.close();
 
         System.out.println("Wrote Incomplete Moves to \"incomplete_moves.txt\"");
