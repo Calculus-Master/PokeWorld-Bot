@@ -152,10 +152,10 @@ public class FlyingMoves
                 .execute();
     }
 
-    //TODO: Copies last move
     public String MirrorMove(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return move.getNotImplementedResult();
+        if(duel.getLastUsedMove(user.getUUID()).isEmpty() || duel.getLastUsedMove(user.getUUID()).equals("Mirror Move")) return move.getNothingResult();
+        else return new Move(duel.getLastUsedMove(user.getUUID())).logic(user, opponent, duel);
     }
 
     public String SkyDrop(Pokemon user, Pokemon opponent, Duel duel, Move move)
