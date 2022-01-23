@@ -847,23 +847,6 @@ public class Duel
             }
         }
 
-        //Field Effects
-
-        if(this.fieldEffects[this.current].has(FieldEffect.TAILWIND))
-        {
-            this.fieldEffects[this.current].tailwindTurns--;
-
-            if(this.fieldEffects[this.current].tailwindTurns <= 0)
-            {
-                this.fieldEffects[this.current].tailwindTurns = 0;
-                this.fieldEffects[this.current].remove(FieldEffect.TAILWIND);
-
-                for(Pokemon p : this.players[this.current].team) p.overrides().remove(Stat.SPD);
-
-                turnResult.add("Tailwind's effects wore off!");
-            }
-        }
-
         if(this.data(this.current).ingrainUsed)
         {
             int amount = this.players[this.current].active.getMaxHealth(1 / 16.);
@@ -1121,10 +1104,28 @@ public class Duel
         }
 
         //Post-Move Updates
+
         if(!isMoveSuccess || (this.data(this.current).furyCutterUsed && !move.getName().equals("Fury Cutter")))
         {
             this.data(this.current).furyCutterUsed = false;
             this.data(this.current).furyCutterTurns = 0;
+        }
+
+        //Field Effects
+
+        if(this.fieldEffects[this.current].has(FieldEffect.TAILWIND))
+        {
+            this.fieldEffects[this.current].tailwindTurns--;
+
+            if(this.fieldEffects[this.current].tailwindTurns <= 0)
+            {
+                this.fieldEffects[this.current].tailwindTurns = 0;
+                this.fieldEffects[this.current].remove(FieldEffect.TAILWIND);
+
+                for(Pokemon p : this.players[this.current].team) p.overrides().remove(Stat.SPD);
+
+                turnResult.add("Tailwind's effects wore off!");
+            }
         }
 
         //Update Move Log
