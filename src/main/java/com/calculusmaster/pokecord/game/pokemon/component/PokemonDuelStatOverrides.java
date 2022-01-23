@@ -19,6 +19,11 @@ public class PokemonDuelStatOverrides
         this.overrides.put(s, value);
     }
 
+    public void remove(Stat s)
+    {
+        this.overrides.remove(s);
+    }
+
     public int get(Stat s)
     {
         return this.overrides.getOrDefault(s, 0);

@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.component.EntryHazardHandler;
 import com.calculusmaster.pokecord.game.duel.component.FieldBarrierHandler;
+import com.calculusmaster.pokecord.game.duel.component.FieldEffectsHandler;
 import com.calculusmaster.pokecord.game.duel.component.FieldGMaxDoTHandler;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
@@ -67,6 +68,7 @@ public class Duel
     public EntryHazardHandler[] entryHazards;
     public FieldBarrierHandler[] barriers;
     public FieldGMaxDoTHandler[] gmaxDoT;
+    public FieldEffectsHandler[] fieldEffects;
 
     public static Duel create(String player1ID, String player2ID, int size, MessageReceivedEvent event)
     {
@@ -831,6 +833,7 @@ public class Duel
             cantUse = true;
         }
 
+        //G-Max Damage Over Time
         if(this.gmaxDoT[this.current].exists())
         {
             this.gmaxDoT[this.current].updateTurns();
@@ -841,6 +844,23 @@ public class Duel
                 this.players[this.current].active.damage(damage);
 
                 turnResult.add(this.players[this.current].active.getName() + " took " + damage + " damage from the G-Max " + this.gmaxDoT[this.current].getEffectName() + "!");
+            }
+        }
+
+        //Field Effects
+
+        if(this.fieldEffects[this.current].has(FieldEffect.TAILWIND))
+        {
+            this.fieldEffects[this.current].tailwindTurns--;
+
+            if(this.fieldEffects[this.current].tailwindTurns <= 0)
+            {
+                this.fieldEffects[this.current].tailwindTurns = 0;
+                this.fieldEffects[this.current].remove(FieldEffect.TAILWIND);
+
+                for(Pokemon p : this.players[this.current].team) p.overrides().remove(Stat.SPD);
+
+                turnResult.add("Tailwind's effects wore off!");
             }
         }
 
@@ -1179,6 +1199,7 @@ public class Duel
         this.entryHazards = new EntryHazardHandler[]{new EntryHazardHandler(), new EntryHazardHandler()};
         this.barriers = new FieldBarrierHandler[]{new FieldBarrierHandler(), new FieldBarrierHandler()};
         this.gmaxDoT = new FieldGMaxDoTHandler[]{new FieldGMaxDoTHandler(), new FieldGMaxDoTHandler()};
+        this.fieldEffects = new FieldEffectsHandler[]{new FieldEffectsHandler(), new FieldEffectsHandler()};
         this.queuedMoves = new HashMap<>();
 
         for(Player player : this.players) for(Pokemon p : player.team) p.setHealth(p.getStat(Stat.HP));

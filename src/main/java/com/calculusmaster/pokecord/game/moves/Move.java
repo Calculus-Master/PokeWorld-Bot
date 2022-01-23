@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 public class Move
 {
     //TODO: Keep checking the custom moves and see if they can function as close to the original as possible
-    public static final List<String> WIP_MOVES = List.of("Roar", "Whirlwind", "Rage Powder", "Tailwind", "Frustration", "Return", "Magnetic Flux", "After You", "Disable", "Miracle Eye", "Me First", "Yawn", "Gravity", "Spite", "Mean Look", "Foresight", "Wide Guard", "Natural Gift", "Last Resort", "Teleport", "Odor Sleuth", "Helping Hand", "Mirror Move", "Stuff Cheeks", "Copycat", "Follow Me", "Sky Drop", "Simple Beam", "Fling", "Telekinesis", "Quash", "No Retreat", "Encore", "Substitute", "Magic Coat", "Embargo", "Ally Switch", "Sleep Talk");
+    public static final List<String> WIP_MOVES = List.of("Roar", "Whirlwind", "Rage Powder", "Frustration", "Return", "Magnetic Flux", "After You", "Disable", "Miracle Eye", "Me First", "Yawn", "Gravity", "Spite", "Mean Look", "Foresight", "Wide Guard", "Natural Gift", "Last Resort", "Teleport", "Odor Sleuth", "Helping Hand", "Mirror Move", "Stuff Cheeks", "Copycat", "Follow Me", "Sky Drop", "Simple Beam", "Fling", "Telekinesis", "Quash", "No Retreat", "Encore", "Substitute", "Magic Coat", "Embargo", "Ally Switch", "Sleep Talk");
     public static final List<String> CUSTOM_MOVES = List.of("Leech Seed", "Rapid Spin", "Mirror Shot", "Worry Seed", "Aromatic Mist", "Pay Day", "Pollen Puff");
     public static List<String> INCOMPLETE_MOVES = new ArrayList<>();
 

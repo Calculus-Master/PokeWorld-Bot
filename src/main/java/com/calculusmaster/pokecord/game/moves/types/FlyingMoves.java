@@ -31,7 +31,8 @@ public class FlyingMoves
 
     public String Tailwind(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return move.getNotImplementedResult();
+        for(Pokemon p : duel.getPlayers()[duel.playerIndexFromUUID(user.getUUID())].team) p.overrides().set(Stat.SPD, p.getStat(Stat.SPD) * 2);
+        return user.getName() + " boosted the speed of its team!";
     }
 
     public String Roost(Pokemon user, Pokemon opponent, Duel duel, Move move)
