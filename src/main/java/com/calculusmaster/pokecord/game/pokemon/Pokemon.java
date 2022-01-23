@@ -52,6 +52,7 @@ public class Pokemon
 
     //Duel Fields
     private List<Type> type;
+    private List<String> abilities;
     private PokemonDuelStatChanges statChanges;
     private PokemonBoosts boosts;
     private int health;
@@ -118,6 +119,7 @@ public class Pokemon
     private void setDuelDefaults()
     {
         this.type = new ArrayList<>(List.copyOf(this.data.types));
+        this.abilities = new ArrayList<>(List.copyOf(this.data.abilities));
         this.statChanges = new PokemonDuelStatChanges();
         this.boosts = new PokemonBoosts();
         this.health = this.getMaxHealth();
@@ -516,7 +518,22 @@ public class Pokemon
 
     public List<String> getAbilities()
     {
-        return this.data.abilities;
+        return this.abilities;
+    }
+
+    public void addAbility(String ability)
+    {
+        this.abilities.add(ability);
+    }
+
+    public void clearAbilities()
+    {
+        this.abilities.clear();
+    }
+
+    public void setAbilities(List<String> abilities)
+    {
+        this.abilities = new ArrayList<>(List.copyOf(abilities));
     }
 
     //Type

@@ -765,7 +765,12 @@ public class NormalMoves
 
     public String Entrainment(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return move.getNotImplementedResult();
+        if(user.getAbilities().contains("Truant") || user.getAbilities().contains("Multitype") || user.getAbilities().contains("Zen Mode")) return move.getNoEffectResult(opponent);
+        else
+        {
+            opponent.setAbilities(user.getAbilities());
+            return opponent.getName() + "'s abilities were set to " + user.getName() + "'s abilities!";
+        }
     }
 
     public String RazorWind(Pokemon user, Pokemon opponent, Duel duel, Move move)
