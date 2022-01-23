@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.component.EntryHazardHandler;
 import com.calculusmaster.pokecord.game.duel.component.FieldBarrierHandler;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
+import com.calculusmaster.pokecord.game.enums.elements.FieldEffect;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.moves.Move;
@@ -32,6 +33,9 @@ public class FlyingMoves
     public String Tailwind(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         for(Pokemon p : duel.getPlayers()[duel.playerIndexFromUUID(user.getUUID())].team) p.overrides().set(Stat.SPD, p.getStat(Stat.SPD) * 2);
+
+        duel.fieldEffects[duel.playerIndexFromUUID(user.getUUID())].add(FieldEffect.TAILWIND, 4);
+
         return user.getName() + " boosted the speed of its team!";
     }
 
