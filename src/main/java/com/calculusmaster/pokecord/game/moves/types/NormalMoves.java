@@ -775,11 +775,6 @@ public class NormalMoves
                 .execute();
     }
 
-    public String Block(Pokemon user, Pokemon opponent, Duel duel, Move move)
-    {
-        return move.getNotImplementedResult();
-    }
-
     public String FollowMe(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return move.getNotImplementedResult();
@@ -1272,5 +1267,11 @@ public class NormalMoves
                 .addDamageEffect()
                 .addStatusEffect(StatusCondition.FLINCHED)
                 .execute() : move.getNothingResult();
+    }
+
+    public String Block(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        duel.data(opponent.getUUID()).canSwap = false;
+        return opponent.getName() + " is blocked from swapping out!";
     }
 }
