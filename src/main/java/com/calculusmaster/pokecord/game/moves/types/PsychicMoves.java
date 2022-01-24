@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game.moves.types;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.duel.component.FieldBarrierHandler;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.Move;
@@ -8,10 +9,7 @@ import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class PsychicMoves
 {
@@ -298,8 +296,18 @@ public class PsychicMoves
 
     public String PsychicFangs(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        //TODO: Breaks Light Screen/Reflect
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addCustomEffect(() -> {
+                    FieldBarrierHandler b = duel.barriers[duel.playerIndexFromUUID(opponent.getUUID())];
+
+                    StringJoiner s = new StringJoiner(" ");
+                    if(b.has(FieldBarrier.LIGHT_SCREEN)) s.add(opponent.getName() + "'s Light Screen Barrier was removed!");
+                    if(b.has(FieldBarrier.REFLECT)) s.add(opponent.getName() + "'s Reflect Barrier was removed!");
+
+                    return s.toString();
+                })
+                .execute();
     }
 
     public String MistBall(Pokemon user, Pokemon opponent, Duel duel, Move move)

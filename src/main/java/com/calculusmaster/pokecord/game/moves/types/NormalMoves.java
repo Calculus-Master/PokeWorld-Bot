@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.game.moves.types;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.component.EntryHazardHandler;
+import com.calculusmaster.pokecord.game.duel.component.FieldBarrierHandler;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.Move;
@@ -578,17 +579,21 @@ public class NormalMoves
         return move.getNotImplementedResult();
     }
 
-    //TODO: Affects more things than just entry hazards: https://bulbapedia.bulbagarden.net/wiki/Court_Change_(move)
+    //TODO: Swap FieldEffects
     public String CourtChange(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int current = duel.playerIndexFromUUID(user.getUUID());
         int other = current == 0 ? 1 : 0;
 
-        EntryHazardHandler temp = duel.entryHazards[current];
+        EntryHazardHandler tempE = duel.entryHazards[current];
         duel.entryHazards[current] = duel.entryHazards[other];
-        duel.entryHazards[other] = temp;
+        duel.entryHazards[other] = tempE;
 
-        return "Entry Hazards were swapped!";
+        FieldBarrierHandler tempB = duel.barriers[current];
+        duel.barriers[current] = duel.barriers[other];
+        duel.barriers[other] = tempB;
+
+        return "Entry Hazards, Barriers and Field Effects were swapped!";
     }
 
     public String Feint(Pokemon user, Pokemon opponent, Duel duel, Move move)
