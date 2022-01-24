@@ -302,8 +302,18 @@ public class PsychicMoves
                     FieldBarrierHandler b = duel.barriers[duel.playerIndexFromUUID(opponent.getUUID())];
 
                     StringJoiner s = new StringJoiner(" ");
-                    if(b.has(FieldBarrier.LIGHT_SCREEN)) s.add(opponent.getName() + "'s Light Screen Barrier was removed!");
-                    if(b.has(FieldBarrier.REFLECT)) s.add(opponent.getName() + "'s Reflect Barrier was removed!");
+
+                    if(b.has(FieldBarrier.LIGHT_SCREEN))
+                    {
+                        b.removeBarrier(FieldBarrier.LIGHT_SCREEN);
+                        s.add(opponent.getName() + "'s Light Screen Barrier was removed!");
+                    }
+
+                    if(b.has(FieldBarrier.REFLECT))
+                    {
+                        b.removeBarrier(FieldBarrier.REFLECT);
+                        s.add(opponent.getName() + "'s Reflect Barrier was removed!");
+                    }
 
                     return s.toString();
                 })
