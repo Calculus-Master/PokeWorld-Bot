@@ -22,7 +22,6 @@ public class CommandServerInfo extends Command
     {
         if(this.insufficientMasteryLevel(Feature.VIEW_SERVER_INFO)) return this.invalidMasteryLevel(Feature.VIEW_SERVER_INFO);
 
-        this.server.loadMembers();
         DataHelper.updateServerPlayers(this.server);
 
         this.embed.setTitle(this.server.getName() + " (ID: " + this.server.getId() + ")");

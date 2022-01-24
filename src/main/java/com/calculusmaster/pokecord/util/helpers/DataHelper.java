@@ -23,9 +23,7 @@ public class DataHelper
     {
         SERVER_PLAYERS.put(g.getId(), new ArrayList<>());
 
-        g.loadMembers();
-
-        for(Member m : g.getMembers()) if(PlayerDataQuery.isRegistered(m.getId())) SERVER_PLAYERS.get(g.getId()).add(m.getId());
+        for(Member m : g.loadMembers().get()) if(PlayerDataQuery.isRegistered(m.getId())) SERVER_PLAYERS.get(g.getId()).add(m.getId());
     }
 
     public static void removeServer(String ID)
