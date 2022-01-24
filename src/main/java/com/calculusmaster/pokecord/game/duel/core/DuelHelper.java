@@ -185,7 +185,7 @@ public class DuelHelper
         Move maxMove;
 
         if(baseMove.getCategory().equals(Category.STATUS)) maxMove = new Move("Max Guard");
-        else if(p.canGigantamax() && DataHelper.getGigantamaxData(p.getName()).moveType().equals(baseMove.getType())) maxMove = new Move(DataHelper.getGigantamaxData(p.getName()).move(), DataHelper.getGigantamaxData(p.getName()).moveType(), null, 0);
+        else if(p.canGigantamax() && DataHelper.getGigantamaxData(p.getName()).moveType().equals(baseMove.getType())) maxMove = Move.create(DataHelper.getGigantamaxData(p.getName()).move(), DataHelper.getGigantamaxData(p.getName()).moveType(), null, 0, 100);
         else maxMove = new Move(MaxMoveRegistry.get(baseMove.getType()).name);
 
         int maxPower;
@@ -203,6 +203,7 @@ public class DuelHelper
 
         maxMove.setPower(maxPower);
         maxMove.setCategory(baseMove.getCategory());
+        maxMove.isMaxMove = true;
 
         return maxMove;
     }

@@ -75,30 +75,6 @@ public class Move
         return m;
     }
 
-    //Custom
-    @Deprecated
-    public Move(String name, Type type, Category category, int power)
-    {
-        this.name = name;
-        this.type = type;
-        this.category = category;
-        this.power = power;
-
-        this.accuracy = 100;
-
-        //TODO: Add MaxMove Registry
-        this.isZMove = true;
-        this.isMaxMove = false;
-
-        this.setPriority();
-
-        this.damageMultiplier = 1.0;
-        this.accuracyMultiplier = 1.0;
-
-        this.critChance = 1;
-        this.hitCrit = false;
-    }
-
     public String logic(Pokemon user, Pokemon opponent, Duel duel)
     {
         //Call specific move method
