@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.moves.types;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.component.EntryHazardHandler;
 import com.calculusmaster.pokecord.game.duel.component.FieldBarrierHandler;
+import com.calculusmaster.pokecord.game.duel.component.FieldEffectsHandler;
 import com.calculusmaster.pokecord.game.duel.component.FieldGMaxDoTHandler;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.Item;
@@ -580,7 +581,6 @@ public class NormalMoves
         return move.getNotImplementedResult();
     }
 
-    //TODO: Swap FieldEffects
     public String CourtChange(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int current = duel.playerIndexFromUUID(user.getUUID());
@@ -597,6 +597,10 @@ public class NormalMoves
         FieldGMaxDoTHandler tempG = duel.gmaxDoT[current];
         duel.gmaxDoT[current] = duel.gmaxDoT[other];
         duel.gmaxDoT[other] = tempG;
+
+        FieldEffectsHandler tempFE = duel.fieldEffects[current];
+        duel.fieldEffects[current] = duel.fieldEffects[other];
+        duel.fieldEffects[other] = tempFE;
 
         return "Entry Hazards, Barriers and Field Effects were swapped!";
     }
