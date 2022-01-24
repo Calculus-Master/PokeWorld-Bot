@@ -322,6 +322,11 @@ public class Pokemon
         this.statusConditions.clear();
     }
 
+    public void clearStatusConditions(StatusCondition... conditions)
+    {
+        Arrays.stream(conditions).forEach(this::removeStatusCondition);
+    }
+
     public EnumSet<StatusCondition> getStatusConditions()
     {
         return this.statusConditions;

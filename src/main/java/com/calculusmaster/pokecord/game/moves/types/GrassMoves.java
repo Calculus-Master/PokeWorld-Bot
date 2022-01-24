@@ -357,8 +357,7 @@ public class GrassMoves
 
     public String JungleHealing(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        //TODO: Non-volatile Status Conditions
-        user.clearStatusConditions();
+        user.clearStatusConditions(StatusCondition.BURNED, StatusCondition.FROZEN, StatusCondition.PARALYZED, StatusCondition.POISONED);
 
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addFractionHealEffect(1 / 4D)
