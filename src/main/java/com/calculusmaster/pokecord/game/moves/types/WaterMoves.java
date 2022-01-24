@@ -61,12 +61,11 @@ public class WaterMoves
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
-    //TODO: Heals 1/16 each turn
     public String AquaRing(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return MoveEffectBuilder.make(user, opponent, duel, move)
-                .addFractionHealEffect(1 / 16D)
-                .execute();
+        duel.data(user.getUUID()).aquaRingUsed = true;
+
+        return user.getName() + " set up an Aqua Ring veil!";
     }
 
     public String MuddyWater(Pokemon user, Pokemon opponent, Duel duel, Move move)
