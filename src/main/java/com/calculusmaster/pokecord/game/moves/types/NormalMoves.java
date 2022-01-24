@@ -578,7 +578,8 @@ public class NormalMoves
 
     public String LastResort(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return move.getNotImplementedResult();
+        if(user.getMoves().stream().distinct().allMatch(s -> s.equals("Last Resort")) || duel.getMovesUsed(user.getUUID()).stream().distinct().dropWhile(s -> s.equals("Last Resort")).count() == user.getMoves().stream().dropWhile(s -> s.equals("Last Resort")).count()) return move.getNothingResult();
+        else return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
     public String CourtChange(Pokemon user, Pokemon opponent, Duel duel, Move move)
