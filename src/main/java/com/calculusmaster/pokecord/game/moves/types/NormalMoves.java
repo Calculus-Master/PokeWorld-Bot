@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.moves.types;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.component.EntryHazardHandler;
 import com.calculusmaster.pokecord.game.duel.component.FieldBarrierHandler;
+import com.calculusmaster.pokecord.game.duel.component.FieldGMaxDoTHandler;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.Move;
@@ -592,6 +593,10 @@ public class NormalMoves
         FieldBarrierHandler tempB = duel.barriers[current];
         duel.barriers[current] = duel.barriers[other];
         duel.barriers[other] = tempB;
+
+        FieldGMaxDoTHandler tempG = duel.gmaxDoT[current];
+        duel.gmaxDoT[current] = duel.gmaxDoT[other];
+        duel.gmaxDoT[other] = tempG;
 
         return "Entry Hazards, Barriers and Field Effects were swapped!";
     }
