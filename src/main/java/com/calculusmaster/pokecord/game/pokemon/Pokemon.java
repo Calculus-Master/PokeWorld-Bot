@@ -389,7 +389,7 @@ public class Pokemon
 
     public int getStat(Stat s)
     {
-        if(this.statOverrides.has(s)) return this.statOverrides.get(s);
+        if(this.statOverrides != null && this.statOverrides.has(s)) return this.statOverrides.get(s);
 
         if(s.equals(Stat.HP))
         {
