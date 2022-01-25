@@ -120,7 +120,7 @@ public class PlayerDataQuery extends MongoQuery
     //key: "playerID"
     public String getID()
     {
-        return this.json().getString("playerID");
+        return this.document.getString("playerID");
     }
 
     public String getMention()
@@ -131,13 +131,13 @@ public class PlayerDataQuery extends MongoQuery
     //key: "username"
     public String getUsername()
     {
-        return this.json().getString("username");
+        return this.document.getString("username");
     }
 
     //key: "level"
     public int getLevel()
     {
-        return this.json().getInt("level");
+        return this.document.getInteger("level");
     }
 
     public void increaseLevel()
@@ -150,7 +150,7 @@ public class PlayerDataQuery extends MongoQuery
     //key: "exp"
     public int getExp()
     {
-        return this.json().getInt("exp");
+        return this.document.getInteger("exp");
     }
 
     public void clearExp()
@@ -185,23 +185,21 @@ public class PlayerDataQuery extends MongoQuery
     //key: "credits"
     public int getCredits()
     {
-        return this.json().getInt("credits");
+        return this.document.getInteger("credits");
     }
 
     public void changeCredits(int amount)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.set("credits", this.getCredits() + amount));
+        this.update(Updates.set("credits", this.getCredits() + amount));
 
         if(amount < 0) this.getStatistics().incr(PlayerStatistic.CREDITS_SPENT, Math.abs(amount));
         else if(amount > 0) this.getStatistics().incr(PlayerStatistic.CREDITS_EARNED, Math.abs(amount));
-
-        this.update();
     }
 
     //key: "redeems"
     public int getRedeems()
     {
-        return this.json().getInt("redeems");
+        return this.document.getInteger("redeems");
     }
 
     public void changeRedeems(int amount)
@@ -212,13 +210,13 @@ public class PlayerDataQuery extends MongoQuery
     //key: "selected"
     public int getSelected()
     {
-        int selected = this.json().getInt("selected");
+        int selected = this.document.getInteger("selected");
         int pokemonListSize = this.getPokemonList().size();
 
         if(selected > pokemonListSize) this.setSelected(pokemonListSize);
         else if(selected <= 0) this.setSelected(1);
 
-        return this.json().getInt("selected") - 1;
+        return this.document.getInteger("selected") - 1;
     }
 
     public void setSelected(int num)
@@ -247,20 +245,17 @@ public class PlayerDataQuery extends MongoQuery
 
     public void addPokemon(String UUID)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.push("pokemon", UUID));
+        this.update(Updates.push("pokemon", UUID));
 
-        this.update();
     }
 
     public void removePokemon(String UUID)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.pull("pokemon", UUID));
+        this.update(Updates.pull("pokemon", UUID));
         PokemonDataCache.removeCache(UUID);
 
         if(this.getTeam().contains(UUID)) this.removePokemonFromTeam(this.getTeam().indexOf(UUID));
         if(this.getFavorites().contains(UUID)) this.removePokemonFromFavorites(UUID);
-
-        this.update();
     }
 
     public void removePokemon(int index)
@@ -271,7 +266,7 @@ public class PlayerDataQuery extends MongoQuery
     //key: "team"
     public List<String> getTeam()
     {
-        return this.json().getJSONArray("team").toList().stream().map(o -> (String)o).collect(Collectors.toList());
+        return this.document.getList("team", String.class);
     }
 
     public void clearTeam()
@@ -322,7 +317,7 @@ public class PlayerDataQuery extends MongoQuery
     //key: "favorites"
     public List<String> getFavorites()
     {
-        return this.json().getJSONArray("favorites").toList().stream().map(s -> (String)s).collect(Collectors.toList());
+        return this.document.getList("favorites", String.class);
     }
 
     public void addPokemonToFavorites(String UUID)
@@ -344,7 +339,7 @@ public class PlayerDataQuery extends MongoQuery
     //key: "items"
     public List<String> getItemList()
     {
-        return this.json().getJSONArray("items").toList().stream().map(o -> (String)o).collect(Collectors.toList());
+        return this.document.getList("items", String.class);
     }
 
     public void addItem(String item)
@@ -357,17 +352,15 @@ public class PlayerDataQuery extends MongoQuery
         int counts = 0;
         for(String s : this.getItemList()) if(s.equalsIgnoreCase(item)) counts++;
 
-        Mongo.PlayerData.updateOne(this.query, Updates.pull("items", item));
+        this.update(Updates.pull("items", item));
 
         for(int i = 0; i < counts - 1; i++) this.addItem(item);
-
-        this.update();
     }
 
     //key: "tms"
     public List<String> getTMList()
     {
-        return this.json().getJSONArray("tms").toList().stream().map(o -> (String)o).collect(Collectors.toList());
+        return this.document.getList("tms", String.class);
     }
 
     public void addTM(String TM)
@@ -380,17 +373,15 @@ public class PlayerDataQuery extends MongoQuery
         int counts = 0;
         for (int i = 0; i < this.getTMList().size(); i++) if(this.getTMList().get(i).equals(TM)) counts++;
 
-        Mongo.PlayerData.updateOne(this.query, Updates.pull("tms", TM));
+        this.update(this.query, Updates.pull("tms", TM));
 
         for(int i = 0; i < counts - 1; i++) this.addTM(TM);
-
-        this.update();
     }
 
     //key: "trs"
     public List<String> getTRList()
     {
-        return this.json().getJSONArray("trs").toList().stream().map(o -> (String)o).collect(Collectors.toList());
+        return this.document.getList("trs", String.class);
     }
 
     public void addTR(String TR)
@@ -404,17 +395,15 @@ public class PlayerDataQuery extends MongoQuery
         int counts = 0;
         for (int i = 0; i < this.getTRList().size(); i++) if(this.getTRList().get(i).equals(TR)) counts++;
 
-        Mongo.PlayerData.updateOne(this.query, Updates.pull("trs", TR));
+        this.update(Updates.pull("trs", TR));
 
         for(int i = 0; i < counts - 1; i++) this.addTR(TR);
-
-        this.update();
     }
 
     //key: "zcrystals"
     public List<String> getZCrystalList()
     {
-        return this.json().getJSONArray("zcrystals").toList().stream().map(o -> (String)o).collect(Collectors.toList());
+        return this.document.getList("zcrystals", String.class);
     }
 
     public boolean hasZCrystal(String z)
@@ -430,7 +419,7 @@ public class PlayerDataQuery extends MongoQuery
     //key: "active_zcrystal"
     public String getEquippedZCrystal()
     {
-        return this.json().getString("active_zcrystal");
+        return this.document.getString("active_zcrystal");
     }
 
     public void equipZCrystal(String z)
@@ -441,7 +430,7 @@ public class PlayerDataQuery extends MongoQuery
     //key: "achievements"
     public List<String> getAchievementsList()
     {
-        return this.json().getJSONArray("achievements").toList().stream().map(o -> (String)o).collect(Collectors.toList());
+        return this.document.getList("achievements", String.class);
     }
 
     public void addAchievement(Achievements a)
@@ -457,7 +446,7 @@ public class PlayerDataQuery extends MongoQuery
     //key: "owned_forms"
     public List<String> getOwnedForms()
     {
-        return this.json().getJSONArray("owned_forms").toList().stream().map(s -> (String)s).collect(Collectors.toList());
+        return this.document.getList("owned_forms", String.class);
     }
 
     public void addOwnedForm(String form)
@@ -468,7 +457,7 @@ public class PlayerDataQuery extends MongoQuery
     //key: "owned_megas"
     public List<String> getOwnedMegas()
     {
-        return this.json().getJSONArray("owned_megas").toList().stream().map(s -> (String)s).collect(Collectors.toList());
+        return this.document.getList("owned_megas", String.class);
     }
 
     public void addOwnedMegas(String mega)
@@ -479,7 +468,7 @@ public class PlayerDataQuery extends MongoQuery
     //key: "bounties"
     public List<String> getBountyIDs()
     {
-        return this.json().getJSONArray("bounties").toList().stream().map(s -> (String)s).collect(Collectors.toList());
+        return this.document.getList("bounties", String.class);
     }
 
     public List<Bounty> getBounties()
@@ -557,14 +546,12 @@ public class PlayerDataQuery extends MongoQuery
     //key: "pursuit"
     public List<String> getPursuitIDs()
     {
-        return this.json().getJSONArray("pursuit").toList().stream().map(s -> (String)s).collect(Collectors.toList());
+        return this.document.getList("pursuit", String.class);
     }
 
     public void setPursuit(List<String> IDs)
     {
-        Mongo.PlayerData.updateOne(this.query, Updates.pushEach("pursuit", IDs));
-
-        this.update();
+        this.update(Updates.pushEach("pursuit", IDs));
     }
 
     public Bounty getCurrentPursuitBounty()
@@ -589,7 +576,7 @@ public class PlayerDataQuery extends MongoQuery
     //key: "pursuit_level"
     public int getPursuitLevel()
     {
-        return this.json().getInt("pursuit_level");
+        return this.document.getInteger("pursuit_level");
     }
 
     public void increasePursuitLevel()
@@ -605,7 +592,7 @@ public class PlayerDataQuery extends MongoQuery
     //key: "owned_eggs"
     public List<String> getOwnedEggIDs()
     {
-        return this.json().getJSONArray("owned_eggs").toList().stream().map(s -> (String)s).collect(Collectors.toList());
+        return this.document.getList("owned_eggs", String.class);
     }
 
     public List<PokemonEgg> getOwnedEggs()
@@ -631,7 +618,7 @@ public class PlayerDataQuery extends MongoQuery
     //key: "active_egg"
     public String getActiveEggID()
     {
-        return this.json().getString("active_egg");
+        return this.document.getString("active_egg");
     }
 
     public PokemonEgg getActiveEgg()
@@ -641,7 +628,7 @@ public class PlayerDataQuery extends MongoQuery
 
     public boolean hasActiveEgg()
     {
-        return !this.json().getString("active_egg").equals("");
+        return !this.document.getString("active_egg").equals("");
     }
 
     public void setActiveEgg(String eggID)

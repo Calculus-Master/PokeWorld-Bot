@@ -5,6 +5,9 @@ import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
+import org.bson.conversions.Bson;
+
+import java.util.List;
 
 public class PlayerStatisticsQuery extends MongoQuery
 {
@@ -25,21 +28,21 @@ public class PlayerStatisticsQuery extends MongoQuery
     }
 
     @Override
-    protected void update()
+    protected void update(Bson... updates)
     {
+        Mongo.StatisticsData.updateOne(this.query, List.of(updates));
+
         this.document = Mongo.StatisticsData.find(this.query).first();
     }
 
     public int get(PlayerStatistic stat)
     {
-        return this.json().getInt(stat.key);
+        return this.document.getInteger(stat.key);
     }
 
     public void incr(PlayerStatistic stat, int amount)
     {
-        Mongo.StatisticsData.updateOne(this.query, Updates.inc(stat.key, amount));
-
-        this.update();
+        this.update(this.query, Updates.inc(stat.key, amount));
     }
 
     public void incr(PlayerStatistic stat)

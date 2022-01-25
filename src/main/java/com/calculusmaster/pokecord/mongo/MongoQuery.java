@@ -4,7 +4,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.json.JSONObject;
 
 import java.util.Arrays;
 
@@ -21,37 +20,11 @@ public abstract class MongoQuery
         this.document = idVal.contains("BOT") ? null : database.find(this.query).first();
     }
 
-    public MongoQuery(MongoQuery from)
-    {
-        this.database = from.database;
-        this.query = from.query;
-        this.document = from.document;
-    }
-
-    @Deprecated
-    public JSONObject json()
-    {
-        if(this.document == null) System.out.println(this + ", Query: " + this.query);
-        return new JSONObject(this.document.toJson());
-    }
-
-    protected void update()
-    {
-        this.document = this.database.find(this.query).first();
-    }
-
-    protected void update(Bson update)
-    {
-        this.database.updateOne(this.query, update);
-
-        this.update();
-    }
-
     protected void update(Bson... updates)
     {
         this.database.updateOne(this.query, Arrays.asList(updates));
 
-        this.update();
+        this.document = this.database.find(this.query).first();
     }
 
     public boolean isNull()

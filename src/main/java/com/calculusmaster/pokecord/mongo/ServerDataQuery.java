@@ -6,10 +6,10 @@ import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.Guild;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.json.JSONArray;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ServerDataQuery extends MongoQuery
 {
@@ -44,8 +44,11 @@ public class ServerDataQuery extends MongoQuery
         SpawnEventHelper.start(server);
     }
 
-    protected void update()
+    @Override
+    protected void update(Bson... updates)
     {
+        Mongo.ServerData.updateOne(this.query, List.of(updates));
+
         this.document = Mongo.ServerData.find(this.query).first();
     }
 
@@ -53,132 +56,108 @@ public class ServerDataQuery extends MongoQuery
 
     public String getPrefix()
     {
-        return this.json().getString("prefix");
+        return this.document.getString("prefix");
     }
 
     public void setPrefix(String prefix)
     {
-        Mongo.ServerData.updateOne(this.query, Updates.set("prefix", prefix));
-
-        this.update();
+        this.update(Updates.set("prefix", prefix));
     }
 
     //key: "spawnchannel"
 
     public List<String> getSpawnChannels()
     {
-        return this.json().getJSONArray("spawnchannel").toList().stream().map(s -> (String)s).collect(Collectors.toList());
+        return this.document.getList("spawnchannel", String.class);
     }
 
     public void addSpawnChannel(String channelID)
     {
-        Mongo.ServerData.updateOne(this.query, Updates.push("spawnchannel", channelID));
-
-        this.update();
+        this.update(Updates.push("spawnchannel", channelID));
     }
 
     public void removeSpawnChannel(String channelID)
     {
-        Mongo.ServerData.updateOne(this.query, Updates.pull("spawnchannel", channelID));
-
-        this.update();
+        this.update(Updates.pull("spawnchannel", channelID));
     }
 
     //key: "equipzcrystal_duel"
 
     public boolean canEquipZCrystalDuel()
     {
-        return this.json().getBoolean("equipzcrystal_duel");
+        return this.document.getBoolean("equipzcrystal_duel");
     }
 
     public void setEquipZCrystalDuel(boolean val)
     {
-        Mongo.ServerData.updateOne(this.query, Updates.set("equipzcrystal_duel", val));
-
-        this.update();
+        this.update(Updates.set("equipzcrystal_duel", val));
     }
 
     //key: "dynamax"
 
     public boolean isDynamaxEnabled()
     {
-        return this.json().getBoolean("dynamax");
+        return this.document.getBoolean("dynamax");
     }
 
     public void setDynamaxEnabled(boolean val)
     {
-        Mongo.ServerData.updateOne(this.query, Updates.set("dynamax", val));
-
-        this.update();
+        this.update(Updates.set("dynamax", val));
     }
 
     //key: "zmoves"
 
     public boolean areZMovesEnabled()
     {
-        return this.json().getBoolean("zmoves");
+        return this.document.getBoolean("zmoves");
     }
 
     public void setZMovesEnabled(boolean val)
     {
-        Mongo.ServerData.updateOne(this.query, Updates.set("zmoves", val));
-
-        this.update();
+        this.update(Updates.set("zmoves", val));
     }
 
     //key: "duelchannel"
 
     public List<String> getDuelChannels()
     {
-        return this.json().getJSONArray("duelchannel").toList().stream().map(s -> (String)s).collect(Collectors.toList());
+        return this.document.getList("duelchannel", String.class);
     }
 
     public void addDuelChannel(String channelID)
     {
-        Mongo.ServerData.updateOne(this.query, Updates.push("duelchannel", channelID));
-
-        this.update();
+        this.update(Updates.push("duelchannel", channelID));
     }
 
     public void removeDuelChannel(String channelID)
     {
-        Mongo.ServerData.updateOne(this.query, Updates.pull("duelchannel", channelID));
-
-        this.update();
+        this.update(Updates.pull("duelchannel", channelID));
     }
 
     public void clearDuelChannels()
     {
-        Mongo.ServerData.updateOne(this.query, Updates.set("duelchannel", new JSONArray()));
-
-        this.update();
+        this.update(Updates.set("duelchannel", new JSONArray()));
     }
 
     //key: "botchannel"
 
     public List<String> getBotChannels()
     {
-        return this.json().getJSONArray("botchannel").toList().stream().map(s -> (String)s).collect(Collectors.toList());
+        return this.document.getList("botchannel", String.class);
     }
 
     public void addBotChannel(String channelID)
     {
-        Mongo.ServerData.updateOne(this.query, Updates.push("botchannel", channelID));
-
-        this.update();
+        this.update(Updates.push("botchannel", channelID));
     }
 
     public void removeBotChannel(String channelID)
     {
-        Mongo.ServerData.updateOne(this.query, Updates.pull("botchannel", channelID));
-
-        this.update();
+        this.update(Updates.pull("botchannel", channelID));
     }
 
     public void clearBotChannels()
     {
-        Mongo.ServerData.updateOne(this.query, Updates.set("botchannel", new JSONArray()));
-
-        this.update();
+        this.update(Updates.set("botchannel", new JSONArray()));
     }
 }
