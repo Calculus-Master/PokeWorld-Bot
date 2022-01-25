@@ -306,6 +306,10 @@ public class Commands
                 .setCommand(CommandLearnInfo::new)
                 .setCategory(Category.MOVES);
 
+        register("prestige")
+                .setCommand(CommandPrestige::new)
+                .setCategory(Category.POKEMON);
+
         register("dev")
                 .setCommand(CommandDev::new)
                 .setCategory(Category.MISC);
