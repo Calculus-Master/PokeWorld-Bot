@@ -45,6 +45,7 @@ public class CommandPrestige extends Command
                 this.playerData.changeCredits(-1 * Prices.PRESTIGE.get());
 
                 p.increasePrestigeLevel();
+                p.updatePrestigeLevel();
 
                 //Prestige Resets
                 p.setLevel(1);

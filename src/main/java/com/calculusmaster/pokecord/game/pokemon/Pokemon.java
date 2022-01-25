@@ -400,7 +400,10 @@ public class Pokemon
             double maxHP = this.level + 10 + ((this.level * (2 * base + IV + EV / 4.0)) / 100);
 
             double dynamaxBoost = this.isDynamaxed ? 1.0 + (this.getDynamaxLevel() * 0.05 + 0.5) : 1.0;
-            return (int)(maxHP * dynamaxBoost * this.boosts.getHealthBoost());
+            double prestigeBoost = this.getPrestigeBonus(s);
+            double rawBoost = this.boosts.getHealthBoost();
+
+            return (int)(maxHP * dynamaxBoost * prestigeBoost * rawBoost);
         }
         else
         {
@@ -410,7 +413,12 @@ public class Pokemon
             int IV = this.ivs.get(s);
             int EV = this.evs.get(s);
             double stat = nature * (5 + ((this.level * (2 * base + IV + EV / 4.0)) / 100));
-            return (int)(stat * this.statChanges.getModifier(s) * this.boosts.getStatBoost());
+
+            double modifier = this.statChanges.getModifier(s);
+            double prestigeBoost = this.getPrestigeBonus(s);
+            double rawBoost = this.boosts.getStatBoost();
+
+            return (int)(stat * modifier * prestigeBoost * rawBoost);
         }
     }
 
@@ -824,6 +832,24 @@ public class Pokemon
     }
 
     //Prestige Level
+    public double getPrestigeBonus(Stat s)
+    {
+        if(!this.hasPrestiged()) return 1.0;
+        else
+        {
+            double ratio = (double)this.getPrestigeLevel() / (double)this.getMaxPrestigeLevel();
+
+            boolean hp = s.equals(Stat.HP);
+            double maxBonus = switch(this.rarity) {
+                case COPPER, SILVER, GOLD -> hp ? 0.75 : 0.50;
+                case DIAMOND, PLATINUM -> hp ? 0.50 : 0.35;
+                case MYTHICAL, LEGENDARY, EXTREME -> hp ? 0.30 : 0.25;
+            };
+
+            return 1.0 + (ratio * maxBonus);
+        }
+    }
+
     public int getPrestigeLevel()
     {
         return this.prestigeLevel;
