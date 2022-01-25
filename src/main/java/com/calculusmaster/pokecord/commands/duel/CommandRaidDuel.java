@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands.duel;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.game.duel.extension.RaidDuel;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -27,16 +28,18 @@ public class CommandRaidDuel extends Command
             else if(leave && !RaidEventHelper.isPlayerReady(this.server.getId(), this.player.getId())) this.response = "You are not in this server's active Raid duel! To join, type `p!raidduel join`.";
             else
             {
+                RaidDuel raid = RaidEventHelper.getRaid(this.server.getId());
+
                 if(join)
                 {
-                    RaidEventHelper.getRaid(this.server.getId()).setEvent(this.event);
-                    RaidEventHelper.getRaid(this.server.getId()).addPlayer(this.player.getId());
+                    raid.setEvent(this.event);
+                    raid.addPlayer(this.player.getId());
 
                     this.response = "You have joined the Raid with " + this.playerData.getSelectedPokemon().getName() + "!";
                 }
                 else if(leave)
                 {
-                    RaidEventHelper.getRaid(this.server.getId()).removePlayer(this.player.getId());
+                    raid.removePlayer(this.player.getId());
 
                     this.response = "You have left the Raid!";
                 }
