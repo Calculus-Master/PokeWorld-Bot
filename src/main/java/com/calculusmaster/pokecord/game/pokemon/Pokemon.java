@@ -43,6 +43,7 @@ public class Pokemon
     private int level;
     private int exp;
     private int dynamaxLevel;
+    private int prestigeLevel;
     private PokemonStats ivs;
     private PokemonStats evs;
     private List<String> moves;
@@ -59,6 +60,9 @@ public class Pokemon
     private EnumSet<StatusCondition> statusConditions;
     private boolean isDynamaxed;
     private PokemonDuelStatOverrides statOverrides;
+
+    //Misc
+    private PokemonRarity.Rarity rarity;
 
     //Private Constructor
     private Pokemon() {}
@@ -77,6 +81,8 @@ public class Pokemon
         p.setGender();
         p.setNature();
         p.setLevel(1);
+        p.setDynamaxLevel(0);
+        p.setPrestigeLevel(0);
         p.setExp(0);
         p.setIVs();
         p.setEVs();
@@ -86,6 +92,7 @@ public class Pokemon
         p.setTR();
 
         p.setDuelDefaults();
+        p.setupMisc();
 
         return p;
     }
@@ -103,6 +110,8 @@ public class Pokemon
         p.setGender(Gender.cast(data.getString("gender")));
         p.setNature(Nature.cast(data.getString("nature")));
         p.setLevel(data.getInteger("level"));
+        p.setDynamaxLevel(data.getInteger("dynamaxLevel"));
+        p.setPrestigeLevel(data.getInteger("prestigeLevel"));
         p.setExp(data.getInteger("exp"));
         p.setIVs(data.get("ivs", Document.class));
         p.setEVs(data.get("evs", Document.class));
@@ -112,6 +121,7 @@ public class Pokemon
         p.setTR(data.getInteger("tr") == -1 ? null : TR.get(data.getInteger("tr")));
 
         p.setDuelDefaults();
+        p.setupMisc();
 
         return p;
     }
@@ -126,6 +136,11 @@ public class Pokemon
         this.statusConditions = EnumSet.noneOf(StatusCondition.class);
         this.isDynamaxed = false;
         this.statOverrides = new PokemonDuelStatOverrides();
+    }
+
+    private void setupMisc()
+    {
+        this.rarity = PokemonRarity.POKEMON_RARITIES.get(this.name);
     }
 
     public static Pokemon build(String UUID)
@@ -176,6 +191,7 @@ public class Pokemon
                 .append("level", this.level)
                 .append("exp", this.exp)
                 .append("dynamaxLevel", this.dynamaxLevel)
+                .append("prestigeLevel", this.prestigeLevel)
                 .append("ivs", this.ivs.serialized())
                 .append("evs", this.evs.serialized())
                 .append("moves", this.moves)
@@ -239,6 +255,11 @@ public class Pokemon
     public void updateDynamaxLevel()
     {
         this.update(Updates.set("dynamaxLevel", this.dynamaxLevel));
+    }
+
+    public void updatePrestigeLevel()
+    {
+        this.update(Updates.set("prestigeLevel", this.prestigeLevel));
     }
 
     public void updateEVs()
@@ -800,6 +821,35 @@ public class Pokemon
     public LinkedHashMap<Stat, Integer> getEVs()
     {
         return this.evs.get();
+    }
+
+    //Prestige Level
+    public int getPrestigeLevel()
+    {
+        return this.prestigeLevel;
+    }
+
+    public void setPrestigeLevel(int prestigeLevel)
+    {
+        this.prestigeLevel = prestigeLevel;
+    }
+
+    public int getMaxPrestigeLevel()
+    {
+        return switch(this.rarity) {
+            case COPPER -> 7;
+            case SILVER -> 6;
+            case GOLD -> 5;
+            case DIAMOND -> 4;
+            case PLATINUM -> 3;
+            case MYTHICAL -> 2;
+            case LEGENDARY, EXTREME -> 1;
+        };
+    }
+
+    public void increasePrestigeLevel()
+    {
+        if(this.prestigeLevel < this.getMaxPrestigeLevel()) this.prestigeLevel++;
     }
 
     //Dynamax Level
