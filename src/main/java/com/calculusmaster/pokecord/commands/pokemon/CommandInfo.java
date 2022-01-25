@@ -41,7 +41,7 @@ public class CommandInfo extends Command
         String UUID = this.playerData.getPokemonList().get(index);
         Pokemon chosen = Pokemon.build(UUID);
 
-        String title = "**Level " + chosen.getLevel() + " " + chosen.getDisplayName() + "**" + (chosen.isShiny() ? ":star2:" : "") + (chosen.isMastered() ? ":trophy:" : "");
+        String title = "**Level " + chosen.getLevel() + " " + chosen.getDisplayName() + "**" + (chosen.isShiny() ? ":star2:" : "") + (chosen.isMastered() ? ":trophy:" : "") + (chosen.hasPrestiged() ? ":zap:".repeat(chosen.getPrestigeLevel()) : "");
         String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getData().growthRate, chosen.getLevel()) + " XP";
         String type = chosen.getType().stream().map(Type::getStyledName).collect(Collectors.joining("\n"));
         String nature = Global.normalize(chosen.getNature().toString());
@@ -63,6 +63,10 @@ public class CommandInfo extends Command
                     .addField(this.getIVsField(chosen))
                     .addField(this.getEVsField(chosen));
         }
+
+        //Prestige
+        if(chosen.getLevel() == 100 && chosen.getPrestigeLevel() < chosen.getMaxPrestigeLevel()) this.embed.addField("Prestige", "Your Pokemon can now prestige! A prestige will reset a Pokemon's level down to 1, remove all held items and unlearn all moves. The newly Prestiged Pokemon will gain a permanent boost!", false);
+        else if(chosen.getPrestigeLevel() == 0 && chosen.getLevel() >= 50) this.embed.addField("Prestige", "Your Pokemon will be able to Prestige at Level 100!", false);
 
         this.embed.setTitle(title);
         this.embed.setDescription("UUID: " + UUID);

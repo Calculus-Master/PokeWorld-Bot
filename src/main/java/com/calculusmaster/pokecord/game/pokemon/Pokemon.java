@@ -829,6 +829,11 @@ public class Pokemon
         return this.prestigeLevel;
     }
 
+    public boolean hasPrestiged()
+    {
+        return this.prestigeLevel != 0;
+    }
+
     public void setPrestigeLevel(int prestigeLevel)
     {
         this.prestigeLevel = prestigeLevel;
