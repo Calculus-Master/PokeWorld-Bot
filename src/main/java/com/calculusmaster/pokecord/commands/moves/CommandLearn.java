@@ -10,6 +10,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class CommandLearn extends Command
 {
@@ -34,6 +36,15 @@ public class CommandLearn extends Command
         Pokemon selected = this.playerData.getSelectedPokemon();
         String move = Global.normalize(this.getMultiWordContent(1));
 
+        boolean autoReplace = false;
+        if(this.isNumeric(1) && this.msg.length > 2 && this.getInt(1) > 0 && this.getInt(1) < 5)
+        {
+            move = Global.normalize(this.getMultiWordContent(2));
+            autoReplace = true;
+
+            System.out.println(move);
+        }
+
         if(!Move.isMove(move)) this.response = "Invalid move name!";
         else if(!Move.isImplemented(move)) this.response = "`" + move + "` has not been implemented yet!";
         else if(!selected.availableMoves().contains(move)) this.response = selected.getName() + " does not know `" + move + "`";
@@ -44,6 +55,8 @@ public class CommandLearn extends Command
 
             this.embed.setDescription("Which move do you want to replace with " + move + "?" + movesList);
             moveLearnRequests.put(selected.getUUID(), move);
+
+            if(autoReplace) Executors.newSingleThreadScheduledExecutor().schedule(() -> new CommandReplace(this.event, new String[]{"replace", "" + this.getInt(1)}).runCommand().send(), 1250, TimeUnit.MILLISECONDS);
         }
 
         return this;
