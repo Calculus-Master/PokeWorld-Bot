@@ -41,8 +41,6 @@ public class CommandLearn extends Command
         {
             move = Global.normalize(this.getMultiWordContent(2));
             autoReplace = true;
-
-            System.out.println(move);
         }
 
         if(!Move.isMove(move)) this.response = "Invalid move name!";
