@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.mongo;
 
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import org.bson.Document;
@@ -25,6 +26,8 @@ public abstract class MongoQuery
         this.database.updateOne(this.query, Arrays.asList(updates));
 
         this.document = this.database.find(this.query).first();
+
+        LoggerHelper.logDatabaseUpdate(MongoQuery.class, updates);
     }
 
     public boolean isNull()
