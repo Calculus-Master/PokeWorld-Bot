@@ -1056,6 +1056,10 @@ public class Pokemon
             case "Jangmo O" -> "Jangmo-o";
             case "Hakamo O" -> "Hakamo-o";
             case "Kommo O" -> "Kommo-o";
+            case "Mr Mime" -> "Mr. Mime";
+            case "Mime Jr" -> "Mime Jr.";
+            case "Galarian Mr Mime" -> "Galarian Mr. Mime";
+            case "Mr Rime" -> "Mr. Rime";
             default -> this.getName();
         };
     }
