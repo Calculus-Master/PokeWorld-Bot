@@ -21,7 +21,7 @@ public class CommandNickname extends Command
         {
             this.msg = this.event.getMessage().getContentRaw().trim().split("\\s+");
 
-            String nick = this.getMultiWordContent(2);
+            String nick = this.getMultiWordContent(1);
             s.setNickname(nick);
 
             this.response = "Changed your Pokemon's nickname to `" + nick + "`!";
