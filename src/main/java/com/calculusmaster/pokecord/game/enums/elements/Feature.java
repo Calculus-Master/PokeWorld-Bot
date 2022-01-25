@@ -10,6 +10,7 @@ public enum Feature
     SELECT_POKEMON("Select an active Pokemon"),
     VIEW_LEVEL("View your Pokemon Mastery Level"),
     VIEW_TIPS("View helpful tips for your adventure"),
+    ACCESS_SETTINGS("Access your player settings (and if applicable, server settings)"),
 
     //Level 1
     VIEW_DEX_INFO("View Pokedex information about any Pokemon"),
@@ -18,7 +19,6 @@ public enum Feature
     VIEW_PROFILE("View your player profile"),
     CREATE_REPORT("Submit feature requests and bug reports to help out with bot development"),
     VIEW_HELP("Access the help command to understand other features"),
-    ACCESS_SETTINGS("Access your player settings (and if applicable, server settings)"),
     VIEW_BALANCE("View your credits balance"),
 
     //Level 2

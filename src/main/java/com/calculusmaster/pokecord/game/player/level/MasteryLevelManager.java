@@ -19,15 +19,16 @@ public class MasteryLevelManager
         // View Level – p!level
         // Tips – p!tip
         // Server Targets - p!target (this can't be locked behind a PML easily)
+        // Settings - p!settings (this shouldn't really be locked behind anything)
         PokemonMasteryLevel.create(0)
-                .withFeaturesUnlocked(Feature.CATCH_POKEMON, Feature.SELECT_POKEMON, Feature.VIEW_POKEMON_LIST)
+                .withFeaturesUnlocked(Feature.CATCH_POKEMON, Feature.SELECT_POKEMON, Feature.VIEW_POKEMON_LIST, Feature.ACCESS_SETTINGS)
                 .register();
 
         // Level 1 - Essential Features (p!start)
         // Information – p!dex, p!info, p!serverinfo
-        // Misc Utilities – p!profile, p!report, p!help, p!settings, p!balance
+        // Misc Utilities – p!profile, p!report, p!help, p!balance
         PokemonMasteryLevel.create(1)
-                .withFeaturesUnlocked(Feature.VIEW_DEX_INFO, Feature.VIEW_UNIQUE_INFO, Feature.VIEW_SERVER_INFO, Feature.VIEW_PROFILE, Feature.CREATE_REPORT, Feature.VIEW_HELP, Feature.ACCESS_SETTINGS, Feature.VIEW_BALANCE)
+                .withFeaturesUnlocked(Feature.VIEW_DEX_INFO, Feature.VIEW_UNIQUE_INFO, Feature.VIEW_SERVER_INFO, Feature.VIEW_PROFILE, Feature.CREATE_REPORT, Feature.VIEW_HELP, Feature.VIEW_BALANCE)
                 .withPokemonRequirement(2)
                 .register();
 
