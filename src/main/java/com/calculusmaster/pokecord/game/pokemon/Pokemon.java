@@ -689,6 +689,11 @@ public class Pokemon
         return !this.consumedItem.equals(Item.NONE);
     }
 
+    public Item getConsumedItem()
+    {
+        return this.consumedItem;
+    }
+
     public void restoreItem()
     {
         if(this.hasConsumedItem())
