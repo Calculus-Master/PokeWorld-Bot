@@ -72,7 +72,10 @@ public enum Item
     SPOOKY_PLATE(1000, PLATE),
     STONE_PLATE(1000, PLATE),
     TOXIC_PLATE(1000, PLATE),
-    ZAP_PLATE(1000, PLATE);
+    ZAP_PLATE(1000, PLATE),
+    //Berries
+
+    ;
 
     public int cost;
     public ItemType type;
@@ -135,5 +138,16 @@ public enum Item
     public boolean isFunctionalItem()
     {
         return this.type.equals(FUNCTIONAL);
+    }
+
+    public boolean isBerry()
+    {
+        return this.type.equals(BERRY);
+    }
+
+    public boolean isConsumable()
+    {
+        //TODO: Currently only berries, but will need to be expanded if other items are consumable
+        return this.isBerry();
     }
 }

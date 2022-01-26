@@ -60,6 +60,7 @@ public class Pokemon
     private EnumSet<StatusCondition> statusConditions;
     private boolean isDynamaxed;
     private PokemonDuelStatOverrides statOverrides;
+    private Item consumedItem;
 
     //Misc
     private PokemonRarity.Rarity rarity;
@@ -136,6 +137,7 @@ public class Pokemon
         this.statusConditions = EnumSet.noneOf(StatusCondition.class);
         this.isDynamaxed = false;
         this.statOverrides = new PokemonDuelStatOverrides();
+        this.consumedItem = Item.NONE;
     }
 
     private void setupMisc()
@@ -678,7 +680,22 @@ public class Pokemon
 
     public void removeItem()
     {
-        this.setItem(Item.NONE);
+        if(this.item.isConsumable()) this.consumedItem = this.item;
+        this.item = Item.NONE;
+    }
+
+    public boolean hasConsumedItem()
+    {
+        return !this.consumedItem.equals(Item.NONE);
+    }
+
+    public void restoreItem()
+    {
+        if(this.hasConsumedItem())
+        {
+            this.item = this.consumedItem;
+            this.consumedItem = Item.NONE;
+        }
     }
 
     public Item getItem()
