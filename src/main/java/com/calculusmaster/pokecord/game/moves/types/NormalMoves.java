@@ -535,7 +535,38 @@ public class NormalMoves
 
     public String NaturalGift(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return move.getNotImplementedResult();
+        if(!user.getItem().isBerry()) return move.getNothingResult();
+        else
+        {
+            move.setType(switch(user.getItem()) {
+                case CHILAN_BERRY -> Type.NORMAL;
+                case CHERI_BERRY, OCCA_BERRY -> Type.FIRE;
+                case CHESTO_BERRY, PASSHO_BERRY -> Type.WATER;
+                case PECHA_BERRY, WACAN_BERRY -> Type.ELECTRIC;
+                case RAWST_BERRY, RINDO_BERRY, LIECHI_BERRY -> Type.GRASS;
+                case ASPEAR_BERRY, YACHE_BERRY, POMEG_BERRY, GANLON_BERRY -> Type.ICE;
+                case LEPPA_BERRY, CHOPLE_BERRY, SALAC_BERRY -> Type.FIGHTING;
+                case ORAN_BERRY, KEBIA_BERRY, QUALOT_BERRY, PETAYA_BERRY -> Type.POISON;
+                case PERSIM_BERRY, SHUCA_BERRY, HONDEW_BERRY, APICOT_BERRY -> Type.GROUND;
+                case LUM_BERRY, COBA_BERRY, GREPA_BERRY, LANSAT_BERRY -> Type.FLYING;
+                case SITRUS_BERRY, PAYAPA_BERRY, TAMATO_BERRY, STARF_BERRY -> Type.PSYCHIC;
+                case FIGY_BERRY, TANGA_BERRY, ENIGMA_BERRY -> Type.BUG;
+                case WIKI_BERRY, CHARTI_BERRY, MICLE_BERRY -> Type.ROCK;
+                case MAGO_BERRY, KASIB_BERRY, CUSTAP_BERRY -> Type.GHOST;
+                case AGUAV_BERRY, HABAN_BERRY, JABOCA_BERRY -> Type.DRAGON;
+                case IAPAPA_BERRY, COLBUR_BERRY, SPELON_BERRY, ROWAP_BERRY -> Type.DARK;
+                case BABIRI_BERRY -> Type.STEEL;
+                default -> throw new IllegalStateException("Invalid Berry Item: " + user.getItem() + "!");
+            });
+
+            move.setPower(switch(user.getItem()) {
+                case POMEG_BERRY, QUALOT_BERRY, HONDEW_BERRY, GREPA_BERRY, TAMATO_BERRY, SPELON_BERRY -> 70;
+                case LIECHI_BERRY, GANLON_BERRY, SALAC_BERRY, PETAYA_BERRY, APICOT_BERRY, LANSAT_BERRY, STARF_BERRY, ENIGMA_BERRY, MICLE_BERRY, CUSTAP_BERRY, JABOCA_BERRY, ROWAP_BERRY -> 80;
+                default -> 60;
+            });
+
+            return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        }
     }
 
     public String Refresh(Pokemon user, Pokemon opponent, Duel duel, Move move)
