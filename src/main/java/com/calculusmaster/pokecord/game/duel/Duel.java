@@ -14,6 +14,7 @@ import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.TypeEffectiveness;
+import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonDuelAttributes;
@@ -941,6 +942,32 @@ public class Duel
         if(this.barriers[this.other].has(FieldBarrier.LIGHT_SCREEN))
         {
             if(move.is(Category.SPECIAL)) move.setDamageMultiplier(0.5);
+        }
+
+        //Berries – Pre-Move Effects
+
+        MoveEffectBuilder builder = MoveEffectBuilder.make(this.players[this.current].active, this.players[this.other].active, this, move);
+        Runnable consumeBerry = () -> {
+            this.players[this.current].active.removeItem();
+            turnResult.add(this.players[this.current].active.getName() + " consumed their berry!");
+        };
+
+        if(c.hasItem(Item.AGUAV_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
+        {
+            consumeBerry.run();
+
+            turnResult.add(builder
+                    .addFractionHealEffect(1 / 2.)
+                    .addConditionalEffect(List.of(Nature.NAUGHTY, Nature.RASH, Nature.NAIVE, Nature.LAX).contains(c.getNature()), b -> b.addStatusEffect(StatusCondition.CONFUSED, 100, true))
+                    .execute()
+            );
+        }
+
+        if(c.hasItem(Item.APICOT_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
+        {
+            consumeBerry.run();
+
+            turnResult.add(builder.addStatChangeEffect(Stat.SPDEF, 1, 100, true).execute());
         }
 
         //Main Results

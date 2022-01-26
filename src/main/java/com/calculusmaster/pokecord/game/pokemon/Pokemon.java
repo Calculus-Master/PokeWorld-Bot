@@ -703,6 +703,11 @@ public class Pokemon
         }
     }
 
+    public boolean hasItem(Item item)
+    {
+        return this.item.equals(item);
+    }
+
     public Item getItem()
     {
         return this.item;
