@@ -1236,6 +1236,59 @@ public class Duel
                 this.data(this.other).bideDamage += Math.max(damageDealt, 0);
             }
 
+            //Berry Effects - Post-Move Damage Dealt
+
+            if(damageDealt > 0)
+            {
+                if(o.hasItem(Item.ENIGMA_BERRY) && TypeEffectiveness.getEffectiveness(o.getType()).get(move.getType()) > 1.0)
+                {
+                    int amount = o.getMaxHealth(1 / 4.);
+
+                    o.heal(amount);
+                    o.removeItem();
+
+                    turnResult.add(o.getName() + " consumed its Enigma Berry! It healed for " + amount + " HP!");
+                }
+
+                if(o.hasItem(Item.JABOCA_BERRY) && move.is(Category.PHYSICAL))
+                {
+                    int amount = c.getMaxHealth(1 / 8.);
+
+                    c.damage(amount);
+                    o.removeItem();
+
+                    turnResult.add(o.getName() + " consumed its Jaboca Berry! " + c.getName() + " took " + amount + " recoil damage!");
+                }
+
+                if(o.hasItem(Item.ROWAP_BERRY) && move.is(Category.SPECIAL))
+                {
+                    int amount = c.getMaxHealth(1 / 8.);
+
+                    c.damage(amount);
+                    o.removeItem();
+
+                    turnResult.add(o.getName() + " consumed its Rowap Berry! " + c.getName() + " took " + amount + " recoil damage!");
+                }
+
+                if(o.hasItem(Item.KEE_BERRY) && move.is(Category.PHYSICAL))
+                {
+                    o.changes().change(Stat.DEF, 1);
+                    o.removeItem();
+
+                    turnResult.add(o.getName() + " consumed its Kee Berry! Its Defense rose by 1 stage!");
+                }
+
+                if(o.hasItem(Item.MARANGA_BERRY) && move.is(Category.PHYSICAL))
+                {
+                    o.changes().change(Stat.SPDEF, 1);
+                    o.removeItem();
+
+                    turnResult.add(o.getName() + " consumed its Maranga Berry! Its Special Defense rose by 1 stage!");
+                }
+            }
+
+            //Other Stuff
+
             if(damageDealt > 0 && this.isNonBotPlayer(this.current))
             {
                 final Move m = move;
