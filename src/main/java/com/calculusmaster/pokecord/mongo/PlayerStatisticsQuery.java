@@ -26,7 +26,7 @@ public class PlayerStatisticsQuery extends MongoQuery
     }
 
     @Override
-    protected void update(Bson... updates)
+    protected void update(Bson updates)
     {
         this.document = Mongo.StatisticsData.find(this.query).first();
     }
@@ -40,7 +40,7 @@ public class PlayerStatisticsQuery extends MongoQuery
     {
         Mongo.StatisticsData.updateOne(this.query, Updates.inc(stat.key, amount));
 
-        this.update();
+        this.update(null);
     }
 
     public void incr(PlayerStatistic stat)

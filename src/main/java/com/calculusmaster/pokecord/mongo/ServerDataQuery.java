@@ -45,9 +45,9 @@ public class ServerDataQuery extends MongoQuery
     }
 
     @Override
-    protected void update(Bson... updates)
+    protected void update(Bson update)
     {
-        Mongo.ServerData.updateOne(this.query, List.of(updates));
+        Mongo.ServerData.updateOne(this.query, update);
 
         this.document = Mongo.ServerData.find(this.query).first();
     }

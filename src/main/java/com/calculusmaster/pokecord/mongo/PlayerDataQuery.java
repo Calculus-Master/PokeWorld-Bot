@@ -373,7 +373,7 @@ public class PlayerDataQuery extends MongoQuery
         int counts = 0;
         for (int i = 0; i < this.getTMList().size(); i++) if(this.getTMList().get(i).equals(TM)) counts++;
 
-        this.update(this.query, Updates.pull("tms", TM));
+        this.update(Updates.pull("tms", TM));
 
         for(int i = 0; i < counts - 1; i++) this.addTM(TM);
     }
@@ -478,7 +478,7 @@ public class PlayerDataQuery extends MongoQuery
 
     private void updateBounty(Consumer<Bounty> checker)
     {
-        if(this.document == null) this.update();
+        if(this.document == null) this.update(null);
 
         //Basic Bounties
         for(String ID : this.getBountyIDs())
