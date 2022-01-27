@@ -24,6 +24,12 @@ public class WeatherHandler
         this.turns = 5;
     }
 
+    public void setPermanentWeather(Weather weather)
+    {
+        this.weather = weather;
+        this.turns = -1;
+    }
+
     public void removeWeather()
     {
         this.weather = Weather.CLEAR;
@@ -32,6 +38,10 @@ public class WeatherHandler
 
     public void updateTurns()
     {
+        //Primal Weathers don't remove automatically
+        if(this.weather.isPrimalWeather()) return;
+
+        //Standard weathers do
         if(this.turns > 0)
         {
             this.turns--;
