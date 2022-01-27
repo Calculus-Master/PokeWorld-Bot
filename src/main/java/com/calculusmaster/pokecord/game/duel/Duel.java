@@ -198,14 +198,25 @@ public class Duel
         int speed1 = this.players[0].active.getStat(Stat.SPD);
         int speed2 = this.players[1].active.getStat(Stat.SPD);
 
-        if(this.terrain.get().equals(Terrain.GRASSY_TERRAIN) && this.players[0].move.getName().equals("Grassy Glide")) this.players[0].move.setPriority(1);
-        if(this.terrain.get().equals(Terrain.GRASSY_TERRAIN) && this.players[1].move.getName().equals("Grassy Glide")) this.players[1].move.setPriority(1);
+        if(this.terrain.get().equals(Terrain.GRASSY_TERRAIN) && this.players[0].move.getName().equals("Grassy Glide"))
+            this.players[0].move.setPriority(1);
+        if(this.terrain.get().equals(Terrain.GRASSY_TERRAIN) && this.players[1].move.getName().equals("Grassy Glide"))
+            this.players[1].move.setPriority(1);
 
         if(this.players[0].move.getPriority() == this.players[1].move.getPriority())
         {
             this.current = speed1 == speed2 ? (new Random().nextInt(100) < 50 ? 0 : 1) : (speed1 > speed2 ? 0 : 1);
 
-            if(this.room.isActive(Room.TRICK_ROOM)) this.current = this.current == 0 ? 1 : 0;
+            if(this.room.isActive(Room.TRICK_ROOM))
+                this.current = this.current == 0 ? 1 : 0;
+
+            if(this.players[this.other].active.hasItem(Item.CUSTAP_BERRY) && this.players[this.other].active.getHealth() < this.players[this.other].active.getMaxHealth(1 / 4.))
+            {
+                this.players[this.other].active.removeItem();
+                this.results.add(this.players[this.other].active.getName() + " consumed its Custap Berry and will attack first!");
+
+                this.current = this.other;
+            }
         }
         else
         {
