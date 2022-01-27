@@ -7,8 +7,6 @@ import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
-import java.util.List;
-
 public class PlayerStatisticsQuery extends MongoQuery
 {
     public PlayerStatisticsQuery(String playerID)
@@ -30,8 +28,6 @@ public class PlayerStatisticsQuery extends MongoQuery
     @Override
     protected void update(Bson... updates)
     {
-        Mongo.StatisticsData.updateOne(this.query, List.of(updates));
-
         this.document = Mongo.StatisticsData.find(this.query).first();
     }
 
@@ -42,7 +38,9 @@ public class PlayerStatisticsQuery extends MongoQuery
 
     public void incr(PlayerStatistic stat, int amount)
     {
-        this.update(this.query, Updates.inc(stat.key, amount));
+        Mongo.StatisticsData.updateOne(this.query, Updates.inc(stat.key, amount));
+
+        this.update();
     }
 
     public void incr(PlayerStatistic stat)
