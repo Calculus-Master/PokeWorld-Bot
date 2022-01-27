@@ -350,10 +350,50 @@ public class Duel
         }
 
         //Weather-based Move Changes
-        this.moveWeatherEffects(move);
+
+        switch(this.weather.get())
+        {
+            case HAIL -> {
+                if(move.getName().equals("Blizzard")) move.setAccuracy(100);
+
+                if(move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower(move.getPower() / 2);
+            }
+            case HARSH_SUNLIGHT, EXTREME_HARSH_SUNLIGHT -> {
+                if(move.getType().equals(Type.FIRE)) move.setPower((int)(move.getPower() * 1.5));
+                else if(move.getType().equals(Type.WATER)) move.setPower((int)(move.getPower() * 0.5));
+
+                if(move.getName().equals("Thunder") || move.getName().equals("Hurricane")) move.setAccuracy(50);
+            }
+            case RAIN -> {
+                if(move.getType().equals(Type.WATER)) move.setPower((int)(move.getPower() * 1.5));
+                else if(move.getType().equals(Type.FIRE) || move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower((int)(move.getPower() * 0.5));
+
+                if(move.getName().equals("Thunder") || move.getName().equals("Hurricane")) move.setAccuracy(100);
+            }
+            case SANDSTORM -> {
+                if(move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower(move.getPower() / 2);
+            }
+        }
 
         //Terrain-based Move Changes
-        this.turnTerrainEffects(move);
+
+        switch(this.terrain.get())
+        {
+            case ELECRIC_TERRAIN -> {
+                if(move.getType().equals(Type.ELECTRIC)) move.setPower(move.getPower() * 1.5);
+            }
+            case GRASSY_TERRAIN -> {
+                if(move.getType().equals(Type.GRASS)) move.setPower(move.getPower() * 1.5);
+
+                if(!this.data(this.current).isRaised) this.players[this.current].active.heal(this.players[this.current].active.getStat(Stat.HP) / 16);
+            }
+            case MISTY_TERRAIN -> {
+                if(move.getType().equals(Type.DRAGON)) move.setDamageMultiplier(0.5);
+            }
+            case PSYCHIC_TERRAIN -> {
+                if(move.getType().equals(Type.PSYCHIC)) move.setPower(move.getPower() * 1.5);
+            }
+        }
 
         //If the pokemon uses an unfreeze remove, remove the Frozen Status Condition
         if(this.players[this.current].active.hasStatusCondition(StatusCondition.FROZEN) && Arrays.asList("Fusion Flare", "Flame Wheel", "Sacred Fire", "Flare Blitz", "Scald", "Steam Eruption").contains(move.getName())) this.players[this.current].active.removeStatusCondition(StatusCondition.FROZEN);
@@ -1672,54 +1712,6 @@ public class Duel
     private boolean isAffectedBySandstorm(int p)
     {
         return !this.players[p].active.isType(Type.GROUND) && !this.players[p].active.isType(Type.ROCK) && !this.players[p].active.isType(Type.STEEL) && !this.data(p).digUsed && !this.data(p).diveUsed && !this.data(p).phantomForceUsed && !this.data(p).shadowForceUsed;
-    }
-
-    public void moveWeatherEffects(Move move)
-    {
-        switch(this.weather.get())
-        {
-            case HAIL -> {
-                if(move.getName().equals("Blizzard")) move.setAccuracy(100);
-
-                if(move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower(move.getPower() / 2);
-            }
-            case HARSH_SUNLIGHT, EXTREME_HARSH_SUNLIGHT -> {
-                if(move.getType().equals(Type.FIRE)) move.setPower((int)(move.getPower() * 1.5));
-                else if(move.getType().equals(Type.WATER)) move.setPower((int)(move.getPower() * 0.5));
-
-                if(move.getName().equals("Thunder") || move.getName().equals("Hurricane")) move.setAccuracy(50);
-            }
-            case RAIN -> {
-                if(move.getType().equals(Type.WATER)) move.setPower((int)(move.getPower() * 1.5));
-                else if(move.getType().equals(Type.FIRE) || move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower((int)(move.getPower() * 0.5));
-
-                if(move.getName().equals("Thunder") || move.getName().equals("Hurricane")) move.setAccuracy(100);
-            }
-            case SANDSTORM -> {
-                if(move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower(move.getPower() / 2);
-            }
-        }
-    }
-
-    public void turnTerrainEffects(Move move)
-    {
-        switch(this.terrain.get())
-        {
-            case ELECRIC_TERRAIN -> {
-                if(move.getType().equals(Type.ELECTRIC)) move.setPower(move.getPower() * 1.5);
-            }
-            case GRASSY_TERRAIN -> {
-                if(move.getType().equals(Type.GRASS)) move.setPower(move.getPower() * 1.5);
-
-                if(!this.data(this.current).isRaised) this.players[this.current].active.heal(this.players[this.current].active.getStat(Stat.HP) / 16);
-            }
-            case MISTY_TERRAIN -> {
-                if(move.getType().equals(Type.DRAGON)) move.setDamageMultiplier(0.5);
-            }
-            case PSYCHIC_TERRAIN -> {
-                if(move.getType().equals(Type.PSYCHIC)) move.setPower(move.getPower() * 1.5);
-            }
-        }
     }
 
     public void entryHazardEffects(int player)
