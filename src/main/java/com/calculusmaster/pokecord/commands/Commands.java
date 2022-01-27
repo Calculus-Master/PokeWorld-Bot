@@ -198,10 +198,6 @@ public class Commands
                 .setCommand(CommandTrainerDuel::new)
                 .setCategory(Category.DUEL);
 
-        register("abilityinfo", "ai")
-                .setCommand(CommandAbilityInfo::new)
-                .setCategory(Category.MOVES);
-
         register("activate")
                 .setCommand(CommandActivate::new)
                 .setCategory(Category.POKEMON);

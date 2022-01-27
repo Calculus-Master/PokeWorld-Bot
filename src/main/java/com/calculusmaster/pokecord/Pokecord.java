@@ -3,7 +3,6 @@ package com.calculusmaster.pokecord;
 import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.commands.duel.CommandTarget;
 import com.calculusmaster.pokecord.commands.economy.CommandShop;
-import com.calculusmaster.pokecord.commands.moves.CommandAbilityInfo;
 import com.calculusmaster.pokecord.commands.pokemon.CommandBreed;
 import com.calculusmaster.pokecord.game.duel.players.Trainer;
 import com.calculusmaster.pokecord.game.moves.Move;
@@ -73,7 +72,6 @@ public class Pokecord
         LoggerHelper.init("Evolutions", SpecialEvolutionRegistry::init);
         LoggerHelper.init("Trainer", Trainer::init);
         LoggerHelper.init("Incomplete Moves", Move::init);
-        LoggerHelper.init("Ability Info", CommandAbilityInfo::init);
         LoggerHelper.init("Pokemon Rarity", PokemonRarity::init);
         LoggerHelper.init("Command Handler", Commands::init);
         LoggerHelper.init("Shops", CommandShop::updateShops);
