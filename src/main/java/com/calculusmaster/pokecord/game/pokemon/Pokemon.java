@@ -393,6 +393,11 @@ public class Pokemon
     {
         if(this.statOverrides != null && this.statOverrides.has(s)) return this.statOverrides.get(s);
 
+        double masteredBoost = this.isMastered() ? 1.05 : 1.0;
+        double prestigeBoost = this.getPrestigeBonus(s);
+
+        double commonBoosts = masteredBoost * prestigeBoost;
+
         if(s.equals(Stat.HP))
         {
             //HP = Level + 10 + [((2 * Base + IV + EV / 4) * Level) / 100]
@@ -402,10 +407,9 @@ public class Pokemon
             double maxHP = this.level + 10 + ((this.level * (2 * base + IV + EV / 4.0)) / 100);
 
             double dynamaxBoost = this.isDynamaxed ? 1.0 + (this.getDynamaxLevel() * 0.05 + 0.5) : 1.0;
-            double prestigeBoost = this.getPrestigeBonus(s);
             double rawBoost = this.boosts.getHealthBoost();
 
-            return (int)(maxHP * dynamaxBoost * prestigeBoost * rawBoost);
+            return (int)(maxHP * dynamaxBoost * commonBoosts * rawBoost);
         }
         else
         {
@@ -417,10 +421,9 @@ public class Pokemon
             double stat = nature * (5 + ((this.level * (2 * base + IV + EV / 4.0)) / 100));
 
             double modifier = this.statChanges.getModifier(s);
-            double prestigeBoost = this.getPrestigeBonus(s);
             double rawBoost = this.boosts.getStatBoost();
 
-            return (int)(stat * modifier * prestigeBoost * rawBoost);
+            return (int)(stat * modifier * commonBoosts * rawBoost);
         }
     }
 
