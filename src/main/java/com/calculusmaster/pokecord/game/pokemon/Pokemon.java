@@ -441,7 +441,7 @@ public class Pokemon
 
     public void heal(int amount)
     {
-        this.setHealth(Math.min(this.health + amount, this.getMaxHealth()));
+        if(!this.isFainted()) this.setHealth(Math.min(this.health + amount, this.getMaxHealth()));
     }
 
     public void damage(int amount)

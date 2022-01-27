@@ -1159,7 +1159,7 @@ public class Duel
             if(o.hasItem(Item.CHARTI_BERRY) && effectiveMoveBerryApplies.apply(Type.ROCK))
                 effectiveMoveBerryResult.accept("Charti", move);
 
-            if(o.hasItem(Item.CHILAN_BERRY) && move.getType().equals(Type.NORMAL))
+            if(o.hasItem(Item.CHILAN_BERRY) && move.is(Type.NORMAL))
                 effectiveMoveBerryResult.accept("Chilan", move);
 
             if(o.hasItem(Item.CHOPLE_BERRY) && effectiveMoveBerryApplies.apply(Type.FIGHTING))
