@@ -259,9 +259,16 @@ public class Duel
         //If current has a primal weather, the weather gets removed
         if(Stream.of("Desolate Land", "Primordial Sea", "Delta Stream").anyMatch(a -> this.players[p].active.getAbilities().contains(a)))
         {
-            this.results.add(this.weather.get().getName() + " disappeared!\n\n");
+            boolean dlFail = this.players[p].active.getAbilities().contains("Desolate Land") && this.weather.get().equals(Weather.EXTREME_HARSH_SUNLIGHT);
+            boolean psFail = this.players[p].active.getAbilities().contains("Primordial Sea") && this.weather.get().equals(Weather.HEAVY_RAIN);
+            boolean dsFail = this.players[p].active.getAbilities().contains("Delta Stream") && this.weather.get().equals(Weather.STRONG_WINDS);
 
-            this.weather.removeWeather();
+            if(!dlFail && !psFail && !dsFail)
+            {
+                this.results.add(this.weather.get().getName() + " disappeared!\n\n");
+
+                this.weather.removeWeather();
+            }
         }
 
         //Swap Action
