@@ -15,8 +15,7 @@ public class TerrainEffect extends MoveEffect
     @Override
     public String get()
     {
-        this.duel.terrain = this.terrain;
-        this.duel.terrainTurns = 5;
+        this.duel.terrain.setTerrain(this.terrain);
 
         return this.user.getName() + " created a " + Global.normalize(this.terrain.toString().replaceAll("_", " ") + "!");
     }

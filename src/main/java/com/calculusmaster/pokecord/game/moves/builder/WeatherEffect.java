@@ -14,8 +14,7 @@ public class WeatherEffect extends MoveEffect
     @Override
     public String get()
     {
-        this.duel.weather = this.weather;
-        this.duel.weatherTurns = 5;
+        this.duel.weather.setWeather(this.weather);
 
         return this.user.getName() + " " + switch(this.weather) {
             case HAIL -> "summoned a Hailstorm!";
@@ -23,7 +22,9 @@ public class WeatherEffect extends MoveEffect
             case RAIN -> "summoned a Rain Shower!";
             case HARSH_SUNLIGHT -> "summoned Harsh Sunlight!";
             case CLEAR -> "cleared the weather!";
-            default -> "";
+            case EXTREME_HARSH_SUNLIGHT -> "summoned Extreme Harsh Sunlight!";
+            case HEAVY_RAIN -> "summoned a Heavy Rain Shower!";
+            case DELTA_STREAM -> "summoned a Delta Stream!";
         };
     }
 }

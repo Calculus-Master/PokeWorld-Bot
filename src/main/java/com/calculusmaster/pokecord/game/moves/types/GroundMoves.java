@@ -147,7 +147,7 @@ public class GroundMoves
     public String ShoreUp(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.make(user, opponent, duel, move)
-                .addFractionHealEffect(duel.weather.equals(Weather.SANDSTORM) ? 2 / 3D : 1 / 2D)
+                .addFractionHealEffect(duel.weather.get().equals(Weather.SANDSTORM) ? 2 / 3D : 1 / 2D)
                 .execute();
     }
 

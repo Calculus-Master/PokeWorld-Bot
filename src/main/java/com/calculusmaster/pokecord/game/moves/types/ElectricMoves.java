@@ -234,7 +234,7 @@ public class ElectricMoves
 
     public String RisingVoltage(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(duel.terrain.equals(Terrain.ELECRIC_TERRAIN)) move.setPower(2.0);
+        if(duel.terrain.get().equals(Terrain.ELECRIC_TERRAIN)) move.setPower(2.0);
 
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addDamageEffect()

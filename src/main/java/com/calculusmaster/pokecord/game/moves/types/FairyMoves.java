@@ -15,7 +15,7 @@ public class FairyMoves
     public String Moonlight(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.make(user, opponent, duel, move)
-                .addFractionHealEffect(switch(duel.weather) {
+                .addFractionHealEffect(switch(duel.weather.get()) {
                     case CLEAR -> 1 / 2D;
                     case HARSH_SUNLIGHT -> 2 / 3D;
                     default -> 1 / 4D;
@@ -176,7 +176,7 @@ public class FairyMoves
 
     public String MistyExplosion(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(duel.terrain.equals(Terrain.MISTY_TERRAIN)) move.setPower(1.5);
+        if(duel.terrain.get().equals(Terrain.MISTY_TERRAIN)) move.setPower(1.5);
 
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addSelfFaintEffect()

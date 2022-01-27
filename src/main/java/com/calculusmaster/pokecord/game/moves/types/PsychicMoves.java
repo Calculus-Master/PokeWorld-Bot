@@ -380,7 +380,7 @@ public class PsychicMoves
 
     public String ExpandingForce(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(duel.terrain.equals(Terrain.PSYCHIC_TERRAIN) && !duel.data(user.getUUID()).isRaised) move.setPower(1.5);
+        if(duel.terrain.get().equals(Terrain.PSYCHIC_TERRAIN) && !duel.data(user.getUUID()).isRaised) move.setPower(1.5);
 
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addDamageEffect()

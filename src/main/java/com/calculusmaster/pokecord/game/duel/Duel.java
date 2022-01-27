@@ -58,11 +58,12 @@ public class Duel
 
     protected List<String> results;
 
-    public Weather weather;
-    public int weatherTurns;
-    public Terrain terrain;
-    public int terrainTurns;
+    //Common Field Effects
+    public WeatherHandler weather;
+    public TerrainHandler terrain;
     public RoomHandler room;
+
+    //Sided Field Effects
     public EntryHazardHandler[] entryHazards;
     public FieldBarrierHandler[] barriers;
     public FieldGMaxDoTHandler[] gmaxDoT;
@@ -195,8 +196,8 @@ public class Duel
         int speed1 = this.players[0].active.getStat(Stat.SPD);
         int speed2 = this.players[1].active.getStat(Stat.SPD);
 
-        if(this.terrain.equals(Terrain.GRASSY_TERRAIN) && this.players[0].move.getName().equals("Grassy Glide")) this.players[0].move.setPriority(1);
-        if(this.terrain.equals(Terrain.GRASSY_TERRAIN) && this.players[1].move.getName().equals("Grassy Glide")) this.players[1].move.setPriority(1);
+        if(this.terrain.get().equals(Terrain.GRASSY_TERRAIN) && this.players[0].move.getName().equals("Grassy Glide")) this.players[0].move.setPriority(1);
+        if(this.terrain.get().equals(Terrain.GRASSY_TERRAIN) && this.players[1].move.getName().equals("Grassy Glide")) this.players[1].move.setPriority(1);
 
         if(this.players[0].move.getPriority() == this.players[1].move.getPriority())
         {
@@ -290,7 +291,7 @@ public class Duel
         //Terrain Pulse Type Change
         if(move.getName().equals("Terrain Pulse"))
         {
-            move.setType(switch(this.terrain) {
+            move.setType(switch(this.terrain.get()) {
                 case NORMAL_TERRAIN -> Type.NORMAL;
                 case GRASSY_TERRAIN -> Type.GRASS;
                 case MISTY_TERRAIN -> Type.FAIRY;
@@ -298,13 +299,13 @@ public class Duel
                 case PSYCHIC_TERRAIN -> Type.PSYCHIC;
             });
 
-            if(!this.terrain.equals(Terrain.NORMAL_TERRAIN) && !this.data(this.current).isRaised) move.setPower(2.0);
+            if(!this.terrain.get().equals(Terrain.NORMAL_TERRAIN) && !this.data(this.current).isRaised) move.setPower(2.0);
         }
 
         //Weather Ball
         if(move.getName().equals("Weather Ball"))
         {
-            move.setType(switch(this.weather) {
+            move.setType(switch(this.weather.get()) {
                 case RAIN, HEAVY_RAIN -> Type.WATER;
                 case HARSH_SUNLIGHT -> Type.FIRE;
                 case SANDSTORM -> Type.ROCK;
@@ -312,7 +313,7 @@ public class Duel
                 default -> Type.NORMAL;
             });
 
-            if(!this.weather.equals(Weather.CLEAR)) move.setPower(2.0);
+            if(!this.weather.get().equals(Weather.CLEAR)) move.setPower(2.0);
         }
 
         //Weather-based Move Changes
@@ -470,11 +471,11 @@ public class Duel
 
             if(c.hasStatusCondition(StatusCondition.FROZEN))
             {
-                if(r.nextInt(100) < 20 || this.weather.equals(Weather.HARSH_SUNLIGHT))
+                if(r.nextInt(100) < 20 || this.weather.get().equals(Weather.HARSH_SUNLIGHT))
                 {
                     c.removeStatusCondition(StatusCondition.FROZEN);
 
-                    statusResults.add("%s has thawed out%s!".formatted(c.getName(), this.weather.equals(Weather.HARSH_SUNLIGHT) ? " due to the Harsh Sunlight" : ""));
+                    statusResults.add("%s has thawed out%s!".formatted(c.getName(), this.weather.get().equals(Weather.HARSH_SUNLIGHT) ? " due to the Harsh Sunlight" : ""));
                 }
                 else
                 {
@@ -485,12 +486,12 @@ public class Duel
 
             if(c.hasStatusCondition(StatusCondition.ASLEEP))
             {
-                if(this.data(this.current).asleepTurns == 2 || this.terrain.equals(Terrain.ELECRIC_TERRAIN))
+                if(this.data(this.current).asleepTurns == 2 || this.terrain.get().equals(Terrain.ELECRIC_TERRAIN))
                 {
                     c.removeStatusCondition(StatusCondition.ASLEEP);
                     this.data(this.current).asleepTurns = 0;
 
-                    statusResults.add("%s woke up%s!".formatted(c.getName(), this.terrain.equals(Terrain.ELECRIC_TERRAIN) ? " due to the Electric Terrain" : ""));
+                    statusResults.add("%s woke up%s!".formatted(c.getName(), this.terrain.get().equals(Terrain.ELECRIC_TERRAIN) ? " due to the Electric Terrain" : ""));
 
                     if(c.hasStatusCondition(StatusCondition.NIGHTMARE))
                     {
@@ -1303,8 +1304,8 @@ public class Duel
     //Turn Helper Methods
     public void setDefaults()
     {
-        this.weather = Weather.CLEAR;
-        this.terrain = Terrain.NORMAL_TERRAIN;
+        this.weather = new WeatherHandler();
+        this.terrain = new TerrainHandler();
         this.room = new RoomHandler();
         this.entryHazards = new EntryHazardHandler[]{new EntryHazardHandler(), new EntryHazardHandler()};
         this.barriers = new FieldBarrierHandler[]{new FieldBarrierHandler(), new FieldBarrierHandler()};
@@ -1342,30 +1343,16 @@ public class Duel
 
     public void updateWeatherTerrainRoom()
     {
-        if(this.weatherTurns <= 0)
-        {
-            this.weatherTurns = 0;
-            this.weather = Weather.CLEAR;
-        }
-
-        if(this.weatherTurns > 0) this.weatherTurns--;
-
-        if(this.terrainTurns <= 0)
-        {
-            this.terrainTurns = 0;
-            this.terrain = Terrain.NORMAL_TERRAIN;
-        }
-
-        if(this.terrainTurns > 0) this.terrainTurns--;
-
+        this.weather.updateTurns();
+        this.terrain.updateTurns();
         this.room.updateTurns();
     }
 
     public void weatherEffects()
     {
-        StringBuilder weatherResult = new StringBuilder().append("\n").append(this.weather.getStatus()).append("\n");
+        StringBuilder weatherResult = new StringBuilder().append("\n").append(this.weather.get().getStatus()).append("\n");
 
-        switch(this.weather)
+        switch(this.weather.get())
         {
             case HAIL -> {
                 if(this.isAffectedByHail(0)) this.doHailEffect(weatherResult, 0);
@@ -1408,7 +1395,7 @@ public class Duel
 
     public void moveWeatherEffects(Move move)
     {
-        switch(this.weather)
+        switch(this.weather.get())
         {
             case HAIL -> {
                 if(move.getName().equals("Blizzard")) move.setAccuracy(100);
@@ -1435,7 +1422,7 @@ public class Duel
 
     public void turnTerrainEffects(Move move)
     {
-        switch(this.terrain)
+        switch(this.terrain.get())
         {
             case ELECRIC_TERRAIN -> {
                 if(move.getType().equals(Type.ELECTRIC)) move.setPower(move.getPower() * 1.5);
@@ -1560,29 +1547,13 @@ public class Duel
     {
         List<String> abilities = this.players[p].active.getAbilities();
 
-        if(abilities.contains("Drought"))
-        {
-            this.weather = Weather.HARSH_SUNLIGHT;
-            this.weatherTurns = 5;
-        }
+        if(abilities.contains("Drought")) this.weather.setWeather(Weather.HARSH_SUNLIGHT);
 
-        if(abilities.contains("Drizzle"))
-        {
-            this.weather = Weather.RAIN;
-            this.weatherTurns = 5;
-        }
+        if(abilities.contains("Drizzle")) this.weather.setWeather(Weather.RAIN);
 
-        if(abilities.contains("Sand Stream"))
-        {
-            this.weather = Weather.SANDSTORM;
-            this.weatherTurns = 5;
-        }
+        if(abilities.contains("Sand Stream")) this.weather.setWeather(Weather.SANDSTORM);
 
-        if(abilities.contains("Snow Warning"))
-        {
-            this.weather = Weather.HAIL;
-            this.weatherTurns = 5;
-        }
+        if(abilities.contains("Snow Warning")) this.weather.setWeather(Weather.HAIL);
     }
 
     //Response Embeds

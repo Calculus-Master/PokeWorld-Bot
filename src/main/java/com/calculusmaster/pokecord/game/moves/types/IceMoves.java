@@ -121,7 +121,7 @@ public class IceMoves
 
     public String AuroraVeil(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(!duel.weather.equals(Weather.HAIL)) return move.getNothingResult();
+        if(!duel.weather.get().equals(Weather.HAIL)) return move.getNothingResult();
 
         duel.barriers[duel.playerIndexFromUUID(user.getUUID())].addBarrier(FieldBarrier.AURORA_VEIL, user.getItem().equals(Item.LIGHT_CLAY));
 

@@ -177,11 +177,10 @@ public class SteelMoves
 
     public String SteelRoller(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(duel.terrain.equals(Terrain.NORMAL_TERRAIN)) return move.getNothingResult();
+        if(duel.terrain.get().equals(Terrain.NORMAL_TERRAIN)) return move.getNothingResult();
         else
         {
-            duel.terrain = Terrain.NORMAL_TERRAIN;
-            duel.terrainTurns = 0;
+            duel.terrain.removeTerrain();
 
             return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + " The current Terrain was destroyed!";
         }

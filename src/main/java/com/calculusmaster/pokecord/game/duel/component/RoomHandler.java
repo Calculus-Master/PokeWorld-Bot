@@ -7,12 +7,12 @@ import java.util.*;
 public class RoomHandler
 {
     private EnumSet<Room> rooms;
-    private Map<Room, Integer> roomTurns;
+    private Map<Room, Integer> turns;
 
     public RoomHandler()
     {
         this.rooms = EnumSet.noneOf(Room.class);
-        this.roomTurns = new HashMap<>();
+        this.turns = new HashMap<>();
     }
 
     public boolean isActive(Room room)
@@ -23,21 +23,21 @@ public class RoomHandler
     public void addRoom(Room room)
     {
         this.rooms.add(room);
-        this.roomTurns.put(room, 5);
+        this.turns.put(room, 5);
     }
 
     public void removeRoom(Room room)
     {
         this.rooms.remove(room);
-        this.roomTurns.remove(room);
+        this.turns.remove(room);
     }
 
     public void updateTurns()
     {
-        this.roomTurns.replaceAll((r, i) -> i - 1);
+        this.turns.replaceAll((r, i) -> i - 1);
 
         List<Runnable> queue = new ArrayList<>();
-        for(Room r : this.rooms) if(this.roomTurns.get(r) <= 0) queue.add(() -> this.removeRoom(r));
+        for(Room r : this.rooms) if(this.turns.get(r) <= 0) queue.add(() -> this.removeRoom(r));
 
         queue.forEach(Runnable::run);
     }
