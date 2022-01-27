@@ -36,7 +36,6 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.*;
 
@@ -256,25 +255,13 @@ public class Duel
 
     private void swapAction(int p)
     {
-        //If current has a primal weather, the weather gets removed
-        if(Stream.of("Desolate Land", "Primordial Sea", "Delta Stream").anyMatch(a -> this.players[p].active.getAbilities().contains(a)))
-        {
-            this.results.add(this.weather.get().getName() + " disappeared!");
-
-            this.weather.removeWeather();
-        }
-
-        //Swap Action
         int index = this.queuedMoves.get(this.players[p].ID).swapInd() - 1;
         this.data(p).setDefaults();
         this.players[p].swap(index);
 
         results.add(this.players[p].data.getUsername() + " brought in " + this.players[p].active.getName() + "!\n");
 
-        //Check if the new Pokemon has a Weather-Causing Ability
         this.checkWeatherAbilities(p);
-
-        //Check for Entry Hazard Effects
         this.entryHazardEffects(p);
 
         if(this.isNonBotPlayer(p)) this.players[p].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
@@ -497,13 +484,11 @@ public class Duel
 
             if(c.hasStatusCondition(StatusCondition.FROZEN))
             {
-                boolean sun = this.weather.get().equals(Weather.HARSH_SUNLIGHT) || this.weather.get().equals(Weather.EXTREME_HARSH_SUNLIGHT);
-
-                if(r.nextInt(100) < 20 || sun)
+                if(r.nextInt(100) < 20 || this.weather.get().equals(Weather.HARSH_SUNLIGHT))
                 {
                     c.removeStatusCondition(StatusCondition.FROZEN);
 
-                    statusResults.add("%s has thawed out%s!".formatted(c.getName(), sun ? " due to the Harsh Sunlight" : ""));
+                    statusResults.add("%s has thawed out%s!".formatted(c.getName(), this.weather.get().equals(Weather.HARSH_SUNLIGHT) ? " due to the Harsh Sunlight" : ""));
                 }
                 else
                 {
@@ -1228,20 +1213,6 @@ public class Duel
 
             this.data(this.other).lastDamageTaken = 0;
         }
-        //Damage-Dealing Water Moves fail in Extreme Harsh Sunlight
-        else if(move.getType().equals(Type.WATER) && move.getPower() > 0)
-        {
-            turnResult.add(move.getName() + " failed due to the Extreme Harsh Sunlight!");
-
-            this.data(this.other).lastDamageTaken = 0;
-        }
-        //Damage-Dealing Fire Moves fail in Heavy Rain
-        else if(move.getType().equals(Type.FIRE) && move.getPower() > 0)
-        {
-            turnResult.add(move.getName() + " failed due to the Heavy Rain!");
-
-            this.data(this.other).lastDamageTaken = 0;
-        }
         //Check if something earlier made user not able to use its move
         else if(cantUse)
         {
@@ -1672,13 +1643,13 @@ public class Duel
 
                 if(move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower(move.getPower() / 2);
             }
-            case HARSH_SUNLIGHT, EXTREME_HARSH_SUNLIGHT -> {
+            case HARSH_SUNLIGHT -> {
                 if(move.getType().equals(Type.FIRE)) move.setPower((int)(move.getPower() * 1.5));
                 else if(move.getType().equals(Type.WATER)) move.setPower((int)(move.getPower() * 0.5));
 
                 if(move.getName().equals("Thunder") || move.getName().equals("Hurricane")) move.setAccuracy(50);
             }
-            case RAIN, HEAVY_RAIN -> {
+            case RAIN -> {
                 if(move.getType().equals(Type.WATER)) move.setPower((int)(move.getPower() * 1.5));
                 else if(move.getType().equals(Type.FIRE) || move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower((int)(move.getPower() * 0.5));
 
@@ -1816,61 +1787,14 @@ public class Duel
     private void checkWeatherAbilities(int p)
     {
         List<String> abilities = this.players[p].active.getAbilities();
-        String name = this.players[p].active.getName();
 
-        List<String> standard = List.of("Drought", "Drizzle", "Sand Stream", "Snow Warning");
-        List<String> primal = List.of("Desolate Land", "Primordial Sea", "Delta Stream");
-        List<String> weatherAbilities = new ArrayList<>(); weatherAbilities.addAll(standard); weatherAbilities.addAll(primal);
+        if(abilities.contains("Drought")) this.weather.setWeather(Weather.HARSH_SUNLIGHT);
 
-        //If the user doesn't have any weather abilities, return
-        if(abilities.stream().noneMatch(weatherAbilities::contains)) return;
+        if(abilities.contains("Drizzle")) this.weather.setWeather(Weather.RAIN);
 
-        String ab = abilities.stream().filter(weatherAbilities::contains).findFirst().orElseThrow();
-        Weather w = switch(ab) {
-            case "Drought" -> Weather.HARSH_SUNLIGHT;
-            case "Drizzle" -> Weather.RAIN;
-            case "Sand Stream" -> Weather.SANDSTORM;
-            case "Snow Warning" -> Weather.HAIL;
-            case "Desolate Land" -> Weather.EXTREME_HARSH_SUNLIGHT;
-            case "Primordial Sea" -> Weather.HEAVY_RAIN;
-            case "Delta Stream" -> Weather.STRONG_WINDS;
-        };
+        if(abilities.contains("Sand Stream")) this.weather.setWeather(Weather.SANDSTORM);
 
-        String activationFailedResult = name + "'s " + ab + " failed to activate!";
-
-        //If the weather effect is already in play, the ability should fail
-        if(this.weather.get().equals(w))
-        {
-            this.results.add(activationFailedResult + " " + this.weather.get().getName() + " already present!");
-            return;
-        }
-
-        //If the ability is a Standard Weather Ability and a Primal Weather is active, return
-        if(this.weather.get().isPrimalWeather() && standard.contains(ab))
-        {
-            this.results.add(activationFailedResult + " " + this.weather.get().getName() + " could not be removed!");
-            return;
-        }
-
-        //Otherwise, the Weather Ability should activate and change the weather
-        String activatedResult = name + "'s " + ab + " activated!";
-        String standardActivatedResult = activatedResult + " " + w.getName() + " covers the battlefield for 5 turns!";
-        String primalActivatedResult = activatedResult + " " + w.getName() + "'s presence will be felt permanently!";
-
-        //Final Weather Change Effect
-        if(standard.contains(ab))
-        {
-            this.results.add(standardActivatedResult);
-
-            this.weather.setWeather(w);
-        }
-        else if(primal.contains(ab))
-        {
-            this.results.add(primalActivatedResult);
-
-            this.weather.setPermanentWeather(w);
-        }
-        else LoggerHelper.error(Duel.class, "Weather Ability failed to activate after passing checks! Ability {%s} & Weather {%s}".formatted(ab, w.toString()));
+        if(abilities.contains("Snow Warning")) this.weather.setWeather(Weather.HAIL);
     }
 
     //Response Embeds
