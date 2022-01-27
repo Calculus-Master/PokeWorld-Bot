@@ -990,32 +990,6 @@ public class Duel
             if(buff) move.setPower(move.getPower() * 1.2);
         }
 
-        //Berries – Pre-Move Effects
-
-        MoveEffectBuilder builder = MoveEffectBuilder.make(this.players[this.current].active, this.players[this.other].active, this, move);
-        Runnable consumeBerry = () -> {
-            this.players[this.current].active.removeItem();
-            turnResult.add(this.players[this.current].active.getName() + " consumed their berry!");
-        };
-
-        if(!itemsOff && c.hasItem(Item.AGUAV_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
-        {
-            consumeBerry.run();
-
-            turnResult.add(builder
-                    .addFractionHealEffect(1 / 2.)
-                    .addConditionalEffect(List.of(Nature.NAUGHTY, Nature.RASH, Nature.NAIVE, Nature.LAX).contains(c.getNature()), b -> b.addStatusEffect(StatusCondition.CONFUSED, 100, true))
-                    .execute()
-            );
-        }
-
-        if(!itemsOff && c.hasItem(Item.APICOT_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
-        {
-            consumeBerry.run();
-
-            turnResult.add(builder.addStatChangeEffect(Stat.SPDEF, 1, 100, true).execute());
-        }
-
         //Barrier Effects
         if(this.barriers[this.other].has(FieldBarrier.AURORA_VEIL))
         {
@@ -1331,6 +1305,32 @@ public class Duel
         {
             this.data(this.current).furyCutterUsed = false;
             this.data(this.current).furyCutterTurns = 0;
+        }
+
+        //Berries – Post-Move Healing Effects
+
+        MoveEffectBuilder builder = MoveEffectBuilder.make(this.players[this.current].active, this.players[this.other].active, this, move);
+        Runnable consumeBerry = () -> {
+            this.players[this.current].active.removeItem();
+            turnResult.add(this.players[this.current].active.getName() + " consumed their berry!");
+        };
+
+        if(!itemsOff && c.hasItem(Item.AGUAV_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
+        {
+            consumeBerry.run();
+
+            turnResult.add(builder
+                    .addFractionHealEffect(1 / 2.)
+                    .addConditionalEffect(List.of(Nature.NAUGHTY, Nature.RASH, Nature.NAIVE, Nature.LAX).contains(c.getNature()), b -> b.addStatusEffect(StatusCondition.CONFUSED, 100, true))
+                    .execute()
+            );
+        }
+
+        if(!itemsOff && c.hasItem(Item.APICOT_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
+        {
+            consumeBerry.run();
+
+            turnResult.add(builder.addStatChangeEffect(Stat.SPDEF, 1, 100, true).execute());
         }
 
         //Field Effects
