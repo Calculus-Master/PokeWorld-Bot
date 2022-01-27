@@ -32,8 +32,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.*;
 
@@ -1137,7 +1139,79 @@ public class Duel
 
             int preMoveHP = this.players[this.other].active.getHealth();
 
+            //Berry Effects – Pre-Successful Move Execution
+
+            Type moveType = move.getType();
+
+            Function<Type, Boolean> effectiveMoveBerryApplies = t -> moveType.equals(t) && TypeEffectiveness.getEffectiveness(o.getType()).get(t) > 1.0;
+
+            BiConsumer<String, Move> effectiveMoveBerryResult = (berryName, moveCopy) -> {
+                o.removeItem();
+
+                moveCopy.setDamageMultiplier(0.5);
+
+                turnResult.add(o.getName() + " consumed its " + berryName + " Berry! The damage dealt by " + moveCopy.getName() + " was reduced significantly!");
+            };
+
+            if(o.hasItem(Item.BABIRI_BERRY) && effectiveMoveBerryApplies.apply(Type.STEEL))
+                effectiveMoveBerryResult.accept("Babiri", move);
+
+            if(o.hasItem(Item.CHARTI_BERRY) && effectiveMoveBerryApplies.apply(Type.ROCK))
+                effectiveMoveBerryResult.accept("Charti", move);
+
+            if(o.hasItem(Item.CHILAN_BERRY) && move.getType().equals(Type.NORMAL))
+                effectiveMoveBerryResult.accept("Chilan", move);
+
+            if(o.hasItem(Item.CHOPLE_BERRY) && effectiveMoveBerryApplies.apply(Type.FIGHTING))
+                effectiveMoveBerryResult.accept("Chople", move);
+
+            if(o.hasItem(Item.COBA_BERRY) && effectiveMoveBerryApplies.apply(Type.FLYING))
+                effectiveMoveBerryResult.accept("Coba", move);
+
+            if(o.hasItem(Item.COLBUR_BERRY) && effectiveMoveBerryApplies.apply(Type.DARK))
+                effectiveMoveBerryResult.accept("Colbur", move);
+
+            if(o.hasItem(Item.HABAN_BERRY) && effectiveMoveBerryApplies.apply(Type.DRAGON))
+                effectiveMoveBerryResult.accept("Haban", move);
+
+            if(o.hasItem(Item.KASIB_BERRY) && effectiveMoveBerryApplies.apply(Type.GHOST))
+                effectiveMoveBerryResult.accept("Kasib", move);
+
+            if(o.hasItem(Item.KEBIA_BERRY) && effectiveMoveBerryApplies.apply(Type.POISON))
+                effectiveMoveBerryResult.accept("Kebia", move);
+
+            if(o.hasItem(Item.OCCA_BERRY) && effectiveMoveBerryApplies.apply(Type.FIRE))
+                effectiveMoveBerryResult.accept("Occa", move);
+
+            if(o.hasItem(Item.PASSHO_BERRY) && effectiveMoveBerryApplies.apply(Type.WATER))
+                effectiveMoveBerryResult.accept("Passho", move);
+
+            if(o.hasItem(Item.PAYAPA_BERRY) && effectiveMoveBerryApplies.apply(Type.PSYCHIC))
+                effectiveMoveBerryResult.accept("Payapa", move);
+
+            if(o.hasItem(Item.RINDO_BERRY) && effectiveMoveBerryApplies.apply(Type.GRASS))
+                effectiveMoveBerryResult.accept("Rindo", move);
+
+            if(o.hasItem(Item.ROSELI_BERRY) && effectiveMoveBerryApplies.apply(Type.FAIRY))
+                effectiveMoveBerryResult.accept("Roseli", move);
+
+            if(o.hasItem(Item.SHUCA_BERRY) && effectiveMoveBerryApplies.apply(Type.GROUND))
+                effectiveMoveBerryResult.accept("Shuca", move);
+
+            if(o.hasItem(Item.TANGA_BERRY) && effectiveMoveBerryApplies.apply(Type.BUG))
+                effectiveMoveBerryResult.accept("Tanga", move);
+
+            if(o.hasItem(Item.WACAN_BERRY) && effectiveMoveBerryApplies.apply(Type.ELECTRIC))
+                effectiveMoveBerryResult.accept("Wacan", move);
+
+            if(o.hasItem(Item.YACHE_BERRY) && effectiveMoveBerryApplies.apply(Type.ICE))
+                effectiveMoveBerryResult.accept("Yache", move);
+
+            //Primary Move Logic
+
             turnResult.add(move.logic(this.players[this.current].active, this.players[this.other].active, this));
+
+            //Post-Move Execution
 
             if(move.getCategory().equals(Category.STATUS)) this.data(this.other).lastDamageTaken = 0;
 
