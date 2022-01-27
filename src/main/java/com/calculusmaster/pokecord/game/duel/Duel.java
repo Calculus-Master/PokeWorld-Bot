@@ -1838,6 +1838,7 @@ public class Duel
             case "Desolate Land" -> Weather.EXTREME_HARSH_SUNLIGHT;
             case "Primordial Sea" -> Weather.HEAVY_RAIN;
             case "Delta Stream" -> Weather.STRONG_WINDS;
+            default -> throw new IllegalStateException("Invalid Weather Ability");
         };
 
         String activationFailedResult = name + "'s " + ab + " failed to activate!";
