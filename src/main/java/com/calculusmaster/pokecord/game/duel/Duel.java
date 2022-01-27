@@ -1351,6 +1351,10 @@ public class Duel
             if(o.hasItem(Item.YACHE_BERRY) && effectiveMoveBerryApplies.apply(Type.ICE))
                 effectiveMoveBerryResult.accept("Yache", move);
 
+            //Strong Winds
+            if(this.weather.get().equals(Weather.STRONG_WINDS) && move.is(Type.FLYING) && TypeEffectiveness.getEffectiveness(this.players[this.other].active.getType()).get(move.getType()) > 1.0)
+                move.setDamageMultiplier(0.5);
+
             //Primary Move Logic
 
             turnResult.add(move.logic(this.players[this.current].active, this.players[this.other].active, this));
