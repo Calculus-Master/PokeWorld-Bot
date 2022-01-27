@@ -3,10 +3,7 @@ package com.calculusmaster.pokecord.game.duel;
 import com.calculusmaster.pokecord.commands.duel.CommandTarget;
 import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
-import com.calculusmaster.pokecord.game.duel.component.EntryHazardHandler;
-import com.calculusmaster.pokecord.game.duel.component.FieldBarrierHandler;
-import com.calculusmaster.pokecord.game.duel.component.FieldEffectsHandler;
-import com.calculusmaster.pokecord.game.duel.component.FieldGMaxDoTHandler;
+import com.calculusmaster.pokecord.game.duel.component.*;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.enums.elements.*;
@@ -65,8 +62,7 @@ public class Duel
     public int weatherTurns;
     public Terrain terrain;
     public int terrainTurns;
-    public Room room;
-    public int roomTurns;
+    public RoomHandler room;
     public EntryHazardHandler[] entryHazards;
     public FieldBarrierHandler[] barriers;
     public FieldGMaxDoTHandler[] gmaxDoT;
@@ -206,7 +202,7 @@ public class Duel
         {
             this.current = speed1 == speed2 ? (new Random().nextInt(100) < 50 ? 0 : 1) : (speed1 > speed2 ? 0 : 1);
 
-            if(this.room.equals(Room.TRICK_ROOM)) this.current = this.current == 0 ? 1 : 0;
+            if(this.room.isActive(Room.TRICK_ROOM)) this.current = this.current == 0 ? 1 : 0;
         }
         else
         {
@@ -346,7 +342,7 @@ public class Duel
 
             //Check Berries before Status Conditions
 
-            if(!this.room.equals(Room.MAGIC_ROOM))
+            if(!this.room.isActive(Room.MAGIC_ROOM))
             {
                 Consumer<StatusCondition> removeStatusAndConsume = s -> {
                     c.removeStatusCondition(s);
@@ -975,7 +971,7 @@ public class Duel
         }
 
         //Item-based Buffs
-        boolean itemsOff = this.room.equals(Room.MAGIC_ROOM);
+        boolean itemsOff = this.room.isActive(Room.MAGIC_ROOM);
 
         if(!itemsOff && this.players[this.current].active.getItem().equals(Item.METAL_COAT))
         {
@@ -1309,7 +1305,7 @@ public class Duel
     {
         this.weather = Weather.CLEAR;
         this.terrain = Terrain.NORMAL_TERRAIN;
-        this.room = Room.NORMAL_ROOM;
+        this.room = new RoomHandler();
         this.entryHazards = new EntryHazardHandler[]{new EntryHazardHandler(), new EntryHazardHandler()};
         this.barriers = new FieldBarrierHandler[]{new FieldBarrierHandler(), new FieldBarrierHandler()};
         this.gmaxDoT = new FieldGMaxDoTHandler[]{new FieldGMaxDoTHandler(), new FieldGMaxDoTHandler()};
@@ -1362,13 +1358,7 @@ public class Duel
 
         if(this.terrainTurns > 0) this.terrainTurns--;
 
-        if(this.roomTurns <= 0)
-        {
-            this.roomTurns = 0;
-            this.room = Room.NORMAL_ROOM;
-        }
-
-        if(this.roomTurns > 0) this.roomTurns--;
+        this.room.updateTurns();
     }
 
     public void weatherEffects()
@@ -1981,30 +1971,5 @@ public class Duel
     {
         if(this.players == null) return false;
         else return Arrays.stream(this.players).anyMatch(p -> p.ID.equals(id));
-    }
-
-    @Override
-    public String toString() {
-        return "Duel{" +
-                "status=" + status +
-                ", event=" + event +
-                ", size=" + size +
-                ", players=0: " + players[0] + ", 1: " + players[1] +
-                ", queuedMoves=" + queuedMoves +
-                ", pokemonAttributes=" + pokemonAttributes +
-                ", expGains=" + expGains +
-                ", turn=" + turn +
-                ", current=" + current +
-                ", other=" + other +
-                ", first='" + first + '\'' +
-                ", results=" + results +
-                ", weather=" + weather +
-                ", weatherTurns=" + weatherTurns +
-                ", terrain=" + terrain +
-                ", terrainTurns=" + terrainTurns +
-                ", room=" + room +
-                ", roomTurns=" + roomTurns +
-                ", entryHazards=" + Arrays.toString(entryHazards) +
-                '}';
     }
 }

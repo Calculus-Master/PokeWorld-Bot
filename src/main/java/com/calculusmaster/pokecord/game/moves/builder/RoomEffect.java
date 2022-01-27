@@ -15,9 +15,17 @@ public class RoomEffect extends MoveEffect
     @Override
     public String get()
     {
-        this.duel.room = this.room;
-        this.duel.roomTurns = 5;
+        String stylizedName = Global.normalize(this.room.toString().replaceAll("_", " "));
 
-        return this.user.getName() + " created a weird area! (" + Global.normalize(this.room.toString().replaceAll("_", " ")) + ")!";
+        if(this.duel.room.isActive(this.room))
+        {
+            this.duel.room.removeRoom(this.room);
+            return this.user.getName() + " removed the " + stylizedName + "!";
+        }
+        else
+        {
+            this.duel.room.addRoom(this.room);
+            return this.user.getName() + " created a strange area! A " + stylizedName + " was set up!";
+        }
     }
 }

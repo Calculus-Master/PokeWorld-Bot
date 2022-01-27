@@ -81,7 +81,7 @@ public class RaidDuel extends WildDuel
 
             pool.stream().filter(this::isUsingMove).collect(Collectors.toList()).sort(Comparator.comparingInt(i -> this.players[(int)i].move.getPriority()).thenComparingInt(i -> this.players[(int)i].active.getStat(Stat.SPD)).reversed());
 
-            if(this.room.equals(Room.TRICK_ROOM)) Collections.reverse(pool);
+            if(this.room.isActive(Room.TRICK_ROOM)) Collections.reverse(pool);
 
             for(int i : pool)
             {
