@@ -259,7 +259,7 @@ public class Duel
         //If current has a primal weather, the weather gets removed
         if(Stream.of("Desolate Land", "Primordial Sea", "Delta Stream").anyMatch(a -> this.players[p].active.getAbilities().contains(a)))
         {
-            this.results.add(this.weather.get().getName() + " disappeared!");
+            this.results.add(this.weather.get().getName() + " disappeared!\n\n");
 
             this.weather.removeWeather();
         }
@@ -1876,6 +1876,8 @@ public class Duel
             this.weather.setPermanentWeather(w);
         }
         else LoggerHelper.error(Duel.class, "Weather Ability failed to activate after passing checks! Ability {%s} & Weather {%s}".formatted(ab, w.toString()));
+
+        this.results.add("\n");
     }
 
     //Response Embeds
