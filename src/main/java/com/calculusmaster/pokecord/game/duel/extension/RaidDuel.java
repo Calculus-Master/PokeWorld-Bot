@@ -115,6 +115,8 @@ public class RaidDuel extends WildDuel
 
         if(this.isComplete())
         {
+            super.onWin();
+
             this.sendTurnEmbed();
             this.sendWinEmbed();
             this.setStatus(DuelStatus.COMPLETE);

@@ -141,6 +141,8 @@ public class Duel
             if(this.event == null) LoggerHelper.error(Duel.class, "Duel Error: Cannot send Embeds, MessageReceivedEvent not initialized!");
             else
             {
+                this.onWin();
+
                 this.sendTurnEmbed();
                 this.sendWinEmbed();
                 this.setStatus(DuelStatus.COMPLETE);
@@ -1641,6 +1643,19 @@ public class Duel
             LoggerHelper.reportError(Duel.class, "Duel Image generation failed!", e);
 
             this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
+        }
+    }
+
+    public void onWin()
+    {
+        for(Player p : this.players)
+        {
+            for(int i = 0; i < p.team.size(); i++)
+            {
+                Pokemon pokemon = p.team.get(i);
+
+                if(pokemon.hasConsumedItem()) pokemon.updateItem();
+            }
         }
     }
 
