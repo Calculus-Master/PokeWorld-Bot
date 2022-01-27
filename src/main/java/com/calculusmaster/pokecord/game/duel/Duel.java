@@ -307,7 +307,7 @@ public class Duel
         {
             move.setType(switch(this.weather.get()) {
                 case RAIN, HEAVY_RAIN -> Type.WATER;
-                case HARSH_SUNLIGHT -> Type.FIRE;
+                case HARSH_SUNLIGHT, EXTREME_HARSH_SUNLIGHT -> Type.FIRE;
                 case SANDSTORM -> Type.ROCK;
                 case HAIL -> Type.ICE;
                 default -> Type.NORMAL;
