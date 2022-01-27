@@ -554,13 +554,13 @@ public class NormalMoves
                 case WIKI_BERRY, CHARTI_BERRY, MICLE_BERRY -> Type.ROCK;
                 case MAGO_BERRY, KASIB_BERRY, CUSTAP_BERRY -> Type.GHOST;
                 case AGUAV_BERRY, HABAN_BERRY, JABOCA_BERRY -> Type.DRAGON;
-                case IAPAPA_BERRY, COLBUR_BERRY, SPELON_BERRY, ROWAP_BERRY -> Type.DARK;
+                case IAPAPA_BERRY, COLBUR_BERRY, ROWAP_BERRY -> Type.DARK;
                 case BABIRI_BERRY -> Type.STEEL;
                 default -> throw new IllegalStateException("Invalid Berry Item: " + user.getItem() + "!");
             });
 
             move.setPower(switch(user.getItem()) {
-                case POMEG_BERRY, QUALOT_BERRY, HONDEW_BERRY, GREPA_BERRY, TAMATO_BERRY, SPELON_BERRY -> 70;
+                case POMEG_BERRY, QUALOT_BERRY, HONDEW_BERRY, GREPA_BERRY, TAMATO_BERRY -> 70;
                 case LIECHI_BERRY, GANLON_BERRY, SALAC_BERRY, PETAYA_BERRY, APICOT_BERRY, LANSAT_BERRY, STARF_BERRY, ENIGMA_BERRY, MICLE_BERRY, CUSTAP_BERRY, JABOCA_BERRY, ROWAP_BERRY -> 80;
                 default -> 60;
             });
