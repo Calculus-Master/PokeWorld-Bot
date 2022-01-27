@@ -276,7 +276,6 @@ public class PlayerDataQuery extends MongoQuery
 
     public void addPokemonToTeam(String UUID, int index)
     {
-        this.clearTeam();
         List<String> team = new ArrayList<>(this.getTeam());
 
         index--;
@@ -284,24 +283,24 @@ public class PlayerDataQuery extends MongoQuery
         if(index >= team.size()) team.add(UUID);
         else team.set(index, UUID);
 
+        this.clearTeam();
         this.update(Updates.pushEach("team", team));
     }
 
     public void removePokemonFromTeam(int index)
     {
-        this.clearTeam();
         List<String> team = new ArrayList<>(this.getTeam());
 
         index--;
 
         team.remove(index);
 
+        this.clearTeam();
         this.update(Updates.pushEach("team", team));
     }
 
     public void swapPokemonInTeam(int from, int to)
     {
-        this.clearTeam();
         List<String> team = new ArrayList<>(this.getTeam());
 
         from--;
@@ -311,6 +310,7 @@ public class PlayerDataQuery extends MongoQuery
         team.set(from, team.get(to));
         team.set(to, temp);
 
+        this.clearTeam();
         this.update(Updates.pushEach("team", team));
     }
 
