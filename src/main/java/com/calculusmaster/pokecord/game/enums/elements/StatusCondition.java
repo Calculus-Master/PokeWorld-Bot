@@ -1,5 +1,7 @@
 package com.calculusmaster.pokecord.game.enums.elements;
 
+import java.util.List;
+
 public enum StatusCondition
 {
     BURNED("BRN"),
@@ -24,5 +26,10 @@ public enum StatusCondition
     public String getAbbrev()
     {
         return this.abbrev;
+    }
+
+    public boolean isNonVolatile()
+    {
+        return List.of(BURNED, ASLEEP, BADLY_POISONED, FROZEN, PARALYZED, POISONED).contains(this);
     }
 }

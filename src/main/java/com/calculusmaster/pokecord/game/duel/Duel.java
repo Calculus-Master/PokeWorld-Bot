@@ -36,6 +36,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.*;
 
@@ -340,6 +341,66 @@ public class Duel
                 this.results.add(String.join(" ", status));
                 return "";
             };
+
+            //Check Berries before Status Conditions
+
+            if(!this.room.equals(Room.MAGIC_ROOM))
+            {
+                Consumer<StatusCondition> removeStatusAndConsume = s -> {
+                    c.removeStatusCondition(s);
+                    c.removeItem();
+                };
+
+                if(c.hasItem(Item.ASPEAR_BERRY) && c.hasStatusCondition(StatusCondition.FROZEN))
+                {
+                    removeStatusAndConsume.accept(StatusCondition.FROZEN);
+
+                    turnResult.add(c.getName() + " consumed its Aspear Berry and thawed out!");
+                }
+
+                if(c.hasItem(Item.CHERI_BERRY) && c.hasStatusCondition(StatusCondition.PARALYZED))
+                {
+                    removeStatusAndConsume.accept(StatusCondition.PARALYZED);
+
+                    turnResult.add(c.getName() + " consumed its Cheri Berry and was cured from paralysis!");
+                }
+
+                if(c.hasItem(Item.CHESTO_BERRY) && c.hasStatusCondition(StatusCondition.ASLEEP))
+                {
+                    removeStatusAndConsume.accept(StatusCondition.ASLEEP);
+
+                    turnResult.add(c.getName() + " consumed its Chesto Berry and woke up!");
+                }
+
+                if(c.hasItem(Item.LUM_BERRY) && c.getStatusConditions().stream().anyMatch(s -> s.isNonVolatile() || s.equals(StatusCondition.CONFUSED)))
+                {
+                    c.removeItem();
+                    Arrays.stream(StatusCondition.values()).filter(s -> s.isNonVolatile() || s.equals(StatusCondition.CONFUSED)).forEach(c::removeStatusCondition);
+
+                    turnResult.add(c.getName() + " consumed its Lum Berry and was cured of all non-volatile Status Conditions!");
+                }
+
+                if(c.hasItem(Item.PECHA_BERRY) && c.hasStatusCondition(StatusCondition.POISONED))
+                {
+                    removeStatusAndConsume.accept(StatusCondition.POISONED);
+
+                    turnResult.add(c.getName() + " consumed its Pecha Berry and was cured of its poison!");
+                }
+
+                if(c.hasItem(Item.PERSIM_BERRY) && c.hasStatusCondition(StatusCondition.CONFUSED))
+                {
+                    removeStatusAndConsume.accept(StatusCondition.CONFUSED);
+
+                    turnResult.add(c.getName() + " consumed its Persim Berry and snapped out of its confusion!");
+                }
+
+                if(c.hasItem(Item.RAWST_BERRY) && c.hasStatusCondition(StatusCondition.BURNED))
+                {
+                    removeStatusAndConsume.accept(StatusCondition.BURNED);
+
+                    turnResult.add(c.getName() + " consumed its Rawst Berry and its burn was healed!");
+                }
+            }
 
             //Damage Status Conditions
             if(c.hasStatusCondition(StatusCondition.BURNED))
