@@ -1556,12 +1556,10 @@ public class Duel
         this.fieldEffects = new FieldEffectsHandler[]{new FieldEffectsHandler(), new FieldEffectsHandler()};
         this.queuedMoves = new HashMap<>();
 
-        for(Player player : this.players) for(Pokemon p : player.team) p.setHealth(p.getStat(Stat.HP));
+        for(Player player : this.players) for(int i = 0; i < player.team.size(); i++) player.team.get(i).setHealth(player.team.get(i).getMaxHealth());
 
         for(Player p : this.players)
         {
-            p.active.setHealth(p.active.getStat(Stat.HP));
-
             for(Pokemon pokemon : p.team) this.movesUsed.put(pokemon.getUUID(), new ArrayList<>());
         }
     }

@@ -31,6 +31,6 @@ public class PokemonDuelStatOverrides
 
     public boolean has(Stat s)
     {
-        return this.get(s) == 0;
+        return this.overrides.containsKey(s);
     }
 }
