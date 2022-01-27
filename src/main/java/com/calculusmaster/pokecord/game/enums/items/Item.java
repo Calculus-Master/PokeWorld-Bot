@@ -98,7 +98,7 @@ public enum Item
     KEBIA_BERRY(750, BERRY),
     KEE_BERRY(750, BERRY),
     KLEPSY_BERRY(750, BERRY),
-    LANSAT_BERRY(750, BERRY),
+    LANSAT_BERRY(750, BERRY), //TODO: Raises crit chance when <25% health
     LEPPA_BERRY(750, BERRY),
     LIECHI_BERRY(750, BERRY),
     LUM_BERRY(750, BERRY),

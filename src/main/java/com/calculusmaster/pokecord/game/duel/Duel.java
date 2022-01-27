@@ -974,6 +974,7 @@ public class Duel
         }
 
         //Item-based Buffs
+
         boolean itemsOff = this.room.isActive(Room.MAGIC_ROOM);
 
         if(!itemsOff && this.players[this.current].active.getItem().equals(Item.METAL_COAT))
@@ -988,6 +989,136 @@ public class Duel
             boolean buff = item.getArceusPlateType() != null && item.getArceusPlateType().equals(move.getType());
 
             if(buff) move.setPower(move.getPower() * 1.2);
+        }
+
+        //Berries – Post-Move Healing Effects
+
+        MoveEffectBuilder builder = MoveEffectBuilder.make(this.players[this.current].active, this.players[this.other].active, this, move);
+        Consumer<String> consumeBerry = berryName -> {
+            this.players[this.current].active.removeItem();
+            turnResult.add(this.players[this.current].active.getName() + " consumed their " + berryName +  " Berry!");
+        };
+
+        if(!itemsOff && c.hasItem(Item.AGUAV_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
+        {
+            consumeBerry.accept("Aguav");
+
+            turnResult.add(builder
+                    .addFractionHealEffect(1 / 2.)
+                    .addConditionalEffect(List.of(Nature.NAUGHTY, Nature.RASH, Nature.NAIVE, Nature.LAX).contains(c.getNature()), b -> b.addStatusEffect(StatusCondition.CONFUSED, 100, true))
+                    .execute()
+            );
+        }
+
+        if(!itemsOff && c.hasItem(Item.FIGY_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
+        {
+            consumeBerry.accept("Figy");
+
+            turnResult.add(builder
+                    .addFractionHealEffect(1 / 3.)
+                    .addConditionalEffect(List.of(Nature.MODEST, Nature.TIMID, Nature.CALM, Nature.BOLD).contains(c.getNature()), b -> b.addStatusEffect(StatusCondition.CONFUSED, 100, true))
+                    .execute()
+            );
+        }
+
+        if(!itemsOff && c.hasItem(Item.IAPAPA_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
+        {
+            consumeBerry.accept("Iapapa");
+
+            turnResult.add(builder
+                    .addFractionHealEffect(1 / 3.)
+                    .addConditionalEffect(List.of(Nature.LONELY, Nature.MILD, Nature.GENTLE, Nature.HASTY).contains(c.getNature()), b -> b.addStatusEffect(StatusCondition.CONFUSED, 100, true))
+                    .execute()
+            );
+        }
+
+        if(!itemsOff && c.hasItem(Item.MAGO_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
+        {
+            consumeBerry.accept("Mago");
+
+            turnResult.add(builder
+                    .addFractionHealEffect(1 / 3.)
+                    .addConditionalEffect(List.of(Nature.BRAVE, Nature.QUIET, Nature.SASSY, Nature.RELAXED).contains(c.getNature()), b -> b.addStatusEffect(StatusCondition.CONFUSED, 100, true))
+                    .execute()
+            );
+        }
+
+        if(!itemsOff && c.hasItem(Item.WIKI_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
+        {
+            consumeBerry.accept("Wiki");
+
+            turnResult.add(builder
+                    .addFractionHealEffect(1 / 3.)
+                    .addConditionalEffect(List.of(Nature.ADAMANT, Nature.JOLLY, Nature.CAREFUL, Nature.IMPISH).contains(c.getNature()), b -> b.addStatusEffect(StatusCondition.CONFUSED, 100, true))
+                    .execute()
+            );
+        }
+
+        if(!itemsOff && c.hasItem(Item.APICOT_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
+        {
+            consumeBerry.accept("Apicot");
+
+            turnResult.add(builder.addStatChangeEffect(Stat.SPDEF, 1, 100, true).execute());
+        }
+
+        if(!itemsOff && c.hasItem(Item.GANLON_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
+        {
+            consumeBerry.accept("Ganlon");
+
+            turnResult.add(builder.addStatChangeEffect(Stat.DEF, 1, 100, true).execute());
+        }
+
+        if(!itemsOff && c.hasItem(Item.LIECHI_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
+        {
+            consumeBerry.accept("Liechi");
+
+            turnResult.add(builder.addStatChangeEffect(Stat.ATK, 1, 100, true).execute());
+        }
+
+        if(!itemsOff && c.hasItem(Item.MICLE_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
+        {
+            consumeBerry.accept("Micle");
+
+            turnResult.add(builder.addAccuracyChangeEffect(1, 100, true).execute());
+        }
+
+        if(!itemsOff && c.hasItem(Item.PETAYA_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
+        {
+            consumeBerry.accept("Petaya");
+
+            turnResult.add(builder.addStatChangeEffect(Stat.SPATK, 1, 100, true).execute());
+        }
+
+        if(!itemsOff && c.hasItem(Item.SALAC_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
+        {
+            consumeBerry.accept("Salac");
+
+            turnResult.add(builder.addStatChangeEffect(Stat.SPD, 1, 100, true).execute());
+        }
+
+        if(!itemsOff && c.hasItem(Item.ORAN_BERRY) && c.getHealth() < c.getMaxHealth(1 / 2.))
+        {
+            consumeBerry.accept("Oran");
+
+            turnResult.add(builder.addFixedHealEffect(10).execute());
+        }
+
+        if(!itemsOff && c.hasItem(Item.SITRUS_BERRY) && c.getHealth() < c.getMaxHealth(1 / 2.))
+        {
+            consumeBerry.accept("Sitrus");
+
+            turnResult.add(builder.addFractionHealEffect(1 / 2.).execute());
+        }
+
+        if(!itemsOff && c.hasItem(Item.STARF_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
+        {
+            consumeBerry.accept("Starf");
+
+            int num = new SplittableRandom().nextInt(Stat.values().length + 2);
+
+            if(num < Stat.values().length) turnResult.add(builder.addStatChangeEffect(Stat.values()[num], 2, 100, true).execute());
+            else if(num == Stat.values().length) turnResult.add(builder.addAccuracyChangeEffect(2, 100, true).execute());
+            else if(num == Stat.values().length + 1) turnResult.add(builder.addEvasionChangeEffect(2, 100, true).execute());
         }
 
         //Barrier Effects
@@ -1305,32 +1436,6 @@ public class Duel
         {
             this.data(this.current).furyCutterUsed = false;
             this.data(this.current).furyCutterTurns = 0;
-        }
-
-        //Berries – Post-Move Healing Effects
-
-        MoveEffectBuilder builder = MoveEffectBuilder.make(this.players[this.current].active, this.players[this.other].active, this, move);
-        Runnable consumeBerry = () -> {
-            this.players[this.current].active.removeItem();
-            turnResult.add(this.players[this.current].active.getName() + " consumed their berry!");
-        };
-
-        if(!itemsOff && c.hasItem(Item.AGUAV_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
-        {
-            consumeBerry.run();
-
-            turnResult.add(builder
-                    .addFractionHealEffect(1 / 2.)
-                    .addConditionalEffect(List.of(Nature.NAUGHTY, Nature.RASH, Nature.NAIVE, Nature.LAX).contains(c.getNature()), b -> b.addStatusEffect(StatusCondition.CONFUSED, 100, true))
-                    .execute()
-            );
-        }
-
-        if(!itemsOff && c.hasItem(Item.APICOT_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
-        {
-            consumeBerry.run();
-
-            turnResult.add(builder.addStatChangeEffect(Stat.SPDEF, 1, 100, true).execute());
         }
 
         //Field Effects
