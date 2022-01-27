@@ -74,6 +74,7 @@ public enum Item
     TOXIC_PLATE(1000, PLATE),
     ZAP_PLATE(1000, PLATE),
     //Berries
+    //TODO: Friendship Raising Weird Berries: Grepa, Hondew, Kelpsy, Pomeg, Qualot, Tamato
     AGUAV_BERRY(750, BERRY),
     APICOT_BERRY(750, BERRY),
     ASPEAR_BERRY(750, BERRY),
