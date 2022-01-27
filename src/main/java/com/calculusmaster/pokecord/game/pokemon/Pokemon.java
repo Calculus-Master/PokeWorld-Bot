@@ -304,6 +304,9 @@ public class Pokemon
         //Dynamax Level must be 10
         else if(this.getDynamaxLevel() < 10) return false;
 
+        //Prestige Level must be at its maximum
+        else if(this.getPrestigeLevel() < this.getMaxPrestigeLevel()) return false;
+
         //Must have an Item
         else if(this.getItem().equals(Item.NONE)) return false;
 
