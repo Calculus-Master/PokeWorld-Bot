@@ -55,7 +55,7 @@ public class GrassMoves
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addFractionHealEffect(switch(duel.weather.get()) {
                     case CLEAR -> 1 / 2D;
-                    case HARSH_SUNLIGHT -> 2 / 3D;
+                    case HARSH_SUNLIGHT, EXTREME_HARSH_SUNLIGHT -> 2 / 3D;
                     default -> 1 / 4D;
                 })
                 .execute();

@@ -35,7 +35,7 @@ public class NormalMoves
 
     public String Growth(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        int stage = duel.weather.get().equals(Weather.HARSH_SUNLIGHT) ? 2 : 1;
+        int stage = duel.weather.get().equals(Weather.HARSH_SUNLIGHT) || duel.weather.get().equals(Weather.EXTREME_HARSH_SUNLIGHT) ? 2 : 1;
 
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addStatChangeEffect(
@@ -419,7 +419,7 @@ public class NormalMoves
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addFractionHealEffect(switch(duel.weather.get()) {
                     case CLEAR -> 1 / 2D;
-                    case HARSH_SUNLIGHT -> 2 / 3D;
+                    case HARSH_SUNLIGHT, EXTREME_HARSH_SUNLIGHT -> 2 / 3D;
                     default -> 1 / 4D;
                 })
                 .execute();
