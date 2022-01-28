@@ -313,6 +313,13 @@ public class Duel
         //Plasma Fists Type Change: Normal -> Electric
         if(this.data(this.current).plasmaFistsUsed && move.getType().equals(Type.NORMAL)) move.setType(Type.ELECTRIC);
 
+        //Ability: Pixilate
+        if(c.hasAbility(Ability.PIXILATE) && move.is(Type.NORMAL))
+        {
+            move.setType(Type.FAIRY);
+            move.setPower(1.2);
+        }
+
         //Electrify Type Change: Normal -> Electric (If Opponent goes after User)
         if(this.players[this.other].active.getUUID().equals(this.first) && this.data(this.other).electrifyUsed)
         {
