@@ -12,7 +12,6 @@ import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CommandTrade extends Command
@@ -51,15 +50,15 @@ public class CommandTrade extends Command
         }
         else if(TradeHelper.isInTrade(this.player.getId()) && this.msg.length >= 2)
         {
-            boolean accept = Arrays.asList("accept").contains(this.msg[1]);
-            boolean deny = Arrays.asList("deny").contains(this.msg[1]);
-            boolean confirm = Arrays.asList("confirm").contains(this.msg[1]);
+            boolean accept = this.msg[1].equals("accept");
+            boolean deny = this.msg[1].equals("deny");
+            boolean confirm = this.msg[1].equals("confirm");
 
-            boolean changeCredits = Arrays.asList("credits", "c").contains(this.msg[1]);
-            boolean changeRedeems = Arrays.asList("redeems", "redeem", "r").contains(this.msg[1]);
-            boolean changePokemon = Arrays.asList("pokemon", "poke", "p").contains(this.msg[1]);
-            boolean changeTMs = Arrays.asList("tms", "tm").contains(this.msg[1]);
-            boolean changeTRs = Arrays.asList("trs", "tr").contains(this.msg[1]);
+            boolean changeCredits = List.of("credits", "c").contains(this.msg[1]);
+            boolean changeRedeems = List.of("redeems", "redeem", "r").contains(this.msg[1]);
+            boolean changePokemon = List.of("pokemon", "poke", "p").contains(this.msg[1]);
+            boolean changeTMs = List.of("tms", "tm").contains(this.msg[1]);
+            boolean changeTRs = List.of("trs", "tr").contains(this.msg[1]);
 
             boolean editOffer = (changeCredits || changeRedeems || changePokemon || changeTMs || changeTRs)
                     && this.msg.length >= 3 && (this.msg[2].equals("add") || this.msg[2].equals("remove"));

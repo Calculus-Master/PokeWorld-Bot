@@ -43,7 +43,7 @@ public class CommandTMInfo extends Command
                     .setTitle(tm + " Info (" + tm.getMoveName() + ")")
                     .setDescription(impl + flavor)
                     .addField("Type", Global.normalize(m.type.toString()), true)
-                    .addField("Category",Global.normalize(m.category.toString()), true)
+                    .addField("Category", Global.normalize(m.category.toString()), true)
                     .addBlankField(true)
                     .addField("Power", String.valueOf(m.basePower), true)
                     .addField("Accuracy", String.valueOf(m.baseAccuracy), true);

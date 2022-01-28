@@ -9,6 +9,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class Bounty
@@ -34,13 +35,13 @@ public class Bounty
 
     public static Bounty fromDB(String bountyID)
     {
-        Document d = Mongo.BountyData.find(Filters.eq("bountyID", bountyID)).first();
+        Document d = Objects.requireNonNull(Mongo.BountyData.find(Filters.eq("bountyID", bountyID)).first());
 
         Bounty b = new Bounty();
 
         b.setBountyID(bountyID);
         b.setReward(d.getInteger("reward"));
-        b.setObjective(ObjectiveType.cast(d.getString("objective_type")))
+        b.setObjective(Objects.requireNonNull(ObjectiveType.cast(d.getString("objective_type"))))
                 .setProgression(d.getInteger("progression"))
                 .setTarget(d.getInteger("target"));
 
