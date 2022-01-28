@@ -36,7 +36,6 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.*;
 
@@ -257,11 +256,11 @@ public class Duel
     private void swapAction(int p)
     {
         //If current has a primal weather, the weather gets removed
-        if(Stream.of("Desolate Land", "Primordial Sea", "Delta Stream").anyMatch(a -> this.players[p].active.getAbilities().contains(a)))
+        if(this.players[p].active.hasAbility(Ability.DESOLATE_LAND, Ability.PRIMORDIAL_SEA, Ability.DELTA_STREAM))
         {
-            boolean dlFail = this.players[p].active.getAbilities().contains("Desolate Land") && this.weather.get().equals(Weather.EXTREME_HARSH_SUNLIGHT);
-            boolean psFail = this.players[p].active.getAbilities().contains("Primordial Sea") && this.weather.get().equals(Weather.HEAVY_RAIN);
-            boolean dsFail = this.players[p].active.getAbilities().contains("Delta Stream") && this.weather.get().equals(Weather.STRONG_WINDS);
+            boolean dlFail = this.players[p].active.hasAbility(Ability.DESOLATE_LAND) && this.weather.get().equals(Weather.EXTREME_HARSH_SUNLIGHT);
+            boolean psFail = this.players[p].active.hasAbility(Ability.PRIMORDIAL_SEA) && this.weather.get().equals(Weather.HEAVY_RAIN);
+            boolean dsFail = this.players[p].active.hasAbility(Ability.DELTA_STREAM) && this.weather.get().equals(Weather.STRONG_WINDS);
 
             if(!dlFail && !psFail && !dsFail)
             {
@@ -297,7 +296,7 @@ public class Duel
         Pokemon o = this.players[this.other].active;
 
         //Arceus Plate
-        if(this.players[this.current].active.getAbilities().contains("Multitype"))
+        if(this.players[this.current].active.hasAbility(Ability.MULTITYPE))
         {
             Item item = this.players[this.current].active.getItem();
 
@@ -1237,7 +1236,7 @@ public class Duel
         }
 
         //Ability: Stance Change (Aegislash)
-        if(!move.getCategory().equals(Category.STATUS) && this.players[this.current].active.getAbilities().contains("Stance Change"))
+        if(!move.getCategory().equals(Category.STATUS) && this.players[this.current].active.hasAbility(Ability.STANCE_CHANGE))
         {
             if(this.players[this.current].active.getName().equals("Aegislash"))
             {
@@ -1318,7 +1317,7 @@ public class Duel
             this.data(this.other).lastDamageTaken = 0;
         }
         //Ability: Disguise (Mimikyu)
-        else if(this.players[this.other].active.getAbilities().contains("Disguise") && !this.data(this.other).disguiseActivated && !move.getCategory().equals(Category.STATUS))
+        else if(this.players[this.other].active.hasAbility(Ability.DISGUISE) && !this.data(this.other).disguiseActivated && !move.getCategory().equals(Category.STATUS))
         {
             this.data(this.other).disguiseActivated = true;
 
@@ -1413,7 +1412,7 @@ public class Duel
 
             if(rechargeMoves.contains(move.getName())) this.data(this.current).recharge = true;
 
-            if(this.players[this.other].active.getAbilities().contains("Iron Barbs") && !move.getCategory().equals(Category.STATUS) && this.data(this.other).lastDamageTaken > 0)
+            if(this.players[this.other].active.hasAbility(Ability.IRON_BARBS) && !move.getCategory().equals(Category.STATUS) && this.data(this.other).lastDamageTaken > 0)
             {
                 int dmg = this.players[this.current].active.getStat(Stat.HP) / 8;
                 this.players[this.current].active.damage(dmg);
@@ -1784,7 +1783,7 @@ public class Duel
         for(Pokemon p : this.players[player].team)
         {
             this.pokemonAttributes.put(p.getUUID(), new PokemonDuelAttributes(p.getUUID()));
-            this.data(player).isRaised = p.isType(Type.FLYING) || p.getAbilities().contains("Levitate");
+            this.data(player).isRaised = p.isType(Type.FLYING) || p.hasAbility(Ability.LEVITATE);
         }
     }
 
@@ -1818,29 +1817,29 @@ public class Duel
 
     private void checkWeatherAbilities(int p)
     {
-        List<String> abilities = this.players[p].active.getAbilities();
+        Pokemon active = this.players[p].active;
         String name = this.players[p].active.getName();
 
-        List<String> standard = List.of("Drought", "Drizzle", "Sand Stream", "Snow Warning");
-        List<String> primal = List.of("Desolate Land", "Primordial Sea", "Delta Stream");
-        List<String> weatherAbilities = new ArrayList<>(); weatherAbilities.addAll(standard); weatherAbilities.addAll(primal);
+        List<Ability> standard = List.of(Ability.DROUGHT, Ability.DRIZZLE, Ability.SAND_STREAM, Ability.SNOW_WARNING);
+        List<Ability> primal = List.of(Ability.DESOLATE_LAND, Ability.PRIMORDIAL_SEA, Ability.DELTA_STREAM);
+        List<Ability> weatherAbilities = new ArrayList<>(); weatherAbilities.addAll(standard); weatherAbilities.addAll(primal);
 
         //If the user doesn't have any weather abilities, return
-        if(abilities.stream().noneMatch(weatherAbilities::contains)) return;
+        if(active.getAbilities().stream().noneMatch(weatherAbilities::contains)) return;
 
-        String ab = abilities.stream().filter(weatherAbilities::contains).findFirst().orElseThrow();
+        Ability ab = active.getAbilities().stream().filter(weatherAbilities::contains).findFirst().orElseThrow();
         Weather w = switch(ab) {
-            case "Drought" -> Weather.HARSH_SUNLIGHT;
-            case "Drizzle" -> Weather.RAIN;
-            case "Sand Stream" -> Weather.SANDSTORM;
-            case "Snow Warning" -> Weather.HAIL;
-            case "Desolate Land" -> Weather.EXTREME_HARSH_SUNLIGHT;
-            case "Primordial Sea" -> Weather.HEAVY_RAIN;
-            case "Delta Stream" -> Weather.STRONG_WINDS;
+            case DROUGHT -> Weather.HARSH_SUNLIGHT;
+            case DRIZZLE -> Weather.RAIN;
+            case SAND_STREAM -> Weather.SANDSTORM;
+            case SNOW_WARNING -> Weather.HAIL;
+            case DESOLATE_LAND -> Weather.EXTREME_HARSH_SUNLIGHT;
+            case PRIMORDIAL_SEA -> Weather.HEAVY_RAIN;
+            case DELTA_STREAM -> Weather.STRONG_WINDS;
             default -> throw new IllegalStateException("Invalid Weather Ability");
         };
 
-        String activationFailedResult = name + "'s " + ab + " failed to activate!";
+        String activationFailedResult = name + "'s " + ab.getName() + " failed to activate!";
 
         //If the weather effect is already in play, the ability should fail
         if(this.weather.get().equals(w))
@@ -1857,7 +1856,7 @@ public class Duel
         }
 
         //Otherwise, the Weather Ability should activate and change the weather
-        String activatedResult = name + "'s " + ab + " activated!";
+        String activatedResult = name + "'s " + ab.getName() + " activated!";
         String standardActivatedResult = activatedResult + " " + w.getName() + " covers the battlefield for 5 turns!";
         String primalActivatedResult = activatedResult + " " + w.getName() + "'s presence will be felt permanently!";
 
@@ -1874,7 +1873,7 @@ public class Duel
 
             this.weather.setPermanentWeather(w);
         }
-        else LoggerHelper.error(Duel.class, "Weather Ability failed to activate after passing checks! Ability {%s} & Weather {%s}".formatted(ab, w.toString()));
+        else LoggerHelper.error(Duel.class, "Weather Ability failed to activate after passing checks! Ability {%s} & Weather {%s}".formatted(ab.toString(), w.toString()));
 
         this.results.add("\n");
     }

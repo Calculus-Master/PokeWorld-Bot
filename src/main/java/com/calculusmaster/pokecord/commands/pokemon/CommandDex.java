@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.game.enums.elements.Ability;
 import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class CommandDex extends Command
 {
@@ -55,7 +57,7 @@ public class CommandDex extends Command
         this.embed
                 .setDescription(data.species + "\nHeight: " + data.height + "     |     Weight: " + data.weight + "\n" + flavor)
                 .addField("Type", data.types.get(0).equals(data.types.get(1)) ? data.types.get(0).getStyledName() : data.types.get(0).getStyledName() + "\n" + data.types.get(1).getStyledName(), true)
-                .addField("Abilities", this.listToMultiLineString(data.abilities), true)
+                .addField("Abilities", data.abilities.stream().map(Ability::getName).collect(Collectors.joining("\n")), true)
                 .addField("Egg Group", this.listToMultiLineString(data.eggGroups.stream().map(EggGroup::getName).toList()), true)
                 .addField("Growth Rate", Global.normalize(data.growthRate.toString().replaceAll("_", "")), true)
                 .addField("EXP Yield", String.valueOf(data.baseEXP), true)

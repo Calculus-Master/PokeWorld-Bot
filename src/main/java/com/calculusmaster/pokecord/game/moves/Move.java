@@ -1,10 +1,7 @@
 package com.calculusmaster.pokecord.game.moves;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
-import com.calculusmaster.pokecord.game.enums.elements.Category;
-import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
-import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.moves.types.*;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
@@ -286,10 +283,10 @@ public class Move
         if(this.name.equals("Foul Play")) atkStat = opponent.getStat(Stat.ATK);
 
         //Ability: Adaptability
-        if(stab == 1.5 && user.getAbilities().contains("Adaptability")) stab = 2.0;
+        if(stab == 1.5 && user.hasAbility(Ability.ADAPTABILITY)) stab = 2.0;
 
         //Ability: Technician
-        if(user.getAbilities().contains("Technician") && power <= 60) power = (int)(power * 1.5);
+        if(user.hasAbility(Ability.TECHNICIAN) && power <= 60) power = (int)(power * 1.5);
 
         double modifier = critical * random * stab * type * burned;
         double damage = (((2 * level / 5.0 + 2) * power * (double)atkStat / (double)defStat) / 50) + 2;

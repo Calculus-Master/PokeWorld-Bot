@@ -27,6 +27,7 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class Pokemon
 {
@@ -53,7 +54,7 @@ public class Pokemon
 
     //Duel Fields
     private List<Type> type;
-    private List<String> abilities;
+    private List<Ability> abilities;
     private PokemonDuelStatChanges statChanges;
     private PokemonBoosts boosts;
     private int health;
@@ -558,24 +559,34 @@ public class Pokemon
         return DataHelper.GIGANTAMAX_DATA.get(this.getName());
     }
 
-    public List<String> getAbilities()
+    public List<Ability> getAbilities()
     {
         return this.abilities;
     }
 
-    public void addAbility(String ability)
+    public boolean hasAbility(Ability ability)
+    {
+        return this.abilities.contains(ability);
+    }
+
+    public boolean hasAbility(Ability... abilities)
+    {
+        return Stream.of(abilities).anyMatch(this::hasAbility);
+    }
+
+    public void addAbility(Ability ability)
     {
         this.abilities.add(ability);
+    }
+
+    public void setAbilities(List<Ability> abilities)
+    {
+        this.abilities = new ArrayList<>(List.copyOf(abilities));
     }
 
     public void clearAbilities()
     {
         this.abilities.clear();
-    }
-
-    public void setAbilities(List<String> abilities)
-    {
-        this.abilities = new ArrayList<>(List.copyOf(abilities));
     }
 
     //Type

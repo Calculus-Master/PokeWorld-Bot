@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game.pokemon.data;
 
+import com.calculusmaster.pokecord.game.enums.elements.Ability;
 import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
@@ -68,7 +69,7 @@ public final class PokemonData
     public final LinkedHashMap<String, Integer> evolutions;
 
     //Moves CSV
-    public final List<String> abilities;
+    public final List<Ability> abilities;
     public final LinkedHashMap<String, Integer> moves;
     public final EnumSet<TM> validTMs;
     public final EnumSet<TR> validTRs;
@@ -131,7 +132,7 @@ public final class PokemonData
         //Moves: {"name", "abilities", "moves", "levels", "tms", "trs"}
         String[] moves = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_MOVES);
 
-        this.abilities = List.of(moves[1].split("-"));
+        this.abilities = Stream.of(moves[1].split("-")).map(Ability::cast).toList();
         this.moves = new LinkedHashMap<>();
         for(int i = 0; i < moves[2].split("-").length; i++) this.moves.put(moves[2].split("-")[i], Integer.parseInt(moves[3].split("-")[i]));
         this.validTMs = moves[4].isEmpty() ? EnumSet.noneOf(TM.class) : EnumSet.copyOf(Stream.of(moves[4].split("-")).map(Integer::parseInt).map(TM::get).toList());

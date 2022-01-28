@@ -806,7 +806,7 @@ public class NormalMoves
 
     public String Entrainment(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(user.getAbilities().contains("Truant") || user.getAbilities().contains("Multitype") || user.getAbilities().contains("Zen Mode")) return move.getNoEffectResult(opponent);
+        if(user.hasAbility(Ability.TRUANT, Ability.MULTITYPE, Ability.ZEN_MODE)) return move.getNoEffectResult(opponent);
         else
         {
             opponent.setAbilities(user.getAbilities());

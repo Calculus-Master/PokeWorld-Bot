@@ -1,5 +1,7 @@
 package com.calculusmaster.pokecord.game.enums.elements;
 
+import com.calculusmaster.pokecord.util.Global;
+
 import java.util.Arrays;
 
 public enum Ability
@@ -270,6 +272,11 @@ public enum Ability
     CHILLING_NEIGH,
     GRIM_NEIGH,
     AS_ONE;
+
+    public String getName()
+    {
+        return Global.normalize(this.toString().replaceAll("_", " "));
+    }
 
     public static Ability cast(String input)
     {

@@ -1,10 +1,7 @@
 package com.calculusmaster.pokecord.game.moves.types;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
-import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
-import com.calculusmaster.pokecord.game.enums.elements.Type;
-import com.calculusmaster.pokecord.game.enums.elements.Weather;
+import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -145,7 +142,7 @@ public class WaterMoves
 
     public String Soak(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(!opponent.getAbilities().contains("Multitype"))
+        if(!opponent.hasAbility(Ability.MULTITYPE))
         {
             opponent.setType(Type.WATER);
 
