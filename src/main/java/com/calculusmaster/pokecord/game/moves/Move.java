@@ -288,6 +288,9 @@ public class Move
         //Ability: Technician
         if(user.hasAbility(Ability.TECHNICIAN) && power <= 60) power = (int)(power * 1.5);
 
+        //Ability: Wonder Guard
+        if(user.hasAbility(Ability.WONDER_GUARD) && type < 2) type = 0.0;
+
         double modifier = critical * random * stab * type * burned;
         double damage = (((2 * level / 5.0 + 2) * power * (double)atkStat / (double)defStat) / 50) + 2;
         double finalDMG = damage * modifier;
