@@ -294,6 +294,9 @@ public class Move
         //Ability: Battle Armor
         if(opponent.hasAbility(Ability.BATTLE_ARMOR)) critical = 1.0;
 
+        //Ability: Prism Armor
+        if(opponent.hasAbility(Ability.PRISM_ARMOR) && type > 1) power = (int)(power * 0.75);
+
         //Ability: Neuroforce
         if(user.hasAbility(Ability.NEUROFORCE) && type > 1) power = (int)(power * 1.25);
 
