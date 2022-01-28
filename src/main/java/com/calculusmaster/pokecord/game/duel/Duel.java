@@ -258,11 +258,12 @@ public class Duel
         //If current has a primal weather, the weather gets removed
         if(this.players[p].active.hasAbility(Ability.DESOLATE_LAND, Ability.PRIMORDIAL_SEA, Ability.DELTA_STREAM))
         {
-            boolean dlFail = this.players[p].active.hasAbility(Ability.DESOLATE_LAND) && this.weather.get().equals(Weather.EXTREME_HARSH_SUNLIGHT);
-            boolean psFail = this.players[p].active.hasAbility(Ability.PRIMORDIAL_SEA) && this.weather.get().equals(Weather.HEAVY_RAIN);
-            boolean dsFail = this.players[p].active.hasAbility(Ability.DELTA_STREAM) && this.weather.get().equals(Weather.STRONG_WINDS);
+            BiFunction<Ability, Weather, Boolean> check =
+                    (a, w) -> this.players[p].active.hasAbility(a) && this.weather.get().equals(w);
 
-            if(!dlFail && !psFail && !dsFail)
+            if(check.apply(Ability.DESOLATE_LAND, Weather.EXTREME_HARSH_SUNLIGHT) ||
+                    check.apply(Ability.PRIMORDIAL_SEA, Weather.HEAVY_RAIN) ||
+                    check.apply(Ability.DELTA_STREAM, Weather.STRONG_WINDS))
             {
                 this.results.add(this.weather.get().getName() + " disappeared!\n\n");
 
