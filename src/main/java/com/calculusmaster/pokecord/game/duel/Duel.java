@@ -283,6 +283,13 @@ public class Duel
         //Check for Entry Hazard Effects
         this.entryHazardEffects(p);
 
+        //Ability: Dauntless Shield
+        if(this.players[p].active.hasAbility(Ability.DAUNTLESS_SHIELD))
+        {
+            this.players[p].active.changes().change(Stat.DEF, 1);
+            this.results.add(Ability.DAUNTLESS_SHIELD.formatActivation(this.players[p].active.getName(), this.players[p].active.getName() + "'s Defense rose by 1 stage!"));
+        }
+
         if(this.isNonBotPlayer(p)) this.players[p].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
     }
 
@@ -1869,12 +1876,27 @@ public class Duel
 
         this.first = "";
 
+        //First turn effects
         if(turn == 0)
         {
             this.checkWeatherAbilities();
+
+            //Effects that occur on the first turn of the battle
+            this.onBattleStart(0);
+            this.onBattleStart(1);
         }
 
         this.turn++;
+    }
+
+    private void onBattleStart(int p)
+    {
+        //Ability: Dauntless Shield
+        if(this.players[p].active.hasAbility(Ability.DAUNTLESS_SHIELD))
+        {
+            this.players[p].active.changes().change(Stat.DEF, 1);
+            this.results.add(Ability.DAUNTLESS_SHIELD.formatActivation(this.players[p].active.getName(), this.players[p].active.getName() + "'s Defense rose by 1 stage!"));
+        }
     }
 
     private void checkWeatherAbilities()
