@@ -370,6 +370,14 @@ public class Duel
             if(!this.weather.get().equals(Weather.CLEAR)) move.setPower(2.0);
         }
 
+        //Ability: Liquid Voice
+        if(c.hasAbility(Ability.LIQUID_VOICE) && Move.SOUND_BASED_MOVES.contains(move.getName()))
+        {
+            move.setType(Type.WATER);
+
+            turnResult.add(Ability.LIQUID_VOICE.formatActivation(c.getName(), move.getName() + " is now a Water Type!"));
+        }
+
         //Weather-based Move Changes
 
         switch(this.weather.get())
@@ -991,9 +999,7 @@ public class Duel
         {
             this.data(this.current).unableToUseSoundMovesTurns--;
 
-            List<String> soundMoves = List.of("Boomburst", "Bug Buzz", "Chatter", "Clanging Scales", "Clangorous Soul", "Clangorous Soulblaze", "Confide", "Disarming Voice", "Echoed Voice", "Eerie Spell", "Grass Whistle", "Growl", "Heal Bell", "Howl", "Hyper Voice", "Metal Sound", "Noble Roar", "Overdrive", "Parting Shot", "Perish Song", "Relic Song", "Roar", "Round", "Screech", "Shadow Panic", "Sing", "Snarl", "Snore", "Sparkling Aria", "Supersonic", "Uproar");
-
-            if(soundMoves.contains(move.getName())) cantUse = true;
+            if(Move.SOUND_BASED_MOVES.contains(move.getName())) cantUse = true;
 
             if(this.data(this.current).unableToUseSoundMovesTurns <= 0)
             {

@@ -19,6 +19,9 @@ public class Move
     public static final List<String> CUSTOM_MOVES = List.of("Leech Seed", "Rapid Spin", "Mirror Shot", "Worry Seed", "Aromatic Mist", "Pay Day", "Pollen Puff");
     public static List<String> INCOMPLETE_MOVES = new ArrayList<>();
 
+    //Other Data Storage
+    public static final List<String> SOUND_BASED_MOVES = List.of("Boomburst", "Bug Buzz", "Chatter", "Clanging Scales", "Clangorous Soul", "Clangorous Soulblaze", "Confide", "Disarming Voice", "Echoed Voice", "Eerie Spell", "Grass Whistle", "Growl", "Heal Bell", "Howl", "Hyper Voice", "Metal Sound", "Noble Roar", "Overdrive", "Parting Shot", "Perish Song", "Relic Song", "Roar", "Round", "Screech", "Shadow Panic", "Sing", "Snarl", "Snore", "Sparkling Aria", "Supersonic", "Uproar");
+
     private String name;
     private MoveData data;
     private Type type;
