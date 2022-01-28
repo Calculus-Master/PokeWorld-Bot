@@ -41,6 +41,9 @@ public class StatusConditionEffect extends MoveEffect
             if(p.hasAbility(Ability.LIMBER) && this.status.equals(StatusCondition.PARALYZED))
                 return Ability.LIMBER.formatActivation(p.getName(), p.getName() + " was not paralyzed!");
 
+            if(p.hasAbility(Ability.PASTEL_VEIL) && this.status.equals(StatusCondition.POISONED))
+                return Ability.PASTEL_VEIL.formatActivation(p.getName(), p.getName() + " was not poisoned!");
+
             p.addStatusCondition(this.status);
 
             if(this.status.equals(StatusCondition.BOUND)) this.duel.data(p.getUUID()).boundTurns = 5;

@@ -484,10 +484,21 @@ public class Duel
 
             if(c.hasStatusCondition(StatusCondition.POISONED))
             {
-                statusDamage = c.getMaxHealth(1 / 8.);
-                c.damage(statusDamage);
+                if(c.hasAbility(Ability.PASTEL_VEIL))
+                {
+                    c.removeStatusCondition(StatusCondition.POISONED);
 
-                statusResults.add("%s is poisoned! The poison dealt %s damage!".formatted(c.getName(), statusDamage));
+                    this.players[this.current].team.forEach(p -> p.removeStatusCondition(StatusCondition.POISONED));
+
+                    statusResults.add(Ability.PASTEL_VEIL.formatActivation(c.getName(), "%s and its team's poison was cured!".formatted(c.getName())));
+                }
+                else
+                {
+                    statusDamage = c.getMaxHealth(1 / 8.);
+                    c.damage(statusDamage);
+
+                    statusResults.add("%s is poisoned! The poison dealt %s damage!".formatted(c.getName(), statusDamage));
+                }
             }
 
             if(c.hasStatusCondition(StatusCondition.BADLY_POISONED))
