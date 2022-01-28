@@ -35,7 +35,6 @@ public class ConfigHelper
             CommandShop.ZCRYSTAL_COUNT_MAX = config.getList("zcrystal_counts", Integer.class).get(1);
             Commands.COMMAND_THREAD_POOL = config.getBoolean("command_thread_pool");
             Bounty.MAX_BOUNTIES_HELD = config.getInteger("bounty_max_held");
-            Bounty.POKEPASS_EXP_YIELD = config.getInteger("bounty_reward_exp");
             Bounty.BOUNTY_REWARD_MIN = config.getList("bounty_rewards", Integer.class).get(0);
             Bounty.BOUNTY_REWARD_MAX = config.getList("bounty_rewards", Integer.class).get(1);
             SpawnEventHelper.SPAWN_INTERVAL = config.getInteger("spawn_event_interval");
@@ -62,7 +61,6 @@ public class ConfigHelper
             CommandShop.ZCRYSTAL_COUNT_MIN = 5;
             Commands.COMMAND_THREAD_POOL = false;
             Bounty.MAX_BOUNTIES_HELD = 3;
-            Bounty.POKEPASS_EXP_YIELD = 200;
             Bounty.BOUNTY_REWARD_MIN = 50;
             Bounty.BOUNTY_REWARD_MAX = 250;
             SpawnEventHelper.SPAWN_INTERVAL = 450;

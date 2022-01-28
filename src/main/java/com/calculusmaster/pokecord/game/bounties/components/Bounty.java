@@ -14,7 +14,6 @@ import java.util.Random;
 public class Bounty
 {
     public static int MAX_BOUNTIES_HELD;
-    public static int POKEPASS_EXP_YIELD;
     public static int BOUNTY_REWARD_MAX;
     public static int BOUNTY_REWARD_MIN;
 
