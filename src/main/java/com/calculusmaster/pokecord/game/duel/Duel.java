@@ -1123,6 +1123,14 @@ public class Duel
             turnResult.add(Ability.STEELY_SPIRIT.formatActivation(c.getName(), move.getName() + "'s power was boosted by 50%!"));
         }
 
+        //Ability: Strong Jaw
+        if(c.hasAbility(Ability.STRONG_JAW) && Move.BITING_MOVES.contains(move.getName()))
+        {
+            move.setPower(1.5);
+
+            turnResult.add(Ability.STRONG_JAW.formatActivation(c.getName(), move.getName() + "'s power was boosted by 50%!"));
+        }
+
         //Item-based Buffs
 
         boolean itemsOff = this.room.isActive(Room.MAGIC_ROOM);
