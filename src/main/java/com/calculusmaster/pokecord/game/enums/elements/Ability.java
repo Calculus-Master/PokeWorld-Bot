@@ -288,6 +288,6 @@ public enum Ability
 
     public String formatActivation(String userName, String result)
     {
-        return "*" + userName + "'s " + this.getName() + "* – " + result;
+        return "*" + userName + "'s " + this.getName() + "* – " + result + "\n";
     }
 }
