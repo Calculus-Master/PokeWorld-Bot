@@ -1109,6 +1109,14 @@ public class Duel
             turnResult.add(Ability.TRANSISTOR.formatActivation(c.getName(), move.getName() + "'s power was boosted by 50%!"));
         }
 
+        //Ability: Steely Spirit
+        if(c.hasAbility(Ability.STEELY_SPIRIT) && move.is(Type.STEEL))
+        {
+            move.setDamageMultiplier(1.5);
+
+            turnResult.add(Ability.STEELY_SPIRIT.formatActivation(c.getName(), move.getName() + "'s power was boosted by 50%!"));
+        }
+
         //Item-based Buffs
 
         boolean itemsOff = this.room.isActive(Room.MAGIC_ROOM);
