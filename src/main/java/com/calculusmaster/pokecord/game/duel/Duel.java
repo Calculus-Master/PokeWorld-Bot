@@ -473,6 +473,27 @@ public class Duel
                 }
             }
 
+            //Abilities that Cure Status Conditions
+            if(c.hasAbility(Ability.PASTEL_VEIL))
+            {
+                c.removeStatusCondition(StatusCondition.POISONED);
+                c.removeStatusCondition(StatusCondition.BADLY_POISONED);
+
+                this.players[this.current].team.forEach(p -> {
+                    p.removeStatusCondition(StatusCondition.POISONED);
+                    p.removeStatusCondition(StatusCondition.BADLY_POISONED);
+                });
+
+                statusResults.add(Ability.PASTEL_VEIL.formatActivation(c.getName(), "%s and its team's poison was cured!".formatted(c.getName())));
+            }
+
+            if(c.hasAbility(Ability.LIMBER))
+            {
+                c.removeStatusCondition(StatusCondition.PARALYZED);
+
+                statusResults.add(Ability.LIMBER.formatActivation(c.getName(), "%s's paralysis was cured!".formatted(c.getName())));
+            }
+
             //Damage Status Conditions
             if(c.hasStatusCondition(StatusCondition.BURNED))
             {
@@ -484,21 +505,10 @@ public class Duel
 
             if(c.hasStatusCondition(StatusCondition.POISONED))
             {
-                if(c.hasAbility(Ability.PASTEL_VEIL))
-                {
-                    c.removeStatusCondition(StatusCondition.POISONED);
+                statusDamage = c.getMaxHealth(1 / 8.);
+                c.damage(statusDamage);
 
-                    this.players[this.current].team.forEach(p -> p.removeStatusCondition(StatusCondition.POISONED));
-
-                    statusResults.add(Ability.PASTEL_VEIL.formatActivation(c.getName(), "%s and its team's poison was cured!".formatted(c.getName())));
-                }
-                else
-                {
-                    statusDamage = c.getMaxHealth(1 / 8.);
-                    c.damage(statusDamage);
-
-                    statusResults.add("%s is poisoned! The poison dealt %s damage!".formatted(c.getName(), statusDamage));
-                }
+                statusResults.add("%s is poisoned! The poison dealt %s damage!".formatted(c.getName(), statusDamage));
             }
 
             if(c.hasStatusCondition(StatusCondition.BADLY_POISONED))
@@ -617,13 +627,7 @@ public class Duel
 
             if(c.hasStatusCondition(StatusCondition.PARALYZED))
             {
-                if(c.hasAbility(Ability.LIMBER))
-                {
-                    c.removeStatusCondition(StatusCondition.PARALYZED);
-
-                    statusResults.add(Ability.LIMBER.formatActivation(c.getName(), "%s's paralysis was cured!".formatted(c.getName())));
-                }
-                else if(r.nextInt(100) < 25)
+                if(r.nextInt(100) < 25)
                 {
                     statusResults.add("%s is paralyzed!".formatted(c.getName()));
 
