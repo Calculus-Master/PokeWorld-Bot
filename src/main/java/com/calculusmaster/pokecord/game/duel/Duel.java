@@ -198,10 +198,17 @@ public class Duel
         int speed1 = this.players[0].active.getStat(Stat.SPD);
         int speed2 = this.players[1].active.getStat(Stat.SPD);
 
+        //Grassy Terrain & Grassy Glide Effects
         if(this.terrain.get().equals(Terrain.GRASSY_TERRAIN) && this.players[0].move.getName().equals("Grassy Glide"))
             this.players[0].move.setPriority(1);
         if(this.terrain.get().equals(Terrain.GRASSY_TERRAIN) && this.players[1].move.getName().equals("Grassy Glide"))
             this.players[1].move.setPriority(1);
+
+        //Ability: Gale Wings
+        if(this.players[0].active.hasAbility(Ability.GALE_WINGS) && this.players[0].move.is(Type.FLYING))
+            this.players[0].move.setPriority(this.players[0].move.getPriority() + 1);
+        if(this.players[1].active.hasAbility(Ability.GALE_WINGS) && this.players[1].move.is(Type.FLYING))
+            this.players[1].move.setPriority(this.players[1].move.getPriority() + 1);
 
         if(this.players[0].move.getPriority() == this.players[1].move.getPriority())
         {
