@@ -424,6 +424,7 @@ public class Duel
             BiFunction<List<String>, List<String>, String> compileResults = (turn, status) -> {
                 this.results.add(String.join(" ", turn));
                 this.results.add(String.join(" ", status));
+                this.results.add("\n\n");
                 return "";
             };
 
@@ -658,6 +659,9 @@ public class Duel
 
                 return compileResults.apply(turnResult, statusResults);
             }
+
+            //Add a space between Status Results and the rest of the turn
+            if(!statusResults.isEmpty()) statusResults.add("\n\n");
 
             this.results.add(String.join(" ", statusResults));
         }
@@ -2116,8 +2120,12 @@ public class Duel
         for(String uuid : this.expGains.keySet())
         {
             p = Pokemon.build(uuid);
-            p.addExp(this.expGains.get(uuid));
-            p.updateExperience();
+
+            if(p != null)
+            {
+                p.addExp(this.expGains.get(uuid));
+                p.updateExperience();
+            }
         }
     }
 
