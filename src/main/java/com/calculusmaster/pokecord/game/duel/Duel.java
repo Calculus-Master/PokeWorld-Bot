@@ -1609,6 +1609,20 @@ public class Duel
                 this.event.getChannel().sendMessage(this.players[this.current].data.getMention() + ": " + this.players[this.current].active.getName() + " earned a Dynamax Level!").queue();
             }
 
+            if(this.players[this.current].active.hasAbility(Ability.GRIM_NEIGH))
+            {
+                this.players[this.current].active.changes().change(Stat.SPATK, 1);
+
+                this.results.add(Ability.GRIM_NEIGH.formatActivation(c.getName(), c.getName() + "'s Special Attack rose by 1 stage!"));
+            }
+
+            if(this.players[this.current].active.hasAbility(Ability.CHILLING_NEIGH))
+            {
+                this.players[this.current].active.changes().change(Stat.ATK, 1);
+
+                this.results.add(Ability.CHILLING_NEIGH.formatActivation(c.getName(), c.getName() + "'s Attack rose by 1 stage!"));
+            }
+
             if(this.data(this.other).destinyBondUsed)
             {
                 this.data(this.other).destinyBondUsed = false;

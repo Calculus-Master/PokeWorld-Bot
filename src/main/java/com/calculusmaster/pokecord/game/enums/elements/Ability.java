@@ -274,7 +274,7 @@ public enum Ability
     GRIM_NEIGH,
     AS_ONE;
 
-    public static final List<Ability> IMPLEMENTED = List.of(DESOLATE_LAND, PRIMORDIAL_SEA, DELTA_STREAM, MULTITYPE, ADAPTABILITY, TECHNICIAN, DISGUISE, DRIZZLE, SNOW_WARNING, DROUGHT, SAND_STREAM, STANCE_CHANGE, IRON_BARBS, LEVITATE);
+    public static final List<Ability> IMPLEMENTED = List.of(DESOLATE_LAND, PRIMORDIAL_SEA, DELTA_STREAM, MULTITYPE, ADAPTABILITY, TECHNICIAN, DISGUISE, DRIZZLE, SNOW_WARNING, DROUGHT, SAND_STREAM, STANCE_CHANGE, IRON_BARBS, LEVITATE, GRIM_NEIGH, CHILLING_NEIGH);
 
     public String getName()
     {
@@ -284,5 +284,10 @@ public enum Ability
     public static Ability cast(String input)
     {
         return Arrays.stream(values()).filter(a -> a.toString().replaceAll("_", " ").equalsIgnoreCase(input.replaceAll("'", ""))).findFirst().orElse(null);
+    }
+
+    public String formatActivation(String userName, String result)
+    {
+        return "*" + userName + "'s " + this.getName() + "* – " + result;
     }
 }
