@@ -1544,6 +1544,13 @@ public class Duel
             this.data(this.current).furyCutterTurns = 0;
         }
 
+        if(c.hasAbility(Ability.SPEED_BOOST))
+        {
+            this.players[this.current].active.changes().change(Stat.SPD, 1);
+
+            turnResult.add(Ability.SPEED_BOOST.formatActivation(c.getName(), c.getName() + "'s Speed rose by 1 stage!"));
+        }
+
         //Field Effects
 
         if(this.fieldEffects[this.current].has(FieldEffect.TAILWIND))
