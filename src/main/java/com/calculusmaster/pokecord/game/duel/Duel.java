@@ -1138,6 +1138,14 @@ public class Duel
             turnResult.add(Ability.STRONG_JAW.formatActivation(c.getName(), move.getName() + "'s power was boosted by 50%!"));
         }
 
+        //Ability: Sand Force
+        if(c.hasAbility(Ability.SAND_FORCE) && this.weather.get().equals(Weather.SANDSTORM) && move.is(Type.ROCK, Type.GROUND, Type.STEEL))
+        {
+            move.setPower(1.3);
+
+            turnResult.add(Ability.SAND_FORCE.formatActivation(c.getName(), move.getName() + "'s power was boosted by 30% from the Sandstorm!"));
+        }
+
         //Item-based Buffs
 
         boolean itemsOff = this.room.isActive(Room.MAGIC_ROOM);
@@ -1789,47 +1797,44 @@ public class Duel
 
     public void weatherEffects()
     {
-        StringBuilder weatherResult = new StringBuilder().append("\n").append(this.weather.get().getStatus()).append("\n");
+        StringJoiner weatherResult = new StringJoiner("\n");
+        weatherResult.add("\n" + this.weather.get().getStatus());
+
+        this.checkWeatherEffects(weatherResult, 0);
+        this.checkWeatherEffects(weatherResult, 1);
+
+        this.results.add(weatherResult.toString());
+    }
+
+    private void checkWeatherEffects(StringJoiner weatherResult, int p)
+    {
+        boolean immuneMoveUsed = this.data(p).digUsed || this.data(p).diveUsed || this.data(p).phantomForceUsed || this.data(p).shadowForceUsed;
+        Pokemon active = this.players[p].active;
 
         switch(this.weather.get())
         {
             case HAIL -> {
-                if(this.isAffectedByHail(0)) this.doHailEffect(weatherResult, 0);
+                if(active.isType(Type.ICE) || immuneMoveUsed) weatherResult.add(active.getName() + " was unaffected by the hailstorm!");
+                else
+                {
+                    int damage = active.getMaxHealth(1 / 16.);
+                    active.damage(damage);
 
-                if(this.isAffectedByHail(1)) this.doHailEffect(weatherResult, 1);
+                    weatherResult.add(active.getName() + " took " + damage + " damage from the hailstorm!");
+                }
             }
             case SANDSTORM -> {
-                if(this.isAffectedBySandstorm(0)) this.doSandstormEffect(weatherResult, 0);
+                if(active.hasAbility(Ability.SAND_FORCE)) weatherResult.add(Ability.SAND_FORCE.formatActivation(active.getName(), active.getName() + " is immune to the sandstorm's effects!"));
+                else if(active.isType(Type.ROCK) || active.isType(Type.GROUND) || active.isType(Type.STEEL) || immuneMoveUsed) weatherResult.add(active.getName() + " was unaffected by the sandstorm!");
+                else
+                {
+                    int damage = active.getMaxHealth(1 / 16.);
+                    active.damage(damage);
 
-                if(this.isAffectedBySandstorm(1)) this.doSandstormEffect(weatherResult, 1);
+                    weatherResult.add(active.getName() + " took " + damage + " damage from the sandstorm!");
+                }
             }
         }
-
-        this.results.add("\n" + weatherResult);
-    }
-
-    private void doHailEffect(StringBuilder weatherResult, int p)
-    {
-        int amount = this.players[p].active.getMaxHealth() / 16;
-        this.players[p].active.damage(amount);
-        weatherResult.append(this.players[p].active.getName()).append(" took %s damage from the hailstorm!\n".formatted(amount));
-    }
-
-    private void doSandstormEffect(StringBuilder weatherResult, int p)
-    {
-        int amount = this.players[p].active.getMaxHealth() / 16;
-        this.players[p].active.damage(amount);
-        weatherResult.append(this.players[p].active.getName()).append(" took %s damage from the sandstorm!\n".formatted(amount));
-    }
-
-    private boolean isAffectedByHail(int p)
-    {
-        return !this.players[p].active.isType(Type.ICE) && !this.data(p).digUsed && !this.data(p).diveUsed && !this.data(p).phantomForceUsed && !this.data(p).shadowForceUsed;
-    }
-
-    private boolean isAffectedBySandstorm(int p)
-    {
-        return !this.players[p].active.isType(Type.GROUND) && !this.players[p].active.isType(Type.ROCK) && !this.players[p].active.isType(Type.STEEL) && !this.data(p).digUsed && !this.data(p).diveUsed && !this.data(p).phantomForceUsed && !this.data(p).shadowForceUsed;
     }
 
     public void entryHazardEffects(int player)
