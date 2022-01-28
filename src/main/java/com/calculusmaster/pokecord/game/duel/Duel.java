@@ -1870,9 +1870,8 @@ public class Duel
         }
 
         //Otherwise, the Weather Ability should activate and change the weather
-        String activatedResult = name + "'s " + ab.getName() + " activated!";
-        String standardActivatedResult = activatedResult + " " + w.getName() + " covers the battlefield for 5 turns!";
-        String primalActivatedResult = activatedResult + " " + w.getName() + "'s presence will be felt permanently!";
+        String standardActivatedResult = ab.formatActivation(name, w.getName() + " covers the battlefield for 5 turns!");
+        String primalActivatedResult = ab.formatActivation(name, w.getName() + "'s presence will be felt permanently!");
 
         //Final Weather Change Effect
         if(standard.contains(ab))
