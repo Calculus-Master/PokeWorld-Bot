@@ -7,13 +7,13 @@ import java.util.EnumSet;
 public enum Weather
 {
     CLEAR("The weather is clear!"),
-    HARSH_SUNLIGHT("Harsh sunlight roasts the battlefield!"),
-    RAIN("There is a heavy rainstorm!"),
-    SANDSTORM("There is an intense sandstorm!"),
-    HAIL("There is a freezing hailstorm!"),
-    EXTREME_HARSH_SUNLIGHT("Extreme harsh sunlight envelops the field!"),
-    HEAVY_RAIN("There is an extreme rainstorm!"),
-    STRONG_WINDS("Strong winds appeared!");
+    HARSH_SUNLIGHT("The sunlight is harsh!"),
+    RAIN("It started to rain!!"),
+    SANDSTORM("A sandstorm is raging!"),
+    HAIL("It started to hail!"),
+    EXTREME_HARSH_SUNLIGHT("The sunlight is extremely harsh!"),
+    HEAVY_RAIN("Heavy rain began to fall!"),
+    STRONG_WINDS("Mysterious strong winds blow through the field!");
 
     private String status;
     Weather(String status)
