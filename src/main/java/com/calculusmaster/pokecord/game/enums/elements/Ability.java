@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.enums.elements;
 import com.calculusmaster.pokecord.util.Global;
 
 import java.util.Arrays;
+import java.util.List;
 
 public enum Ability
 {
@@ -272,6 +273,8 @@ public enum Ability
     CHILLING_NEIGH,
     GRIM_NEIGH,
     AS_ONE;
+
+    public static final List<Ability> IMPLEMENTED = List.of(DESOLATE_LAND, PRIMORDIAL_SEA, DELTA_STREAM, MULTITYPE, ADAPTABILITY, TECHNICIAN, DISGUISE, DRIZZLE, SNOW_WARNING, DROUGHT, SAND_STREAM, STANCE_CHANGE, IRON_BARBS, LEVITATE);
 
     public String getName()
     {

@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.misc;
 import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
+import com.calculusmaster.pokecord.game.enums.elements.Ability;
 import com.calculusmaster.pokecord.game.enums.elements.Location;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.Move;
@@ -167,6 +168,11 @@ public class CommandDev extends Command
 
         writer.write("Work In Progress Moves: \n\n" + String.join("\n", Move.WIP_MOVES));
         writer.write("\n\nAmount: " + Move.WIP_MOVES.size());
+
+        writer.write("\n\nUnimplemented Abilities:\n\n");
+
+        writer.write(Arrays.stream(Ability.values()).filter(a -> !Ability.IMPLEMENTED.contains(a)).map(Ability::getName).collect(Collectors.joining("\n")));
+        writer.write("\n\nAmount: " + (Ability.values().length - Ability.IMPLEMENTED.size()));
 
         writer.close();
 
