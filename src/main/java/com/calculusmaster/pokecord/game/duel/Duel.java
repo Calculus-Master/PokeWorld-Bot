@@ -1339,6 +1339,11 @@ public class Duel
 
             turnResult.add("Mimikyu's Disguise was activated and absorbed the attack!");
         }
+        //Ability: Damp
+        if((c.hasAbility(Ability.DAMP) || o.hasAbility(Ability.DAMP)) && move.is("Explosion", "Self Destruct", "Mind Blown", "Misty Explosion"))
+        {
+            turnResult.add(Ability.DAMP.formatActivation((c.hasAbility(Ability.DAMP) ? c : o).getName(), move.getName() + " failed!"));
+        }
         //Do main move logic
         else
         {
