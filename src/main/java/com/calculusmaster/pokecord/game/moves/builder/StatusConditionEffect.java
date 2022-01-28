@@ -33,11 +33,14 @@ public class StatusConditionEffect extends MoveEffect
                 return p.getName() + " was protected by its Safeguard Barrier!";
             }
 
-            System.out.println(this.status);
-            if(this.status.equals(StatusCondition.INFATUATED) &&
-                    ((this.user.getGender().equals(Gender.UNKNOWN)) || this.opponent.getGender().equals(Gender.UNKNOWN)) ||
-                    this.user.getGender().equals(this.opponent.getGender()))
-                return p.getName() + " was not infatuated!";
+            if(this.status.equals(StatusCondition.INFATUATED))
+            {
+                boolean userUnknown = this.user.getGender().equals(Gender.UNKNOWN);
+                boolean opponentUnknown = this.opponent.getGender().equals(Gender.UNKNOWN);
+                boolean equalGender = this.user.getGender().equals(this.opponent.getGender());
+
+                if(userUnknown || opponentUnknown || equalGender) return p.getName() + " was not infatuated!";
+            }
 
             if(p.hasAbility(Ability.LIMBER) && this.status.equals(StatusCondition.PARALYZED))
                 return Ability.LIMBER.formatActivation(p.getName(), p.getName() + " was not paralyzed!");
