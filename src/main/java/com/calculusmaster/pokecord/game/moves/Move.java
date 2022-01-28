@@ -291,6 +291,9 @@ public class Move
         //Ability: Wonder Guard
         if(user.hasAbility(Ability.WONDER_GUARD) && type < 2) type = 0.0;
 
+        //Ability: Battle Armor
+        if(opponent.hasAbility(Ability.BATTLE_ARMOR)) critical = 1.0;
+
         double modifier = critical * random * stab * type * burned;
         double damage = (((2 * level / 5.0 + 2) * power * (double)atkStat / (double)defStat) / 50) + 2;
         double finalDMG = damage * modifier;
