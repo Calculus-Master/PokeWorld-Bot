@@ -451,9 +451,10 @@ public class Duel
                     turnResult.add(c.getName() + " consumed its Lum Berry and was cured of all non-volatile Status Conditions!");
                 }
 
-                if(c.hasItem(Item.PECHA_BERRY) && c.hasStatusCondition(StatusCondition.POISONED))
+                if(c.hasItem(Item.PECHA_BERRY) && (c.hasStatusCondition(StatusCondition.POISONED) || c.hasStatusCondition(StatusCondition.BADLY_POISONED)))
                 {
                     removeStatusAndConsume.accept(StatusCondition.POISONED);
+                    c.removeStatusCondition(StatusCondition.BADLY_POISONED);
 
                     turnResult.add(c.getName() + " consumed its Pecha Berry and was cured of its poison!");
                 }
