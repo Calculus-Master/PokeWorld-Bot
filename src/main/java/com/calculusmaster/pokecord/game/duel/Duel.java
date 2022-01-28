@@ -295,7 +295,7 @@ public class Duel
         Pokemon c = this.players[this.current].active;
         Pokemon o = this.players[this.other].active;
 
-        //Arceus Plate
+        //Ability: Multitype
         if(this.players[this.current].active.hasAbility(Ability.MULTITYPE))
         {
             Item item = this.players[this.current].active.getItem();
@@ -1045,6 +1045,22 @@ public class Duel
             }
         }
 
+        //Ability: Dragon's Maw
+        if(c.hasAbility(Ability.DRAGONS_MAW) && move.is(Type.DRAGON))
+        {
+            move.setDamageMultiplier(1.5);
+
+            turnResult.add(Ability.DRAGONS_MAW.formatActivation(c.getName(), move.getName() + "'s power was boosted by 50%!"));
+        }
+
+        //Ability: Transistor
+        if(c.hasAbility(Ability.TRANSISTOR) && move.is(Type.ELECTRIC))
+        {
+            move.setDamageMultiplier(1.5);
+
+            turnResult.add(Ability.TRANSISTOR.formatActivation(c.getName(), move.getName() + "'s power was boosted by 50%!"));
+        }
+
         //Item-based Buffs
 
         boolean itemsOff = this.room.isActive(Room.MAGIC_ROOM);
@@ -1613,14 +1629,14 @@ public class Duel
             {
                 this.players[this.current].active.changes().change(Stat.SPATK, 1);
 
-                this.results.add(Ability.GRIM_NEIGH.formatActivation(c.getName(), c.getName() + "'s Special Attack rose by 1 stage!"));
+                turnResult.add(Ability.GRIM_NEIGH.formatActivation(c.getName(), c.getName() + "'s Special Attack rose by 1 stage!"));
             }
 
             if(this.players[this.current].active.hasAbility(Ability.CHILLING_NEIGH))
             {
                 this.players[this.current].active.changes().change(Stat.ATK, 1);
 
-                this.results.add(Ability.CHILLING_NEIGH.formatActivation(c.getName(), c.getName() + "'s Attack rose by 1 stage!"));
+                turnResult.add(Ability.CHILLING_NEIGH.formatActivation(c.getName(), c.getName() + "'s Attack rose by 1 stage!"));
             }
 
             if(this.data(this.other).destinyBondUsed)
