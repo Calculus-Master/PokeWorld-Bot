@@ -19,7 +19,7 @@ public class CommandEliteDuel extends Command
     {
         if(this.insufficientMasteryLevel(Feature.PVE_DUELS_ELITE)) return this.invalidMasteryLevel(Feature.PVE_DUELS_ELITE);
 
-        if(this.msg.length == 2)
+        if(this.msg.length == 1)
         {
             if(DuelHelper.isInDuel(this.player.getId()))
             {
@@ -36,7 +36,7 @@ public class CommandEliteDuel extends Command
             this.embed = null;
             d.sendTurnEmbed();
         }
-        else
+        else if(this.msg[1].equals("info"))
         {
             this.embed
                     .setTitle("Elite Duel Information")
