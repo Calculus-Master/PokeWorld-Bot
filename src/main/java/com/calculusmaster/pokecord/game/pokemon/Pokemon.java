@@ -427,7 +427,9 @@ public class Pokemon
             double modifier = this.statChanges.getModifier(s);
             double rawBoost = this.boosts.getStatBoost();
 
-            return (int)(stat * modifier * commonBoosts * rawBoost);
+            double paralysisModifier = s.equals(Stat.SPD) && this.hasStatusCondition(StatusCondition.PARALYZED) ? 0.5 : 1.0;
+
+            return (int)(stat * modifier * commonBoosts * rawBoost * paralysisModifier);
         }
     }
 
