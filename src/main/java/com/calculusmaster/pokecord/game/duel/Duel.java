@@ -298,6 +298,13 @@ public class Duel
             this.results.add(Ability.DAUNTLESS_SHIELD.formatActivation(this.players[p].active.getName(), this.players[p].active.getName() + "'s Defense rose by 1 stage!"));
         }
 
+        //Ability: Intrepid Sword
+        if(this.players[p].active.hasAbility(Ability.INTREPID_SWORD))
+        {
+            this.players[p].active.changes().change(Stat.ATK, 1);
+            this.results.add(Ability.INTREPID_SWORD.formatActivation(this.players[p].active.getName(), this.players[p].active.getName() + "'s Attack rose by 1 stage!"));
+        }
+
         if(this.isNonBotPlayer(p)) this.players[p].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
     }
 
@@ -1930,6 +1937,13 @@ public class Duel
         {
             this.players[p].active.changes().change(Stat.DEF, 1);
             this.results.add(Ability.DAUNTLESS_SHIELD.formatActivation(this.players[p].active.getName(), this.players[p].active.getName() + "'s Defense rose by 1 stage!"));
+        }
+
+        //Ability: Intrepid Sword
+        if(this.players[p].active.hasAbility(Ability.INTREPID_SWORD))
+        {
+            this.players[p].active.changes().change(Stat.ATK, 1);
+            this.results.add(Ability.INTREPID_SWORD.formatActivation(this.players[p].active.getName(), this.players[p].active.getName() + "'s Attack rose by 1 stage!"));
         }
     }
 
