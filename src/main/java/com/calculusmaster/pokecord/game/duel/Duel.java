@@ -606,7 +606,13 @@ public class Duel
 
             if(c.hasStatusCondition(StatusCondition.PARALYZED))
             {
-                if(r.nextInt(100) < 25)
+                if(c.hasAbility(Ability.LIMBER))
+                {
+                    c.removeStatusCondition(StatusCondition.PARALYZED);
+
+                    statusResults.add(Ability.LIMBER.formatActivation(c.getName(), "%s's paralysis was cured!".formatted(c.getName())));
+                }
+                else if(r.nextInt(100) < 25)
                 {
                     statusResults.add("%s is paralyzed!".formatted(c.getName()));
 

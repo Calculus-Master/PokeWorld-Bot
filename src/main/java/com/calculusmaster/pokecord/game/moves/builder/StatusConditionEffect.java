@@ -1,9 +1,6 @@
 package com.calculusmaster.pokecord.game.moves.builder;
 
-import com.calculusmaster.pokecord.game.enums.elements.FieldBarrier;
-import com.calculusmaster.pokecord.game.enums.elements.Gender;
-import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
+import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
@@ -40,6 +37,9 @@ public class StatusConditionEffect extends MoveEffect
                     ((this.user.getGender().equals(Gender.UNKNOWN)) || this.opponent.getGender().equals(Gender.UNKNOWN)) ||
                     this.user.getGender().equals(this.opponent.getGender()))
                 return p.getName() + " was not infatuated!";
+
+            if(p.hasAbility(Ability.LIMBER) && this.status.equals(StatusCondition.PARALYZED))
+                return Ability.LIMBER.formatActivation(p.getName(), p.getName() + " was not paralyzed!");
 
             p.addStatusCondition(this.status);
 

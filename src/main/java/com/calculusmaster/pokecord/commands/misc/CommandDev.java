@@ -26,6 +26,7 @@ import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.commons.collections4.ListUtils;
+import org.jooq.lambda.Seq;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -171,7 +172,7 @@ public class CommandDev extends Command
 
         writer.write("\n\nUnimplemented Abilities:\n\n");
 
-        writer.write(Arrays.stream(Ability.values()).filter(a -> !Ability.IMPLEMENTED.contains(a)).map(Ability::getName).collect(Collectors.joining("\n")));
+        writer.write(Seq.seq(Arrays.stream(Ability.values()).filter(a -> !Ability.IMPLEMENTED.contains(a)).map(Ability::getName)).shuffle().collect(Collectors.joining("\n")));
         writer.write("\n\nAmount: " + (Ability.values().length - Ability.IMPLEMENTED.size()));
 
         writer.close();
