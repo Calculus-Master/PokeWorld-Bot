@@ -1160,6 +1160,14 @@ public class Duel
             turnResult.add(Ability.SAND_FORCE.formatActivation(c.getName(), move.getName() + "'s power was boosted by 30% from the Sandstorm!"));
         }
 
+        //Ability: Torrent
+        if(c.hasAbility(Ability.TORRENT) && move.is(Type.WATER) && c.getHealth() < c.getMaxHealth(1 / 3.))
+        {
+            move.setPower(1.5);
+
+            turnResult.add(Ability.TORRENT.formatActivation(c.getName(), move.getName() + "'s power was boosted by 50%!"));
+        }
+
         //Item-based Buffs
 
         boolean itemsOff = this.room.isActive(Room.MAGIC_ROOM);
