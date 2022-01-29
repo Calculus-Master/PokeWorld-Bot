@@ -1178,12 +1178,27 @@ public class Duel
             turnResult.add(this.players[this.current].active.getName() + " consumed their " + berryName +  " Berry!");
         };
 
+        double aguavSitrusHeal = 1 / 2.;
+        double standardHeal = 1 / 3.;
+        int standardStat = 1;
+        int oranHeal = 10;
+        int starfStat = 2;
+
+        if(c.hasAbility(Ability.RIPEN))
+        {
+            aguavSitrusHeal *= 2;
+            standardHeal *= 2;
+            standardStat *= 2;
+            oranHeal *= 2;
+            starfStat *= 2;
+        }
+
         if(!itemsOff && c.hasItem(Item.AGUAV_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
         {
             consumeBerry.accept("Aguav");
 
             turnResult.add(builder
-                    .addFractionHealEffect(1 / 2.)
+                    .addFractionHealEffect(aguavSitrusHeal)
                     .addConditionalEffect(List.of(Nature.NAUGHTY, Nature.RASH, Nature.NAIVE, Nature.LAX).contains(c.getNature()), b -> b.addStatusEffect(StatusCondition.CONFUSED, 100, true))
                     .execute()
             );
@@ -1194,7 +1209,7 @@ public class Duel
             consumeBerry.accept("Figy");
 
             turnResult.add(builder
-                    .addFractionHealEffect(1 / 3.)
+                    .addFractionHealEffect(standardHeal)
                     .addConditionalEffect(List.of(Nature.MODEST, Nature.TIMID, Nature.CALM, Nature.BOLD).contains(c.getNature()), b -> b.addStatusEffect(StatusCondition.CONFUSED, 100, true))
                     .execute()
             );
@@ -1205,7 +1220,7 @@ public class Duel
             consumeBerry.accept("Iapapa");
 
             turnResult.add(builder
-                    .addFractionHealEffect(1 / 3.)
+                    .addFractionHealEffect(standardHeal)
                     .addConditionalEffect(List.of(Nature.LONELY, Nature.MILD, Nature.GENTLE, Nature.HASTY).contains(c.getNature()), b -> b.addStatusEffect(StatusCondition.CONFUSED, 100, true))
                     .execute()
             );
@@ -1216,7 +1231,7 @@ public class Duel
             consumeBerry.accept("Mago");
 
             turnResult.add(builder
-                    .addFractionHealEffect(1 / 3.)
+                    .addFractionHealEffect(standardHeal)
                     .addConditionalEffect(List.of(Nature.BRAVE, Nature.QUIET, Nature.SASSY, Nature.RELAXED).contains(c.getNature()), b -> b.addStatusEffect(StatusCondition.CONFUSED, 100, true))
                     .execute()
             );
@@ -1227,7 +1242,7 @@ public class Duel
             consumeBerry.accept("Wiki");
 
             turnResult.add(builder
-                    .addFractionHealEffect(1 / 3.)
+                    .addFractionHealEffect(standardHeal)
                     .addConditionalEffect(List.of(Nature.ADAMANT, Nature.JOLLY, Nature.CAREFUL, Nature.IMPISH).contains(c.getNature()), b -> b.addStatusEffect(StatusCondition.CONFUSED, 100, true))
                     .execute()
             );
@@ -1237,56 +1252,56 @@ public class Duel
         {
             consumeBerry.accept("Apicot");
 
-            turnResult.add(builder.addStatChangeEffect(Stat.SPDEF, 1, 100, true).execute());
+            turnResult.add(builder.addStatChangeEffect(Stat.SPDEF, standardStat, 100, true).execute());
         }
 
         if(!itemsOff && c.hasItem(Item.GANLON_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
         {
             consumeBerry.accept("Ganlon");
 
-            turnResult.add(builder.addStatChangeEffect(Stat.DEF, 1, 100, true).execute());
+            turnResult.add(builder.addStatChangeEffect(Stat.DEF, standardStat, 100, true).execute());
         }
 
         if(!itemsOff && c.hasItem(Item.LIECHI_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
         {
             consumeBerry.accept("Liechi");
 
-            turnResult.add(builder.addStatChangeEffect(Stat.ATK, 1, 100, true).execute());
+            turnResult.add(builder.addStatChangeEffect(Stat.ATK, standardStat, 100, true).execute());
         }
 
         if(!itemsOff && c.hasItem(Item.MICLE_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
         {
             consumeBerry.accept("Micle");
 
-            turnResult.add(builder.addAccuracyChangeEffect(1, 100, true).execute());
+            turnResult.add(builder.addAccuracyChangeEffect(standardStat, 100, true).execute());
         }
 
         if(!itemsOff && c.hasItem(Item.PETAYA_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
         {
             consumeBerry.accept("Petaya");
 
-            turnResult.add(builder.addStatChangeEffect(Stat.SPATK, 1, 100, true).execute());
+            turnResult.add(builder.addStatChangeEffect(Stat.SPATK, standardStat, 100, true).execute());
         }
 
         if(!itemsOff && c.hasItem(Item.SALAC_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
         {
             consumeBerry.accept("Salac");
 
-            turnResult.add(builder.addStatChangeEffect(Stat.SPD, 1, 100, true).execute());
+            turnResult.add(builder.addStatChangeEffect(Stat.SPD, standardStat, 100, true).execute());
         }
 
         if(!itemsOff && c.hasItem(Item.ORAN_BERRY) && c.getHealth() < c.getMaxHealth(1 / 2.))
         {
             consumeBerry.accept("Oran");
 
-            turnResult.add(builder.addFixedHealEffect(10).execute());
+            turnResult.add(builder.addFixedHealEffect(oranHeal).execute());
         }
 
         if(!itemsOff && c.hasItem(Item.SITRUS_BERRY) && c.getHealth() < c.getMaxHealth(1 / 2.))
         {
             consumeBerry.accept("Sitrus");
 
-            turnResult.add(builder.addFractionHealEffect(1 / 2.).execute());
+            turnResult.add(builder.addFractionHealEffect(aguavSitrusHeal).execute());
         }
 
         if(!itemsOff && c.hasItem(Item.STARF_BERRY) && c.getHealth() < c.getMaxHealth(1 / 4.))
@@ -1295,9 +1310,9 @@ public class Duel
 
             int num = new SplittableRandom().nextInt(Stat.values().length + 2);
 
-            if(num < Stat.values().length) turnResult.add(builder.addStatChangeEffect(Stat.values()[num], 2, 100, true).execute());
-            else if(num == Stat.values().length) turnResult.add(builder.addAccuracyChangeEffect(2, 100, true).execute());
-            else if(num == Stat.values().length + 1) turnResult.add(builder.addEvasionChangeEffect(2, 100, true).execute());
+            if(num < Stat.values().length) turnResult.add(builder.addStatChangeEffect(Stat.values()[num], starfStat, 100, true).execute());
+            else if(num == Stat.values().length) turnResult.add(builder.addAccuracyChangeEffect(starfStat, 100, true).execute());
+            else if(num == Stat.values().length + 1) turnResult.add(builder.addEvasionChangeEffect(starfStat, 100, true).execute());
         }
 
         //Barrier Effects
@@ -1451,7 +1466,7 @@ public class Duel
             BiConsumer<String, Move> effectiveMoveBerryResult = (berryName, moveCopy) -> {
                 o.removeItem();
 
-                moveCopy.setDamageMultiplier(0.5);
+                moveCopy.setDamageMultiplier(o.hasAbility(Ability.RIPEN) ? 0.25 : 0.5);
 
                 turnResult.add(o.getName() + " consumed its " + berryName + " Berry! The damage dealt by " + moveCopy.getName() + " was reduced significantly!");
             };
@@ -1547,9 +1562,11 @@ public class Duel
 
             if(damageDealt > 0)
             {
+                int ripenBoost = o.hasAbility(Ability.RIPEN) ? 2 : 1;
+
                 if(o.hasItem(Item.ENIGMA_BERRY) && TypeEffectiveness.getEffectiveness(o.getType()).get(move.getType()) > 1.0)
                 {
-                    int amount = o.getMaxHealth(1 / 4.);
+                    int amount = o.getMaxHealth(1 / 4. * ripenBoost);
 
                     o.heal(amount);
                     o.removeItem();
@@ -1559,7 +1576,7 @@ public class Duel
 
                 if(o.hasItem(Item.JABOCA_BERRY) && move.is(Category.PHYSICAL))
                 {
-                    int amount = c.getMaxHealth(1 / 8.);
+                    int amount = c.getMaxHealth(1 / 8. * ripenBoost);
 
                     c.damage(amount);
                     o.removeItem();
@@ -1569,7 +1586,7 @@ public class Duel
 
                 if(o.hasItem(Item.ROWAP_BERRY) && move.is(Category.SPECIAL))
                 {
-                    int amount = c.getMaxHealth(1 / 8.);
+                    int amount = c.getMaxHealth(1 / 8. * ripenBoost);
 
                     c.damage(amount);
                     o.removeItem();
@@ -1579,7 +1596,7 @@ public class Duel
 
                 if(o.hasItem(Item.KEE_BERRY) && move.is(Category.PHYSICAL))
                 {
-                    o.changes().change(Stat.DEF, 1);
+                    o.changes().change(Stat.DEF, 1 * ripenBoost);
                     o.removeItem();
 
                     turnResult.add(o.getName() + " consumed its Kee Berry! Its Defense rose by 1 stage!");
@@ -1587,7 +1604,7 @@ public class Duel
 
                 if(o.hasItem(Item.MARANGA_BERRY) && move.is(Category.PHYSICAL))
                 {
-                    o.changes().change(Stat.SPDEF, 1);
+                    o.changes().change(Stat.SPDEF, 1 * ripenBoost);
                     o.removeItem();
 
                     turnResult.add(o.getName() + " consumed its Maranga Berry! Its Special Defense rose by 1 stage!");
@@ -1595,6 +1612,14 @@ public class Duel
             }
 
             //Other Stuff
+
+            //Ability: Cotton Down
+            if(o.hasAbility(Ability.COTTON_DOWN) && damageDealt > 0)
+            {
+                c.changes().change(Stat.SPD, -1);
+
+                turnResult.add(Ability.COTTON_DOWN.formatActivation(o.getName(), c.getName() + "'s Speed decreased by 1 stage!"));
+            }
 
             if(damageDealt > 0 && this.isNonBotPlayer(this.current))
             {
