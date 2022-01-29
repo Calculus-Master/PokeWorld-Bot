@@ -21,7 +21,7 @@ public class RaidEventHelper
     {
         createRaid(g, channel);
 
-        ScheduledFuture<?> raidEvent = ThreadPoolHandler.RAID.schedule(() -> startRaid(g, channel), 2, TimeUnit.MINUTES);
+        ScheduledFuture<?> raidEvent = ThreadPoolHandler.RAID.schedule(() -> startRaid(g, channel), 1, TimeUnit.MINUTES);
 
         SCHEDULERS.put(g.getId(), raidEvent);
     }

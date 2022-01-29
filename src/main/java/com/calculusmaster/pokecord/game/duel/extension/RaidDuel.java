@@ -1,6 +1,10 @@
 package com.calculusmaster.pokecord.game.duel.extension;
 
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
+import com.calculusmaster.pokecord.game.duel.component.EntryHazardHandler;
+import com.calculusmaster.pokecord.game.duel.component.FieldBarrierHandler;
+import com.calculusmaster.pokecord.game.duel.component.FieldEffectsHandler;
+import com.calculusmaster.pokecord.game.duel.component.FieldGMaxDoTHandler;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.duel.players.WildPokemon;
@@ -210,11 +214,11 @@ public class RaidDuel extends WildDuel
         //Background is 800 x 480 -> 400 x 240
         int y = 50;
         int spacing = 25;
-        int backgroundW = 400;
-        int backgroundH = 240;
+        int backgroundW = 800;
+        int backgroundH = 480;
         int hint = BufferedImage.TYPE_INT_ARGB;
 
-        int basePlayerSize = 40;
+        int basePlayerSize = 100;
         int bossSize = 150;
 
         Pokemon[] players = new Pokemon[new SplittableRandom().nextInt(5, 9) + 1];
@@ -450,7 +454,21 @@ public class RaidDuel extends WildDuel
     {
         this.waiting = new ArrayList<>();
         this.players = new Player[0];
+
         super.setDefaults();
+
+        this.entryHazards = new EntryHazardHandler[this.players.length];
+        this.barriers = new FieldBarrierHandler[this.players.length];
+        this.gmaxDoT = new FieldGMaxDoTHandler[this.players.length];
+        this.fieldEffects = new FieldEffectsHandler[this.players.length];
+
+        for(int i = 0; i < this.players.length; i++)
+        {
+            this.entryHazards[i] = new EntryHazardHandler();
+            this.barriers[i] = new FieldBarrierHandler();
+            this.gmaxDoT[i] = new FieldGMaxDoTHandler();
+            this.fieldEffects[i] = new FieldEffectsHandler();
+        }
     }
 
     private Player[] getNonBotPlayers()

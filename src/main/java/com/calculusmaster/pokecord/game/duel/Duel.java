@@ -975,6 +975,13 @@ public class Duel
             }
         }
 
+        if(o.hasAbility(Ability.STATIC) && move.isContact())
+        {
+            c.addStatusCondition(StatusCondition.PARALYZED);
+
+            turnResult.add(Ability.STATIC.formatActivation(o.getName(), c.getName() + " is now paralyzed!"));
+        }
+
         if(this.data(this.other).quickGuardUsed)
         {
             this.data(this.other).quickGuardUsed = false;
