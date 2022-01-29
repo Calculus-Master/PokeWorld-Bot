@@ -680,6 +680,12 @@ public class Duel
 
                 statusResults.add("%s flinched and cannot move!".formatted(c.getName()));
 
+                if(c.hasAbility(Ability.STEADFAST))
+                {
+                    c.changes().change(Stat.SPD, 1);
+                    statusResults.add(Ability.STEADFAST.formatActivation(c.getName(), c.getName() + "'s Speed rose by 1 stage!"));
+                }
+
                 return compileResults.apply(turnResult, statusResults);
             }
 
