@@ -1856,7 +1856,7 @@ public class Duel
     public void weatherEffects()
     {
         StringJoiner weatherResult = new StringJoiner("\n");
-        weatherResult.add("\n" + this.weather.get().getStatus());
+        weatherResult.add("\n\n\n" + this.weather.get().getStatus());
 
         this.checkWeatherEffects(weatherResult, 0);
         this.checkWeatherEffects(weatherResult, 1);
