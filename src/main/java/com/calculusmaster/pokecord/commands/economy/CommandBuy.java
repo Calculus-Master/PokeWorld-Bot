@@ -200,7 +200,7 @@ public class CommandBuy extends Command
 
                     this.playerData.getStatistics().incr(PlayerStatistic.SHOP_TMS_BOUGHT);
 
-                    this.response = "Successfully bought `" + request.getShopEntry().replaceAll("`", "") + "`!";
+                    this.response = "Successfully bought " + request.getShopEntry() + "!";
                 }
             }
             else if(tr)
@@ -215,7 +215,7 @@ public class CommandBuy extends Command
 
                     this.playerData.getStatistics().incr(PlayerStatistic.SHOP_TRS_BOUGHT);
 
-                    this.response = "Successfully bought `" + request.getShopEntry() + "`!";
+                    this.response = "Successfully bought " + request.getShopEntry() + "!";
                 }
             }
         }
