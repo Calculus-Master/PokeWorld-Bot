@@ -72,6 +72,7 @@ public class PokemonDuelAttributes
     public boolean mindReaderUsed;
     public int yawnTurns;
     public boolean aquaRingUsed;
+    public boolean obstructUsed;
 
     public boolean disguiseActivated;
 

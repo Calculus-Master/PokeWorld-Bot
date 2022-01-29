@@ -316,4 +316,14 @@ public class DarkMoves
         duel.data(opponent.getUUID()).isTormented = true;
         return opponent.getName() + " was tormented! " + opponent.getName() + " can't use the same move twice in a row!";
     }
+
+    public String Obstruct(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.first.equals(user.getUUID())) return move.getNothingResult();
+        else
+        {
+            duel.data(user.getUUID()).obstructUsed = true;
+            return user.getName() + " set up an obstruction!";
+        }
+    }
 }

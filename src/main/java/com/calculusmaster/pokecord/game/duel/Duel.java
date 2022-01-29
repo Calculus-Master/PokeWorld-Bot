@@ -925,7 +925,7 @@ public class Duel
         {
             this.data(this.other).kingsShieldUsed = false;
 
-            if(!move.getCategory().equals(Category.STATUS))
+            if(move.isContact())
             {
                 this.players[this.current].active.changes().change(Stat.ATK, -2);
                 otherImmune = !bypass;
@@ -938,7 +938,7 @@ public class Duel
         {
             this.data(this.other).banefulBunkerUsed = false;
 
-            if(!move.getCategory().equals(Category.STATUS))
+            if(move.isContact())
             {
                 this.players[this.current].active.addStatusCondition(StatusCondition.POISONED);
                 otherImmune = !bypass;
@@ -951,7 +951,7 @@ public class Duel
         {
             this.data(this.other).spikyShieldUsed = false;
 
-            if(!move.getCategory().equals(Category.STATUS))
+            if(move.isContact())
             {
                 int damage = this.players[this.current].active.getStat(Stat.HP) / 8;
                 this.players[this.current].active.damage(damage);
@@ -959,6 +959,19 @@ public class Duel
                 otherImmune = !bypass;
 
                 turnResult.add(this.players[this.current].active.getName() + " took " + damage + " damage due to the Spiky Shield!");
+            }
+        }
+
+        if(this.data(this.other).obstructUsed)
+        {
+            this.data(this.other).obstructUsed = false;
+
+            if(move.isContact())
+            {
+                this.players[this.current].active.changes().change(Stat.DEF, -2);
+                otherImmune = !bypass;
+
+                turnResult.add(this.players[this.current].active.getName() + "'s Defense was lowered by 2 stages due to the Obstruction!");
             }
         }
 
@@ -1106,7 +1119,7 @@ public class Duel
         if(this.data(this.current).solarBeamUsed) move = new Move("Solar Beam");
 
         //Lowered Accuracy of Defensive Moves
-        List<String> defensiveMoves = Arrays.asList("Endure", "Protect", "Detect", "Wide Guard", "Quick Guard", "Spiky Shield", "Kings Shield", "Baneful Bunker");
+        List<String> defensiveMoves = Arrays.asList("Endure", "Protect", "Detect", "Obstruct", "Wide Guard", "Quick Guard", "Spiky Shield", "Kings Shield", "Baneful Bunker");
 
         if(defensiveMoves.contains(move.getName()) && !move.getName().equals("Quick Guard"))
         {

@@ -226,6 +226,11 @@ public class Move
         return List.of(types).contains(this.getType());
     }
 
+    public boolean isContact()
+    {
+        return this.is(Category.PHYSICAL) ||this.is("Petal Dance", "Trump Card", "Wring Out", "Grass Knot", "Draining Kiss", "Infestation");
+    }
+
     public static boolean isMove(String move)
     {
         return MoveData.MOVES.stream().anyMatch(move::equalsIgnoreCase);
