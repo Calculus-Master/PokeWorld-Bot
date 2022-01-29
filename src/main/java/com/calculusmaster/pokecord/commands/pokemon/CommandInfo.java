@@ -48,8 +48,8 @@ public class CommandInfo extends Command
         String gender = Global.normalize(chosen.getGender().toString());
         String dynamaxLevel = "" + chosen.getDynamaxLevel();
         String item = chosen.getItem().getStyledName();
-        String tm = (chosen.hasTM() ? "TM" + (chosen.getTM().getNumber() < 10 ? "0" : "") + chosen.getTM()  + " - " + chosen.getTM().getMoveName() : "None");
-        String tr =  (chosen.hasTR() ? "TR" + (chosen.getTR().getNumber() < 10 ? "0" : "") + chosen.getTR()  + " - " + chosen.getTR().getMoveName() : "None");
+        String tm = (chosen.hasTM() ? chosen.getTM()  + " - " + chosen.getTM().getMoveName() : "None");
+        String tr =  (chosen.hasTR() ? chosen.getTR()  + " - " + chosen.getTR().getMoveName() : "None");
         String image = chosen.getImage();
 
         this.embed
