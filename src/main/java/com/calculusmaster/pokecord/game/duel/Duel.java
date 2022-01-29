@@ -385,6 +385,14 @@ public class Duel
             turnResult.add(Ability.LIQUID_VOICE.formatActivation(c.getName(), move.getName() + " is now a Water Type!"));
         }
 
+        //Ability: Aerilate
+        if(c.hasAbility(Ability.AERILATE) && move.is(Type.NORMAL))
+        {
+            move.setType(Type.FLYING);
+
+            turnResult.add(Ability.AERILATE.formatActivation(c.getName(), move.getName() + " is now a Flying Type!"));
+        }
+
         //Weather-based Move Changes
 
         switch(this.weather.get())
