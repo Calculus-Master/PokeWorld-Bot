@@ -2326,12 +2326,13 @@ public class Duel
     public InputStream getImage() throws Exception
     {
         //Background is 800 x 480 -> 400 x 240
-        int baseSize = 150;
-        int y = 50;
+        int baseSize = 300;
         int spacing = 25;
-        int backgroundW = 400;
-        int backgroundH = 240;
+        int backgroundW = 800;
+        int backgroundH = 480;
         int hint = BufferedImage.TYPE_INT_ARGB;
+
+        int y = (backgroundH - baseSize) / 2;
 
         Image background = ImageIO.read(new URL(BACKGROUND)).getScaledInstance(backgroundW, backgroundH, hint);
         BufferedImage combined = new BufferedImage(background.getWidth(null), background.getHeight(null), hint);
