@@ -1119,18 +1119,16 @@ public class Duel
         if(this.data(this.current).solarBeamUsed) move = new Move("Solar Beam");
 
         //Lowered Accuracy of Defensive Moves
-        List<String> defensiveMoves = Arrays.asList("Endure", "Protect", "Detect", "Obstruct", "Wide Guard", "Quick Guard", "Spiky Shield", "Kings Shield", "Baneful Bunker");
+        List<String> defensiveMoves = Arrays.asList("Endure", "Protect", "Detect", "Obstruct", "Wide Guard", "Quick Guard", "Max Guard", "Spiky Shield", "Kings Shield", "Baneful Bunker");
 
         if(defensiveMoves.contains(move.getName()) && !move.getName().equals("Quick Guard"))
         {
             List<String> log = this.movesUsed.get(this.players[this.current].active.getUUID());
 
-            int i = this.turn - 1;
-            while((i > 0 && i < log.size()) && log.get(i).equals(move.getName()) && !log.get(i).equals("Quick Guard"))
-            {
-                move.setAccuracy(move.getAccuracy() / 3);
-                i--;
-            }
+            for(int i = log.size() - 1; i > 0 && defensiveMoves.contains(log.get(i)); i--)
+                move.setAccuracy(move.getAccuracy() - (int)(move.getAccuracy() * 0.33));
+
+            accurate = move.isAccurate(this.players[this.current].active, this.players[this.other].active);
         }
 
         //Ability: Dragon's Maw

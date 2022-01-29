@@ -250,7 +250,7 @@ public class Move
         return (new Random().nextInt(100) + 1) <= threshold;
     }
 
-    public strictfp int getDamage(Pokemon user, Pokemon opponent)
+    public int getDamage(Pokemon user, Pokemon opponent)
     {
         Random r = new Random();
 
