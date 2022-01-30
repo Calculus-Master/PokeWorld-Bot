@@ -63,6 +63,8 @@ public class MessageEventHandler
     {
         Pokemon p = this.data.getSelectedPokemon();
 
+        if(p.getLevel() >= 100) return;
+
         int initL = p.getLevel();
 
         int experience;
