@@ -26,7 +26,7 @@ public class CommandLocation extends Command
         Time t = LocationEventHelper.getTime();
 
         this.embed.setTitle("Location Info for " + this.server.getName())
-                .addField("Location", Global.normalize(l.toString()), true)
+                .addField("Location", Global.normalize(l.toString().replaceAll("_", " ")), true)
                 .addField("Region", Global.normalize(r.toString()), true)
                 .addField("Time", Global.normalize(t.toString()), true)
                 .setFooter("Locations will primarily affect certain evolutions!");
