@@ -2,16 +2,9 @@ package com.calculusmaster.pokecord.util.listener;
 
 import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.Commands;
-import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
-import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
-import com.calculusmaster.pokecord.game.enums.functional.Achievements;
-import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.custom.ExtendedIntegerMap;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
@@ -22,7 +15,9 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -32,6 +27,8 @@ public class Listener extends ListenerAdapter
 {
     private final Map<String, Long> cooldowns = new HashMap<>();
     int cooldown = 1; //Seconds
+
+    private final MessageEventHandler events; { this.events = new MessageEventHandler(); }
 
     public static void startSpawnIntervalUpdater()
     {
@@ -62,7 +59,6 @@ public class Listener extends ListenerAdapter
         Guild server = event.getGuild();
         String[] msg = event.getMessage().getContentRaw().toLowerCase().trim().split("\\s+");
         ServerDataQuery serverQuery = new ServerDataQuery(server.getId());
-        Random r = new Random(System.currentTimeMillis());
 
         //If bot is mentioned, send the server prefix
         if(event.getMessage().getMentionedMembers().stream().anyMatch(m -> m.getId().equals("718169293904281610"))) event.getChannel().sendMessage("<@" + player.getId() + ">: My prefix is `" + serverQuery.getPrefix() + "`!").queue();
@@ -73,6 +69,9 @@ public class Listener extends ListenerAdapter
             Pokecord.BOT_JDA.openPrivateChannelById(player.getId()).flatMap(channel -> channel.sendMessage("Bot Commands are not allowed in that channel!")).queue();
             return;
         }
+
+        //Update the Event Handler's Stored Event
+        this.events.updateEvent(event);
 
         //If the message starts with the right prefix, continue, otherwise skip the listener
         if(msg[0].startsWith(serverQuery.getPrefix()))
@@ -104,109 +103,12 @@ public class Listener extends ListenerAdapter
                 LoggerHelper.reportError(Listener.class, "Command Execution Failed! (" + Arrays.toString(msg) + ")", e);
                 event.getChannel().sendMessage("<@" + player.getId() + ">: An error has occurred while using this command. Please report it with `p!report`!").queue();
             }
-
-            if(r.nextInt(5000) < 1) ThreadPoolHandler.LISTENER_EVENT.execute(() -> redeemEvent(event));
         }
 
-        if(r.nextInt(10) <= 3) ThreadPoolHandler.LISTENER_EVENT.execute(() -> expEvent(event));
-
-        if(r.nextInt(10) < 2) ThreadPoolHandler.LISTENER_EVENT.execute(() -> eggExpEvent(event));
+        this.events.activateEvent(MessageEventHandler.MessageEvent.REDEEM);
+        this.events.activateEvent(MessageEventHandler.MessageEvent.EXPERIENCE);
+        this.events.activateEvent(MessageEventHandler.MessageEvent.EGG_EXPERIENCE);
 
         SERVER_RECENT_MESSAGES.increase(server.getId());
-    }
-
-    private static void redeemEvent(MessageReceivedEvent event)
-    {
-        PlayerDataQuery p = PlayerDataQuery.ofNonNull(event.getAuthor().getId());
-        p.changeRedeems(1);
-
-        p.getStatistics().incr(PlayerStatistic.NATURAL_REDEEMS_EARNED);
-
-        event.getChannel().sendMessage(p.getMention() + ": You earned a Redeem!").queue();
-    }
-
-    private static void expEvent(MessageReceivedEvent event)
-    {
-        if(!PlayerDataQuery.isRegistered(event.getAuthor().getId())) return;
-
-        PlayerDataQuery data = PlayerDataQuery.ofNonNull(event.getAuthor().getId());
-        Pokemon p = data.getSelectedPokemon();
-
-        int initL = p.getLevel();
-
-        int experience;
-        int required = GrowthRate.getRequiredExp(p.getData().growthRate, p.getLevel());
-        final SplittableRandom r = new SplittableRandom();
-
-        //Messages: 0.1% - 10% of the required exp
-        if(p.getLevel() < 25)
-        {
-            double fraction = r.nextInt(1, 100) / 1000D;
-            experience = (int)(fraction * required);
-        }
-        //Messages: 50% to 150% of 5% of the required exp
-        else if(p.getLevel() < 40)
-        {
-            int base = required / 100 * 5;
-            experience = r.nextInt((int)(base * 0.5), (int)(base * 1.5));
-        }
-        //Messages: 50% to 150% of 20% of the required exp from 5 levels below
-        else if(p.getLevel() < 80)
-        {
-            required = GrowthRate.getRequiredExp(p.getData().growthRate, p.getLevel() - 5);
-            int base = (int)(required * 0.2);
-            experience = r.nextInt((int)(base * 0.5), (int)(base * 1.5));
-        }
-        else experience = new SplittableRandom().nextInt(1000, 5000);
-
-        if(experience == 0) experience = 50;
-
-        p.addExp(experience);
-
-        data.updateBountyProgression(ObjectiveType.EARN_XP_POKEMON, experience);
-
-        if(p.getLevel() != initL)
-        {
-            data.updateBountyProgression(ObjectiveType.LEVEL_POKEMON, p.getLevel() - initL);
-
-            event.getChannel().sendMessage(data.getMention() + ": Your " + p.getName() + " is now Level " + p.getLevel() + "!").queue();
-        }
-
-        p.updateExperience();
-    }
-
-    private static void eggExpEvent(MessageReceivedEvent event)
-    {
-        if(!PlayerDataQuery.isRegistered(event.getAuthor().getId())) return;
-
-        PlayerDataQuery data = PlayerDataQuery.ofNonNull(event.getAuthor().getId());
-
-        if(!data.hasActiveEgg()) return;
-
-        int experience = new Random().nextInt(250) + 50;
-
-        PokemonEgg egg = data.getActiveEgg();
-
-        egg.addExp(experience);
-
-        if(egg.canHatch())
-        {
-            Pokemon p = egg.hatch();
-
-            p.upload();
-            data.addPokemon(p.getUUID());
-            data.removeActiveEgg();
-            data.removeEgg(egg.getEggID());
-
-            data.getStatistics().incr(PlayerStatistic.EGGS_HATCHED);
-
-            Achievements.grant(data.getID(), Achievements.HATCHED_FIRST_EGG, event);
-            if(p.getTotalIVRounded() >= 60) Achievements.grant(data.getID(), Achievements.HATCHED_FIRST_DECENT_IV, event);
-            if(p.getTotalIVRounded() >= 70) Achievements.grant(data.getID(), Achievements.HATCHED_FIRST_GREAT_IV, event);
-            if(p.getTotalIVRounded() >= 80) Achievements.grant(data.getID(), Achievements.HATCHED_FIRST_EXCELLENT_IV, event);
-            if(p.getTotalIVRounded() >= 90) Achievements.grant(data.getID(), Achievements.HATCHED_FIRST_NEARLY_PERFECT_IV, event);
-
-            event.getChannel().sendMessage(data.getMention() + ": Your Egg hatched into a new " + p.getName() + "!").queue();
-        }
     }
 }
