@@ -12,6 +12,7 @@ public enum PokemonSorterFlag
     AVAILABLE_MOVE("--availablemove", "--amove"),
     LEVEL("--level", "--lvl"),
     DYNAMAX_LEVEL("--dynamaxlevel", "--dlevel", "--dlvl"),
+    PRESTIGE_LEVEL("--prestigelevel", "--plevel", "--plvl"),
     IV("--iv"),
     EV("--ev"),
     STAT("--stat"),
