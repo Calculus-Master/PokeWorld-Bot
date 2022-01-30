@@ -55,6 +55,7 @@ public class PokemonListSorter
     {
         this.sortGeneric(PokemonSorterFlag.SHINY, Pokemon::isShiny);
         this.sortGeneric(PokemonSorterFlag.MASTERED, Pokemon::isMastered);
+        this.sortGeneric(PokemonSorterFlag.PRESTIGED, Pokemon::hasPrestiged);
     }
 
     public void sortStats()
