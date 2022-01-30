@@ -104,15 +104,9 @@ public class CommandCatch extends Command
             this.playerData.updateBountyProgression(b -> {
                 switch(b.getType()) {
                     case CATCH_POKEMON -> b.update();
-                    case CATCH_POKEMON_TYPE -> {
-                        if(caught.isType(((CatchTypeObjective)b.getObjective()).getType())) b.update();
-                    }
-                    case CATCH_POKEMON_NAME -> {
-                        if(caught.getName().equals(((CatchNameObjective)b.getObjective()).getName())) b.update();
-                    }
-                    case CATCH_POKEMON_POOL -> {
-                        if(((CatchPoolObjective)b.getObjective()).getPool().contains(caught.getName())) b.update();
-                    }
+                    case CATCH_POKEMON_TYPE -> b.updateIf(caught.isType(((CatchTypeObjective)b.getObjective()).getType()));
+                    case CATCH_POKEMON_NAME -> b.updateIf(caught.getName().equals(((CatchNameObjective)b.getObjective()).getName()));
+                    case CATCH_POKEMON_POOL -> b.updateIf(((CatchPoolObjective)b.getObjective()).getPool().contains(caught.getName()));
                 }
             });
 

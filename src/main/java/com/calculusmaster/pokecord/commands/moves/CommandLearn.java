@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.moves;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
+import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -54,7 +55,7 @@ public class CommandLearn extends Command
             this.embed.setDescription("Which move do you want to replace with " + move + "?" + movesList);
             moveLearnRequests.put(selected.getUUID(), move);
 
-            if(autoReplace) Executors.newSingleThreadScheduledExecutor().schedule(() -> new CommandReplace(this.event, new String[]{"replace", "" + this.getInt(1)}).runCommand().send(), 1250, TimeUnit.MILLISECONDS);
+            if(autoReplace) Executors.newSingleThreadScheduledExecutor().schedule(() -> Commands.execute("replace", this.event, new String[]{"replace", "" + this.getInt(1)}), 450, TimeUnit.MILLISECONDS);
         }
 
         return this;
