@@ -117,7 +117,7 @@ public class Listener extends ListenerAdapter
 
     private static void redeemEvent(MessageReceivedEvent event)
     {
-        PlayerDataQuery p = PlayerDataQuery.of(event.getAuthor().getId());
+        PlayerDataQuery p = PlayerDataQuery.ofNonNull(event.getAuthor().getId());
         p.changeRedeems(1);
 
         p.getStatistics().incr(PlayerStatistic.NATURAL_REDEEMS_EARNED);
@@ -129,7 +129,7 @@ public class Listener extends ListenerAdapter
     {
         if(!PlayerDataQuery.isRegistered(event.getAuthor().getId())) return;
 
-        PlayerDataQuery data = PlayerDataQuery.of(event.getAuthor().getId());
+        PlayerDataQuery data = PlayerDataQuery.ofNonNull(event.getAuthor().getId());
         Pokemon p = data.getSelectedPokemon();
 
         int initL = p.getLevel();
@@ -179,7 +179,7 @@ public class Listener extends ListenerAdapter
     {
         if(!PlayerDataQuery.isRegistered(event.getAuthor().getId())) return;
 
-        PlayerDataQuery data = PlayerDataQuery.of(event.getAuthor().getId());
+        PlayerDataQuery data = PlayerDataQuery.ofNonNull(event.getAuthor().getId());
 
         if(!data.hasActiveEgg()) return;
 

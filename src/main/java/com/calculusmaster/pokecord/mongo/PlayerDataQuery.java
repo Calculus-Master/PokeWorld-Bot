@@ -18,6 +18,7 @@ import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.bson.Document;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 
 import java.util.*;
@@ -46,6 +47,12 @@ public class PlayerDataQuery extends MongoQuery
             PlayerDataCache.addCache(playerID);
             return PlayerDataQuery.of(playerID);
         }
+    }
+
+    @NotNull
+    public static PlayerDataQuery ofNonNull(String playerID)
+    {
+        return Objects.requireNonNull(PlayerDataQuery.of(playerID));
     }
 
     //Registered
