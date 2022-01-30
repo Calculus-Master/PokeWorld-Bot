@@ -561,6 +561,11 @@ public class Pokemon
         return DataHelper.GIGANTAMAX_DATA.get(this.getName());
     }
 
+    public PokemonRarity.Rarity getRarity()
+    {
+        return this.rarity;
+    }
+
     public List<Ability> getAbilities()
     {
         return this.abilities;

@@ -24,6 +24,7 @@ public enum PokemonSorterFlag
     MAIN_TYPE("--maintype"),
     GENDER("--gender"),
     EGG_GROUP("--egggroup", "--egg"),
+    RARITY("--rarity"),
     SHINY("--shiny"),
     MASTERED("--mastered"),
     PRESTIGED("--prestiged", "--prestige"),

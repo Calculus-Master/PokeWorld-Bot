@@ -50,6 +50,7 @@ public class PokemonListSorter
         this.sortEnum(PokemonSorterFlag.MAIN_TYPE, Type::cast, (p, t) -> p.getType().get(0).equals(t));
         this.sortEnum(PokemonSorterFlag.GENDER, Gender::cast, (p, g) -> p.getGender().equals(g));
         this.sortEnum(PokemonSorterFlag.EGG_GROUP, EggGroup::cast, (p, e) -> p.getEggGroups().contains(e));
+        this.sortEnum(PokemonSorterFlag.RARITY, PokemonRarity.Rarity::cast, (p, r) -> p.getRarity().equals(r));
     }
 
     public void sortStandardBoolean()
