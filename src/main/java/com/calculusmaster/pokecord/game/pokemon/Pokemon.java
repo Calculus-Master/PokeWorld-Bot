@@ -93,8 +93,8 @@ public class Pokemon
         p.setTM();
         p.setTR();
 
-        p.setDuelDefaults();
         p.setupMisc();
+        p.setDuelDefaults();
 
         return p;
     }
@@ -122,8 +122,8 @@ public class Pokemon
         p.setTM(data.getInteger("tm") == -1 ? null : TM.get(data.getInteger("tm")));
         p.setTR(data.getInteger("tr") == -1 ? null : TR.get(data.getInteger("tr")));
 
-        p.setDuelDefaults();
         p.setupMisc();
+        p.setDuelDefaults();
 
         return p;
     }

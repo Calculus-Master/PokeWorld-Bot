@@ -68,7 +68,7 @@ public class CommandInfo extends Command
         if(chosen.getLevel() == 100 && chosen.getPrestigeLevel() < chosen.getMaxPrestigeLevel()) this.embed.addField("Prestige", "Your Pokemon can now prestige! A prestige will reset a Pokemon's level down to 1, remove all held items and unlearn all moves. The newly Prestiged Pokemon will gain a permanent boost!", false);
         else if(chosen.getPrestigeLevel() == 0 && chosen.getLevel() >= 50) this.embed.addField("Prestige", "Your Pokemon will be able to Prestige at Level 100!", false);
 
-        this.embed.setTitle(title);
+        this.embed.setTitle(title.length() > 256 ? title.substring(0, 247) + "..." : title);
         this.embed.setDescription("UUID: " + UUID);
         this.color = chosen.getType().get(0).getColor();
         this.embed.setImage(image);
