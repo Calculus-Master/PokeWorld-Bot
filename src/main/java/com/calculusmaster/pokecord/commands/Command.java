@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.awt.*;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -175,6 +176,9 @@ public abstract class Command
 
             //Tip Footer
             if(this.embed.build().getFooter() == null) this.embed.setFooter("Tip: " + Tips.get().tip);
+
+            //Timestamp
+            this.embed.setTimestamp(Instant.now());
 
             //Finalize
             if(this.event != null) this.event.getChannel().sendMessageEmbeds(this.embed.build()).queue();
