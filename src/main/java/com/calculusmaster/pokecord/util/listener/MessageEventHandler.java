@@ -61,7 +61,7 @@ public class MessageEventHandler
 
     private void activateExperienceEvent()
     {
-        Pokemon p = data.getSelectedPokemon();
+        Pokemon p = this.data.getSelectedPokemon();
 
         int initL = p.getLevel();
 
@@ -75,18 +75,18 @@ public class MessageEventHandler
             double fraction = r.nextInt(1, 100) / 1000D;
             experience = (int)(fraction * required);
         }
-        //Messages: 50% to 150% of 5% of the required exp
+        //Messages: 10% to 150% of 5% of the required exp
         else if(p.getLevel() < 40)
         {
             int base = required / 100 * 5;
-            experience = r.nextInt((int)(base * 0.5), (int)(base * 1.5));
+            experience = r.nextInt((int)(base * 0.1), (int)(base * 1.5));
         }
-        //Messages: 50% to 150% of 20% of the required exp from 5 levels below
+        //Messages: 10% to 150% of 20% of the required exp from 5 levels below
         else if(p.getLevel() < 80)
         {
             required = GrowthRate.getRequiredExp(p.getData().growthRate, p.getLevel() - 5);
             int base = (int)(required * 0.2);
-            experience = r.nextInt((int)(base * 0.5), (int)(base * 1.5));
+            experience = r.nextInt((int)(base * 0.1), (int)(base * 1.5));
         }
         else experience = new SplittableRandom().nextInt(1000, 5000);
 
