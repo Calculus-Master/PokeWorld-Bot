@@ -209,6 +209,8 @@ public class CommandPokemon extends Command
 
         if(p.isMastered()) tags.add(":trophy:");
 
+        if(p.hasPrestiged()) tags.add(":zap:");
+
         if(this.team.contains(p.getUUID())) tags.add(":regional_indicator_t:");
 
         if(this.favorites.contains(p.getUUID())) tags.add(":regional_indicator_f:");
