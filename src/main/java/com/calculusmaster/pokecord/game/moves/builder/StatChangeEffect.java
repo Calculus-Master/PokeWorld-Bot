@@ -1,6 +1,8 @@
 package com.calculusmaster.pokecord.game.moves.builder;
 
+import com.calculusmaster.pokecord.game.enums.elements.Ability;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,20 +42,27 @@ public class StatChangeEffect extends MoveEffect
         //TODO: Combine multiple stat changes with "and"
         StringBuilder result = new StringBuilder();
 
+        Pokemon target = this.userChange ? this.user : this.opponent;
+
         if(new Random().nextInt(100) < this.percent)
         {
             for(Stat s : this.statChanges.keySet())
             {
                 if(this.statChanges.containsKey(s))
                 {
-                    if(this.statChanges.get(s) < 0 && this.duel.data(this.opponent.getUUID()).mistTurns > 0)
+                    if(this.statChanges.get(s) < 0 && target.hasAbility(Ability.BIG_PECKS))
                     {
-                        result.append(this.opponent.getName()).append(" is immune to the change in ").append(s.name);
+                        result.append(Ability.BIG_PECKS.formatActivation(target.getName(), target.getName() + "'s defense was not lowered!"));
+                    }
+
+                    if(this.statChanges.get(s) < 0 && this.duel.data(target.getUUID()).mistTurns > 0)
+                    {
+                        result.append(target.getName()).append(" is immune to the change in ").append(s.name);
                     }
                     else
                     {
-                        (this.userChange ? this.user : this.opponent).changes().change(s, this.statChanges.get(s));
-                        result.append((this.userChange ? this.user : this.opponent).getName()).append("'s ").append(s.name).append(this.statChanges.get(s) > 0 ? " rose " : " was lowered ").append("by ").append(Math.abs(this.statChanges.get(s))).append(" stage").append(this.statChanges.get(s) > 1 ? "s" : "").append("! ");
+                        target.changes().change(s, this.statChanges.get(s));
+                        result.append(target.getName()).append("'s ").append(s.name).append(this.statChanges.get(s) > 0 ? " rose " : " was lowered ").append("by ").append(Math.abs(this.statChanges.get(s))).append(" stage").append(this.statChanges.get(s) > 1 ? "s" : "").append("! ");
                     }
                 }
             }
