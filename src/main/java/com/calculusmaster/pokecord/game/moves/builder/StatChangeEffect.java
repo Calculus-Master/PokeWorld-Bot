@@ -51,14 +51,9 @@ public class StatChangeEffect extends MoveEffect
                 if(this.statChanges.containsKey(s))
                 {
                     if(this.statChanges.get(s) < 0 && target.hasAbility(Ability.BIG_PECKS))
-                    {
                         result.append(Ability.BIG_PECKS.formatActivation(target.getName(), target.getName() + "'s defense was not lowered!"));
-                    }
-
-                    if(this.statChanges.get(s) < 0 && this.duel.data(target.getUUID()).mistTurns > 0)
-                    {
+                    else if(this.statChanges.get(s) < 0 && this.duel.data(target.getUUID()).mistTurns > 0)
                         result.append(target.getName()).append(" is immune to the change in ").append(s.name);
-                    }
                     else
                     {
                         target.changes().change(s, this.statChanges.get(s));
