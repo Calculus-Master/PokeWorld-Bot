@@ -1186,6 +1186,13 @@ public class Duel
             turnResult.add(Ability.TORRENT.formatActivation(c.getName(), move.getName() + "'s power was boosted by 50%!"));
         }
 
+        if(c.hasAbility(Ability.TOXIC_BOOST) && move.is(Category.PHYSICAL) && c.hasStatusCondition(StatusCondition.POISONED))
+        {
+            move.setPower(1.5);
+
+            turnResult.add(Ability.TOXIC_BOOST.formatActivation(c.getName(), move.getName() + "'s power was boosted by 50% due to the poison!"));
+        }
+
         //Item-based Buffs
 
         boolean itemsOff = this.room.isActive(Room.MAGIC_ROOM);
