@@ -1138,6 +1138,14 @@ public class Duel
             accurate = move.isAccurate(this.players[this.current].active, this.players[this.other].active);
         }
 
+        //Ability: Soundproof
+        if(o.hasAbility(Ability.SOUNDPROOF) && Move.SOUND_BASED_MOVES.contains(move.getName()))
+        {
+            otherImmune = true;
+
+            turnResult.add(Ability.SOUNDPROOF.formatActivation(o.getName(), o.getName() + " is immune to " + move.getName() + "!"));
+        }
+
         //Ability: Dragon's Maw
         if(c.hasAbility(Ability.DRAGONS_MAW) && move.is(Type.DRAGON))
         {
@@ -1586,6 +1594,14 @@ public class Duel
                 this.players[this.current].active.damage(dmg);
 
                 turnResult.add(this.players[this.current].active.getName() + " took " + dmg + " damage from the Iron Barbs!");
+            }
+
+            if(o.hasAbility(Ability.WEAK_ARMOR) && move.is(Category.PHYSICAL))
+            {
+                o.changes().change(Stat.DEF, -1);
+                o.changes().change(Stat.SPD, 1);
+
+                turnResult.add(Ability.WEAK_ARMOR.formatActivation(o.getName(), o.getName() + "'s Speed rose by 1 stage, and its Defense was lowered by 1 stage!"));
             }
 
             int damageDealt = preMoveHP - this.players[this.other].active.getHealth();
