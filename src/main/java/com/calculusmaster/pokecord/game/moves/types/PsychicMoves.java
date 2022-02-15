@@ -156,7 +156,7 @@ public class PsychicMoves
     public String HealPulse(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.make(user, opponent, duel, move)
-                .addFractionHealEffect(1 / 2D)
+                .addFractionHealEffect(user.hasAbility(Ability.MEGA_LAUNCHER) ? 3 / 4D : 1 / 2D)
                 .execute();
     }
 

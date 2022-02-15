@@ -22,6 +22,7 @@ public class Move
     //Other Data Storage
     public static final List<String> SOUND_BASED_MOVES = List.of("Boomburst", "Bug Buzz", "Chatter", "Clanging Scales", "Clangorous Soul", "Clangorous Soulblaze", "Confide", "Disarming Voice", "Echoed Voice", "Eerie Spell", "Grass Whistle", "Growl", "Heal Bell", "Howl", "Hyper Voice", "Metal Sound", "Noble Roar", "Overdrive", "Parting Shot", "Perish Song", "Relic Song", "Roar", "Round", "Screech", "Shadow Panic", "Sing", "Snarl", "Snore", "Sparkling Aria", "Supersonic", "Uproar");
     public static final List<String> BITING_MOVES = List.of("Bite", "Crunch", "Fire Fang", "Fishious Rend", "Hyper Fang", "Ice Fang", "Jaw Lock", "Poison Fang", "Psychic Fangs", "Thunder Fang");
+    public static final List<String> PULSE_MOVES = List.of("Aura Sphere", "Dark Pulse", "Dragon Pulse", "Heal Pulse", "Origin Pulse", "Terrain Pulse", "Water Pulse");
 
     private String name;
     private MoveData data;
@@ -224,6 +225,11 @@ public class Move
     public boolean is(Type... types)
     {
         return List.of(types).contains(this.getType());
+    }
+
+    public boolean is(List<String> names)
+    {
+        return names.contains(this.getName());
     }
 
     public boolean isContact()

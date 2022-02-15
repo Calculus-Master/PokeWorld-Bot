@@ -1194,11 +1194,25 @@ public class Duel
             turnResult.add(Ability.TORRENT.formatActivation(c.getName(), move.getName() + "'s power was boosted by 50%!"));
         }
 
+        //Ability: Toxic Boost
         if(c.hasAbility(Ability.TOXIC_BOOST) && move.is(Category.PHYSICAL) && c.hasStatusCondition(StatusCondition.POISONED))
         {
             move.setPower(1.5);
 
             turnResult.add(Ability.TOXIC_BOOST.formatActivation(c.getName(), move.getName() + "'s power was boosted by 50% due to the poison!"));
+        }
+
+        //Ability: Mega Launcher
+        if(c.hasAbility(Ability.MEGA_LAUNCHER) && move.is(Move.PULSE_MOVES) && !move.is(Category.STATUS))
+        {
+            if(move.is("Heal Pulse"))
+                turnResult.add(Ability.MEGA_LAUNCHER.formatActivation(c.getName(), "Heal Pulse's Healing Power was boosted!"));
+            else
+            {
+                move.setDamageMultiplier(1.5);
+
+                turnResult.add(Ability.MEGA_LAUNCHER.formatActivation(c.getName(), move.getName() + "'s power was boosted by 50%!"));
+            }
         }
 
         //Item-based Buffs
