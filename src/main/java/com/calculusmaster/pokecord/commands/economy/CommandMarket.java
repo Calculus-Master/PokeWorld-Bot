@@ -156,7 +156,9 @@ public class CommandMarket extends Command
 
             //Finalizing
             if(marketEntries.isEmpty()) this.embed.setDescription("No market listings found with those parameters!");
-            else this.embed.setDescription(this.getMarketPage(marketEntries));
+            else this.embed
+                    .setDescription(this.getMarketPage(marketEntries))
+                    .setFooter("View more information about a specific listing using the p!market info <ID> command. To purchase a Pokemon, use the p!market buy <ID> command. If you want to recollect one of your listings, use the p!market collect <ID> command.");
         }
 
         return this;
