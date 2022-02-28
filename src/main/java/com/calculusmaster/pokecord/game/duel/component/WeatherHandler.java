@@ -9,8 +9,7 @@ public class WeatherHandler
 
     public WeatherHandler()
     {
-        this.weather = Weather.CLEAR;
-        this.turns = -1;
+        this.setPermanentWeather(Weather.CLEAR);
     }
 
     public Weather get()
@@ -32,8 +31,7 @@ public class WeatherHandler
 
     public void removeWeather()
     {
-        this.weather = Weather.CLEAR;
-        this.turns = -1;
+        this.setPermanentWeather(Weather.CLEAR);
     }
 
     public void updateTurns()
