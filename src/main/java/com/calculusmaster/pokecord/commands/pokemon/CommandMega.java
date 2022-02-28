@@ -29,8 +29,7 @@ public class CommandMega extends Command
             selected.changeForm(original);
             selected.updateName();
 
-            this.event.getChannel().sendMessage(this.playerData.getMention() + ": " + mega + " has de-evolved into " + original + "!").queue();
-            this.embed = null;
+            this.response = mega + " has de-evolved into " + original + "!";
         }
         else
         {
@@ -44,7 +43,7 @@ public class CommandMega extends Command
                     selected.changeForm(selected.getMegaList().get(0));
                     selected.updateName();
                 }
-                else this.embed.setDescription("You don't own this Mega-Evolved form!");
+                else this.embed.setDescription("You don't own this Mega Evolution!");
             }
             else if(selected.getMegaList().size() == 2)
             {
@@ -61,11 +60,11 @@ public class CommandMega extends Command
                     selected.changeForm(chosenMega);
                     selected.updateName();
                 }
-                else this.embed.setDescription("You don't own this Mega-Evolved form!");
+                else this.embed.setDescription("You don't own this Mega Evolution!");
             }
             else
             {
-                this.embed.setDescription("Either your Pokemon cannot mega evolve, or you do not own the Mega-Evolved Form!");
+                this.embed.setDescription("Either your Pokemon cannot mega evolve, or you do not own the Mega Evolution!");
             }
         }
 
