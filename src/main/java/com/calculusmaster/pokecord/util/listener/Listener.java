@@ -16,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -33,13 +32,12 @@ public class Listener extends ListenerAdapter
     {
         SERVER_RECENT_MESSAGES = new ExtendedIntegerMap<String>().withDefaultKeys(Pokecord.BOT_JDA.getGuilds().stream().map(ISnowflake::getId).collect(Collectors.toList()));
 
-        RECENT_MESSAGE_SCHEDULER = Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
+        Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
             SERVER_RECENT_MESSAGES.forEach((server, messages) -> SpawnEventHelper.updateSpawnRate(Pokecord.BOT_JDA.getGuildById(server), messages));
             SERVER_RECENT_MESSAGES.reset();
         }, 5, 5, TimeUnit.MINUTES);
     }
 
-    private static ScheduledFuture<?> RECENT_MESSAGE_SCHEDULER;
     private static ExtendedIntegerMap<String> SERVER_RECENT_MESSAGES;
 
     @Override
