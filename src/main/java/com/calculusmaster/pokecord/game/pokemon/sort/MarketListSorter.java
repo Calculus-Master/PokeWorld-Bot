@@ -15,8 +15,11 @@ public class MarketListSorter
 
     private Stream<Pokemon> pokemonStream;
 
-    public MarketListSorter(Stream<MarketEntry> stream, List<String> msg)
+    private List<MarketEntry> mapper;
+
+    public MarketListSorter(List<MarketEntry> original, Stream<MarketEntry> stream, List<String> msg)
     {
+        this.mapper = original;
         this.stream = stream;
         this.msg = msg;
     }
@@ -34,7 +37,7 @@ public class MarketListSorter
 
     private MarketEntry entry(Pokemon p)
     {
-        return this.stream.filter(m -> m.pokemonID.equals(p.getUUID())).findFirst().orElseThrow();
+        return this.mapper.stream().filter(m -> m.pokemonID.equals(p.getUUID())).findFirst().orElseThrow();
     }
 
     //Sorters

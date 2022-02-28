@@ -38,7 +38,7 @@ public class SpawnEventHelper
 
     private static void start(Guild g, int interval)
     {
-        ScheduledFuture<?> spawnEvent = ThreadPoolHandler.SPAWN.scheduleWithFixedDelay(() -> spawnPokemon(g), 10, interval, TimeUnit.SECONDS);
+        ScheduledFuture<?> spawnEvent = ThreadPoolHandler.SPAWN.scheduleWithFixedDelay(() -> spawnPokemon(g), interval, interval, TimeUnit.SECONDS);
 
         SCHEDULERS.put(g.getId(), spawnEvent);
     }

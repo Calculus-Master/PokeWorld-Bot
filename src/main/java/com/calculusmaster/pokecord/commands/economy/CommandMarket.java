@@ -117,7 +117,7 @@ public class CommandMarket extends Command
             Stream<MarketEntry> display = marketEntries.size() > 500 && msg.size() > 4 ? marketEntries.parallelStream() : marketEntries.stream();
 
             //Market Sorting
-            MarketListSorter marketSorter = new MarketListSorter(display, msg);
+            MarketListSorter marketSorter = new MarketListSorter(marketEntries, display, msg);
 
             marketSorter.sortGeneric(MarketSorterFlag.LISTINGS, m -> m.sellerID.equals(this.player.getId()));
 
