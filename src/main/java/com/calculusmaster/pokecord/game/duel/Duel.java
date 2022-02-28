@@ -1215,6 +1215,14 @@ public class Duel
             }
         }
 
+        //Ability: Shadow Shield
+        if(o.hasAbility(Ability.SHADOW_SHIELD) && o.getHealth() == o.getMaxHealth() && move.getPower() > 0)
+        {
+            move.setDamageMultiplier(0.5);
+
+            turnResult.add(Ability.SHADOW_SHIELD.formatActivation(o.getName(), move.getName() + "'s damage was reduced by 50%!"));
+        }
+
         //Item-based Buffs
 
         boolean itemsOff = this.room.isActive(Room.MAGIC_ROOM);
