@@ -1506,7 +1506,7 @@ public class Duel
         {
             this.data(this.other).disguiseActivated = true;
 
-            turnResult.add("Mimikyu's Disguise was activated and absorbed the attack!");
+            turnResult.add(Ability.DISGUISE.formatActivation(o.getName(), "The Disguise absorbed the attack!"));
         }
         //Ability: Damp
         else if((c.hasAbility(Ability.DAMP) || o.hasAbility(Ability.DAMP)) && move.is("Explosion", "Self Destruct", "Mind Blown", "Misty Explosion"))
