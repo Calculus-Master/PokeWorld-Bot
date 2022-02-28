@@ -1223,6 +1223,32 @@ public class Duel
             turnResult.add(Ability.SHADOW_SHIELD.formatActivation(o.getName(), move.getName() + "'s damage was reduced by 50%!"));
         }
 
+        //Ability: Bulletproof
+        if(o.hasAbility(Ability.BULLETPROOF) && move.is(Move.BALL_AND_BOMB_MOVES))
+        {
+            otherImmune = true;
+
+            turnResult.add(Ability.BULLETPROOF.formatActivation(o.getName(), move.getName() + " does not affect " + o.getName() + "!"));
+        }
+
+        //Ability: Fluffy
+        if(o.hasAbility(Ability.FLUFFY))
+        {
+            if(move.isContact() && !move.is(Type.FIRE))
+            {
+                move.setDamageMultiplier(0.5);
+
+                turnResult.add(Ability.FLUFFY.formatActivation(o.getName(), move.getName() + "'s damage was reduced by 50%"));
+            }
+
+            if(move.is(Type.FIRE) && !move.isContact())
+            {
+                move.setDamageMultiplier(2.0);
+
+                turnResult.add(Ability.FLUFFY.formatActivation(o.getName(), move.getName() + "'s damage was doubled!"));
+            }
+        }
+
         //Item-based Buffs
 
         boolean itemsOff = this.room.isActive(Room.MAGIC_ROOM);
