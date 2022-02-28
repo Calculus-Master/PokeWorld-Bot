@@ -1663,6 +1663,8 @@ public class Duel
                 this.data(this.other).bideDamage += Math.max(damageDealt, 0);
             }
 
+            if(move.isContact()) this.data(this.other).isFocusPunchFailed = true;
+
             //Berry Effects - Post-Move Damage Dealt
 
             if(damageDealt > 0)
