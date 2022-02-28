@@ -69,7 +69,7 @@ public class PlayerDataQuery extends MongoQuery
                 .append("username", player.getName())
                 .append("level", 0)
                 .append("exp", 0)
-                .append("credits", 1000)
+                .append("credits", 100)
                 .append("redeems", 0)
                 .append("selected", 1)
                 .append("pokemon", new JSONArray())
