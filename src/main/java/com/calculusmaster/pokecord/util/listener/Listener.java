@@ -3,7 +3,6 @@ package com.calculusmaster.pokecord.util.listener;
 import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
-import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.custom.ExtendedIntegerMap;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
@@ -15,9 +14,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -29,6 +26,8 @@ public class Listener extends ListenerAdapter
     int cooldown = 1; //Seconds
 
     private final MessageEventHandler events; { this.events = new MessageEventHandler(); }
+
+    private static final List<String> PLAYERS_NOTIFIED_BOT_CHANNELS = new ArrayList<>();
 
     public static void startSpawnIntervalUpdater()
     {
@@ -63,19 +62,24 @@ public class Listener extends ListenerAdapter
         //If bot is mentioned, send the server prefix
         if(event.getMessage().getMentionedMembers().stream().anyMatch(m -> m.getId().equals("718169293904281610"))) event.getChannel().sendMessage("<@" + player.getId() + ">: My prefix is `" + serverQuery.getPrefix() + "`!").queue();
 
-        //If bot commands are disabled in this channel, skip the listener
-        if(!serverQuery.getBotChannels().isEmpty() && !serverQuery.getBotChannels().contains(event.getChannel().getId()) && !Global.userHasAdmin(server, player))
-        {
-            Pokecord.BOT_JDA.openPrivateChannelById(player.getId()).flatMap(channel -> channel.sendMessage("Bot Commands are not allowed in that channel!")).queue();
-            return;
-        }
-
         //Update the Event Handler's Stored Event
         this.events.updateEvent(event);
 
         //If the message starts with the right prefix, continue, otherwise skip the listener
         if(msg[0].startsWith(serverQuery.getPrefix()))
         {
+            //If bot commands are disabled in this channel, skip the listener
+            if(!serverQuery.getBotChannels().isEmpty() && !serverQuery.getBotChannels().contains(event.getChannel().getId()))
+            {
+                if(!PLAYERS_NOTIFIED_BOT_CHANNELS.contains(player.getId()))
+                {
+                    Pokecord.BOT_JDA.openPrivateChannelById(player.getId()).flatMap(channel -> channel.sendMessage("Bot Commands are not allowed in that channel!")).queue();
+                    PLAYERS_NOTIFIED_BOT_CHANNELS.add(player.getId());
+                }
+
+                return;
+            }
+
             //Check cooldown
             if(this.cooldowns.containsKey(player.getId()) && !msg[0].contains("catch") && !msg[0].contains("use"))
             {
