@@ -34,7 +34,7 @@ public class MessageEventHandler
 
         this.event = event;
         if(PlayerDataQuery.isRegistered(event.getAuthor().getId())) this.data = PlayerDataQuery.ofNonNull(event.getAuthor().getId());
-        this.canSendMessage = new ServerDataQuery(event.getGuild().getId()).getBotChannels().contains(event.getChannel().getId());
+        this.canSendMessage = new ServerDataQuery(event.getGuild().getId()).isAbleToSendMessages(event.getChannel().getId());
     }
 
     public void activateEvent(MessageEvent event)

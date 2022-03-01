@@ -141,6 +141,11 @@ public class ServerDataQuery extends MongoQuery
 
     //key: "botchannel"
 
+    public boolean isAbleToSendMessages(String channelID)
+    {
+        return this.getBotChannels().isEmpty() || this.getBotChannels().contains(channelID);
+    }
+
     public List<String> getBotChannels()
     {
         return this.document.getList("botchannel", String.class);
