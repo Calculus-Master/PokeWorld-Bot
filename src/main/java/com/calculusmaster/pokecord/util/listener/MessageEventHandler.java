@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -19,6 +20,7 @@ public class MessageEventHandler
     private SplittableRandom random;
     private MessageReceivedEvent event;
     private PlayerDataQuery data;
+    private boolean canSendMessage;
 
     public MessageEventHandler()
     {
@@ -32,6 +34,7 @@ public class MessageEventHandler
 
         this.event = event;
         if(PlayerDataQuery.isRegistered(event.getAuthor().getId())) this.data = PlayerDataQuery.ofNonNull(event.getAuthor().getId());
+        this.canSendMessage = new ServerDataQuery(event.getGuild().getId()).getBotChannels().contains(event.getChannel().getId());
     }
 
     public void activateEvent(MessageEvent event)
@@ -46,7 +49,8 @@ public class MessageEventHandler
 
     private void send(String content)
     {
-        this.event.getChannel().sendMessage(this.data.getMention() + "\n" + content).queue();
+        if(this.canSendMessage) this.event.getChannel().sendMessage(this.data.getMention() + "\n" + content).queue();
+        else this.data.directMessage(content);
     }
 
     //Event Activate Methods
