@@ -148,15 +148,21 @@ public class Commands
 
         register("teach")
                 .setCommand(CommandTeach::new)
-                .setCategory(Category.POKEMON);
+                .setCategory(Category.POKEMON)
+                .setDesc("Teach TMs and TRs to your Pokemon!")
+                .addTerminalPoint("teach tm <number>", "Teach a TM to your selected Pokemon.")
+                .addTerminalPoint("teach tr <number>", "Teach a TR to your selected Pokemon.");
 
         register("inventory", "inv", "items", "tms", "trs")
                 .setCommand(CommandInventory::new)
-                .setCategory(Category.ECONOMY);
+                .setCategory(Category.ECONOMY)
+                .setDesc("View your inventory: items, TMs, TRs, and Z-Crystals!")
+                .addTerminalPoint("inventory <page>", "View a specific subpage of your inventory in more detail.");
 
         register("help")
                 .setCommand(CommandHelp::new)
-                .setCategory(Category.MISC);
+                .setCategory(Category.MISC)
+                .setDesc("View help for commands!");
 
         register("trade")
                 .setCommand(CommandTrade::new)
