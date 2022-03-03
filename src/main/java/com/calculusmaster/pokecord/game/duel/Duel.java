@@ -1428,6 +1428,17 @@ public class Duel
             if(move.is(Category.SPECIAL)) move.setDamageMultiplier(0.5);
         }
 
+        //Ability: Volt Absorb
+        if(!otherImmune && o.hasAbility(Ability.VOLT_ABSORB) && move.is(Type.ELECTRIC))
+        {
+            int health = o.getMaxHealth(1 / 4.);
+            if(!move.is(Category.STATUS)) o.heal(health);
+
+            otherImmune = true;
+
+            turnResult.add(Ability.VOLT_ABSORB.formatActivation(o.getName(), move.getName() + " has no affect on " + o.getName() + "!" + (!move.is(Category.STATUS) ? " " + o.getName() + " healed for " + health + " HP!" : "")));
+        }
+
         //Main Results
         String name = this.players[this.current].active.getName();
         List<String> rechargeMoves = List.of("Hyper Beam", "Blast Burn", "Hydro Cannon", "Frenzy Plant", "Roar Of Time", "Prismatic Laser", "Eternabeam", "Giga Impact", "Meteor Assault", "Rock Wrecker");
