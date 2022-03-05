@@ -113,7 +113,7 @@ public class Move
             catch (NoSuchMethodException e) { implemented = false; }
         }
 
-        if(!implemented) LoggerHelper.warn(Move.class, "Unimplemented Move `" + name + "`!");
+        //TODO: Temporarily Disabled: if(!implemented) LoggerHelper.warn(Move.class, "Unimplemented Move `" + name + "`!");
 
         return implemented;
     }

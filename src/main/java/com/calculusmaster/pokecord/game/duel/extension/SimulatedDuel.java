@@ -1,30 +1,33 @@
 package com.calculusmaster.pokecord.game.duel.extension;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
-import com.calculusmaster.pokecord.game.duel.players.Player;
+import com.calculusmaster.pokecord.game.enums.elements.Category;
+import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.MoveData;
 import com.calculusmaster.pokecord.game.moves.registry.MaxMoveRegistry;
 import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
 import com.calculusmaster.pokecord.game.moves.registry.ZMoveRegistry;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.SplittableRandom;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 //For Machine Learning
 public class SimulatedDuel extends Duel
 {
     private static void init()
     {
+        LoggerHelper.disableMongoLoggers();
+
         CSVHelper.init();
         PokemonData.init();
+        PokemonRarity.init();
         MoveData.init();
         MoveTutorRegistry.init();
         ZMoveRegistry.init();
@@ -32,73 +35,81 @@ public class SimulatedDuel extends Duel
         DataHelper.createGigantamaxDataMap();
     }
 
-    //TODO: Heavily WIP (ML for Duels)
     public static void main(String[] args)
     {
-        LoggerHelper.disableMongoLoggers();
         LoggerHelper.init("Simulated Duel", SimulatedDuel::init);
 
-        Pokemon n1 = Pokemon.create("Bulbasaur");
-        Pokemon n2 = Pokemon.create("Bulbasaur");
+        //Outermost Map: {Pokemon Name: {Target Name: {Damage Effectiveness Map}}
+        Map<String, Map<String, Map<String, Float>>> simulatedEffectiveness = new HashMap<>();
 
-        new SimulatedDuel(n1, n2).simulate(5);
-    }
+        ExecutorService pool = Executors.newFixedThreadPool(20);
 
-    public SimulatedDuel(Pokemon a, Pokemon b)
-    {
-        Player A = this.createSimulatedPlayer(a, "A");
-        Player B = this.createSimulatedPlayer(b, "B");
-
-        this.players = new Player[]{A, B};
-    }
-
-    private Player createSimulatedPlayer(Pokemon active, String ID)
-    {
-        Player p = new Player();
-
-        p.ID = "BOT_" + ID;
-        p.data = new PlayerDataQuery(p.ID)
+        for(String userName : PokemonData.POKEMON)
         {
-            @Override
-            public String getUsername()
-            {
-                return "Player " + ID;
-            }
-        };
-        p.team = List.of(active);
-        p.active = active;
+            simulatedEffectiveness.put(userName, new HashMap<>());
 
-        List<String> movePool = new ArrayList<>(List.copyOf(p.active.allMoves()));
-        Collections.shuffle(movePool);
-        for(int i = 0; i < 4; i++) p.active.learnMove(movePool.get(i), i);
+            pool.execute(() -> {
+                for(String targetName : PokemonData.POKEMON)
+                {
+                    Pokemon user = Pokemon.create(userName);
+                    Pokemon target = Pokemon.create(targetName);
 
-        return p;
-    }
+                    user.setLevel(100);
+                    target.setLevel(100);
 
-    public void simulate()
-    {
-        this.setDefaults();
-        this.setDuelPokemonObjects(0);
-        this.setDuelPokemonObjects(1);
-
-        final SplittableRandom r = new SplittableRandom();
-
-        while(!this.isComplete())
-        {
-            this.submitMove(this.players[0].ID, r.nextInt(4), 'm');
-            this.submitMove(this.players[1].ID, r.nextInt(4), 'm');
-
-            this.checkReady();
+                    Collections.synchronizedMap(simulatedEffectiveness).get(userName).put(targetName, simulateMoveDamages(user, target));
+                }
+            });
         }
+
+        StringJoiner j = new StringJoiner("\n");
+        Map<String, Map<String, Integer>> highestDamageMoveFrequency = new HashMap<>();
+
+        simulatedEffectiveness.forEach((user, allPokemonDamagesMap) -> allPokemonDamagesMap.forEach((target, damagesMap) -> {
+            float max = 0;
+            String maxMove = "";
+
+            for (Map.Entry<String, Float> moveDamage : damagesMap.entrySet()) {
+                if (moveDamage.getValue() > max) {
+                    max = moveDamage.getValue();
+                    maxMove = moveDamage.getKey();
+                }
+            }
+
+            String matchup = user + " versus " + target;
+            j.add(matchup + ": Highest Damage Move is " + maxMove + " (Damage: " + max + ")!");
+
+            if(!highestDamageMoveFrequency.containsKey(user)) highestDamageMoveFrequency.put(user, new HashMap<>());
+            highestDamageMoveFrequency.get(user).put(maxMove, highestDamageMoveFrequency.get(user).getOrDefault(maxMove, 0) + 1);
+        }));
+
+        System.out.println(j);
+        //System.out.println(highestDamageMoveFrequency.entrySet().stream().map(e -> e.getKey() + ": " + e.getValue().keySet()).collect(Collectors.joining("\n")));
     }
 
-    public void simulate(int times)
+    private static Map<String, Float> simulateMoveDamages(Pokemon user, Pokemon target)
     {
-        for(int i = 0; i < times; i++) this.simulate();
-    }
+        List<Move> moves = user.getData().moves.keySet().stream().filter(Move::isImplemented).map(Move::new).filter(m -> m.getPower() > 0 && !m.is(Category.STATUS)).toList();
 
-    private static class DuelTurnSummary
-    {
+        Map<String, Float> moveDamages = new HashMap<>();
 
+        for(Move m : moves)
+        {
+            int damageTotal = 0;
+            int trials = 10;
+
+            for(int i = 0; i < trials; i++)
+            {
+                int damage = m.getDamage(user, target);
+                damageTotal += damage;
+            }
+
+            float average = damageTotal / (float)(trials);
+
+            moveDamages.put(m.getName(), average);
+        }
+
+        //System.out.println(user.getName() + " versus " + target.getName() + ":\n\n" + moveDamages.entrySet().stream().map(e -> e.getKey() + ": " + e.getValue()).collect(Collectors.joining("\n")));
+        return moveDamages;
     }
 }
