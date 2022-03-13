@@ -22,7 +22,6 @@ import com.calculusmaster.pokecord.util.helpers.*;
 import com.calculusmaster.pokecord.util.helpers.event.LocationEventHelper;
 import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
-import com.calculusmaster.pokecord.util.listener.ButtonListener;
 import com.calculusmaster.pokecord.util.listener.Listener;
 import com.calculusmaster.pokecord.util.listener.MiscListener;
 import net.dv8tion.jda.api.JDA;
@@ -97,7 +96,6 @@ public class Pokecord
                 .setActivity(Activity.playing("Pokemon"))
                 .addEventListeners(
                         new Listener(),
-                        new ButtonListener(),
                         new MiscListener()
                 );
 
