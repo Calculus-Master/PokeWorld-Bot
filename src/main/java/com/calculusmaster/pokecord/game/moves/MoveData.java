@@ -33,7 +33,7 @@ public final class MoveData
 
         for(String[] moveLine : movesCSV)
         {
-            String name = Global.normalize(moveLine[1].replaceAll("-", " ")).replace("Vice Grip", "Vise Grip");
+            String name = Global.normalize(moveLine[1].replaceAll("-", " "));
 
             String type = typeID.get(moveLine[3]);
             String category = categoryID.get(moveLine[9]);
@@ -84,6 +84,14 @@ public final class MoveData
 
     public static MoveData get(String name)
     {
+        MoveData data = MOVE_DATA.get(name);
+        if(data == null) System.out.println(name);
         return MOVE_DATA.get(name).copy();
+    }
+
+    public static boolean hasData(String name)
+    {
+        //TODO: Remove after fixing the weird usse
+        return MOVE_DATA.containsKey(name);
     }
 }

@@ -143,7 +143,7 @@ public class Pokemon
 
     private void setupMisc()
     {
-        this.rarity = PokemonRarity.POKEMON_RARITIES.getOrDefault(this.name.replaceAll("Primal", "").replaceAll("Mega", "").replaceAll(" X", "").replaceAll(" Y", "").trim(), PokemonRarity.Rarity.EXTREME);
+        this.rarity = PokemonRarity.POKEMON_RARITIES.getOrDefault(this.name.replaceAll("Primal|Mega|\\sY|\\sX", "").trim(), PokemonRarity.Rarity.EXTREME);
     }
 
     public static Pokemon build(String UUID)

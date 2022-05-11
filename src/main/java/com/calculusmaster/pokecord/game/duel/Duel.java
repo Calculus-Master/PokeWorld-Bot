@@ -19,7 +19,6 @@ import com.calculusmaster.pokecord.game.tournament.Tournament;
 import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
-import com.calculusmaster.pokecord.util.listener.ButtonListener;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -36,6 +35,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.*;
 
@@ -1902,21 +1902,32 @@ public class Duel
     //Turn Helper Methods
     public void setDefaults()
     {
+        //Queued Moves
+        this.queuedMoves = new HashMap<>();
+
+        //Global (Non-Sided) Effects: Weather, Terrain, Room
         this.weather = new WeatherHandler();
         this.terrain = new TerrainHandler();
         this.room = new RoomHandler();
-        this.entryHazards = new EntryHazardHandler[]{new EntryHazardHandler(), new EntryHazardHandler()};
-        this.barriers = new FieldBarrierHandler[]{new FieldBarrierHandler(), new FieldBarrierHandler()};
-        this.gmaxDoT = new FieldGMaxDoTHandler[]{new FieldGMaxDoTHandler(), new FieldGMaxDoTHandler()};
-        this.fieldEffects = new FieldEffectsHandler[]{new FieldEffectsHandler(), new FieldEffectsHandler()};
-        this.queuedMoves = new HashMap<>();
 
+        //Field Effects: Entry Hazards, Barriers, Damage over Time from G-Max, Misc. Field Effects
+        this.entryHazards = new EntryHazardHandler[this.players.length];
+        this.barriers = new FieldBarrierHandler[this.players.length];
+        this.gmaxDoT = new FieldGMaxDoTHandler[this.players.length];
+        this.fieldEffects = new FieldEffectsHandler[this.players.length];
+
+        this.iteratePlayers(i -> {
+            this.entryHazards[i] = new EntryHazardHandler();
+            this.barriers[i] = new FieldBarrierHandler();
+            this.gmaxDoT[i] = new FieldGMaxDoTHandler();
+            this.fieldEffects[i] = new FieldEffectsHandler();
+        });
+
+        //Set Default Move Logs
+        for(Player p : this.players) for(Pokemon pokemon : p.team) this.movesUsed.put(pokemon.getUUID(), new ArrayList<>());
+
+        //Set every Pokemon's Health to their Max
         for(Player player : this.players) for(int i = 0; i < player.team.size(); i++) player.team.get(i).setHealth(player.team.get(i).getMaxHealth());
-
-        for(Player p : this.players)
-        {
-            for(Pokemon pokemon : p.team) this.movesUsed.put(pokemon.getUUID(), new ArrayList<>());
-        }
     }
 
     public void checkDynamax(int p)
@@ -1925,10 +1936,7 @@ public class Duel
         {
             this.players[p].dynamaxTurns--;
 
-            if(this.players[p].active.isFainted())
-            {
-                this.players[p].dynamaxTurns = 0;
-            }
+            if(this.players[p].active.isFainted()) this.players[p].dynamaxTurns = 0;
             else if(this.players[p].dynamaxTurns <= 0)
             {
                 this.players[p].active.exitDynamax();
@@ -1947,12 +1955,9 @@ public class Duel
     public void weatherEffects()
     {
         StringJoiner weatherResult = new StringJoiner("\n");
-        weatherResult.add("\n\n\n" + this.weather.get().getStatus());
+        this.iteratePlayers(i -> this.checkWeatherEffects(weatherResult, i));
 
-        this.checkWeatherEffects(weatherResult, 0);
-        this.checkWeatherEffects(weatherResult, 1);
-
-        this.results.add(weatherResult.toString());
+        this.results.add("\n\n\n" + this.weather.get().getStatus() + "\n" + weatherResult);
     }
 
     private void checkWeatherEffects(StringJoiner weatherResult, int p)
@@ -2066,19 +2071,20 @@ public class Duel
 
         this.results = new ArrayList<>();
 
-        this.players[0].move = null;
-        this.players[1].move = null;
+        this.iteratePlayers(i -> this.players[i].move = null);
 
         this.first = "";
 
         //First turn effects
         if(turn == 0)
         {
-            this.checkWeatherAbilities();
+            List<Player> sortedBySpeed = Stream.of(this.players).sorted(Comparator.comparingInt(p -> ((Player)p).active.getStat(Stat.SPD)).reversed()).toList();
 
-            //Effects that occur on the first turn of the battle
-            this.onBattleStart(0);
-            this.onBattleStart(1);
+            //Check Turn 1 weather abilities
+            sortedBySpeed.forEach(p -> this.checkWeatherAbilities(this.indexOf(p.ID)));
+
+            //Check generic Turn 1 effects
+            sortedBySpeed.forEach(p -> this.onBattleStart(this.indexOf(p.ID)));
         }
 
         this.turn++;
@@ -2099,15 +2105,6 @@ public class Duel
             this.players[p].active.changes().change(Stat.ATK, 1);
             this.results.add(Ability.INTREPID_SWORD.formatActivation(this.players[p].active.getName(), this.players[p].active.getName() + "'s Attack rose by 1 stage!"));
         }
-    }
-
-    private void checkWeatherAbilities()
-    {
-        int faster = this.players[0].active.getStat(Stat.SPD) > this.players[1].active.getStat(Stat.SPD) ? 0 : 1;
-        int slower = faster == 0 ? 1 : 0;
-
-        this.checkWeatherAbilities(faster);
-        this.checkWeatherAbilities(slower);
     }
 
     private void checkWeatherAbilities(int p)
@@ -2190,29 +2187,11 @@ public class Duel
 
         try
         {
-            ButtonListener.ZMOVE_SELECTIONS.remove(this.players[0].ID);
             if(this.isComplete())
-            {
                 this.event.getChannel().sendFile(this.getImage(), "duel.png").setEmbeds(embed.build()).queue();
-            }
             else this.event.getChannel()
                     .sendFile(this.getImage(), "duel.png")
                     .setEmbeds(embed.build())
-                    /*.flatMap(m -> m.reply("Turn Action Selection:")
-                            .setActionRows(
-                                    ActionRow.of(
-                                            Button.primary(ButtonListener.DUEL_MOVE_BUTTONS.get(0), "Move 1"),
-                                            Button.primary(ButtonListener.DUEL_MOVE_BUTTONS.get(1), "Move 2"),
-                                            Button.primary(ButtonListener.DUEL_MOVE_BUTTONS.get(2), "Move 3"),
-                                            Button.primary(ButtonListener.DUEL_MOVE_BUTTONS.get(3), "Move 4")
-                                    ),
-                                    ActionRow.of(
-                                            Button.primary(ButtonListener.DUEL_ZMOVE_BUTTON, "Z-Move"),
-                                            Button.primary(ButtonListener.DUEL_DYNAMAX_BUTTON, "Dynamax")
-                                    )
-                            ))
-                    .delay(30, TimeUnit.SECONDS)
-                    .flatMap(Message::delete)*/
                     .queue();
         }
         catch (Exception e)
@@ -2376,7 +2355,7 @@ public class Duel
 
     public boolean isComplete()
     {
-        return this.players[0].lost() || this.players[1].lost();
+        return Arrays.stream(this.players).anyMatch(Player::lost);
     }
 
     public ActionType getAction(int player)
@@ -2496,6 +2475,11 @@ public class Duel
         else sb.append(this.players[p].active.getHealth()).append(" / ").append(this.players[p].active.getStat(Stat.HP)).append(" HP ").append(this.players[p].active.getActiveStatusConditions());
 
         return sb.toString();
+    }
+
+    protected void iteratePlayers(Consumer<Integer> playerAction)
+    {
+        for(int i = 0; i < this.players.length; i++) playerAction.accept(i);
     }
 
     //Core Getters and Setters

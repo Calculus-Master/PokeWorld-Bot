@@ -11,6 +11,7 @@ import com.calculusmaster.pokecord.game.moves.registry.MaxMoveRegistry;
 import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
 import com.calculusmaster.pokecord.game.moves.registry.ZMoveRegistry;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
+import com.calculusmaster.pokecord.game.pokemon.PokemonAI;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.SpecialEvolutionRegistry;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
@@ -80,6 +81,7 @@ public class Pokecord
 
         LoggerHelper.init("Pokemon Data Cache", PokemonDataCache::init);
         //LoggerHelper.init("CommandPokemon", CacheHelper::initPokemonLists, true);
+        if(PokemonAI.ENABLED) LoggerHelper.init("Pokemon AI", PokemonAI::init, true);
 
         long end = System.currentTimeMillis();
 

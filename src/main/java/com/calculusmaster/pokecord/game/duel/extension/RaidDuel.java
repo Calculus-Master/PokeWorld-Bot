@@ -358,14 +358,6 @@ public class RaidDuel extends WildDuel
         return this.players[this.players.length - 1].active.isFainted() || Arrays.stream(this.getNonBotPlayers()).allMatch(p -> p.active.isFainted());
     }
 
-    @Override
-    protected void turnSetup()
-    {
-        super.turnSetup();
-
-        for(int i = 0; i < this.players.length; i++) this.players[i].move = null;
-    }
-
     public void start()
     {
         this.players = new Player[this.waiting.size() + 1];

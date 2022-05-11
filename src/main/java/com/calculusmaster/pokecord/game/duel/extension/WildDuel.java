@@ -9,6 +9,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.PokemonAI;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -53,11 +54,8 @@ public class WildDuel extends Duel
             List<Move> botMoves = new ArrayList<>();
             for(String s : this.players[1].active.allMoves()) if(Move.isImplemented(s)) botMoves.add(new Move(s));
 
-            //TODO: Better AI
-            Move mostDamage = botMoves.get(0);
-            for(Move m : botMoves) if(m.getPower() > mostDamage.getPower()) mostDamage = m;
-
-            if(this.players[1].active.getHealth() <= this.players[1].active.getStat(Stat.HP) / 4) this.players[1].move = mostDamage;
+            //TODO: Better AI (progress made 5-11-22)
+            if(this.players[1].active.getHealth() <= this.players[1].active.getStat(Stat.HP) / 4) this.players[1].move = new Move(new PokemonAI(this.players[1].active).getHighestDamageMove(this.players[0].active));
             else this.players[1].move = botMoves.get(new Random().nextInt(botMoves.size()));
 
             this.fullMoveTurn();

@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.bounties.components.Bounty;
 import com.calculusmaster.pokecord.game.duel.players.Trainer;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
+import com.calculusmaster.pokecord.game.pokemon.PokemonAI;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
@@ -44,6 +45,7 @@ public class ConfigHelper
             Trainer.BASE_COUNT = config.getInteger("base_daily_trainer_count");
             Trainer.COUNT_DEVIATION = config.getInteger("daily_trainer_deviation");
             MasteryLevelManager.ACTIVE = config.getBoolean("mastery_levels");
+            PokemonAI.ENABLED = config.getBoolean("experimental_ai");
 
             LoggerHelper.info(ConfigHelper.class, "Loaded config values!");
         }
@@ -69,6 +71,7 @@ public class ConfigHelper
             CommandTeam.MAX_TEAM_SIZE = 12;
             Trainer.BASE_COUNT = 4;
             Trainer.COUNT_DEVIATION = 2;
+            PokemonAI.ENABLED = true;
         }
     }
 }
