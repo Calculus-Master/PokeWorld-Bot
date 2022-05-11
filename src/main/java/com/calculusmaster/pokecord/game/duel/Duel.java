@@ -305,6 +305,34 @@ public class Duel
             this.results.add(Ability.INTREPID_SWORD.formatActivation(this.players[p].active.getName(), this.players[p].active.getName() + "'s Attack rose by 1 stage!"));
         }
 
+        //Ability: Electric Surge
+        if(this.players[p].active.hasAbility(Ability.ELECTRIC_SURGE))
+        {
+            this.terrain.setTerrain(Terrain.ELECRIC_TERRAIN);
+            this.results.add(Ability.ELECTRIC_SURGE.formatActivation(this.players[p].active.getName(), "An Electric Terrain was created!"));
+        }
+
+        //Ability: Psychic Surge
+        if(this.players[p].active.hasAbility(Ability.PSYCHIC_SURGE))
+        {
+            this.terrain.setTerrain(Terrain.PSYCHIC_TERRAIN);
+            this.results.add(Ability.PSYCHIC_SURGE.formatActivation(this.players[p].active.getName(), "A Psychic Terrain was created!"));
+        }
+
+        //Ability: Grassy Surge
+        if(this.players[p].active.hasAbility(Ability.MISTY_SURGE))
+        {
+            this.terrain.setTerrain(Terrain.MISTY_TERRAIN);
+            this.results.add(Ability.MISTY_SURGE.formatActivation(this.players[p].active.getName(), "A Misty Terrain was created!"));
+        }
+
+        //Ability: Misty Surge
+        if(this.players[p].active.hasAbility(Ability.GRASSY_SURGE))
+        {
+            this.terrain.setTerrain(Terrain.GRASSY_TERRAIN);
+            this.results.add(Ability.GRASSY_SURGE.formatActivation(this.players[p].active.getName(), "A Grassy Terrain was created!"));
+        }
+
         if(this.isNonBotPlayer(p)) this.players[p].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
     }
 
@@ -1238,7 +1266,7 @@ public class Duel
             {
                 move.setDamageMultiplier(0.5);
 
-                turnResult.add(Ability.FLUFFY.formatActivation(o.getName(), move.getName() + "'s damage was reduced by 50%"));
+                turnResult.add(Ability.FLUFFY.formatActivation(o.getName(), move.getName() + "'s damage was reduced by 50%!"));
             }
 
             if(move.is(Type.FIRE) && !move.isContact())
@@ -1246,6 +1274,17 @@ public class Duel
                 move.setDamageMultiplier(2.0);
 
                 turnResult.add(Ability.FLUFFY.formatActivation(o.getName(), move.getName() + "'s damage was doubled!"));
+            }
+        }
+
+        //Ability: Ice Scales
+        if(o.hasAbility(Ability.ICE_SCALES))
+        {
+            if(move.is(Category.SPECIAL))
+            {
+                move.setDamageMultiplier(0.5);
+
+                turnResult.add(Ability.ICE_SCALES.formatActivation(o.getName(), move.getName() + "'s damage was reduced by 50%!"));
             }
         }
 
@@ -1661,6 +1700,13 @@ public class Duel
                 o.changes().change(Stat.SPD, 1);
 
                 turnResult.add(Ability.WEAK_ARMOR.formatActivation(o.getName(), o.getName() + "'s Speed rose by 1 stage, and its Defense was lowered by 1 stage!"));
+            }
+
+            if(o.hasAbility(Ability.JUSTIFIED) && move.is(Type.DARK))
+            {
+                o.changes().change(Stat.ATK, 1);
+
+                turnResult.add(Ability.JUSTIFIED.formatActivation(o.getName(), o.getName() + "'s Attack rose by 1 stage!"));
             }
 
             int damageDealt = preMoveHP - this.players[this.other].active.getHealth();
@@ -2104,6 +2150,34 @@ public class Duel
         {
             this.players[p].active.changes().change(Stat.ATK, 1);
             this.results.add(Ability.INTREPID_SWORD.formatActivation(this.players[p].active.getName(), this.players[p].active.getName() + "'s Attack rose by 1 stage!"));
+        }
+
+        //Ability: Electric Surge
+        if(this.players[p].active.hasAbility(Ability.ELECTRIC_SURGE) && this.terrain.get().equals(Terrain.NORMAL_TERRAIN))
+        {
+            this.terrain.setTerrain(Terrain.ELECRIC_TERRAIN);
+            this.results.add(Ability.ELECTRIC_SURGE.formatActivation(this.players[p].active.getName(), "An Electric Terrain was created!"));
+        }
+
+        //Ability: Psychic Surge
+        if(this.players[p].active.hasAbility(Ability.PSYCHIC_SURGE) && this.terrain.get().equals(Terrain.NORMAL_TERRAIN))
+        {
+            this.terrain.setTerrain(Terrain.PSYCHIC_TERRAIN);
+            this.results.add(Ability.PSYCHIC_SURGE.formatActivation(this.players[p].active.getName(), "A Psychic Terrain was created!"));
+        }
+
+        //Ability: Misty Surge
+        if(this.players[p].active.hasAbility(Ability.MISTY_SURGE) && this.terrain.get().equals(Terrain.NORMAL_TERRAIN))
+        {
+            this.terrain.setTerrain(Terrain.MISTY_TERRAIN);
+            this.results.add(Ability.MISTY_SURGE.formatActivation(this.players[p].active.getName(), "A Misty Terrain was created!"));
+        }
+
+        //Ability: Grassy Surge
+        if(this.players[p].active.hasAbility(Ability.GRASSY_SURGE) && this.terrain.get().equals(Terrain.NORMAL_TERRAIN))
+        {
+            this.terrain.setTerrain(Terrain.GRASSY_TERRAIN);
+            this.results.add(Ability.GRASSY_SURGE.formatActivation(this.players[p].active.getName(), "A Grassy Terrain was created!"));
         }
     }
 
