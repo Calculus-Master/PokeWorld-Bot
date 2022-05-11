@@ -23,11 +23,12 @@ repositories {
 
 dependencies {
     implementation 'net.dv8tion:JDA:4.4.0_352'
-    implementation 'org.mongodb:mongodb-driver-sync:4.4.1'
-    implementation 'org.json:json:20210307'
+    implementation 'org.mongodb:mongodb-driver-sync:4.6.0'
+    implementation 'org.json:json:20220320'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.5'
     implementation group: 'com.opencsv', name: 'opencsv', version: '5.5'
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'org.jooq:joor:0.9.14'
     implementation 'org.jooq:jool:0.9.14'
+    implementation 'one.util:streamex:0.8.1'
 }
