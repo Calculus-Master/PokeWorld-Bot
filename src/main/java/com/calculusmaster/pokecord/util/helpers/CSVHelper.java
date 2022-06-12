@@ -25,6 +25,8 @@ public class CSVHelper
     public static List<String[]> CSV_POKEMON_DATA_DESCRIPTIONS;
     public static List<String[]> CSV_POKEMON_DATA_RARITIES;
 
+    public static List<String[]> CSV_MOVE_DATA;
+
     public static void init()
     {
         CSV_POKEMON_DATA_STANDARD = CSVHelper.readDataCSV("standard");
@@ -37,6 +39,8 @@ public class CSVHelper
         CSV_POKEMON_DATA_MOVES = CSVHelper.readDataCSV("moves");
         CSV_POKEMON_DATA_DESCRIPTIONS = CSVHelper.readDataCSV("descriptions");
         CSV_POKEMON_DATA_RARITIES = CSVHelper.readDataCSV("rarities");
+
+        CSV_MOVE_DATA = CSVHelper.readCSV("/data_csv/move_data");
     }
 
     private static List<String[]> readDataCSV(String fileName)
