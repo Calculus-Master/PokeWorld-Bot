@@ -11,6 +11,7 @@ import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class CommandInfo extends Command
@@ -47,14 +48,16 @@ public class CommandInfo extends Command
         String nature = Global.normalize(chosen.getNature().toString());
         String gender = Global.normalize(chosen.getGender().toString());
         String dynamaxLevel = "" + chosen.getDynamaxLevel();
+        String prestigeLevel = "" + chosen.getPrestigeLevel();
         String item = chosen.getItem().getStyledName();
         String tm = (chosen.hasTM() ? chosen.getTM()  + " - " + chosen.getTM().getMoveName() : "None");
         String tr =  (chosen.hasTR() ? chosen.getTR()  + " - " + chosen.getTR().getMoveName() : "None");
         String image = chosen.getImage();
 
         this.embed
-                .addField("General Info", "**Experience:** %s\n**Type:** %s\n**Nature:** %s\n**Gender:** %s\n**Dynamax Level** %s".formatted(exp, type, nature, gender, dynamaxLevel), false)
-                .addField("Held", "**Item:** %s\n**TM:** %s\n**TR:** %s".formatted(item, tm, tr), false)
+                .addField("General Info", "**Experience:** %s\n**Type:** %s\n**Nature:** %s\n**Gender:** %s\n**Dynamax Level**: %s\n**Prestige Level**: %s".formatted(exp, type, nature, gender, dynamaxLevel, prestigeLevel), true)
+                .addField("Held", "**Item:** %s\n**TM:** %s\n**TR:** %s".formatted(item, tm, tr), true)
+                .addField(this.getPrestigeField(chosen))
                 .addField(this.getStatsField(chosen));
 
         if(this.playerData.getSettings().get(Settings.CLIENT_DETAILED, Boolean.class))
@@ -64,10 +67,6 @@ public class CommandInfo extends Command
                     .addField(this.getEVsField(chosen));
         }
 
-        //Prestige
-        if(chosen.getLevel() == 100 && chosen.getPrestigeLevel() < chosen.getMaxPrestigeLevel()) this.embed.addField("Prestige", "Your Pokemon can now prestige! A prestige will reset a Pokemon's level down to 1, remove all held items and unlearn all moves. The newly Prestiged Pokemon will gain a permanent boost!", false);
-        else if(chosen.getPrestigeLevel() == 0 && chosen.getLevel() >= 50) this.embed.addField("Prestige", "Your Pokemon will be able to Prestige at Level 100!", false);
-
         this.embed.setTitle(title.length() > 256 ? title.substring(0, 247) + "..." : title);
         this.embed.setDescription("UUID: " + UUID);
         this.color = chosen.getType().get(0).getColor();
@@ -75,6 +74,30 @@ public class CommandInfo extends Command
         this.embed.setFooter("Showing Pokemon " + (index + 1) + " / " + this.playerData.getPokemonList().size());
 
         return this;
+    }
+
+    private MessageEmbed.Field getPrestigeField(Pokemon p)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        if(p.getPrestigeLevel() == 0)
+        {
+            if(p.getLevel() < 100) sb.append("*Your Pokemon will be able to Prestige at Level 100 to gain permanent stat boosts! Use the p!prestige command for more information.*");
+            else sb.append("*Your Pokemon can now Prestige! Use the p!prestige command for more information.*");
+        }
+        else if(p.getPrestigeLevel() == p.getMaxPrestigeLevel()) sb.append("*Your Pokemon has reached its maximum Prestige Level!*");
+
+        if(p.getPrestigeLevel() != 0)
+        {
+            Function<Double, String> truncate = i -> ((int)(((i - 1.0) * 100) * 100)) / 100. + "%";
+            String healthBoost = "HP: " + truncate.apply(p.getPrestigeBonus(Stat.HP));
+            String statBoost = "ATK/DEF/SPATK/SPDEF: " + truncate.apply(p.getPrestigeBonus(Stat.ATK));
+            String speedBoost = "SPD: " + truncate.apply(p.getPrestigeBonus(Stat.SPD));
+
+            sb.append("\n").append(healthBoost).append("\n").append(statBoost).append("\n").append(speedBoost).append("\n");
+        }
+
+        return new MessageEmbed.Field("Prestige Boosts", sb.toString(), false);
     }
 
     private MessageEmbed.Field getStatsField(Pokemon p)

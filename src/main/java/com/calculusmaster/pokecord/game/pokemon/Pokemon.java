@@ -891,10 +891,11 @@ public class Pokemon
             double ratio = (double)this.getPrestigeLevel() / (double)this.getMaxPrestigeLevel();
 
             boolean hp = s.equals(Stat.HP);
+            boolean speed = s.equals(Stat.SPD);
             double maxBonus = switch(this.rarity) {
-                case COPPER, SILVER, GOLD -> hp ? 0.75 : 0.50;
-                case DIAMOND, PLATINUM -> hp ? 0.50 : 0.35;
-                case MYTHICAL, LEGENDARY, EXTREME -> hp ? 0.30 : 0.25;
+                case COPPER, SILVER, GOLD -> hp ? 0.75 : (speed ? 0.30 : 0.50);
+                case DIAMOND, PLATINUM -> hp ? 0.50 : (speed ? 0.15 : 0.35);
+                case MYTHICAL, LEGENDARY, EXTREME -> hp ? 0.30 : (speed ? 0.05 : 0.25);
             };
 
             return 1.0 + (ratio * maxBonus);

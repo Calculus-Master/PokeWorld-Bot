@@ -43,6 +43,7 @@ public class PokemonAI
 
     public static void init()
     {
+        //TODO: Cache into a CSV
         List<List<String>> chunkedPokemonList = ListUtils.partition(PokemonData.POKEMON, 50);
 
         ExecutorService pool = Executors.newFixedThreadPool(chunkedPokemonList.size());
