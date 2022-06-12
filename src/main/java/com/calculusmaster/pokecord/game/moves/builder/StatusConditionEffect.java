@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
+import java.util.List;
 import java.util.Random;
 
 public class StatusConditionEffect extends MoveEffect
@@ -47,6 +48,9 @@ public class StatusConditionEffect extends MoveEffect
 
             if(p.hasAbility(Ability.PASTEL_VEIL) && (this.status.equals(StatusCondition.POISONED) || this.status.equals(StatusCondition.BADLY_POISONED)))
                 return Ability.PASTEL_VEIL.formatActivation(p.getName(), p.getName() + " was not poisoned!");
+
+            if(!this.userChange && p.hasAbility(Ability.LEAF_GUARD) && (this.duel.weather.get().equals(Weather.HARSH_SUNLIGHT) || this.duel.weather.get().equals(Weather.EXTREME_HARSH_SUNLIGHT)) && List.of(StatusCondition.ASLEEP, StatusCondition.BURNED, StatusCondition.PARALYZED, StatusCondition.POISONED, StatusCondition.BADLY_POISONED, StatusCondition.FROZEN).contains(this.status))
+                return Ability.LEAF_GUARD.formatActivation(p.getName(), p.getName() + " was protected from the Status Condition!");
 
             p.addStatusCondition(this.status);
 
