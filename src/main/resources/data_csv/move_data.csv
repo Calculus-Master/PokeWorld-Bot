@@ -741,3 +741,4 @@ Thunderous Kick,Fighting,Physical,90,100,The user overwhelms the target with lig
 Glacial Lance,Ice,Physical,130,100,The user attacks by hurling a blizzard-cloaked icicle lance at opposing Pokémon.
 Astral Barrage,Ghost,Special,120,100,The user attacks by sending a frightful amount of small ghosts at opposing Pokémon.
 Eerie Spell,Psychic,Special,80,100,The user attacks with its tremendous psychic power. This also removes 3 PP from the target’s last move.
+Psyshield Bash,Psychic,Special,70,90,"Cloaking itself in psychic energy, the user slams into the target. This may also raise the user’s defensive stats."

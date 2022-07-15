@@ -9,7 +9,6 @@ import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -159,8 +158,8 @@ public final class PokemonData
 //    private static final List<Document> PokemonInfoDatabase = new ArrayList<>();
 //    static { Mongo.PokemonInfo.find().forEach(PokemonInfoDatabase::add); }
 
-    public static void main(String[] args) throws IOException
-    {
+//    public static void main(String[] args) throws IOException
+//    {
 //        writeCSVFile("pokemon_data_standard.csv", new String[]{"name", "dex", "species", "height", "weight", "type", "growth", "yield"},
 //                (d, s, o) -> {
 //                    String[] out = new String[s];
@@ -273,7 +272,7 @@ public final class PokemonData
 //
 //                    o.add(out);
 //        });
-    }
+//    }
 
 //    private interface DocumentParser { void parse(Document d, int arraySize, List<String[]> outputList); }
 //
