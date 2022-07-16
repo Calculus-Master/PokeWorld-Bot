@@ -85,9 +85,7 @@ public class EliteDuel extends TrainerDuel
         String[] team = new String[6];
         for(int i = 0; i < 6; i++) team[i] = pool.get(new Random().nextInt(pool.size()));
 
-        Trainer.TrainerInfo elite = new Trainer.TrainerInfo("Elite Trainer", 100, ZCrystal.values()[new Random().nextInt(18)], 1.5, team);
-
-        elite.buff = 1.25;
+        Trainer.TrainerInfo elite = new Trainer.TrainerInfo("Elite Trainer", 100, ZCrystal.values()[new Random().nextInt(18)], 1.25, team);
 
         this.players[1] = Trainer.create(elite);
 
@@ -102,6 +100,13 @@ public class EliteDuel extends TrainerDuel
 
             p.setHealth(p.getStat(Stat.HP));
             p.setShiny(r.nextInt(100) < 20);
+
+            if(r.nextFloat() < 0.2F)
+            {
+                List<Integer> levelPool = new ArrayList<>();
+                for(int prestigeLevel = 1; prestigeLevel < p.getMaxPrestigeLevel() + 1; prestigeLevel++) for(int k = 0; k < p.getMaxPrestigeLevel() + 1 - prestigeLevel; k++) levelPool.add(prestigeLevel);
+                p.setPrestigeLevel(levelPool.get(r.nextInt(levelPool.size())));
+            }
         }
 
         this.players[1].active = this.players[1].team.get(0);
