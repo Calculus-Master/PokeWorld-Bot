@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugmentRegistry;
@@ -49,7 +50,8 @@ public class CommandAugments extends Command
             int price = augment.getCreditCost();
             Pokemon active = this.playerData.getSelectedPokemon();
 
-            if(!owned && this.playerData.getCredits() < price) this.response = "Insufficient credits! You need " + price + " credits to unlock this Augment!";
+            if(DuelHelper.isInDuel(this.player.getId())) this.response = "You cannot change Augments while in a Duel!";
+            else if(!owned && this.playerData.getCredits() < price) this.response = "Insufficient credits! You need " + price + " credits to unlock this Augment!";
             else if(active.hasAugment(augment)) this.response = active.getName() + " already has that Augment equipped!";
             else if(!active.isValidAugment(augment)) this.response = active.getName() + " cannot equip that Augment!";
             else if(active.getAvailableAugmentSlots() < augment.getSlotCost()) this.response = "There are not enough slots available to equip that Augment! " + active.getName() + " has " + active.getAvailableAugmentSlots() + " available, and that Augment needs " + augment.getSlotCost() + " slots!";
@@ -75,7 +77,8 @@ public class CommandAugments extends Command
 
             Pokemon active = this.playerData.getSelectedPokemon();
 
-            if(all)
+            if(DuelHelper.isInDuel(this.player.getId())) this.response = "You cannot change Augments while in a Duel!";
+            else if(all)
             {
                 if(active.getAugments().isEmpty()) this.response = active.getName() + " does not have any Augments equipped!";
                 else
