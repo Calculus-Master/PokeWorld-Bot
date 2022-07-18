@@ -54,6 +54,7 @@ public class CommandPrestige extends Command
                 p.setTR();
                 p.setTM();
                 p.setMoves();
+                p.clearAugments();
 
                 p.completeUpdate();
 
