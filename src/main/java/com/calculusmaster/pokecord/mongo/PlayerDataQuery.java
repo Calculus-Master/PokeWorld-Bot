@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
+import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.cache.PlayerDataCache;
 import com.calculusmaster.pokecord.util.cache.PokemonDataCache;
@@ -86,7 +87,8 @@ public class PlayerDataQuery extends MongoQuery
                 .append("bounties", new JSONArray())
                 .append("pursuit", new JSONArray())
                 .append("owned_eggs", new JSONArray())
-                .append("active_egg", "");
+                .append("active_egg", "")
+                .append("owned_augments", new JSONArray());
 
         LoggerHelper.logDatabaseInsert(PlayerDataQuery.class, data);
 
@@ -646,5 +648,26 @@ public class PlayerDataQuery extends MongoQuery
     public void removeActiveEgg()
     {
         this.update(Updates.set("active_egg", ""));
+    }
+
+    //key: "owned_augments"
+    public List<String> getOwnedAugmentIDs()
+    {
+        return this.document.getList("owned_augments", String.class);
+    }
+
+    public List<PokemonAugment> getOwnedAugments()
+    {
+        return this.getOwnedAugmentIDs().stream().map(PokemonAugment::fromID).collect(Collectors.toList());
+    }
+
+    public boolean ownsAugment(String augmentID)
+    {
+        return this.getOwnedAugmentIDs().contains(augmentID);
+    }
+
+    public void addAugment(String augmentID)
+    {
+        this.update(Updates.push("owned_augments", augmentID));
     }
 }

@@ -5,6 +5,8 @@ import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
+import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugmentRegistry;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonBoosts;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonDuelStatChanges;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonDuelStatOverrides;
@@ -51,6 +53,7 @@ public class Pokemon
     private Item item;
     private TM tm;
     private TR tr;
+    private EnumSet<PokemonAugment> augments;
 
     //Duel Fields
     private List<Type> type;
@@ -92,6 +95,7 @@ public class Pokemon
         p.setItem(Item.NONE);
         p.setTM();
         p.setTR();
+        p.setAugments(List.of());
 
         p.setupMisc();
         p.setDuelDefaults();
@@ -121,6 +125,7 @@ public class Pokemon
         p.setItem(Item.cast(data.getString("item")));
         p.setTM(data.getInteger("tm") == -1 ? null : TM.get(data.getInteger("tm")));
         p.setTR(data.getInteger("tr") == -1 ? null : TR.get(data.getInteger("tr")));
+        p.setAugments(data.getList("augments", String.class));
 
         p.setupMisc();
         p.setDuelDefaults();
@@ -200,7 +205,8 @@ public class Pokemon
                 .append("moves", this.moves)
                 .append("item", this.item.toString())
                 .append("tm", this.tm == null ? -1 : this.tm.getNumber())
-                .append("tr", this.tr == null ? -1 : this.tr.getNumber());
+                .append("tr", this.tr == null ? -1 : this.tr.getNumber())
+                .append("augments", this.augments.stream().map(Enum::toString).toList());
     }
 
     public void upload()
@@ -288,6 +294,17 @@ public class Pokemon
     public void updateTMTR()
     {
         this.update(Updates.set("tm", this.tm == null ? -1 : this.tm.getNumber()), Updates.set("tr", this.tr == null ? -1 : this.tr.getNumber()));
+    }
+
+    public void updateAugments()
+    {
+        this.update(Updates.set("augments", this.augments));
+    }
+
+    public void resetAugments()
+    {
+        this.clearAugments();
+        this.updateAugments();
     }
 
     //Mastery
@@ -399,8 +416,9 @@ public class Pokemon
 
         double masteredBoost = this.isMastered() ? 1.05 : 1.0;
         double prestigeBoost = this.getPrestigeBonus(s);
+        double generalAugmentBoost = this.getAugmentStatBoost(s);
 
-        double commonBoosts = masteredBoost * prestigeBoost;
+        double commonBoosts = masteredBoost * prestigeBoost * generalAugmentBoost;
 
         if(s.equals(Stat.HP))
         {
@@ -880,6 +898,77 @@ public class Pokemon
     public LinkedHashMap<Stat, Integer> getEVs()
     {
         return this.evs.get();
+    }
+
+    //Augments
+    public int getTotalAugmentSlots()
+    {
+        List<Integer> scaling = PokemonAugmentRegistry.AUGMENT_SLOTS.get(this.getRarity());
+
+        int slots = 0;
+        for(Integer slotLevel : scaling) if(slotLevel <= this.getLevel()) slots++;
+        return slots;
+    }
+
+    public int getLevelForNextSlot()
+    {
+        List<Integer> scaling = PokemonAugmentRegistry.AUGMENT_SLOTS.get(this.getRarity());
+
+        if(scaling.size() == this.getTotalAugmentSlots()) return -1;
+        else for(int i = scaling.size() - 1; i >= 0; i--) if(this.getLevel() >= scaling.get(i)) return scaling.get(i + 1);
+        return -1;
+    }
+
+    public void equipAugment(PokemonAugment augment)
+    {
+        this.augments.add(augment);
+    }
+
+    public void removeAugment(PokemonAugment augment)
+    {
+        this.augments.remove(augment);
+    }
+
+    public void setAugments(List<String> augments)
+    {
+        this.augments = EnumSet.noneOf(PokemonAugment.class);
+        augments.forEach(s -> this.augments.add(PokemonAugment.fromID(s)));
+    }
+
+    public void clearAugments()
+    {
+        this.augments = EnumSet.noneOf(PokemonAugment.class);
+    }
+
+    public int getAvailableAugmentSlots()
+    {
+        return this.getTotalAugmentSlots() - this.augments.stream().mapToInt(PokemonAugment::getSlotCost).sum();
+    }
+
+    public EnumSet<PokemonAugment> getAugments()
+    {
+        return this.augments;
+    }
+
+    public boolean hasAugment(PokemonAugment augment)
+    {
+        return this.augments.contains(augment);
+    }
+
+    public boolean isValidAugment(PokemonAugment augment)
+    {
+        return PokemonAugmentRegistry.AUGMENT_DATA.get(this.getName()).has(augment);
+    }
+
+    public double getAugmentStatBoost(Stat s)
+    {
+        if(s.equals(Stat.HP)) return this.hasAugment(PokemonAugment.HP_BOOST_I) ? 1.05 : (this.hasAugment(PokemonAugment.HP_BOOST_II) ? 1.1 : (this.hasAugment(PokemonAugment.HP_BOOST_III) ? 1.2 : 1.0));
+        else if(s.equals(Stat.ATK)) return this.hasAugment(PokemonAugment.ATK_BOOST_I) ? 1.05 : (this.hasAugment(PokemonAugment.ATK_BOOST_II) ? 1.1 : (this.hasAugment(PokemonAugment.ATK_BOOST_III) ? 1.2 : 1.0));
+        else if(s.equals(Stat.DEF)) return this.hasAugment(PokemonAugment.DEF_BOOST_I) ? 1.05 : (this.hasAugment(PokemonAugment.DEF_BOOST_II) ? 1.1 : (this.hasAugment(PokemonAugment.DEF_BOOST_III) ? 1.2 : 1.0));
+        else if(s.equals(Stat.SPATK)) return this.hasAugment(PokemonAugment.SPATK_BOOST_I) ? 1.05 : (this.hasAugment(PokemonAugment.SPATK_BOOST_II) ? 1.1 : (this.hasAugment(PokemonAugment.SPATK_BOOST_III) ? 1.2 : 1.0));
+        else if(s.equals(Stat.SPDEF)) return this.hasAugment(PokemonAugment.SPDEF_BOOST_I) ? 1.05 : (this.hasAugment(PokemonAugment.SPDEF_BOOST_II) ? 1.1 : (this.hasAugment(PokemonAugment.SPDEF_BOOST_III) ? 1.2 : 1.0));
+        else if(s.equals(Stat.SPD)) return this.hasAugment(PokemonAugment.SPD_BOOST_I) ? 1.05 : (this.hasAugment(PokemonAugment.SPD_BOOST_II) ? 1.1 : (this.hasAugment(PokemonAugment.SPD_BOOST_III) ? 1.2 : 1.0));
+        else return 1.0;
     }
 
     //Prestige Level

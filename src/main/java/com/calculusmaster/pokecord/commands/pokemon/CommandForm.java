@@ -33,8 +33,11 @@ public class CommandForm extends Command
         else
         {
             this.response = s.getName() + " transformed into `" + form + "`!";
+
             s.changeForm(form);
             s.updateName();
+
+            s.resetAugments();
         }
 
         return this;

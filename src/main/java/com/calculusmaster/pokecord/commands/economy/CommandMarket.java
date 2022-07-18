@@ -58,6 +58,8 @@ public class CommandMarket extends Command
                 this.playerData.changeCredits(-1 * m.price);
                 this.playerData.addPokemon(m.pokemonID);
 
+                m.pokemon.resetAugments();
+
                 if(!m.sellerID.equals("BOT"))
                 {
                     PlayerDataQuery seller = PlayerDataQuery.of(m.sellerID);

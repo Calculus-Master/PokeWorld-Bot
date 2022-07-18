@@ -116,6 +116,8 @@ public class CommandEvolve extends Command
             selected.evolve(target);
             selected.updateName();
 
+            selected.resetAugments();
+
             this.playerData.updateBountyProgression(ObjectiveType.EVOLVE_POKEMON);
             this.playerData.getStatistics().incr(PlayerStatistic.POKEMON_EVOLVED);
 

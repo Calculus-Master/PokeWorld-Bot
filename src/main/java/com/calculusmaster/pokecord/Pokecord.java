@@ -14,6 +14,7 @@ import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.PokemonAI;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.SpecialEvolutionRegistry;
+import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugmentRegistry;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.PrivateInfo;
@@ -73,6 +74,7 @@ public class Pokecord
         LoggerHelper.init("Trainer", Trainer::init);
         LoggerHelper.init("Incomplete Moves", Move::init);
         LoggerHelper.init("Pokemon Rarity", PokemonRarity::init);
+        LoggerHelper.init("Pokemon Augments", PokemonAugmentRegistry::init);
         LoggerHelper.init("Command Handler", Commands::init);
         LoggerHelper.init("Shops", CommandShop::updateShops);
         LoggerHelper.init("Pokemon Mastery Level", MasteryLevelManager::init);

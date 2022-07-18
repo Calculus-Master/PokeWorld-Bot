@@ -312,6 +312,10 @@ public class Commands
                 .setCommand(CommandPrestige::new)
                 .setCategory(Category.POKEMON);
 
+        register("augments")
+                .setCommand(CommandAugments::new)
+                .setCategory(Category.POKEMON);
+
         register("dev")
                 .setCommand(CommandDev::new)
                 .setCategory(Category.MISC);
