@@ -53,6 +53,7 @@ public class CommandAugments extends Command
             if(DuelHelper.isInDuel(this.player.getId())) this.response = "You cannot change Augments while in a Duel!";
             else if(!owned && this.playerData.getCredits() < price) this.response = "Insufficient credits! You need " + price + " credits to unlock this Augment!";
             else if(active.hasAugment(augment)) this.response = active.getName() + " already has that Augment equipped!";
+            else if(PokemonAugmentRegistry.isIncompatibleWith(augment, active.getAugments())) this.response = "That Augment is incompatible with at least one of the equipped Augments!";
             else if(!active.isValidAugment(augment)) this.response = active.getName() + " cannot equip that Augment!";
             else if(active.getAvailableAugmentSlots() < augment.getSlotCost()) this.response = "There are not enough slots available to equip that Augment! " + active.getName() + " has " + active.getAvailableAugmentSlots() + " available, and that Augment needs " + augment.getSlotCost() + " slots!";
             else
@@ -121,7 +122,7 @@ public class CommandAugments extends Command
                 for(PokemonAugment augment : augments)
                 {
                     String tag;
-                    if(active.hasAugment(augment)) tag = ":no_entry_sign:";
+                    if(active.hasAugment(augment) || PokemonAugmentRegistry.isIncompatibleWith(augment, active.getAugments())) tag = ":no_entry_sign:";
                     else if(augment.getSlotCost() > active.getAvailableAugmentSlots() && level <= active.getLevel()) tag = ":yellow_circle:";
                     else if(level <= active.getLevel()) tag = ":green_circle:";
                     else tag = ":red_circle:";

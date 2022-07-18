@@ -24,6 +24,17 @@ public class PokemonAugmentRegistry
             PokemonRarity.Rarity.EXTREME,   List.of(10, 50, 90)
     );
 
+    //Incompatibilities
+    public static final Map<PokemonAugment, EnumSet<PokemonAugment>> INCOMPATIBILITIES = Map.of(
+            PokemonAugment.SUPERCHARGED, EnumSet.of(PokemonAugment.SUPERFORTIFIED),
+            PokemonAugment.SUPERFORTIFIED, EnumSet.of(PokemonAugment.SUPERCHARGED)
+    );
+
+    public static boolean isIncompatibleWith(PokemonAugment augment, Collection<PokemonAugment> equipped)
+    {
+        return INCOMPATIBILITIES.containsKey(augment) && INCOMPATIBILITIES.get(augment).stream().anyMatch(equipped::contains);
+    }
+
     //Augment Data
     public static final Map<String, PokemonAugmentData> AUGMENT_DATA = new LinkedHashMap<>();
 

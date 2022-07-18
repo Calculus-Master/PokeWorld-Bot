@@ -40,6 +40,7 @@ public enum PokemonAugment
     private final int slotCost;
     private final String augmentName;
     private final String description;
+
     PokemonAugment(int slotCost, String augmentName, String description)
     {
         this.slotCost = slotCost;
