@@ -87,6 +87,18 @@ public class PokemonAugmentRegistry
             augmentData.build();
         });
 
+        //Somewhat Universal Augments
+        PokemonData.POKEMON.forEach(s -> {
+            PokemonData data = PokemonData.get(s);
+            PokemonAugmentData augmentData = AUGMENT_DATA.get(s);
+
+            PokemonRarity.Rarity rarity = PokemonRarity.POKEMON_RARITIES.getOrDefault(data.name.replaceAll("Primal|Mega|\\sY|\\sX", "").trim(), PokemonRarity.Rarity.EXTREME);
+
+            //Supercharged & Superfortified
+            if(List.of(PokemonRarity.Rarity.COPPER, PokemonRarity.Rarity.SILVER, PokemonRarity.Rarity.GOLD, PokemonRarity.Rarity.DIAMOND, PokemonRarity.Rarity.PLATINUM).contains(rarity))
+                augmentData.registerAugment(35, PokemonAugment.SUPERCHARGED).registerAugment(35, PokemonAugment.SUPERFORTIFIED);
+        });
+
         //Necrozma
         AUGMENT_DATA.get("Necrozma").registerAugment(60, PokemonAugment.PRISMATIC_CONVERGENCE).registerAugment(40, PokemonAugment.LIGHT_ABSORPTION);
         AUGMENT_DATA.get("Dusk Mane Necrozma").registerAugment(60, PokemonAugment.PRISMATIC_CONVERGENCE).registerAugment(40, PokemonAugment.LIGHT_ABSORPTION);

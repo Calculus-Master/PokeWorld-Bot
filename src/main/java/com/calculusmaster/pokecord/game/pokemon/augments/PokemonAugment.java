@@ -26,9 +26,13 @@ public enum PokemonAugment
     SPDEF_BOOST_III (1, "Special Defense Boost III", "Increases Special Defense 20%"),
     SPD_BOOST_III   (1, "Speed Boost III", "Increases Speed by 20%"),
 
+    //Somewhat Universal Augments
+    SUPERCHARGED(2, "Supercharged", "All moves deal 25% more damage, but increases damage taken by 25%."),
+    SUPERFORTIFIED(2, "Superfortified", "Reduces damage taken by 25%, but all moves deal 25% less damage."),
+
     //Unique Augments - Necrozma
-    PRISMATIC_CONVERGENCE(2, "Prismatic Convergence", "Supercharges Prismatic Laser, dealing 30% extra damage, but lowering Speed by 2 stages on use."),
-    REFRACTED_PRISMATIC_CONVERGENCE(2, "Ascendant Prismatic Convergence", "Supercharges Prismatic Laser, dealing 60% extra damage, but lowering Speed by 4 stages on use."),
+    PRISMATIC_CONVERGENCE(2, "Prismatic Convergence", "Supercharges Prismatic Laser, increasing its power by 30%, but lowering Speed by 2 stages on use."),
+    REFRACTED_PRISMATIC_CONVERGENCE(2, "Ascendant Prismatic Convergence", "Supercharges Prismatic Laser, increasing its power by 60%, but lowering Speed by 4 stages on use."),
     LIGHT_ABSORPTION(1, "Light Absorption", "During Harsh Sunlight, reduces damage taken from Special moves by 15%.")
 
     ;
