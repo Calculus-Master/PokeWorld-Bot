@@ -6,14 +6,9 @@ import com.calculusmaster.pokecord.game.moves.MoveData;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
-import com.calculusmaster.pokecord.util.Mongo;
-import com.calculusmaster.pokecord.util.helpers.CSVHelper;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Updates;
 import org.jooq.lambda.tuple.Tuple2;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class PokemonAugmentRegistry
 {
@@ -31,18 +26,6 @@ public class PokemonAugmentRegistry
 
     //Augment Data
     public static final Map<String, PokemonAugmentData> AUGMENT_DATA = new LinkedHashMap<>();
-
-    public static void main(String[] args)
-    {
-        CSVHelper.init();
-        MoveData.init();
-        PokemonData.init();
-        init();
-
-        AUGMENT_DATA.forEach((s, d) -> System.out.println(s + ": " + d.augments.entrySet().stream().map(e -> "(" + e.getKey() + " – " + e.getValue().stream().map(a -> a.toString()).collect(Collectors.joining(", ")) + ")").collect(Collectors.joining("   |   "))));
-
-        Mongo.PlayerData.updateMany(Filters.exists("playerID"), Updates.set("owned_augments", EnumSet.noneOf(PokemonAugment.class)));
-    }
 
     public static void init()
     {
@@ -103,6 +86,12 @@ public class PokemonAugmentRegistry
             augments.forEach(t -> augmentData.registerAugment(t.v2, t.v1));
             augmentData.build();
         });
+
+        //Necrozma
+        AUGMENT_DATA.get("Necrozma").registerAugment(60, PokemonAugment.PRISMATIC_CONVERGENCE).registerAugment(40, PokemonAugment.LIGHT_ABSORPTION);
+        AUGMENT_DATA.get("Dusk Mane Necrozma").registerAugment(60, PokemonAugment.PRISMATIC_CONVERGENCE).registerAugment(40, PokemonAugment.LIGHT_ABSORPTION);
+        AUGMENT_DATA.get("Dawn Wings Necrozma").registerAugment(60, PokemonAugment.PRISMATIC_CONVERGENCE);
+        AUGMENT_DATA.get("Ultra Necrozma").registerAugment(70, PokemonAugment.REFRACTED_PRISMATIC_CONVERGENCE).registerAugment(30, PokemonAugment.LIGHT_ABSORPTION);
     }
 
     private static PokemonAugmentData register(String pokemon)

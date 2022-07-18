@@ -4,7 +4,7 @@ import com.calculusmaster.pokecord.util.enums.Prices;
 
 public enum PokemonAugment
 {
-    //Basic Augments
+    //Basic Stat Boost Augments
     HP_BOOST_I      (1, "Health Boost I", "Increases HP by 5%"),
     ATK_BOOST_I     (1, "Attack Boost I", "Increases Attack by 5%"),
     DEF_BOOST_I     (1, "Defense Boost I", "Increases Defense by 5%"),
@@ -24,7 +24,14 @@ public enum PokemonAugment
     DEF_BOOST_III   (1, "Defense Boost III", "Increases Defense by 20%"),
     SPATK_BOOST_III (1, "Special Attack Boost III", "Increases Special Attack by 20%"),
     SPDEF_BOOST_III (1, "Special Defense Boost III", "Increases Special Defense 20%"),
-    SPD_BOOST_III   (1, "Speed Boost III", "Increases Speed by 20%");
+    SPD_BOOST_III   (1, "Speed Boost III", "Increases Speed by 20%"),
+
+    //Unique Augments - Necrozma
+    PRISMATIC_CONVERGENCE(2, "Prismatic Convergence", "Supercharges Prismatic Laser, dealing 30% extra damage, but lowering Speed by 2 stages on use."),
+    REFRACTED_PRISMATIC_CONVERGENCE(2, "Ascendant Prismatic Convergence", "Supercharges Prismatic Laser, dealing 60% extra damage, but lowering Speed by 4 stages on use."),
+    LIGHT_ABSORPTION(1, "Light Absorption", "During Harsh Sunlight, reduces damage taken from Special moves by 15%.")
+
+    ;
 
     private final int slotCost;
     private final String augmentName;

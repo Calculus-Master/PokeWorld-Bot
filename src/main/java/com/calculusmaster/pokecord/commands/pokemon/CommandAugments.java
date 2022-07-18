@@ -70,11 +70,21 @@ public class CommandAugments extends Command
         }
         else if(remove)
         {
+            boolean all = this.msg[2].equals("all");
             PokemonAugment augment = PokemonAugment.fromID(this.msg[2]);
 
             Pokemon active = this.playerData.getSelectedPokemon();
 
-            if(augment == null) this.response = "Invalid Augment ID!";
+            if(all)
+            {
+                if(active.getAugments().isEmpty()) this.response = active.getName() + " does not have any Augments equipped!";
+                else
+                {
+                    active.resetAugments();
+                    this.response = "Successfully removed all Augments from " + active.getName() + "!";
+                }
+            }
+            else if(augment == null) this.response = "Invalid Augment ID!";
             else if(!active.hasAugment(augment)) this.response = active.getName() + " does not have that Augment equipped!";
             else
             {

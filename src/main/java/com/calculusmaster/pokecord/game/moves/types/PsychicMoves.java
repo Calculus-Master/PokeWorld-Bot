@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 
 import java.util.*;
 
@@ -172,7 +173,21 @@ public class PsychicMoves
 
     public String PrismaticLaser(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        String augment = "";
+        if(user.hasAugment(PokemonAugment.PRISMATIC_CONVERGENCE))
+        {
+            move.setPower(1.3);
+            user.changes().change(Stat.SPD, -2);
+            augment = " It was supercharged by Prismatic Convergence Augment!";
+        }
+        else if(user.hasAugment(PokemonAugment.REFRACTED_PRISMATIC_CONVERGENCE))
+        {
+            move.setPower(1.6);
+            user.changes().change(Stat.SPD, -4);
+            augment = " It was supercharged by the Refracted Prismatic Convergence Augment!";
+        }
+
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + augment;
     }
 
     public String Extrasensory(Pokemon user, Pokemon opponent, Duel duel, Move move)
