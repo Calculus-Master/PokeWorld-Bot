@@ -30,10 +30,18 @@ public enum PokemonAugment
     SUPERCHARGED(2, "Supercharged", "All moves deal 25% more damage, but increases damage taken by 25%."),
     SUPERFORTIFIED(2, "Superfortified", "Reduces damage taken by 25%, but all moves deal 25% less damage."),
 
+    //Unique Augments - Marshadow
+    SPECTRAL_AMPLIFICATION(3, "Spectral Amplification", "Increases the damage of Ghost-type moves by 250%. Every time a Ghost-type move is used, both Attack and Defense are lowered by 2 stages."),
+    PHANTOM_TARGETING(1, "Phantom Targeting", "All super effective moves deal 50% more damage."),
+    SHADOW_PROPULSION(1, "Shadow Propulsion", "Using Ghost-type moves has a 33% chance to raise Speed by 1 stage."),
+
     //Unique Augments - Necrozma
     PRISMATIC_CONVERGENCE(2, "Prismatic Convergence", "Supercharges Prismatic Laser, increasing its power by 30%, but lowering Speed by 2 stages on use."),
-    REFRACTED_PRISMATIC_CONVERGENCE(2, "Ascendant Prismatic Convergence", "Supercharges Prismatic Laser, increasing its power by 60%, but lowering Speed by 4 stages on use."),
-    LIGHT_ABSORPTION(1, "Light Absorption", "During Harsh Sunlight, reduces damage taken from Special moves by 15%.")
+    RADIANT_PRISMATIC_CONVERGENCE(2, "Radiant Prismatic Convergence", "Supercharges Prismatic Laser, increasing its power by 60%, but lowering Speed by 4 stages on use."),
+    LIGHT_ABSORPTION(1, "Light Absorption", "During Harsh Sunlight, reduces damage taken from Special moves by 15%."),
+    DIFFRACTED_BEAMS(2, "Diffraction Beam", "50% of the damage dealt by Beam Moves (Charge Beam, Prismatic Laser, Solar Beam, Hyper Beam, Flash Cannon) is distributed across the opponent's team."),
+    RADIANT_DIFFRACTED_BEAMS(2, "Radiant Diffraction Beam", "50% of the damage dealt by Beam Moves (Charge Beam, Prismatic Laser, Solar Beam, Hyper Beam, Flash Cannon) is distributed across the opponent's team. The damage dealt to each team member is boosted by an additional 10%."),
+    PRISMATIC_MOONLIT_SHIELD(1, "Prismatic Moonlit Shield", "Provides immunity to Dark-type moves. Damage taken from Ghost-type moves is reduced by 75%.")
 
     ;
 

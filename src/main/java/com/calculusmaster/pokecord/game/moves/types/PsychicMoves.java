@@ -178,13 +178,13 @@ public class PsychicMoves
         {
             move.setPower(1.3);
             user.changes().change(Stat.SPD, -2);
-            augment = " It was supercharged by Prismatic Convergence Augment!";
+            augment = " It was supercharged by the %s Augment!".formatted(PokemonAugment.PRISMATIC_CONVERGENCE.getAugmentName());
         }
-        else if(user.hasAugment(PokemonAugment.REFRACTED_PRISMATIC_CONVERGENCE))
+        else if(user.hasAugment(PokemonAugment.RADIANT_PRISMATIC_CONVERGENCE))
         {
             move.setPower(1.6);
             user.changes().change(Stat.SPD, -4);
-            augment = " It was supercharged by the Refracted Prismatic Convergence Augment!";
+            augment = " It was supercharged by the %s Augment!".formatted(PokemonAugment.RADIANT_PRISMATIC_CONVERGENCE.getAugmentName());
         }
 
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + augment;

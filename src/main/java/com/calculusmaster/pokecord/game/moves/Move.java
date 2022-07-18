@@ -316,6 +316,9 @@ public class Move
         //Ability: Neuroforce
         if(user.hasAbility(Ability.NEUROFORCE) && type > 1) power = (int)(power * 1.25);
 
+        //Augment: Phantom Targeting
+        if(type > 1.0) type *= 1.5;
+
         double modifier = critical * random * stab * type * burned;
         double damage = (((2 * level / 5.0 + 2) * power * (double)atkStat / (double)defStat) / 50) + 2;
         double finalDMG = damage * modifier;

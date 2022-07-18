@@ -14,6 +14,7 @@ import com.calculusmaster.pokecord.game.moves.TypeEffectiveness;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
+import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonDuelAttributes;
 import com.calculusmaster.pokecord.game.tournament.Tournament;
 import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
@@ -1707,6 +1708,13 @@ public class Duel
                 o.changes().change(Stat.ATK, 1);
 
                 turnResult.add(Ability.JUSTIFIED.formatActivation(o.getName(), o.getName() + "'s Attack rose by 1 stage!"));
+            }
+
+            if(c.hasAugment(PokemonAugment.SHADOW_PROPULSION) && move.is(Type.GHOST) && new Random().nextFloat() < 0.33F)
+            {
+                c.changes().change(Stat.SPD, -1);
+
+                turnResult.add(c.getName() + "'s Speed rose by 1 stage due to the %s Augment!".formatted(PokemonAugment.SHADOW_PROPULSION.getAugmentName()));
             }
 
             int damageDealt = preMoveHP - this.players[this.other].active.getHealth();

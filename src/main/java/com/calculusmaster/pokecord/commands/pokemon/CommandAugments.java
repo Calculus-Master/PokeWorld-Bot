@@ -127,7 +127,7 @@ public class CommandAugments extends Command
                     else if(level <= active.getLevel()) tag = ":green_circle:";
                     else tag = ":red_circle:";
 
-                    availableAugments.add(String.join(" | ", augment.getAugmentName() + " " + tag, "ID: " + augment.getAugmentID(), "Slots: " + augment.getSlotCost(), "Level: " + level, "*" + augment.getAugmentDescription() + "*"));
+                    availableAugments.add(String.join(" | ", augment.getAugmentName() + " " + tag, "ID: " + augment.getAugmentID(), "Slots: " + augment.getSlotCost(), "Level: " + level));
                 }
             });
             this.embed.addField("Available Augments", String.join("\n", availableAugments), false);

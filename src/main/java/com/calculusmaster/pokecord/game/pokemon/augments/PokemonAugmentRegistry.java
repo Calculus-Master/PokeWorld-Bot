@@ -27,7 +27,10 @@ public class PokemonAugmentRegistry
     //Incompatibilities
     public static final Map<PokemonAugment, EnumSet<PokemonAugment>> INCOMPATIBILITIES = Map.of(
             PokemonAugment.SUPERCHARGED, EnumSet.of(PokemonAugment.SUPERFORTIFIED),
-            PokemonAugment.SUPERFORTIFIED, EnumSet.of(PokemonAugment.SUPERCHARGED)
+            PokemonAugment.SUPERFORTIFIED, EnumSet.of(PokemonAugment.SUPERCHARGED),
+
+            PokemonAugment.PRISMATIC_CONVERGENCE, EnumSet.of(PokemonAugment.RADIANT_DIFFRACTED_BEAMS),
+            PokemonAugment.RADIANT_PRISMATIC_CONVERGENCE, EnumSet.of(PokemonAugment.RADIANT_DIFFRACTED_BEAMS)
     );
 
     public static boolean isIncompatibleWith(PokemonAugment augment, Collection<PokemonAugment> equipped)
@@ -110,11 +113,14 @@ public class PokemonAugmentRegistry
                 augmentData.registerAugment(35, PokemonAugment.SUPERCHARGED).registerAugment(35, PokemonAugment.SUPERFORTIFIED);
         });
 
+        //Marshadow
+        AUGMENT_DATA.get("Marshadow").registerAugment(50, PokemonAugment.SPECTRAL_AMPLIFICATION).registerAugment(25, PokemonAugment.PHANTOM_TARGETING);
+
         //Necrozma
-        AUGMENT_DATA.get("Necrozma").registerAugment(60, PokemonAugment.PRISMATIC_CONVERGENCE).registerAugment(40, PokemonAugment.LIGHT_ABSORPTION);
-        AUGMENT_DATA.get("Dusk Mane Necrozma").registerAugment(60, PokemonAugment.PRISMATIC_CONVERGENCE).registerAugment(40, PokemonAugment.LIGHT_ABSORPTION);
-        AUGMENT_DATA.get("Dawn Wings Necrozma").registerAugment(60, PokemonAugment.PRISMATIC_CONVERGENCE);
-        AUGMENT_DATA.get("Ultra Necrozma").registerAugment(70, PokemonAugment.REFRACTED_PRISMATIC_CONVERGENCE).registerAugment(30, PokemonAugment.LIGHT_ABSORPTION);
+        AUGMENT_DATA.get("Necrozma").registerAugment(60, PokemonAugment.PRISMATIC_CONVERGENCE).registerAugment(40, PokemonAugment.LIGHT_ABSORPTION).registerAugment(55, PokemonAugment.DIFFRACTED_BEAMS);
+        AUGMENT_DATA.get("Dusk Mane Necrozma").registerAugment(60, PokemonAugment.PRISMATIC_CONVERGENCE).registerAugment(40, PokemonAugment.LIGHT_ABSORPTION).registerAugment(55, PokemonAugment.DIFFRACTED_BEAMS);
+        AUGMENT_DATA.get("Dawn Wings Necrozma").registerAugment(60, PokemonAugment.PRISMATIC_CONVERGENCE).registerAugment(55, PokemonAugment.DIFFRACTED_BEAMS);
+        AUGMENT_DATA.get("Ultra Necrozma").registerAugment(70, PokemonAugment.RADIANT_PRISMATIC_CONVERGENCE).registerAugment(30, PokemonAugment.LIGHT_ABSORPTION).registerAugment(65, PokemonAugment.RADIANT_DIFFRACTED_BEAMS);
     }
 
     private static PokemonAugmentData register(String pokemon)
