@@ -420,6 +420,12 @@ public class Pokemon
 
         double commonBoosts = masteredBoost * prestigeBoost * generalAugmentBoost;
 
+        //Augment: Pinnacle Evasion
+        if(this.hasAugment(PokemonAugment.PINNACLE_EVASION) && s.equals(Stat.SPD)) commonBoosts *= 0.9;
+
+        //Augment: Electrified Hyper Speed
+        if(this.hasAugment(PokemonAugment.ELECTRIFIED_HYPER_SPEED) && s.equals(Stat.SPD)) commonBoosts *= 2.0;
+
         if(s.equals(Stat.HP))
         {
             //HP = Level + 10 + [((2 * Base + IV + EV / 4) * Level) / 100]

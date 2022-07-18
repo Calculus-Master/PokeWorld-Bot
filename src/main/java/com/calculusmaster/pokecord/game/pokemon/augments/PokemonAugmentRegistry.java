@@ -101,6 +101,21 @@ public class PokemonAugmentRegistry
             augmentData.build();
         });
 
+        //Universal Augments
+        PokemonData.POKEMON.forEach(pokemon -> {
+            PokemonData data = PokemonData.get(pokemon);
+            PokemonAugmentData augmentData = AUGMENT_DATA.get(pokemon);
+
+            switch(data.growthRate)
+            {
+                case ERRATIC -> augmentData.registerAugment(25, PokemonAugment.XP_BOOST_I);
+                case FAST -> augmentData.registerAugment(25, PokemonAugment.XP_BOOST_II);
+                case MEDIUM_FAST, MEDIUM_SLOW -> augmentData.registerAugment(25, PokemonAugment.XP_BOOST_III);
+                case SLOW -> augmentData.registerAugment(25, PokemonAugment.XP_BOOST_IV);
+                case FLUCTUATING -> augmentData.registerAugment(25, PokemonAugment.XP_BOOST_V);
+            }
+        });
+
         //Somewhat Universal Augments
         PokemonData.POKEMON.forEach(s -> {
             PokemonData data = PokemonData.get(s);
@@ -111,16 +126,31 @@ public class PokemonAugmentRegistry
             //Supercharged & Superfortified
             if(List.of(PokemonRarity.Rarity.COPPER, PokemonRarity.Rarity.SILVER, PokemonRarity.Rarity.GOLD, PokemonRarity.Rarity.DIAMOND, PokemonRarity.Rarity.PLATINUM).contains(rarity))
                 augmentData.registerAugment(35, PokemonAugment.SUPERCHARGED).registerAugment(35, PokemonAugment.SUPERFORTIFIED);
+
+            //Harmony
+            if(data.types.size() == 1) augmentData.registerAugment(40, PokemonAugment.HARMONY);
+
+            //Pinnacle Evasion
+            if(data.baseStats.get(Stat.SPD) >= 100) augmentData.registerAugment(56, PokemonAugment.PINNACLE_EVASION);
+
+            //Precision Strikes
+            if(data.baseStats.get(Stat.ATK) >= 90 && data.baseStats.get(Stat.SPD) <= 150) augmentData.registerAugment(60, PokemonAugment.PRECISION_STRIKES);
+
+            //Precision Burst
+            if(data.baseStats.get(Stat.ATK) >= 75) augmentData.registerAugment(65, PokemonAugment.PRECISION_BURST);
         });
 
         //Marshadow
-        AUGMENT_DATA.get("Marshadow").registerAugment(50, PokemonAugment.SPECTRAL_AMPLIFICATION).registerAugment(25, PokemonAugment.PHANTOM_TARGETING);
+        AUGMENT_DATA.get("Marshadow").registerAugment(50, PokemonAugment.SPECTRAL_AMPLIFICATION).registerAugment(25, PokemonAugment.PHANTOM_TARGETING).registerAugment(35, PokemonAugment.SHADOW_PROPULSION).registerAugment(70, PokemonAugment.SPECTRAL_SUPERCHARGE);
 
         //Necrozma
         AUGMENT_DATA.get("Necrozma").registerAugment(60, PokemonAugment.PRISMATIC_CONVERGENCE).registerAugment(40, PokemonAugment.LIGHT_ABSORPTION).registerAugment(55, PokemonAugment.DIFFRACTED_BEAMS);
         AUGMENT_DATA.get("Dusk Mane Necrozma").registerAugment(60, PokemonAugment.PRISMATIC_CONVERGENCE).registerAugment(40, PokemonAugment.LIGHT_ABSORPTION).registerAugment(55, PokemonAugment.DIFFRACTED_BEAMS);
         AUGMENT_DATA.get("Dawn Wings Necrozma").registerAugment(60, PokemonAugment.PRISMATIC_CONVERGENCE).registerAugment(55, PokemonAugment.DIFFRACTED_BEAMS);
         AUGMENT_DATA.get("Ultra Necrozma").registerAugment(70, PokemonAugment.RADIANT_PRISMATIC_CONVERGENCE).registerAugment(30, PokemonAugment.LIGHT_ABSORPTION).registerAugment(65, PokemonAugment.RADIANT_DIFFRACTED_BEAMS);
+
+        //Regieleki
+        AUGMENT_DATA.get("Regieleki").registerAugment(50, PokemonAugment.ELECTRIFIED_HYPER_SPEED);
     }
 
     private static PokemonAugmentData register(String pokemon)

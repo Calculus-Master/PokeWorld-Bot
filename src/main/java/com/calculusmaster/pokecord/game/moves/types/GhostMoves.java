@@ -9,6 +9,7 @@ import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 
 public class GhostMoves
 {
@@ -126,7 +127,14 @@ public class GhostMoves
             }
         }
 
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + " " + user.getName() + " stole all of " + opponent.getName() + "'s Stat Boosts!";
+        String augment = "";
+        if(user.hasAugment(PokemonAugment.SPECTRAL_SUPERCHARGE))
+        {
+            move.setPower(1.5);
+            augment = " Its power was supercharged by the %s Augment!".formatted(PokemonAugment.SPECTRAL_SUPERCHARGE.getAugmentName());
+        }
+
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + augment + " " + user.getName() + " stole all of " + opponent.getName() + "'s Stat Boosts!";
     }
 
     public String MoongeistBeam(Pokemon user, Pokemon opponent, Duel duel, Move move)

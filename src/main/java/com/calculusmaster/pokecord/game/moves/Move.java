@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.moves.types.*;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 
 import java.util.ArrayList;
@@ -133,7 +134,7 @@ public class Move
     {
         if(this.isZMove) return ZMoves.class;
         else if(this.isMaxMove) return MaxMoves.class;
-        else return switch(this.type) {
+        else return switch(this.data.type) {
             case BUG -> BugMoves.class;
             case DARK -> DarkMoves.class;
             case DRAGON -> DragonMoves.class;
@@ -261,6 +262,9 @@ public class Move
     {
         Random r = new Random();
 
+        //Augment: Precision Strikes
+        if(user.hasAugment(PokemonAugment.PRECISION_STRIKES)) this.critChance += 2;
+
         //Damage = [((2 * Level / 5 + 2) * Power * A / D) / 50 + 2] * Modifier
         int level = user.getLevel();
         int power = this.power;
@@ -299,7 +303,7 @@ public class Move
         if(this.name.equals("Foul Play")) atkStat = opponent.getStat(Stat.ATK);
 
         //Ability: Adaptability
-        if(stab == 1.5 && user.hasAbility(Ability.ADAPTABILITY)) stab = 2.0;
+        if(stab > 1.0 && user.hasAbility(Ability.ADAPTABILITY)) stab = 2.0;
 
         //Ability: Technician
         if(user.hasAbility(Ability.TECHNICIAN) && power <= 60) power = (int)(power * 1.5);
@@ -318,6 +322,12 @@ public class Move
 
         //Augment: Phantom Targeting
         if(type > 1.0) type *= 1.5;
+
+        //Augment: Harmony - TODO: STAB-modifying moves overwrite each other
+        if(stab > 1.0) stab = 1.75;
+
+        //Augment: Precision Burst
+        if(critical > 1.0) critical = 2.0;
 
         double modifier = critical * random * stab * type * burned;
         double damage = (((2 * level / 5.0 + 2) * power * (double)atkStat / (double)defStat) / 50) + 2;

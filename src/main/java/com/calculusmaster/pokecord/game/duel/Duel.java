@@ -422,6 +422,14 @@ public class Duel
             turnResult.add(Ability.AERILATE.formatActivation(c.getName(), move.getName() + " is now a Flying Type!"));
         }
 
+        //Augment: Spectral Supercharge
+        if(c.hasAugment(PokemonAugment.SPECTRAL_SUPERCHARGE) && move.is(Type.FIGHTING))
+        {
+            move.setType(Type.GHOST);
+
+            turnResult.add(move.getName() + " is now a Ghost-type move due to the %s Augment!".formatted(PokemonAugment.SPECTRAL_SUPERCHARGE.getAugmentName()));
+        }
+
         //Weather-based Move Changes
 
         switch(this.weather.get())
@@ -1598,6 +1606,11 @@ public class Duel
         {
             turnResult.add(Ability.DAMP.formatActivation((c.hasAbility(Ability.DAMP) ? c : o).getName(), move.getName() + " failed!"));
         }
+        //Augment: Pinnacle Evasion
+        else if(o.hasAugment(PokemonAugment.PINNACLE_EVASION) && new Random().nextFloat() < 0.05)
+        {
+            turnResult.add(o.getName() + " evaded the attack, due to the %s Augment!".formatted(PokemonAugment.PINNACLE_EVASION.getAugmentName()));
+        }
         //Do main move logic
         else
         {
@@ -2382,7 +2395,15 @@ public class Duel
 
             if(p != null)
             {
-                p.addExp(this.expGains.get(uuid));
+                double experience = this.expGains.get(uuid);
+
+                if(p.hasAugment(PokemonAugment.XP_BOOST_I)) experience *= 1.025;
+                else if(p.hasAugment(PokemonAugment.XP_BOOST_II)) experience *= 1.05;
+                else if(p.hasAugment(PokemonAugment.XP_BOOST_III)) experience *= 1.1;
+                else if(p.hasAugment(PokemonAugment.XP_BOOST_IV)) experience *= 1.175;
+                else if(p.hasAugment(PokemonAugment.XP_BOOST_V)) experience *= 1.275;
+
+                p.addExp((int)(experience));
                 p.updateExperience();
             }
         }
