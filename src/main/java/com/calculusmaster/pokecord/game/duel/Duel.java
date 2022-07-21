@@ -430,6 +430,16 @@ public class Duel
             turnResult.add(move.getName() + " is now a Ghost-type move due to the %s Augment!".formatted(PokemonAugment.SPECTRAL_SUPERCHARGE.getAugmentName()));
         }
 
+        //Augment: Supercharged Tackle
+        if(c.hasAugment(PokemonAugment.SUPERCHARGED_TACKLE) && move.is("Tackle"))
+        {
+            move.setPower(3.0);
+            move.setType(c.getType().get(0));
+            move.critChance = 24;
+
+            turnResult.add("Tackle was Supercharged!");
+        }
+
         //Weather-based Move Changes
 
         switch(this.weather.get())
@@ -810,6 +820,8 @@ public class Duel
         {
             accurate = true;
             this.players[this.current].usedZMove = true;
+
+            if(c.hasAugment(PokemonAugment.Z_AFFINITY)) move.setPower(2.0);
 
             Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_ZMOVE, this.event);
         }
@@ -1295,6 +1307,14 @@ public class Duel
 
                 turnResult.add(Ability.ICE_SCALES.formatActivation(o.getName(), move.getName() + "'s damage was reduced by 50%!"));
             }
+        }
+
+        //Augment: Weighted Punch
+        if(c.hasAugment(PokemonAugment.WEIGHTED_PUNCH) && move.getName().contains("Punch"))
+        {
+            move.setPower(c.getWeight() / o.getWeight());
+
+            turnResult.add(move.getName() + "'s power was amplified by the %s Augment!".formatted(PokemonAugment.WEIGHTED_PUNCH.getAugmentName()));
         }
 
         //Item-based Buffs

@@ -32,30 +32,42 @@ public enum PokemonAugment
     XP_BOOST_IV     (1, "XP Boost IV", "Increases XP gains by 17.5%"),
     XP_BOOST_V      (1, "XP Boost V", "Increases XP gains by 27.5%"),
 
+    EV_AFFINITY     (4, "EV Affinity", "Doubles EV gains from defeating opponents."),
+
     //Somewhat Universal Augments
-    SUPERCHARGED(3, "Supercharged", "All moves deal 25% more damage, but increases damage taken by 25%."),
-    SUPERFORTIFIED(3, "Superfortified", "Reduces damage taken by 25%, but all moves deal 25% less damage."),
-    HARMONY(1, "Harmony", "Increases the boost provided by STAB from 25% to 75%."),
-    PINNACLE_EVASION(2, "Pinnacle Evasion", "Grants a 5% chance to evade an attack, but Speed is reduced by 10%."),
-    PRECISION_STRIKES(1, "Precision Strikes", "Increases the chance of a critical hit by 8.3%."),
-    PRECISION_BURST(2, "Precision Burst", "Increases the damage boost provided by a critical hit from 50% to 100%."),
+    SUPERCHARGED        (3, "Supercharged", "All moves deal 25% more damage, but increases damage taken by 25%."),
+    SUPERFORTIFIED      (3, "Superfortified", "Reduces damage taken by 25%, but all moves deal 25% less damage."),
+    HARMONY             (1, "Harmony", "Increases the boost provided by STAB from 25% to 75%."),
+    PINNACLE_EVASION    (2, "Pinnacle Evasion", "Grants a 5% chance to evade an attack, but Speed is reduced by 10%."),
+    PRECISION_STRIKES   (1, "Precision Strikes", "Increases the chance of a critical hit by 8.3%."),
+    PRECISION_BURST     (2, "Precision Burst", "Increases the damage boost provided by a critical hit from 50% to 100%."),
+    RAW_FORCE           (3, "Raw Force", "Increases the power of moves by 50%, but removes bonuses from Type Effectiveness, STAB, and Critical Hits."),
+    MODIFYING_FORCE     (3, "Modifying Force", "Increases the bonuses provided from Type Effectiveness, STAB, and Critical Hits by 25%, 20%, and 15% respectively, but reduces the power of moves by 40%."),
+
+    //General Move Augments
+    WEIGHTED_PUNCH      (2, "Weighted Punch", "Multiplies the power of Punch moves by the ratio of the user's weight to the opponent's weight."),
+    Z_AFFINITY          (5, "Z-Affinity", "Doubles the power of Z-Moves."),
+
+    //Specific Move Augments
+    SUPERCHARGED_TACKLE (3, "Supercharged Tackle", "Increases the power of Tackle by 300%, changes its Type to the user's Type, and guarantees a Critical Hit."),
+    METEOR_SHOWER       (4, "Meteor Shower", "The power of Meteor Mash is reduced by 20. Meteor Mash now lowers the opponent's Defense by 2 stages, but no longer increases the user's Attack."),
 
     //Unique Augments - Marshadow
-    SPECTRAL_AMPLIFICATION(3, "Spectral Amplification", "Increases the damage of Ghost-type moves by 250%. Every time a Ghost-type move is used, both Attack and Defense are lowered by 2 stages."),
-    PHANTOM_TARGETING(1, "Phantom Targeting", "All super effective moves deal 50% more damage."),
-    SHADOW_PROPULSION(1, "Shadow Propulsion", "Using Ghost-type moves has a 33% chance to raise Speed by 1 stage."),
-    SPECTRAL_SUPERCHARGE(3, "Spectral Supercharge", "Supercharges the Spectral Thief move, increasing its power by 50%. Converts all Fighting-type moves to Ghost-type moves."),
+    SPECTRAL_AMPLIFICATION  (3, "Spectral Amplification", "Increases the damage of Ghost-type moves by 250%. Every time a Ghost-type move is used, both Attack and Defense are lowered by 2 stages."),
+    PHANTOM_TARGETING       (1, "Phantom Targeting", "All super effective moves deal 50% more damage."),
+    SHADOW_PROPULSION       (1, "Shadow Propulsion", "Using Ghost-type moves has a 33% chance to raise Speed by 1 stage."),
+    SPECTRAL_SUPERCHARGE    (3, "Spectral Supercharge", "Supercharges the Spectral Thief move, increasing its power by 50%. Converts all Fighting-type moves to Ghost-type moves."),
 
     //Unique Augments - Necrozma
-    PRISMATIC_CONVERGENCE(2, "Prismatic Convergence", "Supercharges Prismatic Laser, increasing its power by 30%, but lowering Speed by 2 stages on use."),
-    RADIANT_PRISMATIC_CONVERGENCE(2, "Radiant Prismatic Convergence", "Supercharges Prismatic Laser, increasing its power by 60%, but lowering Speed by 4 stages on use."),
-    LIGHT_ABSORPTION(1, "Light Absorption", "During Harsh Sunlight, reduces damage taken from Special moves by 15%."),
-    DIFFRACTED_BEAMS(2, "Diffraction Beam", "50% of the damage dealt by Beam Moves (Charge Beam, Prismatic Laser, Solar Beam, Hyper Beam, Flash Cannon) is distributed across the opponent's team."),
-    RADIANT_DIFFRACTED_BEAMS(2, "Radiant Diffraction Beam", "50% of the damage dealt by Beam Moves (Charge Beam, Prismatic Laser, Solar Beam, Hyper Beam, Flash Cannon) is distributed across the opponent's team. The damage dealt to each team member is boosted by an additional 10%."),
-    PRISMATIC_MOONLIT_SHIELD(1, "Prismatic Moonlit Shield", "Provides immunity to Dark-type moves. Damage taken from Ghost-type moves is reduced by 75%."),
+    PRISMATIC_CONVERGENCE           (2, "Prismatic Convergence", "Supercharges Prismatic Laser, increasing its power by 30%, but lowering Speed by 2 stages on use."),
+    RADIANT_PRISMATIC_CONVERGENCE   (2, "Radiant Prismatic Convergence", "Supercharges Prismatic Laser, increasing its power by 60%, but lowering Speed by 4 stages on use."),
+    LIGHT_ABSORPTION                (1, "Light Absorption", "During Harsh Sunlight, reduces damage taken from Special moves by 15%."),
+    DIFFRACTED_BEAMS                (2, "Diffraction Beam", "50% of the damage dealt by Beam Moves (Charge Beam, Prismatic Laser, Solar Beam, Hyper Beam, Flash Cannon) is distributed across the opponent's team."),
+    RADIANT_DIFFRACTED_BEAMS        (2, "Radiant Diffraction Beam", "50% of the damage dealt by Beam Moves (Charge Beam, Prismatic Laser, Solar Beam, Hyper Beam, Flash Cannon) is distributed across the opponent's team. The damage dealt to each team member is boosted by an additional 10%."),
+    PRISMATIC_MOONLIT_SHIELD        (1, "Prismatic Moonlit Shield", "Provides immunity to Dark-type moves. Damage taken from Ghost-type moves is reduced by 75%."),
 
     //Unique Augments - Regieleki
-    ELECTRIFIED_HYPER_SPEED(2, "Electrified Hyper Speed", "Increases Speed by 100%."),
+    ELECTRIFIED_HYPER_SPEED     (2, "Electrified Hyper Speed", "Increases Speed by 100%."),
 
     ;
 

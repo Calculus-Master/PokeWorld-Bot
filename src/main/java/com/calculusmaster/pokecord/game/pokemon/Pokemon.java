@@ -872,7 +872,8 @@ public class Pokemon
 
     public void gainEVs(Pokemon other)
     {
-        for(Stat s : other.getEVYield().keySet()) this.addEVs(s, other.getEVYield().get(s));
+        int boost = this.hasAugment(PokemonAugment.EV_AFFINITY) ? 2 : 1;
+        for(Stat s : other.getEVYield().keySet()) this.addEVs(s, other.getEVYield().get(s) * boost);
     }
 
     public int getEVTotal()

@@ -106,6 +106,7 @@ public class PokemonAugmentRegistry
             PokemonData data = PokemonData.get(pokemon);
             PokemonAugmentData augmentData = AUGMENT_DATA.get(pokemon);
 
+            //XP Boost
             switch(data.growthRate)
             {
                 case ERRATIC -> augmentData.registerAugment(25, PokemonAugment.XP_BOOST_I);
@@ -114,6 +115,9 @@ public class PokemonAugmentRegistry
                 case SLOW -> augmentData.registerAugment(25, PokemonAugment.XP_BOOST_IV);
                 case FLUCTUATING -> augmentData.registerAugment(25, PokemonAugment.XP_BOOST_V);
             }
+
+            //EV Affinity
+            augmentData.registerAugment(85, PokemonAugment.EV_AFFINITY);
         });
 
         //Somewhat Universal Augments
@@ -138,6 +142,27 @@ public class PokemonAugmentRegistry
 
             //Precision Burst
             if(data.baseStats.get(Stat.ATK) >= 75) augmentData.registerAugment(65, PokemonAugment.PRECISION_BURST);
+
+            //Raw & Modifying Force
+            if(data.baseStats.get().values().stream().mapToInt(v -> v).sum() < 600) augmentData.registerAugment(65, PokemonAugment.RAW_FORCE).registerAugment(65, PokemonAugment.MODIFYING_FORCE);
+        });
+
+        //Move Augments
+        PokemonData.POKEMON.forEach(s -> {
+            PokemonData data = PokemonData.get(s);
+            PokemonAugmentData augmentData = AUGMENT_DATA.get(s);
+
+            //Weighted Punch
+            if(data.moves.keySet().stream().anyMatch(move -> move.contains("Punch"))) augmentData.registerAugment(25, PokemonAugment.WEIGHTED_PUNCH);
+
+            //Z-Affinity
+            augmentData.registerAugment(100, PokemonAugment.Z_AFFINITY);
+
+            //Supercharged Tackle
+            if(data.moves.containsKey("Tackle")) augmentData.registerAugment(15, PokemonAugment.SUPERCHARGED_TACKLE);
+
+            //Meteor Mash
+            if(data.moves.containsKey("Meteor Mash")) augmentData.registerAugment(50, PokemonAugment.METEOR_SHOWER);
         });
 
         //Marshadow

@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 
 public class SteelMoves
 {
@@ -124,6 +125,14 @@ public class SteelMoves
 
     public String MeteorMash(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        if(user.hasAugment(PokemonAugment.METEOR_SHOWER))
+        {
+            return MoveEffectBuilder.make(user, opponent, duel, move)
+                    .addDamageEffect()
+                    .addStatChangeEffect(Stat.DEF, -2, 100, false)
+                    .execute() + " Meteor Mash was boosted by the %s Augment!".formatted(PokemonAugment.METEOR_SHOWER.getAugmentName());
+        }
+
         return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.ATK, 1, 20, true);
     }
 

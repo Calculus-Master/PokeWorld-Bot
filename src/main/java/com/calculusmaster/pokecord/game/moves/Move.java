@@ -321,13 +321,39 @@ public class Move
         if(user.hasAbility(Ability.NEUROFORCE) && type > 1) power = (int)(power * 1.25);
 
         //Augment: Phantom Targeting
-        if(type > 1.0) type *= 1.5;
+        if(user.hasAugment(PokemonAugment.PHANTOM_TARGETING) && type > 1.0) type *= 1.5;
 
         //Augment: Harmony - TODO: STAB-modifying moves overwrite each other
-        if(stab > 1.0) stab = 1.75;
+        if(user.hasAugment(PokemonAugment.HARMONY) && stab > 1.0) stab = 1.75;
 
         //Augment: Precision Burst
-        if(critical > 1.0) critical = 2.0;
+        if(user.hasAugment(PokemonAugment.PRECISION_BURST) && critical > 1.0) critical = 2.0;
+
+        //Augment: Raw Force
+        if(user.hasAugment(PokemonAugment.RAW_FORCE))
+        {
+            critical = 1.0;
+            stab = 1.0;
+            type = 1.0;
+
+            power *= 1.5;
+        }
+
+        //Augment: Modifying Force
+        if(user.hasAugment(PokemonAugment.MODIFYING_FORCE))
+        {
+            if(critical > 1.0) critical *= 1.15;
+            if(stab > 1.0) stab *= 1.2;
+            type *= 1.25;
+
+            power *= 0.6;
+        }
+
+        //Augment: Meteor Shower
+        if(user.hasAugment(PokemonAugment.METEOR_SHOWER) && this.is("Meteor Mash"))
+        {
+            power -= 20;
+        }
 
         double modifier = critical * random * stab * type * burned;
         double damage = (((2 * level / 5.0 + 2) * power * (double)atkStat / (double)defStat) / 50) + 2;
