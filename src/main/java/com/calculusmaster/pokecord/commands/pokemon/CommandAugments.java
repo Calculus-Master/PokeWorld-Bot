@@ -8,8 +8,6 @@ import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugmentRegistry;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.EnumSet;
 import java.util.List;
 
 public class CommandAugments extends Command
@@ -23,8 +21,9 @@ public class CommandAugments extends Command
     public Command runCommand()
     {
         boolean info = this.msg.length == 2 && this.msg[1].equals("info");
-        boolean equip = this.msg.length == 3 && this.msg[1].equals("equip");
-        boolean remove = this.msg.length == 3 && this.msg[1].equals("remove");
+        boolean equip = this.msg.length == 3 && this.msg[1].equals("equip") && this.isNumeric(2);
+        boolean remove = this.msg.length == 3 && this.msg[1].equals("remove") && this.isNumeric(2);
+        boolean clear = this.msg.length == 2 && this.msg[1].equals("clear");
 
         if(info)
         {
@@ -38,17 +37,19 @@ public class CommandAugments extends Command
         }
         else if(equip)
         {
-            PokemonAugment augment = PokemonAugment.fromID(this.msg[2]);
+            Pokemon active = this.playerData.getSelectedPokemon();
+            List<PokemonAugment> available = PokemonAugmentRegistry.AUGMENT_DATA.get(active.getName()).getOrderedAugmentList();
+            int index = this.getInt(2) - 1;
 
-            if(augment == null)
+            if(index < 0 || index >= available.size())
             {
-                this.response = "Invalid Augment ID!";
+                this.response = "Invalid number!";
                 return this;
             }
 
+            PokemonAugment augment = available.get(index);
             boolean owned = this.playerData.ownsAugment(augment.getAugmentID());
             int price = augment.getCreditCost();
-            Pokemon active = this.playerData.getSelectedPokemon();
 
             if(DuelHelper.isInDuel(this.player.getId())) this.response = "You cannot change Augments while in a Duel!";
             else if(!owned && this.playerData.getCredits() < price) this.response = "Insufficient credits! You need " + price + " credits to unlock this Augment!";
@@ -73,28 +74,45 @@ public class CommandAugments extends Command
         }
         else if(remove)
         {
-            boolean all = this.msg[2].equals("all");
-            PokemonAugment augment = PokemonAugment.fromID(this.msg[2]);
+            Pokemon active = this.playerData.getSelectedPokemon();
 
+            List<PokemonAugment> equipped = new ArrayList<>(active.getAugments());
+            int index = this.getInt(2) - 1;
+
+            if(DuelHelper.isInDuel(this.player.getId())) this.response = "You cannot change Augments while in a Duel!";
+            else if(equipped.isEmpty())
+            {
+                this.response = active.getName() + " does not have any Augments equipped!";
+                return this;
+            }
+            else if(index < 0 || index >= equipped.size())
+            {
+                this.response = "Invalid number!";
+                return this;
+            }
+            else
+            {
+                PokemonAugment augment = equipped.get(index);
+
+                if(!active.hasAugment(augment)) this.response = active.getName() + " does not have that Augment equipped!";
+                else
+                {
+                    active.removeAugment(augment);
+                    active.updateAugments();
+                    this.response = "Successfully removed the " + augment.getAugmentName() + " augment from " + active.getName() + "!";
+                }
+            }
+        }
+        else if(clear)
+        {
             Pokemon active = this.playerData.getSelectedPokemon();
 
             if(DuelHelper.isInDuel(this.player.getId())) this.response = "You cannot change Augments while in a Duel!";
-            else if(all)
-            {
-                if(active.getAugments().isEmpty()) this.response = active.getName() + " does not have any Augments equipped!";
-                else
-                {
-                    active.resetAugments();
-                    this.response = "Successfully removed all Augments from " + active.getName() + "!";
-                }
-            }
-            else if(augment == null) this.response = "Invalid Augment ID!";
-            else if(!active.hasAugment(augment)) this.response = active.getName() + " does not have that Augment equipped!";
+            else if(active.getAugments().isEmpty()) this.response = active.getName() + " does not have any Augments equipped!";
             else
             {
-                active.removeAugment(augment);
-                active.updateAugments();
-                this.response = "Successfully removed the " + augment.getAugmentName() + " augment from " + active.getName() + "!";
+                active.resetAugments();
+                this.response = "Successfully cleared all Augments from %s!".formatted(active.getName());
             }
         }
         else
@@ -108,28 +126,42 @@ public class CommandAugments extends Command
             this.embed.setDescription("Slot Usage: " + usedSlots + " / " + totalSlots + "\n" + ":red_square:".repeat(usedSlots) + ":green_square:".repeat(availableSlots) + "\n" + nextSlot);
 
             StringBuilder equippedAugments = new StringBuilder();
-            if(active.getAugments().isEmpty()) equippedAugments.append("No augments equipped! Use `p!augments info` to learn more about Augments.");
-            else for(PokemonAugment augment : active.getAugments()) equippedAugments.append(String.join(" | ", augment.getAugmentName(), "ID: " + augment.getAugmentID(), "Slots: " + augment.getSlotCost(), "*" + augment.getAugmentDescription() + "*")).append("\n");
+
+            List<PokemonAugment> activeAugments = new ArrayList<>(active.getAugments());
+            if(activeAugments.isEmpty()) equippedAugments.append("No augments equipped! Use `p!augments info` to learn more about Augments.");
+            else for(int i = 0; i < activeAugments.size(); i++)
+            {
+                PokemonAugment augment = activeAugments.get(i);
+
+                String number = (i + 1) + ": ";
+                String data = String.join(" | ", augment.getAugmentName(), "Slots: " + augment.getSlotCost());
+                equippedAugments.append(number).append(data).append("\n");
+            }
+
             equippedAugments.append("\n\nRemove augments using `p!augments remove <ID>`! Equip augments using `p!augments equip <ID>`!");
             this.embed.addField("Augment Overview", equippedAugments.toString(), false);
             
             List<String> availableAugments = new ArrayList<>();
+
             PokemonAugmentRegistry.PokemonAugmentData augmentData = PokemonAugmentRegistry.AUGMENT_DATA.get(active.getName());
+            List<PokemonAugment> availableList = augmentData.getOrderedAugmentList();
 
-            List<Integer> levels = augmentData.getAugmentsInfo().keySet().stream().sorted(Comparator.comparingInt(i -> i)).toList();
-            levels.forEach(level -> {
-                EnumSet<PokemonAugment> augments = augmentData.getAugmentsInfo().get(level);
-                for(PokemonAugment augment : augments)
-                {
-                    String tag;
-                    if(active.hasAugment(augment) || PokemonAugmentRegistry.isIncompatibleWith(augment, active.getAugments())) tag = ":no_entry_sign:";
-                    else if(augment.getSlotCost() > active.getAvailableAugmentSlots() && level <= active.getLevel()) tag = ":yellow_circle:";
-                    else if(level <= active.getLevel()) tag = ":green_circle:";
-                    else tag = ":red_circle:";
+            for(int i = 0; i < availableList.size(); i++)
+            {
+                PokemonAugment augment = availableList.get(i);
+                int level = augmentData.getAugmentsInfo().entrySet().stream().filter(e -> e.getValue().contains(augment)).findFirst().get().getKey();
 
-                    availableAugments.add(String.join(" | ", augment.getAugmentName() + " " + tag, "ID: " + augment.getAugmentID(), "Slots: " + augment.getSlotCost(), "Level: " + level));
-                }
-            });
+                String tag;
+                if(active.hasAugment(augment) || PokemonAugmentRegistry.isIncompatibleWith(augment, active.getAugments())) tag = ":no_entry_sign:";
+                else if(augment.getSlotCost() > active.getAvailableAugmentSlots() && level <= active.getLevel()) tag = ":yellow_circle:";
+                else if(level <= active.getLevel()) tag = ":green_circle:";
+                else tag = ":red_circle:";
+
+                String number = (i + 1) + ": ";
+                String data = String.join(" | ", augment.getAugmentName() + " " + tag, "Slots: " + augment.getSlotCost(), "Level: " + level);
+                availableAugments.add(number + data);
+            }
+
             this.embed.addField("Available Augments", String.join("\n", availableAugments), false);
 
             this.embed.setTitle(active.getName() + " Augments");

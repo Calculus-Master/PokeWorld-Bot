@@ -212,5 +212,14 @@ public class PokemonAugmentRegistry
         {
             return this.augments;
         }
+
+        public List<PokemonAugment> getOrderedAugmentList()
+        {
+            List<Integer> levels = this.augments.keySet().stream().sorted(Comparator.comparingInt(i -> i)).toList();
+
+            List<PokemonAugment> list = new ArrayList<>();
+            levels.forEach(level -> list.addAll(this.augments.get(level)));
+            return list;
+        }
     }
 }
