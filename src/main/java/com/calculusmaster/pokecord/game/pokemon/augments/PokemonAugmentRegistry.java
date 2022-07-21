@@ -158,6 +158,12 @@ public class PokemonAugmentRegistry
             //Z-Affinity
             augmentData.registerAugment(100, PokemonAugment.Z_AFFINITY);
 
+            //Restorative Hail
+            if(data.moves.containsKey("Hail")) augmentData.registerAugment(52, PokemonAugment.RESTORATIVE_HAIL);
+
+            //Restorative Sandstorm
+            if(data.moves.containsKey("Sandstorm")) augmentData.registerAugment(52, PokemonAugment.RESTORATIVE_SANDSTORM);
+
             //Supercharged Tackle
             if(data.moves.containsKey("Tackle")) augmentData.registerAugment(15, PokemonAugment.SUPERCHARGED_TACKLE);
 

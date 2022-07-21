@@ -2055,6 +2055,14 @@ public class Duel
         switch(this.weather.get())
         {
             case HAIL -> {
+                if(active.hasAugment(PokemonAugment.RESTORATIVE_HAIL))
+                {
+                    int health = active.getMaxHealth(1 / 10.);
+                    active.heal(health);
+
+                    weatherResult.add(active.getName() + " restored %s HP from the Hailstorm, due to the %s Augment!".formatted(health, PokemonAugment.RESTORATIVE_HAIL.getAugmentName()));
+                }
+
                 if(active.isType(Type.ICE) || immuneMoveUsed) weatherResult.add(active.getName() + " was unaffected by the hailstorm!");
                 else
                 {
@@ -2065,6 +2073,14 @@ public class Duel
                 }
             }
             case SANDSTORM -> {
+                if(active.hasAugment(PokemonAugment.RESTORATIVE_SANDSTORM))
+                {
+                    int health = active.getMaxHealth(1 / 10.);
+                    active.heal(health);
+
+                    weatherResult.add(active.getName() + " restored %s HP from the Sandstorm, due to the %s Augment!".formatted(health, PokemonAugment.RESTORATIVE_SANDSTORM.getAugmentName()));
+                }
+
                 if(active.hasAbility(Ability.SAND_FORCE)) weatherResult.add(Ability.SAND_FORCE.formatActivation(active.getName(), active.getName() + " is immune to the sandstorm's effects!"));
                 else if(active.isType(Type.ROCK) || active.isType(Type.GROUND) || active.isType(Type.STEEL) || immuneMoveUsed) weatherResult.add(active.getName() + " was unaffected by the sandstorm!");
                 else

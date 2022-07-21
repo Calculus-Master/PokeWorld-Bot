@@ -47,6 +47,8 @@ public enum PokemonAugment
     //General Move Augments
     WEIGHTED_PUNCH      (2, "Weighted Punch", "Multiplies the power of Punch moves by the ratio of the user's weight to the opponent's weight."),
     Z_AFFINITY          (5, "Z-Affinity", "Doubles the power of Z-Moves."),
+    RESTORATIVE_HAIL    (2, "Restorative Hail", "Heals the user for 10% of their maximum HP while a Hailstorm is active."),
+    RESTORATIVE_SANDSTORM(2, "Restorative Sandstorm", "Heals the user for 10% of their maximum HP while a Sandstorm is active."),
 
     //Specific Move Augments
     SUPERCHARGED_TACKLE (3, "Supercharged Tackle", "Increases the power of Tackle by 300%, changes its Type to the user's Type, and guarantees a Critical Hit."),
