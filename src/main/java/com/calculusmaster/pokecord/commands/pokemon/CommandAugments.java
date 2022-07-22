@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugmentRegistry;
@@ -20,6 +21,8 @@ public class CommandAugments extends Command
     @Override
     public Command runCommand()
     {
+        if(this.insufficientMasteryLevel(Feature.AUGMENT_POKEMON)) return this.invalidMasteryLevel(Feature.AUGMENT_POKEMON);
+
         boolean info = this.msg.length == 2 && this.msg[1].equals("info");
         boolean equip = this.msg.length == 3 && this.msg[1].equals("equip") && this.isNumeric(2);
         boolean remove = this.msg.length == 3 && this.msg[1].equals("remove") && this.isNumeric(2);

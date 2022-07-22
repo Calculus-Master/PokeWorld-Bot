@@ -103,7 +103,8 @@ public enum Feature
     ACCESS_LEADERBOARD("View the Global Leaderboard"),
 
     //Level 20
-    PRESTIGE_POKEMON("Prestige Pokemon to gain permanent boosts")
+    PRESTIGE_POKEMON("Prestige Pokemon to gain permanent boosts"),
+    AUGMENT_POKEMON("Apply Augments to your Pokemon, customizing their capabilities"),
 
     ;
 
