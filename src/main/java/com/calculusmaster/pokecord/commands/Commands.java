@@ -304,8 +304,8 @@ public class Commands
                 .setCommand(CommandEliteDuel::new)
                 .setCategory(Category.DUEL);
 
-        register("learninfo", "li")
-                .setCommand(CommandLearnInfo::new)
+        register("learninfo", "li", "movedex", "md")
+                .setCommand(CommandMoveDex::new)
                 .setCategory(Category.MOVES);
 
         register("prestige")
