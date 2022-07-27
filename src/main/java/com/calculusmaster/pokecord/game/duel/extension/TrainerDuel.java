@@ -9,6 +9,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -72,7 +73,7 @@ public class TrainerDuel extends Duel
                 {
                     int winCredits = (new Random().nextInt(501) + 500) * Trainer.DAILY_TRAINERS.size();
                     this.players[0].data.changeCredits(winCredits);
-                    this.players[0].data.addExp(30, 75);
+                    this.players[0].data.addExp(PMLExperience.DUEL_TRAINER_DAILY_COMPLETE, 100);
                     this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated all of today's trainers! You earned a bonus " + winCredits + " credits!").queue();
 
                     Achievements.grant(this.players[0].ID, Achievements.DEFEATED_DAILY_TRAINERS, this.event);

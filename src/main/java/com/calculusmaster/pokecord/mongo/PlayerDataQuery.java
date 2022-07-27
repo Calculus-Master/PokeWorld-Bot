@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.bounties.components.Bounty;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
+import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
@@ -167,13 +168,10 @@ public class PlayerDataQuery extends MongoQuery
         this.update(Updates.set("exp", 0));
     }
 
-    public void addExp(int amount)
+    public void addExp(PMLExperience experienceEnum, int chance)
     {
-        this.addExp(amount, 100);
-    }
+        int amount = experienceEnum.experience;
 
-    public void addExp(int amount, int chance)
-    {
         if(new SplittableRandom().nextInt(100) < chance)
         {
             this.update(Updates.inc("exp", amount));

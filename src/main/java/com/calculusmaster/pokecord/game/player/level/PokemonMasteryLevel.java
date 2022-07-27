@@ -46,9 +46,9 @@ public class PokemonMasteryLevel
         return this;
     }
 
-    public PokemonMasteryLevel withExperienceRequirement(int exp)
+    public PokemonMasteryLevel withExperienceRequirement(int pokemonLevels)
     {
-        this.requirements.add(new ExperienceLevelTask(exp));
+        this.requirements.add(new ExperienceLevelTask(pokemonLevels * PMLExperience.LEVEL_POKEMON.experience));
         return this;
     }
 

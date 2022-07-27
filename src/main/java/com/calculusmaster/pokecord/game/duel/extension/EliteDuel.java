@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.game.duel.players.Trainer;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
+import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
@@ -49,7 +50,7 @@ public class EliteDuel extends TrainerDuel
             int credits = new SplittableRandom().nextInt(500, 1000);
             this.players[0].data.changeCredits(credits);
 
-            this.players[0].data.addExp(60, 65);
+            this.players[0].data.addExp(PMLExperience.DUEL_ELITE, 95);
 
             this.players[0].data.updateBountyProgression(ObjectiveType.WIN_ELITE_DUEL);
 

@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game.enums.functional;
 
+import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
@@ -89,7 +90,7 @@ public enum Achievements
                 p.addAchievement(a);
                 p.changeCredits(a.credits);
 
-                p.addExp(20, 100);
+                p.addExp(PMLExperience.ACHIEVEMENT, 100);
 
                 String message = "You unlocked an Achievement!\n`\"%s\"`\n*You earned %sc.*".formatted(a.desc, a.credits);
 

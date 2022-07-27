@@ -45,8 +45,6 @@ public class GauntletDuel extends WildDuel
             this.players[0].data.updateBountyProgression(ObjectiveType.COMPLETE_GAUNTLET_LEVELS);
             this.players[0].data.getStatistics().incr(PlayerStatistic.GAUNTLETS_WON);
 
-            if(this.level > 3) this.players[0].data.addExp(this.level * 10);
-
             this.setWildPokemon("");
             this.setDuelPokemonObjects(1);
             this.queuedMoves.clear();

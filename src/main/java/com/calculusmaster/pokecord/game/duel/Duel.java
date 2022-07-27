@@ -12,6 +12,7 @@ import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.TypeEffectiveness;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
+import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
@@ -2391,7 +2392,7 @@ public class Duel
             this.uploadEVs(1);
         }
 
-        this.players[winner].data.addExp(20);
+        this.players[winner].data.addExp(PMLExperience.DUEL_PVP, 95);
 
         this.players[winner].data.getStatistics().incr(PlayerStatistic.PVP_DUELS_WON);
         this.players[winner].data.updateBountyProgression(b -> {

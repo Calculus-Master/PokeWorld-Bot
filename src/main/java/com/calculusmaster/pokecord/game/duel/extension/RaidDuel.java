@@ -12,6 +12,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Room;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
@@ -158,8 +159,10 @@ public class RaidDuel extends WildDuel
                 double multiplier = highestDamage.equals(p.ID) ? 1.3 : (p.active.isFainted() ? 0.3 : 1.0);
 
                 p.data.changeCredits((int)(credits * multiplier));
-                p.data.addExp((int)(40 * multiplier));
                 p.active.addExp((int)(pokeXP * multiplier));
+
+                if(highestDamage.equals(p.ID)) p.data.addExp(PMLExperience.DUEL_RAID_MVP, 100);
+                else if(!p.active.isFainted()) p.data.addExp(PMLExperience.DUEL_RAID_PARTICIPANT, 75);
 
                 p.data.getStatistics().incr(PlayerStatistic.RAIDS_WON);
                 p.data.updateBountyProgression(ObjectiveType.WIN_RAID_DUEL);
