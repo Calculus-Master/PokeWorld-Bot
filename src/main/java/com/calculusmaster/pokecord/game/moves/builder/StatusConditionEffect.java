@@ -52,6 +52,14 @@ public class StatusConditionEffect extends MoveEffect
             if(!this.userChange && p.hasAbility(Ability.LEAF_GUARD) && (this.duel.weather.get().equals(Weather.HARSH_SUNLIGHT) || this.duel.weather.get().equals(Weather.EXTREME_HARSH_SUNLIGHT)) && List.of(StatusCondition.ASLEEP, StatusCondition.BURNED, StatusCondition.PARALYZED, StatusCondition.POISONED, StatusCondition.BADLY_POISONED, StatusCondition.FROZEN).contains(this.status))
                 return Ability.LEAF_GUARD.formatActivation(p.getName(), p.getName() + " was protected from the Status Condition!");
 
+            if((this.status.equals(StatusCondition.POISONED) || this.status.equals(StatusCondition.BADLY_POISONED)) && !this.userChange)
+            {
+                boolean poisonImmune = p.isType(Type.STEEL) || p.isType(Type.POISON);
+                boolean corrosionOverride = poisonImmune && p.hasAbility(Ability.CORROSION) && this.percent == 100;
+
+                if(poisonImmune && !corrosionOverride) return p.getName() + " was immune to the poison!";
+            }
+
             p.addStatusCondition(this.status);
 
             if(this.status.equals(StatusCondition.BOUND)) this.duel.data(p.getUUID()).boundTurns = 5;

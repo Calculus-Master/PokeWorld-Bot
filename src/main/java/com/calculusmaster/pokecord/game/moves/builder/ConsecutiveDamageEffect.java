@@ -1,5 +1,7 @@
 package com.calculusmaster.pokecord.game.moves.builder;
 
+import com.calculusmaster.pokecord.game.enums.elements.Ability;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,7 +24,7 @@ public class ConsecutiveDamageEffect extends FixedDamageEffect
         {
             this.move.setPower(power);
 
-            if(this.move.isAccurate(this.user, this.opponent))
+            if(this.user.hasAbility(Ability.MOXIE) || this.move.isAccurate(this.user, this.opponent))
             {
                 totalDamage += this.move.getDamage(this.user, this.opponent);
                 hits++;

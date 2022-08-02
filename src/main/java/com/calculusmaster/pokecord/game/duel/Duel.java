@@ -812,6 +812,13 @@ public class Duel
             }
         }
 
+        if(this.weather.get().equals(Weather.SANDSTORM) && o.hasAbility(Ability.SAND_VEIL))
+        {
+            move.setAccuracyMultiplier(4 / 5.);
+
+            turnResult.add(Ability.SAND_VEIL.formatActivation(o.getName(), o.getName() + "'s Sand Veil tried to interrupt the move!"));
+        }
+
         //Pre-Move Checks
         boolean accurate = move.isAccurate(this.players[this.current].active, this.players[this.other].active);
         boolean otherImmune = false;
@@ -1587,6 +1594,12 @@ public class Duel
 
             this.data(this.other).lastDamageTaken = 0;
         }
+        else if(o.hasAbility(Ability.LIGHTNING_ROD) && move.is(Type.ELECTRIC) && !move.is(Category.STATUS) && !move.is("Judgment", "Natural Gift", "Hidden Power"))
+        {
+            turnResult.add(Ability.LIGHTNING_ROD.formatActivation(o.getName(), o.getName() + " was immune to the attack, and its Special Attack rose by 1 stage!"));
+
+            o.changes().change(Stat.SPATK, 1);
+        }
         //Check if something earlier made user not able to use its move
         else if(cantUse)
         {
@@ -2083,6 +2096,7 @@ public class Duel
                 }
 
                 if(active.hasAbility(Ability.SAND_FORCE)) weatherResult.add(Ability.SAND_FORCE.formatActivation(active.getName(), active.getName() + " is immune to the sandstorm's effects!"));
+                else if(active.hasAbility(Ability.SAND_VEIL)) weatherResult.add(Ability.SAND_VEIL.formatActivation(active.getName(), active.getName() + " is immune to the sandstorm's effects!"));
                 else if(active.isType(Type.ROCK) || active.isType(Type.GROUND) || active.isType(Type.STEEL) || immuneMoveUsed) weatherResult.add(active.getName() + " was unaffected by the sandstorm!");
                 else
                 {
