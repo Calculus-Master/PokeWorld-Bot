@@ -582,11 +582,18 @@ public class Duel
                 statusResults.add(Ability.PASTEL_VEIL.formatActivation(c.getName(), "%s and its team's poison was cured!".formatted(c.getName())));
             }
 
-            if(c.hasAbility(Ability.LIMBER))
+            if(c.hasAbility(Ability.LIMBER) && c.hasStatusCondition(StatusCondition.PARALYZED))
             {
                 c.removeStatusCondition(StatusCondition.PARALYZED);
 
                 statusResults.add(Ability.LIMBER.formatActivation(c.getName(), "%s's paralysis was cured!".formatted(c.getName())));
+            }
+
+            if(c.hasAbility(Ability.WATER_VEIL) && c.hasStatusCondition(StatusCondition.BURNED))
+            {
+                c.removeStatusCondition(StatusCondition.BURNED);
+
+                statusResults.add(Ability.WATER_VEIL.formatActivation(c.getName(), "%s's is no longer burned!".formatted(c.getName())));
             }
 
             //Damage Status Conditions
@@ -817,6 +824,13 @@ public class Duel
             move.setAccuracyMultiplier(4 / 5.);
 
             turnResult.add(Ability.SAND_VEIL.formatActivation(o.getName(), o.getName() + "'s Sand Veil tried to interrupt the move!"));
+        }
+
+        if(c.hasAbility(Ability.VICTORY_STAR))
+        {
+            move.setAccuracyMultiplier(1.1);
+
+            turnResult.add(Ability.VICTORY_STAR.formatActivation(c.getName(), "The accuracy of " + move.getName() + " was raised!"));
         }
 
         //Pre-Move Checks
