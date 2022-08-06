@@ -25,17 +25,18 @@ public class PokemonAugmentRegistry
     );
 
     //Incompatibilities
-    public static final Map<PokemonAugment, EnumSet<PokemonAugment>> INCOMPATIBILITIES = Map.of(
-            PokemonAugment.SUPERCHARGED, EnumSet.of(PokemonAugment.SUPERFORTIFIED),
-            PokemonAugment.SUPERFORTIFIED, EnumSet.of(PokemonAugment.SUPERCHARGED),
+    public static final List<EnumSet<PokemonAugment>> INCOMPATIBILITIES = List.of(
+            EnumSet.of(PokemonAugment.AERIAL_EVASION, PokemonAugment.PINNACLE_EVASION),
 
-            PokemonAugment.PRISMATIC_CONVERGENCE, EnumSet.of(PokemonAugment.RADIANT_DIFFRACTED_BEAMS),
-            PokemonAugment.RADIANT_PRISMATIC_CONVERGENCE, EnumSet.of(PokemonAugment.RADIANT_DIFFRACTED_BEAMS)
+            EnumSet.of(PokemonAugment.SUPERFORTIFIED, PokemonAugment.SUPERCHARGED),
+
+            EnumSet.of(PokemonAugment.PRISMATIC_CONVERGENCE, PokemonAugment.RADIANT_PRISMATIC_CONVERGENCE, PokemonAugment.DIFFRACTED_BEAMS, PokemonAugment.RADIANT_DIFFRACTED_BEAMS)
     );
 
     public static boolean isIncompatibleWith(PokemonAugment augment, Collection<PokemonAugment> equipped)
     {
-        return INCOMPATIBILITIES.containsKey(augment) && INCOMPATIBILITIES.get(augment).stream().anyMatch(equipped::contains);
+        for(EnumSet<PokemonAugment> set : INCOMPATIBILITIES) if(set.contains(augment)) return equipped.stream().anyMatch(set::contains);
+        return false;
     }
 
     //Augment Data
@@ -169,6 +170,36 @@ public class PokemonAugmentRegistry
 
             //Meteor Mash
             if(data.moves.containsKey("Meteor Mash")) augmentData.registerAugment(50, PokemonAugment.METEOR_SHOWER);
+        });
+
+        //Typed Augments
+        PokemonData.POKEMON.forEach(s -> {
+            PokemonData data = PokemonData.get(s);
+            PokemonAugmentData augmentData = AUGMENT_DATA.get(s);
+
+            if(List.of(PokemonRarity.Rarity.EXTREME, PokemonRarity.Rarity.LEGENDARY, PokemonRarity.Rarity.MYTHICAL).contains(PokemonRarity.POKEMON_RARITIES.getOrDefault(s.replaceAll("Primal|Mega|\\sY|\\sX", "").trim(), PokemonRarity.Rarity.EXTREME)))
+            {
+                augmentData.registerAugment(20, switch(data.types.get(0)) {
+                    case NORMAL -> PokemonAugment.STANDARDIZATION;
+                    case FIRE -> PokemonAugment.SEARING_SHOT;
+                    case WATER -> PokemonAugment.DRENCH;
+                    case ELECTRIC -> PokemonAugment.STATIC;
+                    case GRASS -> PokemonAugment.FLORAL_HEALING;
+                    case ICE -> PokemonAugment.ICY_AURA;
+                    case FIGHTING -> PokemonAugment.TRUE_STRIKE;
+                    case POISON -> PokemonAugment.POISONOUS_SINGE;
+                    case GROUND -> PokemonAugment.GROUNDED_EMPOWERMENT;
+                    case FLYING -> PokemonAugment.AERIAL_EVASION;
+                    case PSYCHIC -> PokemonAugment.SURE_SHOT;
+                    case BUG -> PokemonAugment.SWARM_COLLECTIVE;
+                    case ROCK -> PokemonAugment.HEAVYWEIGHT_BASH;
+                    case GHOST -> PokemonAugment.PHASE_SHIFTER;
+                    case DRAGON -> PokemonAugment.DRACONIC_ENRAGE;
+                    case DARK -> PokemonAugment.UMBRAL_ENHANCEMENTS;
+                    case STEEL -> PokemonAugment.PLATED_ARMOR;
+                    case FAIRY -> PokemonAugment.FLOWERING_GRACE;
+                });
+            }
         });
 
         //Marshadow

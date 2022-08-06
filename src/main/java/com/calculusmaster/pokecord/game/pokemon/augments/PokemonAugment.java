@@ -44,6 +44,46 @@ public enum PokemonAugment
     RAW_FORCE           (3, "Raw Force", "Increases the power of moves by 50%, but removes bonuses from Type Effectiveness, STAB, and Critical Hits."),
     MODIFYING_FORCE     (3, "Modifying Force", "Increases the bonuses provided from Type Effectiveness, STAB, and Critical Hits by 25%, 20%, and 15% respectively, but reduces the power of moves by 40%."),
 
+    //Type Augments
+    STANDARDIZATION     (4, "Standardization", "Using a Normal-type move has a small chance to remove a negative stat change."),
+
+    SEARING_SHOT        (1, "Searing Shot", "All Fire-type moves have an additional 5% chance to burn the target, if the target is not burned by the move itself."),
+
+    DRENCH              (2, "Drench", "Using Water-type moves has an additional chance to reduce the opponent's Speed by 2 stages, Evasion by 1 stage, and Accuracy by 1 stage."),
+
+    STATIC              (1, "Static", "Grants a 10% chance for Electric-type moves to deal partial damage to a random Pokemon from the opponent's team."),
+
+    FLORAL_HEALING      (1, "Floral Healing", "While not on the battlefield, grants a 10% chance for the user to heal 15% of their maximum HP each turn."),
+
+    ICY_AURA            (2, "Icy Aura", "Ice-type moves have a 20% chance to reduce the target's Speed by 1 stage. During a hailstorm, the chance is increased to 80%."),
+
+    TRUE_STRIKE         (2, "True Strike", "Reduces the power of Physical Fighting-type moves by 30. Successfully using a Physical Fighting move deals an additional 10, 20, or 30 damage as a true strike (directly reducing an opponent's health. Fighting-type moves with less than 50 power do not trigger this effect."),
+
+    POISONOUS_SINGE     (2, "Poisonous Singe", "While the user is on the battlefield, damage taken by the opponent due to Poisoned status condition is doubled."),
+
+    GROUNDED_EMPOWERMENT(1, "Grounded Empowerment", "Increases the power of Ground-type moves by 30% against lighter opponents. If a Ground-type move is used against a heavier opponent, the user's Speed is lowered by 1 stage."),
+
+    AERIAL_EVASION      (1, "Aerial Evasion", "Using Flying-type moves increases the user's Evasion by 1 stage. Reduces overall Speed by 10%."),
+
+    SURE_SHOT           (2, "Magical Sure Shot", "Halves the damage reduction of Psychic-type moves when not effective against the opponent, and increases the damage boost of Psychic-type moves when super effective against opponents by 50%."),
+
+    SWARM_COLLECTIVE    (2, "Swarm Collective", "Increases the power of Bug-type moves based on the number of Bug-type moves the user knows (+5% each) and the number of Bug-type allies the user has (+10% each, +25% if the ally has this augment equipped)."),
+
+    HEAVYWEIGHT_BASH    (3, "Heavyweight Bash", "Increases the power of Physical Rock-type moves with base power of at least 80 by 60. Reduces the power of non-Rock type moves by 20."),
+
+    PHASE_SHIFTER       (2, "Phase Shifter", "Using a Ghost-type move has a chance to increase Evasion by 4 stages. Normal-type moves used against the user have a small chance to deal 10 true damage to the opponent."),
+
+    DRACONIC_ENRAGE     (3, "Draconic Enrage", "Increases Attack, Special Attack, and Speed by 15%. Decreases Defense and Special Defense by 15%"),
+
+    UMBRAL_ENHANCEMENTS (1, "Umbral Enhancements", "During nighttime, increases the power of Dark-type moves by 30%. During daytime, decreases the power of Dark-type moves by 10%."),
+
+    PLATED_ARMOR        (1, "Plated Armor", "Taking damage from Physical moves increases the user's Defense by 1 stage."),
+
+    FLOWERING_GRACE     (3, "Flowering Grace", "Lowers the power of Special Fairy-type moves by 40. Dealing damage with Special Fairy-type moves heals 40HP, plus an additional 15HP for each Fairy-type move the user and opponent know."),
+
+    //TODO: Implement Harmonic Overcharge, and add the above augments (and HO) to the Augment Registry (all Pokemon with first type equal to the required type get the augment - not 2nd types)
+    HARMONIC_OVERCHARGE (4, "Harmonic Overcharge", "Moves of the same type as the user are supercharged, dealing 100% (150% if using a Z-Move or Max Move) more damage with a secondary effect based on the type. The user takes 50% less damage from moves of the same type, but 150% more damage from moves of any other type. The damage of moves with a different type than the user is reduced by 75%."),
+
     //General Move Augments
     WEIGHTED_PUNCH      (2, "Weighted Punch", "Multiplies the power of Punch moves by the ratio of the user's weight to the opponent's weight."),
     Z_AFFINITY          (5, "Z-Affinity", "Doubles the power of Z-Moves."),

@@ -10,6 +10,7 @@ import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.MoveData;
 import com.calculusmaster.pokecord.game.moves.TypeEffectiveness;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
@@ -21,6 +22,7 @@ import com.calculusmaster.pokecord.game.tournament.Tournament;
 import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
+import com.calculusmaster.pokecord.util.helpers.event.LocationEventHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -608,17 +610,33 @@ public class Duel
             if(c.hasStatusCondition(StatusCondition.POISONED))
             {
                 statusDamage = c.getMaxHealth(1 / 8.);
+
+                String singeEffect = "";
+                if(o.hasAugment(PokemonAugment.POISONOUS_SINGE))
+                {
+                    statusDamage *= 2;
+                    singeEffect = " The poison was especially toxic due to " + o.getName() + "'s " + PokemonAugment.POISONOUS_SINGE.getAugmentName() + " Augment!";
+                }
+
                 c.damage(statusDamage);
 
-                statusResults.add("%s is poisoned! The poison dealt %s damage!".formatted(c.getName(), statusDamage));
+                statusResults.add("%s is poisoned! The poison dealt %s damage!%s".formatted(c.getName(), statusDamage, singeEffect));
             }
 
             if(c.hasStatusCondition(StatusCondition.BADLY_POISONED))
             {
                 statusDamage = c.getMaxHealth(1 / 16.) * this.data(this.current).badlyPoisonedTurns;
+
+                String singeEffect = "";
+                if(o.hasAugment(PokemonAugment.POISONOUS_SINGE))
+                {
+                    statusDamage *= 2;
+                    singeEffect = " The poison was especially toxic due to " + o.getName() + "'s " + PokemonAugment.POISONOUS_SINGE.getAugmentName() + " Augment!";
+                }
+
                 c.damage(statusDamage);
 
-                statusResults.add("%s is badly poisoned! The poison dealt %s damage!".formatted(c.getName(), statusDamage));
+                statusResults.add("%s is badly poisoned! The poison dealt %s damage!%s".formatted(c.getName(), statusDamage, singeEffect));
             }
 
             if(c.hasStatusCondition(StatusCondition.CURSED))
@@ -1339,6 +1357,50 @@ public class Duel
             turnResult.add(move.getName() + "'s power was amplified by the %s Augment!".formatted(PokemonAugment.WEIGHTED_PUNCH.getAugmentName()));
         }
 
+        //Augment: Umbral Enhancements
+        if(c.hasAugment(PokemonAugment.UMBRAL_ENHANCEMENTS) && move.is(Type.DARK) && !move.is(Category.STATUS))
+        {
+            boolean night = LocationEventHelper.getTime().isNight();
+
+            if(night) move.setPower(1.3);
+            else move.setPower(0.9);
+
+            turnResult.add(move.getName() + "'s power was " + (night ? "increased" : "reduced") + " by the %s Augment!".formatted(PokemonAugment.UMBRAL_ENHANCEMENTS.getAugmentName()));
+        }
+
+        //Augment: Swarm Collective
+        if(c.hasAugment(PokemonAugment.SWARM_COLLECTIVE) && move.is(Type.BUG) && !move.is(Category.STATUS))
+        {
+            double modifier = 1.0;
+
+            for(String s : c.getMoves()) if(MoveData.get(s).type.equals(Type.BUG)) modifier += 0.05;
+            for(Pokemon p : this.players[this.current].team) if(p.getType().get(0).equals(Type.BUG)) modifier += p.hasAugment(PokemonAugment.SWARM_COLLECTIVE) ? 0.25 : 0.1;
+
+            if(modifier != 1.0)
+            {
+                move.setPower(modifier);
+
+                turnResult.add(move.getName() + "'s power was amplified through the %s Augment!".formatted(PokemonAugment.SWARM_COLLECTIVE.getAugmentName()));
+            }
+        }
+
+        //Augment: Heavyweight Bash
+        if(c.hasAugment(PokemonAugment.HEAVYWEIGHT_BASH))
+        {
+            if(move.is(Type.ROCK) && move.getPower() >= 80)
+            {
+                move.setPower(move.getPower() + 60);
+
+                turnResult.add(move.getName() + " became heavy due to the %s Augment!".formatted(PokemonAugment.HEAVYWEIGHT_BASH.getAugmentName()));
+            }
+            else if(!move.is(Type.ROCK) && move.getPower() > 20)
+            {
+                move.setPower(move.getPower() - 20);
+
+                turnResult.add(move.getName() + " became lighter due to the %s Augment!".formatted(PokemonAugment.HEAVYWEIGHT_BASH.getAugmentName()));
+            }
+        }
+
         //Item-based Buffs
 
         boolean itemsOff = this.room.isActive(Room.MAGIC_ROOM);
@@ -1738,6 +1800,29 @@ public class Duel
             if(this.weather.get().equals(Weather.STRONG_WINDS) && move.is(Type.FLYING) && TypeEffectiveness.getEffectiveness(this.players[this.other].active.getType()).get(move.getType()) > 1.0)
                 move.setDamageMultiplier(0.5);
 
+            //Augment: True Strike
+            boolean isTrueStrikeValid = c.hasAugment(PokemonAugment.TRUE_STRIKE) && move.is(Category.PHYSICAL) && move.is(Type.FIGHTING) && move.getPower() > 50;
+            if(isTrueStrikeValid) move.setPower(move.getPower() - 30);
+
+            //Augment: Grounded Empowerment
+            if(c.hasAugment(PokemonAugment.GROUNDED_EMPOWERMENT) && move.is(Type.GROUND))
+            {
+                if(c.getWeight() > o.getWeight())
+                {
+                    move.setPower(1.3);
+                    turnResult.add(move.getName() + "'s was empowered by %s's %s Augment!".formatted(c.getName(), PokemonAugment.GROUNDED_EMPOWERMENT.getAugmentName()));
+                }
+                else
+                {
+                    c.changes().change(Stat.SPD, -1);
+                    turnResult.add(c.getName() + "'s Speed was reduced from the %s Augment!".formatted(PokemonAugment.GROUNDED_EMPOWERMENT.getAugmentName()));
+                }
+            }
+
+            //Augment: Flowering Grace
+            boolean isValidFloweringGrace = c.hasAugment(PokemonAugment.FLOWERING_GRACE) && move.is(Category.SPECIAL) && move.is(Type.FAIRY) && move.getPower() > 40;
+            if(isValidFloweringGrace) move.setPower(move.getPower() - 40);
+
             //Primary Move Logic
 
             turnResult.add(move.logic(this.players[this.current].active, this.players[this.other].active, this));
@@ -1778,6 +1863,36 @@ public class Duel
                 turnResult.add(c.getName() + "'s Speed rose by 1 stage due to the %s Augment!".formatted(PokemonAugment.SHADOW_PROPULSION.getAugmentName()));
             }
 
+            //Augment: Searing Shot
+            if(c.hasAugment(PokemonAugment.SEARING_SHOT) && move.is(Type.FIRE) && !o.hasStatusCondition(StatusCondition.BURNED) && new Random().nextFloat() < 0.05F)
+            {
+                o.addStatusCondition(StatusCondition.BURNED);
+
+                turnResult.add(o.getName() + " is now burned, due to the %s Augment!".formatted(PokemonAugment.SEARING_SHOT.getAugmentName()));
+            }
+
+            //Augment: Aerial Evasion
+            if(c.hasAugment(PokemonAugment.AERIAL_EVASION) && move.is(Type.FLYING))
+            {
+                c.changes().changeEvasion(1);
+
+                turnResult.add(c.getName() + "'s Evasion was increased by 1 stage due to its %s Augment!".formatted(PokemonAugment.AERIAL_EVASION.getAugmentName()));
+            }
+
+            //Augment: Phase Shifter
+            if(c.hasAugment(PokemonAugment.PHASE_SHIFTER) && move.is(Type.GHOST) && new Random().nextFloat() < 0.2F)
+            {
+                c.changes().changeEvasion(4);
+
+                turnResult.add(c.getName() + "'s Evasion was increased greatly due to its %s Augment!".formatted(PokemonAugment.PHASE_SHIFTER.getAugmentName()));
+            }
+            if(o.hasAugment(PokemonAugment.PHASE_SHIFTER) && move.is(Type.NORMAL) && new Random().nextFloat() < 0.1F)
+            {
+                c.damage(10);
+
+                turnResult.add(c.getName() + " took 10 true damage due to %s's %s Augment!".formatted(o.getName(), PokemonAugment.PHASE_SHIFTER.getAugmentName()));
+            }
+
             int damageDealt = preMoveHP - this.players[this.other].active.getHealth();
 
             if(damageDealt > 0 && this.isNonBotPlayer(this.current)) this.damageDealt.put(this.players[this.current].active.getUUID(), this.damageDealt.getOrDefault(this.players[this.current].active.getUUID(), 0) + damageDealt);
@@ -1790,6 +1905,83 @@ public class Duel
             }
 
             if(move.isContact()) this.data(this.other).isFocusPunchFailed = true;
+
+            if(damageDealt > 0 && c.hasAugment(PokemonAugment.STATIC) && move.is(Type.ELECTRIC) && this.players[this.other].team.size() > 1 && new Random().nextFloat() < 0.1F)
+            {
+                int randomIndex = new Random().nextInt(this.players[this.other].team.size());
+                Pokemon target = this.players[this.other].team.get(randomIndex);
+
+                int targetDamage = (int)(damageDealt * 0.15F);
+                target.damage(targetDamage);
+
+                turnResult.add(target.getName() + " took " + targetDamage + " damage due to the %s Augment!".formatted(PokemonAugment.STATIC.getAugmentName()));
+            }
+
+            if(c.hasAugment(PokemonAugment.ICY_AURA) && move.is(Type.ICE) && new Random().nextFloat() < (this.weather.get().equals(Weather.HAIL) ? 0.8F : 0.2F))
+            {
+                o.changes().change(Stat.SPD, -1);
+
+                turnResult.add(o.getName() + "'s Speed was lowered by 1 stage, due to " + c.getName() + "'s " + PokemonAugment.ICY_AURA.getAugmentName() + " Augment!");
+            }
+
+            if(isTrueStrikeValid && damageDealt > 0)
+            {
+                float r = new Random().nextFloat();
+                int trueDamage;
+
+                if(r < 0.2F) trueDamage = 30;
+                else if(r < 0.5F) trueDamage = 20;
+                else trueDamage = 10;
+
+                o.damage(trueDamage);
+
+                turnResult.add(move.getName() + " dealt an additional " + trueDamage + " true damage, due to the " + PokemonAugment.TRUE_STRIKE.getAugmentName() + " Augment!");
+            }
+
+            if(move.is(Category.PHYSICAL) && c.hasAugment(PokemonAugment.PLATED_ARMOR) && damageDealt > 0)
+            {
+                c.changes().change(Stat.DEF, 1);
+
+                turnResult.add(c.getName() + "'s Defense rose by 1 stage due to the " + PokemonAugment.PLATED_ARMOR.getAugmentName() + " Augment!");
+            }
+
+            //Augment: Flowering Grace
+            if(isValidFloweringGrace && damageDealt > 0)
+            {
+                int HP = 40;
+                for(String s : c.getMoves()) if(MoveData.get(s).type.equals(Type.FAIRY)) HP += 15;
+                for(String s : o.getMoves()) if(MoveData.get(s).type.equals(Type.FAIRY)) HP += 15;
+
+                c.heal(HP);
+
+                turnResult.add(c.getName() + " healed for " + HP + " due to the " + PokemonAugment.FLOWERING_GRACE.getAugmentName() + " Augment!");
+            }
+
+            //Augment: Drench
+            if(c.hasAugment(PokemonAugment.DRENCH) && move.is(Type.WATER) && new Random().nextFloat() < 0.05)
+            {
+                o.changes().change(Stat.SPD, -2);
+                o.changes().changeEvasion(-1);
+                o.changes().changeAccuracy(-1);
+
+                turnResult.add(o.getName() + "'s Speed was lowered by 2 stages, and its Evasion and Accuracy were reduced by 1 stage, due to " + c.getName() + "'s " + PokemonAugment.DRENCH.getAugmentName() + " Augment!");
+            }
+
+            //Augment: Standardization
+            if(c.hasAugment(PokemonAugment.STANDARDIZATION) && move.is(Type.NORMAL) && new Random().nextFloat() < 0.1)
+            {
+                List<Stat> valid = new ArrayList<>();
+                for(Stat s : Stat.values()) if(c.changes().get(s) < 0) valid.add(s);
+
+                if(!valid.isEmpty())
+                {
+                    Stat s = valid.get(new Random().nextInt(valid.size()));
+                    int value = c.changes().get(s);
+                    c.changes().change(s, value * -1);
+
+                    turnResult.add(c.getName() + "'s negative " + s.toString() + " modifiers were removed due to the " + PokemonAugment.STANDARDIZATION.getAugmentName() + " Augment!");
+                }
+            }
 
             //Berry Effects - Post-Move Damage Dealt
 
@@ -1903,6 +2095,22 @@ public class Duel
             this.players[this.current].active.changes().change(Stat.SPD, 1);
 
             turnResult.add(Ability.SPEED_BOOST.formatActivation(c.getName(), c.getName() + "'s Speed rose by 1 stage!"));
+        }
+
+        if(this.players[this.other].team.size() > 1)
+        {
+            List<String> heals = new ArrayList<>();
+            Random r = new Random();
+
+            for(Pokemon p : this.players[this.other].team) if(p.hasAugment(PokemonAugment.FLORAL_HEALING) && r.nextFloat() < 0.1F)
+            {
+                int healAmount = p.getMaxHealth(0.15F);
+
+                p.heal(healAmount);
+                heals.add(p.getName() + " healed for " + healAmount + "HP!");
+            }
+
+            if(!heals.isEmpty()) turnResult.add("\n" + PokemonAugment.FLORAL_HEALING.getAugmentName() + " Augment: " + String.join(" ", heals) + "\n");
         }
 
         //Field Effects

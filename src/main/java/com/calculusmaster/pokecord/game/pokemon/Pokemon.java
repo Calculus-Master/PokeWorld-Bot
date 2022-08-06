@@ -426,6 +426,16 @@ public class Pokemon
         //Augment: Electrified Hyper Speed
         if(this.hasAugment(PokemonAugment.ELECTRIFIED_HYPER_SPEED) && s.equals(Stat.SPD)) commonBoosts *= 2.0;
 
+        //Augment: Aerial Evasion
+        if(this.hasAugment(PokemonAugment.AERIAL_EVASION) && s.equals(Stat.SPD)) commonBoosts *= 0.9;
+
+        //Augment: Draonic Enrage
+        if(this.hasAugment(PokemonAugment.DRACONIC_ENRAGE))
+        {
+            if(List.of(Stat.ATK, Stat.SPATK, Stat.SPD).contains(s)) commonBoosts *= 1.15;
+            else if(List.of(Stat.DEF, Stat.SPDEF).contains(s)) commonBoosts *= 0.85;
+        }
+
         if(s.equals(Stat.HP))
         {
             //HP = Level + 10 + [((2 * Base + IV + EV / 4) * Level) / 100]
