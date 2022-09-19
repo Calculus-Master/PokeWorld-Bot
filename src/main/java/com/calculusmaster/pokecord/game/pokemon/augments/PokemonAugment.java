@@ -81,9 +81,6 @@ public enum PokemonAugment
 
     FLOWERING_GRACE     (3, "Flowering Grace", "Lowers the power of Special Fairy-type moves by 40. Dealing damage with Special Fairy-type moves heals 40HP, plus an additional 15HP for each Fairy-type move the user and opponent know."),
 
-    //TODO: Implement Harmonic Overcharge, and add the above augments (and HO) to the Augment Registry (all Pokemon with first type equal to the required type get the augment - not 2nd types)
-    HARMONIC_OVERCHARGE (4, "Harmonic Overcharge", "Moves of the same type as the user are supercharged, dealing 100% (150% if using a Z-Move or Max Move) more damage with a secondary effect based on the type. The user takes 50% less damage from moves of the same type, but 150% more damage from moves of any other type. The damage of moves with a different type than the user is reduced by 75%."),
-
     //General Move Augments
     WEIGHTED_PUNCH      (2, "Weighted Punch", "Multiplies the power of Punch moves by the ratio of the user's weight to the opponent's weight."),
     Z_AFFINITY          (5, "Z-Affinity", "Doubles the power of Z-Moves."),
@@ -93,6 +90,13 @@ public enum PokemonAugment
     //Specific Move Augments
     SUPERCHARGED_TACKLE (3, "Supercharged Tackle", "Increases the power of Tackle by 300%, changes its Type to the user's Type, and guarantees a Critical Hit."),
     METEOR_SHOWER       (4, "Meteor Shower", "The power of Meteor Mash is reduced by 20. Meteor Mash now lowers the opponent's Defense by 2 stages, but no longer increases the user's Attack."),
+
+    //Unique Augments - Victini
+    VICTORY_RESOLVE     (3, "Victory Resolve", "Defeating an opponent restores HP equal to 50% of the user's remaining HP and cures the user of any Status Conditions."),
+    FINAL_RESORT_V      (2, "Final Resort V", "If the user's health is below 10%, V-Create's power is doubled. Using V-Create will lower the user's Defense and Special Defense by 6 stages."),
+    V_RUSH              (1, "V Rush", "Missing an attack increases the user's Attack and Special Attack by 1 stage."),
+    SHINING_STAR        (2, "Shining Star", "The Victory Star ability now increases Accuracy by 30% instead of 10%."),
+    VICTORY_ENSURED     (4, "Victory Ensured", "When the user faints, the opponent takes damage equal to half of their remaining health."),
 
     //Unique Augments - Marshadow
     SPECTRAL_AMPLIFICATION  (3, "Spectral Amplification", "Increases the damage of Ghost-type moves by 250%. Every time a Ghost-type move is used, both Attack and Defense are lowered by 2 stages."),

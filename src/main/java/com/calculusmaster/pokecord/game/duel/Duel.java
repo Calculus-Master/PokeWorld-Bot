@@ -846,9 +846,11 @@ public class Duel
 
         if(c.hasAbility(Ability.VICTORY_STAR))
         {
-            move.setAccuracyMultiplier(1.1);
+            boolean augment = c.hasAugment(PokemonAugment.SHINING_STAR);
+            double multiplier = augment ? 1.3 : 1.1;
+            move.setAccuracyMultiplier(multiplier);
 
-            turnResult.add(Ability.VICTORY_STAR.formatActivation(c.getName(), "The accuracy of " + move.getName() + " was raised!"));
+            turnResult.add(Ability.VICTORY_STAR.formatActivation(c.getName(), "The accuracy of " + move.getName() + " was %s!".formatted(augment ? " greatly raised due to the " + PokemonAugment.SHINING_STAR.getAugmentName() + " augment!" : " raised!")));
         }
 
         //Pre-Move Checks
@@ -1695,6 +1697,15 @@ public class Duel
                 this.players[this.current].active.damage(this.players[this.current].active.getStat(Stat.HP) / 2);
             }
 
+            //Augment: V Rush
+            if(c.hasAugment(PokemonAugment.V_RUSH))
+            {
+                c.changes().change(Stat.ATK, 1);
+                c.changes().change(Stat.SPATK, 1);
+
+                turnResult.add(c.getName() + "'s Attack and Special Attack rose by 1 stage, due to the %s Augment!".formatted(PokemonAugment.V_RUSH.getAugmentName()));
+            }
+
             this.data(this.other).lastDamageTaken = 0;
         }
         //Check if opponent is immune
@@ -1822,6 +1833,13 @@ public class Duel
             //Augment: Flowering Grace
             boolean isValidFloweringGrace = c.hasAugment(PokemonAugment.FLOWERING_GRACE) && move.is(Category.SPECIAL) && move.is(Type.FAIRY) && move.getPower() > 40;
             if(isValidFloweringGrace) move.setPower(move.getPower() - 40);
+
+            //Augment: Final Resort V
+            boolean isFinalResortVActivated = c.hasAugment(PokemonAugment.FINAL_RESORT_V) && move.is("V Create") && c.getHealth() < c.getMaxHealth(1 / 10.);
+            if(isFinalResortVActivated)
+            {
+                move.setPower(2.0);
+            }
 
             //Primary Move Logic
 
@@ -1981,6 +1999,15 @@ public class Duel
 
                     turnResult.add(c.getName() + "'s negative " + s.toString() + " modifiers were removed due to the " + PokemonAugment.STANDARDIZATION.getAugmentName() + " Augment!");
                 }
+            }
+
+            //Augment: Final Resort V
+            if(isFinalResortVActivated)
+            {
+                c.changes().change(Stat.DEF, -6);
+                c.changes().change(Stat.SPDEF, -6);
+
+                turnResult.add(c.getName() + "'s Defense and Special Defense were lowered by 6 stages due to the " + PokemonAugment.FINAL_RESORT_V.getAugmentName() + " Augment!");
             }
 
             //Berry Effects - Post-Move Damage Dealt
@@ -2206,6 +2233,25 @@ public class Duel
                 this.players[this.current].active.changes().change(Stat.ATK, 1);
 
                 turnResult.add(Ability.CHILLING_NEIGH.formatActivation(c.getName(), c.getName() + "'s Attack rose by 1 stage!"));
+            }
+
+            //Augment: Victory Resolve
+            if(c.hasAugment(PokemonAugment.VICTORY_RESOLVE))
+            {
+                int health = c.getHealth() / 2;
+                c.heal(health);
+                c.clearStatusConditions();
+
+                turnResult.add(c.getName() + " healed for %s HP and was cured of all Status Conditions, due to the %s Augment!".formatted(health, PokemonAugment.VICTORY_RESOLVE.getAugmentName()));
+            }
+
+            //Augment: Victory Ensured
+            if(o.hasAugment(PokemonAugment.VICTORY_ENSURED))
+            {
+                int damage = c.getHealth() / 2;
+                c.damage(damage);
+
+                turnResult.add(c.getName() + " took " + damage + " damage, due to the %s Augment!".formatted(PokemonAugment.VICTORY_ENSURED.getAugmentName()));
             }
 
             if(this.data(this.other).destinyBondUsed)
