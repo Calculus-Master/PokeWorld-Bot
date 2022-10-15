@@ -64,7 +64,9 @@ public class ZTrialDuel extends WildDuel
 
     private void setWildPokemon(Type type)
     {
-        this.players[1] = new WildPokemon(type, 80);
+        this.players[1] = new WildPokemon(type, Math.max(80, this.players[0].active.getLevel()));
         this.type = type;
     }
+
+    //TODO: Edit getImage and increase the Trial pokemon's size
 }

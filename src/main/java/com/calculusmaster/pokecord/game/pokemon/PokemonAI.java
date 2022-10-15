@@ -135,6 +135,6 @@ public class PokemonAI
 
     public String getHighestDamageMove(Pokemon target)
     {
-        return Optional.of(Collections.max(this.totalSimulatedDamageEffectiveness.get(target.getName()).entrySet(), Map.Entry.comparingByValue()).getKey()).orElse("Tackle");
+        return this.totalSimulatedDamageEffectiveness == null ? (target.getMoves().stream().sorted(Comparator.comparingInt(s -> MoveData.get(s).basePower)).toList().get(3)) : Collections.max(this.totalSimulatedDamageEffectiveness.get(target.getName()).entrySet(), Map.Entry.comparingByValue()).getKey();
     }
 }

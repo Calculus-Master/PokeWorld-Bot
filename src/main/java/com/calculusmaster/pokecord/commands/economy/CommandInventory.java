@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.TR;
+import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;
@@ -52,7 +53,7 @@ public class CommandInventory extends Command
 
                     if(!this.playerData.getZCrystalList().isEmpty())
                     {
-                        for(int i = 0; i < this.playerData.getZCrystalList().size(); i++) s.append(i + 1).append(": ").append(this.playerData.getZCrystalList().get(i)).append("\n");
+                        for(int i = 0; i < this.playerData.getZCrystalList().size(); i++) s.append(i + 1).append(": ").append(ZCrystal.cast(this.playerData.getZCrystalList().get(i)).getStyledName()).append("\n");
                         s.append("\n");
                         s.append("`Equipped:` ").append(this.playerData.getEquippedZCrystal() != null && !this.playerData.getEquippedZCrystal().isEmpty() ? this.playerData.getEquippedZCrystal() : "None");
                     }

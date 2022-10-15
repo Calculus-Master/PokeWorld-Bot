@@ -106,7 +106,7 @@ public enum ZCrystal
 
     public static ZCrystal cast(String z)
     {
-        for(ZCrystal zc : values()) if(z.equals(zc.getStyledName())) return zc;
+        for(ZCrystal zc : values()) if(z.equalsIgnoreCase(zc.getStyledName()) || z.equalsIgnoreCase(zc.toString())) return zc;
         return null;
     }
 

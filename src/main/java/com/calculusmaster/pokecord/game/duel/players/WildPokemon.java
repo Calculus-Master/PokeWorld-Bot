@@ -47,6 +47,7 @@ public class WildPokemon extends Player
         };
     }
 
+    //Z-Trial
     public WildPokemon(Type type, int level)
     {
         List<String> pool = DataHelper.TYPE_LISTS.get(type);
@@ -54,6 +55,7 @@ public class WildPokemon extends Player
 
         p.setLevel(level);
         p.getBoosts().setStatBoost(1.5);
+        p.getBoosts().setHealthBoost(2.75);
         Arrays.stream(Stat.values()).forEach(s -> p.setEV(s, 50));
         p.setHealth(p.getStat(Stat.HP));
 
