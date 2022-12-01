@@ -34,7 +34,7 @@ public class CommandZTrialDuel extends Command
             else if(!this.isEligibleForTrial(type)) this.response = "You are not ready for a Z Trial! You will need to have 50 " + type.getStyledName() + "-Type Pokemon and 2000 credits!";
             else
             {
-                this.playerData.changeCredits(-1 * 2000);
+                this.playerData.changeCredits(-2000);
 
                 Duel d = ZTrialDuel.create(this.player.getId(), this.event, type);
 
