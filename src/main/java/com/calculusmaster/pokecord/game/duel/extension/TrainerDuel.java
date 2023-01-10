@@ -29,7 +29,8 @@ public class TrainerDuel extends Duel
         TrainerDuel duel = new TrainerDuel();
 
         duel.setStatus(DuelStatus.WAITING);
-        duel.setEvent(event);
+        duel.setTurn();
+        duel.addChannel(event.getTextChannel());
         duel.setPlayers(playerID, trainer.name, trainer.pokemon.size());
         duel.setTrainer(trainer);
         duel.limitPlayerPokemon(trainer.pokemonLevel);
@@ -54,7 +55,7 @@ public class TrainerDuel extends Duel
 
             embed.setDescription("You defeated " + bot + "!");
 
-            Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_TRAINER_DUEL, this.event);
+            Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_TRAINER_DUEL, null);
             this.players[0].data.updateBountyProgression(ObjectiveType.WIN_TRAINER_DUEL);
 
             //Regular Daily Trainer
@@ -74,9 +75,9 @@ public class TrainerDuel extends Duel
                     int winCredits = (new Random().nextInt(501) + 500) * Trainer.DAILY_TRAINERS.size();
                     this.players[0].data.changeCredits(winCredits);
                     this.players[0].data.addExp(PMLExperience.DUEL_TRAINER_DAILY_COMPLETE, 100);
-                    this.event.getChannel().sendMessage(this.players[0].data.getMention() + ": You defeated all of today's trainers! You earned a bonus " + winCredits + " credits!").queue();
+                    this.players[0].data.directMessage("You defeated all of today's trainers! You earned a bonus " + winCredits + " credits!");
 
-                    Achievements.grant(this.players[0].ID, Achievements.DEFEATED_DAILY_TRAINERS, this.event);
+                    Achievements.grant(this.players[0].ID, Achievements.DEFEATED_DAILY_TRAINERS, null);
                 }
             }
 
@@ -92,7 +93,7 @@ public class TrainerDuel extends Duel
         this.players[0].data.updateBountyProgression(ObjectiveType.COMPLETE_TRAINER_DUEL);
         this.players[0].data.getStatistics().incr(PlayerStatistic.TRAINER_DUELS_COMPLETED);
 
-        this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
+        this.sendEmbed(embed.build());
         DuelHelper.delete(this.players[0].ID);
     }
 

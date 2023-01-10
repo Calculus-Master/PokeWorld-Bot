@@ -33,7 +33,8 @@ public class ZTrialDuel extends WildDuel
         ZTrialDuel duel = new ZTrialDuel();
 
         duel.setStatus(DuelHelper.DuelStatus.WAITING);
-        duel.setEvent(event);
+        duel.setTurn();
+        duel.addChannel(event.getTextChannel());
         duel.setPlayers(playerID, "BOT", 1);
         duel.setWildPokemon(type);
         duel.setDefaults();
@@ -56,7 +57,7 @@ public class ZTrialDuel extends WildDuel
             this.onWildDuelWon(true);
 
             this.players[0].data.addZCrystal(crystal.toString());
-            Achievements.grant(this.players[this.current].ID, Achievements.ACQUIRED_FIRST_TYPED_ZCRYSTAL, this.event);
+            Achievements.grant(this.players[this.current].ID, Achievements.ACQUIRED_FIRST_TYPED_ZCRYSTAL, null);
 
             embed.setDescription("You won! You acquired `%s`!".formatted(crystal.getStyledName()));
         }
@@ -67,7 +68,7 @@ public class ZTrialDuel extends WildDuel
             embed.setDescription("You lost! You weren't able to earn `%s`.".formatted(crystal.getStyledName()));
         }
 
-        this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
+        this.sendEmbed(embed.build());
         DuelHelper.delete(this.players[0].ID);
     }
 

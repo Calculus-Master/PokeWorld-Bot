@@ -32,7 +32,7 @@ public class CommandRaidDuel extends Command
 
                 if(join)
                 {
-                    raid.setEvent(this.event);
+                    raid.setTurn();
                     raid.addPlayer(this.player.getId());
 
                     this.response = "You have joined the Raid with " + this.playerData.getSelectedPokemon().getName() + "!";

@@ -29,7 +29,8 @@ public class WildDuel extends Duel
         WildDuel duel = new WildDuel();
 
         duel.setStatus(DuelStatus.WAITING);
-        duel.setEvent(event);
+        duel.setTurn();
+        duel.addChannel(event.getTextChannel());
         duel.setPlayers(playerID, "BOT", 1);
         duel.setWildPokemon(pokemon);
         duel.setDefaults();
@@ -87,7 +88,7 @@ public class WildDuel extends Duel
 
         this.players[0].data.getStatistics().incr(PlayerStatistic.WILD_DUELS_COMPLETED);
 
-        this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
+        this.sendEmbed(embed.build());
         DuelHelper.delete(this.players[0].ID);
     }
 
@@ -100,7 +101,7 @@ public class WildDuel extends Duel
         if(evs) this.players[this.current].active.updateEVs();
         p.updateExperience();
 
-        Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_WILD_DUEL, this.event);
+        Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_WILD_DUEL, null);
         this.players[0].data.updateBountyProgression(b -> {
             if(b.getType().equals(ObjectiveType.WIN_WILD_DUEL) || b.getType().equals(ObjectiveType.COMPLETE_WILD_DUEL)) b.update();
         });

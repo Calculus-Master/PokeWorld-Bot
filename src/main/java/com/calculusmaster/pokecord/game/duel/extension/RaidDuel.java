@@ -166,7 +166,7 @@ public class RaidDuel extends WildDuel
 
                 p.data.getStatistics().incr(PlayerStatistic.RAIDS_WON);
                 p.data.updateBountyProgression(ObjectiveType.WIN_RAID_DUEL);
-                Achievements.grant(p.ID, Achievements.WON_FIRST_RAID, this.event);
+                Achievements.grant(p.ID, Achievements.WON_FIRST_RAID, null);
 
                 winnings.append(p.data.getUsername()).append(" - `").append((int)(credits * multiplier)).append("c`\n");
 
@@ -183,7 +183,7 @@ public class RaidDuel extends WildDuel
                     p.data.addPokemon(reward.getUUID());
 
                     p.data.getStatistics().incr(PlayerStatistic.RAIDS_WON_MVP);
-                    Achievements.grant(p.ID, Achievements.WON_FIRST_RAID_HIGHEST_DAMAGE, this.event);
+                    Achievements.grant(p.ID, Achievements.WON_FIRST_RAID_HIGHEST_DAMAGE, null);
 
                     extraWinnings = "\n\n**" + p.data.getUsername() + " caught the Raid Pokemon!**";
                 }
@@ -199,13 +199,13 @@ public class RaidDuel extends WildDuel
         {
             p.data.getStatistics().incr(PlayerStatistic.RAIDS_COMPLETED);
             p.data.updateBountyProgression(ObjectiveType.PARTICIPATE_RAID);
-            Achievements.grant(p.ID, Achievements.COMPLETED_FIRST_RAID, this.event);
+            Achievements.grant(p.ID, Achievements.COMPLETED_FIRST_RAID, null);
         }
 
-        this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
+        this.sendEmbed(embed.build());
 
         DuelHelper.delete(this.players[0].ID);
-        RaidEventHelper.removeServer(this.event.getGuild().getId());
+        RaidEventHelper.removeServer(this.channels.get(0).getGuild().getId());
     }
 
     private static void testImageGeneration() throws IOException

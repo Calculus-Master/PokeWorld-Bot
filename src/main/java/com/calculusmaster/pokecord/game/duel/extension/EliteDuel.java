@@ -25,7 +25,8 @@ public class EliteDuel extends TrainerDuel
         EliteDuel duel = new EliteDuel();
 
         duel.setStatus(DuelHelper.DuelStatus.WAITING);
-        duel.setEvent(event);
+        duel.setTurn();
+        duel.addChannel(event.getTextChannel());
         duel.setPlayers(playerID, "Elite Trainer", 6);
         duel.setEliteTrainer();
         duel.setDefaults();
@@ -44,8 +45,8 @@ public class EliteDuel extends TrainerDuel
         //Player won
         if(this.getWinner().ID.equals(this.players[0].ID))
         {
-            Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_TRAINER_DUEL, this.event);
-            Achievements.grant(this.players[0].ID, Achievements.DEFEATED_FIRST_ELITE_TRAINER, this.event);
+            Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_TRAINER_DUEL, null);
+            Achievements.grant(this.players[0].ID, Achievements.DEFEATED_FIRST_ELITE_TRAINER, null);
 
             int credits = new SplittableRandom().nextInt(500, 1000);
             this.players[0].data.changeCredits(credits);
@@ -62,7 +63,7 @@ public class EliteDuel extends TrainerDuel
         //Player lost
         else embed.setDescription("You were defeated by the Elite Trainer!");
 
-        this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
+        this.sendEmbed(embed.build());
 
         this.uploadEVs(0);
         this.uploadExperience();

@@ -24,6 +24,9 @@ import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.event.LocationEventHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.imageio.ImageIO;
@@ -47,7 +50,7 @@ import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.*;
 public class Duel
 {
     protected DuelStatus status;
-    protected MessageReceivedEvent event;
+    protected List<TextChannel> channels;
     protected int size;
     protected Player[] players;
     protected Map<String, TurnAction> queuedMoves = new HashMap<>();
@@ -80,7 +83,8 @@ public class Duel
         Duel duel = new Duel();
 
         duel.setStatus(DuelStatus.WAITING);
-        duel.setEvent(event);
+        duel.setTurn();
+        duel.addChannel(event.getTextChannel());
         duel.setPlayers(player1ID, player2ID, size);
         duel.setDefaults();
         duel.setDuelPokemonObjects(0);
@@ -141,7 +145,7 @@ public class Duel
 
         if(this.isComplete())
         {
-            if(this.event == null) LoggerHelper.error(Duel.class, "Duel Error: Cannot send Embeds, MessageReceivedEvent not initialized!");
+            if(this.channels.isEmpty()) LoggerHelper.error(Duel.class, "Duel Error: Cannot send Embeds, Channels list is empty!");
             else
             {
                 this.onWin();
@@ -153,7 +157,7 @@ public class Duel
         }
         else
         {
-            if(this.event == null) LoggerHelper.error(Duel.class, "Duel Error: Cannot send Embeds, MessageReceivedEvent not initialized!");
+            if(this.channels.isEmpty()) LoggerHelper.error(Duel.class, "Duel Error: Cannot send Embeds, Channels list is empty!");
             else this.sendTurnEmbed();
         }
 
@@ -865,7 +869,7 @@ public class Duel
 
             if(c.hasAugment(PokemonAugment.Z_AFFINITY)) move.setPower(2.0);
 
-            Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_ZMOVE, this.event);
+            Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_ZMOVE, null);
         }
 
         if(move.isMaxMove)
@@ -873,7 +877,7 @@ public class Duel
             accurate = true;
             this.players[this.current].usedDynamax = true;
 
-            Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_DYNAMAX, this.event);
+            Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_DYNAMAX, null);
         }
 
         if(this.data(this.other).imprisonUsed && this.players[this.other].active.getMoves().contains(move.getName())) cantUse = true;
@@ -2218,7 +2222,7 @@ public class Duel
                 this.players[this.current].active.increaseDynamaxLevel();
                 this.players[this.current].active.updateDynamaxLevel();
 
-                this.event.getChannel().sendMessage(this.players[this.current].data.getMention() + ": " + this.players[this.current].active.getName() + " earned a Dynamax Level!").queue();
+                this.players[this.current].data.directMessage(this.players[this.current].active.getName() + " earned a Dynamax Level!");
             }
 
             if(this.players[this.current].active.hasAbility(Ability.GRIM_NEIGH))
@@ -2599,20 +2603,19 @@ public class Duel
 
         embed.setImage("attachment://duel.png");
 
-        try
+        for(TextChannel c : this.channels)
         {
-            if(this.isComplete())
-                this.event.getChannel().sendFile(this.getImage(), "duel.png").setEmbeds(embed.build()).queue();
-            else this.event.getChannel()
-                    .sendFile(this.getImage(), "duel.png")
-                    .setEmbeds(embed.build())
-                    .queue();
-        }
-        catch (Exception e)
-        {
-            LoggerHelper.reportError(Duel.class, "Duel Image generation failed!", e);
+            try
+            {
+                if(this.isComplete()) c.sendFile(this.getImage(), "duel.png").setEmbeds(embed.build()).queue();
+                else c.sendFile(this.getImage(), "duel.png").setEmbeds(embed.build()).queue();
+            }
+            catch (Exception e)
+            {
+                LoggerHelper.reportError(Duel.class, "Duel Image generation failed!", e);
 
-            this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
+                c.sendMessageEmbeds(embed.build()).queue();
+            }
         }
     }
 
@@ -2638,31 +2641,37 @@ public class Duel
 
         int c = this.players[0].team.size() >= 6 ? this.giveWinCredits() : new Random().nextInt(11) + 10;
 
-        if(CommandTarget.isTarget(this.event.getGuild(), this.players[winner].ID))
+        //If not matchmade Duel, Target system
+        if(this.channels.size() == 1)
         {
-            c = (new Random().nextInt(201) + 50) * (CommandTarget.SERVER_TARGET_DUELS_WON.get(this.event.getGuild().getId()) + 1);
+            Guild g = this.channels.get(0).getGuild();
 
-            CommandTarget.SERVER_TARGET_DUELS_WON.put(this.event.getGuild().getId(), CommandTarget.SERVER_TARGET_DUELS_WON.get(this.event.getGuild().getId()) + 1);
+            if(CommandTarget.isTarget(g, this.players[winner].ID))
+            {
+                c = (new Random().nextInt(201) + 50) * (CommandTarget.SERVER_TARGET_DUELS_WON.get(g.getId()) + 1);
 
-            embed.setFooter("The Server Target has won another duel!");
-        }
-        else if(CommandTarget.isTarget(this.event.getGuild(), this.players[loser].ID))
-        {
-            CommandTarget.SERVER_TARGETS.remove(this.event.getGuild().getId());
+                CommandTarget.SERVER_TARGET_DUELS_WON.put(g.getId(), CommandTarget.SERVER_TARGET_DUELS_WON.get(g.getId()) + 1);
 
-            c = new Random().nextInt(501) + 500;
+                embed.setFooter("The Server Target has won another duel!");
+            }
+            else if(CommandTarget.isTarget(g, this.players[loser].ID))
+            {
+                CommandTarget.SERVER_TARGETS.remove(g.getId());
 
-            CommandTarget.generateNewServerTarget(this.event.getGuild());
+                c = new Random().nextInt(501) + 500;
 
-            embed.setFooter("The Server Target has been defeated!");
+                CommandTarget.generateNewServerTarget(g);
+
+                embed.setFooter("The Server Target has been defeated!");
+            }
         }
 
         embed.setDescription(this.getWinner().data.getUsername() + " has won!" + (c != 0 ? "\nThey earned " + c + " credits!" : ""));
 
-        this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
+        this.sendEmbed(embed.build());
 
-        Achievements.grant(this.getWinner().ID, Achievements.WON_FIRST_PVP_DUEL, this.event);
-        if(this.size == CommandTeam.MAX_TEAM_SIZE) Achievements.grant(this.getWinner().ID, Achievements.WON_FIRST_DUEL_MAX_SIZE, this.event);
+        Achievements.grant(this.getWinner().ID, Achievements.WON_FIRST_PVP_DUEL, null);
+        if(this.size == CommandTeam.MAX_TEAM_SIZE) Achievements.grant(this.getWinner().ID, Achievements.WON_FIRST_DUEL_MAX_SIZE, null);
 
         this.players[winner].data.getStatistics().incr(PlayerStatistic.PVP_DUELS_WON);
         this.players[winner].data.getStatistics().incr(PlayerStatistic.PVP_DUELS_COMPLETED);
@@ -2735,6 +2744,16 @@ public class Duel
         return winCredits;
     }
 
+    protected void sendMessage(String text)
+    {
+        this.channels.forEach(t -> t.sendMessage(text).queue());
+    }
+
+    protected void sendEmbed(MessageEmbed embed)
+    {
+        this.channels.forEach(t -> t.sendMessageEmbeds(embed).queue());
+    }
+
     //Useful Getters/Setters
 
     public void submitMove(String id, int index, char type)
@@ -2745,7 +2764,7 @@ public class Duel
         //index functions as both the swapIndex and moveIndex, which one is dictated by type == 's' and type == 'm'
         else if(type == 's')
         {
-            if(this.players[this.indexOf(id)].team.get(index - 1).isFainted()) this.event.getChannel().sendMessage("That pokemon is fainted!").queue();
+            if(this.players[this.indexOf(id)].team.get(index - 1).isFainted()) this.players[this.indexOf(id)].data.directMessage("That pokemon is fainted!");
             else this.queuedMoves.put(id, new TurnAction(ActionType.SWAP, -1, index));
         }
         else this.queuedMoves.put(id, new TurnAction(type == 'z' ? ActionType.ZMOVE : (type == 'd' ? ActionType.DYNAMAX : ActionType.MOVE), index, -1));
@@ -2916,10 +2935,16 @@ public class Duel
         return this.status;
     }
 
-    public void setEvent(MessageReceivedEvent event)
+    //TODO: maybe remove and just default initialize the turn var
+    public void setTurn()
     {
-        this.event = event;
         this.turn = 0;
+    }
+
+    public void addChannel(TextChannel channel)
+    {
+        if(this.channels == null) this.channels = new ArrayList<>();
+        this.channels.add(channel);
     }
 
     public void setSize(int size)

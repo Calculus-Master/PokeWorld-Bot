@@ -29,6 +29,7 @@ public class RaidEventHelper
     public static void createRaid(Guild g, TextChannel channel)
     {
         RaidDuel raid = RaidDuel.create();
+        raid.addChannel(channel);
         SERVER_RAIDS.put(g.getId(), raid);
 
         LoggerHelper.info(RaidEventHelper.class, "Creating new Raid in " + g.getName() + " (" + g.getId() + ")");

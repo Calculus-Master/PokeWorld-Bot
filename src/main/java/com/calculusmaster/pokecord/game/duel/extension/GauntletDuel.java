@@ -2,7 +2,6 @@ package com.calculusmaster.pokecord.game.duel.extension;
 
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
-import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -12,6 +11,7 @@ import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.DuelStatus;
 
 public class GauntletDuel extends WildDuel
 {
+    //TODO: Delete and replace with Tower Duel
     private int level;
 
     public static GauntletDuel start(String playerID, MessageReceivedEvent event)
@@ -19,7 +19,8 @@ public class GauntletDuel extends WildDuel
         GauntletDuel duel = new GauntletDuel();
 
         duel.setStatus(DuelStatus.WAITING);
-        duel.setEvent(event);
+        duel.setTurn();
+        duel.addChannel(event.getTextChannel());
         duel.setPlayers(playerID, "BOT", 1);
         duel.setWildPokemon("");
         duel.setDefaults();
@@ -62,18 +63,12 @@ public class GauntletDuel extends WildDuel
 
             embed.setDescription("You lost! Your Gauntlet Run ended at Level %s! You earned %s credits!".formatted(this.level, credits));
 
-            Achievements.grant(this.players[0].ID, Achievements.GAUNTLET_FIRST_COMPLETED, this.event);
-            if(this.level >= 3) Achievements.grant(this.players[0].ID, Achievements.GAUNTLET_FIRST_REACHED_LEVEL_3, this.event);
-            if(this.level >= 5) Achievements.grant(this.players[0].ID, Achievements.GAUNTLET_FIRST_REACHED_LEVEL_5, this.event);
-            if(this.level >= 7) Achievements.grant(this.players[0].ID, Achievements.GAUNTLET_FIRST_REACHED_LEVEL_7, this.event);
-            if(this.level >= 10) Achievements.grant(this.players[0].ID, Achievements.GAUNTLET_FIRST_REACHED_LEVEL_10, this.event);
-
             DuelHelper.delete(this.players[0].ID);
         }
 
         this.players[0].data.getStatistics().incr(PlayerStatistic.GAUNTLETS_COMPLETED);
 
-        this.event.getChannel().sendMessageEmbeds(embed.build()).queue();
+        this.sendEmbed(embed.build());
         if(this.getWinner().ID.equals(this.players[0].ID)) this.sendTurnEmbed();
     }
 
