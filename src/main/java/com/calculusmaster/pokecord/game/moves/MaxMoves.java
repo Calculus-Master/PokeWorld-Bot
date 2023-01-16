@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.game.moves;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.component.GMaxDoTType;
+import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -151,7 +152,9 @@ public class MaxMoves
     public String GMaxGoldRush(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         int coins = new SplittableRandom().nextInt((int)(user.getLevel() * 1.25), (int)(user.getLevel() * 2.0));
-        duel.getPlayers()[duel.playerIndexFromUUID(user.getUUID())].data.changeCredits(coins);
+
+        if(duel.getPlayers()[duel.playerIndexFromUUID(user.getUUID())] instanceof UserPlayer u)
+            u.data.changeCredits(coins);
 
         return MoveEffectBuilder.statusDamage(user, opponent, duel, move, StatusCondition.CONFUSED, 100) + " Meowth found " + coins + " credits!";
     }

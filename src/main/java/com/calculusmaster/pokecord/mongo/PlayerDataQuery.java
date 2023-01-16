@@ -3,6 +3,8 @@ package com.calculusmaster.pokecord.mongo;
 import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.game.bounties.components.Bounty;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
+import com.calculusmaster.pokecord.game.duel.trainer.TrainerData;
+import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
@@ -74,22 +76,23 @@ public class PlayerDataQuery extends MongoQuery
                 .append("credits", 100)
                 .append("redeems", 0)
                 .append("selected", 1)
-                .append("pokemon", new JSONArray())
-                .append("team", new JSONArray())
-                .append("favorites", new JSONArray())
-                .append("items", new JSONArray())
-                .append("tms", new JSONArray())
-                .append("trs", new JSONArray())
-                .append("zcrystals", new JSONArray())
+                .append("pokemon", new ArrayList<>())
+                .append("team", new ArrayList<>())
+                .append("favorites", new ArrayList<>())
+                .append("items", new ArrayList<>())
+                .append("tms", new ArrayList<>())
+                .append("trs", new ArrayList<>())
+                .append("zcrystals", new ArrayList<>())
                 .append("active_zcrystal", "")
-                .append("achievements", new JSONArray())
-                .append("owned_forms", new JSONArray())
-                .append("owned_megas", new JSONArray())
-                .append("bounties", new JSONArray())
-                .append("pursuit", new JSONArray())
-                .append("owned_eggs", new JSONArray())
+                .append("achievements", new ArrayList<>())
+                .append("owned_forms", new ArrayList<>())
+                .append("owned_megas", new ArrayList<>())
+                .append("bounties", new ArrayList<>())
+                .append("pursuit", new ArrayList<>())
+                .append("owned_eggs", new ArrayList<>())
                 .append("active_egg", "")
-                .append("owned_augments", new JSONArray());
+                .append("owned_augments", new ArrayList<>())
+                .append("defeated_trainers", new ArrayList<>());
 
         LoggerHelper.logDatabaseInsert(PlayerDataQuery.class, data);
 
@@ -274,6 +277,11 @@ public class PlayerDataQuery extends MongoQuery
     public List<String> getTeam()
     {
         return this.document.getList("team", String.class);
+    }
+
+    public List<Pokemon> getTeamPokemon()
+    {
+        return this.getTeam().stream().map(s -> Pokemon.build(s, this.getPokemonList().indexOf(s) + 1)).toList();
     }
 
     public void clearTeam()
@@ -667,5 +675,31 @@ public class PlayerDataQuery extends MongoQuery
     public void addAugment(String augmentID)
     {
         this.update(Updates.push("owned_augments", augmentID));
+    }
+
+    //key: "defeated_trainers"
+    public List<String> getDefeatedTrainers()
+    {
+        return this.document.getList("defeated_trainers", String.class);
+    }
+
+    public boolean hasDefeatedTrainer(String trainerID)
+    {
+        return this.getDefeatedTrainers().contains(trainerID);
+    }
+
+    public void addDefeatedTrainer(String trainerID)
+    {
+        this.update(Updates.push("defeated_trainers", trainerID));
+    }
+
+    public boolean hasDefeatedAllTrainersOfClass(int clazz)
+    {
+        return TrainerManager.getTrainersOfClass(clazz).stream().map(TrainerData::getTrainerID).allMatch(s -> this.getDefeatedTrainers().contains(s));
+    }
+
+    public boolean hasDefeatedAllTrainerClasses()
+    {
+        return TrainerManager.REGULAR_TRAINERS.stream().map(TrainerData::getTrainerClass).distinct().allMatch(this::hasDefeatedAllTrainersOfClass);
     }
 }

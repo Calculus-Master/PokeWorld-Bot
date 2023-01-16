@@ -43,8 +43,8 @@ public class GauntletDuel extends WildDuel
 
             this.level++;
 
-            this.players[0].data.updateBountyProgression(ObjectiveType.COMPLETE_GAUNTLET_LEVELS);
-            this.players[0].data.getStatistics().incr(PlayerStatistic.GAUNTLETS_WON);
+            this.getUser().data.updateBountyProgression(ObjectiveType.COMPLETE_GAUNTLET_LEVELS);
+            this.getUser().data.getStatistics().incr(PlayerStatistic.GAUNTLETS_WON);
 
             this.setWildPokemon("");
             this.setDuelPokemonObjects(1);
@@ -59,14 +59,14 @@ public class GauntletDuel extends WildDuel
             int xp = this.level * 100;
             int credits = (int)(Math.pow(this.level, 1.05) * 100);
 
-            this.players[0].data.changeCredits(credits);
+            this.getUser().data.changeCredits(credits);
 
             embed.setDescription("You lost! Your Gauntlet Run ended at Level %s! You earned %s credits!".formatted(this.level, credits));
 
             DuelHelper.delete(this.players[0].ID);
         }
 
-        this.players[0].data.getStatistics().incr(PlayerStatistic.GAUNTLETS_COMPLETED);
+        this.getUser().data.getStatistics().incr(PlayerStatistic.GAUNTLETS_COMPLETED);
 
         this.sendEmbed(embed.build());
         if(this.getWinner().ID.equals(this.players[0].ID)) this.sendTurnEmbed();

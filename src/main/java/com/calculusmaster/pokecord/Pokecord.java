@@ -4,7 +4,8 @@ import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.commands.duel.CommandTarget;
 import com.calculusmaster.pokecord.commands.economy.CommandShop;
 import com.calculusmaster.pokecord.commands.pokemon.CommandBreed;
-import com.calculusmaster.pokecord.game.duel.players.Trainer;
+import com.calculusmaster.pokecord.game.duel.teamrules.TeamRestrictionRegistry;
+import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.MoveData;
 import com.calculusmaster.pokecord.game.moves.registry.MaxMoveRegistry;
@@ -71,9 +72,10 @@ public class Pokecord
         LoggerHelper.init("Player Data Cache", PlayerDataCache::init);
 
         LoggerHelper.init("Evolutions", SpecialEvolutionRegistry::init);
-        LoggerHelper.init("Trainer", Trainer::init);
+        LoggerHelper.init("Team Restrictions", TeamRestrictionRegistry::init);
         LoggerHelper.init("Incomplete Moves", Move::init);
         LoggerHelper.init("Pokemon Rarity", PokemonRarity::init);
+        LoggerHelper.init("Trainer Manager", TrainerManager::init);
         LoggerHelper.init("Pokemon Augments", PokemonAugmentRegistry::init);
         LoggerHelper.init("Command Handler", Commands::init);
         LoggerHelper.init("Shops", CommandShop::updateShops);

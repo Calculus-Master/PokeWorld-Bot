@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.enums.elements;
 import com.calculusmaster.pokecord.util.Global;
 
 import java.awt.*;
+import java.util.Random;
 
 public enum Type
 {
@@ -43,5 +44,10 @@ public enum Type
     public static Type cast(String type)
     {
         return (Type) Global.getEnumFromString(values(), type);
+    }
+
+    public static Type getRandom()
+    {
+        return values()[new Random().nextInt(values().length)];
     }
 }

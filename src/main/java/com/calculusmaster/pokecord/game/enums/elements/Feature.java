@@ -33,7 +33,7 @@ public enum Feature
 
     //Level 3
     PVP_DUELS_1V1("Duel other players in 1v1 duels using your active Pokemon"),
-    USE_MOVES("Use your Pokemon's moveset in duels"),
+    USE_MOVES("Use your Pokemon's moves in duels"),
     TRADE("Trade with other players"),
 
     //Level 4
@@ -51,7 +51,8 @@ public enum Feature
 
     //Level 7
     PVE_DUELS("Duel Wild Pokemon"),
-    PVE_DUELS_TRAINER("Duel randomly generated Trainers and earn rewards for defeating them each day"),
+    PVE_DUELS_TRAINER("Duel randomly generated Trainers and earn rewards for defeating them each rotation"),
+    VIEW_TRAINER_INFO("View information regarding randomly generated Trainers"),
     FLEE_TRAINER_DUELS("Flee duels against Trainers that aren't going so well"),
 
     //Level 8

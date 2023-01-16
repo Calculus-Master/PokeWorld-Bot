@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.duel.component.EntryHazardHandler;
 import com.calculusmaster.pokecord.game.duel.component.FieldBarrierHandler;
 import com.calculusmaster.pokecord.game.duel.component.FieldEffectsHandler;
 import com.calculusmaster.pokecord.game.duel.component.FieldGMaxDoTHandler;
+import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.Move;
@@ -1035,7 +1036,8 @@ public class NormalMoves
     {
         final int amount = new SplittableRandom().nextInt((int)(user.getLevel() * 0.5), (int)(user.getLevel() * 1.5));
 
-        Executors.newSingleThreadExecutor().execute(() -> duel.getPlayers()[duel.playerIndexFromUUID(user.getUUID())].data.changeCredits(amount));
+        if(duel.getPlayers()[duel.playerIndexFromUUID(user.getUUID())] instanceof UserPlayer u)
+            Executors.newSingleThreadExecutor().execute(() -> u.data.changeCredits(amount));
 
         return user.getName() + " found some coins! " + MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }

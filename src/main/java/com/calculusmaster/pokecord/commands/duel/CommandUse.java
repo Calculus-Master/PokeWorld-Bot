@@ -49,7 +49,7 @@ public class CommandUse extends Command
         final Player p = d.getPlayers()[d.indexOf(this.player.getId())];
 
         boolean normal = this.msg.length == 2 && this.isNumeric(1) && this.getInt(1) > 0 && this.getInt(1) < 5;
-        boolean swap = this.msg.length == 3 && (this.msg[1].equals("swap") || this.msg[1].equals("s")) && this.isNumeric(2) && this.getInt(2) > 0 && this.getInt(2) <= d.getSize();
+        boolean swap = this.msg.length == 3 && (this.msg[1].equals("swap") || this.msg[1].equals("s")) && this.isNumeric(2) && this.getInt(2) > 0 && this.getInt(2) <= d.getPlayer(this.player.getId()).team.size();
         boolean zmove = this.msg.length == 3 && (this.msg[1].equals("zmove") || this.msg[1].equals("z")) && isNumeric(2) && this.getInt(2) > 0 && this.getInt(2) < 5;
         boolean dynamax = this.msg.length == 3 && (this.msg[1].equals("dynamax") || this.msg[1].equals("d")) && isNumeric(2) && this.getInt(2) > 0 && this.getInt(2) < 5;
 

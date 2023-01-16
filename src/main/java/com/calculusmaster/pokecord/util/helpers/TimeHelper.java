@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord.util.helpers;
 
 import com.calculusmaster.pokecord.commands.economy.CommandShop;
-import com.calculusmaster.pokecord.game.duel.players.Trainer;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
@@ -14,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TimeHelper
 {
+    //TODO: Actually implement this for shops
     public static void start()
     {
         ThreadPoolHandler.TIME.scheduleAtFixedRate(TimeHelper::updateTimes, 5, 15 * 60, TimeUnit.SECONDS);
@@ -43,7 +43,6 @@ public class TimeHelper
 
     private enum TimeTask
     {
-        DAILY_TRAINERS("daily_trainers", Trainer::createDailyTrainers),
         SHOPS("shops", CommandShop::updateShops);
 
         private final String target;
@@ -137,7 +136,7 @@ public class TimeHelper
         }
     }
 
-    private static record PackagedTime(int days, int minutes, int hours, int seconds)
+    private record PackagedTime(int days, int minutes, int hours, int seconds)
     {
         PackagedTime(Document d)
         {

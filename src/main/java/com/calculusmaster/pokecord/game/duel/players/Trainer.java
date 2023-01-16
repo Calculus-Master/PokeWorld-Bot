@@ -4,7 +4,6 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
@@ -21,6 +20,10 @@ public class Trainer extends Player
     public static int COUNT_DEVIATION;
 
     public static final List<TrainerInfo> DAILY_TRAINERS = new ArrayList<>();
+
+    protected Trainer(String ID) {
+        super(ID);
+    }
 
     public static void init()
     {
@@ -81,33 +84,12 @@ public class Trainer extends Player
 
     public static Trainer create(TrainerInfo info)
     {
-        Trainer t = new Trainer();
+        Trainer t = new Trainer(info.trainerID);
         t.ID = info.trainerID;
         t.setTeam(info.pokemonLevel, info.pokemon, info.buff);
         t.move = null;
         t.usedZMove = false;
         t.info = info;
-
-        t.data = new PlayerDataQuery(t.ID)
-        {
-            @Override
-            public String getUsername()
-            {
-                return info.name;
-            }
-
-            @Override
-            public boolean hasZCrystal(String z)
-            {
-                return info.zcrystal != null && z.equals(this.getEquippedZCrystal());
-            }
-
-            @Override
-            public String getEquippedZCrystal()
-            {
-                return info.zcrystal.getStyledName();
-            }
-        };
 
         return t;
     }
@@ -145,6 +127,11 @@ public class Trainer extends Player
         Mongo.TrainerData.updateOne(Filters.eq("trainerID", trainerID), Updates.push("players_defeated", playerID));
 
         Trainer.init();
+    }
+
+    @Override
+    public String getName() {
+        return "null";
     }
 
     public static class TrainerInfo

@@ -70,7 +70,7 @@ public class CommandDuel extends Command
 
         if(accept || deny)
         {
-            if(!DuelHelper.isInDuel(this.player.getId())) this.response = "You are not in a duel!";
+            if(!DuelHelper.isInDuel(this.player.getId())) this.response = "There are no pending requests to duel you!";
             else if(DuelHelper.instance(this.player.getId()).getStatus().equals(DuelHelper.DuelStatus.DUELING)) this.response = "You are already in a duel!";
             else if(accept)
             {
@@ -78,17 +78,11 @@ public class CommandDuel extends Command
 
                 if(d.getSize() > 1 && d.getSize() <= 6 && this.insufficientMasteryLevel(Feature.PVP_DUELS_6v6)) this.invalidMasteryLevel(Feature.PVP_DUELS_6v6);
                 else if(d.getSize() > 6 && this.insufficientMasteryLevel(Feature.PVP_DUELS_UNLIMITED)) return this.invalidMasteryLevel(Feature.PVP_DUELS_UNLIMITED);
-                else if(d.getSize() != 1 && d.getSize() > this.playerData.getTeam().size())
-                {
-                    this.response = "Your team needs to contain at least " + d.getSize() + " Pokemon to participate! Deleting duel request!";
-
-                    this.removeRequestExpiry();
-
-                    DuelHelper.delete(this.player.getId());
-                }
                 else if(checkTeam && this.isInvalidTeam(d.getSize())) this.createInvalidTeamEmbed(d.getSize());
                 else
                 {
+                    if(d.getSize() > this.playerData.getTeam().size()) this.event.getChannel().sendMessage("Warning! Your team has less Pokemon than your opponent.").queue();
+
                     this.removeRequestExpiry();
 
                     d.sendTurnEmbed();
@@ -132,8 +126,8 @@ public class CommandDuel extends Command
         Member opponent = this.getMember(opponentID);
 
         if(this.playerData.getTeam().size() < size) this.response = "Your team needs to have at least " + size + " Pokemon!";
-        else if(!PlayerDataQuery.isRegistered(opponentID)) this.response = opponent.getEffectiveName() + " is not registered! Use p!start <starter> to begin!";
-        else if(size != 1 && PlayerDataQuery.of(opponentID).getTeam().isEmpty()) this.response = opponent.getEffectiveName() + " needs to create a Pokemon team!";
+        else if(!PlayerDataQuery.isRegistered(opponentID)) this.response = opponent.getEffectiveName() + " is not registered! They must use p!start <starter> to begin.";
+        else if(size != 1 && PlayerDataQuery.ofNonNull(opponentID).getTeam().isEmpty()) this.response = opponent.getEffectiveName() + " needs to create a Pokemon team!";
         else if(DuelHelper.isInDuel(opponentID)) this.response = opponent.getEffectiveName() + " is already in a Duel!";
         else if(this.player.getId().equals(opponentID)) this.response = "You cannot duel yourself!";
         else if(checkTeam && this.isInvalidTeam(size)) this.createInvalidTeamEmbed(size);

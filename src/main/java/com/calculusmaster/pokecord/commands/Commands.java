@@ -320,6 +320,10 @@ public class Commands
                 .setCommand(CommandAugmentInfo::new)
                 .setCategory(Category.POKEMON);
 
+        register("trainerinfo", "ti")
+                .setCommand(CommandTrainerInfo::new)
+                .setCategory(Category.DUEL);
+
         register("dev")
                 .setCommand(CommandDev::new)
                 .setCategory(Category.MISC);

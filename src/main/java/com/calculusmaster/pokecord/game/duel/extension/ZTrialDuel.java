@@ -3,11 +3,13 @@ package com.calculusmaster.pokecord.game.duel.extension;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
-import com.calculusmaster.pokecord.game.duel.players.WildPokemon;
+import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
+import com.calculusmaster.pokecord.game.duel.players.WildPlayer;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
+import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -18,7 +20,10 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.BACKGROUND;
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.DUELS;
@@ -52,20 +57,20 @@ public class ZTrialDuel extends WildDuel
         ZCrystal crystal = Objects.requireNonNull(ZCrystal.getCrystalOfType(this.type));
 
         //Player won
-        if(this.getWinner().ID.equals(this.players[0].ID))
+        if(this.getWinner() instanceof UserPlayer player)
         {
             this.onWildDuelWon(true);
 
-            this.players[0].data.addZCrystal(crystal.toString());
+            player.data.addZCrystal(crystal.toString());
             Achievements.grant(this.players[this.current].ID, Achievements.ACQUIRED_FIRST_TYPED_ZCRYSTAL, null);
 
-            embed.setDescription("You won! You acquired `%s`!".formatted(crystal.getStyledName()));
+            embed.setDescription("You won! You acquired a new Z-Crystal: `%s`.".formatted(crystal.getStyledName()));
         }
         //Player lost
         else
         {
-            this.players[0].data.updateBountyProgression(ObjectiveType.COMPLETE_WILD_DUEL);
-            embed.setDescription("You lost! You weren't able to earn `%s`.".formatted(crystal.getStyledName()));
+            this.getUser().data.updateBountyProgression(ObjectiveType.COMPLETE_WILD_DUEL);
+            embed.setDescription("You lost! You weren't able to earn a Z-Crystal.");
         }
 
         this.sendEmbed(embed.build());
@@ -74,8 +79,16 @@ public class ZTrialDuel extends WildDuel
 
     private void setWildPokemon(Type type)
     {
-        this.players[1] = new WildPokemon(type, Math.max(80, this.players[0].active.getLevel()));
+        List<String> pool = DataHelper.TYPE_LISTS.get(type);
+        String pokemon = pool.get(new Random().nextInt(pool.size()));
+
+        this.players[1] = new WildPlayer(pokemon, Math.max(80, this.players[0].active.getLevel()));
         this.type = type;
+
+        this.players[1].active.getBoosts().setStatBoost(1.5);
+        this.players[1].active.getBoosts().setHealthBoost(2.75);
+        Arrays.stream(Stat.values()).forEach(s -> this.players[1].active.setEV(s, 50));
+        this.players[1].active.setHealth(this.players[1].active.getMaxHealth());
     }
 
     @Override
@@ -83,7 +96,7 @@ public class ZTrialDuel extends WildDuel
     {
         StringBuilder sb = new StringBuilder();
 
-        if(this.isNonBotPlayer(p)) sb.append(this.players[p].data.getUsername()).append("'s ");
+        if(this.players[p] instanceof UserPlayer player) sb.append(player.getName()).append("'s ");
         else sb.append("Z-Trial Leader ");
 
         sb.append(this.players[p].active.getName()).append(": ");

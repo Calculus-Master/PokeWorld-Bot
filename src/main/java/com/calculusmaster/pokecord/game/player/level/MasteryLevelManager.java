@@ -92,7 +92,7 @@ public class MasteryLevelManager
         // Level 7 – Expanding Duels (PvE)
         // PvE Duels – p!wild, p!trainer (Daily, not Elite), p!flee
         PokemonMasteryLevel.create(7)
-                .withFeaturesUnlocked(Feature.PVE_DUELS, Feature.PVE_DUELS_TRAINER, Feature.FLEE_TRAINER_DUELS)
+                .withFeaturesUnlocked(Feature.PVE_DUELS, Feature.PVE_DUELS_TRAINER, Feature.FLEE_TRAINER_DUELS, Feature.VIEW_TRAINER_INFO)
                 .withExperienceRequirement(500)
                 .withPokemonRequirement(225)
                 .withTaskRequirement(new BountiesLevelTask(5))

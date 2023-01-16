@@ -43,6 +43,13 @@ public class PokemonRarity
         return SPAWNS.contains(spawn) ? spawn : getLegendarySpawn();
     }
 
+    public static String getSpawnOfRarities(Rarity... rarities)
+    {
+        String result = PokemonRarity.getSpawn();
+        while(!List.of(rarities).contains(POKEMON_RARITIES.get(result))) result = PokemonRarity.getSpawn();
+        return result;
+    }
+
     public static void add(String name, Rarity r)
     {
         for(int i = 0; i < r.num; i++) SPAWNS.add(name);

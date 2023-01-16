@@ -4,18 +4,20 @@ import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
-import com.calculusmaster.pokecord.game.duel.players.Trainer;
+import com.calculusmaster.pokecord.game.duel.players.TrainerPlayer;
+import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
+import com.calculusmaster.pokecord.game.duel.trainer.TrainerData;
+import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
-import com.calculusmaster.pokecord.game.player.level.PMLExperience;
+import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Random;
 import java.util.SplittableRandom;
 
@@ -24,16 +26,16 @@ import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.DuelStatus;
 
 public class TrainerDuel extends Duel
 {
-    public static Duel create(String playerID, MessageReceivedEvent event, Trainer.TrainerInfo trainer)
+    public static Duel create(String playerID, MessageReceivedEvent event, TrainerData trainer)
     {
         TrainerDuel duel = new TrainerDuel();
 
         duel.setStatus(DuelStatus.WAITING);
         duel.setTurn();
         duel.addChannel(event.getTextChannel());
-        duel.setPlayers(playerID, trainer.name, trainer.pokemon.size());
+        duel.setPlayers(playerID, trainer.getName(), trainer.getTeam().size());
         duel.setTrainer(trainer);
-        duel.limitPlayerPokemon(trainer.pokemonLevel);
+        duel.limitPlayerPokemon(trainer.getAveragePokemonLevel());
         duel.setDefaults();
         duel.setDuelPokemonObjects(0);
         duel.setDuelPokemonObjects(1);
@@ -48,50 +50,64 @@ public class TrainerDuel extends Duel
         EmbedBuilder embed = new EmbedBuilder();
 
         //Player won
-        if(this.getWinner().ID.equals(this.players[0].ID))
+        if(this.getWinner() instanceof UserPlayer player)
         {
-            Trainer botTrainer = (Trainer)this.players[1];
-            String bot = botTrainer.info.name;
+            TrainerPlayer botTrainer = this.getTrainer();
 
-            embed.setDescription("You defeated " + bot + "!");
+            embed.setDescription("You defeated " + botTrainer.getName() + "!");
 
             Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_TRAINER_DUEL, null);
-            this.players[0].data.updateBountyProgression(ObjectiveType.WIN_TRAINER_DUEL);
+            player.data.updateBountyProgression(ObjectiveType.WIN_TRAINER_DUEL);
 
-            //Regular Daily Trainer
+            //Regular Trainer
 
-            List<String> playersDefeatedBot = botTrainer.info.playersDefeated;
-
-            if(!playersDefeatedBot.contains(this.players[0].ID))
+            if(!player.data.hasDefeatedTrainer(botTrainer.ID))
             {
-                playersDefeatedBot.add(this.players[0].ID);
-                Trainer.addPlayerDefeated(botTrainer.ID, this.players[0].ID);
+                player.data.addDefeatedTrainer(botTrainer.ID);
 
-                boolean dailyComplete = true;
-                for(Trainer.TrainerInfo ti : Trainer.DAILY_TRAINERS) if(!ti.playersDefeated.contains(this.players[0].ID)) dailyComplete = false;
+                int trainerClass = botTrainer.getData().getTrainerClass();
 
-                if(dailyComplete)
+                if(player.data.hasDefeatedAllTrainersOfClass(trainerClass))
                 {
-                    int winCredits = (new Random().nextInt(501) + 500) * Trainer.DAILY_TRAINERS.size();
-                    this.players[0].data.changeCredits(winCredits);
-                    this.players[0].data.addExp(PMLExperience.DUEL_TRAINER_DAILY_COMPLETE, 100);
-                    this.players[0].data.directMessage("You defeated all of today's trainers! You earned a bonus " + winCredits + " credits!");
+                    //TODO: Rewards for defeating all trainers of a class
 
-                    Achievements.grant(this.players[0].ID, Achievements.DEFEATED_DAILY_TRAINERS, null);
+                    int credits = switch(trainerClass) {
+                        case 1 -> 500;
+                        case 2 -> 1250;
+                        case 3 -> 3000;
+                        case 4 -> 4500;
+                        case 5 -> 7500;
+                        case 6 -> 7000;
+                        default -> throw new IllegalStateException("Invalid Trainer Class: " + trainerClass);
+                    };
+
+                    player.data.changeCredits(credits);
+
+                    String trainerClassRoman = TrainerManager.getRoman(trainerClass);
+                    player.data.directMessage("You've defeated all Class %s Trainers! Reward: %s Credits!".formatted(trainerClassRoman, credits));
+                }
+
+                if(player.data.hasDefeatedAllTrainerClasses())
+                {
+                    //TODO: Rewards for defeating all trainers totally
+
+                    player.data.directMessage("You've defeated all the current rotation of Trainers! Congratulations! Reward: ?? Credits!");
+
+                    Achievements.grant(this.players[0].ID, Achievements.DEFEATED_ROTATION_TRAINERS, null);
                 }
             }
 
-            this.players[0].data.getStatistics().incr(PlayerStatistic.TRAINER_DUELS_WON);
+            player.data.getStatistics().incr(PlayerStatistic.TRAINER_DUELS_WON);
 
         }
         //Player lost
-        else embed.setDescription("You were defeated by " + ((Trainer)this.players[1]).info.name + "!");
+        else embed.setDescription("You were defeated by " + this.players[1].getName() + ". Take note of the team used by the Trainer, and develop a counter-strategy!");
 
         this.uploadEVs(0);
         this.uploadExperience();
 
-        this.players[0].data.updateBountyProgression(ObjectiveType.COMPLETE_TRAINER_DUEL);
-        this.players[0].data.getStatistics().incr(PlayerStatistic.TRAINER_DUELS_COMPLETED);
+        this.getUser().data.updateBountyProgression(ObjectiveType.COMPLETE_TRAINER_DUEL);
+        this.getUser().data.getStatistics().incr(PlayerStatistic.TRAINER_DUELS_COMPLETED);
 
         this.sendEmbed(embed.build());
         DuelHelper.delete(this.players[0].ID);
@@ -155,7 +171,7 @@ public class TrainerDuel extends Duel
 
             index = ind + 1;
 
-            if(this.players[1].data.hasZCrystal(ZCrystal.getCrystalOfType(move.getType()).getStyledName())) type = 'z';
+            if(((TrainerPlayer)this.players[1]).hasZCrystal(ZCrystal.getCrystalOfType(move.getType()))) type = 'z';
             else type = 'm';
 
         }
@@ -192,14 +208,15 @@ public class TrainerDuel extends Duel
     @Override
     public void setPlayers(String player1ID, String player2ID, int size)
     {
-        this.players = new Player[]{new Player(player1ID, size), null};
+        this.players = new Player[]{new UserPlayer(PlayerDataQuery.ofNonNull(player1ID), size), null};
         this.size = size;
     }
 
-    private void setTrainer(Trainer.TrainerInfo info)
+    private void setTrainer(TrainerData data)
     {
-        this.players[1] = Trainer.create(info);
+        this.players[1] = new TrainerPlayer(data);
 
+        //TODO: Determine EV handling for trainer pokemon
         int highest = this.players[0].team.get(0).getEVTotal();
         LinkedHashMap<Stat, Integer> evs = this.players[0].team.get(0).getEVs();
         //Copy EVs
@@ -219,5 +236,15 @@ public class TrainerDuel extends Duel
         }
 
         this.players[1].active = this.players[1].team.get(0);
+    }
+
+    protected UserPlayer getUser()
+    {
+        return (UserPlayer)this.players[0];
+    }
+
+    protected TrainerPlayer getTrainer()
+    {
+        return (TrainerPlayer)this.players[1];
     }
 }

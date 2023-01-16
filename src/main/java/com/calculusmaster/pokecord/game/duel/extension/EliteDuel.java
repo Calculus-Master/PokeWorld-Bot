@@ -3,7 +3,9 @@ package com.calculusmaster.pokecord.game.duel.extension;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
-import com.calculusmaster.pokecord.game.duel.players.Trainer;
+import com.calculusmaster.pokecord.game.duel.players.TrainerPlayer;
+import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
+import com.calculusmaster.pokecord.game.duel.trainer.TrainerData;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
@@ -43,20 +45,20 @@ public class EliteDuel extends TrainerDuel
         EmbedBuilder embed = new EmbedBuilder();
 
         //Player won
-        if(this.getWinner().ID.equals(this.players[0].ID))
+        if(this.getWinner() instanceof UserPlayer player)
         {
             Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_TRAINER_DUEL, null);
             Achievements.grant(this.players[0].ID, Achievements.DEFEATED_FIRST_ELITE_TRAINER, null);
 
             int credits = new SplittableRandom().nextInt(500, 1000);
-            this.players[0].data.changeCredits(credits);
+            player.data.changeCredits(credits);
 
-            this.players[0].data.addExp(PMLExperience.DUEL_ELITE, 95);
+            player.data.addExp(PMLExperience.DUEL_ELITE, 95);
 
-            this.players[0].data.updateBountyProgression(ObjectiveType.WIN_ELITE_DUEL);
+            player.data.updateBountyProgression(ObjectiveType.WIN_ELITE_DUEL);
 
-            this.players[0].data.getStatistics().incr(PlayerStatistic.ELITE_DUELS_WON);
-            this.players[0].data.getStatistics().incr(PlayerStatistic.TRAINER_DUELS_WON);
+            player.data.getStatistics().incr(PlayerStatistic.ELITE_DUELS_WON);
+            player.data.getStatistics().incr(PlayerStatistic.TRAINER_DUELS_WON);
 
             embed.setDescription("You defeated the Elite Trainer and earned " + credits + " credits!");
         }
@@ -68,15 +70,15 @@ public class EliteDuel extends TrainerDuel
         this.uploadEVs(0);
         this.uploadExperience();
 
-        this.players[0].data.updateBountyProgression(ObjectiveType.COMPLETE_ELITE_DUEL);
-        this.players[0].data.getStatistics().incr(PlayerStatistic.ELITE_DUELS_COMPLETED);
+        this.getUser().data.updateBountyProgression(ObjectiveType.COMPLETE_ELITE_DUEL);
+        this.getUser().data.getStatistics().incr(PlayerStatistic.ELITE_DUELS_COMPLETED);
 
         DuelHelper.delete(this.players[0].ID);
     }
 
     private void setEliteTrainer()
     {
-        SplittableRandom r = new SplittableRandom();
+        Random r = new Random();
 
         List<String> pool = new ArrayList<>();
         pool.addAll(PokemonRarity.LEGENDARY);
@@ -85,11 +87,11 @@ public class EliteDuel extends TrainerDuel
         pool.addAll(PokemonRarity.MEGA);
 
         String[] team = new String[6];
-        for(int i = 0; i < 6; i++) team[i] = pool.get(new Random().nextInt(pool.size()));
+        for(int i = 0; i < 6; i++) team[i] = pool.get(r.nextInt(pool.size()));
 
-        Trainer.TrainerInfo elite = new Trainer.TrainerInfo("Elite Trainer", 100, ZCrystal.values()[new Random().nextInt(18)], 1.25, team);
+        TrainerData elite = new TrainerData("Elite Trainer", -1, List.of(team), ZCrystal.values()[r.nextInt(18)], 100, 1.25F);
 
-        this.players[1] = Trainer.create(elite);
+        this.players[1] = new TrainerPlayer(elite);
 
         for(int i = 0; i < this.players[1].team.size(); i++)
         {

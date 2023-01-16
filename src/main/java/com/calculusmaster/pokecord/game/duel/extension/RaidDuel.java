@@ -7,7 +7,8 @@ import com.calculusmaster.pokecord.game.duel.component.FieldEffectsHandler;
 import com.calculusmaster.pokecord.game.duel.component.FieldGMaxDoTHandler;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
-import com.calculusmaster.pokecord.game.duel.players.WildPokemon;
+import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
+import com.calculusmaster.pokecord.game.duel.players.WildPlayer;
 import com.calculusmaster.pokecord.game.enums.elements.Room;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
@@ -16,6 +17,7 @@ import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
+import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
@@ -70,7 +72,7 @@ public class RaidDuel extends WildDuel
 
         if(!this.isComplete())
         {
-            for(int i = 0; i < this.getNonBotPlayers().length; i++) if(!this.getAction(i).equals(ActionType.IDLE)) this.moveAction(i);
+            for(int i = 0; i < this.getUserPlayers().length; i++) if(!this.getAction(i).equals(ActionType.IDLE)) this.moveAction(i);
 
             List<String> movePool = this.getRaidBoss().active.allMoves().stream().filter(Move::isImplemented).collect(Collectors.collectingAndThen(Collectors.toList(), list -> { Collections.shuffle(list); return list; }));
             this.getRaidBoss().move = new Move(movePool.isEmpty() ? "Tackle" : movePool.get(new Random().nextInt(movePool.size())));
@@ -82,7 +84,7 @@ public class RaidDuel extends WildDuel
             }
 
             List<Integer> pool = new ArrayList<>();
-            for(int i = 0; i < this.getNonBotPlayers().length; i++) pool.add(i);
+            for(int i = 0; i < this.getUserPlayers().length; i++) pool.add(i);
 
             pool.stream().filter(this::isUsingMove).collect(Collectors.toList()).sort(Comparator.comparingInt(i -> this.players[(int)i].move.getPriority()).thenComparingInt(i -> this.players[(int)i].active.getStat(Stat.SPD)).reversed());
 
@@ -96,7 +98,7 @@ public class RaidDuel extends WildDuel
             }
 
             this.current = this.other;
-            do this.other = new Random().nextInt(this.getNonBotPlayers().length);
+            do this.other = new Random().nextInt(this.getUserPlayers().length);
             while(this.players[this.other].active.isFainted());
 
             this.results.add("\n");
@@ -149,26 +151,28 @@ public class RaidDuel extends WildDuel
             List<Map.Entry<String, Integer>> sorted = this.damageDealt.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getValue)).collect(Collectors.toList());
             Collections.reverse(sorted);
 
-            String highestDamage = this.getNonBotPlayers().length == 1 ? "" : pokemonToPlayer.get(sorted.get(0).getKey());
+            String highestDamage = this.getUserPlayers().length == 1 ? "" : pokemonToPlayer.get(sorted.get(0).getKey());
 
             StringBuilder winnings = new StringBuilder();
             String extraWinnings = "";
 
-            for(Player p : this.getNonBotPlayers())
+            for(Player p : this.getUserPlayers())
             {
+                UserPlayer userPlayer = (UserPlayer)p;
+
                 double multiplier = highestDamage.equals(p.ID) ? 1.3 : (p.active.isFainted() ? 0.3 : 1.0);
 
-                p.data.changeCredits((int)(credits * multiplier));
-                p.active.addExp((int)(pokeXP * multiplier));
+                userPlayer.data.changeCredits((int)(credits * multiplier));
+                userPlayer.active.addExp((int)(pokeXP * multiplier));
 
-                if(highestDamage.equals(p.ID)) p.data.addExp(PMLExperience.DUEL_RAID_MVP, 100);
-                else if(!p.active.isFainted()) p.data.addExp(PMLExperience.DUEL_RAID_PARTICIPANT, 75);
+                if(highestDamage.equals(p.ID)) userPlayer.data.addExp(PMLExperience.DUEL_RAID_MVP, 100);
+                else if(!p.active.isFainted()) userPlayer.data.addExp(PMLExperience.DUEL_RAID_PARTICIPANT, 75);
 
-                p.data.getStatistics().incr(PlayerStatistic.RAIDS_WON);
-                p.data.updateBountyProgression(ObjectiveType.WIN_RAID_DUEL);
+                userPlayer.data.getStatistics().incr(PlayerStatistic.RAIDS_WON);
+                userPlayer.data.updateBountyProgression(ObjectiveType.WIN_RAID_DUEL);
                 Achievements.grant(p.ID, Achievements.WON_FIRST_RAID, null);
 
-                winnings.append(p.data.getUsername()).append(" - `").append((int)(credits * multiplier)).append("c`\n");
+                winnings.append(userPlayer.data.getUsername()).append(" - `").append((int)(credits * multiplier)).append("c`\n");
 
                 if(highestDamage.equals(p.ID) && !p.active.isFainted() && new Random().nextInt(100) < 50)
                 {
@@ -180,12 +184,12 @@ public class RaidDuel extends WildDuel
                     reward.setNickname("Raid " + reward.getName());
 
                     reward.upload();
-                    p.data.addPokemon(reward.getUUID());
+                    userPlayer.data.addPokemon(reward.getUUID());
 
-                    p.data.getStatistics().incr(PlayerStatistic.RAIDS_WON_MVP);
+                    userPlayer.data.getStatistics().incr(PlayerStatistic.RAIDS_WON_MVP);
                     Achievements.grant(p.ID, Achievements.WON_FIRST_RAID_HIGHEST_DAMAGE, null);
 
-                    extraWinnings = "\n\n**" + p.data.getUsername() + " caught the Raid Pokemon!**";
+                    extraWinnings = "\n\n**" + p.getName() + " caught the Raid Pokemon!**";
                 }
             }
 
@@ -195,10 +199,10 @@ public class RaidDuel extends WildDuel
         }
         else embed.setDescription("Raid Pokemon could not be defeated! No rewards earned!");
 
-        for(Player p : this.getNonBotPlayers())
+        for(Player p : this.getUserPlayers())
         {
-            p.data.getStatistics().incr(PlayerStatistic.RAIDS_COMPLETED);
-            p.data.updateBountyProgression(ObjectiveType.PARTICIPATE_RAID);
+            ((UserPlayer)p).data.getStatistics().incr(PlayerStatistic.RAIDS_COMPLETED);
+            ((UserPlayer)p).data.updateBountyProgression(ObjectiveType.PARTICIPATE_RAID);
             Achievements.grant(p.ID, Achievements.COMPLETED_FIRST_RAID, null);
         }
 
@@ -358,14 +362,18 @@ public class RaidDuel extends WildDuel
     @Override
     public boolean isComplete()
     {
-        return this.players[this.players.length - 1].active.isFainted() || Arrays.stream(this.getNonBotPlayers()).allMatch(p -> p.active.isFainted());
+        return this.players[this.players.length - 1].active.isFainted() || Arrays.stream(this.getUserPlayers()).allMatch(p -> p.active.isFainted());
     }
 
     public void start()
     {
         this.players = new Player[this.waiting.size() + 1];
 
-        for(int i = 0; i < this.waiting.size(); i++) this.players[i] = new Player(this.waiting.get(i), 1);
+        for(int i = 0; i < this.waiting.size(); i++)
+        {
+            PlayerDataQuery p = PlayerDataQuery.ofNonNull(this.waiting.get(i));
+            this.players[i] = new UserPlayer(p, p.getSelectedPokemon());
+        }
 
         this.setWildPokemon("");
 
@@ -411,21 +419,15 @@ public class RaidDuel extends WildDuel
         {
             StringBuilder hb = new StringBuilder();
             for(int i = 0; i < this.players.length - 1; i++) hb.append(this.getHB(i)).append("\n");
-            hb.append("\n**Raid Boss ").append(this.getHB(this.players.length - 1)).append("**");
+            hb.append("\n**Raid Leader ").append(this.getHB(this.players.length - 1)).append("**");
             return hb.toString();
         }
     }
 
     @Override
-    protected String getHB(int p)
-    {
-        return super.getHB(p).replaceAll("The Wild", "");
-    }
-
-    @Override
     public void checkReady()
     {
-        if(Arrays.stream(this.getNonBotPlayers()).allMatch(p -> p.active.isFainted() || this.queuedMoves.containsKey(p.ID)))
+        if(Arrays.stream(this.getUserPlayers()).allMatch(p -> p.active.isFainted() || this.queuedMoves.containsKey(p.ID)))
         {
             this.turnHandler();
         }
@@ -436,7 +438,7 @@ public class RaidDuel extends WildDuel
     {
         if(new Random().nextInt(100) < 5) pokemon = "Eternamax Eternatus";
 
-        this.players[this.players.length - 1] = pokemon.equals("") ? new WildPokemon(100) : new WildPokemon(pokemon, 100);
+        this.players[this.players.length - 1] = pokemon.equals("") ? new WildPlayer(100) : new WildPlayer(pokemon, 100);
 
         Player raidBoss = this.players[this.players.length - 1];
 
@@ -466,7 +468,7 @@ public class RaidDuel extends WildDuel
         }
     }
 
-    private Player[] getNonBotPlayers()
+    private Player[] getUserPlayers()
     {
         Player[] players = new Player[this.players.length - 1];
         System.arraycopy(this.players, 0, players, 0, players.length);

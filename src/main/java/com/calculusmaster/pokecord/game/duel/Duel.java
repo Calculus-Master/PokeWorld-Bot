@@ -1,11 +1,11 @@
 package com.calculusmaster.pokecord.game.duel;
 
 import com.calculusmaster.pokecord.commands.duel.CommandTarget;
-import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.component.*;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
+import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.Item;
@@ -20,6 +20,7 @@ import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonDuelAttributes;
 import com.calculusmaster.pokecord.game.tournament.Tournament;
 import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
+import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.event.LocationEventHelper;
@@ -83,6 +84,7 @@ public class Duel
         Duel duel = new Duel();
 
         duel.setStatus(DuelStatus.WAITING);
+        duel.setSize(size);
         duel.setTurn();
         duel.addChannel(event.getTextChannel());
         duel.setPlayers(player1ID, player2ID, size);
@@ -291,7 +293,7 @@ public class Duel
         this.data(p).setDefaults();
         this.players[p].swap(index);
 
-        results.add(this.players[p].data.getUsername() + " brought in " + this.players[p].active.getName() + "!\n");
+        this.results.add(this.players[p].getName() + " brought in " + this.players[p].active.getName() + "!\n");
 
         //Check if the new Pokemon has a Weather-Causing Ability
         this.checkWeatherAbilities(p);
@@ -341,7 +343,7 @@ public class Duel
             this.results.add(Ability.GRASSY_SURGE.formatActivation(this.players[p].active.getName(), "A Grassy Terrain was created!"));
         }
 
-        if(this.isNonBotPlayer(p)) this.players[p].data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
+        if(this.players[p] instanceof UserPlayer player) player.data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
     }
 
     //Always use this.current!
@@ -1917,7 +1919,7 @@ public class Duel
 
             int damageDealt = preMoveHP - this.players[this.other].active.getHealth();
 
-            if(damageDealt > 0 && this.isNonBotPlayer(this.current)) this.damageDealt.put(this.players[this.current].active.getUUID(), this.damageDealt.getOrDefault(this.players[this.current].active.getUUID(), 0) + damageDealt);
+            if(damageDealt > 0 && this.players[this.current] instanceof UserPlayer) this.damageDealt.put(this.players[this.current].active.getUUID(), this.damageDealt.getOrDefault(this.players[this.current].active.getUUID(), 0) + damageDealt);
 
             if(this.data(this.other).bideTurns > 0)
             {
@@ -2077,10 +2079,10 @@ public class Duel
                 turnResult.add(Ability.COTTON_DOWN.formatActivation(o.getName(), c.getName() + "'s Speed decreased by 1 stage!"));
             }
 
-            if(damageDealt > 0 && this.isNonBotPlayer(this.current))
+            if(damageDealt > 0 && this.players[this.current] instanceof UserPlayer player)
             {
                 final Move m = move;
-                this.players[this.current].data.updateBountyProgression(b -> {
+                player.data.updateBountyProgression(b -> {
                     switch(b.getType()) {
                         case DAMAGE_POKEMON -> b.update(damageDealt);
                         case DAMAGE_POKEMON_TYPE -> b.updateIf(this.players[this.other].active.isType(b.getObjective().asTypeObjective().getType()), damageDealt);
@@ -2089,10 +2091,10 @@ public class Duel
                 });
             }
 
-            if(this.isNonBotPlayer(this.current))
+            if(this.players[this.current] instanceof UserPlayer player)
             {
                 final Move m = move;
-                this.players[this.current].data.updateBountyProgression(b -> {
+                player.data.updateBountyProgression(b -> {
                     switch(b.getType()) {
                         case USE_MOVES -> b.update();
                         case USE_MOVES_TYPE -> b.updateIf(b.getObjective().asTypeObjective().getType().equals(m.getType()));
@@ -2188,9 +2190,9 @@ public class Duel
             int exp = this.players[this.current].active.getDefeatExp(this.players[this.other].active);
             this.expGains.put(UUID, (this.expGains.getOrDefault(UUID, 0)) + exp);
 
-            if(this.isNonBotPlayer(this.current))
+            if(this.players[this.current] instanceof UserPlayer player)
             {
-                this.players[this.current].data.updateBountyProgression(b -> {
+                player.data.updateBountyProgression(b -> {
                     switch(b.getType())
                     {
                         case DEFEAT_POKEMON -> b.update();
@@ -2212,17 +2214,21 @@ public class Duel
                     }
                 });
 
-                this.players[this.current].data.getStatistics().incr(PlayerStatistic.POKEMON_DEFEATED);
+                player.data.getStatistics().incr(PlayerStatistic.POKEMON_DEFEATED);
             }
 
-            if(this.isNonBotPlayer(this.other)) this.players[this.other].data.getStatistics().incr(PlayerStatistic.POKEMON_FAINTED);
+            if(this.players[this.other] instanceof UserPlayer player) player.data.getStatistics().incr(PlayerStatistic.POKEMON_FAINTED);
 
             if(this.players[this.current].active.isDynamaxed() && this.players[this.current].active.getDynamaxLevel() < 10 && new Random().nextInt(100) < 40)
             {
                 this.players[this.current].active.increaseDynamaxLevel();
-                this.players[this.current].active.updateDynamaxLevel();
 
-                this.players[this.current].data.directMessage(this.players[this.current].active.getName() + " earned a Dynamax Level!");
+                if(this.players[this.current] instanceof UserPlayer player)
+                {
+                    this.players[this.current].active.updateDynamaxLevel();
+
+                    player.data.directMessage(this.players[this.current].active.getName() + " earned a Dynamax Level!");
+                }
             }
 
             if(this.players[this.current].active.hasAbility(Ability.GRIM_NEIGH))
@@ -2639,6 +2645,7 @@ public class Duel
         int winner = this.getWinner().ID.equals(this.players[0].ID) ? 0 : 1;
         int loser = winner == 0 ? 1 : 0;
 
+        //TODO: Take another pass at Duel Rewards
         int c = this.players[0].team.size() >= 6 ? this.giveWinCredits() : new Random().nextInt(11) + 10;
 
         //If not matchmade Duel, Target system
@@ -2666,30 +2673,30 @@ public class Duel
             }
         }
 
-        embed.setDescription(this.getWinner().data.getUsername() + " has won!" + (c != 0 ? "\nThey earned " + c + " credits!" : ""));
+        embed.setDescription(this.getWinner().getName() + " has won!" + (c != 0 ? "\nThey earned " + c + " credits!" : ""));
 
         this.sendEmbed(embed.build());
 
         Achievements.grant(this.getWinner().ID, Achievements.WON_FIRST_PVP_DUEL, null);
-        if(this.size == CommandTeam.MAX_TEAM_SIZE) Achievements.grant(this.getWinner().ID, Achievements.WON_FIRST_DUEL_MAX_SIZE, null);
 
-        this.players[winner].data.getStatistics().incr(PlayerStatistic.PVP_DUELS_WON);
-        this.players[winner].data.getStatistics().incr(PlayerStatistic.PVP_DUELS_COMPLETED);
-        this.players[loser].data.getStatistics().incr(PlayerStatistic.PVP_DUELS_COMPLETED);
-
-        if(new Random().nextInt(100) < 20)
+        if(this.players[winner] instanceof UserPlayer player)
         {
-            this.uploadEVs(0);
-            this.uploadEVs(1);
+            player.data.getStatistics().incr(PlayerStatistic.PVP_DUELS_WON);
+            player.data.getStatistics().incr(PlayerStatistic.PVP_DUELS_COMPLETED);
+
+            player.data.addExp(PMLExperience.DUEL_PVP, 95);
+
+            player.data.updateBountyProgression(b -> {
+                if(b.getType().equals(ObjectiveType.WIN_PVP_DUEL) || b.getType().equals(ObjectiveType.COMPLETE_PVP_DUEL)) b.update();
+            });
         }
 
-        this.players[winner].data.addExp(PMLExperience.DUEL_PVP, 95);
+        if(this.players[loser] instanceof UserPlayer player)
+        {
+            player.data.getStatistics().incr(PlayerStatistic.PVP_DUELS_COMPLETED);
 
-        this.players[winner].data.getStatistics().incr(PlayerStatistic.PVP_DUELS_WON);
-        this.players[winner].data.updateBountyProgression(b -> {
-            if(b.getType().equals(ObjectiveType.WIN_PVP_DUEL) || b.getType().equals(ObjectiveType.COMPLETE_PVP_DUEL)) b.update();
-        });
-        this.players[loser].data.updateBountyProgression(ObjectiveType.COMPLETE_PVP_DUEL);
+            player.data.updateBountyProgression(ObjectiveType.COMPLETE_PVP_DUEL);
+        }
 
         if(TournamentHelper.isInTournament(this.players[winner].ID) && TournamentHelper.isInTournament(this.players[loser].ID))
         {
@@ -2702,6 +2709,12 @@ public class Duel
         }
 
         this.uploadExperience();
+
+        if(new Random().nextInt(100) < 20)
+        {
+            this.uploadEVs(0);
+            this.uploadEVs(1);
+        }
 
         DuelHelper.delete(this.players[0].ID);
     }
@@ -2737,11 +2750,16 @@ public class Duel
         }
     }
 
+    @Deprecated //TODO: Remove
     protected int giveWinCredits()
     {
-        int winCredits = new Random().nextInt(501) + 500;
-        this.getWinner().data.changeCredits(winCredits);
-        return winCredits;
+        if(this.getWinner() instanceof UserPlayer player)
+        {
+            int winCredits = new Random().nextInt(501) + 500;
+            player.data.changeCredits(winCredits);
+            return winCredits;
+        }
+        return 0;
     }
 
     protected void sendMessage(String text)
@@ -2764,7 +2782,8 @@ public class Duel
         //index functions as both the swapIndex and moveIndex, which one is dictated by type == 's' and type == 'm'
         else if(type == 's')
         {
-            if(this.players[this.indexOf(id)].team.get(index - 1).isFainted()) this.players[this.indexOf(id)].data.directMessage("That pokemon is fainted!");
+            Player p = this.players[this.indexOf(id)];
+            if(p.team.get(index - 1).isFainted()) ((UserPlayer)p).data.directMessage("That pokemon is fainted!");
             else this.queuedMoves.put(id, new TurnAction(ActionType.SWAP, -1, index));
         }
         else this.queuedMoves.put(id, new TurnAction(type == 'z' ? ActionType.ZMOVE : (type == 'd' ? ActionType.DYNAMAX : ActionType.MOVE), index, -1));
@@ -2908,7 +2927,7 @@ public class Duel
 
     protected String getHB(int p)
     {
-        StringBuilder sb = new StringBuilder().append(this.players[p].data.getUsername()).append("'s ").append(this.players[p].active.getDisplayName());
+        StringBuilder sb = new StringBuilder().append(this.players[p].getName()).append("'s ").append(this.players[p].active.getDisplayName());
         sb.append(this.players[p].active.isDynamaxed() ? (this.players[p].active.canGigantamax() ? " (Gigantamaxed)" : " (Dynamaxed)") : "");
 
         sb.append(": ");
@@ -2954,12 +2973,17 @@ public class Duel
 
     public int getSize()
     {
-        return this.players[0].team.size();
+        return this.size;
     }
 
     public void setPlayers(String player1ID, String player2ID, int size)
     {
-        this.players = new Player[]{new Player(player1ID, size), new Player(player2ID, size)};
+        PlayerDataQuery a = PlayerDataQuery.ofNonNull(player1ID);
+        PlayerDataQuery b = PlayerDataQuery.ofNonNull(player2ID);
+
+        if(size == 1) this.players = new Player[]{new UserPlayer(a, a.getSelectedPokemon()), new UserPlayer(b, b.getSelectedPokemon())};
+        else this.players = new Player[]{new UserPlayer(a, size), new UserPlayer(b, size)};
+
         this.size = size;
     }
 
@@ -2971,11 +2995,6 @@ public class Duel
     public Player getPlayer(String ID)
     {
         return this.players[this.indexOf(ID)];
-    }
-
-    public boolean isNonBotPlayer(int p)
-    {
-        return this.players[p].ID.chars().allMatch(Character::isDigit);
     }
 
     public int indexOf(String id)

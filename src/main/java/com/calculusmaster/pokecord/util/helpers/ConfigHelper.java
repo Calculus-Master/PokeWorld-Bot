@@ -4,7 +4,7 @@ import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.commands.economy.CommandShop;
 import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.bounties.components.Bounty;
-import com.calculusmaster.pokecord.game.duel.players.Trainer;
+import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.PokemonAI;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
@@ -42,10 +42,9 @@ public class ConfigHelper
             SpawnEventHelper.RAID_CHANCE = config.getInteger("spawn_event_raid_chance");
             PokemonEgg.MAX_EGGS = config.getInteger("egg_limit");
             CommandTeam.MAX_TEAM_SIZE = config.getInteger("team_limit");
-            Trainer.BASE_COUNT = config.getInteger("base_daily_trainer_count");
-            Trainer.COUNT_DEVIATION = config.getInteger("daily_trainer_deviation");
             MasteryLevelManager.ACTIVE = config.getBoolean("mastery_levels");
             PokemonAI.ENABLED = config.getBoolean("experimental_ai");
+            TrainerManager.REGULAR_TRAINER_INTERVAL = config.getInteger("trainer_rotation_interval");
 
             LoggerHelper.info(ConfigHelper.class, "Loaded config values!");
         }
@@ -68,10 +67,9 @@ public class ConfigHelper
             SpawnEventHelper.SPAWN_INTERVAL = 450;
             SpawnEventHelper.RAID_CHANCE = 1;
             PokemonEgg.MAX_EGGS = 9;
-            CommandTeam.MAX_TEAM_SIZE = 12;
-            Trainer.BASE_COUNT = 4;
-            Trainer.COUNT_DEVIATION = 2;
+            CommandTeam.MAX_TEAM_SIZE = 6;
             PokemonAI.ENABLED = true;
+            TrainerManager.REGULAR_TRAINER_INTERVAL = 24 * 7;
         }
     }
 }

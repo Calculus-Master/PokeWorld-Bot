@@ -72,7 +72,7 @@ public class FixedDamageEffect extends MoveEffect
             for(Pokemon p : targetTeam.stream().filter(p -> !p.isFainted()).filter(p -> !p.getUUID().equals(this.opponent.getUUID())).toList())
                 p.damage(diffractionDamage);
 
-            augment.add("The beam diffracted due to the %s Augment! Each opposing team member took %s damage!".formatted(radiant ? PokemonAugment.DIFFRACTED_BEAMS.getAugmentName() : PokemonAugment.RADIANT_DIFFRACTED_BEAMS.getAugmentName(), diffractionDamage));
+            augment.add(" The beam diffracted due to the %s Augment! Each opposing team member took %s damage!".formatted(radiant ? PokemonAugment.DIFFRACTED_BEAMS.getAugmentName() : PokemonAugment.RADIANT_DIFFRACTED_BEAMS.getAugmentName(), diffractionDamage));
         }
 
         if(this.opponent.hasAugment(PokemonAugment.PRISMATIC_MOONLIT_SHIELD))

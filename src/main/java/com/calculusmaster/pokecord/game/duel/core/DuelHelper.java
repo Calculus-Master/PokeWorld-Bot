@@ -2,6 +2,8 @@ package com.calculusmaster.pokecord.game.duel.core;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.players.Player;
+import com.calculusmaster.pokecord.game.duel.players.TrainerPlayer;
+import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
@@ -9,6 +11,7 @@ import com.calculusmaster.pokecord.game.moves.registry.MaxMoveRegistry;
 import com.calculusmaster.pokecord.game.moves.registry.ZMoveRegistry;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,7 +62,13 @@ public class DuelHelper
 
     public static Move getZMove(Player p, Move baseMove)
     {
-        ZCrystal z = ZCrystal.cast(p.data.getEquippedZCrystal());
+        if(!(p instanceof UserPlayer) && !(p instanceof TrainerPlayer))
+        {
+            LoggerHelper.error(DuelHelper.class, "Invalid Player Type attempting to use a Z-Crystal! " + p.getClass().getName());
+            return baseMove;
+        }
+
+        ZCrystal z = p instanceof UserPlayer up ? ZCrystal.cast(up.data.getEquippedZCrystal()) : ((TrainerPlayer)(p)).getData().getZCrystal();
         Move fallback = new Move("Tackle");
 
         if(z == null) return fallback;

@@ -4,12 +4,14 @@ import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
-import com.calculusmaster.pokecord.game.duel.players.WildPokemon;
+import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
+import com.calculusmaster.pokecord.game.duel.players.WildPlayer;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonAI;
+import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -71,22 +73,23 @@ public class WildDuel extends Duel
         EmbedBuilder embed = new EmbedBuilder();
 
         //Player won
-        if(this.getWinner().ID.equals(this.players[0].ID))
+        if(this.getWinner() instanceof UserPlayer player)
         {
             this.onWildDuelWon(true);
 
-            this.players[0].data.getStatistics().incr(PlayerStatistic.WILD_DUELS_WON);
+            player.data.getStatistics().incr(PlayerStatistic.WILD_DUELS_WON);
 
             embed.setDescription("You won! Your " + this.players[0].active.getName() + " earned some EVs!");
         }
         //Player lost
         else
         {
-            this.players[0].data.updateBountyProgression(ObjectiveType.COMPLETE_WILD_DUEL);
-            embed.setDescription("You lost! Your " + this.players[0].active.getName() + " didn't earn any EVs...");
+            this.getUser().data.updateBountyProgression(ObjectiveType.COMPLETE_WILD_DUEL);
+
+            embed.setDescription("You lost! Your " + this.getUser().active.getName() + " didn't earn any EVs...");
         }
 
-        this.players[0].data.getStatistics().incr(PlayerStatistic.WILD_DUELS_COMPLETED);
+        this.getUser().data.getStatistics().incr(PlayerStatistic.WILD_DUELS_COMPLETED);
 
         this.sendEmbed(embed.build());
         DuelHelper.delete(this.players[0].ID);
@@ -95,14 +98,14 @@ public class WildDuel extends Duel
     protected void onWildDuelWon(boolean evs)
     {
         int exp = this.players[0].active.getDefeatExp(this.players[1].active);
-        Pokemon p = this.players[0].data.getSelectedPokemon();
+        Pokemon p = this.getUser().data.getSelectedPokemon();
         p.addExp(exp);
 
-        if(evs) this.players[this.current].active.updateEVs();
+        if(evs) this.getUser().active.updateEVs();
         p.updateExperience();
 
         Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_WILD_DUEL, null);
-        this.players[0].data.updateBountyProgression(b -> {
+        this.getUser().data.updateBountyProgression(b -> {
             if(b.getType().equals(ObjectiveType.WIN_WILD_DUEL) || b.getType().equals(ObjectiveType.COMPLETE_WILD_DUEL)) b.update();
         });
     }
@@ -121,8 +124,7 @@ public class WildDuel extends Duel
     {
         StringBuilder sb = new StringBuilder();
 
-        if(this.isNonBotPlayer(p)) sb.append(this.players[p].data.getUsername()).append("'s ");
-        else sb.append("The Wild ");
+        if(this.players[p] instanceof UserPlayer player) sb.append(player.getName()).append("'s ");
 
         sb.append(this.players[p].active.getName()).append(": ");
 
@@ -141,17 +143,29 @@ public class WildDuel extends Duel
     @Override
     public void setPlayers(String player1ID, String player2ID, int size)
     {
-        this.players = new Player[]{new Player(player1ID, size), null};
+        PlayerDataQuery p = PlayerDataQuery.ofNonNull(player1ID);
+
+        this.players = new Player[]{new UserPlayer(p, p.getSelectedPokemon()), null};
     }
 
     public void setWildPokemon(String pokemon)
     {
-        int levelBuff = this.players[0].active.getLevel() + (new Random().nextInt(5) + 2);
-        if(pokemon.equals("")) this.players[1] = new WildPokemon(this.players[0].active.getLevel() + levelBuff);
-        else this.players[1] = new WildPokemon(pokemon, this.players[0].active.getLevel() + levelBuff);
+        int level = Math.min(100, this.getUser().active.getLevel() + (new Random().nextInt(5) + 1));
 
-        this.players[1].active.getBoosts().setStatBoost(this.players[1].active.getLevel() > 60 ? Math.random() * 1.5 + 1 : 1);
-        this.players[1].active.setLevel(this.players[0].active.getLevel());
+        if(pokemon.equals("")) this.players[1] = new WildPlayer(level);
+        else this.players[1] = new WildPlayer(pokemon, level);
+
+        this.players[1].active.getBoosts().setStatBoost(level > 60 ? Math.random() * 1.5 + 1 : 1);
         this.players[1].active.setHealth(this.players[1].active.getStat(Stat.HP));
+    }
+
+    protected UserPlayer getUser()
+    {
+        return (UserPlayer)this.players[0];
+    }
+
+    protected WildPlayer getWildPokemon()
+    {
+        return (WildPlayer)this.players[1];
     }
 }
