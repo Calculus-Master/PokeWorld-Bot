@@ -32,7 +32,7 @@ public class WildDuel extends Duel
 
         duel.setStatus(DuelStatus.WAITING);
         duel.setTurn();
-        duel.addChannel(event.getTextChannel());
+        duel.addChannel(event.getChannel().asTextChannel());
         duel.setPlayers(playerID, "BOT", 1);
         duel.setWildPokemon(pokemon);
         duel.setDefaults();

@@ -32,7 +32,7 @@ public class TrainerDuel extends Duel
 
         duel.setStatus(DuelStatus.WAITING);
         duel.setTurn();
-        duel.addChannel(event.getTextChannel());
+        duel.addChannel(event.getChannel().asTextChannel());
         duel.setPlayers(playerID, trainer.getName(), trainer.getTeam().size());
         duel.setTrainer(trainer);
         duel.limitPlayerPokemon(trainer.getAveragePokemonLevel());

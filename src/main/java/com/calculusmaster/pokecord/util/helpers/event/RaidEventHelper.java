@@ -5,7 +5,7 @@ import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 import java.util.HashMap;
 import java.util.Map;

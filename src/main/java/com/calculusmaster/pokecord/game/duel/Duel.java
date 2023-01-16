@@ -27,8 +27,9 @@ import com.calculusmaster.pokecord.util.helpers.event.LocationEventHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.utils.FileUpload;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -86,7 +87,7 @@ public class Duel
         duel.setStatus(DuelStatus.WAITING);
         duel.setSize(size);
         duel.setTurn();
-        duel.addChannel(event.getTextChannel());
+        duel.addChannel(event.getChannel().asTextChannel());
         duel.setPlayers(player1ID, player2ID, size);
         duel.setDefaults();
         duel.setDuelPokemonObjects(0);
@@ -2613,8 +2614,8 @@ public class Duel
         {
             try
             {
-                if(this.isComplete()) c.sendFile(this.getImage(), "duel.png").setEmbeds(embed.build()).queue();
-                else c.sendFile(this.getImage(), "duel.png").setEmbeds(embed.build()).queue();
+                if(this.isComplete()) c.sendFiles(FileUpload.fromData(this.getImage(), "duel.png")).setEmbeds(embed.build()).queue();
+                else c.sendFiles(FileUpload.fromData(this.getImage(), "duel.png")).setEmbeds(embed.build()).queue();
             }
             catch (Exception e)
             {

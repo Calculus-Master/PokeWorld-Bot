@@ -55,7 +55,12 @@ public class CommandLearn extends Command
             this.embed.setDescription("Which move do you want to replace with " + move + "?" + movesList);
             moveLearnRequests.put(selected.getUUID(), move);
 
-            if(autoReplace) Executors.newSingleThreadScheduledExecutor().schedule(() -> Commands.execute("replace", this.event, new String[]{"replace", "" + this.getInt(1)}), 450, TimeUnit.MILLISECONDS);
+            if(autoReplace)
+            {
+                this.response = "Learning move...";
+                this.embed = null;
+                Executors.newSingleThreadScheduledExecutor().schedule(() -> Commands.execute("replace", this.event, new String[]{"replace", "" + this.getInt(1)}), 450, TimeUnit.MILLISECONDS);
+            }
         }
 
         return this;

@@ -8,7 +8,8 @@ import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
@@ -20,15 +21,18 @@ import org.jetbrains.annotations.NotNull;
 public class MiscListener extends ListenerAdapter
 {
     @Override
-    public void onTextChannelDelete(@NotNull TextChannelDeleteEvent event)
+    public void onChannelDelete(ChannelDeleteEvent event)
     {
-        String channelID = event.getChannel().getId();
-        ServerDataQuery serverData = new ServerDataQuery(event.getGuild().getId());
-
-        //Make sure spawn channel doesn't reference a deleted channel
-        if(serverData.getSpawnChannels().contains(channelID))
+        if(event.isFromType(ChannelType.TEXT))
         {
-            serverData.removeSpawnChannel(channelID);
+            String channelID = event.getChannel().getId();
+            ServerDataQuery serverData = new ServerDataQuery(event.getGuild().getId());
+
+            //Make sure spawn channel doesn't reference a deleted channel
+            if(serverData.getSpawnChannels().contains(channelID))
+            {
+                serverData.removeSpawnChannel(channelID);
+            }
         }
     }
 

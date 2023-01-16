@@ -103,7 +103,7 @@ public class CommandDev extends Command
                 Location l = Location.cast(this.msg[2]);
                 if(l != null) LocationEventHelper.forceLocation(this.server, l);
             }
-            case "forceraid" -> RaidEventHelper.forceRaid(this.server, this.event.getTextChannel());
+            case "forceraid" -> RaidEventHelper.forceRaid(this.server, this.event.getChannel().asTextChannel());
             case "restartspawns" -> {
                 for(Guild g : Pokecord.BOT_JDA.getGuilds())
                 {

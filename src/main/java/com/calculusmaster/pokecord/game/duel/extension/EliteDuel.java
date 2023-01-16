@@ -28,7 +28,7 @@ public class EliteDuel extends TrainerDuel
 
         duel.setStatus(DuelHelper.DuelStatus.WAITING);
         duel.setTurn();
-        duel.addChannel(event.getTextChannel());
+        duel.addChannel(event.getChannel().asTextChannel());
         duel.setPlayers(playerID, "Elite Trainer", 6);
         duel.setEliteTrainer();
         duel.setDefaults();

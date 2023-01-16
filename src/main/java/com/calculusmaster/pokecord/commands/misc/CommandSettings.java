@@ -7,7 +7,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.mongo.PlayerSettingsQuery;
 import com.calculusmaster.pokecord.util.Global;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import static com.calculusmaster.pokecord.game.player.Settings.*;
@@ -182,7 +182,7 @@ public class CommandSettings extends Command
                 }
                 else if(SERVER_SPAWNCHANNEL.matches(this.msg[2]))
                 {
-                    String channel = !this.event.getMessage().getMentionedChannels().isEmpty() ? this.event.getMessage().getMentionedChannels().get(0).getId() : this.event.getMessage().getChannel().getId();
+                    String channel = !this.event.getMessage().getMentions().getChannels().isEmpty() ? this.event.getMessage().getMentions().getChannels().get(0).getId() : this.event.getMessage().getChannel().getId();
                     TextChannel channelName = this.event.getGuild().getTextChannelById(channel);
 
                     if(channelName != null && this.serverData.getSpawnChannels().contains(channel))
@@ -257,7 +257,7 @@ public class CommandSettings extends Command
                 }
                 else if(SERVER_DUELCHANNEL.matches(this.msg[2]))
                 {
-                    String channel = !this.event.getMessage().getMentionedChannels().isEmpty() ? this.event.getMessage().getMentionedChannels().get(0).getId() : this.event.getMessage().getChannel().getId();
+                    String channel = !this.event.getMessage().getMentions().getChannels().isEmpty() ? this.event.getMessage().getMentions().getChannels().get(0).getId() : this.event.getMessage().getChannel().getId();
                     TextChannel channelName = this.event.getGuild().getTextChannelById(channel);
 
                     if(channelName != null && this.serverData.getDuelChannels().contains(channel))
@@ -281,7 +281,7 @@ public class CommandSettings extends Command
                 }
                 else if(SERVER_BOTCHANNEL.matches(this.msg[2]))
                 {
-                    String channel = !this.event.getMessage().getMentionedChannels().isEmpty() ? this.event.getMessage().getMentionedChannels().get(0).getId() : this.event.getMessage().getChannel().getId();
+                    String channel = !this.event.getMessage().getMentions().getChannels().isEmpty() ? this.event.getMessage().getMentions().getChannels().get(0).getId() : this.event.getMessage().getChannel().getId();
                     TextChannel channelName = this.event.getGuild().getTextChannelById(channel);
 
                     if(channelName != null && this.serverData.getBotChannels().contains(channel))

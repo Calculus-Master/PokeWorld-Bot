@@ -11,12 +11,10 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.awt.*;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -24,7 +22,6 @@ import java.util.Random;
 public abstract class Command
 {
     protected MessageReceivedEvent event;
-    protected ButtonClickEvent buttonEvent;
     protected String[] msg;
     protected List<Member> mentions;
 
@@ -41,9 +38,8 @@ public abstract class Command
     public Command(MessageReceivedEvent event, String[] msg, boolean serverData)
     {
         this.event = event;
-        this.buttonEvent = null;
         this.msg = msg;
-        this.mentions = event.getMessage().getMentionedMembers();
+        this.mentions = event.getMessage().getMentions().getMembers();
 
         this.player = event.getAuthor();
         this.server = event.getGuild();
@@ -59,24 +55,6 @@ public abstract class Command
     public Command(MessageReceivedEvent event, String[] msg)
     {
         this(event, msg, false);
-    }
-
-    public Command(ButtonClickEvent event, String[] msg)
-    {
-        this.event = null;
-        this.buttonEvent = event;
-        this.msg = msg;
-        this.mentions = new ArrayList<>();
-
-        this.player = event.getMember().getUser();
-        this.server = event.getGuild();
-
-        this.serverData = new ServerDataQuery(this.server.getId());
-        this.playerData = PlayerDataQuery.of(this.player.getId());
-
-        this.embed = new EmbedBuilder();
-        this.response = "";
-        this.color = null;
     }
 
     public abstract Command runCommand();
@@ -96,14 +74,6 @@ public abstract class Command
     protected int getInt(int index)
     {
         return Integer.parseInt(this.msg[index]);
-    }
-
-    @Deprecated
-    protected void sendMsg(String msg)
-    {
-        this.embed = null;
-        if(this.event != null) this.event.getChannel().sendMessage(this.playerData.getMention() + ": " + msg).queue();
-        else if(this.buttonEvent != null)  this.buttonEvent.getChannel().sendMessage(this.playerData.getMention() + ": " + msg).queue();
     }
 
     protected Command invalid()
@@ -163,7 +133,6 @@ public abstract class Command
             this.response = this.player.getAsMention() + "\n" + this.response;
 
             if(this.event != null) this.event.getChannel().sendMessage(this.response).queue();
-            else if(this.buttonEvent != null) this.buttonEvent.getChannel().sendMessage(this.response).queue();
         }
         else if(this.embed != null)
         {
@@ -182,7 +151,6 @@ public abstract class Command
 
             //Finalize
             if(this.event != null) this.event.getChannel().sendMessageEmbeds(this.embed.build()).queue();
-            else if(this.buttonEvent != null) this.buttonEvent.getChannel().sendMessageEmbeds(this.embed.build()).queue();
         }
         //If this.response.isEmpty() && this.embed == null, another class will handle the Embed or Message response
     }

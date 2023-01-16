@@ -8,7 +8,6 @@ import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
-import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import static com.calculusmaster.pokecord.game.duel.core.DuelChecks.CheckType.*;
@@ -18,11 +17,6 @@ public class CommandUse extends Command
     public CommandUse(MessageReceivedEvent event, String[] msg)
     {
         super(event, msg, true);
-    }
-
-    public CommandUse(ButtonClickEvent event, String[] msg)
-    {
-        super(event, msg);
     }
 
     @Override

@@ -9,7 +9,8 @@ import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.utils.FileUpload;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -142,7 +143,7 @@ public class SpawnEventHelper
 
             byte[] bytes = out.toByteArray();
 
-            for(TextChannel c : channels) c.sendFile(bytes, "pkmn.png").setEmbeds(embed.build()).queue();
+            for(TextChannel c : channels) c.sendFiles(FileUpload.fromData(bytes, "pkmn.png")).setEmbeds(embed.build()).queue();
         }
         catch (IOException e)
         {

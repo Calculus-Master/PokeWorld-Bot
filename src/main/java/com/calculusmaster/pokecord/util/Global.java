@@ -4,7 +4,6 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
-import org.jetbrains.annotations.Nls;
 
 import java.awt.*;
 import java.time.LocalDateTime;
@@ -67,7 +66,6 @@ public class Global
         return new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256));
     }
 
-    @Nls(capitalization = Nls.Capitalization.Title)
     public static String normalize(String s)
     {
         if(s.toLowerCase().startsWith("nidoran"))
