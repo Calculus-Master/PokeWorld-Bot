@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.commands.duel.CommandTarget;
 import com.calculusmaster.pokecord.commands.economy.CommandShop;
 import com.calculusmaster.pokecord.commands.pokemon.CommandBreed;
+import com.calculusmaster.pokecord.commandsv2.CommandHandler;
 import com.calculusmaster.pokecord.game.duel.teamrules.TeamRestrictionRegistry;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
 import com.calculusmaster.pokecord.game.moves.Move;
@@ -102,7 +103,8 @@ public class Pokecord
                 .setActivity(Activity.playing("Pokemon"))
                 .addEventListeners(
                         new Listener(),
-                        new MiscListener()
+                        new MiscListener(),
+                        new CommandHandler()
                 );
 
         BOT_JDA = bot.build().awaitReady();

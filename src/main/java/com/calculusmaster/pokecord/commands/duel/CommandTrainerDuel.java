@@ -8,9 +8,6 @@ import com.calculusmaster.pokecord.game.duel.trainer.TrainerData;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
-import com.calculusmaster.pokecord.util.Mongo;
-import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
@@ -84,38 +81,5 @@ public class CommandTrainerDuel extends Command
             this.embed.addField("Elite Trainers", "You can duel challenging, randomized Elite Trainers using the `r!elite` command.", false);
         }
         return this;
-    }
-
-    private int getLegendaryCap(int size)
-    {
-        return 1 + (size - 1) / 4;
-    }
-
-    private int getMythicalUBCap(int size)
-    {
-        return 2 + (size - 1) / 4;
-    }
-
-    public boolean isInvalidTeam(int size)
-    {
-        if(size < 3) return false;
-
-        int legendary = 0;
-        int mythical = 0;
-        int ub = 0;
-
-        String name;
-        List<String> team = this.playerData.getTeam();
-
-        for(int i = 0; i < this.playerData.getTeam().size(); i++)
-        {
-            name = Mongo.PokemonData.find(Filters.eq("UUID", team.get(i))).first().getString("name");
-
-            if(PokemonRarity.LEGENDARY.contains(name)) legendary++;
-            if(PokemonRarity.MYTHICAL.contains(name)) mythical++;
-            if(PokemonRarity.ULTRA_BEAST.contains(name)) ub++;
-        }
-
-        return legendary > this.getLegendaryCap(size) || (mythical + ub) > this.getMythicalUBCap(size);
     }
 }
