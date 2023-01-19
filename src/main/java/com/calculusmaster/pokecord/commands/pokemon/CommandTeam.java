@@ -11,7 +11,11 @@ import com.calculusmaster.pokecord.game.tournament.Tournament;
 import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class CommandTeam extends Command
 {
@@ -21,22 +25,36 @@ public class CommandTeam extends Command
     }
 
     public static int MAX_TEAM_SIZE;
+    public static int MAX_SLOTS;
 
     @Override
     public Command runCommand()
     {
         if(this.insufficientMasteryLevel(Feature.CREATE_POKEMON_TEAMS)) return this.invalidMasteryLevel(Feature.CREATE_POKEMON_TEAMS);
 
-        //p!team set index number
+        //p!team set <index> <number>
         boolean set = this.msg.length == 4 && this.msg[1].equals("set") && isNumeric(2) && isNumeric(3);
-        //p!team add number
+        //p!team add <number>
         boolean add = this.msg.length == 3 && this.msg[1].equals("add") && isNumeric(2);
-        //p!team remove index
+        //p!team remove <index>
         boolean remove = this.msg.length == 3 && this.msg[1].equals("remove") && isNumeric(2);
-        //p!team swap index index
+        //p!team swap <index> <index>
         boolean swap = this.msg.length == 4 && this.msg[1].equals("swap") && isNumeric(2) && isNumeric(3);
         //p!team clear
         boolean clear = this.msg.length == 2 && this.msg[1].equals("clear");
+
+        //Save Slots
+
+        //p!team save <num>
+        boolean save = this.msg.length == 3 && this.msg[1].equals("save") && isNumeric(2);
+        //p!team load <num>
+        boolean load = this.msg.length == 3 && this.msg[1].equals("load") && isNumeric(2);
+        //p!team reset <num>
+        boolean reset = this.msg.length == 3 && this.msg[1].equals("reset") && isNumeric(2);
+        //p!team rename <num> <name+>
+        boolean rename = this.msg.length >= 4 && this.msg[1].equals("rename") && isNumeric(2);
+        //p!team saved
+        boolean saved = this.msg.length == 2 && this.msg[1].equals("saved");
 
         if(TournamentHelper.isInTournament(this.player.getId()))
         {
@@ -119,6 +137,77 @@ public class CommandTeam extends Command
             this.playerData.clearTeam();
 
             this.response = this.playerData.getMention() + ": Your team was successfully cleared!";
+        }
+        else if(save)
+        {
+            int slot = this.getInt(2) - 1;
+
+            if(slot < 0 && slot >= MAX_SLOTS) this.response = "Invalid slot number!";
+            else if(this.playerData.getTeam().isEmpty()) this.response = "Your team is empty!";
+            else
+            {
+                List<String> currentTeam = this.playerData.getTeam();
+                this.playerData.setSavedTeam(slot, currentTeam);
+
+                this.response = "Saved your current team to slot " + (slot + 1) + "!";
+            }
+        }
+        else if(load)
+        {
+            int slot = this.getInt(2) - 1;
+
+            if(slot < 0 && slot >= MAX_SLOTS) this.response = "Invalid slot number!";
+            else if(this.playerData.getSavedTeam(slot).isEmpty()) this.response = "The saved team in that slot is empty!";
+            else
+            {
+                List<String> savedTeam = this.playerData.getSavedTeam(slot);
+                this.playerData.setTeam(savedTeam);
+
+                this.response = "Loaded your saved team from slot " + (slot + 1) + "!";
+            }
+        }
+        else if(reset)
+        {
+            int slot = this.getInt(2) - 1;
+
+            if(slot < 0 && slot >= MAX_SLOTS) this.response = "Invalid slot number!";
+            else if(this.playerData.getSavedTeam(slot).isEmpty()) this.response = "The saved team in that slot is already empty!";
+            else
+            {
+                this.playerData.setSavedTeam(slot, new ArrayList<>());
+
+                this.response = "Cleared slot " + (slot + 1) + "!";
+            }
+        }
+        else if(rename)
+        {
+            int slot = this.getInt(2) - 1;
+
+            if(slot < 0 && slot >= MAX_SLOTS) this.response = "Invalid slot number!";
+            else
+            {
+                String oldName = this.playerData.getSavedTeamName(slot);
+
+                String[] raw = this.event.getMessage().getContentRaw().split("\\s+");
+                String[] name = Arrays.copyOfRange(raw, 3, raw.length);
+                String newName = String.join(" ", List.of(name));
+
+                this.playerData.renameSavedTeam(slot, newName);
+
+                this.response = "Renamed slot " + (slot + 1) + (!oldName.isEmpty() ? " from `" + oldName + "` " : " ") + "to `" + newName + "`!";
+            }
+        }
+        else if(saved)
+        {
+            this.embed.setTitle("Saved Teams");
+            for(int i = 0; i < MAX_SLOTS; i++)
+            {
+                String name = this.playerData.getSavedTeamName(i);
+                if(name.isEmpty()) name = "UNNAMED";
+
+                List<String> team = this.playerData.getSavedTeam(i);
+                this.embed.addField("Slot " + (i + 1) + ": " + name, team.isEmpty() ? "Empty" : IntStream.range(0, team.size()).mapToObj(k -> (k + 1) + ": " + Pokemon.build(team.get(k)).getName()).collect(Collectors.joining("\n")), false);
+            }
         }
         else
         {

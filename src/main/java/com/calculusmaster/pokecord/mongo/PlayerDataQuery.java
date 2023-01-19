@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.mongo;
 
 import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.bounties.components.Bounty;
 import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerData;
@@ -28,6 +29,7 @@ import org.json.JSONArray;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class PlayerDataQuery extends MongoQuery
 {
@@ -92,7 +94,8 @@ public class PlayerDataQuery extends MongoQuery
                 .append("owned_eggs", new ArrayList<>())
                 .append("active_egg", "")
                 .append("owned_augments", new ArrayList<>())
-                .append("defeated_trainers", new ArrayList<>());
+                .append("defeated_trainers", new ArrayList<>())
+                .append("saved_teams", IntStream.range(0, CommandTeam.MAX_TEAM_SIZE).mapToObj(i -> new Document("name", "").append("team", new ArrayList<>())).toList());
 
         LoggerHelper.logDatabaseInsert(PlayerDataQuery.class, data);
 
@@ -326,6 +329,12 @@ public class PlayerDataQuery extends MongoQuery
         team.set(to, temp);
 
         this.clearTeam();
+        this.update(Updates.pushEach("team", team));
+    }
+
+    public void setTeam(List<String> team)
+    {
+        this.update(Updates.set("team", new ArrayList<>()));
         this.update(Updates.pushEach("team", team));
     }
 
@@ -701,5 +710,31 @@ public class PlayerDataQuery extends MongoQuery
     public boolean hasDefeatedAllTrainerClasses()
     {
         return TrainerManager.REGULAR_TRAINERS.stream().map(TrainerData::getTrainerClass).distinct().allMatch(this::hasDefeatedAllTrainersOfClass);
+    }
+
+    //key: "saved_teams"
+    public List<Document> getSavedTeams()
+    {
+        return this.document.getList("saved_teams", Document.class);
+    }
+
+    public void setSavedTeam(int slot, List<String> team)
+    {
+        this.update(Updates.set("saved_teams." + slot + ".team", team));
+    }
+
+    public List<String> getSavedTeam(int slot)
+    {
+        return this.getSavedTeams().get(slot).getList("team", String.class);
+    }
+
+    public String getSavedTeamName(int slot)
+    {
+        return this.getSavedTeams().get(slot).getString("name");
+    }
+
+    public void renameSavedTeam(int slot, String name)
+    {
+        this.update(Updates.set("saved_teams." + slot + ".name", name));
     }
 }

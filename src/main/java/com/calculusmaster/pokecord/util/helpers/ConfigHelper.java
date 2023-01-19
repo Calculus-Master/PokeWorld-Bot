@@ -42,6 +42,7 @@ public class ConfigHelper
             SpawnEventHelper.RAID_CHANCE = config.getInteger("spawn_event_raid_chance");
             PokemonEgg.MAX_EGGS = config.getInteger("egg_limit");
             CommandTeam.MAX_TEAM_SIZE = config.getInteger("team_limit");
+            CommandTeam.MAX_SLOTS = config.getInteger("team_slots");
             MasteryLevelManager.ACTIVE = config.getBoolean("mastery_levels");
             PokemonAI.ENABLED = config.getBoolean("experimental_ai");
             TrainerManager.REGULAR_TRAINER_INTERVAL = config.getInteger("trainer_rotation_interval");
@@ -68,6 +69,7 @@ public class ConfigHelper
             SpawnEventHelper.RAID_CHANCE = 1;
             PokemonEgg.MAX_EGGS = 9;
             CommandTeam.MAX_TEAM_SIZE = 6;
+            CommandTeam.MAX_SLOTS = 5;
             PokemonAI.ENABLED = true;
             TrainerManager.REGULAR_TRAINER_INTERVAL = 24 * 7;
         }
