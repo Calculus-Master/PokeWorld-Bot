@@ -24,7 +24,6 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -282,6 +281,11 @@ public class PlayerDataQuery extends MongoQuery
         return this.document.getList("team", String.class);
     }
 
+    public void setTeam(List<String> team)
+    {
+        this.update(Updates.set("team", team));
+    }
+
     public List<Pokemon> getTeamPokemon()
     {
         return this.getTeam().stream().map(s -> Pokemon.build(s, this.getPokemonList().indexOf(s) + 1)).toList();
@@ -289,7 +293,7 @@ public class PlayerDataQuery extends MongoQuery
 
     public void clearTeam()
     {
-        this.update(Updates.set("team", new JSONArray()));
+        this.setTeam(new ArrayList<>());
     }
 
     public void addPokemonToTeam(String UUID, int index)
@@ -301,8 +305,7 @@ public class PlayerDataQuery extends MongoQuery
         if(index >= team.size()) team.add(UUID);
         else team.set(index, UUID);
 
-        this.clearTeam();
-        this.update(Updates.pushEach("team", team));
+        this.setTeam(team);
     }
 
     public void removePokemonFromTeam(int index)
@@ -313,8 +316,7 @@ public class PlayerDataQuery extends MongoQuery
 
         team.remove(index);
 
-        this.clearTeam();
-        this.update(Updates.pushEach("team", team));
+        this.setTeam(team);
     }
 
     public void swapPokemonInTeam(int from, int to)
@@ -328,14 +330,7 @@ public class PlayerDataQuery extends MongoQuery
         team.set(from, team.get(to));
         team.set(to, temp);
 
-        this.clearTeam();
-        this.update(Updates.pushEach("team", team));
-    }
-
-    public void setTeam(List<String> team)
-    {
-        this.update(Updates.set("team", new ArrayList<>()));
-        this.update(Updates.pushEach("team", team));
+        this.setTeam(team);
     }
 
     //key: "favorites"
@@ -356,7 +351,7 @@ public class PlayerDataQuery extends MongoQuery
 
     public void clearFavorites()
     {
-        this.update(Updates.set("favorites", new JSONArray()));
+        this.update(Updates.set("favorites", new ArrayList<>()));
     }
 
 
@@ -592,7 +587,7 @@ public class PlayerDataQuery extends MongoQuery
     {
         for(String s : this.getPursuitIDs()) Bounty.delete(s);
 
-        this.update(Updates.set("pursuit", new JSONArray()));
+        this.update(Updates.set("pursuit", new ArrayList<>()));
 
         this.resetPursuitLevel();
     }
