@@ -1,6 +1,5 @@
-package com.calculusmaster.pokecord.game.bounties.components;
+package com.calculusmaster.pokecord.game.bounties;
 
-import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
 import com.calculusmaster.pokecord.game.bounties.objectives.core.*;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;

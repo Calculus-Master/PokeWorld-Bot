@@ -12,6 +12,7 @@ public class MasteryLevelManager
     public static boolean ACTIVE;
     public static final List<PokemonMasteryLevel> MASTERY_LEVELS = new ArrayList<>();
 
+    //TODO: Restructure Mastery Level
     public static void init()
     {
         // Level 0 – Introduction
@@ -80,9 +81,8 @@ public class MasteryLevelManager
 
         // Level 6 – Bounties
         // Bounties – p!bounties
-        // Pursuits (Limited to Mini/Small/Average) – p!pursuit
         PokemonMasteryLevel.create(6)
-                .withFeaturesUnlocked(Feature.ACCESS_BOUNTIES, Feature.ACCESS_PURSUITS_INTRO)
+                .withFeaturesUnlocked(Feature.ACCESS_BOUNTIES)
                 .withExperienceRequirement(400)
                 .withPokemonRequirement(175)
                 .withTaskRequirement(new PvPLevelTask(15))
@@ -189,9 +189,8 @@ public class MasteryLevelManager
 
         // Level 17 – Dynamaxing, Gigantamaxing and Max Moves
         // Dynamaxing (Duels) – p!use d
-        // Pursuits (Long/Journey/Legend) – p!pursuit
         PokemonMasteryLevel.create(17)
-                .withFeaturesUnlocked(Feature.DYNAMAX_POKEMON, Feature.ACCESS_PURSUITS_FULL)
+                .withFeaturesUnlocked(Feature.DYNAMAX_POKEMON)
                 .withExperienceRequirement(4000)
                 .withPokemonRequirement(800)
                 .withTaskRequirement(new SpecificLevelPokemonLevelTask(6, 65))

@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.game.duel;
 
 import com.calculusmaster.pokecord.commands.duel.CommandTarget;
-import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
+import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.component.*;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;

@@ -47,7 +47,6 @@ public enum Feature
 
     //Level 6
     ACCESS_BOUNTIES("Complete short bounties to earn gold and experience"),
-    ACCESS_PURSUITS_INTRO("Complete a pursuit (a series of bounties) to earn individual rewards as well as an overall pursuit completion reward"),
 
     //Level 7
     PVE_DUELS("Duel Wild Pokemon"),
@@ -94,7 +93,6 @@ public enum Feature
 
     //Level 17
     DYNAMAX_POKEMON("Dynamax Pokemon in Duels to improve their health and be able to use Max Moves"),
-    ACCESS_PURSUITS_FULL("Start Pursuits of much larger sizes for much larger rewards"),
 
     //Level 18
     PVE_DUELS_GAUNTLET("Challenge a Gauntlet Duel, a test of how many Pokemon your active Pokemon can defeat for large rewards"),

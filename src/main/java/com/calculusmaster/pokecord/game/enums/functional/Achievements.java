@@ -35,8 +35,6 @@ public enum Achievements
     REACHED_TOP_1_LEADERBOARD(2000, "Reached 1st Place on the Global Leaderboard!"),
     REACHED_TOP_10_LEADERBOARD(1000, "Reached Top 10 on the Global Leaderboard!"),
     COMPLETED_FIRST_BOUNTY(500, "Completed your first Bounty!"),
-    COMPLETED_FIRST_PURSUIT(1000, "Completed your first Pursuit"),
-    COMPLETED_FIRST_LEGEND_PURSUIT(20000, "Completed your first Legend size Pursuit!"),
     PARTICIPATED_FIRST_TOURNAMENT(500, "Participated in your first Tournament!"),
     WON_FIRST_TOURNAMENT(5000, "Won your first Tournament!"),
     OWNED_10_POKEMON(200, "Owned 10 Pokemon!"),

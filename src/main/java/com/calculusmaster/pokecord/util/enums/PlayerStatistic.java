@@ -34,7 +34,6 @@ public enum PlayerStatistic
     MOVES_USED("moves_used"),
     ZMOVES_USED("zmoves_used"),
     MAX_MOVES_USED("max_moves_used"),
-    PURSUITS_COMPLETED("pursuits_completed"),
     MASTERY_EXP_EARNED("mastery_exp_earned");
 
     public String key;

@@ -236,10 +236,6 @@ public class Commands
                 .setCommand(CommandBounties::new)
                 .setCategory(Category.PLAYER);
 
-        register("pursuit")
-                .setCommand(CommandPursuit::new)
-                .setCategory(Category.PLAYER);
-
         register("target")
                 .setCommand(CommandTarget::new)
                 .setCategory(Category.DUEL);

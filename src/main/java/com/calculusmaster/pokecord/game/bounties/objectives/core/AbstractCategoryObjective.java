@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.game.bounties.objectives.core;
 
-import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
+import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
 import org.bson.Document;
 

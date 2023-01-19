@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.game.trade;
 
-import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
+import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.trade.elements.TradeOffer;
 import com.calculusmaster.pokecord.game.trade.elements.TradePlayer;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;

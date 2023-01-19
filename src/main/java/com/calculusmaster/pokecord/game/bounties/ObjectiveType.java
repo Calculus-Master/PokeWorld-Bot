@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game.bounties.enums;
+package com.calculusmaster.pokecord.game.bounties;
 
 import com.calculusmaster.pokecord.game.bounties.objectives.*;
 import com.calculusmaster.pokecord.game.bounties.objectives.core.Objective;

@@ -2,8 +2,8 @@ package com.calculusmaster.pokecord.mongo;
 
 import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
-import com.calculusmaster.pokecord.game.bounties.components.Bounty;
-import com.calculusmaster.pokecord.game.bounties.enums.ObjectiveType;
+import com.calculusmaster.pokecord.game.bounties.Bounty;
+import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerData;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
@@ -89,7 +89,6 @@ public class PlayerDataQuery extends MongoQuery
                 .append("owned_forms", new ArrayList<>())
                 .append("owned_megas", new ArrayList<>())
                 .append("bounties", new ArrayList<>())
-                .append("pursuit", new ArrayList<>())
                 .append("owned_eggs", new ArrayList<>())
                 .append("active_egg", "")
                 .append("owned_augments", new ArrayList<>())
@@ -513,21 +512,6 @@ public class PlayerDataQuery extends MongoQuery
                 if(b.getObjective().isComplete()) this.directMessage("You have unclaimed bounties!");
             }
         }
-
-        //PursuitBuilder Bounty
-        if(this.hasPursuit() && this.getPursuitLevel() <= this.getPursuitIDs().size())
-        {
-            Bounty pursuit = this.getCurrentPursuitBounty();
-
-            if(!pursuit.getObjective().isComplete())
-            {
-                checker.accept(pursuit);
-
-                pursuit.updateProgression();
-
-                if(pursuit.getObjective().isComplete()) this.directMessage("Your active Pursuit bounty is complete!");
-            }
-        }
     }
 
     public void updateBountyProgression(final Consumer<Bounty> checker)
@@ -560,52 +544,6 @@ public class PlayerDataQuery extends MongoQuery
     public void removeBounty(String ID)
     {
         this.update(Updates.pull("bounties", ID));
-    }
-
-    //key: "pursuit"
-    public List<String> getPursuitIDs()
-    {
-        return this.document.getList("pursuit", String.class);
-    }
-
-    public void setPursuit(List<String> IDs)
-    {
-        this.update(Updates.pushEach("pursuit", IDs));
-    }
-
-    public Bounty getCurrentPursuitBounty()
-    {
-        return Bounty.fromDB(this.getPursuitIDs().get(this.getPursuitLevel() - 1));
-    }
-
-    public boolean hasPursuit()
-    {
-        return !this.getPursuitIDs().isEmpty();
-    }
-
-    public void removePursuit()
-    {
-        for(String s : this.getPursuitIDs()) Bounty.delete(s);
-
-        this.update(Updates.set("pursuit", new ArrayList<>()));
-
-        this.resetPursuitLevel();
-    }
-
-    //key: "pursuit_level"
-    public int getPursuitLevel()
-    {
-        return this.document.getInteger("pursuit_level");
-    }
-
-    public void increasePursuitLevel()
-    {
-        this.update(Updates.inc("pursuit_level", 1));
-    }
-
-    public void resetPursuitLevel()
-    {
-        this.update(Updates.set("pursuit_level", 0));
     }
 
     //key: "owned_eggs"
