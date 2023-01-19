@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commandsv2;
 
 import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.commandsv2.economy.CommandBalance;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
@@ -41,7 +42,10 @@ public class CommandHandler extends ListenerAdapter
 
     public static void init()
     {
+        CommandBalance.init();
 
+        //TODO: Global Commands
+        Pokecord.BOT_JDA.getGuildById("873993084155887617").updateCommands().addCommands(COMMANDS.stream().map(CommandData::getSlashCommandData).toList()).queue();
     }
 
     //Listeners

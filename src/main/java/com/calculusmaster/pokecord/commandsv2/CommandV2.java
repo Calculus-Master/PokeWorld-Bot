@@ -40,7 +40,11 @@ public abstract class CommandV2
     }
 
     //For Subclasses
-
+    protected boolean error(String errorMessage)
+    {
+        this.response = errorMessage;
+        return false;
+    }
 
     //Internal
     protected void setPlayer(User player)
@@ -68,7 +72,7 @@ public abstract class CommandV2
 
     protected void respond(Consumer<String> text, Consumer<MessageEmbed> embed)
     {
-        if(!this.response.isEmpty() && this.embed != null)
+        if(!this.response.isEmpty() && (this.embed != null && !this.embed.isEmpty()))
         {
             text.accept(this.response);
             this.channel.sendMessageEmbeds(this.embed.build()).queue();
