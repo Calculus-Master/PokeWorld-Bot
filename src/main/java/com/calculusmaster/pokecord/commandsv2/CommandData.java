@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.commandsv2;
 
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.util.List;
@@ -11,6 +12,7 @@ public class CommandData
     private final String commandName;
     private Supplier<CommandV2> supplier;
     private SlashCommandData slashCommandData;
+    private Feature feature;
 
     //Interaction Components
     private List<String> buttonIDs;
@@ -23,6 +25,7 @@ public class CommandData
         this.commandName = commandName;
         this.supplier = null;
         this.slashCommandData = null;
+        this.feature = null;
 
         this.buttonIDs = List.of();
         this.modalIDs = List.of();
@@ -49,6 +52,12 @@ public class CommandData
     public CommandData withCommand(SlashCommandData slashCommandData)
     {
         this.slashCommandData = slashCommandData;
+        return this;
+    }
+
+    public CommandData withFeature(Feature feature)
+    {
+        this.feature = feature;
         return this;
     }
 
@@ -96,6 +105,16 @@ public class CommandData
         return this.entitySelectIDs.contains(entitySelectID);
     }
 
+    public boolean hasFeature()
+    {
+        return this.feature != null;
+    }
+
+    public Feature getFeature()
+    {
+        return this.feature;
+    }
+
     public SlashCommandData getSlashCommandData()
     {
         return this.slashCommandData;
@@ -103,7 +122,9 @@ public class CommandData
 
     public CommandV2 getInstance()
     {
-        return this.supplier.get();
+        CommandV2 instance = this.supplier.get();
+        instance.setCommandData(this);
+        return instance;
     }
 
     public String getCommandName()

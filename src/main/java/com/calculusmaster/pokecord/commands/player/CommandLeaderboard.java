@@ -188,6 +188,7 @@ public class CommandLeaderboard extends Command
         ACHIEVEMENTS(2.5, p -> p.getAchievementsList().size(), "Achievements"),
         MASTERY_LEVEL(1.9, p -> p.getLevel(), "Pokemon Mastery Level"),
         POKEMON_PRESTIGED(2.5, p -> p.getPokemon().stream().filter(Pokemon::hasPrestiged).mapToInt(Pokemon::getPrestigeLevel).sum(), "Prestiged Pokemon"),
+        POKEMON_MASTERED(5.0, p -> p.getPokemon().stream().filter(Pokemon::isMastered).mapToInt(i -> 1).sum(), "Mastered Pokemon"),
         CREDITS(1.25, p -> p.getCredits(), "Credits"),
         REDEEMS(1.85, p -> p.getRedeems(), "Redeems"),
         TMS(1.5, p -> p.getTMList().size(), "TMs"),

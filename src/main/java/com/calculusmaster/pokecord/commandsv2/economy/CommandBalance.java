@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commandsv2.economy;
 
 import com.calculusmaster.pokecord.commandsv2.CommandData;
 import com.calculusmaster.pokecord.commandsv2.CommandV2;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -15,6 +16,7 @@ public class CommandBalance extends CommandV2
         CommandData
                 .create("balance")
                 .withConstructor(CommandBalance::new)
+                .withFeature(Feature.VIEW_BALANCE)
                 .withCommand(Commands
                         .slash("balance", "View your credits and redeems.")
                         .addOption(OptionType.USER, "user", "[Optional] The user who you want to see the balance of.", false)

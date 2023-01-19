@@ -1,5 +1,7 @@
 package com.calculusmaster.pokecord.commandsv2;
 
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
+import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -14,11 +16,14 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.EntitySelectInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 
+import java.awt.*;
 import java.util.Objects;
 import java.util.function.Consumer;
 
 public abstract class CommandV2
 {
+    private CommandData commandData;
+
     protected User player;
     protected Guild server;
     protected TextChannel channel;
@@ -81,6 +86,11 @@ public abstract class CommandV2
         else if(this.embed != null) embed.accept(this.embed.build());
     }
 
+    protected void respondInvalidMasteryLevel(Feature feature)
+    {
+        this.response = "This feature requires **Pokemon Mastery Level " + feature.getRequiredLevel() + "**!";
+    }
+
     //Parsers
     public void parseSlashCommand(SlashCommandInteractionEvent event)
     {
@@ -89,7 +99,18 @@ public abstract class CommandV2
         this.setChannel(event.getChannel().asTextChannel());
 
         this.initResponses();
-        boolean result = this.slashCommandLogic(event);
+
+        boolean result;
+        if(this.commandData.hasFeature() && MasteryLevelManager.ACTIVE && this.playerData.getLevel() < this.commandData.getFeature().getRequiredLevel())
+        {
+            this.respondInvalidMasteryLevel(this.commandData.getFeature());
+            result = false;
+        }
+        else result = this.slashCommandLogic(event);
+
+        if(!result && this.embed != null && !this.embed.isEmpty()) this.embed.setColor(Color.RED);
+        if(!result && !this.response.isEmpty()) this.response = "[ERROR] " + this.response;
+
         this.respond(s -> event.reply(s).queue(), e -> event.replyEmbeds(e).queue());
     }
 
@@ -154,4 +175,10 @@ public abstract class CommandV2
     protected boolean modalLogic(ModalInteractionEvent event) { return false; }
     protected boolean stringSelectLogic(StringSelectInteractionEvent event) { return false; }
     protected boolean entitySelectLogic(EntitySelectInteractionEvent event) { return false; }
+
+    //Misc
+    public void setCommandData(CommandData commandData)
+    {
+        this.commandData = commandData;
+    }
 }
