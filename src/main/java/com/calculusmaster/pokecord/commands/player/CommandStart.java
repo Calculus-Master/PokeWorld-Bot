@@ -81,7 +81,7 @@ public class CommandStart extends Command
     {
         LinkedHashMap<Stat, Integer> ivs = new LinkedHashMap<>();
         SplittableRandom r = new SplittableRandom();
-        for(Stat s : Stat.values()) ivs.put(s, r.nextInt(22, 32));
+        for(Stat s : Stat.values()) ivs.put(s, r.nextInt(22, 30));
         return ivs;
     }
 }
