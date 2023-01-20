@@ -66,6 +66,11 @@ public class CommandTeam extends Command
                 return this;
             }
         }
+        else if(DuelHelper.isInDuel(this.player.getId()))
+        {
+            this.response = "You cannot edit your team while in a Duel!";
+            return this;
+        }
 
         if(set || add)
         {

@@ -31,4 +31,5 @@ dependencies {
     implementation 'org.jooq:joor:0.9.14'
     implementation 'org.jooq:jool:0.9.14'
     implementation 'one.util:streamex:0.8.1'
+    implementation('net.sourceforge.htmlunit:htmlunit:2.69.0')
 }
