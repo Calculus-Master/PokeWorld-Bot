@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.duel.CommandTarget;
 import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.component.*;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
 import com.calculusmaster.pokecord.game.enums.elements.*;
@@ -2646,8 +2647,7 @@ public class Duel
         int winner = this.getWinner().ID.equals(this.players[0].ID) ? 0 : 1;
         int loser = winner == 0 ? 1 : 0;
 
-        //TODO: Take another pass at Duel Rewards
-        int c = this.players[0].team.size() >= 6 ? this.giveWinCredits() : new Random().nextInt(11) + 10;
+        int c = new Random().nextInt(11) + 10;
 
         //If not matchmade Duel, Target system
         if(this.channels.size() == 1)
@@ -2673,6 +2673,8 @@ public class Duel
                 embed.setFooter("The Server Target has been defeated!");
             }
         }
+        // Casual Matchmade Duel Rewards
+        else if(this instanceof CasualMatchmadeDuel) c = new Random().nextInt(100, 201);
 
         embed.setDescription(this.getWinner().getName() + " has won!" + (c != 0 ? "\nThey earned " + c + " credits!" : ""));
 

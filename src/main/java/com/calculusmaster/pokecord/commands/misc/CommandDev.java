@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.misc;
 import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
 import com.calculusmaster.pokecord.game.enums.elements.Ability;
 import com.calculusmaster.pokecord.game.enums.elements.Location;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
@@ -139,6 +140,11 @@ public class CommandDev extends Command
             case "updatepokemoncache" -> {
                 PokemonDataCache.CACHE.clear();
                 PokemonDataCache.init();
+            }
+            case "viewcasualqueues" -> {
+                String msg = String.join("\n", List.of(CasualMatchmadeDuel.QUEUE_1v1.stream().map(mp -> "(ID: %s, Channel: %s)".formatted(mp.getID(), mp.getTextChannel().getName())).collect(Collectors.joining(", "))));
+                if(msg.isBlank()) msg = "All queues are empty";
+                this.event.getChannel().sendMessage(msg).queue();
             }
         }
 

@@ -5,6 +5,8 @@ import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
+import com.calculusmaster.pokecord.game.duel.teamrules.TeamRestrictionRegistry;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
@@ -56,6 +58,43 @@ public class CommandDuel extends Command
         {
             this.response = "Duels are not allowed in this channel!";
             return this;
+        }
+        else if(this.msg[1].equals("queue"))
+        {
+            if(this.msg.length == 3 && this.msg[2].equals("leave"))
+            {
+                if(!CasualMatchmadeDuel.isQueueing(this.player.getId())) this.response = "You are not currently queuing!";
+                else
+                {
+                    CasualMatchmadeDuel.dequeuePlayer(this.player.getId());
+
+                    this.response = "You have left the queue!";
+                }
+            }
+            else if(this.msg.length == 3 && this.isNumeric(2) && List.of(1, 3, 6).contains(this.getInt(2)))
+            {
+                int size = this.getInt(2);
+
+                if(CasualMatchmadeDuel.isQueueing(this.player.getId())) this.response = "You are already queuing!";
+                else if(this.playerData.getTeam().isEmpty()) this.response = "You must have a team to queue!";
+                else if(size != 1 && this.playerData.getTeam().size() > size) this.response = "Your team must be have at most " + this.getInt(2) + " Pokemon!";
+                else if(size != 1 && !TeamRestrictionRegistry.STANDARD.validate(this.playerData.getTeamPokemon())) this.response = "Your team does not meet the Standard Duel Team restrictions!";
+                else
+                {
+                    if(size != 1 && this.playerData.getTeam().size() < size) this.playerData.directMessage("Warning! Your team is smaller than the size of the duel you are queuing for!");
+
+                    CasualMatchmadeDuel.QueueType type = switch(this.getInt(2)) {
+                        case 1 -> CasualMatchmadeDuel.QueueType.ONES;
+                        case 3 -> CasualMatchmadeDuel.QueueType.THREES;
+                        case 6 -> CasualMatchmadeDuel.QueueType.SIXES;
+                        default -> throw new IllegalStateException("Invalid QueueType for Casual Matchmade Duel: " + this.getInt(2));
+                    };
+
+                    CasualMatchmadeDuel.queuePlayer(this.player.getId(), this.event.getGuildChannel().asTextChannel(), type);
+
+                    this.response = "You've entered the queue for a " + size + "v" + size + " duel!";
+                }
+            }
         }
         else if(this.msg.length >= 3 && (!isNumeric(2) || this.getInt(2) > CommandTeam.MAX_TEAM_SIZE || this.getInt(2) > this.playerData.getTeam().size()))
         {

@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.commands.duel.CommandTarget;
 import com.calculusmaster.pokecord.commands.economy.CommandShop;
 import com.calculusmaster.pokecord.commands.pokemon.CommandBreed;
 import com.calculusmaster.pokecord.commandsv2.CommandHandler;
+import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
 import com.calculusmaster.pokecord.game.duel.teamrules.TeamRestrictionRegistry;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
 import com.calculusmaster.pokecord.game.moves.Move;
@@ -115,6 +116,7 @@ public class Pokecord
         //Initializations Requiring Bot to be Loaded
         LoggerHelper.init("Spawn Event & Location Event Thread Pools", ThreadPoolHandler::init);
         LoggerHelper.init("Spawn Event Interval Updater", Listener::startSpawnIntervalUpdater);
+        LoggerHelper.init("Casual Matchmade Duels", CasualMatchmadeDuel::init);
 
         end = System.currentTimeMillis();
 
