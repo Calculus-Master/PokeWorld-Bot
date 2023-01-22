@@ -112,7 +112,7 @@ public class CommandBounties extends Command
 
             for(int i = 0; i < bounties.size(); i++)
             {
-                this.embed.addField("Bounty " + (i + 1), bounties.get(i).getOverview(), true);
+                this.embed.addField("Bounty " + (i + 1), bounties.get(i).getOverview(), false);
             }
 
             this.embed.setTitle(this.player.getName() + "'s Bounties");
