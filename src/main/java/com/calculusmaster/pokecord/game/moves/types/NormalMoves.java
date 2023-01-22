@@ -353,6 +353,7 @@ public class NormalMoves
                 .execute();
     }
 
+    //TODO: After You
     public String AfterYou(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return move.getNotImplementedResult();
@@ -364,8 +365,11 @@ public class NormalMoves
         return user.getName() + " braces for the next attack!";
     }
 
+    //TODO: Disable
     public String Disable(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        if(opponent.hasAbility(Ability.AROMA_VEIL)) return Ability.AROMA_VEIL.formatActivation(opponent.getName(), move.getName() + " has no effect on " + opponent.getName() + "!");
+
         return move.getNotImplementedResult();
     }
 
@@ -852,6 +856,8 @@ public class NormalMoves
     //TODO: Force opponent to use last used move for 3 turns
     public String Encore(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        if(opponent.hasAbility(Ability.AROMA_VEIL)) return Ability.AROMA_VEIL.formatActivation(opponent.getName(), move.getName() + " has no effect on " + opponent.getName() + "!");
+
         return move.getNotImplementedResult();
     }
 
@@ -1325,6 +1331,7 @@ public class NormalMoves
 
     public String Yawn(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        if(opponent.hasAbility(Ability.VITAL_SPIRIT)) return Ability.VITAL_SPIRIT.formatActivation(opponent.getName(), move.getNoEffectResult(opponent));
         duel.data(user.getUUID()).yawnTurns++;
         return user.getName() + " is feeling drowsy!";
     }

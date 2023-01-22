@@ -75,6 +75,7 @@ public class PokemonDuelAttributes
     public boolean obstructUsed;
 
     public boolean disguiseActivated;
+    public boolean flashFireActivated;
 
     public void setDefaults()
     {
@@ -146,6 +147,7 @@ public class PokemonDuelAttributes
         this.aquaRingUsed = false;
 
         this.disguiseActivated = false;
+        this.flashFireActivated = false;
     }
 
     public PokemonDuelAttributes(String UUID)

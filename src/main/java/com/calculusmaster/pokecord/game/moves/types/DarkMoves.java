@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game.moves.types;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.enums.elements.Ability;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.items.Item;
@@ -36,6 +37,8 @@ public class DarkMoves
 
     public String Taunt(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        if(opponent.hasAbility(Ability.AROMA_VEIL)) return Ability.AROMA_VEIL.formatActivation(opponent.getName(), move.getName() + " has no effect on " + opponent.getName() + "!");
+
         duel.data(user.getUUID()).tauntTurns = 3;
         return opponent.getName() + " is now unable to use Status moves for 3 turns!";
     }
@@ -313,6 +316,8 @@ public class DarkMoves
 
     public String Torment(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
+        if(opponent.hasAbility(Ability.AROMA_VEIL)) return Ability.AROMA_VEIL.formatActivation(opponent.getName(), move.getName() + " has no effect on " + opponent.getName() + "!");
+
         duel.data(opponent.getUUID()).isTormented = true;
         return opponent.getName() + " was tormented! " + opponent.getName() + " can't use the same move twice in a row!";
     }

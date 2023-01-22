@@ -25,6 +25,8 @@ public class Move
     public static final List<String> BITING_MOVES = List.of("Bite", "Crunch", "Fire Fang", "Fishious Rend", "Hyper Fang", "Ice Fang", "Jaw Lock", "Poison Fang", "Psychic Fangs", "Thunder Fang");
     public static final List<String> PULSE_MOVES = List.of("Aura Sphere", "Dark Pulse", "Dragon Pulse", "Heal Pulse", "Origin Pulse", "Terrain Pulse", "Water Pulse");
     public static final List<String> BALL_AND_BOMB_MOVES = List.of("Acid Spray", "Aura Sphere", "Barrage", "Beak Blast", "Bullet Seed", "Egg Bomb", "Electro Ball", "Energy Ball", "Focus Blast", "Gyro Ball", "Ice Ball", "Magnet Bomb", "Mist Ball", "Mud Bomb", "Octazooka", "Pollen Puff", "Pyro Ball", "Rock Blast", "Rock Wrecker", "Searing Shot", "Seed Bomb", "Shadow Ball", "Sludge Bomb", "Weather Ball", "Zap Cannon");
+    public static final List<String> OHKO_MOVES = List.of("Fissure", "Guillotine", "Horn Drill", "Sheer Cold");
+    public static final List<String> DIRECT_DAMAGE_MOVES = List.of("Bide", "Comeuppance", "Counter", "Dragon Rage", "Endeavor", "Final Gambit", "Guardian of Alola", "Metal Burst", "Mirror Coat", "Nature's Madness", "Night Shade", "Psywave", "Ruination", "Seismic Toss", "Sonic Boom", "Super Fang");
 
     private String name;
     private MoveData data;
@@ -41,7 +43,7 @@ public class Move
     private double accuracyMultiplier;
 
     public int critChance;
-    private boolean hitCrit;
+    public boolean hitCrit;
 
     public static void init()
     {
@@ -187,11 +189,6 @@ public class Move
         else throw new IllegalStateException("Effectiveness multiplier is a strange value: " + e);
     }
 
-    public String getRecoilDamageResult(Pokemon user, int dmg)
-    {
-        return user.getName() + " took **" + dmg + "** damage in recoil!";
-    }
-
     public String getNoEffectResult(Pokemon opponent)
     {
         return "It **doesn't affect** " + opponent.getName() + "...";
@@ -319,6 +316,12 @@ public class Move
 
         //Ability: Neuroforce
         if(user.hasAbility(Ability.NEUROFORCE) && type > 1) power = (int)(power * 1.25);
+
+        //Ability: Hustle
+        if(user.hasAbility(Ability.HUSTLE)) atkStat *= 1.5;
+
+        //Ability: Defeatist
+        if(user.hasAbility(Ability.DEFEATIST) && user.getHealth() <= user.getMaxHealth(0.5)) atkStat *= 0.5;
 
         //Augment: Phantom Targeting
         if(user.hasAugment(PokemonAugment.PHANTOM_TARGETING) && type > 1.0) type *= 1.5;

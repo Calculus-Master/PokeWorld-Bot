@@ -23,6 +23,14 @@ public class StatusConditionEffect extends MoveEffect
     @Override
     public String get()
     {
+        if(this.user.hasAbility(Ability.SERENE_GRACE))
+        {
+            this.percent *= 2;
+
+            //TODO: Serene Grace result
+            //result.append(Ability.SERENE_GRACE.formatActivation(this.user.getName(), this.move.getName() + " has been graced!")).append(" ");
+        }
+
         if(new Random().nextInt(100) < this.percent)
         {
             Pokemon p = this.userChange ? this.user : this.opponent;
@@ -52,8 +60,20 @@ public class StatusConditionEffect extends MoveEffect
             if(p.hasAbility(Ability.WATER_VEIL) && this.status.equals(StatusCondition.BURNED))
                 return Ability.WATER_VEIL.formatActivation(p.getName(), p.getName() + " was immune to the burn!");
 
+            if(p.hasAbility(Ability.VITAL_SPIRIT) && this.status.equals(StatusCondition.ASLEEP))
+                return Ability.VITAL_SPIRIT.formatActivation(p.getName(), p.getName() + " did not fall asleep!");
+
+            if(p.hasAbility(Ability.AROMA_VEIL) && this.status.equals(StatusCondition.INFATUATED))
+                return Ability.AROMA_VEIL.formatActivation(p.getName(), p.getName() + " was not affected by the infatuation!");
+
             if(!this.userChange && p.hasAbility(Ability.LEAF_GUARD) && (this.duel.weather.get().equals(Weather.HARSH_SUNLIGHT) || this.duel.weather.get().equals(Weather.EXTREME_HARSH_SUNLIGHT)) && List.of(StatusCondition.ASLEEP, StatusCondition.BURNED, StatusCondition.PARALYZED, StatusCondition.POISONED, StatusCondition.BADLY_POISONED, StatusCondition.FROZEN).contains(this.status))
                 return Ability.LEAF_GUARD.formatActivation(p.getName(), p.getName() + " was protected from the Status Condition!");
+
+            if(p.hasAbility(Ability.MAGMA_ARMOR) && this.status.equals(StatusCondition.FROZEN))
+                return Ability.MAGMA_ARMOR.formatActivation(p.getName(), p.getName() + " cannot be frozen!");
+
+            if(p.hasAbility(Ability.INNER_FOCUS) && this.status.equals(StatusCondition.FLINCHED))
+                return Ability.INNER_FOCUS.formatActivation(p.getName(), p.getName() + " did not flinch!");
 
             if((this.status.equals(StatusCondition.POISONED) || this.status.equals(StatusCondition.BADLY_POISONED)) && !this.userChange)
             {

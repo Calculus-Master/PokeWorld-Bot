@@ -38,6 +38,11 @@ public class DuelHelper
         DUELS.removeIf(d -> Arrays.stream(d.getPlayers()).anyMatch(p -> p.ID.equals(id)));
     }
 
+    public static Duel findDuel(Pokemon pokemon)
+    {
+        return DuelHelper.DUELS.stream().filter(duel -> Arrays.stream(duel.getPlayers()).anyMatch(p -> p.team.contains(pokemon))).findFirst().orElse(null);
+    }
+
     //Core Components
 
     public record TurnAction(ActionType action, int moveInd, int swapInd) {}

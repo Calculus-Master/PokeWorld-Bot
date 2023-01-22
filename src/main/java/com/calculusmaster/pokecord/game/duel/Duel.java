@@ -603,7 +603,36 @@ public class Duel
             {
                 c.removeStatusCondition(StatusCondition.BURNED);
 
-                statusResults.add(Ability.WATER_VEIL.formatActivation(c.getName(), "%s's is no longer burned!".formatted(c.getName())));
+                statusResults.add(Ability.WATER_VEIL.formatActivation(c.getName(), "%s is no longer burned!".formatted(c.getName())));
+            }
+
+            if(c.hasAbility(Ability.VITAL_SPIRIT) && c.hasStatusCondition(StatusCondition.ASLEEP))
+            {
+                c.removeStatusCondition(StatusCondition.ASLEEP);
+                this.data(this.current).asleepTurns = 0;
+
+                statusResults.add(Ability.VITAL_SPIRIT.formatActivation(c.getName(), c.getName() + " woke up!"));
+            }
+
+            if(c.hasAbility(Ability.AROMA_VEIL) && c.hasStatusCondition(StatusCondition.INFATUATED))
+            {
+                statusResults.add(Ability.AROMA_VEIL.formatActivation(c.getName(), "The infatuation has no effect!"));
+
+                c.removeStatusCondition(StatusCondition.INFATUATED);
+            }
+
+            if(c.hasAbility(Ability.INNER_FOCUS) && c.hasStatusCondition(StatusCondition.FLINCHED))
+            {
+                statusResults.add(Ability.INNER_FOCUS.formatActivation(c.getName(), "Flinching was prevented!"));
+
+                c.removeStatusCondition(StatusCondition.FLINCHED);
+            }
+
+            if(c.hasAbility(Ability.MAGMA_ARMOR) && c.hasStatusCondition(StatusCondition.FROZEN))
+            {
+                statusResults.add(Ability.MAGMA_ARMOR.formatActivation(c.getName(), c.getName() + " thawed out!"));
+
+                c.removeStatusCondition(StatusCondition.FROZEN);
             }
 
             //Damage Status Conditions
@@ -734,6 +763,14 @@ public class Duel
                         statusResults.add("%s is in a nightmare! The nightmare dealt %s damage!".formatted(c.getName(), statusDamage));
                     }
 
+                    if(o.hasAbility(Ability.BAD_DREAMS))
+                    {
+                        statusDamage = c.getMaxHealth(1 / 8.);
+                        c.damage(statusDamage);
+
+                        statusResults.add(Ability.BAD_DREAMS.formatActivation(o.getName(), c.getName() + " took an additional " + statusDamage + " damage!"));
+                    }
+
                     statusResults.add("%s is asleep!".formatted(c.getName()));
 
                     if(!move.getName().equals("Snore"))
@@ -859,6 +896,13 @@ public class Duel
             move.setAccuracyMultiplier(multiplier);
 
             turnResult.add(Ability.VICTORY_STAR.formatActivation(c.getName(), "The accuracy of " + move.getName() + " was %s!".formatted(augment ? " greatly raised due to the " + PokemonAugment.SHINING_STAR.getAugmentName() + " augment!" : " raised!")));
+        }
+
+        if(c.hasAbility(Ability.HUSTLE) && move.is(Category.PHYSICAL) && !Move.OHKO_MOVES.contains(move.getName()))
+        {
+            move.setAccuracyMultiplier(0.8);
+
+            turnResult.add(Ability.HUSTLE.formatActivation(c.getName(), "The accuracy of " + move.getName() + " was lowered!"));
         }
 
         //Pre-Move Checks
@@ -1191,6 +1235,9 @@ public class Duel
 
             turnResult.add(this.players[this.current].active.getName() + " healed for " + amount + " HP due to its Aqua Ring!");
         }
+
+        if(this.data(this.current).flashFireActivated && move.is(Type.FIRE))
+            move.setDamageMultiplier(1.5);
 
         List<String> minimizeBoostMoves = List.of("Body Slam", "Stomp", "Dragon Rush", "Steamroller", "Heat Crash", "Heavy Slam", "Flying Press", "Malicious Moonsault", "Double Iron Bash");
         if(this.data(this.other).isMinimized && minimizeBoostMoves.contains(move.getName())) move.setPower(2.0);
@@ -1735,6 +1782,20 @@ public class Duel
         {
             turnResult.add(Ability.DAMP.formatActivation((c.hasAbility(Ability.DAMP) ? c : o).getName(), move.getName() + " failed!"));
         }
+        //Ability: Flash Fire
+        else if(o.hasAbility(Ability.FLASH_FIRE) && move.is(Type.FIRE))
+        {
+            this.data(o.getUUID()).flashFireActivated = true;
+
+            turnResult.add(Ability.FLASH_FIRE.formatActivation(o.getName(), o.getName() + " is immune to the attack! The power of its Fire-type moves is boosted by 50%!"));
+        }
+        //Ability: Flash Fire
+        else if(o.hasAbility(Ability.SAP_SIPPER) && move.is(Type.GRASS) && !move.is("Aromatherapy"))
+        {
+            o.changes().change(Stat.ATK, 1);
+
+            turnResult.add(Ability.SAP_SIPPER.formatActivation(o.getName(), o.getName() + " is immune to the move! It's Attack was raised by 1 stage!"));
+        }
         //Augment: Pinnacle Evasion
         else if(o.hasAugment(PokemonAugment.PINNACLE_EVASION) && new Random().nextFloat() < 0.05)
         {
@@ -1819,6 +1880,10 @@ public class Duel
             if(this.weather.get().equals(Weather.STRONG_WINDS) && move.is(Type.FLYING) && TypeEffectiveness.getEffectiveness(this.players[this.other].active.getType()).get(move.getType()) > 1.0)
                 move.setDamageMultiplier(0.5);
 
+            //Ability: Multiscale
+            if(o.hasAbility(Ability.MULTISCALE) && o.getHealth() == o.getMaxHealth() && !Move.DIRECT_DAMAGE_MOVES.contains(move.getName()))
+                move.setDamageMultiplier(0.5);
+
             //Augment: True Strike
             boolean isTrueStrikeValid = c.hasAugment(PokemonAugment.TRUE_STRIKE) && move.is(Category.PHYSICAL) && move.is(Type.FIGHTING) && move.getPower() > 50;
             if(isTrueStrikeValid) move.setPower(move.getPower() - 30);
@@ -1880,6 +1945,52 @@ public class Duel
                 o.changes().change(Stat.ATK, 1);
 
                 turnResult.add(Ability.JUSTIFIED.formatActivation(o.getName(), o.getName() + "'s Attack rose by 1 stage!"));
+            }
+
+            if(o.hasAbility(Ability.ANGER_POINT) && move.hitCrit)
+            {
+                o.changes().change(Stat.ATK, 12);
+
+                turnResult.add(Ability.ANGER_POINT.formatActivation(o.getName(), o.getName() + "'s Attack was maximized!"));
+            }
+
+            if(o.hasAbility(Ability.COLOR_CHANGE) && !o.isType(move.getType()))
+            {
+                o.setType(move.getType());
+
+                turnResult.add(Ability.COLOR_CHANGE.formatActivation(o.getName(), o.getName() + "'s Type was changed to " + move.getType().getStyledName() + "!"));
+            }
+
+            if(c.hasAbility(Ability.POISON_TOUCH) && move.isContact() && new Random().nextInt(100) < 30 && !o.hasStatusCondition(StatusCondition.POISONED))
+            {
+                o.addStatusCondition(StatusCondition.POISONED);
+
+                turnResult.add(Ability.POISON_TOUCH.formatActivation(c.getName(), o.getName() + " was poisoned!"));
+            }
+
+            if((c.hasItem(Item.KINGS_ROCK) || c.hasItem(Item.RAZOR_FANG)) && !move.is(Category.STATUS) && !o.hasStatusCondition(StatusCondition.FLINCHED))
+            {
+                int percent = 10;
+                if(c.hasAbility(Ability.SERENE_GRACE))
+                {
+                    percent *= 2;
+
+                    turnResult.add(Ability.SERENE_GRACE.formatActivation(c.getName(), move.getName() + " has been graced!"));
+                }
+
+                if(new Random().nextInt(100) < percent)
+                {
+                    o.addStatusCondition(StatusCondition.FLINCHED);
+
+                    turnResult.add(c.getName() + "'s " + c.getItem().getStyledName() + " activated! " + o.getName() + " flinched!");
+                }
+            }
+
+            if(o.hasAbility(Ability.STEAM_ENGINE) && move.is(Type.FIRE, Type.WATER))
+            {
+                o.changes().change(Stat.SPD, 6);
+
+                turnResult.add(Ability.STEAM_ENGINE.formatActivation(o.getName(), o.getName() + "'s Speed was increased by 6 stages!"));
             }
 
             if(c.hasAugment(PokemonAugment.SHADOW_PROPULSION) && move.is(Type.GHOST) && new Random().nextFloat() < 0.33F)

@@ -44,6 +44,13 @@ public class StatChangeEffect extends MoveEffect
         Map<Integer, List<Stat>> changesMap = new HashMap<>();
         List<Stat> mistImmuneStats = new ArrayList<>();
 
+        if(this.user.hasAbility(Ability.SERENE_GRACE))
+        {
+            this.percent *= 2;
+
+            result.append(Ability.SERENE_GRACE.formatActivation(this.user.getName(), this.move.getName() + " has been graced!")).append(" ");
+        }
+
         if(new Random().nextInt(100) < this.percent)
         {
             for(Stat s : this.statChanges.keySet())
@@ -56,6 +63,13 @@ public class StatChangeEffect extends MoveEffect
                     else
                     {
                         int change = this.statChanges.get(s);
+
+                        if(!this.userChange && change < 0 && target.hasAbility(Ability.COMPETITIVE))
+                        {
+                            result.append(Ability.COMPETITIVE.formatActivation(target.getName(), target.getName() + "'s Special Attack rose by 2 stages!")).append(" ");
+
+                            target.changes().change(Stat.SPATK, 2);
+                        }
 
                         target.changes().change(s, change);
 

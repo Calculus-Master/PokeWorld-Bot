@@ -1,5 +1,7 @@
 package com.calculusmaster.pokecord.game.pokemon;
 
+import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
@@ -429,11 +431,18 @@ public class Pokemon
         //Augment: Aerial Evasion
         if(this.hasAugment(PokemonAugment.AERIAL_EVASION) && s.equals(Stat.SPD)) commonBoosts *= 0.9;
 
-        //Augment: Draonic Enrage
+        //Augment: Draconic Enrage
         if(this.hasAugment(PokemonAugment.DRACONIC_ENRAGE))
         {
             if(List.of(Stat.ATK, Stat.SPATK, Stat.SPD).contains(s)) commonBoosts *= 1.15;
             else if(List.of(Stat.DEF, Stat.SPDEF).contains(s)) commonBoosts *= 0.85;
+        }
+
+        //Ability: Swift Swim
+        if(this.hasAbility(Ability.SWIFT_SWIM))
+        {
+            Duel d = DuelHelper.findDuel(this);
+            if(List.of(Weather.RAIN, Weather.HEAVY_RAIN).contains(d.weather.get())) commonBoosts *= 2.0;
         }
 
         if(s.equals(Stat.HP))
@@ -532,7 +541,7 @@ public class Pokemon
 
     public double getWeight()
     {
-        return this.data.weight;
+        return this.hasAbility(Ability.HEAVY_METAL) ? this.data.weight * 2 : this.data.weight;
     }
 
     public boolean hasMega()
