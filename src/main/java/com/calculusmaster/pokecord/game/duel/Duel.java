@@ -441,16 +441,6 @@ public class Duel
             turnResult.add(move.getName() + " is now a Ghost-type move due to the %s Augment!".formatted(PokemonAugment.SPECTRAL_SUPERCHARGE.getAugmentName()));
         }
 
-        //Augment: Supercharged Tackle
-        if(c.hasAugment(PokemonAugment.SUPERCHARGED_TACKLE) && move.is("Tackle"))
-        {
-            move.setPower(3.0);
-            move.setType(c.getType().get(0));
-            move.critChance = 24;
-
-            turnResult.add("Tackle was Supercharged!");
-        }
-
         //Weather-based Move Changes
 
         switch(this.weather.get())
@@ -2851,12 +2841,6 @@ public class Duel
             if(p != null)
             {
                 double experience = this.expGains.get(uuid);
-
-                if(p.hasAugment(PokemonAugment.XP_BOOST_I)) experience *= 1.025;
-                else if(p.hasAugment(PokemonAugment.XP_BOOST_II)) experience *= 1.05;
-                else if(p.hasAugment(PokemonAugment.XP_BOOST_III)) experience *= 1.1;
-                else if(p.hasAugment(PokemonAugment.XP_BOOST_IV)) experience *= 1.175;
-                else if(p.hasAugment(PokemonAugment.XP_BOOST_V)) experience *= 1.275;
 
                 p.addExp((int)(experience));
                 p.updateExperience();

@@ -891,7 +891,7 @@ public class Pokemon
 
     public void gainEVs(Pokemon other)
     {
-        int boost = this.hasAugment(PokemonAugment.EV_AFFINITY) ? 2 : 1;
+        int boost = 1;
         for(Stat s : other.getEVYield().keySet()) this.addEVs(s, other.getEVYield().get(s) * boost);
     }
 
@@ -988,12 +988,12 @@ public class Pokemon
 
     public double getAugmentStatBoost(Stat s)
     {
-        if(s.equals(Stat.HP)) return this.hasAugment(PokemonAugment.HP_BOOST_I) ? 1.05 : (this.hasAugment(PokemonAugment.HP_BOOST_II) ? 1.1 : (this.hasAugment(PokemonAugment.HP_BOOST_III) ? 1.2 : 1.0));
-        else if(s.equals(Stat.ATK)) return this.hasAugment(PokemonAugment.ATK_BOOST_I) ? 1.05 : (this.hasAugment(PokemonAugment.ATK_BOOST_II) ? 1.1 : (this.hasAugment(PokemonAugment.ATK_BOOST_III) ? 1.2 : 1.0));
-        else if(s.equals(Stat.DEF)) return this.hasAugment(PokemonAugment.DEF_BOOST_I) ? 1.05 : (this.hasAugment(PokemonAugment.DEF_BOOST_II) ? 1.1 : (this.hasAugment(PokemonAugment.DEF_BOOST_III) ? 1.2 : 1.0));
-        else if(s.equals(Stat.SPATK)) return this.hasAugment(PokemonAugment.SPATK_BOOST_I) ? 1.05 : (this.hasAugment(PokemonAugment.SPATK_BOOST_II) ? 1.1 : (this.hasAugment(PokemonAugment.SPATK_BOOST_III) ? 1.2 : 1.0));
-        else if(s.equals(Stat.SPDEF)) return this.hasAugment(PokemonAugment.SPDEF_BOOST_I) ? 1.05 : (this.hasAugment(PokemonAugment.SPDEF_BOOST_II) ? 1.1 : (this.hasAugment(PokemonAugment.SPDEF_BOOST_III) ? 1.2 : 1.0));
-        else if(s.equals(Stat.SPD)) return this.hasAugment(PokemonAugment.SPD_BOOST_I) ? 1.05 : (this.hasAugment(PokemonAugment.SPD_BOOST_II) ? 1.1 : (this.hasAugment(PokemonAugment.SPD_BOOST_III) ? 1.2 : 1.0));
+        if(s.equals(Stat.HP)) return this.hasAugment(PokemonAugment.HP_BOOST) ? 1.05 : 1.0;
+        else if(s.equals(Stat.ATK)) return this.hasAugment(PokemonAugment.ATK_BOOST) ? 1.05 : 1.0;
+        else if(s.equals(Stat.DEF)) return this.hasAugment(PokemonAugment.DEF_BOOST) ? 1.05 : 1.0;
+        else if(s.equals(Stat.SPATK)) return this.hasAugment(PokemonAugment.SPATK_BOOST) ? 1.05 : 1.0;
+        else if(s.equals(Stat.SPDEF)) return this.hasAugment(PokemonAugment.SPDEF_BOOST) ? 1.05 : 1.0;
+        else if(s.equals(Stat.SPD)) return this.hasAugment(PokemonAugment.SPD_BOOST) ? 1.05 : 1.0;
         else return 1.0;
     }
 

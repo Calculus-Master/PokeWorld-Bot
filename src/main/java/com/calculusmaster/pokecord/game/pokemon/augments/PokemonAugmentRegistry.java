@@ -1,12 +1,9 @@
 package com.calculusmaster.pokecord.game.pokemon.augments;
 
-import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.moves.MoveData;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
-import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
-import org.jooq.lambda.tuple.Tuple2;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 
 import java.util.*;
 
@@ -23,6 +20,8 @@ public class PokemonAugmentRegistry
             PokemonRarity.Rarity.LEGENDARY, List.of(10, 50, 90),
             PokemonRarity.Rarity.EXTREME,   List.of(10, 50, 90)
     );
+
+    public static final int MAX_AUGMENTS = 10;
 
     //Incompatibilities
     public static final List<EnumSet<PokemonAugment>> INCOMPATIBILITIES = List.of(
@@ -44,142 +43,77 @@ public class PokemonAugmentRegistry
 
     public static void init()
     {
-        //Automatic registry of Basic Stat Boost Augments
-        PokemonData.POKEMON.forEach(pokemon -> {
-            PokemonData data = PokemonData.get(pokemon);
-            PokemonStats baseStats = data.baseStats;
+        PokemonData.POKEMON.stream().map(PokemonData::get).forEach(pokemon -> {
+            PokemonAugmentData data = PokemonAugmentRegistry.register(pokemon.name);
+            PokemonRarity.Rarity rarity = PokemonRarity.POKEMON_RARITIES.getOrDefault(pokemon.name, PokemonRarity.Rarity.EXTREME);
 
-            double average = Arrays.stream(Stat.values()).mapToInt(baseStats::get).average().orElse(0.0);
+            //Unique Augments
 
-            boolean physicalFocus = data.moves.keySet().stream().map(MoveData::get).filter(m -> m.category.equals(Category.PHYSICAL)).count() > data.moves.keySet().stream().map(MoveData::get).filter(m -> m.category.equals(Category.SPECIAL)).count();
-
-            List<Tuple2<PokemonAugment, Integer>> augments = new ArrayList<>();
-            for(Stat stat : Stat.values())
+            if("Necrozma".equals(pokemon.name))
             {
-                double ratio = baseStats.get(stat) / average;
-
-                double significantPercentChange = 0.3;
-                int tier = ratio < (1 - significantPercentChange) ? 3 : (ratio > (1 + significantPercentChange) ? 1 : 2);
-
-                PokemonAugment boostAugment;
-                if(tier == 1) boostAugment = switch(stat) {
-                    case HP -> PokemonAugment.HP_BOOST_I;
-                    case ATK -> PokemonAugment.ATK_BOOST_I;
-                    case DEF -> PokemonAugment.DEF_BOOST_I;
-                    case SPATK -> PokemonAugment.SPATK_BOOST_I;
-                    case SPDEF -> PokemonAugment.SPDEF_BOOST_I;
-                    case SPD -> PokemonAugment.SPD_BOOST_I;
-                };
-                else if(tier == 2) boostAugment = switch(stat) {
-                    case HP -> PokemonAugment.HP_BOOST_II;
-                    case ATK -> PokemonAugment.ATK_BOOST_II;
-                    case DEF -> PokemonAugment.DEF_BOOST_II;
-                    case SPATK -> PokemonAugment.SPATK_BOOST_II;
-                    case SPDEF -> PokemonAugment.SPDEF_BOOST_II;
-                    case SPD -> PokemonAugment.SPD_BOOST_II;
-                };
-                else boostAugment = switch(stat) {
-                    case HP -> PokemonAugment.HP_BOOST_III;
-                    case ATK -> PokemonAugment.ATK_BOOST_III;
-                    case DEF -> PokemonAugment.DEF_BOOST_III;
-                    case SPATK -> PokemonAugment.SPATK_BOOST_III;
-                    case SPDEF -> PokemonAugment.SPDEF_BOOST_III;
-                    case SPD -> PokemonAugment.SPD_BOOST_III;
-                };
-
-                int level;
-                if(stat.equals(Stat.HP) || stat.equals(Stat.SPD)) level = tier == 1 ? 10 : (tier == 2 ? 25 : 40);
-                else level = tier == 1 ? 25 : (tier == 2 ? 35 : 50);
-
-                if((physicalFocus && (stat.equals(Stat.ATK) || stat.equals(Stat.DEF))) ||
-                        (!physicalFocus && (stat.equals(Stat.SPATK) || stat.equals(Stat.SPDEF)))) level -= 8;
-
-                augments.add(new Tuple2<>(boostAugment, level));
-             }
-
-            PokemonAugmentData augmentData = PokemonAugmentRegistry.register(pokemon);
-            augments.forEach(t -> augmentData.registerAugment(t.v2, t.v1));
-            augmentData.build();
-        });
-
-        //Universal Augments
-        PokemonData.POKEMON.forEach(pokemon -> {
-            PokemonData data = PokemonData.get(pokemon);
-            PokemonAugmentData augmentData = AUGMENT_DATA.get(pokemon);
-
-            //XP Boost
-            switch(data.growthRate)
+                data.registerAugment(40, PokemonAugment.LIGHT_ABSORPTION);
+                data.registerAugment(55, PokemonAugment.DIFFRACTED_BEAMS);
+                data.registerAugment(60, PokemonAugment.PRISMATIC_CONVERGENCE);
+            }
+            else if("Dusk Mane Necrozma".equals(pokemon.name))
             {
-                case ERRATIC -> augmentData.registerAugment(25, PokemonAugment.XP_BOOST_I);
-                case FAST -> augmentData.registerAugment(25, PokemonAugment.XP_BOOST_II);
-                case MEDIUM_FAST, MEDIUM_SLOW -> augmentData.registerAugment(25, PokemonAugment.XP_BOOST_III);
-                case SLOW -> augmentData.registerAugment(25, PokemonAugment.XP_BOOST_IV);
-                case FLUCTUATING -> augmentData.registerAugment(25, PokemonAugment.XP_BOOST_V);
+                data.registerAugment(40, PokemonAugment.LIGHT_ABSORPTION);
+                data.registerAugment(55, PokemonAugment.DIFFRACTED_BEAMS);
+                data.registerAugment(60, PokemonAugment.PRISMATIC_CONVERGENCE);
+            }
+            else if("Dawn Wings Necrozma".contains(pokemon.name))
+            {
+                data.registerAugment(40, PokemonAugment.PRISMATIC_MOONLIT_SHIELD);
+                data.registerAugment(55, PokemonAugment.DIFFRACTED_BEAMS);
+                data.registerAugment(60, PokemonAugment.PRISMATIC_CONVERGENCE);
+            }
+            else if("Ultra Necrozma".contains(pokemon.name))
+            {
+                data.registerAugment(30, PokemonAugment.LIGHT_ABSORPTION);
+                data.registerAugment(65, PokemonAugment.RADIANT_DIFFRACTED_BEAMS);
+                data.registerAugment(70, PokemonAugment.RADIANT_PRISMATIC_CONVERGENCE);
+            }
+            else if("Marshadow".contains(pokemon.name))
+            {
+                data.registerAugment(25, PokemonAugment.PHANTOM_TARGETING);
+                data.registerAugment(35, PokemonAugment.SHADOW_PROPULSION);
+                data.registerAugment(50, PokemonAugment.SPECTRAL_AMPLIFICATION);
+                data.registerAugment(70, PokemonAugment.SPECTRAL_SUPERCHARGE);
+            }
+            else if("Regieleki".contains(pokemon.name))
+            {
+                data.registerAugment(50, PokemonAugment.ELECTRIFIED_HYPER_SPEED);
+            }
+            else if("Victini".contains(pokemon.name))
+            {
+                data.registerAugment(30, PokemonAugment.FINAL_RESORT_V);
+                data.registerAugment(40, PokemonAugment.V_RUSH);
+                data.registerAugment(65, PokemonAugment.VICTORY_RESOLVE);
+                data.registerAugment(80, PokemonAugment.SHINING_STAR);
+                data.registerAugment(90, PokemonAugment.VICTORY_ENSURED);
             }
 
-            //EV Affinity
-            augmentData.registerAugment(85, PokemonAugment.EV_AFFINITY);
-        });
+            //Move Augments
 
-        //Somewhat Universal Augments
-        PokemonData.POKEMON.forEach(s -> {
-            PokemonData data = PokemonData.get(s);
-            PokemonAugmentData augmentData = AUGMENT_DATA.get(s);
+            if(pokemon.moves.keySet().stream().anyMatch(move -> move.contains("Punch")))
+                data.registerAugment(25, PokemonAugment.WEIGHTED_PUNCH);
 
-            PokemonRarity.Rarity rarity = PokemonRarity.POKEMON_RARITIES.getOrDefault(data.name.replaceAll("Primal|Mega|\\sY|\\sX", "").trim(), PokemonRarity.Rarity.EXTREME);
+            if(!List.of(PokemonRarity.Rarity.MYTHICAL, PokemonRarity.Rarity.LEGENDARY, PokemonRarity.Rarity.EXTREME).contains(rarity))
+                data.registerAugment(100, PokemonAugment.Z_AFFINITY);
 
-            //Supercharged & Superfortified
-            if(List.of(PokemonRarity.Rarity.COPPER, PokemonRarity.Rarity.SILVER, PokemonRarity.Rarity.GOLD, PokemonRarity.Rarity.DIAMOND, PokemonRarity.Rarity.PLATINUM).contains(rarity))
-                augmentData.registerAugment(35, PokemonAugment.SUPERCHARGED).registerAugment(35, PokemonAugment.SUPERFORTIFIED);
+            if(pokemon.moves.containsKey("Hail"))
+                data.registerAugment(52, PokemonAugment.RESTORATIVE_HAIL);
 
-            //Harmony
-            if(data.types.size() == 1) augmentData.registerAugment(40, PokemonAugment.HARMONY);
+            if(pokemon.moves.containsKey("Sandstorm"))
+                data.registerAugment(52, PokemonAugment.RESTORATIVE_SANDSTORM);
 
-            //Pinnacle Evasion
-            if(data.baseStats.get(Stat.SPD) >= 100) augmentData.registerAugment(56, PokemonAugment.PINNACLE_EVASION);
+            if(pokemon.moves.containsKey("Meteor Mash"))
+                data.registerAugment(50, PokemonAugment.METEOR_SHOWER);
 
-            //Precision Strikes
-            if(data.baseStats.get(Stat.ATK) >= 90 && data.baseStats.get(Stat.SPD) <= 150) augmentData.registerAugment(60, PokemonAugment.PRECISION_STRIKES);
-
-            //Precision Burst
-            if(data.baseStats.get(Stat.ATK) >= 75) augmentData.registerAugment(65, PokemonAugment.PRECISION_BURST);
-
-            //Raw & Modifying Force
-            if(data.baseStats.get().values().stream().mapToInt(v -> v).sum() < 600) augmentData.registerAugment(65, PokemonAugment.RAW_FORCE).registerAugment(65, PokemonAugment.MODIFYING_FORCE);
-        });
-
-        //Move Augments
-        PokemonData.POKEMON.forEach(s -> {
-            PokemonData data = PokemonData.get(s);
-            PokemonAugmentData augmentData = AUGMENT_DATA.get(s);
-
-            //Weighted Punch
-            if(data.moves.keySet().stream().anyMatch(move -> move.contains("Punch"))) augmentData.registerAugment(25, PokemonAugment.WEIGHTED_PUNCH);
-
-            //Z-Affinity
-            augmentData.registerAugment(100, PokemonAugment.Z_AFFINITY);
-
-            //Restorative Hail
-            if(data.moves.containsKey("Hail")) augmentData.registerAugment(52, PokemonAugment.RESTORATIVE_HAIL);
-
-            //Restorative Sandstorm
-            if(data.moves.containsKey("Sandstorm")) augmentData.registerAugment(52, PokemonAugment.RESTORATIVE_SANDSTORM);
-
-            //Supercharged Tackle
-            if(data.moves.containsKey("Tackle")) augmentData.registerAugment(15, PokemonAugment.SUPERCHARGED_TACKLE);
-
-            //Meteor Mash
-            if(data.moves.containsKey("Meteor Mash")) augmentData.registerAugment(50, PokemonAugment.METEOR_SHOWER);
-        });
-
-        //Typed Augments
-        PokemonData.POKEMON.forEach(s -> {
-            PokemonData data = PokemonData.get(s);
-            PokemonAugmentData augmentData = AUGMENT_DATA.get(s);
-
-            if(List.of(PokemonRarity.Rarity.EXTREME, PokemonRarity.Rarity.LEGENDARY, PokemonRarity.Rarity.MYTHICAL).contains(PokemonRarity.POKEMON_RARITIES.getOrDefault(s.replaceAll("Primal|Mega|\\sY|\\sX", "").trim(), PokemonRarity.Rarity.EXTREME)))
+            //Typed Augments
+            if(List.of(PokemonRarity.Rarity.EXTREME, PokemonRarity.Rarity.LEGENDARY, PokemonRarity.Rarity.MYTHICAL).contains(rarity))
             {
-                augmentData.registerAugment(20, switch(data.types.get(0)) {
+                data.registerAugment(24, switch(pokemon.types.get(0)) {
                     case NORMAL -> PokemonAugment.STANDARDIZATION;
                     case FIRE -> PokemonAugment.SEARING_SHOT;
                     case WATER -> PokemonAugment.DRENCH;
@@ -200,19 +134,48 @@ public class PokemonAugmentRegistry
                     case FAIRY -> PokemonAugment.FLOWERING_GRACE;
                 });
             }
+
+            //Stat Augments
+            Stat maxStat = Collections.max(List.of(Stat.values()), Comparator.comparingInt(pokemon.baseStats::get));
+
+            data.registerAugment(15, switch(maxStat) {
+                case HP -> PokemonAugment.HP_BOOST;
+                case ATK -> PokemonAugment.ATK_BOOST;
+                case DEF -> PokemonAugment.DEF_BOOST;
+                case SPATK -> PokemonAugment.SPATK_BOOST;
+                case SPDEF -> PokemonAugment.SPDEF_BOOST;
+                case SPD -> PokemonAugment.SPD_BOOST;
+            });
+
+            //Misc
+
+            if(List.of(PokemonRarity.Rarity.COPPER, PokemonRarity.Rarity.SILVER, PokemonRarity.Rarity.GOLD, PokemonRarity.Rarity.DIAMOND, PokemonRarity.Rarity.PLATINUM).contains(rarity))
+            {
+                int sumATK = pokemon.baseStats.get(Stat.ATK) + pokemon.baseStats.get(Stat.SPATK);
+                int sumDEF = pokemon.baseStats.get(Stat.DEF) + pokemon.baseStats.get(Stat.SPDEF);
+
+                if(sumATK > sumDEF) data.registerAugment(35, PokemonAugment.SUPERCHARGED);
+                else data.registerAugment(35, PokemonAugment.SUPERFORTIFIED);
+            }
+
+            if(pokemon.types.size() == 1)
+                data.registerAugment(40, PokemonAugment.HARMONY);
+
+            if(pokemon.baseStats.get(Stat.SPD) >= 100)
+                data.registerAugment(56, PokemonAugment.PINNACLE_EVASION);
+
+            if(pokemon.baseStats.get(Stat.ATK) >= 90 && pokemon.baseStats.get(Stat.SPD) <= 150)
+                data.registerAugment(60, PokemonAugment.PRECISION_STRIKES);
+
+            if(pokemon.baseStats.get(Stat.ATK) >= 75)
+                data.registerAugment(65, PokemonAugment.PRECISION_BURST);
+
+            if(pokemon.baseStats.get().values().stream().mapToInt(v -> v).sum() < 600)
+                data.registerAugment(65, PokemonAugment.RAW_FORCE).registerAugment(65, PokemonAugment.MODIFYING_FORCE);
+
+            //Build
+            data.build();
         });
-
-        //Marshadow
-        AUGMENT_DATA.get("Marshadow").registerAugment(50, PokemonAugment.SPECTRAL_AMPLIFICATION).registerAugment(25, PokemonAugment.PHANTOM_TARGETING).registerAugment(35, PokemonAugment.SHADOW_PROPULSION).registerAugment(70, PokemonAugment.SPECTRAL_SUPERCHARGE);
-
-        //Necrozma
-        AUGMENT_DATA.get("Necrozma").registerAugment(60, PokemonAugment.PRISMATIC_CONVERGENCE).registerAugment(40, PokemonAugment.LIGHT_ABSORPTION).registerAugment(55, PokemonAugment.DIFFRACTED_BEAMS);
-        AUGMENT_DATA.get("Dusk Mane Necrozma").registerAugment(60, PokemonAugment.PRISMATIC_CONVERGENCE).registerAugment(40, PokemonAugment.LIGHT_ABSORPTION).registerAugment(55, PokemonAugment.DIFFRACTED_BEAMS);
-        AUGMENT_DATA.get("Dawn Wings Necrozma").registerAugment(60, PokemonAugment.PRISMATIC_CONVERGENCE).registerAugment(55, PokemonAugment.DIFFRACTED_BEAMS);
-        AUGMENT_DATA.get("Ultra Necrozma").registerAugment(70, PokemonAugment.RADIANT_PRISMATIC_CONVERGENCE).registerAugment(30, PokemonAugment.LIGHT_ABSORPTION).registerAugment(65, PokemonAugment.RADIANT_DIFFRACTED_BEAMS);
-
-        //Regieleki
-        AUGMENT_DATA.get("Regieleki").registerAugment(50, PokemonAugment.ELECTRIFIED_HYPER_SPEED);
     }
 
     private static PokemonAugmentData register(String pokemon)
@@ -231,7 +194,11 @@ public class PokemonAugmentRegistry
         private PokemonAugmentData registerAugment(int level, PokemonAugment augment)
         {
             if(!this.augments.containsKey(level)) this.augments.put(level, EnumSet.noneOf(PokemonAugment.class));
-            this.augments.get(level).add(augment);
+
+            if(this.augments.values().stream().mapToInt(EnumSet::size).sum() == MAX_AUGMENTS)
+                LoggerHelper.warn(PokemonAugmentRegistry.class, "Failed to apply Augment: " + augment.getAugmentName() + " to Pokemon: " + this.pokemon + ". Maximum number of Augments reached.");
+            else this.augments.get(level).add(augment);
+
             return this;
         }
 
