@@ -1,9 +1,9 @@
 package com.calculusmaster.pokecord.game.pokemon.augments;
 
-import com.calculusmaster.pokecord.util.enums.Prices;
-
 public enum PokemonAugment
 {
+    //TODO: Add acquisition sourecs for Augments
+
     //Stat Boost Augments
     HP_BOOST            (1, "Health Boost", "Increases HP by 5%"),
     ATK_BOOST           (1, "Attack Boost", "Increases Attack by 5%"),
@@ -104,13 +104,6 @@ public enum PokemonAugment
     public String getAugmentDescription()
     {
         return this.description;
-    }
-
-    public int getCreditCost()
-    {
-        int price = (int)(Prices.UNLOCK_AUGMENT_BASE.get() * Math.pow(1.25, this.getSlotCost() - 1));
-        price -= price % 10;
-        return price;
     }
 
     public static PokemonAugment fromID(String augmentID)

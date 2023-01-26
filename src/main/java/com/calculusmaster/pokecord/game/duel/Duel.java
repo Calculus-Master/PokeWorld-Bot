@@ -827,6 +827,19 @@ public class Duel
             if(new Random().nextInt(100) < 50) return this.players[this.current].active.getName() + " is infatuated and will not attack!";
         }
 
+        //Check Ignored Abilities
+        List<String> ignoreAbilityMoves = List.of("Sunsteel Strike", "Moongeist Beam", "Photon Geyser", "Searing Sunraze Smash", "Menacing Moonraze Maelstrom", "Light That Burns the Sky", "G Max Drum Solo", "G Max Fireball", "G Max Hydrosnipe");
+        List<Ability> ignoreAbilityAbilities = List.of(Ability.MOLD_BREAKER, Ability.TURBOBLAZE, Ability.TERAVOLT); //TODO: Mycelium Might
+
+        if(move.is(ignoreAbilityMoves))
+            o.setAbilitiesIgnored(true);
+        else if(ignoreAbilityAbilities.stream().anyMatch(c::hasAbility))
+        {
+            o.setAbilitiesIgnored(true);
+            turnResult.add(ignoreAbilityAbilities.stream().filter(c::hasAbility).findFirst().get().formatActivation(c.getName(), o.getName() + "'s Abilities have been ignored!"));
+        }
+
+        //Special Move Logic
         if(this.data(this.current).perishSongTurns > 0)
         {
             this.data(this.current).perishSongTurns--;
@@ -836,7 +849,7 @@ public class Duel
                 this.data(this.current).perishSongTurns = 0;
 
                 this.players[this.current].active.damage(this.players[this.current].active.getHealth());
-                return turnResult + " Perish Song hit! " + this.players[this.current].active.getName() + " fainted!";
+                return String.join(", ", turnResult) + " Perish Song hit! " + this.players[this.current].active.getName() + " fainted!";
             }
         }
 
@@ -2375,6 +2388,9 @@ public class Duel
                 turnResult.add(this.players[this.current].active.getName() + " fainted from the Destiny Bond!");
             }
         }
+
+        //Reset Ignored Abilities
+        o.setAbilitiesIgnored(false);
 
         if(this.first.equals(this.players[this.current].active.getUUID())) turnResult.add("\n\n");
 

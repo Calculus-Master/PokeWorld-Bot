@@ -609,7 +609,7 @@ public class PlayerDataQuery extends MongoQuery
         return this.getOwnedAugmentIDs().stream().map(PokemonAugment::fromID).collect(Collectors.toList());
     }
 
-    public boolean ownsAugment(String augmentID)
+    public boolean isAugmentUnlocked(String augmentID)
     {
         return this.getOwnedAugmentIDs().contains(augmentID);
     }

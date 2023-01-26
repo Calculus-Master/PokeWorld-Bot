@@ -38,9 +38,8 @@ public class CommandAugmentInfo extends Command
                         .setTitle(augment.getAugmentName())
                         .setDescription("*" + augment.getAugmentDescription() + "*")
                         .addField("Slots", String.valueOf(augment.getSlotCost()), true)
-                        .addField("Credits", String.valueOf(augment.getCreditCost()), true)
                         .addField("ID", augment.getAugmentID(), true)
-                        .setFooter(this.playerData.ownsAugment(augment.getAugmentID()) ? "You own this Augment!" : "You do not own this Augment! When you first equip this Augment, you will need to purchase it with the specified credit amount.");
+                        .setFooter(this.playerData.isAugmentUnlocked(augment.getAugmentID()) ? "You have unlocked this Augment!" : "You have not unlocked this Augment!");
             }
         }
         else return this.invalid();

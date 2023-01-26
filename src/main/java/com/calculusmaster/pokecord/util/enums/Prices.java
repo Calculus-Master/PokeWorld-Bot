@@ -15,8 +15,7 @@ public enum Prices
     SHOP_RANDOM_TM(4000),
     SHOP_BASE_TR(3000),
     SHOP_RANDOM_TR(4000),
-    PRESTIGE(20000),
-    UNLOCK_AUGMENT_BASE(1250);
+    PRESTIGE(20000);
 
     private int price;
     Prices(int price)

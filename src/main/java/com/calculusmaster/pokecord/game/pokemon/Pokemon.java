@@ -67,6 +67,7 @@ public class Pokemon
     private boolean isDynamaxed;
     private PokemonDuelStatOverrides statOverrides;
     private Item consumedItem;
+    private boolean abilitiesIgnored;
 
     //Misc
     private PokemonRarity.Rarity rarity;
@@ -146,6 +147,7 @@ public class Pokemon
         this.isDynamaxed = false;
         this.statOverrides = new PokemonDuelStatOverrides();
         this.consumedItem = Item.NONE;
+        this.abilitiesIgnored = false;
     }
 
     private void setupMisc()
@@ -616,7 +618,8 @@ public class Pokemon
 
     public boolean hasAbility(Ability ability)
     {
-        return this.abilities.contains(ability);
+        if(this.abilitiesIgnored && Ability.IGNORABLE.contains(ability)) return false;
+        else return this.abilities.contains(ability);
     }
 
     public boolean hasAbility(Ability... abilities)
@@ -778,6 +781,12 @@ public class Pokemon
     public Item getItem()
     {
         return this.item;
+    }
+
+    //Ignored Abilities
+    public void setAbilitiesIgnored(boolean v)
+    {
+        this.abilitiesIgnored = v;
     }
 
     //Moves

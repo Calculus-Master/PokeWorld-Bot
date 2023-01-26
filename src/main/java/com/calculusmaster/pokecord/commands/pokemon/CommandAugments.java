@@ -34,8 +34,8 @@ public class CommandAugments extends Command
                     .setTitle("Augments Info")
                     .setDescription("Augments can strengthen your Pokemon.")
                     .addField("Augment Slots", "Each Pokemon has a limited number of Augment slots. Each Augment takes up a certain number of slots. You cannot equip Augments that exceed the total number of slots the Pokemon has. Pokemon will earn more slots by leveling up.", false)
-                    .addField("Unlocking Augments", "Each Pokemon has a predetermined set of Augments that can be equipped. You can view these using the `p!pokemon augments` command. Each augment requires a minimum level to equip.", false)
-                    .addField("Purchasing Augments", "The first time you equip an Augment, it will cost some credits. Once purchased once that Augment can be equipped for free on any Pokemon! Augments you own will be designated when viewing your Pokemon's augments.", false)
+                    .addField("Equipping Augments", "Each Pokemon has a predetermined set of Augments that can be equipped. You can view these using the `p!pokemon augments` command. Each augment requires a minimum level to equip.", false)
+                    .addField("Unlocking Augments", "You must unlock Augments from doing various activities throughout the bot. Once unlocked, an Augment can be equipped for free on any Pokemon! Augments you own will be designated when viewing your Pokemon's augments.", false)
                     .addField("Important Note!", "Whenever you change your Pokemon's form, evolve your Pokemon, or purchase a Pokemon from the market, any equipped Augments will be automatically cleared.", false);
         }
         else if(equip)
@@ -51,28 +51,18 @@ public class CommandAugments extends Command
             }
 
             PokemonAugment augment = available.get(index);
-            boolean owned = this.playerData.ownsAugment(augment.getAugmentID());
-            int price = augment.getCreditCost();
 
             if(DuelHelper.isInDuel(this.player.getId())) this.response = "You cannot change Augments while in a Duel!";
-            else if(!owned && this.playerData.getCredits() < price) this.response = "Insufficient credits! You need " + price + " credits to unlock this Augment!";
+            else if(!this.playerData.isAugmentUnlocked(augment.getAugmentID())) this.response = "You have not unlocked that Augment!";
             else if(active.hasAugment(augment)) this.response = active.getName() + " already has that Augment equipped!";
             else if(PokemonAugmentRegistry.isIncompatibleWith(augment, active.getAugments())) this.response = "That Augment is incompatible with at least one of the equipped Augments!";
             else if(!active.isValidAugment(augment)) this.response = active.getName() + " cannot equip that Augment!";
             else if(active.getAvailableAugmentSlots() < augment.getSlotCost()) this.response = "There are not enough slots available to equip that Augment! " + active.getName() + " has " + active.getAvailableAugmentSlots() + " available, and that Augment needs " + augment.getSlotCost() + " slots!";
             else
             {
-                String credits = "";
-                if(!owned)
-                {
-                    this.playerData.changeCredits(price * -1);
-                    this.playerData.addAugment(augment.getAugmentID());
-                    credits = "Purchased the " + augment.getAugmentName() + " augment for " + price + " credits! ";
-                }
-
                 active.equipAugment(augment);
                 active.updateAugments();
-                this.response = credits + "\nSuccessfully equipped the " + augment.getAugmentName() + " augment onto " + active.getName() + "!";
+                this.response = "Successfully equipped the " + augment.getAugmentName() + " augment onto " + active.getName() + "!";
             }
         }
         else if(remove)
