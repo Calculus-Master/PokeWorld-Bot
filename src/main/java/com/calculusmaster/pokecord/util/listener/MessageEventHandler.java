@@ -5,7 +5,6 @@ import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
-import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
@@ -98,13 +97,6 @@ public class MessageEventHandler
         else experience = new SplittableRandom().nextInt(1000, 5000);
 
         if(experience == 0) experience = 50;
-
-        //Augment Modifiers
-        if(p.hasAugment(PokemonAugment.XP_BOOST_I)) experience *= 1.025;
-        else if(p.hasAugment(PokemonAugment.XP_BOOST_II)) experience *= 1.05;
-        else if(p.hasAugment(PokemonAugment.XP_BOOST_III)) experience *= 1.1;
-        else if(p.hasAugment(PokemonAugment.XP_BOOST_IV)) experience *= 1.175;
-        else if(p.hasAugment(PokemonAugment.XP_BOOST_V)) experience *= 1.275;
 
         p.addExp(experience);
 
