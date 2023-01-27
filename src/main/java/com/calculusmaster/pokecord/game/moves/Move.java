@@ -300,7 +300,7 @@ public class Move
         if(this.name.equals("Foul Play")) atkStat = opponent.getStat(Stat.ATK);
 
         //Ability: Adaptability
-        if(stab > 1.0 && user.hasAbility(Ability.ADAPTABILITY)) stab = 2.0;
+        if(stab > 1.0 && user.hasAbility(Ability.ADAPTABILITY)) stab *= 2.0;
 
         //Ability: Technician
         if(user.hasAbility(Ability.TECHNICIAN) && power <= 60) power = (int)(power * 1.5);
@@ -326,8 +326,8 @@ public class Move
         //Augment: Phantom Targeting
         if(user.hasAugment(PokemonAugment.PHANTOM_TARGETING) && type > 1.0) type *= 1.5;
 
-        //Augment: Harmony - TODO: STAB-modifying moves overwrite each other
-        if(user.hasAugment(PokemonAugment.HARMONY) && stab > 1.0) stab = 1.75;
+        //Augment: Harmony
+        if(user.hasAugment(PokemonAugment.HARMONY) && stab > 1.0) stab *= 1.75;
 
         //Augment: Precision Burst
         if(user.hasAugment(PokemonAugment.PRECISION_BURST) && critical > 1.0) critical = 2.0;

@@ -127,10 +127,9 @@ public class BugMoves
                 .execute();
     }
 
-    //TODO: Should work after the user swaps
     public String FirstImpression(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return duel.turn == 1 ? MoveEffectBuilder.defaultDamage(user, opponent, duel, move) : move.getNothingResult();
+        return duel.turn == 1 || duel.data(user.getUUID()).firstAfterSwap ? MoveEffectBuilder.defaultDamage(user, opponent, duel, move) : move.getNothingResult();
     }
 
     public String StruggleBug(Pokemon user, Pokemon opponent, Duel duel, Move move)

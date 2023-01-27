@@ -68,6 +68,7 @@ public class Pokemon
     private PokemonDuelStatOverrides statOverrides;
     private Item consumedItem;
     private boolean abilitiesIgnored;
+    private boolean statChangesIgnored;
 
     //Misc
     private PokemonRarity.Rarity rarity;
@@ -148,6 +149,7 @@ public class Pokemon
         this.statOverrides = new PokemonDuelStatOverrides();
         this.consumedItem = Item.NONE;
         this.abilitiesIgnored = false;
+        this.statChangesIgnored = false;
     }
 
     private void setupMisc()
@@ -469,7 +471,7 @@ public class Pokemon
             int EV = this.evs.get(s);
             double stat = nature * (5 + ((this.level * (2 * base + IV + EV / 4.0)) / 100));
 
-            double modifier = this.statChanges.getModifier(s);
+            double modifier = this.statChangesIgnored ? 1.0 : this.statChanges.getModifier(s);
             double rawBoost = this.boosts.getStatBoost();
 
             double paralysisModifier = s.equals(Stat.SPD) && this.hasStatusCondition(StatusCondition.PARALYZED) ? 0.5 : 1.0;
@@ -787,6 +789,12 @@ public class Pokemon
     public void setAbilitiesIgnored(boolean v)
     {
         this.abilitiesIgnored = v;
+    }
+
+    //Ignored Stat Changes
+    public boolean setStatChangesIgnored(boolean v)
+    {
+        return this.statChangesIgnored = v;
     }
 
     //Moves

@@ -387,7 +387,6 @@ public class PsychicMoves
 
     public String EerieSpell(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        //TODO: Lowers target's last used move PP by 3
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addDamageEffect()
                 .execute();

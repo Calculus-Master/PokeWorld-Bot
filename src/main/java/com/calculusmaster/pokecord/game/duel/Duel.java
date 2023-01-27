@@ -303,6 +303,9 @@ public class Duel
         //Check for Entry Hazard Effects
         this.entryHazardEffects(p);
 
+        //Activate the first swap flag (this is then toggled off at the end of every turn)
+        this.data(this.players[p].active.getUUID()).firstAfterSwap = true;
+
         //Ability: Dauntless Shield
         if(this.players[p].active.hasAbility(Ability.DAUNTLESS_SHIELD))
         {
@@ -1010,7 +1013,7 @@ public class Duel
             accurate = move.isAccurate(this.players[this.current].active, this.players[this.other].active);
         }
 
-        boolean bypass = (move.getName().equals("Phantom Force") && this.data(this.current).phantomForceUsed) || (move.getName().equals("Shadow Force") && this.data(this.current).shadowForceUsed) || move.getName().equals("Feint");
+        boolean bypass = (move.getName().equals("Phantom Force") && this.data(this.current).phantomForceUsed) || (move.getName().equals("Shadow Force") && this.data(this.current).shadowForceUsed) || move.getName().equals("Feint") || move.is("G Max One Blow", "G Max Rapid Flow");
 
         if(this.data(this.other).detectUsed)
         {
@@ -1141,6 +1144,11 @@ public class Duel
 
             List<String> bypassStatusMoves = Arrays.asList("Perish Song", "Spikes", "Stealth Rock", "Toxic Spikes", "Sticky Web");
             if(move.getCategory().equals(Category.STATUS) && !bypassStatusMoves.contains(move.getName())) otherImmune = !bypass;
+        }
+
+        if(this.data(this.other).maxGuardUsed && !move.is("G Max One Blow", "G Max Rapid Flow"))
+        {
+            otherImmune = true;
         }
 
         if(move.getName().equals("Fusion Bolt") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move != null && this.players[this.other].move.getName().equals("Fusion Flare")) move.setPower(move.getPower() * 2);
@@ -1625,17 +1633,17 @@ public class Duel
         }
 
         //Barrier Effects
-        if(this.barriers[this.other].has(FieldBarrier.AURORA_VEIL))
+        if(!bypass && this.barriers[this.other].has(FieldBarrier.AURORA_VEIL))
         {
             if(move.is(Category.SPECIAL, Category.PHYSICAL)) move.setDamageMultiplier(0.5);
         }
 
-        if(this.barriers[this.other].has(FieldBarrier.REFLECT))
+        if(!bypass && this.barriers[this.other].has(FieldBarrier.REFLECT))
         {
             if(move.is(Category.PHYSICAL)) move.setDamageMultiplier(0.5);
         }
 
-        if(this.barriers[this.other].has(FieldBarrier.LIGHT_SCREEN))
+        if(!bypass && this.barriers[this.other].has(FieldBarrier.LIGHT_SCREEN))
         {
             if(move.is(Category.SPECIAL)) move.setDamageMultiplier(0.5);
         }
@@ -2391,6 +2399,9 @@ public class Duel
 
         //Reset Ignored Abilities
         o.setAbilitiesIgnored(false);
+
+        //Reset first swap flag
+        this.data(c.getUUID()).firstAfterSwap = false;
 
         if(this.first.equals(this.players[this.current].active.getUUID())) turnResult.add("\n\n");
 

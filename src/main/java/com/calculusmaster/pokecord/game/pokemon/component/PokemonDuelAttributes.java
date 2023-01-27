@@ -73,6 +73,8 @@ public class PokemonDuelAttributes
     public int yawnTurns;
     public boolean aquaRingUsed;
     public boolean obstructUsed;
+    public boolean maxGuardUsed;
+    public boolean firstAfterSwap;
 
     public boolean disguiseActivated;
     public boolean flashFireActivated;
@@ -145,6 +147,9 @@ public class PokemonDuelAttributes
         this.mindReaderUsed = false;
         this.yawnTurns = 0;
         this.aquaRingUsed = false;
+        this.obstructUsed = false;
+        this.maxGuardUsed = false;
+        this.firstAfterSwap = false;
 
         this.disguiseActivated = false;
         this.flashFireActivated = false;

@@ -94,10 +94,14 @@ public class MaxMoves
         return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPD, -1, 100, false);
     }
 
-    //TODO: Max Guard
     public String MaxGuard(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return move.getNotImplementedResult();
+        if(!duel.first.equals(user.getUUID())) return move.getNothingResult();
+        else
+        {
+            duel.data(user.getUUID()).maxGuardUsed = true;
+            return user.getName() + " is heavily protected!";
+        }
     }
 
     public String MaxMindstorm(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -165,10 +169,11 @@ public class MaxMoves
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
-    //TODO: Prevents swapping
     public String GMaxTerror(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        duel.data(opponent.getUUID()).canSwap = false;
+
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + " " + opponent.getName() + " is terrified in place!";
     }
 
     public String GMaxFoamBurst(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -293,7 +298,6 @@ public class MaxMoves
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
-    //TODO: Takes away 2 PP (won't be added)
     public String GMaxDepletion(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
@@ -315,34 +319,29 @@ public class MaxMoves
                 .execute();
     }
 
-    //TODO: Ignore Abilities
     public String GMaxDrumSolo(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         move.setPower(160);
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
-    //TODO: Ignore Abilities
     public String GMaxFireball(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         move.setPower(160);
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
-    //TODO: Ignore Abilities
     public String GMaxHydrosnipe(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         move.setPower(160);
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
-    //TODO: Bypasses Protection and Max Guard
     public String GMaxOneBlow(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
-    //TODO: Bypasses Protection and Max Guard
     public String GMaxRapidFlow(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);

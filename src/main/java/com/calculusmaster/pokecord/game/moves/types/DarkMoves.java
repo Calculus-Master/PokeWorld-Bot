@@ -13,7 +13,6 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class DarkMoves
@@ -210,17 +209,9 @@ public class DarkMoves
 
     public String WickedBlow(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        Map<Stat, Integer> statChanges = Map.copyOf(opponent.changes().getAll());
-        int accuracy = opponent.changes().getAccuracy();
-        int evasion = opponent.changes().getEvasion();
-
-        opponent.changes().clear();
+        opponent.setStatChangesIgnored(true);
         String result = MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
-
-        opponent.changes().set(statChanges);
-        opponent.changes().changeAccuracy(accuracy);
-        opponent.changes().changeEvasion(evasion);
-
+        opponent.setStatChangesIgnored(false);
         return result;
     }
 
@@ -229,10 +220,12 @@ public class DarkMoves
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
 
-    //TODO: Ignores changes to stats
     public String DarkestLariat(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        opponent.setStatChangesIgnored(true);
+        String result = MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        opponent.setStatChangesIgnored(false);
+        return result;
     }
 
     public String Thief(Pokemon user, Pokemon opponent, Duel duel, Move move)

@@ -157,10 +157,11 @@ public class SteelMoves
                 .execute();
     }
 
-    //TODO: Opponent unable to flee
     public String AnchorShot(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        duel.data(opponent.getUUID()).canSwap = false;
+
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + " " + opponent.getName() + " was anchored in!";
     }
 
     public String ShiftGear(Pokemon user, Pokemon opponent, Duel duel, Move move)

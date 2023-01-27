@@ -217,10 +217,17 @@ public class FireMoves
 
     public String Incinerate(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        //TODO: Deletes opponent's berry
+        String b = "";
+
+        if(opponent.hasItem() && opponent.getItem().isBerry())
+        {
+            opponent.removeItem();
+            b = opponent.getName() + "'s " + opponent.getItem().getName() + " was burned up!";
+        }
+
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addDamageEffect()
-                .execute();
+                .execute() + b;
     }
 
     public String FirePledge(Pokemon user, Pokemon opponent, Duel duel, Move move)
