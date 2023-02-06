@@ -45,8 +45,27 @@ import java.util.concurrent.TimeUnit;
 
 public class Pokecord
 {
+    public static final String TEST_SERVER_ID = "873993084155887617";
+
     public static JDA BOT_JDA;
     public static boolean INIT_COMPLETE;
+
+    public static void initializeDiscordBot() throws InterruptedException
+    {
+        JDABuilder bot = JDABuilder
+                .createDefault(PrivateInfo.TOKEN)
+                .setMemberCachePolicy(MemberCachePolicy.ALL)
+                .enableIntents(EnumSet.allOf(GatewayIntent.class))
+                .setChunkingFilter(ChunkingFilter.ALL)
+                .setActivity(Activity.playing("Pokemon"))
+                .addEventListeners(
+                        new Listener(),
+                        new MiscListener(),
+                        new CommandHandler()
+                );
+
+        BOT_JDA = bot.build().awaitReady();
+    }
 
     public static void main(String[] args) throws InterruptedException, LoginException
     {
@@ -96,19 +115,7 @@ public class Pokecord
         start = System.currentTimeMillis();
 
         //Create Bot
-        JDABuilder bot = JDABuilder
-                .createDefault(PrivateInfo.TOKEN)
-                .setMemberCachePolicy(MemberCachePolicy.ALL)
-                .enableIntents(EnumSet.allOf(GatewayIntent.class))
-                .setChunkingFilter(ChunkingFilter.ALL)
-                .setActivity(Activity.playing("Pokemon"))
-                .addEventListeners(
-                        new Listener(),
-                        new MiscListener(),
-                        new CommandHandler()
-                );
-
-        BOT_JDA = bot.build().awaitReady();
+        Pokecord.initializeDiscordBot();
 
         //Interaction Commands
         LoggerHelper.init("Commands V2", CommandHandler::init, true);

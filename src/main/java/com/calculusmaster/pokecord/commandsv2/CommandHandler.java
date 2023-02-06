@@ -13,29 +13,21 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.EntitySelectInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 import javax.security.auth.login.LoginException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class CommandHandler extends ListenerAdapter
 {
-    //Creating/Deleting Test Commands
+    //Command Upsert
     public static void main(String[] args) throws LoginException, InterruptedException
     {
-        Pokecord.main(args);
-
-        Pokecord.BOT_JDA.getGuildById("873993084155887617").updateCommands()
-                .addCommands(Commands.slash("test", "For testing **hi im bold**")
-                        .addSubcommands(
-                                new SubcommandData("test2", "For testing 2").addOption(OptionType.INTEGER, "integer", "integer", true),
-                                new SubcommandData("test3", "For testing 3").addOption(OptionType.STRING, "string", "string", true)
-                        )
-                ).queue();
+        //Guild Commands
+        Pokecord.initializeDiscordBot();
+        CommandHandler.init();
     }
 
     public static final List<CommandData> COMMANDS = new ArrayList<>();
@@ -45,7 +37,7 @@ public class CommandHandler extends ListenerAdapter
         CommandBalance.init();
 
         //TODO: Global Commands
-        Pokecord.BOT_JDA.getGuildById("873993084155887617").updateCommands().addCommands(COMMANDS.stream().map(CommandData::getSlashCommandData).toList()).queue();
+        Pokecord.BOT_JDA.getGuildById(Pokecord.TEST_SERVER_ID).updateCommands().addCommands(COMMANDS.stream().map(CommandData::getSlashCommandData).toList()).queue();
     }
 
     //Listeners
@@ -69,7 +61,11 @@ public class CommandHandler extends ListenerAdapter
             LoggerHelper.warn(CommandHandler.class, "Attempted use of Slash Command (%s) used in non-TextChannel (%s, Type: %s)".formatted(event.getName(), event.getChannel().getName(), event.getChannel().getType()));
             event.reply("Slash Command usage outside of standard Text Channels is not currently supported.").setEphemeral(true).queue();
         }
-        else data.getInstance().parseSlashCommand(event);
+        else
+        {
+            LoggerHelper.info(CommandHandler.class, "Parsing Slash Command: /" + event.getFullCommandName() + " " + event.getOptions().stream().map(o -> o.getName() + ": " + o.getAsString()).collect(Collectors.joining(" ")));
+            data.getInstance().parseSlashCommand(event);
+        }
     }
 
     @Override

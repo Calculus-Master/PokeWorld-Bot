@@ -31,6 +31,7 @@ public abstract class CommandV2
     protected PlayerDataQuery playerData;
     protected ServerDataQuery serverData;
 
+    protected boolean ephemeral;
     protected EmbedBuilder embed;
     protected String response;
 
@@ -48,6 +49,7 @@ public abstract class CommandV2
     protected boolean error(String errorMessage)
     {
         this.response = errorMessage;
+        this.ephemeral = true;
         return false;
     }
 
@@ -69,8 +71,9 @@ public abstract class CommandV2
         this.channel = channel;
     }
 
-    protected void initResponses()
+    protected void setDefaultResponses()
     {
+        this.ephemeral = false;
         this.embed = new EmbedBuilder();
         this.response = "";
     }
@@ -98,7 +101,7 @@ public abstract class CommandV2
         this.setServer(Objects.requireNonNull(event.getGuild()));
         this.setChannel(event.getChannel().asTextChannel());
 
-        this.initResponses();
+        this.setDefaultResponses();
 
         boolean result;
         if(this.commandData.hasFeature() && MasteryLevelManager.ACTIVE && this.playerData.getLevel() < this.commandData.getFeature().getRequiredLevel())
@@ -111,7 +114,13 @@ public abstract class CommandV2
         if(!result && this.embed != null && !this.embed.isEmpty()) this.embed.setColor(Color.RED);
         if(!result && !this.response.isEmpty()) this.response = "[ERROR] " + this.response;
 
-        this.respond(s -> event.reply(s).queue(), e -> event.replyEmbeds(e).queue());
+        this.respond(s -> {
+            if(event.isAcknowledged()) event.getHook().editOriginal(s).queue();
+            else event.reply(s).setEphemeral(this.ephemeral).queue();
+        }, e -> {
+            if(event.isAcknowledged()) event.getHook().editOriginalEmbeds(e).queue();
+            else event.replyEmbeds(e).setEphemeral(this.ephemeral).queue();
+        });
     }
 
     public void parseAutocomplete(CommandAutoCompleteInteractionEvent event)
@@ -120,7 +129,7 @@ public abstract class CommandV2
         this.setServer(Objects.requireNonNull(event.getGuild()));
         this.setChannel(Objects.requireNonNull(event.getChannel()).asTextChannel());
 
-        this.initResponses();
+        this.setDefaultResponses();
         boolean result = this.autocompleteLogic(event);
     }
 
@@ -130,9 +139,9 @@ public abstract class CommandV2
         this.setServer(Objects.requireNonNull(event.getGuild()));
         this.setChannel(Objects.requireNonNull(event.getChannel()).asTextChannel());
 
-        this.initResponses();
+        this.setDefaultResponses();
         boolean result = this.buttonLogic(event);
-        this.respond(s -> event.reply(s).queue(), e -> event.replyEmbeds(e).queue());
+        this.respond(s -> event.reply(s).setEphemeral(this.ephemeral).queue(), e -> event.replyEmbeds(e).setEphemeral(this.ephemeral).queue());
     }
 
     public void parseModalInteraction(ModalInteractionEvent event)
@@ -141,9 +150,9 @@ public abstract class CommandV2
         this.setServer(Objects.requireNonNull(event.getGuild()));
         this.setChannel(Objects.requireNonNull(event.getChannel()).asTextChannel());
 
-        this.initResponses();
+        this.setDefaultResponses();
         boolean result = this.modalLogic(event);
-        this.respond(s -> event.reply(s).queue(), e -> event.replyEmbeds(e).queue());
+        this.respond(s -> event.reply(s).setEphemeral(this.ephemeral).queue(), e -> event.replyEmbeds(e).setEphemeral(this.ephemeral).queue());
     }
 
     public void parseStringSelectMenuInteraction(StringSelectInteractionEvent event)
@@ -152,9 +161,9 @@ public abstract class CommandV2
         this.setServer(Objects.requireNonNull(event.getGuild()));
         this.setChannel(Objects.requireNonNull(event.getChannel()).asTextChannel());
 
-        this.initResponses();
+        this.setDefaultResponses();
         boolean result = this.stringSelectLogic(event);
-        this.respond(s -> event.reply(s).queue(), e -> event.replyEmbeds(e).queue());
+        this.respond(s -> event.reply(s).setEphemeral(this.ephemeral).queue(), e -> event.replyEmbeds(e).setEphemeral(this.ephemeral).queue());
     }
 
     public void parseEntitySelectMenuInteraction(EntitySelectInteractionEvent event)
@@ -163,13 +172,13 @@ public abstract class CommandV2
         this.setServer(Objects.requireNonNull(event.getGuild()));
         this.setChannel(Objects.requireNonNull(event.getChannel()).asTextChannel());
 
-        this.initResponses();
+        this.setDefaultResponses();
         boolean result = this.entitySelectLogic(event);
-        this.respond(s -> event.reply(s).queue(), e -> event.replyEmbeds(e).queue());
+        this.respond(s -> event.reply(s).setEphemeral(this.ephemeral).queue(), e -> event.replyEmbeds(e).setEphemeral(this.ephemeral).queue());
     }
 
-    //Overrides
-    protected boolean slashCommandLogic(SlashCommandInteractionEvent event) { return false; }
+    //Overrides (Slash Command is required)
+    protected abstract boolean slashCommandLogic(SlashCommandInteractionEvent event);
     protected boolean autocompleteLogic(CommandAutoCompleteInteractionEvent event) { return false; }
     protected boolean buttonLogic(ButtonInteractionEvent event) { return false; }
     protected boolean modalLogic(ModalInteractionEvent event) { return false; }
