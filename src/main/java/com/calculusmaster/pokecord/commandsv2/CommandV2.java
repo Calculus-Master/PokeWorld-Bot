@@ -91,7 +91,7 @@ public abstract class CommandV2
 
     protected void respondInvalidMasteryLevel(Feature feature)
     {
-        this.response = "This feature requires **Pokemon Mastery Level " + feature.getRequiredLevel() + "**!";
+        this.response = Feature.DISABLED.contains(feature) ? "This feature has been temporarily disabled!" : "This feature requires **Pokemon Mastery Level " + feature.getRequiredLevel() + "**!";
     }
 
     //Parsers
@@ -104,7 +104,7 @@ public abstract class CommandV2
         this.setDefaultResponses();
 
         boolean result;
-        if(this.commandData.hasFeature() && MasteryLevelManager.ACTIVE && this.playerData.getLevel() < this.commandData.getFeature().getRequiredLevel())
+        if(this.commandData.hasFeature() && (Feature.DISABLED.contains(this.commandData.getFeature()) || (MasteryLevelManager.ACTIVE && this.playerData.getLevel() < this.commandData.getFeature().getRequiredLevel())))
         {
             this.respondInvalidMasteryLevel(this.commandData.getFeature());
             result = false;

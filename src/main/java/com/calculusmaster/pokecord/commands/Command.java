@@ -89,12 +89,12 @@ public abstract class Command
 
     protected boolean insufficientMasteryLevel(Feature feature)
     {
-        return MasteryLevelManager.ACTIVE && this.playerData.getLevel() < feature.getRequiredLevel();
+        return Feature.DISABLED.contains(feature) || (MasteryLevelManager.ACTIVE && this.playerData.getLevel() < feature.getRequiredLevel());
     }
 
     protected Command invalidMasteryLevel(Feature feature)
     {
-        this.response = "This feature requires **Pokemon Mastery Level " + feature.getRequiredLevel() + "**!";
+        this.response = Feature.DISABLED.contains(feature) ? "This feature has been temporarily disabled!" : "This feature requires **Pokemon Mastery Level " + feature.getRequiredLevel() + "**!";
         return this;
     }
 

@@ -2,6 +2,8 @@ package com.calculusmaster.pokecord.game.enums.elements;
 
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 
+import java.util.EnumSet;
+
 public enum Feature
 {
     //Level 0
@@ -106,6 +108,8 @@ public enum Feature
     AUGMENT_POKEMON("Apply Augments to your Pokemon, customizing their capabilities"),
 
     ;
+
+    public static final EnumSet<Feature> DISABLED = EnumSet.noneOf(Feature.class);
 
     private String overview;
 

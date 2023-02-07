@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
 import com.calculusmaster.pokecord.game.enums.elements.Ability;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Location;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.Move;
@@ -145,6 +146,20 @@ public class CommandDev extends Command
                 String msg = String.join("\n", List.of(CasualMatchmadeDuel.QUEUE_1v1.stream().map(mp -> "(ID: %s, Channel: %s)".formatted(mp.getID(), mp.getTextChannel().getName())).collect(Collectors.joining(", "))));
                 if(msg.isBlank()) msg = "All queues are empty";
                 this.event.getChannel().sendMessage(msg).queue();
+            }
+            case "togglefeature" -> {
+                Feature f = Feature.valueOf(this.msg[2]);
+
+                if(Feature.DISABLED.contains(f))
+                {
+                    Feature.DISABLED.remove(f);
+                    this.event.getChannel().sendMessage(f + " has been re-enabled!").queue();
+                }
+                else
+                {
+                    Feature.DISABLED.add(f);
+                    this.event.getChannel().sendMessage(f + " has been disabled!").queue();
+                }
             }
         }
 
