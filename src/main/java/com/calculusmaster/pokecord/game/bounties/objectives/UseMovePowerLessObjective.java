@@ -10,7 +10,6 @@ public class UseMovePowerLessObjective extends AbstractPowerObjective
     public UseMovePowerLessObjective()
     {
         super(ObjectiveType.USE_MOVES_POWER_LESS);
-
     }
 
     @Override

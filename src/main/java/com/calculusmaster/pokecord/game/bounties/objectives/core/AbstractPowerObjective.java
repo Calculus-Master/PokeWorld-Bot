@@ -10,6 +10,7 @@ public abstract class AbstractPowerObjective extends Objective
     public AbstractPowerObjective(ObjectiveType type)
     {
         super(type);
+        this.setRandomPower();
     }
 
     protected abstract void setRandomPower();

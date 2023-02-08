@@ -10,6 +10,7 @@ public abstract class AbstractAccuracyObjective extends Objective
     public AbstractAccuracyObjective(ObjectiveType type)
     {
         super(type);
+        this.setRandomAccuracy();
     }
 
     protected abstract void setRandomAccuracy();
