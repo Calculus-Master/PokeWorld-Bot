@@ -59,7 +59,7 @@ public class CommandBounties extends Command
 
                 if(new Random().nextInt(50) < 10 && this.playerData.getSelectedPokemon().getLevel() != 100) this.playerData.getSelectedPokemon().addExp(500);
 
-                this.response = "You earned " + b.getReward() + " credits and some PokePass XP for completing this bounty!";
+                this.response = "You earned " + b.getReward() + " credits for completing this bounty!";
             }
         }
         else if(reroll)
@@ -134,7 +134,7 @@ public class CommandBounties extends Command
                 this.playerData.addBounty(b.getBountyID());
             }
 
-            this.response = "You acquired " + added + " new bounties!";
+            this.event.getChannel().sendMessage(this.player.getAsMention() + " You acquired " + added + " new bounties!").queue();
         }
     }
 }
