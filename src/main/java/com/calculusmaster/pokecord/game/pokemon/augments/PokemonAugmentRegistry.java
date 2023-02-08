@@ -34,8 +34,9 @@ public class PokemonAugmentRegistry
 
     public static boolean isIncompatibleWith(PokemonAugment augment, Collection<PokemonAugment> equipped)
     {
-        for(EnumSet<PokemonAugment> set : INCOMPATIBILITIES) if(set.contains(augment)) return equipped.stream().anyMatch(set::contains);
-        return false;
+        boolean incompatible = false;
+        for(EnumSet<PokemonAugment> set : INCOMPATIBILITIES) if(set.contains(augment)) incompatible = incompatible || equipped.stream().anyMatch(set::contains);
+        return incompatible;
     }
 
     //Augment Data
