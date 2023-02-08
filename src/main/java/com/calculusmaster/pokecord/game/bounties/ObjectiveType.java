@@ -32,7 +32,6 @@ public enum ObjectiveType
     COMPLETE_WILD_DUEL(CompleteWildDuelObjective::new, 10, 80),
     COMPLETE_TRAINER_DUEL(WinTrainerDuelObjective::new, 2, 15),
     COMPLETE_ELITE_DUEL(CompleteEliteDuelObjective::new, 2, 10),
-    COMPLETE_BOUNTY(CompleteBountyObjective::new, 1, 10),
     COMPLETE_GAUNTLET_LEVELS(CompleteGauntletLevelsObjective::new, 1, 10),
     WIN_PVP_DUEL(WinPVPDuelObjective::new, 1, 5),
     WIN_WILD_DUEL(WinWildDuelObjective::new, 10, 40),
