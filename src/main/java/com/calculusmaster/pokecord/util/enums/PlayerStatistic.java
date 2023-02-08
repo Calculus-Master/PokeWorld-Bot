@@ -34,7 +34,9 @@ public enum PlayerStatistic
     MOVES_USED("moves_used"),
     ZMOVES_USED("zmoves_used"),
     MAX_MOVES_USED("max_moves_used"),
-    MASTERY_EXP_EARNED("mastery_exp_earned");
+    MASTERY_EXP_EARNED("mastery_exp_earned"),
+    DYNAMAXED_POKEMON("dynamaxed_pokemon"),
+    POKEMON_PRESTIGED("pokemon_prestiged");
 
     public String key;
     PlayerStatistic(String key)

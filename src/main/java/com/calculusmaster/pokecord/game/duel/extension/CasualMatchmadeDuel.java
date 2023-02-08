@@ -30,13 +30,13 @@ public class CasualMatchmadeDuel extends Duel
 
     private static void processQueues()
     {
-        LoggerHelper.info(CasualMatchmadeDuel.class, "Processing Queues for Casual Duels...");
-
         int tasks_1v1 = QUEUE_1v1.size() / 2;
         int tasks_3v3 = QUEUE_3v3.size() / 2;
         int tasks_6v6 = QUEUE_6v6.size() / 2;
 
         if(tasks_1v1 == 0 && tasks_3v3 == 0 && tasks_6v6 == 0) return;
+
+        LoggerHelper.info(CasualMatchmadeDuel.class, "Processing Queues for Casual Duels...");
 
         int totalTaskSlots = 4;
         int slots_1v1 = tasks_1v1 > 0 ? 1 : 0;

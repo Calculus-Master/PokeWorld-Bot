@@ -1,13 +1,13 @@
-package com.calculusmaster.pokecord.game.player.level.leveltasks;
+package com.calculusmaster.pokecord.game.player.level.pmltasks;
 
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 
-public class PvPLevelTask extends AbstractLevelTask
+public class PvPDuelsCompletedPMLTask extends AbstractPMLTask
 {
     private final int amount;
 
-    public PvPLevelTask(int amount)
+    public PvPDuelsCompletedPMLTask(int amount)
     {
         super(LevelTaskType.PVP_DUELS);
         this.amount = amount;

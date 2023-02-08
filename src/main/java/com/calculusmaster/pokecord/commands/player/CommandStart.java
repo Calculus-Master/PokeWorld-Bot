@@ -45,12 +45,11 @@ public class CommandStart extends Command
                             """, false)
                     .addField("Progression", """
                             This bot uses a Level-based progression system. To unlock certain features, you have to earn enough experience and complete certain tasks in order to advance to the next level.
-                            Check what tasks you have to complete in order to level up by using the `p!level` command.
-                            Upon reaching level 19, you will have unlocked all of the core features of the bot. Level 20 and beyond contains more advanced features that are tougher to unlock!
+                            After selecting a starter, you'll receive a DM with more information about Pokemon Mastery Level!
                             """, false)
                     .addField("Help", """
-                            Use `p!help <command name>` to learn how to use certain commands!
-                            Certain advanced commands will additionally have an `info` secondary option that provides a more detailed explanation (For example, `p!duel info` or `p!target info`)
+                            Use `/help` to learn how to use certain commands!
+                            Certain commands will have built-in help sections as well.
                             """, false)
                     .setImage("https://vignette.wikia.nocookie.net/pokeverse/images/4/46/Pokemon_starters_.png/revision/latest/scale-to-width-down/1000?cb=20180424013225");
         }
@@ -70,6 +69,8 @@ public class CommandStart extends Command
 
             starter.upload();
             this.playerData.addPokemon(starter.getUUID());
+
+            this.playerData.dmMasteryLevel();
 
             this.response = "You started your journey with " + starter.getName() + "! Check out its stats using %s!".formatted(this.getCommandFormatted("info latest"));
         }

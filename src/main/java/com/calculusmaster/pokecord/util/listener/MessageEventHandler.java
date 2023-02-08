@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.util.listener;
 import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
+import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -105,6 +106,7 @@ public class MessageEventHandler
         if(p.getLevel() != initL)
         {
             this.data.updateBountyProgression(ObjectiveType.LEVEL_POKEMON, p.getLevel() - initL);
+            this.data.addExp(PMLExperience.LEVEL_POKEMON, 100);
 
             this.send("Your " + p.getName() + " is now Level " + p.getLevel() + "!");
         }

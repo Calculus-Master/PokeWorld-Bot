@@ -1,12 +1,12 @@
-package com.calculusmaster.pokecord.game.player.level.leveltasks;
+package com.calculusmaster.pokecord.game.player.level.pmltasks;
 
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 
-public class CreditsLevelTask extends AbstractLevelTask
+public class CreditsPMLTask extends AbstractPMLTask
 {
     private final int amount;
 
-    public CreditsLevelTask(int amount)
+    public CreditsPMLTask(int amount)
     {
         super(LevelTaskType.CREDITS);
         this.amount = amount;

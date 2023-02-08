@@ -1,13 +1,13 @@
-package com.calculusmaster.pokecord.game.player.level.leveltasks;
+package com.calculusmaster.pokecord.game.player.level.pmltasks;
 
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 
-public class PokemonEvolvedLevelTask extends AbstractLevelTask
+public class PokemonEvolvedPMLTask extends AbstractPMLTask
 {
     private final int amount;
 
-    public PokemonEvolvedLevelTask(int amount)
+    public PokemonEvolvedPMLTask(int amount)
     {
         super(LevelTaskType.POKEMON_EVOLVED);
         this.amount = amount;

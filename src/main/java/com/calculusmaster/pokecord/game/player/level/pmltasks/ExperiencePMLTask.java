@@ -1,12 +1,12 @@
-package com.calculusmaster.pokecord.game.player.level.leveltasks;
+package com.calculusmaster.pokecord.game.player.level.pmltasks;
 
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 
-public class ExperienceLevelTask extends AbstractLevelTask
+public class ExperiencePMLTask extends AbstractPMLTask
 {
     private final int exp;
 
-    public ExperienceLevelTask(int exp)
+    public ExperiencePMLTask(int exp)
     {
         super(LevelTaskType.EXPERIENCE);
         this.exp = exp;

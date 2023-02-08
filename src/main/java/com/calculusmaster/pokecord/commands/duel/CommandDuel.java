@@ -37,7 +37,7 @@ public class CommandDuel extends Command
     @Override
     public Command runCommand()
     {
-        if(this.insufficientMasteryLevel(Feature.PVP_DUELS_1V1)) return this.invalidMasteryLevel(Feature.PVP_DUELS_1V1);
+        if(this.insufficientMasteryLevel(Feature.PVP_DUELS)) return this.invalidMasteryLevel(Feature.PVP_DUELS);
 
         boolean info = this.msg.length == 2 && Arrays.asList("info", "tutorial", "how").contains(this.msg[1]);
 
@@ -115,9 +115,7 @@ public class CommandDuel extends Command
             {
                 Duel d = DuelHelper.instance(this.player.getId());
 
-                if(d.getSize() > 1 && d.getSize() <= 6 && this.insufficientMasteryLevel(Feature.PVP_DUELS_6v6)) this.invalidMasteryLevel(Feature.PVP_DUELS_6v6);
-                else if(d.getSize() > 6 && this.insufficientMasteryLevel(Feature.PVP_DUELS_UNLIMITED)) return this.invalidMasteryLevel(Feature.PVP_DUELS_UNLIMITED);
-                else if(checkTeam && this.isInvalidTeam(d.getSize())) this.createInvalidTeamEmbed(d.getSize());
+                if(checkTeam && this.isInvalidTeam(d.getSize())) this.createInvalidTeamEmbed(d.getSize());
                 else
                 {
                     if(d.getSize() > this.playerData.getTeam().size()) this.event.getChannel().sendMessage("Warning! Your team has less Pokemon than your opponent.").queue();
@@ -143,9 +141,6 @@ public class CommandDuel extends Command
 
         if(this.msg.length >= 3) size = this.getInt(2);
         if(TournamentHelper.isInTournament(this.player.getId())) size = TournamentHelper.instance(this.player.getId()).getSize();
-
-        if(size > 1 && size <= 6 && this.insufficientMasteryLevel(Feature.PVP_DUELS_6v6)) this.invalidMasteryLevel(Feature.PVP_DUELS_6v6);
-        else if(size > 6 && this.insufficientMasteryLevel(Feature.PVP_DUELS_UNLIMITED)) return this.invalidMasteryLevel(Feature.PVP_DUELS_UNLIMITED);
 
         //Player wants to start a duel with the mention, check all necessary things
 

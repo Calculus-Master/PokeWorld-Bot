@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.enums.Prices;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -57,6 +58,8 @@ public class CommandPrestige extends Command
                 p.clearAugments();
 
                 p.completeUpdate();
+
+                this.playerData.getStatistics().incr(PlayerStatistic.POKEMON_PRESTIGED);
 
                 this.response = p.getName() + " successfully prestiged to **Prestige Level " + p.getPrestigeLevel() + "!**";
             }

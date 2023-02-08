@@ -1,12 +1,12 @@
-package com.calculusmaster.pokecord.game.player.level.leveltasks;
+package com.calculusmaster.pokecord.game.player.level.pmltasks;
 
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 
-public abstract class AbstractLevelTask
+public abstract class AbstractPMLTask
 {
     private LevelTaskType type;
 
-    public AbstractLevelTask(LevelTaskType type)
+    public AbstractPMLTask(LevelTaskType type)
     {
         this.type = type;
     }
@@ -24,6 +24,7 @@ public abstract class AbstractLevelTask
     {
         EXPERIENCE("Earn Pokemon Mastery Level Experience"),
         POKEMON("Collect Pokemon"),
+        POKEMON_CAUGHT("Catch Pokemon"),
         POKEMON_LEVEL("Have Pokemon at a Certain Level"),
         CREDITS("Earn Credits"),
         SHOP_PURCHASED("Buy Items from the Shop"),
@@ -34,7 +35,12 @@ public abstract class AbstractLevelTask
         RAIDS("Win Raids"),
         ELITE_DUELS("Win Elite Trainer Duels"),
         BOUNTIES("Complete Bounties"),
-        POKEMON_EVOLVED("Evolve Pokemon");
+        POKEMON_EVOLVED("Evolve Pokemon"),
+        POKEMON_DYNAMAXED("Dynamax Pokemon"),
+        POKEMON_BRED("Breed Pokemon"),
+        EGGS_HATCHED("Hatch Pokemon Eggs"),
+        ZCRYSTALS_ACQUIRED("Acquire Z-Crystals"),
+        POKEMON_PRESTIGED("Prestige Pokemon");
 
         private String desc;
         LevelTaskType(String desc)

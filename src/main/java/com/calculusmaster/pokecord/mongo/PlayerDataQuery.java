@@ -20,6 +20,7 @@ import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.bson.Document;
@@ -117,6 +118,23 @@ public class PlayerDataQuery extends MongoQuery
         }
     }
 
+    public void directMessage(MessageEmbed embed)
+    {
+        try
+        {
+            Pokecord.BOT_JDA.openPrivateChannelById(this.getID()).flatMap(channel -> channel.sendMessageEmbeds(embed)).queue();
+        }
+        catch (Exception e)
+        {
+            LoggerHelper.reportError(PlayerDataQuery.class, "Failed to DM " + this.getUsername() + " (ID: " + this.getID() + ")!", e);
+        }
+    }
+
+    public void dmMasteryLevel()
+    {
+        this.directMessage(MasteryLevelManager.MASTERY_LEVELS.get(this.getLevel()).getEmbed().build());
+    }
+
     //Get the SettingsHelper object
     public PlayerSettingsQuery getSettings()
     {
@@ -189,6 +207,7 @@ public class PlayerDataQuery extends MongoQuery
                 if(this.getLevel() == 20) Achievements.grant(this.getID(), Achievements.REACH_MASTERY_LEVEL_20, null);
 
                 this.directMessage("You are now **Pokemon Mastery Level " + this.getLevel() + "**! You've unlocked the following features:\n" + MasteryLevelManager.MASTERY_LEVELS.get(this.getLevel()).getUnlockedFeaturesOverview());
+                this.dmMasteryLevel();
             }
         }
     }

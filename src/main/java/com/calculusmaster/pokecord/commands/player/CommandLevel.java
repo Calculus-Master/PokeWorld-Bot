@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.commands.player;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
-import com.calculusmaster.pokecord.game.player.level.leveltasks.AbstractLevelTask;
+import com.calculusmaster.pokecord.game.player.level.pmltasks.AbstractPMLTask;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.List;
@@ -22,15 +22,15 @@ public class CommandLevel extends Command
         if(!MasteryLevelManager.isMax(this.playerData))
         {
             int level = this.playerData.getLevel();
-            List<AbstractLevelTask> tasks = MasteryLevelManager.MASTERY_LEVELS.get(level + 1).getTasks();
+            List<AbstractPMLTask> tasks = MasteryLevelManager.MASTERY_LEVELS.get(level + 1).getTasks();
 
             this.embed
                     .addField("Level", "You are `Level " + level + "`", false)
-                    .addField("Features", "You recently unlocked the following features:\n" + MasteryLevelManager.MASTERY_LEVELS.get(level).getUnlockedFeaturesOverview(), false);
+                    .addField("Features", level == 0 ? "You've just started exploring the world of Pokemon! You're able to catch, release, select, evolve, teach moves and organize your Pokemon." : "You recently unlocked the following features:\n" + MasteryLevelManager.MASTERY_LEVELS.get(level).getUnlockedFeaturesOverview(), false);
 
             for(int i = 0; i < tasks.size(); i++)
             {
-                AbstractLevelTask t = tasks.get(i);
+                AbstractPMLTask t = tasks.get(i);
                 boolean complete = t.isCompleted(this.playerData);
 
                 String title = "Task " + (i + 1);

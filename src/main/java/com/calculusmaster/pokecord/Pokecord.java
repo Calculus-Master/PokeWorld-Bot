@@ -46,6 +46,7 @@ import java.util.concurrent.TimeUnit;
 public class Pokecord
 {
     public static final String TEST_SERVER_ID = "873993084155887617";
+    public static final String NAME = "PokeWorld";
 
     public static JDA BOT_JDA;
     public static boolean INIT_COMPLETE;

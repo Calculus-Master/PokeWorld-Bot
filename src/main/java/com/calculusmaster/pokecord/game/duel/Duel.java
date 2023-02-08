@@ -263,6 +263,9 @@ public class Duel
             this.players[p].active.enterDynamax();
             this.players[p].dynamaxTurns = 3;
             this.players[p].usedDynamax = true;
+
+            if(this.players[p] instanceof UserPlayer user) user.data.getStatistics().incr(PlayerStatistic.DYNAMAXED_POKEMON);
+
             this.results.add(this.players[p].active.getName() + " dynamaxed!\n");
         }
 

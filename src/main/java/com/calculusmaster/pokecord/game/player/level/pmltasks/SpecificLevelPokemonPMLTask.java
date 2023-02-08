@@ -1,13 +1,13 @@
-package com.calculusmaster.pokecord.game.player.level.leveltasks;
+package com.calculusmaster.pokecord.game.player.level.pmltasks;
 
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 
-public class SpecificLevelPokemonLevelTask extends AbstractLevelTask
+public class SpecificLevelPokemonPMLTask extends AbstractPMLTask
 {
     private final int amount;
     private final int level;
 
-    public SpecificLevelPokemonLevelTask(int amount, int level)
+    public SpecificLevelPokemonPMLTask(int amount, int level)
     {
         super(LevelTaskType.POKEMON_LEVEL);
         this.amount = amount;
@@ -17,7 +17,7 @@ public class SpecificLevelPokemonLevelTask extends AbstractLevelTask
     @Override
     public boolean isCompleted(PlayerDataQuery p)
     {
-        return p.getPokemon().stream().filter(pokemon -> pokemon.getLevel() >= this.level).count() >= amount;
+        return p.getPokemon().stream().filter(pokemon -> pokemon.getLevel() >= this.level).count() >= this.amount;
     }
 
     @Override

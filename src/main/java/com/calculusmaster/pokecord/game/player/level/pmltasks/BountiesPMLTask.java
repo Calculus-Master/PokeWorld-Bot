@@ -1,13 +1,13 @@
-package com.calculusmaster.pokecord.game.player.level.leveltasks;
+package com.calculusmaster.pokecord.game.player.level.pmltasks;
 
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 
-public class BountiesLevelTask extends AbstractLevelTask
+public class BountiesPMLTask extends AbstractPMLTask
 {
     private final int amount;
 
-    public BountiesLevelTask(int amount)
+    public BountiesPMLTask(int amount)
     {
         super(LevelTaskType.BOUNTIES);
         this.amount = amount;

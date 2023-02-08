@@ -1,234 +1,197 @@
 package com.calculusmaster.pokecord.game.player.level;
 
-import com.calculusmaster.pokecord.game.enums.elements.Feature;
-import com.calculusmaster.pokecord.game.player.level.leveltasks.*;
+import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.game.player.level.pmltasks.*;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.calculusmaster.pokecord.game.enums.elements.Feature.*;
 
 public class MasteryLevelManager
 {
     public static boolean ACTIVE;
     public static final List<PokemonMasteryLevel> MASTERY_LEVELS = new ArrayList<>();
 
-    //TODO: Restructure Mastery Level
+    //TODO: Restructure leveling and ensure it requires usage of features just unlocked
+    //TODO: Names for each Level?
     public static void init()
     {
-        // Level 0 – Introduction
-        // Catch Pokemon – p!catch, p!pokemon, p!select
-        // View Level – p!level
-        // Tips – p!tip
-        // Server Targets - p!target (this can't be locked behind a PML easily)
-        // Settings - p!settings (this shouldn't really be locked behind anything)
-        PokemonMasteryLevel.create(0)
-                .withFeaturesUnlocked(Feature.CATCH_POKEMON, Feature.SELECT_POKEMON, Feature.VIEW_POKEMON_LIST, Feature.ACCESS_SETTINGS)
+        //Level 0 – Introduction & Basic Features
+        PokemonMasteryLevel
+                .create(0)
+                .withEmbed(() -> new EmbedBuilder()
+                        .setTitle("Pokemon Mastery Level 0 – Welcome to " + Pokecord.NAME + "!")
+                        .setDescription("""
+                                ***Welcome to the world of Pokemon! Let's start with some basic key features you'll be using throughout your journey.***
+                                
+                                The core loop of the bot is to catch Pokemon, level them up, and battle against other opponents.\s
+                                Along the way, you'll discover countless ways to improve, empower, diversify, and customize your Pokemon, and as a result many challenging opponents and interesting battling experiences.
+                                But first, you'll need to be acquainted with some key features you'll need to solidify to become a Pokemon Master!
+                                
+                                New features will be unlocked as you level up your Pokemon Mastery Level. The main way to earn XP for this is to level up your Pokemon! You'll discover new ways to earn PML experience later on, but for now leveling up Pokemon is your primary way to earn experience.
+                                For example, you do not have access to battling right now. You'll need to level up Pokemon you catch to earn enough experience to reach that point!
+                                You can use `/level` for a more in-depth overview of what tasks you need to complete and your progress towards reaching the next Mastery Rank.
+                                
+                                **Good luck, Trainer!**
+                                """)
+                        .addField("Catching and Managing your Pokemon", """
+                                **Catching Pokemon**: The most common thing you'll be doing is catching new Pokemon!\s
+                                Pokemon will randomly spawn in a specific channel on your server, every so often. You can catch them using `/catch`.\s
+                                Make sure you catch and guess the Pokemon's name quickly before another player does!
+                                
+                                **Viewing Pokemon**: You can see the Pokemon you've acquired using `/pokemon`.\s
+                                You can also select a Pokemon to be your active Pokemon, using the `/select` command. A good portion of features within the bot will make use of your selected Pokemon, so always make sure to select a Pokemon you want to interact with.
+                                If you're interested in one of your Pokemon's abilities, use `/info` (selected Pokemon) or `/info <number>` (a specific Pokemon from your list) to view its stats, gender, nature, experience, IVs, EVs, and more!
+                                """, false)
+                        .addField("Releasing Pokemon", """
+                                Growing tired of a Pokemon? No longer want 15 Weedles?\s
+                                Not to worry – you can release a Pokemon to the wild using `/release <number>`.\s
+                                *Note: Anything equipped on or invested into this Pokemon will be lost!*
+                                """, false)
+                        .addField("Leveling", """
+                                Sending messages on Discord will automatically grant your currently selected Pokemon some experience.\s
+                                There are other ways to earn Pokemon XP, that you'll discover throughout the rest of your adventure.\s
+                                Leveling up Pokemon unlocks new moves and makes them more powerful! The maximum level any Pokemon can be is 100.
+                                """, false)
+                        .addField("Moves", """
+                                You can view your selected Pokemon's available moves using `/moves`.\s
+                                Some moves will be locked – you need to level up that Pokemon further to unlock them! Additionally, a select few moves may be permanently locked. These are either not going to be implemented, or are currently a work-in-progress!\s
+                                To learn a new move, use `/learn`. This will prompt you to replace one of the moves your current Pokemon knows using `/replace`. There is no penalty or cost for switching out moves, so feel free to experiment and craft that perfect set of moves for your Pokemon!
+                                Moves can do a variety of different things in Duels (which you'll unlock soon!).
+                                """, false)
+                        .addField("Evolution", """
+                                Some Pokemon have the ability to evolve into a more powerful Pokemon. You can view if your selected Pokemon can evolve using `/info`.
+                                Level-based evolutions will happen automatically as you chat on Discord, when a Pokemon reaches the correct level.
+                                Special evolutions that may require items and/or special conditions can be activated using `/evolve`.
+                                """, false)
+                        .addField("Help & Information", """
+                                **Balance**: The primary currency in %s is Credits. You can earn credits in a variety of ways, as you'll discover during your journey.\s
+                                You can view your credit balance using `/balance`.
+                                
+                                **Help**: There's *a lot* of information surrounding Pokemon, their moves, and the features of this bot.\s
+                                You can use `/help` if you ever feel lost with a certain command.
+                                
+                                **Information**: Interested in information regarding a specific Pokemon, ability, move, or more?\s
+                                There are plenty of commands such as `/dex`, `/info`, `/moveinfo` and more that will show you data regarding a specific aspect of the world of Pokemon.
+                                """.formatted(Pokecord.NAME), false)
+                )
+                .withFeaturesUnlocked(VIEW_POKEMON_LIST, VIEW_LEVEL, VIEW_TIPS, ACCESS_SETTINGS, VIEW_DEX_INFO, VIEW_UNIQUE_INFO, VIEW_SERVER_INFO, VIEW_PROFILE, CREATE_REPORT, VIEW_HELP, VIEW_BALANCE, VIEW_ABILITY_INFO, VIEW_MOVE_INFO, VIEW_MOVES, VIEW_LOCATION, VIEW_ACHIEVEMENTS, ACCESS_INVENTORY, ACCESS_LEADERBOARD,
+                        CATCH_POKEMON, SELECT_POKEMON, EVOLVE_POKEMON, RELEASE_POKEMON, LEARN_REPLACE_MOVES)
                 .register();
 
-        // Level 1 - Essential Features (p!start)
-        // Information – p!dex, p!info, p!serverinfo
-        // Misc Utilities – p!profile, p!report, p!help, p!balance
         PokemonMasteryLevel.create(1)
-                .withFeaturesUnlocked(Feature.VIEW_DEX_INFO, Feature.VIEW_UNIQUE_INFO, Feature.VIEW_SERVER_INFO, Feature.VIEW_PROFILE, Feature.CREATE_REPORT, Feature.VIEW_HELP, Feature.VIEW_BALANCE)
-                .withPokemonRequirement(2)
+                .withEmbed(() -> new EmbedBuilder())
+                .withFeaturesUnlocked(CREATE_POKEMON_TEAMS, PVP_DUELS, USE_MOVES)
+                .withExperienceRequirement(20)
+                .withTaskRequirement(new PokemonCaughtPMLTask(10))
                 .register();
 
-        // Level 2 - Expanded Essential Features (Moves)
-        // Pokemon Evolution and Release – p!evolve, p!release
-        // Move Information – p!abilityinfo, p!moveinfo
-        // Moves – p!moves, p!learn, p!replace
-        // Additional Misc – p!location, p!achievements
         PokemonMasteryLevel.create(2)
-                .withFeaturesUnlocked(Feature.EVOLVE_POKEMON, Feature.RELEASE_POKEMON, Feature.VIEW_ABILITY_INFO, Feature.VIEW_MOVE_INFO, Feature.VIEW_MOVES, Feature.LEARN_REPLACE_MOVES, Feature.VIEW_LOCATION, Feature.VIEW_ACHIEVEMENTS)
+                .withEmbed(() -> new EmbedBuilder())
+                .withFeaturesUnlocked(TRADE, ACCESS_BUY_SHOP, ACCESS_MARKET)
                 .withExperienceRequirement(50)
-                .withPokemonRequirement(15)
-                .withTaskRequirement(new CreditsLevelTask(1500))
+                .withTaskRequirement(new PokemonCaughtPMLTask(20))
+                .withTaskRequirement(new SpecificLevelPokemonPMLTask(2, 15))
+                .withTaskRequirement(new PvPDuelsCompletedPMLTask(3))
                 .register();
 
-        // Level 3 - Player Interaction
-        // PvP Duels (Limited to 1v1) – p!duel, p!use
-        // Trading – p!trade
         PokemonMasteryLevel.create(3)
-                .withFeaturesUnlocked(Feature.PVP_DUELS_1V1, Feature.USE_MOVES, Feature.TRADE)
-                .withExperienceRequirement(100)
-                .withPokemonRequirement(25)
-                .withTaskRequirement(new SpecificLevelPokemonLevelTask(10, 20))
-                .withTaskRequirement(new CreditsLevelTask(2000))
+                .withEmbed(() -> new EmbedBuilder())
+                .withFeaturesUnlocked(PVE_DUELS, CREATE_POKEMON_FAVORITES, ACQUIRE_POKEMON_FORMS, ACQUIRE_POKEMON_MEGA_EVOLUTIONS)
+                .withExperienceRequirement(70)
+                .withTaskRequirement(new PokemonOwnedPMLTask(40))
+                .withTaskRequirement(new SpecificLevelPokemonPMLTask(3, 25))
+                .withTaskRequirement(new ShopPurchasedPMLTask(2))
                 .register();
 
-        // Level 4 – Shop & Inventory
-        // Shop Interaction – p!shop, p!buy (Nature, Candy)
-        // Redeems – p!redeem
         PokemonMasteryLevel.create(4)
-                .withFeaturesUnlocked(Feature.ACCESS_BUY_SHOP, Feature.REDEEM_POKEMON)
-                .withExperienceRequirement(175)
-                .withPokemonRequirement(75)
-                .withTaskRequirement(new PvPLevelTask(5))
-                .withTaskRequirement(new CreditsLevelTask(2800))
+                .withEmbed(() -> new EmbedBuilder())
+                .withFeaturesUnlocked(ACCESS_BOUNTIES, GIVE_POKEMON_ITEMS, REDEEM_POKEMON)
+                .withExperienceRequirement(100)
+                .withTaskRequirement(new PokemonOwnedPMLTask(70))
+                .withTaskRequirement(new SpecificLevelPokemonPMLTask(4, 30))
+                .withTaskRequirement(new SpecificLevelPokemonPMLTask(1, 50))
+                .withTaskRequirement(new WildPMLTask(5))
                 .register();
 
-        // Level 5 – Expanding Duels (PvP)
-        // PvP Duels (Limited to 6v6)
-        // Pokemon Teams – p!team
-        // Pokemon Favorites – p!favorites
         PokemonMasteryLevel.create(5)
-                .withFeaturesUnlocked(Feature.PVP_DUELS_6v6, Feature.CREATE_POKEMON_TEAMS, Feature.CREATE_POKEMON_FAVORITES)
-                .withExperienceRequirement(250)
-                .withPokemonRequirement(125)
-                .withTaskRequirement(new ShopPurchasedLevelTask(5))
-                .withTaskRequirement(new SpecificLevelPokemonLevelTask(10, 30))
+                .withEmbed(() -> new EmbedBuilder())
+                .withFeaturesUnlocked(PVE_DUELS_TRAINER, VIEW_TRAINER_INFO, FLEE_TRAINER_DUELS)
+                .withExperienceRequirement(125)
+                .withTaskRequirement(new PokemonOwnedPMLTask(100))
+                .withTaskRequirement(new SpecificLevelPokemonPMLTask(5, 40))
+                .withTaskRequirement(new SpecificLevelPokemonPMLTask(1, 60))
+                .withTaskRequirement(new BountiesPMLTask(4))
                 .register();
 
-        // Level 6 – Bounties
-        // Bounties – p!bounties
         PokemonMasteryLevel.create(6)
-                .withFeaturesUnlocked(Feature.ACCESS_BOUNTIES)
-                .withExperienceRequirement(400)
-                .withPokemonRequirement(175)
-                .withTaskRequirement(new PvPLevelTask(15))
-                .withTaskRequirement(new SpecificLevelPokemonLevelTask(20, 20))
+                .withEmbed(() -> new EmbedBuilder())
+                .withFeaturesUnlocked(ACCESS_TMS, ACCESS_TRS, TEACH_TMS_TRS, DYNAMAX_POKEMON, PURCHASE_MOVE_TUTOR_MOVES)
+                .withExperienceRequirement(180)
+                .withTaskRequirement(new PokemonOwnedPMLTask(120))
+                .withTaskRequirement(new SpecificLevelPokemonPMLTask(1, 90))
+                .withTaskRequirement(new TrainerPMLTask(4))
+                .withTaskRequirement(new PokemonEvolvedPMLTask(2))
                 .register();
 
-        // Level 7 – Expanding Duels (PvE)
-        // PvE Duels – p!wild, p!trainer (Daily, not Elite), p!flee
         PokemonMasteryLevel.create(7)
-                .withFeaturesUnlocked(Feature.PVE_DUELS, Feature.PVE_DUELS_TRAINER, Feature.FLEE_TRAINER_DUELS, Feature.VIEW_TRAINER_INFO)
-                .withExperienceRequirement(500)
-                .withPokemonRequirement(225)
-                .withTaskRequirement(new BountiesLevelTask(5))
-                .withTaskRequirement(new SpecificLevelPokemonLevelTask(5, 40))
-                .withTaskRequirement(new PvPLevelTask(20))
+                .withEmbed(() -> new EmbedBuilder())
+                .withFeaturesUnlocked(BREED_POKEMON, HATCH_EGGS, PVE_DUELS_RAID, ACTIVATE_ITEMS)
+                .withExperienceRequirement(200)
+                .withTaskRequirement(new PokemonOwnedPMLTask(150))
+                .withTaskRequirement(new PokemonDynamaxedPMLTask(3))
                 .register();
 
-        // Level 8 – Pokemon Forms
-        // Forms – p!forms, p!shop/p!buy forms
         PokemonMasteryLevel.create(8)
-                .withFeaturesUnlocked(Feature.ACQUIRE_POKEMON_FORMS)
-                .withExperienceRequirement(600)
-                .withPokemonRequirement(300)
-                .withTaskRequirement(new WildLevelTask(20))
-                .withTaskRequirement(new TrainerLevelTask(5))
+                .withEmbed(() -> new EmbedBuilder())
+                .withFeaturesUnlocked(PVE_DUELS_ZTRIAL, EQUIP_Z_CRYSTALS, USE_Z_MOVES)
+                .withExperienceRequirement(210)
+                .withTaskRequirement(new PokemonOwnedPMLTask(180))
+                .withTaskRequirement(new SpecificLevelPokemonPMLTask(2, 100))
+                .withTaskRequirement(new PokemonBredPMLTask(3))
+                .withTaskRequirement(new PokemonEggsHatchedPMLTask(1))
                 .register();
 
-
-        // Level 9 – Basic Pokemon Items
-        // Items – p!inventory, p!give
-        // Shop – p!shop items, p!buy items
         PokemonMasteryLevel.create(9)
-                .withFeaturesUnlocked(Feature.ACCESS_INVENTORY, Feature.GIVE_POKEMON_ITEMS)
-                .withExperienceRequirement(800)
-                .withPokemonRequirement(350)
-                .withTaskRequirement(new CreditsLevelTask(3000))
+                .withEmbed(() -> new EmbedBuilder())
+                .withFeaturesUnlocked(PRESTIGE_POKEMON, PURCHASE_Z_CRYSTALS)
+                .withExperienceRequirement(220)
+                .withTaskRequirement(new PokemonOwnedPMLTask(220))
+                .withTaskRequirement(new SpecificLevelPokemonPMLTask(3, 100))
+                .withTaskRequirement(new SpecificLevelPokemonPMLTask(6, 50))
+                .withTaskRequirement(new SpecificLevelPokemonPMLTask(12, 25))
+                .withTaskRequirement(new ZCrystalsAcquiredPMLTask(1))
                 .register();
 
-        // Level 10 – Expanding Duels (PvP)
-        // PvP Duels (Unlimited)
-        // Elite Duels – p!elite
         PokemonMasteryLevel.create(10)
-                .withFeaturesUnlocked(Feature.PVP_DUELS_UNLIMITED, Feature.PVE_DUELS_ELITE)
-                .withExperienceRequirement(1000)
-                .withPokemonRequirement(350)
-                .withTaskRequirement(new SpecificLevelPokemonLevelTask(6, 50))
+                .withEmbed(() -> new EmbedBuilder())
+                .withFeaturesUnlocked(PVE_DUELS_ELITE, PVP_DUELS_TOURNAMENT)
+                .withExperienceRequirement(240)
+                .withTaskRequirement(new PokemonOwnedPMLTask(280))
+                .withTaskRequirement(new ZCrystalsAcquiredPMLTask(2))
+                .withTaskRequirement(new PokemonPrestigedPMLTask(1))
                 .register();
 
-        // Level 11 – Mega Evolution
-        // Mega – p!mega, p!shop/p!buy mega
         PokemonMasteryLevel.create(11)
-                .withFeaturesUnlocked(Feature.ACQUIRE_POKEMON_MEGA_EVOLUTIONS)
-                .withExperienceRequirement(1250)
-                .withPokemonRequirement(400)
-                .withTaskRequirement(new PokemonEvolvedLevelTask(20))
+                .withEmbed(() -> new EmbedBuilder())
+                .withFeaturesUnlocked(AUGMENT_POKEMON)
+                .withExperienceRequirement(250)
+                .withTaskRequirement(new PokemonOwnedPMLTask(320))
+                .withTaskRequirement(new ElitePMLTask(1))
+                .withTaskRequirement(new PokemonPrestigedPMLTask(3))
+                .withTaskRequirement(new CreditsPMLTask(5000))
                 .register();
 
-        // Level 12 – Advanced Pokemon Items
-        // TMs / TRs – p!inventory, p!teach, p!tminfo, p!trinfo
         PokemonMasteryLevel.create(12)
-                .withFeaturesUnlocked(Feature.ACCESS_TMS, Feature.ACCESS_TRS, Feature.TEACH_TMS_TRS)
-                .withExperienceRequirement(1750)
-                .withPokemonRequirement(450)
-                .withTaskRequirement(new ShopPurchasedLevelTask(20))
-                .register();
-
-        // Level 13 – Market
-        // Market – p!market
-        PokemonMasteryLevel.create(13)
-                .withFeaturesUnlocked(Feature.ACCESS_MARKET)
-                .withExperienceRequirement(2500)
-                .withPokemonRequirement(475)
-                .withTaskRequirement(new CreditsLevelTask(10000))
-                .register();
-
-        // Level 14 – Z-Crystals
-        // Z-Crystal Access – p!ztrial, p!equip, p!inventory
-        // Activate Items – p!activate
-        PokemonMasteryLevel.create(14)
-                .withFeaturesUnlocked(Feature.PVE_DUELS_ZTRIAL, Feature.PURCHASE_Z_CRYSTALS, Feature.EQUIP_Z_CRYSTALS, Feature.USE_Z_MOVES, Feature.ACTIVATE_ITEMS)
-                .withExperienceRequirement(2750)
-                .withPokemonRequirement(525)
-                .withTaskRequirement(new BountiesLevelTask(30))
-                .register();
-
-        // Level 15 – Expanding Duels (PvP & PvE)
-        // Raid – p!raid
-        // Move Tutor Moves – p!shop movetutor, p!buy movetutor
-        PokemonMasteryLevel.create(15)
-                .withFeaturesUnlocked(Feature.PVE_DUELS_RAID)
-                .withExperienceRequirement(3000)
-                .withPokemonRequirement(600)
-                .withTaskRequirement(new WildLevelTask(50))
-                .register();
-
-        // Level 16 – Breeding
-        // Breeding – p!breed
-        // Eggs – p!egg
-        PokemonMasteryLevel.create(16)
-                .withFeaturesUnlocked(Feature.BREED_POKEMON, Feature.HATCH_EGGS)
-                .withExperienceRequirement(3500)
-                .withPokemonRequirement(700)
-                .register();
-
-        // Level 17 – Dynamaxing, Gigantamaxing and Max Moves
-        // Dynamaxing (Duels) – p!use d
-        PokemonMasteryLevel.create(17)
-                .withFeaturesUnlocked(Feature.DYNAMAX_POKEMON)
-                .withExperienceRequirement(4000)
-                .withPokemonRequirement(800)
-                .withTaskRequirement(new SpecificLevelPokemonLevelTask(6, 65))
-                .register();
-
-        // Level 18 – Expanding Duels (PvE)
-        // Gauntlets – p!gauntlet
-        PokemonMasteryLevel.create(18)
-                .withFeaturesUnlocked(Feature.PVE_DUELS_GAUNTLET)
-                .withExperienceRequirement(4500)
-                .withPokemonRequirement(810)
-                .withTaskRequirement(new SpecificLevelPokemonLevelTask(1, 100))
-                .register();
-
-        // Level 19 – Tournaments
-        // Tournaments – p!tournament
-        // Leaderboard - p!leaderboard
-        PokemonMasteryLevel.create(19)
-                .withFeaturesUnlocked(Feature.PVP_DUELS_TOURNAMENT, Feature.ACCESS_LEADERBOARD)
-                .withExperienceRequirement(5000)
-                .withPokemonRequirement(850)
-                .withTaskRequirement(new SpecificLevelPokemonLevelTask(6, 70))
-                .register();
-
-        // Level 20 – The Apex
-        // TODO: Brainstorm other features for this bot – Endgame Duel Type?
-        PokemonMasteryLevel.create(20)
-                .withFeaturesUnlocked(Feature.PRESTIGE_POKEMON, Feature.AUGMENT_POKEMON)
-                .withExperienceRequirement(7500)
-                .withPokemonRequirement(1000)
-                .withTaskRequirement(new SpecificLevelPokemonLevelTask(6, 100))
-                .withTaskRequirement(new CreditsLevelTask(10000))
-                .withTaskRequirement(new BountiesLevelTask(100))
-                .withTaskRequirement(new PvPLevelTask(50))
-                .withTaskRequirement(new EliteLevelTask(10))
-                .withTaskRequirement(new ShopPurchasedLevelTask(100))
-                .withTaskRequirement(new WildLevelTask(100))
-                .withTaskRequirement(new PokemonEvolvedLevelTask(50))
+                .withEmbed(() -> new EmbedBuilder())
+                .withFeaturesUnlocked(PVE_DUELS_GAUNTLET)
+                .withExperienceRequirement(280)
+                .withTaskRequirement(new SpecificLevelPokemonPMLTask(6, 100))
+                .withTaskRequirement(new PokemonOwnedPMLTask(400))
+                .withTaskRequirement(new ElitePMLTask(4))
                 .register();
     }
 

@@ -1,26 +1,30 @@
 package com.calculusmaster.pokecord.game.player.level;
 
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
-import com.calculusmaster.pokecord.game.player.level.leveltasks.AbstractLevelTask;
-import com.calculusmaster.pokecord.game.player.level.leveltasks.ExperienceLevelTask;
-import com.calculusmaster.pokecord.game.player.level.leveltasks.PokemonLevelTask;
+import com.calculusmaster.pokecord.game.player.level.pmltasks.AbstractPMLTask;
+import com.calculusmaster.pokecord.game.player.level.pmltasks.ExperiencePMLTask;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import net.dv8tion.jda.api.EmbedBuilder;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class PokemonMasteryLevel
 {
     private int level;
+    private Supplier<EmbedBuilder> embed;
     private EnumSet<Feature> features;
-    private List<AbstractLevelTask> requirements;
+    private List<AbstractPMLTask> requirements;
 
     private PokemonMasteryLevel(int level)
     {
         this.level = level;
+        this.embed = EmbedBuilder::new;
         this.features = EnumSet.noneOf(Feature.class);
         this.requirements = new ArrayList<>();
     }
@@ -28,6 +32,11 @@ public class PokemonMasteryLevel
     public static PokemonMasteryLevel create(int level)
     {
         return new PokemonMasteryLevel(level);
+    }
+
+    public EmbedBuilder getEmbed()
+    {
+        return this.embed.get().setTimestamp(Instant.now());
     }
 
     public void register()
@@ -40,6 +49,12 @@ public class PokemonMasteryLevel
         return this.requirements.stream().allMatch(task -> task.isCompleted(p));
     }
 
+    public PokemonMasteryLevel withEmbed(Supplier<EmbedBuilder> embedSupplier)
+    {
+        this.embed = embedSupplier;
+        return this;
+    }
+
     public PokemonMasteryLevel withFeaturesUnlocked(Feature... features)
     {
         Collections.addAll(this.features, features);
@@ -48,23 +63,17 @@ public class PokemonMasteryLevel
 
     public PokemonMasteryLevel withExperienceRequirement(int pokemonLevels)
     {
-        this.requirements.add(new ExperienceLevelTask(pokemonLevels * PMLExperience.LEVEL_POKEMON.experience));
+        this.requirements.add(new ExperiencePMLTask(pokemonLevels * PMLExperience.LEVEL_POKEMON.experience));
         return this;
     }
 
-    public PokemonMasteryLevel withPokemonRequirement(int amount)
-    {
-        this.requirements.add(new PokemonLevelTask(amount));
-        return this;
-    }
-
-    public PokemonMasteryLevel withTaskRequirement(AbstractLevelTask task)
+    public PokemonMasteryLevel withTaskRequirement(AbstractPMLTask task)
     {
         this.requirements.add(task);
         return this;
     }
 
-    public List<AbstractLevelTask> getTasks()
+    public List<AbstractPMLTask> getTasks()
     {
         return this.requirements;
     }

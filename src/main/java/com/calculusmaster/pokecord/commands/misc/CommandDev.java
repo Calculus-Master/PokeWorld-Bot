@@ -10,6 +10,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Location;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.MoveData;
+import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -160,6 +161,10 @@ public class CommandDev extends Command
                     Feature.DISABLED.add(f);
                     this.event.getChannel().sendMessage(f + " has been disabled!").queue();
                 }
+            }
+            case "dmmasteryleveltext" -> {
+                int lvl = Integer.parseInt(this.msg[2]);
+                Pokecord.BOT_JDA.openPrivateChannelById(this.player.getId()).flatMap(channel -> channel.sendMessageEmbeds(MasteryLevelManager.MASTERY_LEVELS.get(lvl).getEmbed().build())).queue();
             }
         }
 
