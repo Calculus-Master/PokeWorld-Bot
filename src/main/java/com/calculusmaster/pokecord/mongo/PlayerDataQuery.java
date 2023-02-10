@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.bounties.Bounty;
 import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerData;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
@@ -203,6 +204,13 @@ public class PlayerDataQuery extends MongoQuery
             if(!MasteryLevelManager.isMax(this) && MasteryLevelManager.MASTERY_LEVELS.get(this.getLevel() + 1).canLevelUp(this))
             {
                 this.increaseLevel();
+
+                //Starting Augments
+                if(MasteryLevelManager.MASTERY_LEVELS.get(this.getLevel()).getFeatures().contains(Feature.AUGMENT_POKEMON))
+                {
+                    EnumSet.of(PokemonAugment.HP_BOOST, PokemonAugment.ATK_BOOST, PokemonAugment.DEF_BOOST, PokemonAugment.SPATK_BOOST, PokemonAugment.SPDEF_BOOST, PokemonAugment.SPD_BOOST)
+                            .forEach(p -> this.addAugment(p.getAugmentID()));
+                }
 
                 if(this.getLevel() == 20) Achievements.grant(this.getID(), Achievements.REACH_MASTERY_LEVEL_20, null);
 

@@ -357,6 +357,7 @@ public class Duel
     //Always use this.current!
     public String turn(Move move)
     {
+        final Random random = new Random();
         List<String> turnResult = new ArrayList<>();
 
         //Setup
@@ -2342,6 +2343,59 @@ public class Duel
                 });
 
                 player.data.getStatistics().incr(PlayerStatistic.POKEMON_DEFEATED);
+
+                //General Augments
+                boolean augmentEarned = false;
+
+                if(random.nextFloat() < 0.1F)
+                {
+                    List<PokemonAugment> pool = new ArrayList<>(List.of(PokemonAugment.SUPERCHARGED, PokemonAugment.SUPERFORTIFIED, PokemonAugment.HARMONY, PokemonAugment.PINNACLE_EVASION, PokemonAugment.PRECISION_STRIKES, PokemonAugment.PRECISION_BURST, PokemonAugment.RAW_FORCE, PokemonAugment.MODIFYING_FORCE));
+                    pool.removeIf(pa -> player.data.isAugmentUnlocked(pa.getAugmentID()));
+
+                    if(!pool.isEmpty())
+                    {
+                        Collections.shuffle(pool);
+
+                        PokemonAugment chosen = pool.get(0);
+                        player.data.addAugment(chosen.getAugmentID());
+
+                        augmentEarned = true;
+                        turnResult.add(player.data.getUsername() + " has found an Augment! They earned: " + chosen.getAugmentName());
+                    }
+                }
+
+                if(!augmentEarned && random.nextFloat() < 0.05F)
+                {
+                    PokemonAugment typeAugment = switch(move.getType()) {
+                        case NORMAL -> PokemonAugment.STANDARDIZATION;
+                        case FIRE -> PokemonAugment.SEARING_SHOT;
+                        case WATER -> PokemonAugment.DRENCH;
+                        case ELECTRIC -> PokemonAugment.STATIC;
+                        case GRASS -> PokemonAugment.FLORAL_HEALING;
+                        case ICE -> PokemonAugment.ICY_AURA;
+                        case FIGHTING -> PokemonAugment.TRUE_STRIKE;
+                        case POISON -> PokemonAugment.POISONOUS_SINGE;
+                        case GROUND -> PokemonAugment.GROUNDED_EMPOWERMENT;
+                        case FLYING -> PokemonAugment.AERIAL_EVASION;
+                        case PSYCHIC -> PokemonAugment.SURE_SHOT;
+                        case BUG -> PokemonAugment.SWARM_COLLECTIVE;
+                        case ROCK -> PokemonAugment.HEAVYWEIGHT_BASH;
+                        case GHOST -> PokemonAugment.PHASE_SHIFTER;
+                        case DRAGON -> PokemonAugment.DRACONIC_ENRAGE;
+                        case DARK -> PokemonAugment.UMBRAL_ENHANCEMENTS;
+                        case STEEL -> PokemonAugment.PLATED_ARMOR;
+                        case FAIRY -> PokemonAugment.FLOWERING_GRACE;
+                    };
+
+                    if(!player.data.isAugmentUnlocked(typeAugment.getAugmentID()))
+                    {
+                        player.data.addAugment(typeAugment.getAugmentID());
+
+                        augmentEarned = true;
+
+                        turnResult.add(player.data.getUsername() + " has found an Augment! They earned: " + typeAugment.getAugmentName());
+                    }
+                }
             }
 
             if(this.players[this.other] instanceof UserPlayer player) player.data.getStatistics().incr(PlayerStatistic.POKEMON_FAINTED);

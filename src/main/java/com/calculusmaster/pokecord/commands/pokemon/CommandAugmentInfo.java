@@ -37,6 +37,7 @@ public class CommandAugmentInfo extends Command
                 this.embed
                         .setTitle(augment.getAugmentName())
                         .setDescription("*" + augment.getAugmentDescription() + "*")
+                        .addField("Source", augment.getSource(), false)
                         .addField("Slots", String.valueOf(augment.getSlotCost()), true)
                         .addField("ID", augment.getAugmentID(), true)
                         .setFooter(this.playerData.isAugmentUnlocked(augment.getAugmentID()) ? "You have unlocked this Augment!" : "You have not unlocked this Augment!");
