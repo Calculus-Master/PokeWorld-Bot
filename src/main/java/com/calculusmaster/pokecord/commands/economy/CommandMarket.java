@@ -53,7 +53,12 @@ public class CommandMarket extends Command
         {
             MarketEntry m = MarketEntry.build(this.msg[2]);
 
-            if(buy && m.price <= this.playerData.getCredits())
+            if(buy && m.sellerID.equals(this.player.getId()))
+            {
+                this.response = "You can't buy your own Pokemon! If you'd like to rescind a listing, use p!market collect <marketID>.";
+                return this;
+            }
+            else if(buy && m.price <= this.playerData.getCredits())
             {
                 this.playerData.changeCredits(-1 * m.price);
                 this.playerData.addPokemon(m.pokemonID);
