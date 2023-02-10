@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.player.level;
 import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.game.player.level.pmltasks.*;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.util.enums.Prices;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.ArrayList;
@@ -93,8 +94,6 @@ public class MasteryLevelManager
                 .withEmbed(() -> new EmbedBuilder())
                 .withFeaturesUnlocked(TRADE, ACCESS_BUY_SHOP, ACCESS_MARKET)
                 .withExperienceRequirement(50)
-                .withTaskRequirement(new PokemonCaughtPMLTask(20))
-                .withTaskRequirement(new SpecificLevelPokemonPMLTask(2, 15))
                 .withTaskRequirement(new PvPDuelsCompletedPMLTask(3))
                 .register();
 
@@ -102,8 +101,8 @@ public class MasteryLevelManager
                 .withEmbed(() -> new EmbedBuilder())
                 .withFeaturesUnlocked(PVE_DUELS, CREATE_POKEMON_FAVORITES, ACQUIRE_POKEMON_FORMS, ACQUIRE_POKEMON_MEGA_EVOLUTIONS)
                 .withExperienceRequirement(70)
-                .withTaskRequirement(new PokemonOwnedPMLTask(40))
-                .withTaskRequirement(new SpecificLevelPokemonPMLTask(3, 25))
+                .withTaskRequirement(new PokemonEvolvedPMLTask(1))
+                .withTaskRequirement(new PokemonCaughtPMLTask(15))
                 .withTaskRequirement(new ShopPurchasedPMLTask(2))
                 .register();
 
@@ -111,9 +110,7 @@ public class MasteryLevelManager
                 .withEmbed(() -> new EmbedBuilder())
                 .withFeaturesUnlocked(ACCESS_BOUNTIES, GIVE_POKEMON_ITEMS, REDEEM_POKEMON)
                 .withExperienceRequirement(100)
-                .withTaskRequirement(new PokemonOwnedPMLTask(70))
-                .withTaskRequirement(new SpecificLevelPokemonPMLTask(4, 30))
-                .withTaskRequirement(new SpecificLevelPokemonPMLTask(1, 50))
+                .withTaskRequirement(new ShopPurchasedPMLTask(5))
                 .withTaskRequirement(new WildPMLTask(5))
                 .register();
 
@@ -121,18 +118,17 @@ public class MasteryLevelManager
                 .withEmbed(() -> new EmbedBuilder())
                 .withFeaturesUnlocked(PVE_DUELS_TRAINER, VIEW_TRAINER_INFO, FLEE_TRAINER_DUELS)
                 .withExperienceRequirement(125)
-                .withTaskRequirement(new PokemonOwnedPMLTask(100))
-                .withTaskRequirement(new SpecificLevelPokemonPMLTask(5, 40))
-                .withTaskRequirement(new SpecificLevelPokemonPMLTask(1, 60))
+                .withTaskRequirement(new WildPMLTask(8))
+                .withTaskRequirement(new PvPDuelsCompletedPMLTask(6))
                 .withTaskRequirement(new BountiesPMLTask(4))
+                .withTaskRequirement(new SpecificLevelPokemonPMLTask(3, 20))
                 .register();
 
         PokemonMasteryLevel.create(6)
                 .withEmbed(() -> new EmbedBuilder())
                 .withFeaturesUnlocked(ACCESS_TMS, ACCESS_TRS, TEACH_TMS_TRS, DYNAMAX_POKEMON, PURCHASE_MOVE_TUTOR_MOVES)
                 .withExperienceRequirement(180)
-                .withTaskRequirement(new PokemonOwnedPMLTask(120))
-                .withTaskRequirement(new SpecificLevelPokemonPMLTask(1, 90))
+                .withTaskRequirement(new CreditsPMLTask(Prices.SHOP_BASE_TM.get()))
                 .withTaskRequirement(new TrainerPMLTask(4))
                 .withTaskRequirement(new PokemonEvolvedPMLTask(2))
                 .register();
@@ -141,7 +137,8 @@ public class MasteryLevelManager
                 .withEmbed(() -> new EmbedBuilder())
                 .withFeaturesUnlocked(BREED_POKEMON, HATCH_EGGS, PVE_DUELS_RAID, ACTIVATE_ITEMS)
                 .withExperienceRequirement(200)
-                .withTaskRequirement(new PokemonOwnedPMLTask(150))
+                .withTaskRequirement(new PokemonCaughtPMLTask(25))
+                .withTaskRequirement(new ShopPurchasedPMLTask(10))
                 .withTaskRequirement(new PokemonDynamaxedPMLTask(3))
                 .register();
 
@@ -149,8 +146,7 @@ public class MasteryLevelManager
                 .withEmbed(() -> new EmbedBuilder())
                 .withFeaturesUnlocked(PVE_DUELS_ZTRIAL, EQUIP_Z_CRYSTALS, USE_Z_MOVES)
                 .withExperienceRequirement(210)
-                .withTaskRequirement(new PokemonOwnedPMLTask(180))
-                .withTaskRequirement(new SpecificLevelPokemonPMLTask(2, 100))
+                .withTaskRequirement(new SpecificLevelPokemonPMLTask(1, 50))
                 .withTaskRequirement(new PokemonBredPMLTask(3))
                 .withTaskRequirement(new PokemonEggsHatchedPMLTask(1))
                 .register();
@@ -159,10 +155,7 @@ public class MasteryLevelManager
                 .withEmbed(() -> new EmbedBuilder())
                 .withFeaturesUnlocked(PRESTIGE_POKEMON, PURCHASE_Z_CRYSTALS)
                 .withExperienceRequirement(220)
-                .withTaskRequirement(new PokemonOwnedPMLTask(220))
-                .withTaskRequirement(new SpecificLevelPokemonPMLTask(3, 100))
-                .withTaskRequirement(new SpecificLevelPokemonPMLTask(6, 50))
-                .withTaskRequirement(new SpecificLevelPokemonPMLTask(12, 25))
+                .withTaskRequirement(new CreditsPMLTask(Prices.SHOP_ZCRYSTAL.get()))
                 .withTaskRequirement(new ZCrystalsAcquiredPMLTask(1))
                 .register();
 
@@ -170,27 +163,27 @@ public class MasteryLevelManager
                 .withEmbed(() -> new EmbedBuilder())
                 .withFeaturesUnlocked(PVE_DUELS_ELITE, PVP_DUELS_TOURNAMENT)
                 .withExperienceRequirement(240)
-                .withTaskRequirement(new PokemonOwnedPMLTask(280))
                 .withTaskRequirement(new ZCrystalsAcquiredPMLTask(2))
                 .withTaskRequirement(new PokemonPrestigedPMLTask(1))
+                .withTaskRequirement(new SpecificLevelPokemonPMLTask(6, 50))
                 .register();
 
         PokemonMasteryLevel.create(11)
                 .withEmbed(() -> new EmbedBuilder())
                 .withFeaturesUnlocked(AUGMENT_POKEMON)
                 .withExperienceRequirement(250)
-                .withTaskRequirement(new PokemonOwnedPMLTask(320))
                 .withTaskRequirement(new ElitePMLTask(1))
                 .withTaskRequirement(new PokemonPrestigedPMLTask(3))
-                .withTaskRequirement(new CreditsPMLTask(5000))
+                //TODO: Add task for Credits = Augment Price from shop
                 .register();
 
         PokemonMasteryLevel.create(12)
                 .withEmbed(() -> new EmbedBuilder())
                 .withFeaturesUnlocked(PVE_DUELS_GAUNTLET)
                 .withExperienceRequirement(280)
-                .withTaskRequirement(new SpecificLevelPokemonPMLTask(6, 100))
-                .withTaskRequirement(new PokemonOwnedPMLTask(400))
+                .withTaskRequirement(new PvPDuelsCompletedPMLTask(12))
+                .withTaskRequirement(new WildPMLTask(16))
+                .withTaskRequirement(new TrainerPMLTask(8))
                 .withTaskRequirement(new ElitePMLTask(4))
                 .register();
     }
