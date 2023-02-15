@@ -78,7 +78,7 @@ public class TrainerManager
             int teamSize = random.nextInt(5, 7);
             List<String> team = IntStream.range(0, teamSize).mapToObj(i -> PokemonRarity.getSpawnOfRarities(COPPER, SILVER, GOLD, PLATINUM, DIAMOND, MYTHICAL)).toList();
 
-            TrainerData data = new TrainerData(randomName.get(), 2, team, level >= 75 && random.nextFloat() < 0.25F ? ZCrystal.getCrystalOfType(Type.getRandom()) : null, level, 1.15F);
+            TrainerData data = new TrainerData(randomName.get(), 2, team, null, level, 1.15F);
             data.addRestriction(TeamRestrictionRegistry.STANDARD);
             REGULAR_TRAINERS.add(data);
         });
@@ -87,7 +87,7 @@ public class TrainerManager
         List.of(50, 70, 90, 100).forEach(level -> {
             List<String> team = IntStream.range(0, 6).mapToObj(i -> PokemonRarity.getSpawn()).toList();
 
-            TrainerData data = new TrainerData(randomName.get(), 3, team, random.nextFloat() < 0.25F ? ZCrystal.getCrystalOfType(Type.getRandom()) : null, level, 1.25F);
+            TrainerData data = new TrainerData(randomName.get(), 3, team, random.nextFloat() < 0.15F ? ZCrystal.getCrystalOfType(Type.getRandom()) : null, level, 1.25F);
             data.addRestriction(TeamRestrictionRegistry.STANDARD);
             data.addRestriction(TeamRestrictionRegistry.getRandomOfTier(1));
             REGULAR_TRAINERS.add(data);
@@ -97,7 +97,7 @@ public class TrainerManager
         List.of(70, 90, 100).forEach(level -> {
             List<String> team = IntStream.range(0, 6).mapToObj(i -> PokemonRarity.getSpawn()).toList();
 
-            TrainerData data = new TrainerData(randomName.get(), 4, team, random.nextFloat() < 0.4F ? ZCrystal.getCrystalOfType(Type.getRandom()) : null, level, 1.35F);
+            TrainerData data = new TrainerData(randomName.get(), 4, team, random.nextFloat() < 0.5F ? ZCrystal.getCrystalOfType(Type.getRandom()) : null, level, 1.35F);
             data.addRestriction(TeamRestrictionRegistry.STANDARD);
             TeamRestrictionRegistry.getRandomOfTier(1, 2).forEach(data::addRestriction);
             REGULAR_TRAINERS.add(data);
