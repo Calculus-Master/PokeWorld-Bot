@@ -120,8 +120,6 @@ public class SpawnEventHelper
             spawn = PokemonRarity.getLegendarySpawn();
         }
 
-        //if(Math.random() < 0.03) new Thread(CommandMarket::addBotEntry).start();
-
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("A wild Pokemon spawned!")
                 .setDescription("Try to guess its name and catch it with p!catch <name>!")

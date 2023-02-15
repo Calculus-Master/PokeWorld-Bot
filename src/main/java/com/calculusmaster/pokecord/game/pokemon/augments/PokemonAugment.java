@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.pokemon.augments;
 public enum PokemonAugment
 {
     //TODO: Add acquisition sourecs for Augments (first 3 sections are done)
+    //TODO: Make acquisition sources more deterministic (currently they are random)
 
     //Stat Boost Augments
     HP_BOOST            (1, "Health Boost",         "Automatically given upon reaching the correct PML.", "Increases HP by 5%"),

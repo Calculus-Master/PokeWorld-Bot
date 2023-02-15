@@ -212,7 +212,7 @@ public class PlayerDataQuery extends MongoQuery
                             .forEach(p -> this.addAugment(p.getAugmentID()));
                 }
 
-                if(this.getLevel() == 20) Achievements.grant(this.getID(), Achievements.REACH_MASTERY_LEVEL_20, null);
+                if(this.getLevel() == MasteryLevelManager.MASTERY_LEVELS.get(MasteryLevelManager.MASTERY_LEVELS.size() - 1).getLevel()) Achievements.grant(this.getID(), Achievements.REACH_MAX_MASTERY_LEVEL, null);
 
                 this.directMessage("You are now **Pokemon Mastery Level " + this.getLevel() + "**! You've unlocked the following features:\n" + MasteryLevelManager.MASTERY_LEVELS.get(this.getLevel()).getUnlockedFeaturesOverview());
                 this.dmMasteryLevel();

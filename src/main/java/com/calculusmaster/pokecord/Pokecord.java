@@ -19,7 +19,7 @@ import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.SpecialEvolutionRegistry;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugmentRegistry;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
-import com.calculusmaster.pokecord.mongo.ServerDataQuery;
+import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.PrivateInfo;
 import com.calculusmaster.pokecord.util.cache.PlayerDataCache;
 import com.calculusmaster.pokecord.util.cache.PokemonDataCache;
@@ -29,6 +29,7 @@ import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import com.calculusmaster.pokecord.util.listener.Listener;
 import com.calculusmaster.pokecord.util.listener.MiscListener;
+import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -36,10 +37,12 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import org.bson.Document;
 
 import javax.security.auth.login.LoginException;
+import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.Random;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -132,19 +135,26 @@ public class Pokecord
 
         INIT_COMPLETE = true;
 
-        //PokecordGUI.launch(PokecordGUI.class, args);
+        List<Document> servers = new ArrayList<>();
+        Mongo.ServerData.find().forEach(servers::add);
 
-        Random r = new Random();
+        servers.forEach(d -> {
+            Guild g = BOT_JDA.getGuildById(d.getString("serverID"));
 
-        for(Guild g : BOT_JDA.getGuilds().stream().filter(ServerDataQuery::isRegistered).toList())
-        {
-            Thread.sleep(r.nextInt(1000) + 500);
+            if(g != null)
+            {
+                SpawnEventHelper.start(g);
+                LocationEventHelper.start(g);
 
-            SpawnEventHelper.start(g);
-            LocationEventHelper.start(g);
+                CommandTarget.generateNewServerTarget(g);
+            }
+            else
+            {
+                LoggerHelper.warn(Pokecord.class, "Bot is not connected to server (%s), removing from Database.".formatted(d.getString("serverID")));
 
-            CommandTarget.generateNewServerTarget(g);
-        }
+                Mongo.ServerData.deleteOne(Filters.eq("serverID", d.getString("serverID")));
+            }
+        });
 
         TimeHelper.start();
     }

@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 public enum Achievements
 {
+    //TODO: Add achivement names
     START_JOURNEY(250, "Started your journey!"),
     CAUGHT_FIRST_POKEMON(500, "Caught your first Pokemon!"),
     BOUGHT_FIRST_POKEMON_MARKET(500, "Bought a Pokemon from the market for the first time!"),
@@ -57,7 +58,7 @@ public enum Achievements
     REACHED_COLLECTION_MILESTONE_10(500, "Reached a Collection Milestone of 10 for any Pokemon!"),
     REACHED_COLLECTION_MILESTONE_20(1500, "Reached a Collection Milestone of 20 for any Pokemon!"),
     REACHED_COLLECTION_MILESTONE_50(7000, "Reached a Collection Milestone of 50 for any Pokemon!"),
-    REACH_MASTERY_LEVEL_20(50000, "Reached Pokemon Mastery Level 20!"),
+    REACH_MAX_MASTERY_LEVEL(50000, "Reached the final Pokemon Mastery Level!"),
     COMPLETED_ALL_ACHIEVEMENTS(1000000, "Completed all Achievements!");
 
     public int credits;
