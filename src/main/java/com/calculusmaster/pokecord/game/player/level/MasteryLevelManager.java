@@ -16,7 +16,6 @@ public class MasteryLevelManager
     public static boolean ACTIVE;
     public static final List<PokemonMasteryLevel> MASTERY_LEVELS = new ArrayList<>();
 
-    //TODO: Restructure leveling and ensure it requires usage of features just unlocked
     //TODO: Names for each Level?
     public static void init()
     {
@@ -447,11 +446,12 @@ public class MasteryLevelManager
                                 Augments are unique modifications that you can equip onto your Pokemon, that change certain aspects of that Pokemon during Duels.
                                 Augments can activate during moves, or other effects during Duels!
                                 
-                                All Pokemon will unlock augment slots at predetermined levels, and each have their own maximum number of augment slots.
-                                Augments each have a cost, that will take up some of those slots.
-                                All of this can be viewed using `/augments`!
+                                Every Augment costs a certain number of Augment Slots. When you use the `/augments` command, you'll be able to see all your available Augments as well as their costs, and level requirements to be slotted in.
+                                Pokemon will unlock augment slots at predetermined levels, and each Pokemon has a maximum number of augment slots they can support.
+                                In general, stronger Pokemon will have less Augment slots than weaker ones!
                                 
                                 Augments need to be earned in various ways, usually by some particular objective. You can see where an augment is obtained using `/augmentinfo <number>`!
+                                Once you earn an Augment, it's yours to use freely!
                                 """)
                 )
                 .withFeaturesUnlocked(AUGMENT_POKEMON)
