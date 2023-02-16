@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game.duel.teamrules;
+package com.calculusmaster.pokecord.game.duel.restrictions;
 
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 

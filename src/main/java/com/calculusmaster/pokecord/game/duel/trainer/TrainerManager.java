@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.game.duel.trainer;
 
-import com.calculusmaster.pokecord.game.duel.teamrules.TeamRestrictionRegistry;
+import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestrictionRegistry;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
@@ -40,14 +40,14 @@ public class TrainerManager
 
         if(REGULAR_TRAINERS.isEmpty()) Mongo.TrainerData.find(Filters.exists("trainerID")).forEach(d -> REGULAR_TRAINERS.add(new TrainerData(d)));
 
-        TIMER.schedule(TrainerManager::updateTrainers, 0, TimeUnit.HOURS);
+        TIMER.scheduleAtFixedRate(TrainerManager::updateTrainers, 0, 1, TimeUnit.HOURS);
     }
 
     private static void updateTrainers()
     {
-        Mongo.TrainerData.updateOne(TIMER_QUERY, Updates.inc("time", -1));
+        int time = Objects.requireNonNull(Mongo.TrainerData.find(TIMER_QUERY).first()).getInteger("time");
 
-        if(Objects.requireNonNull(Mongo.TrainerData.find(TIMER_QUERY).first()).getInteger("time") <= 0)
+        if(--time <= 0)
         {
             Mongo.TrainerData.updateOne(TIMER_QUERY, Updates.set("time", REGULAR_TRAINER_INTERVAL));
 
@@ -57,6 +57,7 @@ public class TrainerManager
 
             TrainerManager.createRegularTrainers();
         }
+        else Mongo.TrainerData.updateOne(TIMER_QUERY, Updates.set("time", time));
     }
 
     public static void createRegularTrainers()

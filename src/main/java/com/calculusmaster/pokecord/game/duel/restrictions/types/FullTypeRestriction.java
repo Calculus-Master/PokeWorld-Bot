@@ -1,5 +1,6 @@
-package com.calculusmaster.pokecord.game.duel.teamrules;
+package com.calculusmaster.pokecord.game.duel.restrictions.types;
 
+import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestriction;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 

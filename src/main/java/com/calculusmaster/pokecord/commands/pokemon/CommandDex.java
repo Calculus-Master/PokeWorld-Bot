@@ -74,7 +74,7 @@ public class CommandDex extends Command
         if(pokemon.equals("Deerling")) image = Global.getDeerlingImage(isShiny);
         else if(pokemon.equals("Sawsbuck")) image = Global.getSawsbuckImage(isShiny);
 
-        this.embed.setTitle("**" + data.name + (isShiny ? ":star2:" : "") + " (#" + data.dex + ")**");
+        this.embed.setTitle("**" + data.name + (isShiny ? ":star2:" : "") + " (#" + data.dex + " – Gen. " + Global.getGeneration(data) + ")**");
         this.color = data.types.get(0).getColor();
         this.embed.setImage(image.equals("") ? Pokemon.getWIPImage() : image);
         this.embed.setFooter("You have collected " + new CollectionsQuery(pokemon, this.player.getId()).getCaughtAmount() + "!");

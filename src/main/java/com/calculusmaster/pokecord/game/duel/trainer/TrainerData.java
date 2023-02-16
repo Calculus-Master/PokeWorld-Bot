@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.game.duel.trainer;
 
-import com.calculusmaster.pokecord.game.duel.teamrules.TeamRestriction;
-import com.calculusmaster.pokecord.game.duel.teamrules.TeamRestrictionRegistry;
+import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestriction;
+import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestrictionRegistry;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import org.bson.Document;

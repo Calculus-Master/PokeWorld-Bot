@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.util;
 
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
@@ -52,6 +53,19 @@ public class Global
     public static boolean isStarter(String s)
     {
         return STARTERS.contains(s.toLowerCase());
+    }
+
+    public static int getGeneration(PokemonData data)
+    {
+        if(data.dex <= 151) return 1;
+        else if(data.dex <= 251) return 2;
+        else if(data.dex <= 386) return 3;
+        else if(data.dex <= 493) return 4;
+        else if(data.dex <= 649) return 5;
+        else if(data.dex <= 721) return 6;
+        else if(data.dex <= 809) return 7;
+        else if(data.dex <= 905) return 8;
+        else return 9;
     }
 
     public static <E extends Enum<E>> E getEnumFromString(E[] enumValues, String s)
