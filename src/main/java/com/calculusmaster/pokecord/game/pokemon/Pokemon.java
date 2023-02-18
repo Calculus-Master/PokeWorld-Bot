@@ -56,6 +56,7 @@ public class Pokemon
     private TM tm;
     private TR tr;
     private EnumSet<PokemonAugment> augments;
+    private int megaCharges;
 
     //Duel Fields
     private List<Type> type;
@@ -100,6 +101,7 @@ public class Pokemon
         p.setTM();
         p.setTR();
         p.setAugments(List.of());
+        p.setMegaCharges();
 
         p.setupMisc();
         p.setDuelDefaults();
@@ -130,6 +132,7 @@ public class Pokemon
         p.setTM(data.getInteger("tm") == -1 ? null : TM.get(data.getInteger("tm")));
         p.setTR(data.getInteger("tr") == -1 ? null : TR.get(data.getInteger("tr")));
         p.setAugments(data.getList("augments", String.class));
+        p.setMegaCharges(data.getInteger("megacharges"));
 
         p.setupMisc();
         p.setDuelDefaults();
@@ -212,7 +215,8 @@ public class Pokemon
                 .append("item", this.item.toString())
                 .append("tm", this.tm == null ? -1 : this.tm.getNumber())
                 .append("tr", this.tr == null ? -1 : this.tr.getNumber())
-                .append("augments", this.augments.stream().map(Enum::toString).toList());
+                .append("augments", this.augments.stream().map(Enum::toString).toList())
+                .append("megacharges", this.megaCharges);
     }
 
     public void upload()
@@ -311,6 +315,11 @@ public class Pokemon
     {
         this.clearAugments();
         this.updateAugments();
+    }
+
+    public void updateMegaCharges()
+    {
+        this.update(Updates.set("megacharges", this.megaCharges));
     }
 
     //Mastery
@@ -546,6 +555,55 @@ public class Pokemon
     public double getWeight()
     {
         return this.hasAbility(Ability.HEAVY_METAL) ? this.data.weight * 2 : this.data.weight;
+    }
+
+    public int getMegaCharges()
+    {
+        return this.megaCharges;
+    }
+
+    public int getMaxMegaCharges()
+    {
+        return PokemonRarity.MEGA.stream().anyMatch(s -> s.contains(this.getName())) ? 5
+                : (PokemonRarity.MEGA_LEGENDARY.stream().anyMatch(s -> s.contains(this.getName())) ? 3 : 0);
+    }
+
+    public void setMegaCharges(int megaCharge)
+    {
+        this.megaCharges = megaCharge;
+    }
+
+    public void setMegaCharges()
+    {
+        this.megaCharges = this.getMaxMegaCharges();
+    }
+
+    public void removeMegaCharge()
+    {
+        this.megaCharges--;
+    }
+
+    public void regenerateMegaCharge()
+    {
+        this.megaCharges++;
+    }
+
+    public void removeMegaEvolution()
+    {
+        if(!this.isMega()) throw new IllegalStateException(this.getName() + " is not Mega-Evolved! Cannot remove Mega-Evolution.");
+
+        String mega = this.getName();
+        String original = "";
+        if(this.getName().contains("Mega")) original = mega.substring("Mega ".length(), mega.contains(" X") || mega.contains(" Y") ? mega.length() - 2 : mega.length());
+        else if(this.getName().contains("Primal")) original = mega.substring("Primal ".length());
+
+        this.changeForm(original);
+        this.updateName();
+    }
+
+    public boolean isMega()
+    {
+        return this.name.contains("Mega") || this.name.contains("Primal");
     }
 
     public boolean hasMega()

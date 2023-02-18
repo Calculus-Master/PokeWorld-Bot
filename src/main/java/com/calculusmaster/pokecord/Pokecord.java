@@ -14,6 +14,7 @@ import com.calculusmaster.pokecord.game.moves.registry.MaxMoveRegistry;
 import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
 import com.calculusmaster.pokecord.game.moves.registry.ZMoveRegistry;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
+import com.calculusmaster.pokecord.game.pokemon.MegaChargeManager;
 import com.calculusmaster.pokecord.game.pokemon.PokemonAI;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.SpecialEvolutionRegistry;
@@ -128,6 +129,7 @@ public class Pokecord
         LoggerHelper.init("Spawn Event & Location Event Thread Pools", ThreadPoolHandler::init);
         LoggerHelper.init("Spawn Event Interval Updater", Listener::startSpawnIntervalUpdater);
         LoggerHelper.init("Casual Matchmade Duels", CasualMatchmadeDuel::init);
+        LoggerHelper.init("Mega Charge Manager", MegaChargeManager::init);
 
         end = System.currentTimeMillis();
 

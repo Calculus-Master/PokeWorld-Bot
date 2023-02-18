@@ -53,9 +53,10 @@ public class CommandInfo extends Command
         String tm = (chosen.hasTM() ? chosen.getTM()  + " - " + chosen.getTM().getMoveName() : "None");
         String tr =  (chosen.hasTR() ? chosen.getTR()  + " - " + chosen.getTR().getMoveName() : "None");
         String image = chosen.getImage();
+        String megaCharges = "**Mega Charges**: " + chosen.getMegaCharges() + " (Max: " + chosen.getMaxMegaCharges() + ")";
 
         this.embed
-                .addField("General Info", "**Experience:** %s\n**Type:** %s\n**Nature:** %s\n**Gender:** %s\n**Dynamax Level**: %s\n**Prestige Level**: %s".formatted(exp, type, nature, gender, dynamaxLevel, prestigeLevel), true)
+                .addField("General Info", "**Experience:** %s\n**Type:** %s\n**Nature:** %s\n**Gender:** %s\n**Dynamax Level**: %s\n**Prestige Level**: %s%s".formatted(exp, type, nature, gender, dynamaxLevel, prestigeLevel, chosen.getMegaList().size() != 0 ? "\n" + megaCharges : ""), true)
                 .addField("Held", "**Item:** %s\n**TM:** %s\n**TR:** %s".formatted(item, tm, tr), true)
                 .addField(this.getPrestigeField(chosen))
                 .addField(this.getStatsField(chosen));

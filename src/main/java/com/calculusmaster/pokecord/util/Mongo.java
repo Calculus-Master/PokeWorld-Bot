@@ -1,12 +1,18 @@
 package com.calculusmaster.pokecord.util;
 
+import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import org.bson.Document;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Mongo
 {
@@ -30,11 +36,26 @@ public class Mongo
     public static final MongoCollection<Document> BountyData = PokecordDB.getCollection("BountyData");
     public static final MongoCollection<Document> EggData = PokecordDB.getCollection("EggData");
     public static final MongoCollection<Document> TrainerData = PokecordDB.getCollection("TrainerData");
+    public static final MongoCollection<Document> MegaChargeData = PokecordDB.getCollection("MegaChargeData");
 
     public static final MongoCollection<Document> TimeData = PokecordDB.getCollection("TimeData");
 
     public static final MongoCollection<Document> ReportData = PokecordDB.getCollection("ReportData");
     public static final MongoCollection<Document> CrashData = PokecordDB.getCollection("CrashData");
+
+    //For random database queries
+    public static void main(String[] args)
+    {
+        List<Document> list = new ArrayList<>();
+        Mongo.PokemonData.find().forEach(list::add);
+
+        list.forEach(d -> {
+            int megaCharges = PokemonRarity.MEGA.stream().anyMatch(s -> s.contains(d.getString("name"))) ? 5
+                    : (PokemonRarity.MEGA_LEGENDARY.stream().anyMatch(s -> s.contains(d.getString("name"))) ? 3 : 0);
+
+            Mongo.PokemonData.updateOne(Filters.eq("UUID", d.getString("UUID")), Updates.set("megacharges", megaCharges));
+        });
+    }
 
     //Database Collections - Legacy
 

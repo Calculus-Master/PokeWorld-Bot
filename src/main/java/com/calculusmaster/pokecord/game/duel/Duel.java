@@ -15,6 +15,7 @@ import com.calculusmaster.pokecord.game.moves.MoveData;
 import com.calculusmaster.pokecord.game.moves.TypeEffectiveness;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
+import com.calculusmaster.pokecord.game.pokemon.MegaChargeManager;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
@@ -2820,7 +2821,26 @@ public class Duel
             {
                 Pokemon pokemon = p.team.get(i);
 
-                if(pokemon.hasConsumedItem()) pokemon.updateItem();
+                //Replenish items
+                if(p instanceof UserPlayer && pokemon.hasConsumedItem()) pokemon.updateItem();
+
+                //Mega Charge
+                if(p instanceof UserPlayer user && pokemon.isMega())
+                {
+                    pokemon.removeMegaCharge();
+                    pokemon.updateMegaCharges();
+
+                    MegaChargeManager.addChargeEvent(pokemon.getUUID(), pokemon.isMega());
+
+                    if(pokemon.getMegaCharges() == 0)
+                    {
+                        pokemon.removeMegaEvolution();
+                        MegaChargeManager.removeBlocking(pokemon.getUUID());
+
+                        user.data.directMessage(pokemon.getName() + " has returned to its original form! Its Mega Charges have been depleted, and will slowly regenerate while the Pokemon is not Mega-Evolved.");
+                        LoggerHelper.info(Duel.class, "Removing Mega-Evolution from " + pokemon.getName() + " (" + pokemon.getUUID() + ") as its Mega Charges have been depleted.");
+                    }
+                }
             }
         }
     }

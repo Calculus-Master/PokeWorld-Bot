@@ -18,7 +18,7 @@ public class StandardRestriction extends TeamRestriction
     public boolean validate(List<Pokemon> team)
     {
         Function<List<String>, Integer> check = list -> (int)team.stream().filter(p -> list.contains(p.getName())).count();
-        int countMegaPrimalLegendary = (int)team.stream().filter(p -> List.of("Mega Mewtwo X", "Mega Mewtwo Y", "Mega Rayquaza").contains(p.getName()) || p.getName().contains("Primal")).count();
+        int countMegaPrimalLegendary = check.apply(PokemonRarity.MEGA_LEGENDARY);
         int countLegendary = check.apply(PokemonRarity.LEGENDARY);
         int countMythical = check.apply(PokemonRarity.MYTHICAL);
         int countUltraBeast = check.apply(PokemonRarity.ULTRA_BEAST);
