@@ -183,6 +183,15 @@ public class MasteryLevelManager
                                 
                                 *Note*: Not all Pokemon have forms and/or can Mega-Evolve! You can view if a Pokemon of interest has forms/can Mega-Evolve using `/dex <pokemonName>`.
                                 """, false)
+                        .addField("Mega-Evolution Charges", """
+                                Mega-Evolving Pokemon has a slight associated cost. Pokemon have a maximum number of *Mega Charges*.
+                                A Mega Charge is consumed upon completing a Duel with a Mega-Evolved Pokemon.
+                                Once a Pokemon reaches 0 Mega Charges, it will not be able to Mega-Evolve until its charges are replenished.
+                                Mega Charges are replenished automatically after a set period of time, when consumed.
+                                
+                                *Note*: Mega Charges will **not** regenerate if the Pokemon is currently Mega-Evolved!
+                                You must restore the Pokemon to its original form for Mega Charges to start to regenerate.
+                                """, false)
                         .addField("Favorites", """
                                 By now you've probably caught a decent amount of Pokemon. And possibly grown closer to some :).
                                 You now have the ability to tag a Pokemon as a favorite, using `/favorite add <number>`, or remove one using `/favorite remove <number>`.
