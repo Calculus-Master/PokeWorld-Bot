@@ -3,7 +3,7 @@ package com.calculusmaster.pokecord.game.duel.trainer;
 import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestrictionRegistry;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
-import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
-import static com.calculusmaster.pokecord.game.pokemon.PokemonRarity.Rarity.*;
+import static com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity.Rarity.*;
 
 public class TrainerManager
 {

@@ -1,8 +1,8 @@
 package com.calculusmaster.pokecord.game.pokemon.augments;
 
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 
 import java.util.*;

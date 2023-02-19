@@ -2,8 +2,8 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
-import com.calculusmaster.pokecord.game.pokemon.MegaChargeManager;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.evolution.MegaChargeManager;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandMega extends Command

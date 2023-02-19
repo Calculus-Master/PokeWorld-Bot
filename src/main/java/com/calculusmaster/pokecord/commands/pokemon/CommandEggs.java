@@ -3,7 +3,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
-import com.calculusmaster.pokecord.game.pokemon.PokemonEgg;
+import com.calculusmaster.pokecord.game.pokemon.evolution.PokemonEgg;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.List;

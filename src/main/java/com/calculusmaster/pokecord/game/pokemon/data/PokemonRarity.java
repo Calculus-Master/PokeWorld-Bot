@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game.pokemon;
+package com.calculusmaster.pokecord.game.pokemon.data;
 
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;

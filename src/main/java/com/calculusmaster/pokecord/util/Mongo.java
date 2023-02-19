@@ -1,14 +1,11 @@
 package com.calculusmaster.pokecord.util;
 
-import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Updates;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -46,15 +43,15 @@ public class Mongo
     //For random database queries
     public static void main(String[] args)
     {
+        long i = System.currentTimeMillis();
+
         List<Document> list = new ArrayList<>();
         Mongo.PokemonData.find().forEach(list::add);
 
-        list.forEach(d -> {
-            int megaCharges = PokemonRarity.MEGA.stream().anyMatch(s -> s.contains(d.getString("name"))) ? 5
-                    : (PokemonRarity.MEGA_LEGENDARY.stream().anyMatch(s -> s.contains(d.getString("name"))) ? 3 : 0);
+        long f = System.currentTimeMillis();
 
-            Mongo.PokemonData.updateOne(Filters.eq("UUID", d.getString("UUID")), Updates.set("megacharges", megaCharges));
-        });
+        double time = (f - i) / 1000.;
+        System.out.println((time / 111.) * 10000 + "s");
     }
 
     //Database Collections - Legacy

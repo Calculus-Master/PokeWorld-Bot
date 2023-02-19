@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.game.duel.restrictions.types;
 
 import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestriction;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.game.pokemon.PokemonRarity;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 
 import java.util.List;
 import java.util.function.Function;

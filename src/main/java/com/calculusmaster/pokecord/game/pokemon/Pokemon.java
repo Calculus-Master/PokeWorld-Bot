@@ -14,6 +14,7 @@ import com.calculusmaster.pokecord.game.pokemon.component.PokemonDuelStatChanges
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonDuelStatOverrides;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.Mongo;
