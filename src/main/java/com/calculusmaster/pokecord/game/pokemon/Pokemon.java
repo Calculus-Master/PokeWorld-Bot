@@ -102,7 +102,7 @@ public class Pokemon
         p.setTM();
         p.setTR();
         p.setAugments(List.of());
-        p.setMegaCharges();
+        p.setDefaultMegaCharges();
 
         p.setupMisc();
         p.setDuelDefaults();
@@ -574,7 +574,7 @@ public class Pokemon
         this.megaCharges = megaCharge;
     }
 
-    public void setMegaCharges()
+    public void setDefaultMegaCharges()
     {
         this.megaCharges = this.getMaxMegaCharges();
     }
@@ -851,9 +851,9 @@ public class Pokemon
     }
 
     //Ignored Stat Changes
-    public boolean setStatChangesIgnored(boolean v)
+    public void setStatChangesIgnored(boolean v)
     {
-        return this.statChangesIgnored = v;
+        this.statChangesIgnored = v;
     }
 
     //Moves

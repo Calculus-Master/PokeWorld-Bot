@@ -117,6 +117,7 @@ public class CommandEvolve extends Command
             selected.updateName();
 
             selected.resetAugments();
+            selected.setDefaultMegaCharges();
 
             this.playerData.updateBountyProgression(ObjectiveType.EVOLVE_POKEMON);
             this.playerData.getStatistics().incr(PlayerStatistic.POKEMON_EVOLVED);
