@@ -15,7 +15,8 @@ public class WeatherEffect extends MoveEffect
     public String get()
     {
         //Primal Weathers cannot be overwritten
-        if(this.weather.isPrimalWeather()) return this.move.getName() + " failed due to the presence of " + this.weather.getName() + "!";
+        if(this.weather.isPrimalWeather())
+            return this.move.getName() + " failed due to the presence of " + this.weather.getName() + "!";
 
         this.duel.weather.setWeather(this.weather);
 

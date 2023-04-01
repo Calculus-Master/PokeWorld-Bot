@@ -3,9 +3,6 @@ package com.calculusmaster.pokecord.commands.moves;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
-import com.calculusmaster.pokecord.game.enums.items.TM;
-import com.calculusmaster.pokecord.game.enums.items.TR;
-import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.json.JSONArray;
 
@@ -30,38 +27,27 @@ public class CommandTeach extends Command
         boolean tm = this.msg[1].equals("tm");
         int number = Integer.parseInt(this.msg[2]);
 
-        if((tm && number > 0 && number <= 100 && this.playerData.getTMList().contains(TM.get(number).toString())) || (!tm && number >= 0 && number < 100 && this.playerData.getTRList().contains(TR.get(number).toString())))
-        {
-            Pokemon selected = this.playerData.getSelectedPokemon();
+        this.response = "Teaching TMs is currently disabled.";
 
-            if(tm && selected.canLearnTM(TM.get(number)))
-            {
-                TM held = selected.getTM();
-                TM target = TM.get(number);
-
-                selected.setTM(target);
-                selected.updateTMTR();
-
-                this.embed.setDescription("Taught " + target.toString() + " - " + target.getMoveName() + " to " + selected.getName());
-
-                this.playerData.removeTM(target.toString());
-                if(selected.hasTM()) this.playerData.addTM(held.toString());
-            }
-            else if(!tm && selected.canLearnTR(TR.get(number)))
-            {
-                TR held = selected.getTR();
-                TR target = TR.get(number);
-
-                selected.setTR(target);
-                selected.updateTMTR();
-
-                this.embed.setDescription("Taught " + target.toString() + " - " + target.getMoveName() + " to " + selected.getName());
-
-                this.playerData.removeTR(TR.get(number).toString());
-                if(selected.hasTR()) this.playerData.addTR(held.toString());
-            }
-            else this.embed.setDescription(selected.getName() + " cannot learn that " + (tm ? "TM" : "TR") + "!");
-        }
+//        if((tm && number > 0 && number <= 100 && this.playerData.getTMList().contains(TM.get(number).toString())) || (!tm && number >= 0 && number < 100 && this.playerData.getTRList().contains(TR.get(number).toString())))
+//        {
+//            Pokemon selected = this.playerData.getSelectedPokemon();
+//
+//            if(tm && selected.canLearnTM(TM.get(number)))
+//            {
+//                TM held = selected.getTM();
+//                TM target = TM.get(number);
+//
+//                selected.setTM(target);
+//                selected.updateTMTR();
+//
+//                this.embed.setDescription("Taught " + target.toString() + " - " + target.getMoveName() + " to " + selected.getRealName());
+//
+//                this.playerData.removeTM(target.toString());
+//                if(selected.hasTM()) this.playerData.addTM(held.toString());
+//            }
+//            else this.embed.setDescription(selected.getName() + " cannot learn that " + (tm ? "TM" : "TR") + "!");
+//        }
 
         return this;
     }

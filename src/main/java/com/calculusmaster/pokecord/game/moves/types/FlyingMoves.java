@@ -10,6 +10,7 @@ import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
 import java.util.List;
@@ -154,7 +155,7 @@ public class FlyingMoves
 
     public String MirrorMove(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(duel.getLastUsedMove(user.getUUID()).isEmpty() || duel.getLastUsedMove(user.getUUID()).equals("Mirror Move")) return move.getNothingResult();
+        if(duel.getLastUsedMove(user.getUUID()) == null || duel.getLastUsedMove(user.getUUID()).equals("Mirror Move")) return move.getNothingResult();
         else return new Move(duel.getLastUsedMove(user.getUUID())).logic(user, opponent, duel);
     }
 
@@ -211,8 +212,8 @@ public class FlyingMoves
                 .addCustomEffect(() -> {
                     if(duel.first.equals(opponent.getUUID()))
                     {
-                        List<String> moves = duel.getMovesUsed(opponent.getUUID());
-                        if(new Move(moves.get(moves.size() - 1)).is(Category.PHYSICAL))
+                        List<MoveEntity> moves = duel.getMovesUsed(opponent.getUUID());
+                        if(moves.get(moves.size() - 1).data().getCategory().equals(Category.PHYSICAL))
                         {
                             opponent.addStatusCondition(StatusCondition.BURNED);
                             return opponent.getName() + " is burned!";

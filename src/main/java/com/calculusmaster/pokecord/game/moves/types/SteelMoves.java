@@ -9,6 +9,7 @@ import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 
 public class SteelMoves
 {
@@ -140,10 +141,10 @@ public class SteelMoves
     {
         duel.data(user.getUUID()).kingsShieldUsed = true;
 
-        if(user.getName().equals("Aegislash Blade"))
+        if(user.is(PokemonEntity.AEGISLASH_BLADE))
         {
-            user.changeForm("Aegislash");
-            user.updateName();
+            user.changePokemon(PokemonEntity.AEGISLASH_SHIELD);
+            user.updateEntity();
         }
 
         return user.getName() + " defended itself with its Shield!";

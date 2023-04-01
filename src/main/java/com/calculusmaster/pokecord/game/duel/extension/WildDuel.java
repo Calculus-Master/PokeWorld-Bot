@@ -9,8 +9,9 @@ import com.calculusmaster.pokecord.game.duel.players.WildPlayer;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.game.pokemon.PokemonAI;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -26,7 +27,7 @@ import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.DuelStatus;
 //PVE Duel - 1v1 Against a Wild Pokemon for EXP and EV Grinding
 public class WildDuel extends Duel
 {
-    public static Duel create(String playerID, MessageReceivedEvent event, String pokemon)
+    public static Duel create(String playerID, MessageReceivedEvent event, PokemonEntity pokemonEntity)
     {
         WildDuel duel = new WildDuel();
 
@@ -34,7 +35,7 @@ public class WildDuel extends Duel
         duel.setTurn();
         duel.addChannel(event.getChannel().asTextChannel());
         duel.setPlayers(playerID, "BOT", 1);
-        duel.setWildPokemon(pokemon);
+        duel.setWildPokemon(pokemonEntity);
         duel.setDefaults();
         duel.setDuelPokemonObjects(0);
         duel.setDuelPokemonObjects(1);
@@ -55,11 +56,11 @@ public class WildDuel extends Duel
             this.moveAction(0);
 
             List<Move> botMoves = new ArrayList<>();
-            for(String s : this.players[1].active.allMoves()) if(Move.isImplemented(s)) botMoves.add(new Move(s));
+            for(MoveEntity moveEntity : this.players[1].active.getLevelUpMoves()) if(Move.isImplemented(moveEntity)) botMoves.add(new Move(moveEntity));
 
             //TODO: Better AI (progress made 5-11-22)
-            if(this.players[1].active.getHealth() <= this.players[1].active.getStat(Stat.HP) / 4) this.players[1].move = new Move(new PokemonAI(this.players[1].active).getHighestDamageMove(this.players[0].active));
-            else this.players[1].move = botMoves.get(new Random().nextInt(botMoves.size()));
+            //if(this.players[1].active.getHealth() <= this.players[1].active.getStat(Stat.HP) / 4) this.players[1].move = new Move(new PokemonAI(this.players[1].active).getHighestDamageMove(this.players[0].active));
+            this.players[1].move = botMoves.get(new Random().nextInt(botMoves.size()));
 
             this.fullMoveTurn();
         }
@@ -148,12 +149,12 @@ public class WildDuel extends Duel
         this.players = new Player[]{new UserPlayer(p, p.getSelectedPokemon()), null};
     }
 
-    public void setWildPokemon(String pokemon)
+    public void setWildPokemon(PokemonEntity pokemonEntity)
     {
         int level = Math.min(100, this.getUser().active.getLevel() + (new Random().nextInt(5) + 1));
 
-        if(pokemon.equals("")) this.players[1] = new WildPlayer(level);
-        else this.players[1] = new WildPlayer(pokemon, level);
+        if(pokemonEntity == null) this.players[1] = new WildPlayer(level);
+        else this.players[1] = new WildPlayer(pokemonEntity, level);
 
         this.players[1].active.getBoosts().setStatBoost(level > 60 ? Math.random() * 1.5 + 1 : 1);
         this.players[1].active.setHealth(this.players[1].active.getStat(Stat.HP));

@@ -9,10 +9,10 @@ import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.Move;
-import com.calculusmaster.pokecord.game.moves.MoveData;
 import com.calculusmaster.pokecord.game.moves.TypeEffectiveness;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
 
@@ -720,13 +720,13 @@ public class NormalMoves
 
     public String Assist(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        List<String> banned = Arrays.asList("Assist", "Baneful Bunker", "Beak Blast", "Belch", "Bestow", "Bounce", "Chatter", "Circle Throw", "Copycat", "Counter", "Covet", "Destiny Bond", "Detect", "Dig", "Dive", "Dragon Tail", "Endure", "Feint", "Fly", "Focus Punch", "Follow Me", "Helping Hand", "Hold Hands", "Kings Shield", "Mat Block", "Me First", "Metronome", "Mimic", "Mirror Coat", "Mirror Move", "Nature Power", "Phantom Force", "Protect", "Rage Powder", "Roar", "Shadow Force", "Shell Trap", "Sketch", "Sky Drop", "Sleep Talk", "Snatch", "Spiky Shield", "Spotlight", "Struggle", "Switcheroo", "Thief", "Transform", "Trick", "Whirlwind");
-        List<String> pool = new ArrayList<>();
-        List<Pokemon> team = List.copyOf(duel.getPlayers()[duel.playerIndexFromUUID(user.getUUID())].team);
+        EnumSet<MoveEntity> bannedMoves = EnumSet.of(MoveEntity.ASSIST, MoveEntity.BANEFUL_BUNKER, MoveEntity.BEAK_BLAST, MoveEntity.BELCH, MoveEntity.BESTOW, MoveEntity.BOUNCE, MoveEntity.CHATTER, MoveEntity.CIRCLE_THROW, MoveEntity.COPYCAT, MoveEntity.COUNTER, MoveEntity.COVET, MoveEntity.DESTINY_BOND, MoveEntity.DETECT, MoveEntity.DIG, MoveEntity.DIVE, MoveEntity.DRAGON_TAIL, MoveEntity.ENDURE, MoveEntity.FEINT, MoveEntity.FLY, MoveEntity.FOCUS_PUNCH, MoveEntity.FOLLOW_ME, MoveEntity.HELPING_HAND, MoveEntity.HOLD_HANDS, MoveEntity.KINGS_SHIELD, MoveEntity.MAT_BLOCK, MoveEntity.ME_FIRST, MoveEntity.METRONOME, MoveEntity.MIMIC, MoveEntity.MIRROR_COAT, MoveEntity.MIRROR_MOVE, MoveEntity.NATURE_POWER, MoveEntity.PHANTOM_FORCE, MoveEntity.PROTECT, MoveEntity.RAGE_POWDER, MoveEntity.ROAR, MoveEntity.SHADOW_FORCE, MoveEntity.SHELL_TRAP, MoveEntity.SKETCH, MoveEntity.SKY_DROP, MoveEntity.SLEEP_TALK, MoveEntity.SNATCH, MoveEntity.SPIKY_SHIELD, MoveEntity.SPOTLIGHT, MoveEntity.STRUGGLE, MoveEntity.SWITCHEROO, MoveEntity.THIEF, MoveEntity.TRANSFORM, MoveEntity.TRICK, MoveEntity.WHIRLWIND);
+        List<MoveEntity> pool = new ArrayList<>();
+        List<Pokemon> team = duel.getPlayers()[duel.playerIndexFromUUID(user.getUUID())].team;
 
         for(Pokemon p : team) pool.addAll(p.getMoves());
 
-        pool = pool.stream().distinct().filter(s -> !banned.contains(s)).collect(Collectors.toList());
+        pool = pool.stream().distinct().filter(s -> !bannedMoves.contains(s)).collect(Collectors.toList());
 
         move = new Move(pool.get(new Random().nextInt(pool.size())));
 
@@ -796,8 +796,8 @@ public class NormalMoves
 
     public String Metronome(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        List<String> banned = Arrays.asList("After You", "Assist", "Baneful Bunker", "Beak Blast", "Belch", "Bestow", "Celebrate", "Chatter", "Copycat", "Counter", "Covet", "Crafty Shield", "Destiny Bond", "Detect", "Diamond Storm", "Dragon Ascent", "Endure", "Feint", "Fleur Cannon", "Focus Punch", "Follow Me", "Freeze Shock", "Helping Hand", "Hold Hands", "Hyperspace Fury", "Hyperspace Hole", "Ice Burn", "Instruct", "Kings Shield", "Light Of Ruin", "Mat Block", "Me First", "Metronome", "Mimic", "Mind Blown", "Mirror Coat", "Mirror Move", "Nature Power", "Origin Pulse", "Photon Geyser", "Plasma Fists", "Precipice Blades", "Protect", "Quash", "Quick Guard", "Rage Powder", "Relic Song", "Secret Sword", "Shell Trap", "Sketch", "Sleep Talk", "Snarl", "Snatch", "Snore", "Spectral Thief", "Spiky Shield", "Spotlight", "Steam Eruption", "Struggle", "Switcheroo", "Techno Blast", "Thief", "Thousand Arrows", "Thousand Waves", "Transform", "Trick", "V Create", "Wide Guard");
-        List<String> pool = MoveData.MOVES.stream().filter(m -> !banned.contains(m)).toList();
+        EnumSet<MoveEntity> bannedMoves = EnumSet.of(MoveEntity.AFTER_YOU, MoveEntity.ASSIST, MoveEntity.BANEFUL_BUNKER, MoveEntity.BEAK_BLAST, MoveEntity.BELCH, MoveEntity.BESTOW, MoveEntity.CELEBRATE, MoveEntity.CHATTER, MoveEntity.COPYCAT, MoveEntity.COUNTER, MoveEntity.COVET, MoveEntity.CRAFTY_SHIELD, MoveEntity.DESTINY_BOND, MoveEntity.DETECT, MoveEntity.DIAMOND_STORM, MoveEntity.DRAGON_ASCENT, MoveEntity.ENDURE, MoveEntity.FEINT, MoveEntity.FLEUR_CANNON, MoveEntity.FOCUS_PUNCH, MoveEntity.FOLLOW_ME, MoveEntity.FREEZE_SHOCK, MoveEntity.HELPING_HAND, MoveEntity.HOLD_HANDS, MoveEntity.HYPERSPACE_FURY, MoveEntity.HYPERSPACE_HOLE, MoveEntity.ICE_BURN, MoveEntity.INSTRUCT, MoveEntity.KINGS_SHIELD, MoveEntity.LIGHT_OF_RUIN, MoveEntity.MAT_BLOCK, MoveEntity.ME_FIRST, MoveEntity.METRONOME, MoveEntity.MIMIC, MoveEntity.MIND_BLOWN, MoveEntity.MIRROR_COAT, MoveEntity.MIRROR_MOVE, MoveEntity.NATURE_POWER, MoveEntity.ORIGIN_PULSE, MoveEntity.PHOTON_GEYSER, MoveEntity.PLASMA_FISTS, MoveEntity.PRECIPICE_BLADES, MoveEntity.PROTECT, MoveEntity.QUASH, MoveEntity.QUICK_GUARD, MoveEntity.RAGE_POWDER, MoveEntity.RELIC_SONG, MoveEntity.SECRET_SWORD, MoveEntity.SHELL_TRAP, MoveEntity.SKETCH, MoveEntity.SLEEP_TALK, MoveEntity.SNARL, MoveEntity.SNATCH, MoveEntity.SNORE, MoveEntity.SPECTRAL_THIEF, MoveEntity.SPIKY_SHIELD, MoveEntity.SPOTLIGHT, MoveEntity.STEAM_ERUPTION, MoveEntity.STRUGGLE, MoveEntity.SWITCHEROO, MoveEntity.TECHNO_BLAST, MoveEntity.THIEF, MoveEntity.THOUSAND_ARROWS, MoveEntity.THOUSAND_WAVES, MoveEntity.TRANSFORM, MoveEntity.TRICK, MoveEntity.V_CREATE, MoveEntity.WIDE_GUARD);
+        List<MoveEntity> pool = Arrays.stream(MoveEntity.values()).filter(m -> !bannedMoves.contains(m)).toList();
 
         move = new Move(pool.get(new Random().nextInt(pool.size())));
 
@@ -891,12 +891,12 @@ public class NormalMoves
 
     public String Sketch(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        List<String> moves = duel.getMovesUsed(opponent.getUUID());
+        List<MoveEntity> moves = duel.getMovesUsed(opponent.getUUID());
 
         if(moves.isEmpty()) return move.getNothingResult();
 
-        String moveToCopy = moves.get(moves.size() - 1);
-        int targetIndex = user.getMoves().indexOf("Sketch");
+        MoveEntity moveToCopy = moves.get(moves.size() - 1);
+        int targetIndex = user.getMoves().indexOf(MoveEntity.SKETCH);
 
         user.learnMove(moveToCopy, targetIndex);
         user.updateMoves();
@@ -997,7 +997,7 @@ public class NormalMoves
     {
         duel.data(user.getUUID()).wishUsed = true;
 
-        return user.getName() + " wished for something!";
+        return user.getName() + " made a wish!";
     }
 
     public String Present(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -1040,7 +1040,7 @@ public class NormalMoves
 
     public String PayDay(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        final int amount = new SplittableRandom().nextInt((int)(user.getLevel() * 0.5), (int)(user.getLevel() * 1.5));
+        final int amount = new Random().nextInt((int)(user.getLevel() * 0.5), (int)(user.getLevel() * 1.5));
 
         if(duel.getPlayers()[duel.playerIndexFromUUID(user.getUUID())] instanceof UserPlayer u)
             Executors.newSingleThreadExecutor().execute(() -> u.data.changeCredits(amount));
@@ -1285,17 +1285,17 @@ public class NormalMoves
 
     public String Mimic(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        List<String> moveLog = duel.getMovesUsed(opponent.getUUID());
+        List<MoveEntity> moveLog = duel.getMovesUsed(opponent.getUUID());
 
-        List<String> banned = new ArrayList<>(List.of("Sketch", "Transform", "Struggle", "Metronome"));
+        EnumSet<MoveEntity> banned = EnumSet.of(MoveEntity.SKETCH, MoveEntity.TRANSFORM, MoveEntity.STRUGGLE, MoveEntity.METRONOME);
         banned.addAll(user.getMoves());
 
         if(moveLog.isEmpty() || banned.contains(moveLog.get(moveLog.size() - 1))) return move.getNothingResult();
         else
         {
-            String newMove = moveLog.get(moveLog.size() - 1);
+            MoveEntity newMove = moveLog.get(moveLog.size() - 1);
 
-            user.learnMove(newMove, user.getMoves().indexOf("Mimic"));
+            user.learnMove(newMove, user.getMoves().indexOf(MoveEntity.MIMIC));
 
             return user.getName() + " learned " + newMove + "!";
         }
@@ -1332,7 +1332,9 @@ public class NormalMoves
     public String Yawn(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         if(opponent.hasAbility(Ability.VITAL_SPIRIT)) return Ability.VITAL_SPIRIT.formatActivation(opponent.getName(), move.getNoEffectResult(opponent));
+
         duel.data(user.getUUID()).yawnTurns++;
+
         return user.getName() + " is feeling drowsy!";
     }
 }

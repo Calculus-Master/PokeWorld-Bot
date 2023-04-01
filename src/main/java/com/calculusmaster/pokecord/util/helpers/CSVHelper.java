@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord.util.helpers;
 
 import com.calculusmaster.pokecord.Pokecord;
-import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 
@@ -71,7 +70,7 @@ public class CSVHelper
         {
             e.printStackTrace();
 
-            LoggerHelper.error(PokemonData.class, "Failed to read CSV file \"" + path + "\"");
+            LoggerHelper.error(CSVHelper.class, "Failed to read CSV file \"" + path + "\"");
 
             return new ArrayList<>();
         }

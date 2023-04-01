@@ -272,7 +272,41 @@ public enum Ability
     DRAGONS_MAW,
     CHILLING_NEIGH,
     GRIM_NEIGH,
-    AS_ONE;
+    AS_ONE_GLASTRIER,
+    AS_ONE_SPECTRIER,
+    LINGERING_AROMA,
+    SEED_SOWER,
+    THERMAL_EXCHANGE,
+    ANGER_SHELL,
+    PURIFYING_SALT,
+    WELL_BAKED_BODY,
+    WIND_RIDER,
+    GUARD_DOG,
+    ROCKY_PAYLOAD,
+    WIND_POWER,
+    ZERO_TO_HERO,
+    COMMANDER,
+    ELECTROMORPHOSIS,
+    PROTOSYNTHESIS,
+    QUARK_DRIVE,
+    GOOD_AS_GOLD,
+    VESSEL_OF_RUIN,
+    SWORD_OF_RUIN,
+    TABLETS_OF_RUIN,
+    BEADS_OF_RUIN,
+    ORICHALCUM_PULSE,
+    HADRON_ENGINE,
+    OPPORTUNIST,
+    CUD_CHEW,
+    SHARPNESS,
+    SUPREME_OVERLORD,
+    COSTAR,
+    TOXIC_DEBRIS,
+    ARMOR_TAIL,
+    EARTH_EATER,
+    MYCELIUM_MIGHT,
+
+    ;
 
     //TODO: Remaining Ability interactions
     //Aroma Veil: Heal Block, Cursed Body
@@ -282,12 +316,17 @@ public enum Ability
 
     public String getName()
     {
-        return Global.normalize(this.toString().replaceAll("_", " "));
+        return this.equals(AS_ONE_GLASTRIER) || this.equals(AS_ONE_SPECTRIER) ?
+                "As One" :
+                Global.normalize(this.toString().replaceAll("_", " "));
     }
 
     public static Ability cast(String input)
     {
-        return Arrays.stream(values()).filter(a -> a.toString().replaceAll("_", " ").equalsIgnoreCase(input.replaceAll("'", ""))).findFirst().orElse(null);
+        return Arrays.stream(values()).filter(ability -> {
+            if(ability.toString().replaceAll("_", " ").equalsIgnoreCase(input.replaceAll("'", ""))) return true;
+            else return input.equalsIgnoreCase(ability.toString());
+        }).findFirst().orElse(null);
     }
 
     public String formatActivation(String userName, String result)

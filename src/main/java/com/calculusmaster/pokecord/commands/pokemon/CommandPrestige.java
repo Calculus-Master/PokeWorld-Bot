@@ -52,7 +52,6 @@ public class CommandPrestige extends Command
                 p.setLevel(1);
                 p.setExp(0);
                 p.removeItem();
-                p.setTR();
                 p.setTM();
                 p.setMoves();
                 p.clearAugments();

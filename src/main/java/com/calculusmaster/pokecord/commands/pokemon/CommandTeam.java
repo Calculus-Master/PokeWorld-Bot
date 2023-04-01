@@ -3,12 +3,14 @@ package com.calculusmaster.pokecord.commands.pokemon;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.tournament.Tournament;
+import com.calculusmaster.pokecord.game.duel.tournament.TournamentHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
-import com.calculusmaster.pokecord.game.tournament.Tournament;
-import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
+import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
@@ -246,7 +248,7 @@ public class CommandTeam extends Command
                     if(i < teamUUIDs.size())
                     {
                         p = Pokemon.build(teamUUIDs.get(i));
-                        team.append("Level ").append(p.getLevel()).append(" ").append(p.getName()).append(this.getTag(p.getName()));
+                        team.append("Level ").append(p.getLevel()).append(" ").append(p.getName()).append(this.getTag(p.getEntity()));
                     }
                     else team.append("None");
 
@@ -260,12 +262,13 @@ public class CommandTeam extends Command
         return this;
     }
 
-    private String getTag(String name)
+    private String getTag(PokemonEntity entity)
     {
-        if(PokemonRarity.LEGENDARY.contains(name)) return " (L)";
-        else if(PokemonRarity.MYTHICAL.contains(name)) return " (M)";
-        else if(PokemonRarity.ULTRA_BEAST.contains(name)) return " (UB)";
-        else if(name.contains("Mega") || name.contains("Primal")) return " (M|P)";
+        if(MegaEvolutionRegistry.isMegaLegendary(entity)) return " (ML)";
+        else if(PokemonRarity.isLegendary(entity)) return " (L)";
+        else if(PokemonRarity.isMythical(entity)) return " (Myth)";
+        else if(PokemonRarity.isUltraBeast(entity)) return " (UB)";
+        else if(MegaEvolutionRegistry.isMega(entity)) return " (Mega)";
         else return "";
     }
 }

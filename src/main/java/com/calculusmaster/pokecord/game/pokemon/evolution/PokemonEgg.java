@@ -6,9 +6,9 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
-import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
+import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
@@ -22,7 +22,7 @@ public class PokemonEgg
     public static int MAX_EGGS;
 
     private String eggID;
-    private String target;
+    private PokemonEntity target;
     private int exp;
     private int max;
     private String ivs;
@@ -31,17 +31,17 @@ public class PokemonEgg
     {
         //Assumes breeding conditions have been satisfied
 
-        String target;
-        if(parent1.getEggGroups().contains(EggGroup.DITTO)) target = parent2.getName().equals("Manaphy") ? "Phione" : (parent2.getName().equals("Phione") ? "Manaphy" : parent2.getName());
-        else if(parent2.getEggGroups().contains(EggGroup.DITTO)) target = parent1.getName().equals("Manaphy") ? "Phione" : (parent1.getName().equals("Phione") ? "Manaphy" : parent1.getName());
-        else target = parent1.getGender().equals(Gender.FEMALE) ? parent1.getName() : parent2.getName();
+        PokemonEntity target;
+        if(parent1.getEggGroups().contains(EggGroup.DITTO)) target = parent2.is(PokemonEntity.MANAPHY) ? PokemonEntity.PHIONE : (parent2.is(PokemonEntity.PHIONE) ? PokemonEntity.MANAPHY : parent2.getEntity());
+        else if(parent2.getEggGroups().contains(EggGroup.DITTO)) target = parent1.is(PokemonEntity.MANAPHY) ? PokemonEntity.PHIONE : (parent1.is(PokemonEntity.PHIONE) ? PokemonEntity.MANAPHY : parent1.getEntity());
+        else target = parent1.getGender().equals(Gender.FEMALE) ? parent1.getEntity() : parent2.getEntity();
 
         PokemonEgg egg = new PokemonEgg();
 
         egg.setEggID();
         egg.setTarget(target);
         egg.setExp(0);
-        egg.setMaxExp((int)(PokemonData.get(target).hatchTarget * (Math.random() + 1)));
+        egg.setMaxExp((int)(255 * (target.data().getRawHatchTarget() + 1) * (Math.random() + 1)));
         egg.setIVs(parent1, parent2);
 
         return egg;
@@ -54,7 +54,7 @@ public class PokemonEgg
         PokemonEgg egg = new PokemonEgg();
 
         egg.setEggID(d.getString("eggID"));
-        egg.setTarget(d.getString("target"));
+        egg.setTarget(PokemonEntity.cast(d.getString("target")));
         egg.setExp(d.getInteger("exp"));
         egg.setMaxExp(d.getInteger("max"));
         egg.setIVs(d.getString("ivs"));
@@ -66,7 +66,7 @@ public class PokemonEgg
     {
         Document eggData = new Document()
                 .append("eggID", egg.getEggID())
-                .append("target", egg.getTarget())
+                .append("target", egg.getTarget().toString())
                 .append("exp", egg.getExp())
                 .append("max", egg.getMaxExp())
                 .append("ivs", egg.getIVs());
@@ -152,12 +152,12 @@ public class PokemonEgg
         return this.max;
     }
 
-    public void setTarget(String target)
+    public void setTarget(PokemonEntity target)
     {
         this.target = target;
     }
 
-    public String getTarget()
+    public PokemonEntity getTarget()
     {
         return this.target;
     }

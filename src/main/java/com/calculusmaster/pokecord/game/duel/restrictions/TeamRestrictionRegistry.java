@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.game.duel.restrictions;
 
 import com.calculusmaster.pokecord.game.duel.restrictions.types.*;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
-import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 
 import java.util.*;
 
@@ -67,7 +67,7 @@ public class TeamRestrictionRegistry
 
         //Specific Pokemon
         List<TeamRestriction> specificPokemonRestrictions = new ArrayList<>();
-        for(String pokemon : PokemonData.POKEMON) specificPokemonRestrictions.add(new ContainsSpecificPokemonRestriction(pokemon));
+        for(PokemonEntity pokemonEntity : PokemonEntity.values()) specificPokemonRestrictions.add(new ContainsSpecificPokemonRestriction(pokemonEntity));
         RESTRICTION_TIERS.get(3).add(specificPokemonRestrictions);
 
         //Status Move Count (1, 2)

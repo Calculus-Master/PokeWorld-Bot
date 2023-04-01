@@ -7,6 +7,8 @@ import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.builder.StatChangeEffect;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
+import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
 
 public class ZMoves
 {
@@ -297,7 +299,8 @@ public class ZMoves
     //Rayquaza and Mega Rayquaza
     public String DraconicOzoneAscent(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(user.getName().contains("Mega") && (opponent.getName().contains("Kyogre") || opponent.getName().contains("Groudon"))) move.setPower(move.getPower() * 1.25);
+        if(MegaEvolutionRegistry.isMega(user.getEntity()) && opponent.is(PokemonEntity.KYOGRE, PokemonEntity.KYOGRE_PRIMAL, PokemonEntity.GROUDON, PokemonEntity.GROUDON_PRIMAL))
+            move.setPower(move.getPower() * 1.25);
 
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
@@ -305,7 +308,7 @@ public class ZMoves
     //Ultra Necrozma (Prismatic Laser)
     public String TheBlindingOne(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(opponent.getName().contains("Mega") || opponent.getName().contains("Primal")) move.setPower(move.getPower() * 2);
+        if(MegaEvolutionRegistry.isMega(opponent.getEntity())) move.setPower(move.getPower() * 2);
 
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
@@ -319,7 +322,8 @@ public class ZMoves
     //Zygarde Complete
     public String TitanicZEnforcer(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(opponent.getName().contains("Zygarde")) move.setPower(move.getPower() * 2);
+        if(opponent.is(PokemonEntity.ZYGARDE_10, PokemonEntity.ZYGARDE_50, PokemonEntity.ZYGARDE_COMPLETE))
+            move.setPower(move.getPower() * 2);
 
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
@@ -414,7 +418,8 @@ public class ZMoves
     public String TheDarkestDay(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         if(opponent.isDynamaxed()) move.setPower(move.getPower() * 2);
-        if(user.getName().contains("Eternamax")) move.setPower(Math.pow(move.getPower(), 2));
+
+        if(user.is(PokemonEntity.ETERNATUS_ETERNAMAX)) move.setPower(Math.pow(move.getPower(), 2));
 
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }

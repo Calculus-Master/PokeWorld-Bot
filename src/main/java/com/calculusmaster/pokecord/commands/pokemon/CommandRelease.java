@@ -57,10 +57,10 @@ public class CommandRelease extends Command
                             if(p.isType(((ReleaseTypeObjective)b.getObjective()).getType())) b.update();
                         }
                         case RELEASE_POKEMON_NAME -> {
-                            if(p.getName().equals(((ReleaseNameObjective)b.getObjective()).getName())) b.update();
+                            if(p.getEntity().toString().equals(((ReleaseNameObjective)b.getObjective()).getName())) b.update();
                         }
                         case RELEASE_POKEMON_POOL -> {
-                            if(((ReleasePoolObjective)b.getObjective()).getPool().contains(p.getName())) b.update();
+                            if(((ReleasePoolObjective)b.getObjective()).getPool().contains(p.getEntity().toString())) b.update();
                         }
                     }
                 });

@@ -5,9 +5,9 @@ import com.calculusmaster.pokecord.game.enums.elements.Gender;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.TM;
-import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
+import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
 import com.calculusmaster.pokecord.util.interfaces.Transformer;
 
 import java.util.ArrayList;
@@ -78,12 +78,11 @@ public class PokemonListSorter
 
     public void sortNameCategories()
     {
-        this.sortIsNameInList(PokemonSorterFlag.LEGENDARY, PokemonRarity.LEGENDARY);
-        this.sortIsNameInList(PokemonSorterFlag.MYTHICAL, PokemonRarity.MYTHICAL);
-        this.sortIsNameInList(PokemonSorterFlag.ULTRA_BEAST, PokemonRarity.ULTRA_BEAST);
-        this.sortGeneric(PokemonSorterFlag.MEGA, p -> p.getName().toLowerCase().contains("mega"));
-        this.sortGeneric(PokemonSorterFlag.PRIMAL, p -> p.getName().toLowerCase().contains("primal"));
-        this.sortGeneric(PokemonSorterFlag.MEGA_OR_PRIMAL, p -> p.getName().toLowerCase().contains("mega") || p.getName().toLowerCase().contains("primal"));
+        this.sortGeneric(PokemonSorterFlag.LEGENDARY, p -> PokemonRarity.isLegendary(p.getEntity()));
+        this.sortGeneric(PokemonSorterFlag.MYTHICAL, p -> PokemonRarity.isMythical(p.getEntity()));
+        this.sortGeneric(PokemonSorterFlag.ULTRA_BEAST, p -> PokemonRarity.isUltraBeast(p.getEntity()));
+        this.sortGeneric(PokemonSorterFlag.MEGA, p -> MegaEvolutionRegistry.isMega(p.getEntity()));
+        this.sortGeneric(PokemonSorterFlag.MEGA_LEGENDARY, p -> MegaEvolutionRegistry.isMegaLegendary(p.getEntity()));
     }
 
     //Sorters
@@ -105,11 +104,6 @@ public class PokemonListSorter
     public void sortIsUUIDInList(PokemonSorterFlag enumFlag, List<String> validList)
     {
         if(this.hasFlag(enumFlag)) this.stream = this.stream.filter(p -> validList.contains(p.getUUID()));
-    }
-
-    public void sortIsNameInList(PokemonSorterFlag enumFlag, List<String> validList)
-    {
-        if(this.hasFlag(enumFlag)) this.stream = this.stream.filter(p -> validList.contains(p.getName()));
     }
 
     public <E extends Enum<E>> void sortEnum(PokemonSorterFlag enumFlag, Caster<E> caster, EnumChecker<E> checker)
@@ -147,19 +141,16 @@ public class PokemonListSorter
 
         if(!flag.equals(""))
         {
-            boolean tm = flag.equals("--tm");
-
             int index = this.msg.indexOf(flag) + 1;
             String input = this.msg.get(index);
 
             String machineFlag = flag.replaceAll("--", "");
             if(input.startsWith(machineFlag) && input.length() > machineFlag.length()) input = input.substring(machineFlag.length());
 
-            if(!input.equals("") && input.chars().allMatch(Character::isDigit))
+            if(!input.equals("") && TM.cast(input) != null)
             {
-                int num = Integer.parseInt(input);
-                if(tm && num >= 1 && num <= 100) this.stream = this.stream.filter(p -> p.getData().validTMs.contains(TM.get(num)));
-                else if(num >= 0 && num <= 99) this.stream = this.stream.filter(p -> p.getData().validTRs.contains(TR.get(num)));
+                final String tmInput = input;
+                this.stream = this.stream.filter(p -> p.getData().getTMs().contains(TM.cast(tmInput).getMove()));
             }
         }
     }
@@ -219,7 +210,7 @@ public class PokemonListSorter
 
     private boolean hasFlag(PokemonSorterFlag flag)
     {
-        return this.msg.stream().anyMatch(s -> (flag.flags.contains(s)));
+        return this.msg.stream().anyMatch(flag.flags::contains);
     }
 
     private boolean isIndexedFlagValid(String flag)

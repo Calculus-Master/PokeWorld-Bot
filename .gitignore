@@ -7,3 +7,5 @@
 /src/main/java/com/calculusmaster/pokecord/util/PrivateInfo.java
 /data/
 /incomplete_moves.txt
+/src/main/java/com/calculusmaster/pokecord/game/pokemon/data/PokeAPIHelper.java
+/src/main/resources/data/

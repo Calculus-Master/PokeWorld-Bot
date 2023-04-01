@@ -14,7 +14,6 @@ import java.util.*;
 
 public class Commands
 {
-    //TODO: Finish adding descriptions for all commands
     public static final List<Registry> COMMANDS = new ArrayList<>();
 
     public static boolean COMMAND_THREAD_POOL;
@@ -282,10 +281,6 @@ public class Commands
 
         register("tminfo", "tmi")
                 .setCommand(CommandTMInfo::new)
-                .setCategory(Category.MOVES);
-
-        register("trinfo", "tri")
-                .setCommand(CommandTRInfo::new)
                 .setCategory(Category.MOVES);
 
         register("level")

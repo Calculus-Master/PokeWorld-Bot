@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.game.bounties.objectives;
 
 import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.bounties.objectives.core.AbstractPoolObjective;
-import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 
 import java.util.Random;
 
@@ -17,7 +17,7 @@ public class UseMovePoolObjective extends AbstractPoolObjective
     protected void setRandomPool()
     {
         int size = new Random().nextInt(15) + 5;
-        for(int i = 0; i < size; i++) this.pool.add(Move.getRandomMove());
+        for(int i = 0; i < size; i++) this.pool.add(MoveEntity.getRandom().toString());
     }
 
     @Override

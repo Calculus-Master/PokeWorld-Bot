@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.game.bounties;
 
 import com.calculusmaster.pokecord.game.bounties.objectives.core.*;
-import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;

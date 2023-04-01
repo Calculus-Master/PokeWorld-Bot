@@ -41,7 +41,7 @@ public class CommandAugments extends Command
         else if(equip)
         {
             Pokemon active = this.playerData.getSelectedPokemon();
-            List<PokemonAugment> available = PokemonAugmentRegistry.AUGMENT_DATA.get(active.getName()).getOrderedAugmentList();
+            List<PokemonAugment> available = PokemonAugmentRegistry.AUGMENT_DATA.get(active.getEntity()).getOrderedAugmentList();
             int index = this.getInt(2) - 1;
 
             if(index < 0 || index >= available.size())
@@ -136,7 +136,7 @@ public class CommandAugments extends Command
             
             List<String> availableAugments = new ArrayList<>();
 
-            PokemonAugmentRegistry.PokemonAugmentData augmentData = PokemonAugmentRegistry.AUGMENT_DATA.get(active.getName());
+            PokemonAugmentRegistry.PokemonAugmentData augmentData = PokemonAugmentRegistry.AUGMENT_DATA.get(active.getEntity());
             List<PokemonAugment> availableList = augmentData.getOrderedAugmentList();
 
             for(int i = 0; i < availableList.size(); i++)
@@ -157,7 +157,7 @@ public class CommandAugments extends Command
 
             this.embed.addField("Available Augments", String.join("\n", availableAugments), false);
 
-            this.embed.setTitle(active.getName() + " Augments");
+            this.embed.setTitle(active.getDisplayName() + " – Augments");
         }
 
         return this;

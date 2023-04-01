@@ -1,295 +1,163 @@
 package com.calculusmaster.pokecord.game.pokemon.data;
 
-import com.calculusmaster.pokecord.game.enums.elements.Ability;
-import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
-import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
-import com.calculusmaster.pokecord.game.enums.elements.Type;
-import com.calculusmaster.pokecord.game.enums.items.TM;
-import com.calculusmaster.pokecord.game.enums.items.TR;
+import com.calculusmaster.pokecord.game.enums.elements.*;
+import com.calculusmaster.pokecord.game.moves.data.MoveData;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
-import com.calculusmaster.pokecord.util.helpers.CSVHelper;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
-import java.util.*;
-import java.util.stream.Stream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.EnumSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public final class PokemonData
 {
-    public static final List<String> POKEMON = new ArrayList<>();
-    private static final LinkedHashMap<String, PokemonData> POKEMON_DATA = new LinkedHashMap<>();
+    private final PokemonEntity entity; public PokemonEntity getEntity() { return this.entity; }
+    private final String name; public String getName() { return this.name; }
 
-    public static void init()
+    //Background
+    private final int dex; public int getDex() { return this.dex; }
+    private final String genus; public String getGenus() { return this.genus; }
+    private final double height; public double getHeight() { return this.height; }
+    private final double weight; public double getWeight() { return this.weight; }
+    private final List<Type> types; public List<Type> getTypes() { return this.types; }
+    private final List<String> flavorText; public List<String> getFlavorText() { return this.flavorText; }
+
+    //Stats
+    private final PokemonStats baseStats; public PokemonStats getBaseStats() { return this.baseStats; }
+    private final PokemonStats yield; public PokemonStats getEVYield() { return this.yield; }
+    private final int baseExperience; public int getBaseExperience() { return this.baseExperience; }
+    private final GrowthRate growthRate; public GrowthRate getGrowthRate() { return this.growthRate; }
+    private final int captureRate; public int getCaptureRate() { return this.captureRate; }
+
+    //Breeding
+    private final int genderRate; public int getGenderRate() { return this.genderRate; }
+    private final EnumSet<EggGroup> eggGroups; public EnumSet<EggGroup> getEggGroups() { return this.eggGroups; }
+    private final int baseHappiness; public int getBaseHappiness() { return this.baseHappiness; }
+    private final int rawHatchTarget; public int getRawHatchTarget() { return this.rawHatchTarget; }
+
+    //Abilities
+    private final EnumSet<Ability> mainAbilities; public EnumSet<Ability> getMainAbilities() { return this.mainAbilities; }
+    private final EnumSet<Ability> hiddenAbilities; public EnumSet<Ability> getHiddenAbilities() { return this.hiddenAbilities; }
+
+    //Moves
+    private final Map<MoveEntity, Integer> levelUpMoves; public Map<MoveEntity, Integer> getLevelUpMoves() { return this.levelUpMoves; }
+    private final String levelUpMovesVersion; public String getLevelUpMovesVersion() { return this.levelUpMovesVersion; }
+
+    private final EnumSet<MoveEntity> eggMoves; public EnumSet<MoveEntity> getEggMoves() { return this.eggMoves; }
+    private final String eggMovesVersion; public String getEggMovesVersion() { return this.eggMovesVersion; }
+
+    private final EnumSet<MoveEntity> tms; public EnumSet<MoveEntity> getTMs() { return this.tms; }
+    private final String tmsVersion; public String getTMsVersion() { return this.tmsVersion; }
+
+    private final EnumSet<MoveEntity> tutorMoves; public EnumSet<MoveEntity> getTutorMoves() { return this.tutorMoves; }
+    private final String tutorMovesVersion; public String getTutorMovesVersion() { return this.tutorMovesVersion; }
+
+    public PokemonData(PokemonEntity entity)
     {
-        CSVHelper.CSV_POKEMON_DATA_STANDARD
-                .stream()
-                .map(line -> line[0])
-                .forEachOrdered(name -> {
-                    POKEMON.add(name);
-                    POKEMON_DATA.put(name, new PokemonData(name));
-                });
+        this.entity = entity;
+        this.name = entity.getName();
+        this.dex = entity.getDex();
+
+        JSONObject json = this.readDataJSON();
+
+        JSONObject background = json.getJSONObject("background");
+        this.genus = background.getString("genus");
+        this.height = background.getDouble("height");
+        this.weight = background.getDouble("weight");
+        this.types = background.getJSONArray("types").toList().stream().map(o -> Type.cast(o.toString())).toList();
+        this.flavorText = background.getJSONArray("flavor").toList().stream().map(Object::toString).toList();
+
+        JSONObject stats = json.getJSONObject("stats");
+        this.baseStats = new PokemonStats(); for(Stat s : Stat.values()) this.baseStats.set(s, stats.getJSONArray("baseStats").getInt(s.ordinal()));
+        this.yield = new PokemonStats(); for(Stat s : Stat.values()) this.yield.set(s, stats.getJSONArray("yield").getInt(s.ordinal()));
+        this.baseExperience = stats.getInt("exp");
+        this.growthRate = GrowthRate.cast(stats.getString("growthRate"));
+        this.captureRate = stats.getInt("captureRate");
+
+        JSONObject breeding = json.getJSONObject("breeding");
+        this.genderRate = breeding.getInt("genderRate");
+        this.eggGroups = EnumSet.noneOf(EggGroup.class); for(String s : breeding.getJSONArray("eggGroups").toList().stream().map(Object::toString).toList()) this.eggGroups.add(EggGroup.cast(s));
+        this.baseHappiness = breeding.getInt("happiness");
+        this.rawHatchTarget = breeding.getInt("hatchTarget");
+
+        JSONObject abilities = json.getJSONObject("abilities");
+        this.mainAbilities = EnumSet.noneOf(Ability.class); for(String s : abilities.getJSONArray("main").toList().stream().map(Object::toString).toList()) this.mainAbilities.add(Ability.cast(s));
+        this.hiddenAbilities = EnumSet.noneOf(Ability.class); for(String s : abilities.getJSONArray("hidden").toList().stream().map(Object::toString).toList()) this.hiddenAbilities.add(Ability.cast(s));
+
+        JSONObject moves = json.getJSONObject("moves");
+
+        JSONObject levelUpMoves = moves.getJSONObject("level");
+        this.levelUpMoves = new LinkedHashMap<>(); for(String s : levelUpMoves.getJSONObject("moves").keySet()) this.levelUpMoves.put(MoveEntity.cast(s), levelUpMoves.getJSONObject("moves").getInt(s));
+        this.levelUpMovesVersion = levelUpMoves.getString("version");
+
+        JSONObject eggMoves = moves.getJSONObject("egg");
+        this.eggMoves = EnumSet.noneOf(MoveEntity.class); for(Object o : eggMoves.getJSONArray("moves")) this.eggMoves.add(MoveEntity.cast((String)o));
+        this.eggMovesVersion = eggMoves.getString("version");
+
+        JSONObject tms = moves.getJSONObject("tm");
+        this.tms = EnumSet.noneOf(MoveEntity.class); for(Object o : tms.getJSONArray("moves")) this.tms.add(MoveEntity.cast((String)o));
+        this.tmsVersion = tms.getString("version");
+
+        JSONObject tutorMoves = moves.getJSONObject("tutor");
+        this.tutorMoves = EnumSet.noneOf(MoveEntity.class); for(Object o : tutorMoves.getJSONArray("moves")) this.tutorMoves.add(MoveEntity.cast((String)o));
+        this.tutorMovesVersion = tutorMoves.getString("version");
     }
 
-    public static PokemonData get(String name)
+    private JSONObject readDataJSON()
     {
-        return POKEMON_DATA.get(name);
+        try
+        {
+            URL path = this.getClass().getResource("/data/pokemon/" + this.entity.getJSONFileName() + ".json");
+            File f = new File(path.toURI());
+            return new JSONObject(new JSONTokener(new FileInputStream(f)));
+        }
+        catch(URISyntaxException | NullPointerException | IOException e)
+        {
+            LoggerHelper.error(MoveData.class, "Unable to find PokemonData JSON. PokemonEntity: %s, JSON Name: %s".formatted(this.entity.toString(), this.entity.getJSONFileName() + ".json"));
+            e.printStackTrace();
+            return new JSONObject();
+        }
     }
 
-    //Fields (Categorized by CSV Data Source)
-
-    //Standard CSV
-    public final String name;
-    public final int dex;
-    public final String species;
-    public final double height;
-    public final double weight;
-    public final List<Type> types;
-    public final GrowthRate growthRate;
-    public final int baseEXP;
-
-    //Images CSV
-    public final String normalURL;
-    public final String shinyURL;
-
-    //Stats CSV
-    public final PokemonStats baseStats;
-
-    //EV CSV
-    public final PokemonStats yield;
-
-    //Forms & Megas CSV
-    public final List<String> forms;
-    public final List<String> megas;
-
-    //Breeding CSV
-    public int genderRate;
-    public List<EggGroup> eggGroups;
-    public int hatchTarget;
-
-    //Evolutions CSV
-    public final LinkedHashMap<String, Integer> evolutions;
-
-    //Moves CSV
-    public final List<Ability> abilities;
-    public final LinkedHashMap<String, Integer> moves;
-    public final EnumSet<TM> validTMs;
-    public final EnumSet<TR> validTRs;
-
-    //Descriptions CSV
-    public final List<String> descriptions;
-
-    private PokemonData(String name)
-    {
-        this.name = name;
-
-        //Standard: {"name", "dex", "species", "height", "weight", "type", "growth", "yield"}
-        String[] standard = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_STANDARD);
-
-        this.dex = Integer.parseInt(standard[1]);
-        this.species = standard[2];
-        this.height = Double.parseDouble(standard[3]);
-        this.weight = this.name.equals("Eternamax Eternatus") ? Double.MAX_VALUE : Double.parseDouble(standard[4]);
-        this.types = Stream.of(Type.cast(standard[5].split("-")[0]), Type.cast(standard[5].split("-")[1])).distinct().toList();
-        this.growthRate = GrowthRate.cast(standard[6]);
-        this.baseEXP = Integer.parseInt(standard[7]);
-
-        //Images: {"name", "normal", "shiny"}
-        String[] images = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_IMAGES);
-
-        this.normalURL = images[1];
-        this.shinyURL = images[2];
-
-        //Stats: {"name", "hp", "atk", "def", "spatk", "spdef", "spd"}
-        String[] stats = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_STATS);
-
-        String[] statValues = Arrays.copyOfRange(stats, 1, stats.length);
-        this.baseStats = new PokemonStats(Integer.parseInt(statValues[0]), Integer.parseInt(statValues[1]), Integer.parseInt(statValues[2]), Integer.parseInt(statValues[3]), Integer.parseInt(statValues[4]), Integer.parseInt(statValues[5]));
-
-        //EVs: {"name", "hp", "atk", "def", "spatk", "spdef", "spd"}
-        String[] evs = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_EFFORT_VALUES);
-
-        String[] evValues = Arrays.copyOfRange(evs, 1, evs.length);
-        this.yield = new PokemonStats(Integer.parseInt(evValues[0]), Integer.parseInt(evValues[1]), Integer.parseInt(evValues[2]), Integer.parseInt(evValues[3]), Integer.parseInt(evValues[4]), Integer.parseInt(evValues[5]));
-
-        //Forms/Megas: {"name", "forms", "megas"}
-        String[] formMega = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_FORMS_MEGAS);
-
-        this.forms = List.of(formMega[1].split("-"));
-        this.megas = List.of(formMega[2].split("-"));
-
-        //Breeding: {"name", "gender_rate", "egg_groups", "hatch_target"}
-        String[] breeding = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_BREEDING);
-
-        this.genderRate = Integer.parseInt(breeding[1]);
-        this.eggGroups = Stream.of(breeding[2].split("-")).map(EggGroup::cast).toList();
-        this.hatchTarget = Integer.parseInt(breeding[3]);
-
-        //Evolutions: {"name", "evolutions", "levels"}
-        String[] evolutions = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_EVOLUTIONS);
-
-        this.evolutions = new LinkedHashMap<>();
-        if(!evolutions[1].isEmpty()) for(int i = 0; i < evolutions[1].split("-").length; i++) this.evolutions.put(evolutions[1].split("-")[i], Integer.parseInt(evolutions[2].split("-")[i]));
-
-        //Moves: {"name", "abilities", "moves", "levels", "tms", "trs"}
-        String[] moves = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_MOVES);
-
-        this.abilities = Stream.of(moves[1].split("-")).map(Ability::cast).toList();
-        this.moves = new LinkedHashMap<>();
-        for(int i = 0; i < moves[2].split("-").length; i++) this.moves.put(moves[2].split("-")[i], Integer.parseInt(moves[3].split("-")[i]));
-        this.validTMs = moves[4].isEmpty() ? EnumSet.noneOf(TM.class) : EnumSet.copyOf(Stream.of(moves[4].split("-")).map(Integer::parseInt).map(TM::get).toList());
-        this.validTRs = moves[5].isEmpty() ? EnumSet.noneOf(TR.class) : EnumSet.copyOf(Stream.of(moves[5].split("-")).map(Integer::parseInt).map(TR::get).toList());
-
-        //Descriptions: {"name", "descriptions"}
-        String[] descriptions = this.readCSVLine(CSVHelper.CSV_POKEMON_DATA_DESCRIPTIONS);
-
-        if(descriptions == null) this.descriptions = List.of("No Pokemon description available.");
-        else this.descriptions = List.of(descriptions[1].split("\\|")).stream()
-                .distinct() //Remove duplicates
-                .map(s -> s.replaceAll("\n", " ")) //Replace new line characters with spaces
-                .map(s -> s.replaceAll("POKéMON", "Pokemon")) //Fix the weirdly formatted Pokemon word
-                .toList();
+    @Override
+    public String toString() {
+        return "PokemonDataNew{" +
+                "entity=" + this.entity +
+                ", name='" + this.name + '\'' +
+                ", dex=" + this.dex +
+                ", genus='" + this.genus + '\'' +
+                ", height=" + this.height +
+                ", weight=" + this.weight +
+                ", types=" + this.types +
+                ", flavorText=" + this.flavorText +
+                ", baseStats=" + this.baseStats +
+                ", yield=" + this.yield +
+                ", baseExperience=" + this.baseExperience +
+                ", growthRate=" + this.growthRate +
+                ", captureRate=" + this.captureRate +
+                ", genderRate=" + this.genderRate +
+                ", eggGroups=" + this.eggGroups +
+                ", baseHappiness=" + this.baseHappiness +
+                ", rawHatchTarget=" + this.rawHatchTarget +
+                ", mainAbilities=" + this.mainAbilities +
+                ", hiddenAbilities=" + this.hiddenAbilities +
+                ", levelUpMoves=" + this.levelUpMoves +
+                ", levelUpMovesVersion='" + this.levelUpMovesVersion + '\'' +
+                ", eggMoves=" + this.eggMoves +
+                ", eggMovesVersion='" + this.eggMovesVersion + '\'' +
+                ", tms=" + this.tms +
+                ", tmsVersion='" + this.tmsVersion + '\'' +
+                ", tutorMoves=" + this.tutorMoves +
+                ", tutorMovesVersion='" + this.tutorMovesVersion + '\'' +
+                '}';
     }
-
-    private String[] readCSVLine(List<String[]> full)
-    {
-        return full.stream().filter(line -> line[0].equals(this.name)).findFirst().orElse(null);
-    }
-
-    //Legacy Code (Converting the Pokemon Info Database to CSV Files)
-//
-//    private static final List<Document> PokemonInfoDatabase = new ArrayList<>();
-//    static { Mongo.PokemonInfo.find().forEach(PokemonInfoDatabase::add); }
-
-//    public static void main(String[] args) throws IOException
-//    {
-//        writeCSVFile("pokemon_data_standard.csv", new String[]{"name", "dex", "species", "height", "weight", "type", "growth", "yield"},
-//                (d, s, o) -> {
-//                    String[] out = new String[s];
-//                    out[0] = d.getString("name");
-//                    out[1] = String.valueOf(d.getInteger("dex"));
-//
-//                    String[] filler = d.getString("fillerinfo").split("-");
-//                    out[2] = filler[0];
-//                    out[3] = filler[1];
-//                    out[4] = filler[2];
-//
-//                    out[5] = d.getList("type", String.class).get(0) + "-" + d.getList("type", String.class).get(1);
-//                    out[6] = d.getString("growthrate");
-//                    out[7] = String.valueOf(d.getInteger("exp"));
-//
-//                    o.add(out);
-//        });
-//
-//        writeCSVFile("pokemon_data_images.csv", new String[]{"name", "normal", "shiny"},
-//                (d, s, o) -> {
-//                    String[] out = new String[s];
-//
-//                    out[0] = d.getString("name");
-//                    out[1] = d.getString("normalURL");
-//                    out[2] = d.getString("shinyURL");
-//
-//                    o.add(out);
-//        });
-//
-//        writeCSVFile("pokemon_data_stats.csv", new String[]{"name", "hp", "atk", "def", "spatk", "spdef", "spd"},
-//                (d, s, o) -> {
-//                    String[] out = new String[s];
-//
-//                    out[0] = d.getString("name");
-//                    for(int i = 1; i < out.length; i++) out[i] = String.valueOf(d.getList("stats", Integer.class).get(i - 1));
-//
-//                    o.add(out);
-//        });
-//
-//        writeCSVFile("pokemon_data_effort_values.csv", new String[]{"name", "hp", "atk", "def", "spatk", "spdef", "spd"},
-//                (d, s, o) -> {
-//                    String[] out = new String[s];
-//
-//                    out[0] = d.getString("name");
-//                    for(int i = 1; i < out.length; i++) out[i] = String.valueOf(d.getList("ev", Integer.class).get(i - 1));
-//
-//                    o.add(out);
-//        });
-//
-//        writeCSVFile("pokemon_data_forms_megas.csv", new String[]{"name", "forms", "megas"},
-//                (d, s, o) -> {
-//                    String[] out = new String[s];
-//
-//                    out[0] = d.getString("name");
-//                    out[1] = String.join("-", d.getList("forms", String.class));
-//                    out[2] = String.join("-", d.getList("mega", String.class));
-//
-//                    o.add(out);
-//        });
-//
-//        DataHelper.createGenderRateMap();
-//        DataHelper.createEggGroupLists();
-//        DataHelper.createBaseEggHatchTargetsMap();
-//
-//        writeCSVFile("pokemon_data_breeding.csv", new String[]{"name", "gender_rate", "egg_groups", "hatch_target"},
-//                (d, s, o) -> {
-//                    String[] out = new String[s];
-//
-//                    out[0] = d.getString("name");
-//                    out[1] = DataHelper.POKEMON_GENDER_RATES.get(d.getInteger("dex")).toString();
-//                    out[2] = DataHelper.POKEMON_EGG_GROUPS.get(d.getInteger("dex")).stream().map(EggGroup::toString).collect(Collectors.joining("-"));
-//                    out[3] = DataHelper.POKEMON_BASE_HATCH_TARGETS.get(d.getInteger("dex")).toString();
-//
-//                    o.add(out);
-//        });
-//
-//        writeCSVFile("pokemon_data_evolutions.csv", new String[]{"name", "evolutions", "levels"},
-//                (d, s, o) -> {
-//                    String[] out = new String[s];
-//
-//                    out[0] = d.getString("name");
-//                    out[1] = String.join("-", d.getList("evolutions", String.class));
-//                    out[2] = String.join("-", d.getList("evolutionsLVL", Integer.class).stream().map(String::valueOf).toList());
-//
-//                    o.add(out);
-//        });
-//
-//        writeCSVFile("pokemon_data_moves.csv", new String[]{"name", "abilities", "moves", "levels", "tms", "trs"},
-//                (d, s, o) -> {
-//                    String[] out = new String[s];
-//
-//                    out[0] = d.getString("name");
-//                    out[1] = String.join("-", d.getList("abilities", String.class));
-//                    out[2] = String.join("-", d.getList("moves", String.class));
-//                    out[3] = String.join("-", d.getList("movesLVL", Integer.class).stream().map(String::valueOf).toList());
-//                    out[4] = String.join("-", d.getList("movesTM", Integer.class).stream().map(String::valueOf).toList());
-//                    out[5] = String.join("-", d.getList("movesTR", Integer.class).stream().map(String::valueOf).toList());
-//
-//                    o.add(out);
-//        });
-
-//        DataHelper.createSpeciesDescLists();
-//
-//        writeCSVFile("pokemon_data_descriptions.csv", new String[]{"name", "descriptions"},
-//                (d, s, o) -> {
-//                    String[] out = new String[s];
-//
-//                    out[0] = d.getString("name");
-//                    out[1] = String.join("|", DataHelper.POKEMON_SPECIES_DESC.get(d.getInteger("dex")));
-//
-//                    o.add(out);
-//        });
-//    }
-
-//    private interface DocumentParser { void parse(Document d, int arraySize, List<String[]> outputList); }
-//
-//    private static void writeCSVFile(String fileName, String[] header, DocumentParser parser) throws IOException
-//    {
-//        CSVWriter writer = Objects.requireNonNull(PokemonData.createWriter(fileName));
-//        writer.writeNext(header);
-//
-//        List<String[]> data = new ArrayList<>();
-//        PokemonInfoDatabase.forEach(d -> parser.parse(d, header.length, data));
-//
-//        writer.writeAll(data);
-//        writer.close();
-//    }
-//
-//    private static CSVWriter createWriter(String fileName) throws IOException
-//    {
-//        return new CSVWriter(new FileWriter(fileName), ',', CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
-//    }
 }

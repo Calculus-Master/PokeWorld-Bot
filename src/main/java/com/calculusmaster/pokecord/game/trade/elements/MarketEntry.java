@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.game.trade.elements;
 
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;

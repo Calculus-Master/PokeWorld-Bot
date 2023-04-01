@@ -9,15 +9,16 @@ import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Location;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.Move;
-import com.calculusmaster.pokecord.game.moves.MoveData;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
+import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.Mongo;
-import com.calculusmaster.pokecord.util.cache.PlayerDataCache;
-import com.calculusmaster.pokecord.util.cache.PokemonDataCache;
+import com.calculusmaster.pokecord.util.cacheold.PlayerDataCache;
+import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.ConfigHelper;
@@ -60,10 +61,10 @@ public class CommandDev extends Command
         switch(this.msg[1])
         {
             case "forcespawn" -> {
-                String spawn;
+                PokemonEntity spawn;
                 if (this.msg[2].equals("random")) spawn = PokemonRarity.getSpawn();
                 else if (this.msg[2].equals("legendary")) spawn = PokemonRarity.getLegendarySpawn();
-                else spawn = this.getMultiWordContent(2);
+                else spawn = PokemonEntity.cast(this.getMultiWordContent(2));
                 SpawnEventHelper.forceSpawn(this.server, spawn);
             }
             case "deletebotmarket" -> {
@@ -73,20 +74,21 @@ public class CommandDev extends Command
             }
             case "randommoves" -> {
                 StringBuilder sb = new StringBuilder();
-                int count = Move.INCOMPLETE_MOVES.size();
+                List<MoveEntity> incomplete = new ArrayList<>(Move.INCOMPLETE_MOVES);
+                int count = incomplete.size();
                 for (int i = 0; i < 15; i++)
-                    sb.append(Move.INCOMPLETE_MOVES.get(new Random().nextInt(count))).append("   ");
+                    sb.append(incomplete.get(new Random().nextInt(count))).append("   ");
                 this.response = "Moves: " + sb + "\nTotal Remaining: " + count;
                 Move.init();
             }
             case "allmoves" -> {
                 List<StringBuilder> sbs = new ArrayList<>();
-                List<List<String>> chunked = ListUtils.partition(Move.INCOMPLETE_MOVES, 40);
+                List<List<MoveEntity>> chunked = ListUtils.partition(new ArrayList<MoveEntity>(Move.INCOMPLETE_MOVES), 40);
 
-                for(List<String> list : chunked)
+                for(List<MoveEntity> list : chunked)
                 {
                     StringBuilder s = new StringBuilder();
-                    for(String m : list) s.append(m).append("              ");
+                    for(MoveEntity m : list) s.append(m.data().getName()).append("              ");
                     sbs.add(s);
                 }
 
@@ -134,7 +136,7 @@ public class CommandDev extends Command
                 msg.removeIf(s -> s.contains("@"));
 
                 String name = Global.normalize(this.mentions.size() > 0 ? this.getMultiWordContent(3) : this.getMultiWordContent(2));
-                Pokemon p = Pokemon.create(name);
+                Pokemon p = Pokemon.create(PokemonEntity.cast(name));
                 p.setLevel(100);
                 target.addPokemon(p.getUUID());
                 p.upload();
@@ -175,7 +177,7 @@ public class CommandDev extends Command
     public static void main(String[] args) throws IOException
     {
         CSVHelper.init();
-        MoveData.init();
+        MoveEntity.init();
         Move.init();
 
         List<Move> incomplete = Move.INCOMPLETE_MOVES.stream().map(Move::new).toList();
@@ -189,7 +191,7 @@ public class CommandDev extends Command
 
         writer.write("Amount: " + Move.INCOMPLETE_MOVES.size() + "\n\n\n");
 
-        writer.write("Work In Progress Moves: \n\n" + String.join("\n", Move.WIP_MOVES));
+        writer.write("Work In Progress Moves: \n\n" + String.join("\n", Move.WIP_MOVES.stream().map(e -> e.data().getName()).toList()));
         writer.write("\n\nAmount: " + Move.WIP_MOVES.size());
 
         writer.write("\n\nUnimplemented Abilities:\n\n");

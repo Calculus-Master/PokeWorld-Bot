@@ -7,11 +7,12 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
 import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestrictionRegistry;
+import com.calculusmaster.pokecord.game.duel.tournament.TournamentHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
-import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
+import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
-import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -224,16 +225,16 @@ public class CommandDuel extends Command
         int mythical = 0;
         int ub = 0;
 
-        String name;
+        PokemonEntity entity;
         List<String> team = this.playerData.getTeam();
 
         for(int i = 0; i < this.playerData.getTeam().size(); i++)
         {
-            name = Mongo.PokemonData.find(Filters.eq("UUID", team.get(i))).first().getString("name");
+            entity = PokemonEntity.cast(Mongo.PokemonData.find(Filters.eq("UUID", team.get(i))).first().getString("entity"));
 
-            if(PokemonRarity.LEGENDARY.contains(name)) legendary++;
-            if(PokemonRarity.MYTHICAL.contains(name)) mythical++;
-            if(PokemonRarity.ULTRA_BEAST.contains(name)) ub++;
+            if(PokemonRarity.isLegendary(entity)) legendary++;
+            if(PokemonRarity.isMythical(entity)) mythical++;
+            if(PokemonRarity.isUltraBeast(entity)) ub++;
         }
 
         return legendary > this.getLegendaryCap(size) || (mythical + ub) > this.getMythicalUBCap(size);

@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.game.duel.restrictions.types;
 
 import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestriction;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
-import com.calculusmaster.pokecord.game.moves.MoveData;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class StatusMovesCountRestriction extends TeamRestriction
     @Override
     public boolean validate(List<Pokemon> team)
     {
-        return team.stream().allMatch(p -> p.getMoves().stream().map(MoveData::get).filter(m -> m.category.equals(Category.STATUS)).count() == this.count);
+        return team.stream().allMatch(p -> p.getMoves().stream().map(MoveEntity::data).filter(m -> m.getCategory().equals(Category.STATUS)).count() == this.count);
     }
 
     @Override

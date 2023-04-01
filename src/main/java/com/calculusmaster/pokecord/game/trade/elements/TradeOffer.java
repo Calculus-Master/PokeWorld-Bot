@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord.game.trade.elements;
 
 import com.calculusmaster.pokecord.game.enums.items.TM;
-import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.trade.TradeHelper;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -17,8 +16,7 @@ public class TradeOffer
     public int credits;
     public int redeems;
     public List<String> pokemon;
-    public List<Integer> tms;
-    public List<Integer> trs;
+    public List<TM> tms;
 
     public TradeOffer(String playerID)
     {
@@ -40,7 +38,6 @@ public class TradeOffer
             case REDEEMS -> this.redeems = 0;
             case POKEMON -> this.pokemon = new ArrayList<>();
             case TM -> this.tms = new ArrayList<>();
-            case TR -> this.trs = new ArrayList<>();
         }
     }
 
@@ -63,12 +60,7 @@ public class TradeOffer
 
         if(!this.tms.isEmpty())
         {
-            for(int i : this.tms) if(!this.player.getTMList().contains(TM.get(i).toString())) return false;
-        }
-
-        if(!this.trs.isEmpty())
-        {
-            for(int i : this.trs) if(!this.player.getTRList().contains(TR.get(i).toString())) return false;
+            for(TM tm : this.tms) if(!this.player.getTMList().contains(tm.toString())) return false;
         }
 
         return true;
@@ -102,21 +94,11 @@ public class TradeOffer
 
         if(!this.tms.isEmpty())
         {
-            for(int tm : this.tms)
+            for(TM tm : this.tms)
             {
-                this.player.removeTM(TM.get(tm).toString());
+                this.player.removeTM(tm.toString());
 
-                receiver.addTM(TM.get(tm).toString());
-            }
-        }
-
-        if(!this.trs.isEmpty())
-        {
-            for(int tr : this.trs)
-            {
-                this.player.removeTR(TR.get(tr).toString());
-
-                receiver.addTR(TR.get(tr).toString());
+                receiver.addTM(tm.toString());
             }
         }
     }
@@ -146,22 +128,7 @@ public class TradeOffer
 
         if(!this.tms.isEmpty())
         {
-            List<String> tmString = this.tms.stream().map(i -> TM.get(i).toString()).collect(Collectors.toList());
-
-            String tms = tmString.toString().substring(1, tmString.toString().length() - 1);
-            tms = tms.replaceAll(",", ", ");
-
-            sb.append("TMs: ").append(tms).append("\n");
-        }
-
-        if(!this.trs.isEmpty())
-        {
-            List<String> trString = this.trs.stream().map(i -> TR.get(i).toString()).collect(Collectors.toList());
-
-            String trs = trString.toString().substring(1, trString.toString().length() - 1);
-            trs = trs.replaceAll(",", ", ");
-
-            sb.append("TRs: ").append(trs).append("\n");
+            sb.append("TMs: ").append(String.join(", ", this.tms.stream().map(TM::toString).toList())).append("\n");
         }
 
         if(sb.toString().equals("```\n")) sb.append("Nothing\n");
@@ -177,8 +144,6 @@ public class TradeOffer
         {
             case CREDITS -> this.credits += i;
             case REDEEMS -> this.redeems += i;
-            case TM -> this.tms.add(i);
-            case TR -> this.trs.add(i);
         }
     }
 
@@ -186,6 +151,7 @@ public class TradeOffer
     {
         switch(offerType)
         {
+            case TM -> this.tms.add(TM.cast(s));
             case POKEMON -> {
                 this.pokemon.add(s);
                 this.pokemon = this.pokemon.stream().distinct().collect(Collectors.toList());
@@ -199,8 +165,6 @@ public class TradeOffer
         {
             case CREDITS -> this.credits -= i;
             case REDEEMS -> this.redeems -= i;
-            case TM -> this.tms.remove(i);
-            case TR -> this.trs.remove(i);
         }
     }
 
@@ -209,6 +173,7 @@ public class TradeOffer
         switch(offerType)
         {
             case POKEMON -> this.pokemon.remove(s);
+            case TM -> this.tms.remove(TM.cast(s));
         }
     }
 }

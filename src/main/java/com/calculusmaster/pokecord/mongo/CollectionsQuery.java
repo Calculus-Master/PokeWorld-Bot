@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord.mongo;
 
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.Mongo;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;

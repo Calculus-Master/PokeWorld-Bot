@@ -9,21 +9,18 @@ import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
 import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestrictionRegistry;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
 import com.calculusmaster.pokecord.game.moves.Move;
-import com.calculusmaster.pokecord.game.moves.MoveData;
-import com.calculusmaster.pokecord.game.moves.registry.MaxMoveRegistry;
+import com.calculusmaster.pokecord.game.moves.data.CustomMoveDataRegistry;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
-import com.calculusmaster.pokecord.game.moves.registry.ZMoveRegistry;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
-import com.calculusmaster.pokecord.game.pokemon.PokemonAI;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugmentRegistry;
-import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
-import com.calculusmaster.pokecord.game.pokemon.evolution.MegaChargeManager;
-import com.calculusmaster.pokecord.game.pokemon.evolution.SpecialEvolutionRegistry;
-import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.game.pokemon.evolution.*;
+import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.util.PrivateInfo;
-import com.calculusmaster.pokecord.util.cache.PlayerDataCache;
-import com.calculusmaster.pokecord.util.cache.PokemonDataCache;
+import com.calculusmaster.pokecord.util.cacheold.PlayerDataCache;
+import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
 import com.calculusmaster.pokecord.util.helpers.*;
 import com.calculusmaster.pokecord.util.helpers.event.LocationEventHelper;
 import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
@@ -84,20 +81,22 @@ public class Pokecord
         LoggerHelper.init("Config", ConfigHelper::init);
         LoggerHelper.init("CSV Helper", CSVHelper::init);
 
-        LoggerHelper.init("Pokemon Data", PokemonData::init, true);
-        LoggerHelper.init("Move Data", MoveData::init, true);
-
+        LoggerHelper.init("Move Entities", MoveEntity::init);
+        LoggerHelper.init("Custom Move Data", CustomMoveDataRegistry::init);
         LoggerHelper.init("Move Tutor", MoveTutorRegistry::init);
-        LoggerHelper.init("Z-Move", ZMoveRegistry::init);
-        LoggerHelper.init("Max Move", MaxMoveRegistry::init);
-        LoggerHelper.init("Gigantamax", DataHelper::createGigantamaxDataMap);
+
+        LoggerHelper.init("Pokemon Entities", PokemonEntity::init);
+
+        LoggerHelper.init("Gigantamax", GigantamaxRegistry::init);
+        LoggerHelper.init("Mega Evolutions", MegaEvolutionRegistry::init);
+        LoggerHelper.init("Forms", FormRegistry::init);
+        LoggerHelper.init("Evolutions", EvolutionRegistry::init);
 
         LoggerHelper.init("EV Lists", DataHelper::createEVLists);
         LoggerHelper.init("Type Lists", DataHelper::createTypeLists);
 
         LoggerHelper.init("Player Data Cache", PlayerDataCache::init);
 
-        LoggerHelper.init("Evolutions", SpecialEvolutionRegistry::init);
         LoggerHelper.init("Team Restrictions", TeamRestrictionRegistry::init, true);
         LoggerHelper.init("Incomplete Moves", Move::init);
         LoggerHelper.init("Pokemon Rarity", PokemonRarity::init);
@@ -111,7 +110,6 @@ public class Pokecord
 
         LoggerHelper.init("Pokemon Data Cache", PokemonDataCache::init);
         //LoggerHelper.init("CommandPokemon", CacheHelper::initPokemonLists, true);
-        if(PokemonAI.ENABLED) LoggerHelper.init("Pokemon AI", PokemonAI::init, true);
 
         long end = System.currentTimeMillis();
 

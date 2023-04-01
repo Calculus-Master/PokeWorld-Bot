@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.commands.pokemon;
 
+import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
@@ -7,9 +8,11 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -43,21 +46,19 @@ public class CommandInfo extends Command
         Pokemon chosen = Pokemon.build(UUID);
 
         String title = "**Level " + chosen.getLevel() + " " + chosen.getDisplayName() + ((chosen.getDisplayName().equals(chosen.getName()) ? "" : " (" + chosen.getName() + ")")) + "**" + (chosen.isShiny() ? ":star2:" : "") + (chosen.isMastered() ? ":trophy:" : "") + (chosen.hasPrestiged() ? ":zap:".repeat(chosen.getPrestigeLevel()) : "");
-        String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getData().growthRate, chosen.getLevel()) + " XP";
+        String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getData().getGrowthRate(), chosen.getLevel()) + " XP";
         String type = chosen.getType().stream().map(Type::getStyledName).collect(Collectors.joining("\n"));
         String nature = Global.normalize(chosen.getNature().toString());
         String gender = Global.normalize(chosen.getGender().toString());
         String dynamaxLevel = "" + chosen.getDynamaxLevel();
         String prestigeLevel = "" + chosen.getPrestigeLevel();
         String item = chosen.getItem().getStyledName();
-        String tm = (chosen.hasTM() ? chosen.getTM()  + " - " + chosen.getTM().getMoveName() : "None");
-        String tr =  (chosen.hasTR() ? chosen.getTR()  + " - " + chosen.getTR().getMoveName() : "None");
-        String image = chosen.getImage();
+        String tm = (chosen.hasTM() ? chosen.getTM()  + " - " + chosen.getTM().getMove().data().getName() : "None");
         String megaCharges = "**Mega Charges**: " + chosen.getMegaCharges() + " (Max: " + chosen.getMaxMegaCharges() + ")";
 
         this.embed
-                .addField("General Info", "**Experience:** %s\n**Type:** %s\n**Nature:** %s\n**Gender:** %s\n**Dynamax Level**: %s\n**Prestige Level**: %s%s".formatted(exp, type, nature, gender, dynamaxLevel, prestigeLevel, chosen.getMegaList().size() != 0 ? "\n" + megaCharges : ""), true)
-                .addField("Held", "**Item:** %s\n**TM:** %s\n**TR:** %s".formatted(item, tm, tr), true)
+                .addField("General Info", "**Experience:** %s\n**Type:** %s\n**Nature:** %s\n**Gender:** %s\n**Dynamax Level**: %s\n**Prestige Level**: %s%s".formatted(exp, type, nature, gender, dynamaxLevel, prestigeLevel, MegaEvolutionRegistry.hasMegaData(chosen.getEntity()) ? "\n" + megaCharges : ""), true)
+                .addField("Held", "**Item:** %s\n**TM:** %s".formatted(item, tm), true)
                 .addField(this.getPrestigeField(chosen))
                 .addField(this.getStatsField(chosen));
 
@@ -71,8 +72,13 @@ public class CommandInfo extends Command
         this.embed.setTitle(title.length() > 256 ? title.substring(0, 247) + "..." : title);
         this.embed.setDescription("UUID: " + UUID);
         this.color = chosen.getType().get(0).getColor();
-        this.embed.setImage(image);
         this.embed.setFooter("Showing Pokemon " + (index + 1) + " / " + this.playerData.getPokemonList().size());
+
+        String image = Pokemon.getImage(chosen.getEntity(), chosen.isShiny(), chosen, null);
+        String imageAttachmentName = "info_" + chosen.getUUID() + ".png";
+        this.embed.setImage("attachment://" + imageAttachmentName);
+        this.event.getChannel().sendFiles(FileUpload.fromData(Pokecord.class.getResourceAsStream(image), imageAttachmentName)).setEmbeds(this.embed.build()).queue();
+        this.embed = null;
 
         return this;
     }

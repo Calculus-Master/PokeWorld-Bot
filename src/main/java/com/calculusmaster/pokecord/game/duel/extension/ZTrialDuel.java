@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game.duel.extension;
 
+import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
@@ -9,7 +10,10 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
+import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -20,10 +24,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.BACKGROUND;
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.DUELS;
@@ -79,8 +81,8 @@ public class ZTrialDuel extends WildDuel
 
     private void setWildPokemon(Type type)
     {
-        List<String> pool = DataHelper.TYPE_LISTS.get(type);
-        String pokemon = pool.get(new Random().nextInt(pool.size()));
+        List<PokemonEntity> pool = new ArrayList<>(DataHelper.TYPE_LISTS.get(type));
+        PokemonEntity pokemon = pool.get(new Random().nextInt(pool.size()));
 
         this.players[1] = new WildPlayer(pokemon, Math.max(80, this.players[0].active.getLevel()));
         this.type = type;
@@ -128,8 +130,15 @@ public class ZTrialDuel extends WildDuel
         {
             int size = this.players[0].active.isDynamaxed() ? (int)(baseSize * 1.25) : baseSize;
 
-            Image p1 = ImageIO.read(new URL(this.getPokemonURL(0))).getScaledInstance(size, size, hint);
-            combined.getGraphics().drawImage(p1, spacing, y, null);
+            String image = Pokemon.getImage(this.players[0].active.getEntity(), this.players[0].active.isShiny(), this.players[0].active, this.players[0].move.getEntity());
+            URL resource = Pokecord.class.getResource(image);
+
+            if(resource != null)
+            {
+                Image p = ImageIO.read(resource).getScaledInstance(size, size, hint);
+                combined.getGraphics().drawImage(p, spacing, y, null);
+            }
+            else LoggerHelper.warn(Duel.class, "Pokemon Image not found. Entity: " + this.players[0].active.getEntity().toString() + ", Image File: " + image);
         }
 
         if(!this.players[1].active.isFainted())
@@ -139,8 +148,15 @@ public class ZTrialDuel extends WildDuel
 
             int size = this.players[1].active.isDynamaxed() ? (int)(baseSize * 1.25) : baseSize;
 
-            Image p2 = ImageIO.read(new URL(this.getPokemonURL(1))).getScaledInstance(size, size, hint);
-            combined.getGraphics().drawImage(p2, (backgroundW - spacing) - size, y, null);
+            String image = Pokemon.getImage(this.players[1].active.getEntity(), this.players[1].active.isShiny(), this.players[1].active, this.players[1].move.getEntity());
+            URL resource = Pokecord.class.getResource(image);
+
+            if(resource != null)
+            {
+                Image p = ImageIO.read(resource).getScaledInstance(size, size, hint);
+                combined.getGraphics().drawImage(p, (backgroundW - spacing) - size, y, null);
+            }
+            else LoggerHelper.warn(Duel.class, "Pokemon Image not found. Entity: " + this.players[1].active.getEntity().toString() + ", Image File: " + image);
         }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();

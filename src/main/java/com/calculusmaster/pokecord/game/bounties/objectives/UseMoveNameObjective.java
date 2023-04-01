@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.game.bounties.objectives;
 
 import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.bounties.objectives.core.AbstractNameObjective;
-import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 
 public class UseMoveNameObjective extends AbstractNameObjective
 {
@@ -14,12 +14,12 @@ public class UseMoveNameObjective extends AbstractNameObjective
     @Override
     protected void setRandomName()
     {
-        this.name = Move.getRandomMove();
+        this.entityName = MoveEntity.getRandom().data().getName();
     }
 
     @Override
     public String getDesc()
     {
-        return "Use the move \"" + this.name + "\" " + this.target + " times";
+        return "Use the move \"" + MoveEntity.cast(this.entityName) + "\" " + this.target + " times";
     }
 }

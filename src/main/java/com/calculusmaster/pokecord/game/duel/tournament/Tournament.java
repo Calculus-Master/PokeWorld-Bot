@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game.tournament;
+package com.calculusmaster.pokecord.game.duel.tournament;
 
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.*;
 
-import static com.calculusmaster.pokecord.game.tournament.TournamentHelper.*;
+import static com.calculusmaster.pokecord.game.duel.tournament.TournamentHelper.*;
 
 public class Tournament
 {

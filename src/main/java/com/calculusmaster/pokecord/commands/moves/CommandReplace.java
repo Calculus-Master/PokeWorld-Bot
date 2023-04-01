@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -34,14 +35,14 @@ public class CommandReplace extends Command
         else
         {
             int index = Integer.parseInt(this.msg[1]) - 1;
-            String oldMove = selected.getMoves().get(index);
-            String newMove = CommandLearn.moveLearnRequests.get(selected.getUUID());
+            MoveEntity oldMove = selected.getMoves().get(index);
+            MoveEntity newMove = CommandLearn.moveLearnRequests.get(selected.getUUID());
 
             selected.learnMove(newMove, index);
             CommandLearn.moveLearnRequests.remove(selected.getUUID(), newMove);
             selected.updateMoves();
 
-            this.embed.setDescription("Replaced " + oldMove + " with " + newMove + "!");
+            this.embed.setDescription("Replaced " + oldMove.data().getName() + " with " + newMove.data().getName() + "!");
             this.color = new Move(newMove).getType().getColor();
         }
 

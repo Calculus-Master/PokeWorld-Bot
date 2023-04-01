@@ -17,8 +17,8 @@ public class TrainerPlayer extends AIPlayer
         this.trainerData = data;
 
         Random r = new Random();
-        this.setTeam(data.getTeam().stream().map(s -> {
-            Pokemon p = Pokemon.create(s);
+        this.setTeam(data.getTeam().stream().map(entity -> {
+            Pokemon p = Pokemon.create(entity);
             p.setLevel(Math.min(100, r.nextInt(data.getAveragePokemonLevel() - 5, data.getAveragePokemonLevel() + 6)));
             p.getBoosts().setStatBoost(this.trainerData.getMultiplier());
             IntStream.range(0, 4).forEach(i -> p.learnMove(p.availableMoves().get(r.nextInt(p.availableMoves().size())), i));

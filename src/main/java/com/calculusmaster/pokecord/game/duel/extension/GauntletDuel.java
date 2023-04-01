@@ -22,7 +22,7 @@ public class GauntletDuel extends WildDuel
         duel.setTurn();
         duel.addChannel(event.getChannel().asTextChannel());
         duel.setPlayers(playerID, "BOT", 1);
-        duel.setWildPokemon("");
+        duel.setWildPokemon(null);
         duel.setDefaults();
         duel.setDuelPokemonObjects(0);
         duel.setDuelPokemonObjects(1);
@@ -46,7 +46,7 @@ public class GauntletDuel extends WildDuel
             this.getUser().data.updateBountyProgression(ObjectiveType.COMPLETE_GAUNTLET_LEVELS);
             this.getUser().data.getStatistics().incr(PlayerStatistic.GAUNTLETS_WON);
 
-            this.setWildPokemon("");
+            this.setWildPokemon(null);
             this.setDuelPokemonObjects(1);
             this.queuedMoves.clear();
             this.results.clear();

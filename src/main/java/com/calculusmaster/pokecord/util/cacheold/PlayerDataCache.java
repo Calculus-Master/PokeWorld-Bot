@@ -1,7 +1,7 @@
-package com.calculusmaster.pokecord.util.cache;
+package com.calculusmaster.pokecord.util.cacheold;
 
+import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
-import com.calculusmaster.pokecord.util.Mongo;
 
 import java.util.HashMap;
 import java.util.Map;

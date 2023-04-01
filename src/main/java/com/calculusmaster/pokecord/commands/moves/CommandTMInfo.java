@@ -4,7 +4,7 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.moves.Move;
-import com.calculusmaster.pokecord.game.moves.MoveData;
+import com.calculusmaster.pokecord.game.moves.data.MoveData;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -33,24 +33,24 @@ public class CommandTMInfo extends Command
                 return this;
             }
 
-            TM tm = TM.get(Integer.parseInt(input));
-            MoveData m = tm.getMoveData();
+            TM tm = TM.cast(input);
+            MoveData m = tm.getMove().data();
 
-            String impl = Move.isImplemented(m.name) ? "" : "***Warning: Move is not implemented! You cannot use " + m.name + " in duels!***\n\n";
-            String flavor = m.flavor.isEmpty() ? "*No Move Description*" : m.flavor.get(new Random().nextInt(m.flavor.size()));
+            String impl = Move.isImplemented(m.getEntity()) ? "" : "***Warning: Move is not implemented! You cannot use " + m.getName() + " in duels!***\n\n";
+            String flavor = m.getFlavorText().isEmpty() ? "*No Move Description*" : m.getFlavorText().get(new Random().nextInt(m.getFlavorText().size()));
 
             this.embed
-                    .setTitle(tm + " Info (" + tm.getMoveName() + ")")
+                    .setTitle(tm + " Info (" + m.getName() + ")")
                     .setDescription(impl + flavor)
-                    .addField("Type", Global.normalize(m.type.toString()), true)
-                    .addField("Category", Global.normalize(m.category.toString()), true)
+                    .addField("Type", Global.normalize(m.getType().toString()), true)
+                    .addField("Category", Global.normalize(m.getCategory().toString()), true)
                     .addBlankField(true)
-                    .addField("Power", String.valueOf(m.basePower), true)
-                    .addField("Accuracy", String.valueOf(m.baseAccuracy), true);
+                    .addField("Power", String.valueOf(m.getBasePower()), true)
+                    .addField("Accuracy", String.valueOf(m.getBaseAccuracy()), true);
 
-            this.color = m.type.getColor();
+            this.color = m.getType().getColor();
 
-            if(Move.CUSTOM_MOVES.contains(m.name)) this.embed.setFooter("This move has a custom implementation! It may not work exactly as described!");
+            if(Move.CUSTOM_MOVES.contains(m.getEntity())) this.embed.setFooter("This move has a custom implementation! It may not work exactly as described!");
         }
 
         return this;

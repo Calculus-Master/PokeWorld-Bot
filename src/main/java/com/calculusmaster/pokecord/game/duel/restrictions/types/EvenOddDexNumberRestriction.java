@@ -18,7 +18,7 @@ public class EvenOddDexNumberRestriction extends TeamRestriction
     @Override
     public boolean validate(List<Pokemon> team)
     {
-        return team.stream().allMatch(p -> p.getData().dex % 2 == (this.even ? 0 : 1));
+        return team.stream().allMatch(p -> p.getData().getDex() % 2 == (this.even ? 0 : 1));
     }
 
     @Override

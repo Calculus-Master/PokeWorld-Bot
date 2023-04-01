@@ -7,10 +7,10 @@ import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
 import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
-import com.calculusmaster.pokecord.game.moves.registry.MaxMoveRegistry;
-import com.calculusmaster.pokecord.game.moves.registry.ZMoveRegistry;
+import com.calculusmaster.pokecord.game.moves.data.CustomMoveDataRegistry;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.util.helpers.DataHelper;
+import com.calculusmaster.pokecord.game.pokemon.evolution.GigantamaxRegistry;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 
 import java.util.ArrayList;
@@ -74,95 +74,97 @@ public class DuelHelper
         }
 
         ZCrystal z = p instanceof UserPlayer up ? ZCrystal.cast(up.data.getEquippedZCrystal()) : ((TrainerPlayer)(p)).getData().getZCrystal();
-        Move fallback = new Move("Tackle");
+        MoveEntity fallback = MoveEntity.TACKLE;
 
-        if(z == null) return fallback;
+        if(z == null) return new Move(fallback);
 
-        Move ZMove = switch(z)
+        MoveEntity entityZMove = switch(z)
         {
             //Types
-            case BUGINIUM_Z -> new Move("Savage Spin Out");
-            case DARKINIUM_Z -> new Move("Black Hole Eclipse");
-            case DRAGONIUM_Z -> new Move("Devastating Drake");
-            case ELECTRIUM_Z -> new Move("Gigavolt Havoc");
-            case FAIRIUM_Z -> new Move("Twinkle Tackle");
-            case FIGHTINIUM_Z -> new Move("All Out Pummeling");
-            case FIRIUM_Z -> new Move("Inferno Overdrive");
-            case FLYINIUM_Z -> new Move("Supersonic Skystrike");
-            case GHOSTIUM_Z -> new Move("Never Ending Nightmare");
-            case GRASSIUM_Z -> new Move("Bloom Doom");
-            case GROUNDIUM_Z -> new Move("Tectonic Rage");
-            case ICIUM_Z -> new Move("Subzero Slammer");
-            case NORMALIUM_Z -> new Move("Breakneck Blitz");
-            case POISONIUM_Z -> new Move("Acid Downpour");
-            case PSYCHIUM_Z -> new Move("Shattered Psyche");
-            case ROCKIUM_Z -> new Move("Continental Crush");
-            case STEELIUM_Z -> new Move("Corkscrew Crash");
-            case WATERIUM_Z -> new Move("Hydro Vortex");
+            case BUGINIUM_Z -> MoveEntity.SAVAGE_SPIN_OUT;
+            case DARKINIUM_Z -> MoveEntity.BLACK_HOLE_ECLIPSE;
+            case DRAGONIUM_Z -> MoveEntity.DEVASTATING_DRAKE;
+            case ELECTRIUM_Z -> MoveEntity.GIGAVOLT_HAVOC;
+            case FAIRIUM_Z -> MoveEntity.TWINKLE_TACKLE;
+            case FIGHTINIUM_Z -> MoveEntity.ALL_OUT_PUMMELING;
+            case FIRIUM_Z -> MoveEntity.INFERNO_OVERDRIVE;
+            case FLYINIUM_Z -> MoveEntity.SUPERSONIC_SKYSTRIKE;
+            case GHOSTIUM_Z -> MoveEntity.NEVER_ENDING_NIGHTMARE;
+            case GRASSIUM_Z -> MoveEntity.BLOOM_DOOM;
+            case GROUNDIUM_Z -> MoveEntity.TECTONIC_RAGE;
+            case ICIUM_Z -> MoveEntity.SUBZERO_SLAMMER;
+            case NORMALIUM_Z -> MoveEntity.BREAKNECK_BLITZ;
+            case POISONIUM_Z -> MoveEntity.ACID_DOWNPOUR;
+            case PSYCHIUM_Z -> MoveEntity.SHATTERED_PSYCHE;
+            case ROCKIUM_Z -> MoveEntity.CONTINENTAL_CRUSH;
+            case STEELIUM_Z -> MoveEntity.CORKSCREW_CRASH;
+            case WATERIUM_Z -> MoveEntity.HYDRO_VORTEX;
             //Uniques
-            case ALORAICHIUM_Z -> new Move("Stoked Sparksurfer");
-            case DECIDIUM_Z -> new Move("Sinister Arrow Raid");
-            case EEVIUM_Z -> new Move("Extreme Evoboost");
-            case INCINIUM_Z -> new Move("Malicious Moonsault");
-            case KOMMOIUM_Z -> new Move("Clangorous Soulblaze");
-            case LUNALIUM_Z -> new Move("Menacing Moonraze Maelstrom");
-            case LYCANIUM_Z -> new Move("Splintered Stormshards");
-            case MARSHADIUM_Z -> new Move("Soul Stealing 7 Star Strike");
-            case MEWNIUM_Z -> new Move("Genesis Supernova");
-            case MIMIKIUM_Z -> new Move("Let's Snuggle Forever");
-            case PIKANIUM_Z -> new Move("Catastropika");
-            case PIKASHUNIUM_Z -> new Move("10,000,000 Volt Thunderbolt");
-            case PRIMARIUM_Z -> new Move("Oceanic Operetta");
-            case SNORLIUM_Z -> new Move("Pulverizing Pancake");
-            case SOLGANIUM_Z -> new Move("Searing Sunraze Smash");
-            case TAPUNIUM_Z -> new Move("Guardian of Alola");
-            case ULTRANECROZIUM_Z -> switch(baseMove.getName()) {
-                case "Photon Geyser" -> new Move("Light That Burns The Sky");
-                case "Prismatic Laser" -> new Move("The Blinding One");
+            case ALORAICHIUM_Z -> MoveEntity.STOKED_SPARKSURFER;
+            case DECIDIUM_Z -> MoveEntity.SINISTER_ARROW_RAID;
+            case EEVIUM_Z -> MoveEntity.EXTREME_EVOBOOST;
+            case INCINIUM_Z -> MoveEntity.MALICIOUS_MOONSAULT;
+            case KOMMOIUM_Z -> MoveEntity.CLANGOROUS_SOULBLAZE;
+            case LUNALIUM_Z -> MoveEntity.MENACING_MOONRAZE_MAELSTROM;
+            case LYCANIUM_Z -> MoveEntity.SPLINTERED_STORMSHARDS;
+            case MARSHADIUM_Z -> MoveEntity.SOUL_STEALING_7_STAR_STRIKE;
+            case MEWNIUM_Z -> MoveEntity.GENESIS_SUPERNOVA;
+            case MIMIKIUM_Z -> MoveEntity.LETS_SNUGGLE_FOREVER;
+            case PIKANIUM_Z -> MoveEntity.CATASTROPIKA;
+            case PIKASHUNIUM_Z -> MoveEntity.TEN_MILLION_VOLT_THUNDERBOLT;
+            case PRIMARIUM_Z -> MoveEntity.OCEANIC_OPERETTA;
+            case SNORLIUM_Z -> MoveEntity.PULVERIZING_PANCAKE;
+            case SOLGANIUM_Z -> MoveEntity.SEARING_SUNRAZE_SMASH;
+            case TAPUNIUM_Z -> MoveEntity.GUARDIAN_OF_ALOLA;
+            case ULTRANECROZIUM_Z -> switch(baseMove.getEntity()) {
+                case PHOTON_GEYSER -> MoveEntity.LIGHT_THAT_BURNS_THE_SKY;
+                case PRISMATIC_LASER -> MoveEntity.THE_BLINDING_ONE;
                 default -> fallback;
             };
             //Custom Uniques
-            case RESHIRIUM_Z -> new Move("White Hot Inferno");
-            case ZEKRIUM_Z -> new Move("Supercharged Storm Surge");
-            case KYURIUM_Z -> switch (baseMove.getName()) {
-                case "Glaciate" -> new Move("Eternal Winter");
-                case "Freeze Shock" -> new Move("Freezing Storm Surge");
-                case "Ice Burn" -> new Move("Blazing Iceferno");
+            case RESHIRIUM_Z -> MoveEntity.WHITE_HOT_INFERNO;
+            case ZEKRIUM_Z -> MoveEntity.SUPERCHARGED_STORM_SURGE;
+            case KYURIUM_Z -> switch (baseMove.getEntity()) {
+                case GLACIATE -> MoveEntity.ETERNAL_WINTER;
+                case FREEZE_SHOCK -> MoveEntity.FREEZING_STORM_SURGE;
+                case ICE_BURN -> MoveEntity.BLAZING_ICEFERNO;
                 default -> fallback;
             };
-            case XERNIUM_Z -> new Move("Tree Of Life");
-            case YVELTIUM_Z -> new Move("Cocoon Of Destruction");
-            case DIANCIUM_Z -> new Move("Dazzling Diamond Barrage");
-            case ARCEIUM_Z -> new Move("Decree Of Arceus");
-            case RAYQUAZIUM_Z -> new Move("Draconic Ozone Ascent");
-            case ZYGARDIUM_Z -> switch (baseMove.getName()) {
-                case "Lands Wrath" -> new Move("Tectonic Z Wrath");
-                case "Core Enforcer" -> new Move("Titanic Z Enforcer");
-                case "Thousand Arrows" -> new Move("Million Arrow Barrage");
-                case "Thousand Waves" -> new Move("Million Wave Tsunami");
+            case XERNIUM_Z -> MoveEntity.TREE_OF_LIFE;
+            case YVELTIUM_Z -> MoveEntity.COCOON_OF_DESTRUCTION;
+            case DIANCIUM_Z -> MoveEntity.DAZZLING_DIAMOND_BARRAGE;
+            case ARCEIUM_Z -> MoveEntity.DECREE_OF_ARCEUS;
+            case RAYQUAZIUM_Z -> MoveEntity.DRACONIC_OZONE_ASCENT;
+            case ZYGARDIUM_Z -> switch (baseMove.getEntity()) {
+                case LANDS_WRATH -> MoveEntity.TECTONIC_Z_WRATH;
+                case CORE_ENFORCER -> MoveEntity.TITANIC_Z_ENFORCER;
+                case THOUSAND_ARROWS -> MoveEntity.MILLION_ARROW_BARRAGE;
+                case THOUSAND_WAVES -> MoveEntity.MILLION_WAVE_TSUNAMI;
                 default -> fallback;
             };
-            case VOLCANIUM_Z -> new Move("Volcanic Steam Geyser");
-            case KYOGRIUM_Z -> new Move("Primordial Tsunami");
-            case GROUDONIUM_Z -> new Move("Primordial Landslide");
-            case GENESECTIUM_Z -> new Move("Elemental Techno Overdrive");
-            case MELMETALIUM_Z -> switch (baseMove.getName()) {
-                case "Double Iron Bash" -> new Move("Quadruple Steel Smash");
-                case "Acid Armor" -> new Move("Metal Liquidation");
+            case VOLCANIUM_Z -> MoveEntity.VOLCANIC_STEAM_GEYSER;
+            case KYOGRIUM_Z -> MoveEntity.PRIMORDIAL_TSUNAMI;
+            case GROUDONIUM_Z -> MoveEntity.PRIMORDIAL_LANDSLIDE;
+            case GENESECTIUM_Z -> MoveEntity.ELEMENTAL_TECHNO_OVERDRIVE;
+            case MELMETALIUM_Z -> switch(baseMove.getEntity()) {
+                case DOUBLE_IRON_BASH -> MoveEntity.QUADRUPLE_STEEL_SMASH;
+                case ACID_ARMOR -> MoveEntity.METAL_LIQUIDATION;
                 default -> fallback;
             };
-            case DIALGIUM_Z -> new Move("Timeline Shatter");
-            case PALKIUM_Z -> new Move("Ultra Space Hypernova");
-            case GIRATINIUM_Z -> new Move("Dark Matter Explosion");
-            case ETERNIUM_Z -> switch (baseMove.getName()) {
-                case "Eternabeam" -> new Move("The Darkest Day");
-                case "Dynamax Cannon" -> new Move("Max Particle Beam");
+            case DIALGIUM_Z -> MoveEntity.TIMELINE_SHATTER;
+            case PALKIUM_Z -> MoveEntity.ULTRA_SPACE_HYPERNOVA;
+            case GIRATINIUM_Z -> MoveEntity.DARK_MATTER_EXPLOSION;
+            case ETERNIUM_Z -> switch(baseMove.getEntity()) {
+                case ETERNABEAM -> MoveEntity.THE_DARKEST_DAY;
+                case DYNAMAX_CANNON -> MoveEntity.MAX_PARTICLE_BEAM;
                 default -> fallback;
             };
-            case DARKRAIUM_Z -> new Move("Nightmare Void");
+            case DARKRAIUM_Z -> MoveEntity.NIGHTMARE_VOID;
         };
 
-        if(ZMoveRegistry.TYPED_ZMOVES.contains(ZMove.getName()))
+        Move ZMove = new Move(entityZMove);
+
+        if(CustomMoveDataRegistry.isTypedZMove(entityZMove))
         {
             int ZPower;
 
@@ -177,13 +179,13 @@ public class DuelHelper
             else if(baseMove.getPower() <= 130) ZPower = 195;
             else ZPower = 200;
 
-            ZPower = switch(baseMove.getName()) {
-                case "Mega Drain" -> 120;
-                case "Core Enforcer" -> 140;
-                case "Weather Ball", "Hex" -> 160;
-                case "Flying Press" -> 170;
-                case "Gear Grind", "Fissure", "Guillotine", "Horn Drill", "Sheer Cold" -> 180;
-                case "V Create" -> 220;
+            ZPower = switch(baseMove.getEntity()) {
+                case MEGA_DRAIN -> 120;
+                case CORE_ENFORCER -> 140;
+                case WEATHER_BALL, HEX -> 160;
+                case FLYING_PRESS -> 170;
+                case GEAR_GRIND, FISSURE, GUILLOTINE, HORN_DRILL, SHEER_COLD -> 180;
+                case V_CREATE -> 220;
                 default -> ZPower;
             };
 
@@ -198,13 +200,14 @@ public class DuelHelper
     {
         Move maxMove;
 
-        if(baseMove.getCategory().equals(Category.STATUS)) maxMove = new Move("Max Guard");
-        else if(p.canGigantamax() && DataHelper.getGigantamaxData(p.getName()).moveType().equals(baseMove.getType())) maxMove = Move.create(DataHelper.getGigantamaxData(p.getName()).move(), DataHelper.getGigantamaxData(p.getName()).moveType(), null, 0, 100);
-        else maxMove = new Move(MaxMoveRegistry.get(baseMove.getType()).name);
+        if(baseMove.is(Category.STATUS)) maxMove = new Move(MoveEntity.MAX_GUARD);
+        else if(GigantamaxRegistry.hasGMax(p.getEntity()) && GigantamaxRegistry.getGMaxMove(p.getEntity()).data().getType().equals(baseMove.getType()))
+            maxMove = new Move(GigantamaxRegistry.getGMaxMove(p.getEntity()));
+        else maxMove = new Move(CustomMoveDataRegistry.getMaxMove(baseMove.getType()));
 
         int maxPower;
 
-        boolean isDecreased = Arrays.asList("Max Knuckle", "Max Ooze").contains(maxMove.getName());
+        boolean isDecreased = maxMove.is(MoveEntity.MAX_KNUCKLE, MoveEntity.MAX_OOZE);
 
         if(baseMove.getCategory().equals(Category.STATUS)) maxPower = 0;
         else if(baseMove.getPower() <= 40) maxPower = isDecreased ? 70 : 90;
@@ -217,7 +220,6 @@ public class DuelHelper
 
         maxMove.setPower(maxPower);
         maxMove.setCategory(baseMove.getCategory());
-        maxMove.isMaxMove = true;
 
         return maxMove;
     }

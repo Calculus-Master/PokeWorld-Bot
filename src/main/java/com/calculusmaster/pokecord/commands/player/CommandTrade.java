@@ -3,8 +3,6 @@ package com.calculusmaster.pokecord.commands.player;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
-import com.calculusmaster.pokecord.game.enums.items.TM;
-import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.trade.Trade;
 import com.calculusmaster.pokecord.game.trade.TradeHelper;
 import com.calculusmaster.pokecord.game.trade.elements.TradeOffer;
@@ -58,9 +56,8 @@ public class CommandTrade extends Command
             boolean changeRedeems = List.of("redeems", "redeem", "r").contains(this.msg[1]);
             boolean changePokemon = List.of("pokemon", "poke", "p").contains(this.msg[1]);
             boolean changeTMs = List.of("tms", "tm").contains(this.msg[1]);
-            boolean changeTRs = List.of("trs", "tr").contains(this.msg[1]);
 
-            boolean editOffer = (changeCredits || changeRedeems || changePokemon || changeTMs || changeTRs)
+            boolean editOffer = (changeCredits || changeRedeems || changePokemon || changeTMs)
                     && this.msg.length >= 3 && (this.msg[2].equals("add") || this.msg[2].equals("remove"));
 
             Trade trade = TradeHelper.instance(this.player.getId());
@@ -120,7 +117,6 @@ public class CommandTrade extends Command
                         if(changeRedeems) offer.clear(TradeHelper.OfferType.REDEEMS);
                         if(changePokemon) offer.clear(TradeHelper.OfferType.POKEMON);
                         if(changeTMs) offer.clear(TradeHelper.OfferType.TM);
-                        if(changeTRs) offer.clear(TradeHelper.OfferType.TR);
 
                         success = true;
                     }
@@ -193,47 +189,26 @@ public class CommandTrade extends Command
                 }
                 else if(changeTMs)
                 {
-                    List<Integer> TMs = new ArrayList<>();
-
-                    for(int i = 3; i < this.msg.length; i++)
-                    {
-                        this.msg[i] = this.msg[i].replaceAll("tm", "");
-
-                        if(this.isNumeric(i) && this.getInt(i) >= 1 && this.getInt(i) <= 100 && this.playerData.getTMList().contains(TM.get(this.getInt(i)).toString()))
-                        {
-                            TMs.add(this.getInt(i));
-                        }
-                    }
-
-                    for(int i : TMs)
-                    {
-                        if(add) offer.add(TradeHelper.OfferType.TM, i);
-                        else if(remove) offer.remove(TradeHelper.OfferType.TM, i);
-                    }
-
-                    success = true;
-                }
-                else if(changeTRs)
-                {
-                    List<Integer> TRs = new ArrayList<>();
-
-                    for(int i = 3; i < this.msg.length; i++)
-                    {
-                        this.msg[i] = this.msg[i].replaceAll("tr", "");
-
-                        if(this.isNumeric(i) && this.getInt(i) >= 0 && this.getInt(i) <= 99 && this.playerData.getTRList().contains(TR.get(this.getInt(i)).toString()))
-                        {
-                            TRs.add(this.getInt(i));
-                        }
-                    }
-
-                    for(int i : TRs)
-                    {
-                        if(add) offer.add(TradeHelper.OfferType.TR, i);
-                        else if(remove) offer.remove(TradeHelper.OfferType.TR, i);
-                    }
-
-                    success = true;
+                    this.response = "TM trading is currently disabled!";
+//                    List<TM> TMs = new ArrayList<>();
+//
+//                    for(int i = 3; i < this.msg.length; i++)
+//                    {
+//                        this.msg[i] = this.msg[i].replaceAll("tm", "");
+//
+//                        if(this.isNumeric(i) && this.getInt(i) >= 1 && this.getInt(i) <= 100 && this.playerData.getTMList().contains(TM.cast(String.valueOf(this.getInt(i))).toString()))
+//                        {
+//                            TMs.add(this.getInt(i));
+//                        }
+//                    }
+//
+//                    for(int i : TMs)
+//                    {
+//                        if(add) offer.add(TradeHelper.OfferType.TM, i);
+//                        else if(remove) offer.remove(TradeHelper.OfferType.TM, i);
+//                    }
+//
+//                    success = true;
                 }
 
                 if(success)

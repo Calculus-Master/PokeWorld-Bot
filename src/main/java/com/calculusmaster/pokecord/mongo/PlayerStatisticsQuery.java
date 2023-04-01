@@ -1,6 +1,5 @@
 package com.calculusmaster.pokecord.mongo;
 
-import com.calculusmaster.pokecord.util.Mongo;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Updates;

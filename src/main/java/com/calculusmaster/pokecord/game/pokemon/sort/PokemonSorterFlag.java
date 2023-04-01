@@ -6,6 +6,7 @@ import java.util.List;
 public enum PokemonSorterFlag
 {
     NAME("--name"),
+    ENTITY("--entity"),
     NICKNAME("--nickname", "--nick"),
     MOVE("--move"),
     LEARNED_MOVE("--learnedmove", "--lmove"),
@@ -17,7 +18,6 @@ public enum PokemonSorterFlag
     EV("--ev"),
     STAT("--stat"),
     TM("--tm"),
-    TR("--tr"),
     TEAM("--team"),
     FAVORITES("--favorites", "--fav"),
     TYPE("--type"),
@@ -44,10 +44,11 @@ public enum PokemonSorterFlag
     MYTHICAL("--mythical", "--myth"),
     ULTRA_BEAST("--ub", "--ultrabeast", "--ultra", "--beast"),
     MEGA("--mega"),
-    PRIMAL("--primal"),
-    MEGA_OR_PRIMAL("--mega|primal", "--primal|mega");
+    MEGA_LEGENDARY("--megalegendary"),
 
-    public List<String> flags;
+    ;
+
+    public final List<String> flags;
     PokemonSorterFlag(String... flags)
     {
         this.flags = Arrays.asList(flags);

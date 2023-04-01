@@ -1,60 +1,59 @@
 package com.calculusmaster.pokecord.game.pokemon.data;
 
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.helpers.CSVHelper;
-import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
 public class PokemonRarity
 {
-    public static final List<String> SPAWNS = new ArrayList<>();
-    public static final LinkedHashMap<String, Rarity> POKEMON_RARITIES = new LinkedHashMap<>();
+    public static final List<PokemonEntity> SPAWNS = new ArrayList<>();
 
-    public static final List<String> LEGENDARY = Arrays.asList("Articuno", "Galarian Articuno", "Moltres", "Galarian Moltres", "Zapdos", "Galarian Zapdos", "Mewtwo", "Mega Mewtwo X", "Mega Mewtwo Y", "Raikou", "Entei", "Suicune", "Lugia", "Ho Oh", "Regirock", "Regice", "Registeel", "Latias", "Mega Latias", "Latios", "Mega Latios", "Kyogre", "Primal Kyogre", "Groudon", "Primal Groudon", "Rayquaza", "Mega Rayquaza", "Deoxys", "Deoxys Attack", "Deoxys Defense", "Deoxys Speed", "Dialga", "Palkia", "Heatran", "Regigigas", "Giratina", "Origin Giratina", "Cresselia", "Darkrai", "Arceus", "Cobalion", "Terrakion", "Virizion", "Tornadus", "Thundurus", "Zekrom", "Reshiram", "Landorus", "Kyurem", "Black Kyurem", "White Kyurem", "Keldeo", "Xerneas", "Yveltal", "Zygarde", "Zygarde 10", "Zygarde Complete", "Volcanion", "Solgaleo", "Lunala", "Necrozma", "Dusk Mane Necrozma", "Dawn Wings Necrozma", "Ultra Necrozma", "Meltan", "Melmetal", "Zacian", "Zamazenta", "Eternatus", "Regieleki", "Regidrago", "Glastrier", "Spectrier", "Calyrex", "Ice Rider Calyrex", "Shadow Rider Calyrex");
-    public static final List<String> MYTHICAL = Arrays.asList("Mew", "Celebi", "Jirachi", "Uxie", "Mesprit", "Azelf", "Phione", "Manaphy", "Shaymin", "Shaymin Sky", "Victini", "Meloetta Pirouette", "Genesect", "Diancie", "Mega Diancie", "Hoopa", "Hoopa Unbound", "Tapu Koko", "Tapu Lele", "Tapu Bulu", "Tapu Fini", "Magearna", "Marshadow", "Zeraora", "Zarude");
-    public static final List<String> ULTRA_BEAST = Arrays.asList("Nihilego", "Buzzwole", "Pheromosa", "Xurkitree", "Celesteela", "Kartana", "Guzzlord", "Poipole", "Naganadel", "Stakataka", "Blacephalon");
-    public static final List<String> MEGA = Arrays.asList("Mega Venusaur", "Mega Charizard X", "Mega Charizard Y", "Mega Blastoise", "Mega Alakazam", "Mega Gengar", "Mega Kangaskhan", "Mega Pinsir", "Mega Gyarados", "Mega Aerodactyl", "Mega Ampharos", "Mega Scizor", "Mega Heracross", "Mega Houndoom", "Mega Tyranitar", "Mega Blaziken", "Mega Gardevoir", "Mega Mawile", "Mega Aggron", "Mega Medicham", "Mega Manectric", "Mega Banette", "Mega Absol", "Mega Garchomp", "Mega Lucario", "Mega Abomasnow", "Mega Beedrill", "Mega Pidgeot", "Mega Slowbro", "Mega Steelix", "Mega Sceptile", "Mega Swampert", "Mega Sableye", "Mega Sharpedo", "Mega Camerupt", "Mega Altaria", "Mega Glalie", "Mega Salamence", "Mega Lopunny", "Mega Gallade", "Mega Audino", "Mega Metagross");
-    public static final List<String> MEGA_LEGENDARY = List.of("Mega Mewtwo X", "Mega Mewtwo Y", "Mega Rayquaza", "Primal Kyogre", "Primal Groudon");
+    //Classifiers
+    public static boolean isLegendary(PokemonEntity p)
+    {
+        return p.getRarity() == Rarity.LEGENDARY;
+    }
+
+    public static boolean isMythical(PokemonEntity p)
+    {
+        return p.getRarity() == Rarity.MYTHICAL;
+    }
+
+    public static boolean isUltraBeast(PokemonEntity p)
+    {
+        return p.getRarity() == Rarity.ULTRA_BEAST;
+    }
+
+    //Rarity Methods
 
     public static void init()
     {
-        CSVHelper.CSV_POKEMON_DATA_RARITIES.forEach(line -> PokemonRarity.add(line[0], Rarity.cast(line[1])));
-
+        Arrays.stream(PokemonEntity.values()).filter(p -> !p.isNotSpawnable()).forEach(e -> IntStream.range(0, e.getRarity().num).forEach(i -> SPAWNS.add(e)));
         Collections.shuffle(SPAWNS);
-
-        LoggerHelper.info(PokemonRarity.class, "Spawn List Size: " + SPAWNS.size());
     }
 
-    public static String getSpawn()
+    public static PokemonEntity getSpawn()
     {
         return SPAWNS.get(new Random().nextInt(SPAWNS.size()));
     }
 
-    public static String getLegendarySpawn()
+    public static PokemonEntity getSpawn(Predicate<PokemonEntity> filter)
     {
-        List<String> combined = new ArrayList<>();
+        List<PokemonEntity> filteredSpawns = SPAWNS.stream().filter(filter).toList();
 
-        combined.addAll(LEGENDARY);
-        combined.addAll(MYTHICAL);
-        combined.addAll(ULTRA_BEAST);
-
-        String spawn = combined.get(new Random().nextInt(combined.size()));
-
-        return SPAWNS.contains(spawn) ? spawn : getLegendarySpawn();
+        return filteredSpawns.get(new Random().nextInt(filteredSpawns.size()));
     }
 
-    public static String getSpawnOfRarities(Rarity... rarities)
+    public static PokemonEntity getLegendarySpawn()
     {
-        String result = PokemonRarity.getSpawn();
-        while(!List.of(rarities).contains(POKEMON_RARITIES.get(result))) result = PokemonRarity.getSpawn();
-        return result;
+        return PokemonRarity.getSpawn(PokemonRarity::isLegendary);
     }
 
-    public static void add(String name, Rarity r)
+    public static PokemonEntity getSpawnOfRarities(Rarity... rarities)
     {
-        for(int i = 0; i < r.num; i++) SPAWNS.add(name);
-        POKEMON_RARITIES.put(name, r);
+        return PokemonRarity.getSpawn(e -> List.of(rarities).contains(e.getRarity()));
     }
 
     public enum Rarity
@@ -65,10 +64,12 @@ public class PokemonRarity
         DIAMOND(25),
         PLATINUM(15),
         MYTHICAL(10),
+        ULTRA_BEAST(8),
         LEGENDARY(5),
-        EXTREME(1);
 
-        public int num;
+        ;
+
+        public final int num;
         Rarity(int num)
         {
             this.num = num;

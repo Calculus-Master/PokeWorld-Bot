@@ -13,25 +13,24 @@ import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Random;
-import java.util.SplittableRandom;
 import java.util.function.Consumer;
 
 public class MessageEventHandler
 {
-    private SplittableRandom random;
+    private Random random;
     private MessageReceivedEvent event;
     private PlayerDataQuery data;
     private boolean canSendMessage;
 
     public MessageEventHandler()
     {
-        this.random = new SplittableRandom();
+        this.random = new Random();
     }
 
     public void updateEvent(MessageReceivedEvent event)
     {
         //Reassign the SplittableRandom object every once in a while
-        if(this.random.nextInt(5) < 1) this.random = new SplittableRandom(System.currentTimeMillis());
+        if(this.random.nextInt(5) < 1) this.random = new Random(System.currentTimeMillis());
 
         this.event = event;
         if(PlayerDataQuery.isRegistered(event.getAuthor().getId())) this.data = PlayerDataQuery.ofNonNull(event.getAuthor().getId());
@@ -73,29 +72,28 @@ public class MessageEventHandler
         int initL = p.getLevel();
 
         int experience;
-        int required = GrowthRate.getRequiredExp(p.getData().growthRate, p.getLevel());
-        final SplittableRandom r = new SplittableRandom();
+        int required = GrowthRate.getRequiredExp(p.getData().getGrowthRate(), p.getLevel());
 
         //Messages: 0.1% - 10% of the required exp
         if(p.getLevel() < 25)
         {
-            double fraction = r.nextInt(1, 100) / 1000D;
+            double fraction = this.random.nextInt(1, 100) / 1000D;
             experience = (int)(fraction * required);
         }
         //Messages: 10% to 150% of 5% of the required exp
         else if(p.getLevel() < 40)
         {
             int base = required / 100 * 5;
-            experience = r.nextInt((int)(base * 0.1), (int)(base * 1.5));
+            experience = this.random.nextInt((int)(base * 0.1), (int)(base * 1.5));
         }
         //Messages: 10% to 150% of 20% of the required exp from 5 levels below
         else if(p.getLevel() < 80)
         {
-            required = GrowthRate.getRequiredExp(p.getData().growthRate, p.getLevel() - 5);
+            required = GrowthRate.getRequiredExp(p.getData().getGrowthRate(), p.getLevel() - 5);
             int base = (int)(required * 0.2);
-            experience = r.nextInt((int)(base * 0.1), (int)(base * 1.5));
+            experience = this.random.nextInt((int)(base * 0.1), (int)(base * 1.5));
         }
-        else experience = new SplittableRandom().nextInt(1000, 5000);
+        else experience = this.random.nextInt(1000, 5000);
 
         if(experience == 0) experience = 50;
 
@@ -108,7 +106,7 @@ public class MessageEventHandler
             this.data.updateBountyProgression(ObjectiveType.LEVEL_POKEMON, p.getLevel() - initL);
             this.data.addExp(PMLExperience.LEVEL_POKEMON, 100);
 
-            this.send("Your " + p.getName() + " is now Level " + p.getLevel() + "!");
+            this.send("Your " + p.getDisplayName() + " is now **Level " + p.getLevel() + "**!");
         }
 
         p.updateExperience();

@@ -2,8 +2,10 @@ package com.calculusmaster.pokecord.game.enums.functional;
 
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.concurrent.Executors;
@@ -98,9 +100,37 @@ public enum Achievements
         });
     }
 
-    public static Achievements asAchievement(String a)
+    public void grant(String playerID, TextChannel channel)
     {
-        for(Achievements s : values()) if(s.toString().equalsIgnoreCase(a)) return s;
-        return null;
+        ThreadPoolHandler.ACHIEVEMENT.execute(() -> {
+            if(!playerID.chars().allMatch(Character::isDigit)) return;
+
+            if(CacheHelper.ACHIEVEMENT_CACHE.get(this).contains(playerID)) return;
+
+            PlayerDataQuery p = PlayerDataQuery.of(playerID);
+
+            if(!p.getAchievementsList().contains(this.toString()))
+            {
+                p.addAchievement(this);
+                p.changeCredits(this.credits);
+
+                p.addExp(PMLExperience.ACHIEVEMENT, 100);
+
+                String message = "You unlocked an Achievement!\n`\"%s\"`\n*You earned %sc.*".formatted(this.desc, this.credits);
+
+                Executors.newSingleThreadScheduledExecutor().schedule(() -> {
+                    if(channel != null) channel.sendMessage(p.getMention() + "\n" + message).queue();
+                    else p.directMessage(message);
+                }, 15, TimeUnit.SECONDS);
+            }
+            else CacheHelper.ACHIEVEMENT_CACHE.get(this).add(playerID);
+
+            if(p.getAchievementsList().size() == Achievements.values().length - 1) COMPLETED_ALL_ACHIEVEMENTS.grant(playerID, channel);
+        });
+    }
+
+    public static Achievements cast(String a)
+    {
+        return Global.getEnumFromString(values(), a);
     }
 }

@@ -9,5 +9,7 @@ public enum Region
     UNOVA,
     KALOS,
     ALOLA,
-    GALAR;
+    GALAR,
+    HISUI,
+    PALDEA;
 }

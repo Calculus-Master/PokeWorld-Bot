@@ -9,6 +9,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -37,7 +38,7 @@ public class CommandMoves extends Command
             this.embed.setDescription("Note: Not all moves that can be learned by your Pokemon are listed here, because moves that have not been implemented yet are excluded from this. Also, some moves listed here might not be able to be learned by your Pokemon right now due to your Pokemon not being high enough level. Use `p!moves` to see what moves your Pokemon can learn at its current level!");
             this.embed.setTitle("Move Info for " + selected.getName());
 
-            List<Move> moves = selected.allMoves().stream().filter(Move::isImplemented).map(Move::new).toList();
+            List<Move> moves = selected.getLevelUpMoves().stream().filter(Move::isImplemented).map(Move::new).toList();
 
             List<Move> topDamage = moves.stream().sorted(Comparator.comparingInt(Move::getPower)).collect(Collectors.toList());
             Collections.reverse(topDamage);
@@ -137,13 +138,13 @@ public class CommandMoves extends Command
 
                 movesList.append("\n**All Moves: **\n");
                 String emote;
-                for (String s : selected.allMoves())
+                for(MoveEntity e : selected.getLevelUpMoves())
                 {
-                    if(selected.availableMoves().contains(s) && Move.isImplemented(s)) emote = " ";
-                    else if(!selected.availableMoves().contains(s) && Move.isImplemented(s)) emote = " :lock:";
+                    if(selected.availableMoves().contains(e) && Move.isImplemented(e)) emote = " ";
+                    else if(!selected.availableMoves().contains(e) && Move.isImplemented(e)) emote = " :lock:";
                     else emote = " :no_entry_sign:";
 
-                    movesList.append(s).append(emote).append("\n");
+                    movesList.append(e).append(emote).append("\n");
                 }
             }
 

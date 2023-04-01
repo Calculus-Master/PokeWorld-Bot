@@ -12,10 +12,10 @@ import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.PokemonEgg;
-import com.calculusmaster.pokecord.util.Mongo;
-import com.calculusmaster.pokecord.util.cache.PlayerDataCache;
-import com.calculusmaster.pokecord.util.cache.PokemonDataCache;
+import com.calculusmaster.pokecord.util.cacheold.PlayerDataCache;
+import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
@@ -489,25 +489,25 @@ public class PlayerDataQuery extends MongoQuery
     }
 
     //key: "owned_forms"
-    public List<String> getOwnedForms()
+    public List<PokemonEntity> getOwnedForms()
     {
-        return this.document.getList("owned_forms", String.class);
+        return this.document.getList("owned_forms", String.class).stream().map(PokemonEntity::cast).toList();
     }
 
-    public void addOwnedForm(String form)
+    public void addOwnedForm(PokemonEntity form)
     {
-        this.update(Updates.push("owned_forms", form));
+        this.update(Updates.push("owned_forms", form.toString()));
     }
 
     //key: "owned_megas"
-    public List<String> getOwnedMegas()
+    public List<PokemonEntity> getOwnedMegas()
     {
-        return this.document.getList("owned_megas", String.class);
+        return this.document.getList("owned_megas", String.class).stream().map(PokemonEntity::cast).toList();
     }
 
-    public void addOwnedMegas(String mega)
+    public void addOwnedMegas(PokemonEntity mega)
     {
-        this.update(Updates.push("owned_megas", mega));
+        this.update(Updates.push("owned_megas", mega.toString()));
     }
 
     //key: "bounties"

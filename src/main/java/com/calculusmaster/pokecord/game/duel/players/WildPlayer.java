@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.game.duel.players;
 
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 
 import java.util.Collections;
 import java.util.Random;
@@ -9,10 +9,10 @@ import java.util.stream.IntStream;
 
 public class WildPlayer extends AIPlayer
 {
-    public WildPlayer(String pokemonName, int level)
+    public WildPlayer(PokemonEntity pokemonEntity, int level)
     {
         Random r = new Random();
-        Pokemon pokemon = Pokemon.create(pokemonName);
+        Pokemon pokemon = Pokemon.create(pokemonEntity);
 
         pokemon.setLevel(level);
         pokemon.setHealth(pokemon.getMaxHealth());
@@ -23,6 +23,6 @@ public class WildPlayer extends AIPlayer
 
     public WildPlayer(int level)
     {
-        this(PokemonData.POKEMON.get(new Random().nextInt(PokemonData.POKEMON.size())), level);
+        this(PokemonEntity.getRandom(), level);
     }
 }

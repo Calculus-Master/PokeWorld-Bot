@@ -31,7 +31,6 @@ public class TradeHelper
         REDEEMS,
         POKEMON,
         TM,
-        TR
     }
 
     public enum TradeStatus

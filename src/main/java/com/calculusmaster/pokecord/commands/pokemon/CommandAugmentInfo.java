@@ -26,7 +26,7 @@ public class CommandAugmentInfo extends Command
         {
             Pokemon active = this.playerData.getSelectedPokemon();
 
-            List<PokemonAugment> augmentList = equipped ? new ArrayList<>(active.getAugments()) : PokemonAugmentRegistry.AUGMENT_DATA.get(active.getName()).getOrderedAugmentList();
+            List<PokemonAugment> augmentList = equipped ? new ArrayList<>(active.getAugments()) : PokemonAugmentRegistry.AUGMENT_DATA.get(active.getEntity()).getOrderedAugmentList();
             int index = this.getInt(equipped ? 2 : 1) - 1;
 
             if(index < 0 || index >= augmentList.size()) this.response = "Invalid number!";

@@ -44,14 +44,14 @@ public class CommandPokemon extends Command
         PokemonListSorter sorter = new PokemonListSorter(stream, msg);
 
         sorter.sortSearchName(PokemonSorterFlag.NAME, (p, s) -> p.getName().toLowerCase().contains(s));
+        sorter.sortSearchName(PokemonSorterFlag.ENTITY, (p, s) -> p.getEntity().toString().toLowerCase().contains(s));
         sorter.sortSearchName(PokemonSorterFlag.NICKNAME, (p, s) -> p.getNickname().toLowerCase().contains(s));
 
-        sorter.sortSearchName(PokemonSorterFlag.MOVE, (p, s) -> p.allMoves().contains(Global.normalize(s)));
-        sorter.sortSearchName(PokemonSorterFlag.LEARNED_MOVE, (p, s) -> p.getMoves().contains(Global.normalize(s)));
-        sorter.sortSearchName(PokemonSorterFlag.AVAILABLE_MOVE, (p, s) -> p.availableMoves().contains(Global.normalize(s)));
+        sorter.sortSearchName(PokemonSorterFlag.MOVE, (p, s) -> p.getLevelUpMoves().stream().anyMatch(me -> me.data().getName().contains(Global.normalize(s))));
+        sorter.sortSearchName(PokemonSorterFlag.LEARNED_MOVE, (p, s) -> p.getMoves().stream().anyMatch(me -> me.data().getName().contains(Global.normalize(s))));
+        sorter.sortSearchName(PokemonSorterFlag.AVAILABLE_MOVE, (p, s) -> p.availableMoves().stream().anyMatch(me -> me.data().getName().contains(Global.normalize(s))));
 
         sorter.sortMachine(PokemonSorterFlag.TM);
-        sorter.sortMachine(PokemonSorterFlag.TR);
 
         sorter.sortIsUUIDInList(PokemonSorterFlag.TEAM, this.team);
         sorter.sortIsUUIDInList(PokemonSorterFlag.FAVORITES, this.favorites);

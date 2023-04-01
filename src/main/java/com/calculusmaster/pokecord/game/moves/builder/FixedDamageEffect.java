@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Category;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.elements.Weather;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 
@@ -56,7 +57,8 @@ public class FixedDamageEffect extends MoveEffect
 
         if(this.duel.getSize() != 1 &&
                 (this.user.hasAugment(PokemonAugment.DIFFRACTED_BEAMS) || this.user.hasAugment(PokemonAugment.RADIANT_DIFFRACTED_BEAMS)) &&
-                List.of("Charge Beam", "Prismatic Laser", "Solar Beam", "Hyper Beam", "Flash Cannon").contains(this.move.getName()))
+                this.move.is(MoveEntity.CHARGE_BEAM, MoveEntity.PRISMATIC_LASER, MoveEntity.SOLAR_BEAM, MoveEntity.HYPER_BEAM, MoveEntity.FLASH_CANNON)
+        )
         {
             boolean radiant = this.user.hasAugment(PokemonAugment.RADIANT_DIFFRACTED_BEAMS);
 
@@ -101,7 +103,7 @@ public class FixedDamageEffect extends MoveEffect
             this.duel.data(this.opponent.getUUID()).endureUsed = false;
         }
 
-        if(this.opponent.getHealth() <= 0 && this.move.getName().equals("Hold Back")) this.opponent.setHealth(1);
+        if(this.opponent.getHealth() <= 0 && this.move.is(MoveEntity.HOLD_BACK)) this.opponent.setHealth(1);
 
         this.duel.data(this.opponent.getUUID()).lastDamageTaken = this.damage;
 

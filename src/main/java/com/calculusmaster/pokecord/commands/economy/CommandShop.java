@@ -5,15 +5,18 @@ import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Nature;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
-import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.enums.Prices;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 public class CommandShop extends Command
 {
@@ -25,10 +28,6 @@ public class CommandShop extends Command
     public static final List<TM> TM_ENTRIES = new ArrayList<>();
     public static int TM_COUNT;
     public static int TM_PRICE = 0;
-
-    public static final List<TR> TR_ENTRIES = new ArrayList<>();
-    public static int TR_COUNT;
-    public static int TR_PRICE = 0;
 
     public static final List<ZCrystal> ZCRYSTAL_ENTRIES = new ArrayList<>();
     public static int ZCRYSTAL_COUNT_MIN;
@@ -69,11 +68,11 @@ public class CommandShop extends Command
                             .addField("Mega X Evolution", this.getCommandFormatted("buy mega x") + " - Buy the X Mega Evolution of a Pokemon that has an X or Y Mega Evolution", false)
                             .addField("Mega Y Evolution", this.getCommandFormatted("buy mega y") + " - Buy the Y Mega Evolution of a Pokemon that has an X or Y Mega Evolution", false);
 
-                    this.embed.setFooter("Your Selected Pokemon (" + selected.getName() + ") " + switch(selected.getMegaList().size()) {
-                        case 1 -> "has one Mega Evolution!";
-                        case 2 -> "has an X and Y Mega Evolution!";
-                        default -> "cannot Mega Evolve!";
-                    });
+//                    this.embed.setFooter("Your Selected Pokemon (" + selected.getName() + ") " + switch(selected.getMegaList().size()) {
+//                        case 1 -> "has one Mega Evolution!";
+//                        case 2 -> "has an X and Y Mega Evolution!";
+//                        default -> "cannot Mega Evolve!";
+//                    });
                 }
                 else if(Page.FORMS.matches(this.msg[1]))
                 {
@@ -84,11 +83,11 @@ public class CommandShop extends Command
                             .addField("Purchase", "To buy a form, type `p!buy form <name>`, where <name> is the name of the form.", false)
                             .addField("Selected Pokemon", selected.getName(), false);
 
-                    StringBuilder availableForms = new StringBuilder();
+                    StringBuilder availableForms = new StringBuilder("Form purchase is currently disabled!");
 
-                    if(selected.getFormsList().isEmpty()) availableForms.append("None");
-                    else if(selected.getName().contains("Aegislash")) availableForms.append("Aegislash Forms are not purchasable! Aegislash will automatically switch forms in duels – Shield Form when using Kings Shield (and subsequent status moves), and Blade Form when using any damaging move.");
-                    else for(String s : selected.getFormsList()) availableForms.append(s).append("\n");
+//                    if(selected.getFormsList().isEmpty()) availableForms.append("None");
+//                    else if(selected.getRealName().contains("Aegislash")) availableForms.append("Aegislash Forms are not purchasable! Aegislash will automatically switch forms in duels – Shield Form when using Kings Shield (and subsequent status moves), and Blade Form when using any damaging move.");
+//                    else for(String s : selected.getFormsList()) availableForms.append(s).append("\n");
 
                     this.embed.addField("Available Forms", availableForms.toString(), false);
                 }
@@ -125,16 +124,6 @@ public class CommandShop extends Command
                     for(TM tm : TM_ENTRIES) s.append(tm.getShopEntry()).append("\n");
                     this.embed.addField("Available TMs", s.toString(), false);
                 }
-                else if(Page.TR.matches(this.msg[1]))
-                {
-                    if(this.insufficientMasteryLevel(Feature.ACCESS_TRS)) return this.invalidMasteryLevel(Feature.ACCESS_TRS);
-
-                    this.embed.addField("Price", "Each TR costs `" + CommandShop.TR_PRICE + "` credits!", false);
-
-                    StringBuilder s = new StringBuilder();
-                    for(TR tr : TR_ENTRIES) s.append(tr.getShopEntry()).append("\n");
-                    this.embed.addField("Available TRs", s.toString(), false);
-                }
                 else if(Page.MOVETUTOR.matches(this.msg[1]))
                 {
                     if(this.insufficientMasteryLevel(Feature.PURCHASE_MOVE_TUTOR_MOVES)) return this.invalidMasteryLevel(Feature.PURCHASE_MOVE_TUTOR_MOVES);
@@ -144,7 +133,7 @@ public class CommandShop extends Command
                             .addField("Info", "Buying a Move Tutor move will automatically add it to the first slot of your Selected Pokemon. If you accidentally replace it, there is no way of retrieving that move without buying it again, so be careful!", false);
 
                     StringBuilder s = new StringBuilder();
-                    for(String move : MoveTutorRegistry.MOVE_TUTOR_MOVES) s.append("`").append(move).append("`\n");
+                    for(MoveEntity move : MoveTutorRegistry.MOVE_TUTOR_MOVES) s.append("`").append(move.data().getName()).append("`\n");
 
                     this.embed.addField("Moves", s.toString(), false);
                 }
@@ -174,12 +163,11 @@ public class CommandShop extends Command
 
         ITEM_ENTRIES.clear();
         TM_ENTRIES.clear();
-        TR_ENTRIES.clear();
         ZCRYSTAL_ENTRIES.clear();
 
         int count;
 
-        SplittableRandom r = new SplittableRandom();
+        Random r = new Random();
 
         //Items
         count = r.nextInt(ITEM_COUNT_MAX - ITEM_COUNT_MIN + 1) + ITEM_COUNT_MIN;
@@ -207,17 +195,6 @@ public class CommandShop extends Command
 
         TM_PRICE = Prices.SHOP_BASE_TM.get() + r.nextInt(Prices.SHOP_RANDOM_TM.get() + 1);
 
-        //TRs
-        for(int i = 0; i < TR_COUNT; i++)
-        {
-            TR tr = TR.values()[r.nextInt(TR.values().length)];
-
-            if(TR_ENTRIES.contains(tr)) i--;
-            else TR_ENTRIES.add(tr);
-        }
-
-        TR_PRICE = Prices.SHOP_BASE_TR.get() + r.nextInt(Prices.SHOP_RANDOM_TR.get() + 1);
-
         //Z Crystals
         count = new Random().nextInt(ZCRYSTAL_COUNT_MAX - ZCRYSTAL_COUNT_MIN + 1) + ZCRYSTAL_COUNT_MIN;
 
@@ -238,7 +215,6 @@ public class CommandShop extends Command
         CANDY("Candies", "Buy Rare Candies to level up Pokemon quickly!", "candy"),
         ITEMS("Items", "Buy Pokemon-Related Items!", "items"),
         TM("TMs", "Buy Technical Machines (TMs) to teach your Pokemon new moves!", "tm"),
-        TR("TRs", "Buy Technical Records (TRs) to teach your Pokemon new moves!", "tr"),
         MOVETUTOR("Move Tutor", "Buy Move Tutor moves to teach your Pokemon!", "movetutor", "mt"),
         ZCRYSTAL("Z Crystals", "Buy Z Crystals to unlock the power of Z-Moves in duels!", "zcrystal", "z");
 

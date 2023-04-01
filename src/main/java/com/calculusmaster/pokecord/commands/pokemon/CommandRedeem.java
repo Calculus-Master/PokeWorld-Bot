@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -30,7 +31,7 @@ public class CommandRedeem extends Command
             if(!this.isPokemon(pokemon)) this.response = "Invalid Pokemon!";
             else
             {
-                Pokemon p = Pokemon.create(pokemon);
+                Pokemon p = Pokemon.create(PokemonEntity.cast(pokemon));
                 p.setLevel(new Random().nextInt(100) + 1);
 
                 p.upload();

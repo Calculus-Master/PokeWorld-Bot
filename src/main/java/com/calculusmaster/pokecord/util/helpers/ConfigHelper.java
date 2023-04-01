@@ -6,9 +6,8 @@ import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
 import com.calculusmaster.pokecord.game.bounties.Bounty;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
-import com.calculusmaster.pokecord.game.pokemon.PokemonAI;
 import com.calculusmaster.pokecord.game.pokemon.evolution.PokemonEgg;
-import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import org.bson.Document;
 
@@ -31,7 +30,6 @@ public class ConfigHelper
             CommandShop.ITEM_COUNT_MIN = config.getList("item_counts", Integer.class).get(0);
             CommandShop.ITEM_COUNT_MAX = config.getList("item_counts", Integer.class).get(1);
             CommandShop.TM_COUNT = config.getInteger("tm_count");
-            CommandShop.TR_COUNT = config.getInteger("tr_count");
             CommandShop.ZCRYSTAL_COUNT_MIN = config.getList("zcrystal_counts", Integer.class).get(0);
             CommandShop.ZCRYSTAL_COUNT_MAX = config.getList("zcrystal_counts", Integer.class).get(1);
             Commands.COMMAND_THREAD_POOL = config.getBoolean("command_thread_pool");
@@ -44,7 +42,6 @@ public class ConfigHelper
             CommandTeam.MAX_TEAM_SIZE = config.getInteger("team_limit");
             CommandTeam.MAX_SLOTS = config.getInteger("team_slots");
             MasteryLevelManager.ACTIVE = config.getBoolean("mastery_levels");
-            PokemonAI.ENABLED = config.getBoolean("experimental_ai");
             TrainerManager.REGULAR_TRAINER_INTERVAL = config.getInteger("trainer_rotation_interval");
 
             LoggerHelper.info(ConfigHelper.class, "Loaded config values!");
@@ -58,7 +55,6 @@ public class ConfigHelper
             CommandShop.ITEM_COUNT_MAX = 10;
             CommandShop.ITEM_COUNT_MIN = 5;
             CommandShop.TM_COUNT = 10;
-            CommandShop.TR_COUNT = 10;
             CommandShop.ZCRYSTAL_COUNT_MAX = 10;
             CommandShop.ZCRYSTAL_COUNT_MIN = 5;
             Commands.COMMAND_THREAD_POOL = false;
@@ -70,7 +66,6 @@ public class ConfigHelper
             PokemonEgg.MAX_EGGS = 9;
             CommandTeam.MAX_TEAM_SIZE = 6;
             CommandTeam.MAX_SLOTS = 5;
-            PokemonAI.ENABLED = true;
             TrainerManager.REGULAR_TRAINER_INTERVAL = 24 * 7;
         }
     }

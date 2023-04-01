@@ -1,6 +1,8 @@
 package com.calculusmaster.pokecord.game.duel.extension;
 
+import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
+import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.component.EntryHazardHandler;
 import com.calculusmaster.pokecord.game.duel.component.FieldBarrierHandler;
 import com.calculusmaster.pokecord.game.duel.component.FieldEffectsHandler;
@@ -13,14 +15,16 @@ import com.calculusmaster.pokecord.game.enums.elements.Room;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -74,12 +78,12 @@ public class RaidDuel extends WildDuel
         {
             for(int i = 0; i < this.getUserPlayers().length; i++) if(!this.getAction(i).equals(ActionType.IDLE)) this.moveAction(i);
 
-            List<String> movePool = this.getRaidBoss().active.allMoves().stream().filter(Move::isImplemented).collect(Collectors.collectingAndThen(Collectors.toList(), list -> { Collections.shuffle(list); return list; }));
-            this.getRaidBoss().move = new Move(movePool.isEmpty() ? "Tackle" : movePool.get(new Random().nextInt(movePool.size())));
+            List<MoveEntity> movePool = this.getRaidBoss().active.getLevelUpMoves().stream().filter(Move::isImplemented).collect(Collectors.collectingAndThen(Collectors.toList(), list -> { Collections.shuffle(list); return list; }));
+            this.getRaidBoss().move = new Move(movePool.isEmpty() ? MoveEntity.TACKLE : movePool.get(new Random().nextInt(movePool.size())));
 
-            if(Arrays.asList("Explosion", "Self Destruct", "Memento").contains(this.getRaidBoss().move.getName()))
+            if(this.getRaidBoss().move.is(MoveEntity.EXPLOSION, MoveEntity.SELF_DESTRUCT, MoveEntity.MEMENTO))
             {
-                this.getRaidBoss().move = new Move("Tackle");
+                this.getRaidBoss().move = new Move(MoveEntity.TACKLE);
                 this.getRaidBoss().move.setPower(350);
             }
 
@@ -176,7 +180,7 @@ public class RaidDuel extends WildDuel
 
                 if(highestDamage.equals(p.ID) && !p.active.isFainted() && new Random().nextInt(100) < 50)
                 {
-                    Pokemon reward = Pokemon.create(this.getRaidBoss().active.getName());
+                    Pokemon reward = Pokemon.create(this.getRaidBoss().active.getEntity());
                     reward.setIVs(50);
                     reward.setLevel(60);
                     Arrays.stream(Stat.values()).forEach(s -> reward.setEV(s, 20));
@@ -215,7 +219,8 @@ public class RaidDuel extends WildDuel
     private static void testImageGeneration() throws IOException
     {
         CSVHelper.init();
-        PokemonData.init();
+        PokemonEntity.init();
+        MoveEntity.init();
         PokemonRarity.init();
 
         //Background is 800 x 480 -> 400 x 240
@@ -249,10 +254,18 @@ public class RaidDuel extends WildDuel
             if(!players[i].isFainted())
             {
                 int size = players[i].isDynamaxed() ? (int)(basePlayerSize * 1.25) : basePlayerSize;
-                System.out.println("Reading URL – Name: " + players[i].getName() + ", URL: " + players[i].getImage());
-                Image image = ImageIO.read(new URL(players[i].getImage())).getScaledInstance(size, size, hint);
 
-                playerImages.add(image);
+                String image = Pokemon.getImage(players[i].getEntity(), players[i].isShiny(), players[i], null);
+                URL resource = Pokecord.class.getResource(image);
+
+                System.out.println("Player " + i + ": Reading URL – Name: " + players[i].getName() + ", URL: " + image);
+
+                if(resource != null)
+                {
+                    Image p = ImageIO.read(resource).getScaledInstance(size, size, hint);
+                    playerImages.add(p);
+                }
+                else LoggerHelper.warn(Duel.class, "Pokemon Image not found. Entity: " + players[i].getEntity().toString() + ", Image File: " + image);
             }
         }
 
@@ -264,8 +277,17 @@ public class RaidDuel extends WildDuel
         {
             int size = players[players.length - 1].isDynamaxed() ? (int)(bossSize * 1.25) : bossSize;
 
-            Image p2 = ImageIO.read(new URL(players[players.length - 1].getImage())).getScaledInstance(size, size, hint);
-            combined.getGraphics().drawImage(p2, (backgroundW - spacing) - size, y, null);
+            String image = Pokemon.getImage(players[players.length - 1].getEntity(), players[players.length - 1].isShiny(), players[players.length - 1], null);
+            URL resource = Pokecord.class.getResource(image);
+
+            System.out.println("Raid Boss: Reading URL – Name: " + players[players.length - 1].getName() + ", URL: " + image);
+
+            if(resource != null)
+            {
+                Image p = ImageIO.read(resource).getScaledInstance(size, size, hint);
+                combined.getGraphics().drawImage(p, (backgroundW - spacing) - size, y, null);
+            }
+            else LoggerHelper.warn(Duel.class, "Pokemon Image not found. Entity: " + players[players.length - 1].getEntity().toString() + ", Image File: " + image);
         }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream(backgroundH * backgroundW * 4);
@@ -310,9 +332,16 @@ public class RaidDuel extends WildDuel
             if(!this.players[i].active.isFainted())
             {
                 int size = this.players[i].active.isDynamaxed() ? (int)(basePlayerSize * 1.25) : basePlayerSize;
-                Image image = ImageIO.read(new URL(this.getPokemonURL(i))).getScaledInstance(size, size, hint);
 
-                playerImages.add(image);
+                String image = Pokemon.getImage(this.players[i].active.getEntity(), this.players[i].active.isShiny(), this.players[i].active, this.players[i].move.getEntity());
+                URL resource = Pokecord.class.getResource(image);
+
+                if(resource != null)
+                {
+                    Image p = ImageIO.read(resource).getScaledInstance(size, size, hint);
+                    playerImages.add(p);
+                }
+                else LoggerHelper.warn(Duel.class, "Pokemon Image not found. Entity: " + this.players[i].active.getEntity().toString() + ", Image File: " + image);
             }
         }
 
@@ -322,8 +351,15 @@ public class RaidDuel extends WildDuel
         {
             int size = this.players[this.players.length - 1].active.isDynamaxed() ? (int)(bossSize * 1.25) : bossSize;
 
-            Image p2 = ImageIO.read(new URL(this.getPokemonURL(this.players.length - 1))).getScaledInstance(size, size, hint);
-            combined.getGraphics().drawImage(p2, (backgroundW - spacing) - size, y, null);
+            String image = Pokemon.getImage(this.players[this.players.length - 1].active.getEntity(), this.players[this.players.length - 1].active.isShiny(), this.players[this.players.length - 1].active, this.players[this.players.length - 1].move.getEntity());
+            URL resource = Pokecord.class.getResource(image);
+
+            if(resource != null)
+            {
+                Image p = ImageIO.read(resource).getScaledInstance(size, size, hint);
+                combined.getGraphics().drawImage(p, (backgroundW - spacing) - size, y, null);
+            }
+            else LoggerHelper.warn(Duel.class, "Pokemon Image not found. Entity: " + this.players[this.players.length - 1].active.getEntity().toString() + ", Image File: " + image);
         }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream(backgroundH * backgroundW * 4);
@@ -375,28 +411,28 @@ public class RaidDuel extends WildDuel
             this.players[i] = new UserPlayer(p, p.getSelectedPokemon());
         }
 
-        this.setWildPokemon("");
+        this.setWildPokemon(null);
 
-        double baseMultiplierHP = switch(PokemonRarity.POKEMON_RARITIES.getOrDefault(this.getRaidBoss().active.getName(), PokemonRarity.Rarity.EXTREME)) {
+        double baseMultiplierHP = switch(this.getRaidBoss().active.getRarity()) {
             case COPPER -> 1.5;
             case SILVER -> 1.6;
             case GOLD -> 1.7;
             case DIAMOND -> 1.8;
             case PLATINUM -> 1.85;
             case MYTHICAL -> 1.95;
+            case ULTRA_BEAST -> 1.97;
             case LEGENDARY -> 2.0;
-            case EXTREME -> 2.3;
         };
 
-        double baseMultiplierStat = switch(PokemonRarity.POKEMON_RARITIES.getOrDefault(this.getRaidBoss().active.getName(), PokemonRarity.Rarity.EXTREME)) {
+        double baseMultiplierStat = switch(this.getRaidBoss().active.getRarity()) {
             case COPPER -> 1.8;
             case SILVER -> 1.9;
             case GOLD -> 2.0;
             case DIAMOND -> 2.1;
             case PLATINUM -> 2.2;
             case MYTHICAL -> 2.5;
-            case LEGENDARY -> 2.6;
-            case EXTREME -> 3.0;
+            case ULTRA_BEAST -> 2.6;
+            case LEGENDARY -> 2.7;
         };
 
         this.players[this.players.length - 1].active.getBoosts().setHealthBoost(baseMultiplierHP + (this.waiting.size() - 1));
@@ -434,11 +470,11 @@ public class RaidDuel extends WildDuel
     }
 
     @Override
-    public void setWildPokemon(String pokemon)
+    public void setWildPokemon(PokemonEntity entity)
     {
-        if(new Random().nextInt(100) < 5) pokemon = "Eternamax Eternatus";
+        if(new Random().nextInt(100) < 5) entity = PokemonEntity.ETERNATUS_ETERNAMAX;
 
-        this.players[this.players.length - 1] = pokemon.equals("") ? new WildPlayer(100) : new WildPlayer(pokemon, 100);
+        this.players[this.players.length - 1] = entity == null ? new WildPlayer(100) : new WildPlayer(entity, 100);
 
         Player raidBoss = this.players[this.players.length - 1];
 

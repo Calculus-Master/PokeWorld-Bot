@@ -50,6 +50,11 @@ public enum Item
     TART_APPLE(250, EVOLUTION),
     SWEET_APPLE(250, EVOLUTION),
     SWEET(250, EVOLUTION),
+    BLACK_AUGURITE(250, EVOLUTION),
+    AUSPICIOUS_ARMOR(250, EVOLUTION),
+    MALICIOUS_ARMOR(250, EVOLUTION),
+    SCROLL_OF_DARKNESS(750, EVOLUTION),
+    SCROLL_OF_WATERS(750, EVOLUTION),
     //Misc
     DESTINY_KNOT(1000, MISC),
     ZYGARDE_CUBE(6000, MISC),
@@ -73,6 +78,29 @@ public enum Item
     STONE_PLATE(1000, PLATE),
     TOXIC_PLATE(1000, PLATE),
     ZAP_PLATE(1000, PLATE),
+    //Memory Discs TODO - Implement Silvally & RKS Drive
+    BUG_MEMORY(1000, MEMORY),
+    DARK_MEMORY(1000, MEMORY),
+    DRAGON_MEMORY(1000, MEMORY),
+    ELECTRIC_MEMORY(1000, MEMORY),
+    FAIRY_MEMORY(1000, MEMORY),
+    FIGHTING_MEMORY(1000, MEMORY),
+    FIRE_MEMORY(1000, MEMORY),
+    FLYING_MEMORY(1000, MEMORY),
+    GHOST_MEMORY(1000, MEMORY),
+    GRASS_MEMORY(1000, MEMORY),
+    GROUND_MEMORY(1000, MEMORY),
+    ICE_MEMORY(1000, MEMORY),
+    POISON_MEMORY(1000, MEMORY),
+    PSYCHIC_MEMORY(1000, MEMORY),
+    ROCK_MEMORY(1000, MEMORY),
+    STEEL_MEMORY(1000, MEMORY),
+    WATER_MEMORY(1000, MEMORY),
+    //Burn Drives TODO - Implement Genesect & Burn Drive
+    BURN_DRIVE(1000, DRIVE),
+    CHILL_DRIVE(1000, DRIVE),
+    DOUSE_DRIVE(1000, DRIVE),
+    SHOCK_DRIVE(1000, DRIVE),
     //Berries
     //TODO: Friendship Raising Weird Berries: Grepa, Hondew, Kelpsy, Pomeg, Qualot, Tamato
     AGUAV_BERRY(750, BERRY),
@@ -184,9 +212,43 @@ public enum Item
         };
     }
 
+    public Type getMemoryType()
+    {
+        return switch(this) {
+            case BUG_MEMORY -> Type.BUG;
+            case DARK_MEMORY -> Type.DARK;
+            case DRAGON_MEMORY -> Type.DRAGON;
+            case ELECTRIC_MEMORY -> Type.ELECTRIC;
+            case FAIRY_MEMORY -> Type.FAIRY;
+            case FIGHTING_MEMORY -> Type.FIGHTING;
+            case FIRE_MEMORY -> Type.FIRE;
+            case FLYING_MEMORY -> Type.FLYING;
+            case GHOST_MEMORY -> Type.GHOST;
+            case GRASS_MEMORY -> Type.GRASS;
+            case GROUND_MEMORY -> Type.GROUND;
+            case ICE_MEMORY -> Type.ICE;
+            case POISON_MEMORY -> Type.POISON;
+            case PSYCHIC_MEMORY -> Type.PSYCHIC;
+            case ROCK_MEMORY -> Type.ROCK;
+            case STEEL_MEMORY -> Type.STEEL;
+            case WATER_MEMORY -> Type.WATER;
+            default -> null;
+        };
+    }
+
     public boolean isPlateItem()
     {
         return this.type.equals(PLATE);
+    }
+
+    public boolean isMemoryItem()
+    {
+        return this.type == MEMORY;
+    }
+
+    public boolean isDriveItem()
+    {
+        return this.type == DRIVE;
     }
 
     public boolean isFunctionalItem()

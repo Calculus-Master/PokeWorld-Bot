@@ -8,11 +8,13 @@ import com.calculusmaster.pokecord.game.duel.extension.WildDuel;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.enums.Prices;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -45,20 +47,20 @@ public class CommandWildDuel extends Command
             }
             else
             {
-                String pokemon;
+                PokemonEntity pokemon;
 
-                if(specific) pokemon = Global.normalize(this.getMultiWordContent(1));
+                if(specific) pokemon = PokemonEntity.cast(Global.normalize(this.getMultiWordContent(1)));
                 else if(stat)
                 {
-                    List<String> statList = DataHelper.EV_LISTS.get(Stat.cast(this.msg[1]).ordinal());
+                    List<PokemonEntity> statList = new ArrayList<>(DataHelper.EV_LISTS.get(Stat.cast(this.msg[1]).ordinal()));
                     pokemon = statList.get(new Random().nextInt(statList.size()));
                 }
                 else if(type)
                 {
-                    List<String> typeList = DataHelper.TYPE_LISTS.get(Type.cast(this.msg[1]));
+                    List<PokemonEntity> typeList = new ArrayList<>(DataHelper.TYPE_LISTS.get(Type.cast(this.msg[1])));
                     pokemon = typeList.get(new Random().nextInt(typeList.size()));
                 }
-                else pokemon = "";
+                else pokemon = null;
 
                 Duel d = WildDuel.create(this.player.getId(), this.event, pokemon);
 

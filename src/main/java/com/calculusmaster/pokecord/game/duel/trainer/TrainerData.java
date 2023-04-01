@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.game.duel.trainer;
 import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestriction;
 import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestrictionRegistry;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import org.bson.Document;
 
@@ -14,14 +15,14 @@ public class TrainerData
     private String trainerID;
     private final String name;
     private final int trainerClass;
-    private final List<String> team;
+    private final List<PokemonEntity> team;
     private final ZCrystal zcrystal;
     private final int averagePokemonLevel;
     private final float multiplier;
     private List<TeamRestriction> restrictions;
 
     //For TrainerData Creation
-    public TrainerData(String name, int trainerClass, List<String> team, ZCrystal zcrystal, int level, float multiplier)
+    public TrainerData(String name, int trainerClass, List<PokemonEntity> team, ZCrystal zcrystal, int level, float multiplier)
     {
         this.trainerID = IDHelper.alphanumeric(12);
         this.name = name;
@@ -39,7 +40,7 @@ public class TrainerData
                 .append("trainerID", this.trainerID)
                 .append("name", this.name)
                 .append("trainerClass", this.trainerClass)
-                .append("team", this.team)
+                .append("team", this.team.stream().map(PokemonEntity::toString).toList())
                 .append("zcrystal", this.zcrystal == null ? "" : this.zcrystal.toString())
                 .append("averagePokemonLevel", this.averagePokemonLevel)
                 .append("multiplier", this.multiplier)
@@ -51,7 +52,7 @@ public class TrainerData
         this(
                 data.getString("name"),
                 data.getInteger("trainerClass"),
-                data.getList("team", String.class),
+                data.getList("team", String.class).stream().map(PokemonEntity::cast).toList(),
                 ZCrystal.cast(data.getString("zcrystal")),
                 data.getInteger("averagePokemonLevel"),
                 data.getDouble("multiplier").floatValue()
@@ -81,7 +82,7 @@ public class TrainerData
         return this.trainerClass;
     }
 
-    public List<String> getTeam()
+    public List<PokemonEntity> getTeam()
     {
         return this.team;
     }

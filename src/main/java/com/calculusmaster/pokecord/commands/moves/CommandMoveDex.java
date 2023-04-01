@@ -2,11 +2,14 @@ package com.calculusmaster.pokecord.commands.moves;
 
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -26,11 +29,12 @@ public class CommandMoveDex extends Command
         if(learnInfo)
         {
             String move = Global.normalize(this.getMultiWordContent(2));
+            MoveEntity moveEntity = MoveEntity.cast(move);
 
             if(!Move.isMove(move)) this.response = "Invalid move name!";
             else
             {
-                List<String> pokemon = PokemonData.POKEMON.stream().map(PokemonData::get).filter(d -> d.moves.containsKey(move)).map(d -> d.name).toList();
+                List<String> pokemon = Arrays.stream(PokemonEntity.values()).map(PokemonEntity::data).filter(d -> d.getLevelUpMoves().containsKey(moveEntity)).map(PokemonData::getName).toList();
 
                 this.embed
                         .setTitle("Pokemon Able to Learn " + move)
@@ -41,14 +45,15 @@ public class CommandMoveDex extends Command
         else if(moveDex)
         {
             String pokemon = Global.normalize(this.getMultiWordContent(2));
+            PokemonEntity pokemonEntity = PokemonEntity.cast(pokemon);
 
-            if(PokemonData.POKEMON.stream().noneMatch(s -> s.equalsIgnoreCase(pokemon))) this.response = "Invalid Pokemon name!";
+            if(pokemonEntity == null) this.response = "Invalid Pokemon name!";
             else
             {
-                Map<String, Integer> moveData = PokemonData.get(pokemon).moves;
+                Map<MoveEntity, Integer> moveData = pokemonEntity.data().getLevelUpMoves();
 
                 List<String> moveDexInfo = new ArrayList<>();
-                moveData.forEach((move, level) -> moveDexInfo.add("**%s** | Level %s".formatted(move, level)));
+                moveData.forEach((move, level) -> moveDexInfo.add("**%s** | Level %s".formatted(move.data().getName(), level)));
 
                 this.embed
                         .setTitle(pokemon + " Moves")

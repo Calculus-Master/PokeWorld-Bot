@@ -4,7 +4,6 @@ import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
-import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -65,21 +64,10 @@ public class CommandInventory extends Command
 
                     if(!this.playerData.getTMList().isEmpty())
                     {
-                        for(String tm : this.playerData.getTMList()) s.append(tm).append(" - ").append(TM.get(tm).getMoveName()).append("\n");
+                        for(String tm : this.playerData.getTMList()) s.append(tm).append(" - ").append(TM.cast(tm).getMove().data().getName()).append("\n");
                         s.deleteCharAt(s.length() - 1);
                     }
                     else s.append("You don't own any Technical Machines (TMs)!");
-                }
-                else if(Page.TRS.matches(this.msg[1]))
-                {
-                    if(this.insufficientMasteryLevel(Feature.ACCESS_TRS)) return this.invalidMasteryLevel(Feature.ACCESS_TRS);
-
-                    if(!this.playerData.getTRList().isEmpty())
-                    {
-                        for(String tr : this.playerData.getTRList()) s.append(tr).append(" - ").append(TR.get(tr).getMoveName()).append("\n");
-                        s.deleteCharAt(s.length() - 1);
-                    }
-                    else s.append("You don't own any Technical Records (TRs)!");
                 }
 
                 this.embed.setTitle(this.playerData.getUsername() + "'s Inventory - " + p.title);
@@ -95,7 +83,8 @@ public class CommandInventory extends Command
         ITEMS("Items", "item", "items", "i"),
         ZCRYSTALS("Z Crystals", "zcrystal", "zcrystals", "z"),
         TMS("TMs", "tm", "tms"),
-        TRS("TRs", "tr", "trs");
+
+        ;
 
         private List<String> commands;
         public String title;

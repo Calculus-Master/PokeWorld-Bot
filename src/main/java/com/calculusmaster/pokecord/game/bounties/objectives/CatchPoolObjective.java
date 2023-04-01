@@ -17,7 +17,7 @@ public class CatchPoolObjective extends AbstractPoolObjective
     protected void setRandomPool()
     {
         int size = new Random().nextInt(20) + 5;
-        for(int i = 0; i < size; i++) this.pool.add(PokemonRarity.getSpawn());
+        for(int i = 0; i < size; i++) this.pool.add(PokemonRarity.getSpawn().toString());
     }
 
     @Override

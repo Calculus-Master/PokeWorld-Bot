@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game.duel;
 
+import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.duel.CommandTarget;
 import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.component.*;
@@ -7,21 +8,24 @@ import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
+import com.calculusmaster.pokecord.game.duel.tournament.Tournament;
+import com.calculusmaster.pokecord.game.duel.tournament.TournamentHelper;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.Move;
-import com.calculusmaster.pokecord.game.moves.MoveData;
 import com.calculusmaster.pokecord.game.moves.TypeEffectiveness;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonDuelAttributes;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
+import com.calculusmaster.pokecord.game.pokemon.evolution.GigantamaxRegistry;
 import com.calculusmaster.pokecord.game.pokemon.evolution.MegaChargeManager;
-import com.calculusmaster.pokecord.game.tournament.Tournament;
-import com.calculusmaster.pokecord.game.tournament.TournamentHelper;
+import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
@@ -61,7 +65,7 @@ public class Duel
     protected Map<String, PokemonDuelAttributes> pokemonAttributes = new HashMap<>();
     protected Map<String, Integer> expGains = new HashMap<>();
     protected Map<String, Integer> damageDealt = new HashMap<>();
-    protected Map<String, List<String>> movesUsed = new HashMap<>();
+    protected Map<String, List<MoveEntity>> movesUsed = new HashMap<>();
 
     public int turn;
     public int current;
@@ -212,9 +216,9 @@ public class Duel
         int speed2 = this.players[1].active.getStat(Stat.SPD);
 
         //Grassy Terrain & Grassy Glide Effects
-        if(this.terrain.get().equals(Terrain.GRASSY_TERRAIN) && this.players[0].move.getName().equals("Grassy Glide"))
+        if(this.terrain.get().equals(Terrain.GRASSY_TERRAIN) && this.players[0].move.is(MoveEntity.GRASSY_GLIDE))
             this.players[0].move.setPriority(1);
-        if(this.terrain.get().equals(Terrain.GRASSY_TERRAIN) && this.players[1].move.getName().equals("Grassy Glide"))
+        if(this.terrain.get().equals(Terrain.GRASSY_TERRAIN) && this.players[1].move.is(MoveEntity.GRASSY_GLIDE))
             this.players[1].move.setPriority(1);
 
         //Ability: Gale Wings
@@ -376,7 +380,7 @@ public class Duel
 
                 this.players[this.current].active.setType(t);
 
-                if(move.getName().equals("Judgement")) move.setType(t);
+                if(move.is(MoveEntity.JUDGMENT)) move.setType(t);
             }
         }
 
@@ -398,7 +402,7 @@ public class Duel
         }
 
         //Terrain Pulse Type Change
-        if(move.getName().equals("Terrain Pulse"))
+        if(move.is(MoveEntity.TERRAIN_PULSE))
         {
             move.setType(switch(this.terrain.get()) {
                 case NORMAL_TERRAIN -> Type.NORMAL;
@@ -412,7 +416,7 @@ public class Duel
         }
 
         //Weather Ball
-        if(move.getName().equals("Weather Ball"))
+        if(move.is(MoveEntity.WEATHER_BALL))
         {
             move.setType(switch(this.weather.get()) {
                 case RAIN, HEAVY_RAIN -> Type.WATER;
@@ -426,7 +430,7 @@ public class Duel
         }
 
         //Ability: Liquid Voice
-        if(c.hasAbility(Ability.LIQUID_VOICE) && Move.SOUND_BASED_MOVES.contains(move.getName()))
+        if(c.hasAbility(Ability.LIQUID_VOICE) && move.is(Move.SOUND_BASED_MOVES))
         {
             move.setType(Type.WATER);
 
@@ -454,24 +458,24 @@ public class Duel
         switch(this.weather.get())
         {
             case HAIL -> {
-                if(move.getName().equals("Blizzard")) move.setAccuracy(100);
+                if(move.is(MoveEntity.BLIZZARD)) move.setAccuracy(100);
 
-                if(move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower(move.getPower() / 2);
+                if(move.is(MoveEntity.SOLAR_BEAM, MoveEntity.SOLAR_BLADE)) move.setPower(0.5);
             }
             case HARSH_SUNLIGHT, EXTREME_HARSH_SUNLIGHT -> {
-                if(move.getType().equals(Type.FIRE)) move.setPower((int)(move.getPower() * 1.5));
-                else if(move.getType().equals(Type.WATER)) move.setPower((int)(move.getPower() * 0.5));
+                if(move.is(Type.FIRE)) move.setPower(1.5);
+                else if(move.is(Type.WATER)) move.setPower(0.5);
 
-                if(move.getName().equals("Thunder") || move.getName().equals("Hurricane")) move.setAccuracy(50);
+                if(move.is(MoveEntity.THUNDER, MoveEntity.HURRICANE)) move.setAccuracy(50);
             }
             case RAIN -> {
-                if(move.getType().equals(Type.WATER)) move.setPower((int)(move.getPower() * 1.5));
-                else if(move.getType().equals(Type.FIRE) || move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower((int)(move.getPower() * 0.5));
+                if(move.is(Type.WATER)) move.setPower(1.5);
+                else if(move.is(Type.FIRE) || move.is(MoveEntity.SOLAR_BEAM, MoveEntity.SOLAR_BLADE)) move.setPower(0.5);
 
-                if(move.getName().equals("Thunder") || move.getName().equals("Hurricane")) move.setAccuracy(100);
+                if(move.is(MoveEntity.THUNDER, MoveEntity.HURRICANE)) move.setAccuracy(100);
             }
             case SANDSTORM -> {
-                if(move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) move.setPower(move.getPower() / 2);
+                if(move.is(MoveEntity.SOLAR_BEAM, MoveEntity.SOLAR_BLADE)) move.setPower(0.5);
             }
         }
 
@@ -480,32 +484,40 @@ public class Duel
         switch(this.terrain.get())
         {
             case ELECRIC_TERRAIN -> {
-                if(move.getType().equals(Type.ELECTRIC)) move.setPower(move.getPower() * 1.5);
+                if(move.getType().equals(Type.ELECTRIC)) move.setPower(1.5);
             }
             case GRASSY_TERRAIN -> {
-                if(move.getType().equals(Type.GRASS)) move.setPower(move.getPower() * 1.5);
+                if(move.getType().equals(Type.GRASS)) move.setPower(1.5);
 
-                if(!this.data(this.current).isRaised) this.players[this.current].active.heal(this.players[this.current].active.getStat(Stat.HP) / 16);
+                if(!this.data(this.current).isRaised) this.players[this.current].active.heal(c.getMaxHealth(1 / 16.));
             }
             case MISTY_TERRAIN -> {
                 if(move.getType().equals(Type.DRAGON)) move.setDamageMultiplier(0.5);
             }
             case PSYCHIC_TERRAIN -> {
-                if(move.getType().equals(Type.PSYCHIC)) move.setPower(move.getPower() * 1.5);
+                if(move.getType().equals(Type.PSYCHIC)) move.setPower(1.5);
             }
         }
 
         //If the pokemon uses an unfreeze remove, remove the Frozen Status Condition
-        if(this.players[this.current].active.hasStatusCondition(StatusCondition.FROZEN) && Arrays.asList("Fusion Flare", "Flame Wheel", "Sacred Fire", "Flare Blitz", "Scald", "Steam Eruption").contains(move.getName())) this.players[this.current].active.removeStatusCondition(StatusCondition.FROZEN);
+        if(this.players[this.current].active.hasStatusCondition(StatusCondition.FROZEN) && move.is(MoveEntity.FUSION_FLARE, MoveEntity.FLAME_WHEEL, MoveEntity.SACRED_FIRE, MoveEntity.FLARE_BLITZ, MoveEntity.SCALD, MoveEntity.STEAM_ERUPTION))
+        {
+            this.players[this.current].active.removeStatusCondition(StatusCondition.FROZEN);
+            turnResult.add(c.getName() + " was thawed by using " + move.getName() + "!");
+        }
 
         //Unfreeze opponent if this move is a Fire Type, Scald or Steam Eruption
-        if(move.getType().equals(Type.FIRE) || move.getName().equals("Scald") || move.getName().equals("Steam Eruption")) this.players[this.other].active.removeStatusCondition(StatusCondition.FROZEN);
+        if(move.is(Type.FIRE))
+        {
+            this.players[this.other].active.removeStatusCondition(StatusCondition.FROZEN);
+            turnResult.add(c.getName() + " is no longer frozen due to their Fire Type!");
+        }
 
         //Check Status Conditions
         if(this.players[this.current].active.hasAnyStatusCondition())
         {
             List<String> statusResults = new ArrayList<>();
-            SplittableRandom r = new SplittableRandom();
+            Random r = new Random();
             int statusDamage;
 
             BiFunction<List<String>, List<String>, String> compileResults = (turn, status) -> {
@@ -707,7 +719,7 @@ public class Duel
             {
                 if(r.nextInt(100) < 33)
                 {
-                    statusDamage = new Move("Tackle").getDamage(c, c);
+                    statusDamage = new Move(MoveEntity.TACKLE).getDamage(c, c);
                     c.damage(statusDamage);
 
                     statusResults.add("%s is confused! %s hurt itself in its confusion for %s damage!".formatted(c.getName(), c.getName(), statusDamage));
@@ -771,7 +783,7 @@ public class Duel
 
                     statusResults.add("%s is asleep!".formatted(c.getName()));
 
-                    if(!move.getName().equals("Snore"))
+                    if(!move.is(MoveEntity.SNORE))
                     {
                         return compileResults.apply(turnResult, statusResults);
                     }
@@ -836,7 +848,7 @@ public class Duel
         }
 
         //Check Ignored Abilities
-        List<String> ignoreAbilityMoves = List.of("Sunsteel Strike", "Moongeist Beam", "Photon Geyser", "Searing Sunraze Smash", "Menacing Moonraze Maelstrom", "Light That Burns the Sky", "G Max Drum Solo", "G Max Fireball", "G Max Hydrosnipe");
+        EnumSet<MoveEntity> ignoreAbilityMoves = EnumSet.of(MoveEntity.SUNSTEEL_STRIKE, MoveEntity.MOONGEIST_BEAM, MoveEntity.PHOTON_GEYSER, MoveEntity.SEARING_SUNRAZE_SMASH, MoveEntity.MENACING_MOONRAZE_MAELSTROM, MoveEntity.LIGHT_THAT_BURNS_THE_SKY, MoveEntity.THE_BLINDING_ONE, MoveEntity.GMAX_DRUM_SOLO, MoveEntity.GMAX_FIREBALL, MoveEntity.GMAX_HYDROSNIPE);
         List<Ability> ignoreAbilityAbilities = List.of(Ability.MOLD_BREAKER, Ability.TURBOBLAZE, Ability.TERAVOLT); //TODO: Mycelium Might
 
         if(move.is(ignoreAbilityMoves))
@@ -870,10 +882,10 @@ public class Duel
                 this.data(this.current).futureSightTurns = 0;
                 this.data(this.current).futureSightUsed = false;
 
-                int damage = new Move("Future Sight").getDamage(this.players[this.current].active, this.players[this.other].active);
+                int damage = new Move(MoveEntity.FUTURE_SIGHT).getDamage(this.players[this.current].active, this.players[this.other].active);
                 this.players[this.other].active.damage(damage);
 
-                turnResult.add("Future Sight landed and dealt **" + damage + "** damage to " + this.players[this.other].active.getName() + "!");
+                turnResult.add("Future Sight landed and dealt **" + damage + "** damage to " + o.getName() + "!");
             }
         }
 
@@ -886,10 +898,10 @@ public class Duel
                 this.data(this.current).doomDesireTurns = 0;
                 this.data(this.current).doomDesireUsed = false;
 
-                int damage = new Move("Doom Desire").getDamage(this.players[this.current].active, this.players[this.other].active);
+                int damage = new Move(MoveEntity.DOOM_DESIRE).getDamage(this.players[this.current].active, this.players[this.other].active);
                 this.players[this.other].active.damage(damage);
 
-                turnResult.add("Doom Desire landed and dealt **" + damage + "** damage to " + this.players[this.other].active.getName() + "!");
+                turnResult.add("Doom Desire landed and dealt **" + damage + "** damage to " + o.getName() + "!");
             }
         }
 
@@ -909,7 +921,7 @@ public class Duel
             turnResult.add(Ability.VICTORY_STAR.formatActivation(c.getName(), "The accuracy of " + move.getName() + " was %s!".formatted(augment ? " greatly raised due to the " + PokemonAugment.SHINING_STAR.getAugmentName() + " augment!" : " raised!")));
         }
 
-        if(c.hasAbility(Ability.HUSTLE) && move.is(Category.PHYSICAL) && !Move.OHKO_MOVES.contains(move.getName()))
+        if(c.hasAbility(Ability.HUSTLE) && move.is(Category.PHYSICAL) && !move.is(Move.OHKO_MOVES))
         {
             move.setAccuracyMultiplier(0.8);
 
@@ -921,29 +933,29 @@ public class Duel
         boolean otherImmune = false;
         boolean cantUse = false;
 
-        if(move.isZMove)
+        if(move.isZMove())
         {
             accurate = true;
             this.players[this.current].usedZMove = true;
 
             if(c.hasAugment(PokemonAugment.Z_AFFINITY)) move.setPower(2.0);
 
-            Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_ZMOVE, null);
+            Achievements.DUEL_USE_ZMOVE.grant(this.players[this.current].ID, this.channels.get(0));
         }
 
-        if(move.isMaxMove)
+        if(move.isMaxMove())
         {
             accurate = true;
             this.players[this.current].usedDynamax = true;
 
-            Achievements.grant(this.players[this.current].ID, Achievements.DUEL_USE_DYNAMAX, null);
+            Achievements.DUEL_USE_DYNAMAX.grant(this.players[this.current].ID, this.channels.get(0));
         }
 
-        if(this.data(this.other).imprisonUsed && this.players[this.other].active.getMoves().contains(move.getName())) cantUse = true;
+        if(this.data(this.other).imprisonUsed && this.players[this.other].active.getMoves().contains(move.getEntity())) cantUse = true;
 
-        if(move.getName().equals("Defense Curl")) this.data(this.current).defenseCurlUsed = true;
+        if(move.is(MoveEntity.DEFENSE_CURL)) this.data(this.current).defenseCurlUsed = true;
 
-        if(move.getName().equals("Rollout"))
+        if(move.is(MoveEntity.ROLLOUT))
         {
             if(accurate) this.data(this.current).rolloutTurns++;
             else this.data(this.current).rolloutTurns = 1;
@@ -952,7 +964,7 @@ public class Duel
         }
         else this.data(this.current).rolloutTurns = 0;
 
-        if(move.getName().equals("Ice Ball"))
+        if(move.is(MoveEntity.ICE_BALL))
         {
             if(accurate) this.data(this.current).iceballTurns++;
             else this.data(this.current).iceballTurns = 1;
@@ -972,7 +984,7 @@ public class Duel
         {
             this.data(this.other).magnetRiseTurns--;
 
-            if(move.getType().equals(Type.GROUND)) otherImmune = true;
+            if(move.is(Type.GROUND)) otherImmune = true;
 
             if(this.data(this.other).magnetRiseTurns <= 0)
             {
@@ -984,7 +996,7 @@ public class Duel
         {
             this.data(this.other).tauntTurns--;
 
-            if(move.getCategory().equals(Category.STATUS)) cantUse = true;
+            if(move.is(Category.STATUS)) cantUse = true;
 
             if(this.data(this.other).tauntTurns <= 0)
             {
@@ -994,31 +1006,33 @@ public class Duel
 
         if(this.data(this.other).waterSportUsed && move.getType().equals(Type.FIRE)) move.setPower(0.5);
 
-        if(move.getName().equals("Sheer Cold"))
+        if(move.is(MoveEntity.SHEER_COLD))
         {
             move.setAccuracy((this.players[this.current].active.isType(Type.ICE) ? 30 : 20) + (this.players[this.current].active.getLevel() - this.players[this.other].active.getLevel()));
             accurate = move.isAccurate(this.players[this.current].active, this.players[this.other].active);
         }
 
-        if(move.getName().equals("Fissure"))
+        if(move.is(MoveEntity.FISSURE))
         {
             move.setAccuracy(20 + (this.players[this.current].active.getLevel() - this.players[this.other].active.getLevel()));
             accurate = move.isAccurate(this.players[this.current].active, this.players[this.other].active);
         }
 
-        if(move.getName().equals("Horn Drill"))
+        if(move.is(MoveEntity.HORN_DRILL))
         {
             move.setAccuracy(30 + (this.players[this.current].active.getLevel() - this.players[this.other].active.getLevel()));
             accurate = move.isAccurate(this.players[this.current].active, this.players[this.other].active);
         }
 
-        if(move.getName().equals("Guillotine"))
+        if(move.is(MoveEntity.GUILLOTINE))
         {
             move.setAccuracy(30 + (this.players[this.current].active.getLevel() - this.players[this.other].active.getLevel()));
             accurate = move.isAccurate(this.players[this.current].active, this.players[this.other].active);
         }
 
-        boolean bypass = (move.getName().equals("Phantom Force") && this.data(this.current).phantomForceUsed) || (move.getName().equals("Shadow Force") && this.data(this.current).shadowForceUsed) || move.getName().equals("Feint") || move.is("G Max One Blow", "G Max Rapid Flow");
+        boolean bypass = (move.is(MoveEntity.PHANTOM_FORCE) && this.data(this.current).phantomForceUsed)
+                || (move.is(MoveEntity.SHADOW_FORCE) && this.data(this.current).shadowForceUsed)
+                || move.is(MoveEntity.FEINT, MoveEntity.GMAX_ONE_BLOW, MoveEntity.GMAX_BEFUDDLE);
 
         if(this.data(this.other).detectUsed)
         {
@@ -1147,18 +1161,20 @@ public class Duel
         {
             this.data(this.other).craftyShieldUsed = false;
 
-            List<String> bypassStatusMoves = Arrays.asList("Perish Song", "Spikes", "Stealth Rock", "Toxic Spikes", "Sticky Web");
-            if(move.getCategory().equals(Category.STATUS) && !bypassStatusMoves.contains(move.getName())) otherImmune = !bypass;
+            EnumSet<MoveEntity> bypassStatusMoves = EnumSet.of(MoveEntity.PERISH_SONG, MoveEntity.SPIKES, MoveEntity.STEALTH_ROCK, MoveEntity.TOXIC_SPIKES, MoveEntity.STICKY_WEB);
+            if(move.getCategory().equals(Category.STATUS) && move.is(bypassStatusMoves)) otherImmune = !bypass;
         }
 
-        if(this.data(this.other).maxGuardUsed && !move.is("G Max One Blow", "G Max Rapid Flow"))
+        if(this.data(this.other).maxGuardUsed && !move.is(MoveEntity.GMAX_ONE_BLOW, MoveEntity.GMAX_RAPID_FLOW))
         {
             otherImmune = true;
         }
 
-        if(move.getName().equals("Fusion Bolt") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move != null && this.players[this.other].move.getName().equals("Fusion Flare")) move.setPower(move.getPower() * 2);
+        if(move.is(MoveEntity.FUSION_BOLT) && !this.first.equals(c.getUUID())
+                && this.players[this.other].move != null && this.players[this.other].move.is(MoveEntity.FUSION_FLARE)) move.setPower(move.getPower() * 2);
 
-        if(move.getName().equals("Fusion Flare") && !this.first.equals(this.players[this.current].active.getUUID()) && this.players[this.other].move != null && this.players[this.other].move.getName().equals("Fusion Bolt")) move.setPower(move.getPower() * 2);
+        if(move.is(MoveEntity.FUSION_FLARE) && !this.first.equals(c.getUUID())
+                && this.players[this.other].move != null && this.players[this.other].move.is(MoveEntity.FUSION_BOLT)) move.setPower(move.getPower() * 2);
 
         if(this.data(this.other).bideTurns <= 0 && this.data(this.other).bideDamage != 0)
         {
@@ -1179,7 +1195,7 @@ public class Duel
             if(move.getType().equals(Type.ELECTRIC)) move.setPower(move.getPower() * 0.5);
         }
 
-        if(move.getName().equals("Smart Strike"))
+        if(move.is(MoveEntity.SMART_STRIKE))
         {
             accurate = true;
             otherImmune = false;
@@ -1199,7 +1215,7 @@ public class Duel
         {
             this.data(this.current).unableToUseSoundMovesTurns--;
 
-            if(Move.SOUND_BASED_MOVES.contains(move.getName())) cantUse = true;
+            if(move.is(Move.SOUND_BASED_MOVES)) cantUse = true;
 
             if(this.data(this.current).unableToUseSoundMovesTurns <= 0)
             {
@@ -1255,44 +1271,48 @@ public class Duel
         if(this.data(this.current).flashFireActivated && move.is(Type.FIRE))
             move.setDamageMultiplier(1.5);
 
-        List<String> minimizeBoostMoves = List.of("Body Slam", "Stomp", "Dragon Rush", "Steamroller", "Heat Crash", "Heavy Slam", "Flying Press", "Malicious Moonsault", "Double Iron Bash");
-        if(this.data(this.other).isMinimized && minimizeBoostMoves.contains(move.getName())) move.setPower(2.0);
+        EnumSet<MoveEntity> minimizeBoostMoves = EnumSet.of(MoveEntity.BODY_SLAM, MoveEntity.STOMP, MoveEntity.DRAGON_RUSH, MoveEntity.STEAMROLLER, MoveEntity.HEAT_CRASH, MoveEntity.HEAVY_SLAM, MoveEntity.FLYING_PRESS, MoveEntity.MALICIOUS_MOONSAULT, MoveEntity.DOUBLE_IRON_BASH, MoveEntity.QUADRUPLE_STEEL_SMASH);
+        if(this.data(this.other).isMinimized && move.is(minimizeBoostMoves)) move.setPower(move.is(MoveEntity.QUADRUPLE_STEEL_SMASH) ? 4.0 : 2.0);
 
         //Fly, Bounce, Dig and Dive
 
-        if(this.data(this.current).flyUsed) move = new Move("Fly");
+        if(this.data(this.current).flyUsed) move = new Move(MoveEntity.FLY);
 
-        if(this.data(this.current).bounceUsed) move = new Move("Bounce");
+        if(this.data(this.current).bounceUsed) move = new Move(MoveEntity.BOUNCE);
 
-        if(this.data(this.current).digUsed) move = new Move("Dig");
+        if(this.data(this.current).digUsed) move = new Move(MoveEntity.DIG);
 
-        if(this.data(this.current).diveUsed) move = new Move("Dive");
+        if(this.data(this.current).diveUsed) move = new Move(MoveEntity.DIVE);
 
-        if(this.data(this.current).phantomForceUsed) move = new Move("Phantom Force");
+        if(this.data(this.current).phantomForceUsed) move = new Move(MoveEntity.PHANTOM_FORCE);
 
-        if(this.data(this.current).shadowForceUsed) move = new Move("Shadow Force");
+        if(this.data(this.current).shadowForceUsed) move = new Move(MoveEntity.SHADOW_FORCE);
 
-        List<String> flyMoves = List.of("Gust", "Twister", "Thunder", "Sky Uppercut", "Smack Down");
-        List<String> digMoves = List.of("Earthquake", "Magnitude", "Fissure");
-        List<String> diveMoves = List.of("Surf", "Whirlpool", "Low Kick");
+        EnumSet<MoveEntity> flyMoves = EnumSet.of(MoveEntity.GUST, MoveEntity.TWISTER, MoveEntity.THUNDER, MoveEntity.SKY_UPPERCUT, MoveEntity.SMACK_DOWN);
+        EnumSet<MoveEntity> digMoves = EnumSet.of(MoveEntity.EARTHQUAKE, MoveEntity.MAGNITUDE, MoveEntity.FISSURE);
+        EnumSet<MoveEntity> diveMoves = EnumSet.of(MoveEntity.SURF, MoveEntity.WHIRLPOOL, MoveEntity.LOW_KICK);
 
-        if((this.data(this.other).flyUsed && !flyMoves.contains(move.getName())) || (this.data(this.other).bounceUsed && !flyMoves.contains(move.getName())) || (this.data(this.other).digUsed && !digMoves.contains(move.getName())) || (this.data(this.other).diveUsed && !diveMoves.contains(move.getName())) || this.data(this.other).phantomForceUsed || this.data(this.other).shadowForceUsed)
+        if(     (this.data(this.other).flyUsed && !move.is(flyMoves))
+                || (this.data(this.other).bounceUsed && !move.is(flyMoves))
+                || (this.data(this.other).digUsed && !move.is(digMoves))
+                || (this.data(this.other).diveUsed && !move.is(diveMoves))
+                || this.data(this.other).phantomForceUsed || this.data(this.other).shadowForceUsed)
         {
             otherImmune = true;
         }
 
         //Two-Turn Charge Moves
 
-        if(this.data(this.current).meteorBeamUsed) move = new Move("Meteor Beam");
+        if(this.data(this.current).meteorBeamUsed) move = new Move(MoveEntity.METEOR_BEAM);
 
-        if(this.data(this.current).solarBeamUsed) move = new Move("Solar Beam");
+        if(this.data(this.current).solarBeamUsed) move = new Move(MoveEntity.SOLAR_BEAM);
 
         //Lowered Accuracy of Defensive Moves
-        List<String> defensiveMoves = Arrays.asList("Endure", "Protect", "Detect", "Obstruct", "Wide Guard", "Quick Guard", "Max Guard", "Spiky Shield", "Kings Shield", "Baneful Bunker");
+        EnumSet<MoveEntity> defensiveMoves = EnumSet.of(MoveEntity.ENDURE, MoveEntity.PROTECT, MoveEntity.DETECT, MoveEntity.OBSTRUCT, MoveEntity.WIDE_GUARD, MoveEntity.QUICK_GUARD, MoveEntity.MAX_GUARD, MoveEntity.SPIKY_SHIELD, MoveEntity.KINGS_SHIELD, MoveEntity.BANEFUL_BUNKER);
 
-        if(defensiveMoves.contains(move.getName()) && !move.getName().equals("Quick Guard"))
+        if(move.is(defensiveMoves) && !move.is(MoveEntity.QUICK_GUARD))
         {
-            List<String> log = this.movesUsed.get(this.players[this.current].active.getUUID());
+            List<MoveEntity> log = this.movesUsed.get(this.players[this.current].active.getUUID());
 
             for(int i = log.size() - 1; i > 0 && defensiveMoves.contains(log.get(i)); i--)
                 move.setAccuracy(move.getAccuracy() - (int)(move.getAccuracy() * 0.33));
@@ -1301,7 +1321,7 @@ public class Duel
         }
 
         //Ability: Soundproof
-        if(o.hasAbility(Ability.SOUNDPROOF) && Move.SOUND_BASED_MOVES.contains(move.getName()))
+        if(o.hasAbility(Ability.SOUNDPROOF) && move.is(Move.SOUND_BASED_MOVES))
         {
             otherImmune = true;
 
@@ -1333,7 +1353,7 @@ public class Duel
         }
 
         //Ability: Strong Jaw
-        if(c.hasAbility(Ability.STRONG_JAW) && Move.BITING_MOVES.contains(move.getName()))
+        if(c.hasAbility(Ability.STRONG_JAW) && move.is(Move.BITING_MOVES))
         {
             move.setPower(1.5);
 
@@ -1367,7 +1387,7 @@ public class Duel
         //Ability: Mega Launcher
         if(c.hasAbility(Ability.MEGA_LAUNCHER) && move.is(Move.PULSE_MOVES) && !move.is(Category.STATUS))
         {
-            if(move.is("Heal Pulse"))
+            if(move.is(MoveEntity.HEAL_PULSE))
                 turnResult.add(Ability.MEGA_LAUNCHER.formatActivation(c.getName(), "Heal Pulse's Healing Power was boosted!"));
             else
             {
@@ -1423,7 +1443,7 @@ public class Duel
         }
 
         //Augment: Weighted Punch
-        if(c.hasAugment(PokemonAugment.WEIGHTED_PUNCH) && move.getName().contains("Punch"))
+        if(c.hasAugment(PokemonAugment.WEIGHTED_PUNCH) && move.is(Move.PUNCH_MOVES))
         {
             move.setPower(c.getWeight() / o.getWeight());
 
@@ -1446,7 +1466,7 @@ public class Duel
         {
             double modifier = 1.0;
 
-            for(String s : c.getMoves()) if(MoveData.get(s).type.equals(Type.BUG)) modifier += 0.05;
+            for(MoveEntity e : c.getMoves()) if(e.data().getType().equals(Type.BUG)) modifier += 0.05;
             for(Pokemon p : this.players[this.current].team) if(p.getType().get(0).equals(Type.BUG)) modifier += p.hasAugment(PokemonAugment.SWARM_COLLECTIVE) ? 0.25 : 0.1;
 
             if(modifier != 1.0)
@@ -1666,16 +1686,16 @@ public class Duel
 
         //Main Results
         String name = this.players[this.current].active.getName();
-        List<String> rechargeMoves = List.of("Hyper Beam", "Blast Burn", "Hydro Cannon", "Frenzy Plant", "Roar Of Time", "Prismatic Laser", "Eternabeam", "Giga Impact", "Meteor Assault", "Rock Wrecker");
+        EnumSet<MoveEntity> rechargeMoves = EnumSet.of(MoveEntity.HYPER_BEAM, MoveEntity.BLAST_BURN, MoveEntity.HYDRO_CANNON, MoveEntity.FRENZY_PLANT, MoveEntity.ROAR_OF_TIME, MoveEntity.PRISMATIC_LASER, MoveEntity.ETERNABEAM, MoveEntity.GIGA_IMPACT, MoveEntity.METEOR_ASSAULT, MoveEntity.ROCK_WRECKER);
 
         //Ensures the recharge occurs when the recharge move isn't used
-        if(this.data(this.current).recharge && !rechargeMoves.contains(move.getName())) this.data(this.current).recharge = false;
+        if(this.data(this.current).recharge && !move.is(rechargeMoves)) this.data(this.current).recharge = false;
 
         //Raised Immunity
         if(this.data(this.other).isRaised && move.getType().equals(Type.GROUND)) otherImmune = true;
 
         //Hyperspace Fury and Hyperspace Hole bypass immunities and always hit
-        if(move.getName().equals("Hyperspace Fury") || move.getName().equals("Hyperspace Hole"))
+        if(move.is(MoveEntity.HYPERSPACE_FURY, MoveEntity.HYPERSPACE_HOLE))
         {
             accurate = true;
             otherImmune = false;
@@ -1693,17 +1713,18 @@ public class Duel
         //Ability: Stance Change (Aegislash)
         if(!move.getCategory().equals(Category.STATUS) && this.players[this.current].active.hasAbility(Ability.STANCE_CHANGE))
         {
-            if(this.players[this.current].active.getName().equals("Aegislash"))
+            //TODO: Rethink this form change
+            if(this.players[this.current].active.is(PokemonEntity.AEGISLASH_SHIELD))
             {
-                this.players[this.current].active.changeForm("Aegislash Blade");
-                this.players[this.current].active.updateName();
+                this.players[this.current].active.changePokemon(PokemonEntity.AEGISLASH_BLADE);
+                this.players[this.current].active.updateEntity();
             }
         }
 
         boolean isMoveSuccess = false;
 
         //Focus Punch
-        if(move.getName().equals("Focus Punch") && this.data(this.current).isFocusPunchFailed)
+        if(move.is(MoveEntity.FOCUS_PUNCH) && this.data(this.current).isFocusPunchFailed)
         {
             turnResult.add(this.players[this.current].active.getName() + " lost its focus!");
 
@@ -1715,14 +1736,14 @@ public class Duel
             turnResult.add(this.players[this.current].active.getName() + " is storing energy!");
         }
         //Torment
-        else if(this.data(this.current).isTormented && this.getLastUsedMove(this.players[this.current].active.getUUID()).equals(move.getName()))
+        else if(this.data(this.current).isTormented && this.getLastUsedMove(this.players[this.current].active.getUUID()) != null && this.getLastUsedMove(this.players[this.current].active.getUUID()).equals(move.getEntity()))
         {
             turnResult.add(name + " can't use " + move.getName() + " due to Torment!");
 
             this.data(this.other).lastDamageTaken = 0;
         }
         //Check if user has to recharge
-        else if(this.data(this.current).recharge && rechargeMoves.contains(move.getName()))
+        else if(this.data(this.current).recharge && move.is(rechargeMoves))
         {
             turnResult.add(name + " can't use " + move.getName() + " because it needs to recharge!");
             this.data(this.current).recharge = false;
@@ -1743,7 +1764,7 @@ public class Duel
 
             this.data(this.other).lastDamageTaken = 0;
         }
-        else if(o.hasAbility(Ability.LIGHTNING_ROD) && move.is(Type.ELECTRIC) && !move.is(Category.STATUS) && !move.is("Judgment", "Natural Gift", "Hidden Power"))
+        else if(o.hasAbility(Ability.LIGHTNING_ROD) && move.is(Type.ELECTRIC) && !move.is(Category.STATUS) && !move.is(MoveEntity.JUDGMENT, MoveEntity.NATURAL_GIFT, MoveEntity.HIDDEN_POWER))
         {
             turnResult.add(Ability.LIGHTNING_ROD.formatActivation(o.getName(), o.getName() + " was immune to the attack, and its Special Attack rose by 1 stage!"));
 
@@ -1761,7 +1782,7 @@ public class Duel
         {
             turnResult.add(move.getMissedResult(this.players[this.current].active));
 
-            if(move.getName().equals("Jump Kick") || move.getName().equals("High Jump Kick"))
+            if(move.is(MoveEntity.JUMP_KICK, MoveEntity.HIGH_JUMP_KICK))
             {
                 turnResult.add(" " + this.players[this.current].active.getName() + " kept going and crashed!");
 
@@ -1794,7 +1815,7 @@ public class Duel
             turnResult.add(Ability.DISGUISE.formatActivation(o.getName(), "The Disguise absorbed the attack!"));
         }
         //Ability: Damp
-        else if((c.hasAbility(Ability.DAMP) || o.hasAbility(Ability.DAMP)) && move.is("Explosion", "Self Destruct", "Mind Blown", "Misty Explosion"))
+        else if((c.hasAbility(Ability.DAMP) || o.hasAbility(Ability.DAMP)) && move.is(MoveEntity.EXPLOSION, MoveEntity.SELF_DESTRUCT, MoveEntity.MIND_BLOWN, MoveEntity.MISTY_EXPLOSION))
         {
             turnResult.add(Ability.DAMP.formatActivation((c.hasAbility(Ability.DAMP) ? c : o).getName(), move.getName() + " failed!"));
         }
@@ -1806,7 +1827,7 @@ public class Duel
             turnResult.add(Ability.FLASH_FIRE.formatActivation(o.getName(), o.getName() + " is immune to the attack! The power of its Fire-type moves is boosted by 50%!"));
         }
         //Ability: Flash Fire
-        else if(o.hasAbility(Ability.SAP_SIPPER) && move.is(Type.GRASS) && !move.is("Aromatherapy"))
+        else if(o.hasAbility(Ability.SAP_SIPPER) && move.is(Type.GRASS) && !move.is(MoveEntity.AROMATHERAPY))
         {
             o.changes().change(Stat.ATK, 1);
 
@@ -1897,7 +1918,7 @@ public class Duel
                 move.setDamageMultiplier(0.5);
 
             //Ability: Multiscale
-            if(o.hasAbility(Ability.MULTISCALE) && o.getHealth() == o.getMaxHealth() && !Move.DIRECT_DAMAGE_MOVES.contains(move.getName()))
+            if(o.hasAbility(Ability.MULTISCALE) && o.getHealth() == o.getMaxHealth() && !move.is(Move.DIRECT_DAMAGE_MOVES))
                 move.setDamageMultiplier(0.5);
 
             //Augment: True Strike
@@ -1924,7 +1945,7 @@ public class Duel
             if(isValidFloweringGrace) move.setPower(move.getPower() - 40);
 
             //Augment: Final Resort V
-            boolean isFinalResortVActivated = c.hasAugment(PokemonAugment.FINAL_RESORT_V) && move.is("V Create") && c.getHealth() < c.getMaxHealth(1 / 10.);
+            boolean isFinalResortVActivated = c.hasAugment(PokemonAugment.FINAL_RESORT_V) && move.is(MoveEntity.V_CREATE) && c.getHealth() < c.getMaxHealth(1 / 10.);
             if(isFinalResortVActivated)
             {
                 move.setPower(2.0);
@@ -1938,7 +1959,7 @@ public class Duel
 
             if(move.getCategory().equals(Category.STATUS)) this.data(this.other).lastDamageTaken = 0;
 
-            if(rechargeMoves.contains(move.getName())) this.data(this.current).recharge = true;
+            if(move.is(rechargeMoves)) this.data(this.current).recharge = true;
 
             if(this.players[this.other].active.hasAbility(Ability.IRON_BARBS) && !move.getCategory().equals(Category.STATUS) && this.data(this.other).lastDamageTaken > 0)
             {
@@ -2102,8 +2123,8 @@ public class Duel
             if(isValidFloweringGrace && damageDealt > 0)
             {
                 int HP = 40;
-                for(String s : c.getMoves()) if(MoveData.get(s).type.equals(Type.FAIRY)) HP += 15;
-                for(String s : o.getMoves()) if(MoveData.get(s).type.equals(Type.FAIRY)) HP += 15;
+                for(MoveEntity e : c.getMoves()) if(e.data().getType().equals(Type.FAIRY)) HP += 15;
+                for(MoveEntity e : o.getMoves()) if(e.data().getType().equals(Type.FAIRY)) HP += 15;
 
                 c.heal(HP);
 
@@ -2228,17 +2249,17 @@ public class Duel
                         case USE_MOVES -> b.update();
                         case USE_MOVES_TYPE -> b.updateIf(b.getObjective().asTypeObjective().getType().equals(m.getType()));
                         case USE_MOVES_CATEGORY -> b.updateIf(b.getObjective().asCategoryObjective().getCategory().equals(m.getCategory()));
-                        case USE_MOVES_NAME -> b.updateIf(b.getObjective().asNameObjective().getName().equals(m.getName()));
-                        case USE_MOVES_POOL -> b.updateIf(b.getObjective().asPoolObjective().getPool().contains(m.getName()));
+                        case USE_MOVES_NAME -> b.updateIf(b.getObjective().asNameObjective().getName().equals(m.getEntity().toString()));
+                        case USE_MOVES_POOL -> b.updateIf(b.getObjective().asPoolObjective().getPool().contains(m.getEntity().toString()));
                         case USE_MOVES_POWER_LESS -> b.updateIf(m.getPower() < b.getObjective().asPowerObjective().getPower());
                         case USE_MOVES_POWER_GREATER -> b.updateIf(m.getPower() > b.getObjective().asPowerObjective().getPower());
                         case USE_MOVES_ACCURACY_LESS -> b.updateIf(m.getAccuracy() < b.getObjective().asAccuracyObjective().getAccuracy());
                         case USE_MOVES_PRIORITY_HIGH -> b.updateIf(m.getPriority() > 0);
                         case USE_MOVES_PRIORITY_LOW -> b.updateIf(m.getPriority() < 0);
-                        case USE_ZMOVE -> b.updateIf(m.isZMove);
-                        case USE_ZMOVE_TYPE -> b.updateIf(m.isZMove && b.getObjective().asTypeObjective().getType().equals(m.getType()));
-                        case USE_MAX_MOVE -> b.updateIf(m.isMaxMove);
-                        case USE_MAX_MOVE_TYPE -> b.updateIf(m.isMaxMove && b.getObjective().asTypeObjective().getType().equals(m.getType()));
+                        case USE_ZMOVE -> b.updateIf(m.isZMove());
+                        case USE_ZMOVE_TYPE -> b.updateIf(m.isZMove() && b.getObjective().asTypeObjective().getType().equals(m.getType()));
+                        case USE_MAX_MOVE -> b.updateIf(m.isMaxMove());
+                        case USE_MAX_MOVE_TYPE -> b.updateIf(m.isMaxMove() && b.getObjective().asTypeObjective().getType().equals(m.getType()));
                     }
                 });
             }
@@ -2246,7 +2267,7 @@ public class Duel
 
         //Post-Move Updates
 
-        if(!isMoveSuccess || (this.data(this.current).furyCutterUsed && !move.getName().equals("Fury Cutter")))
+        if(!isMoveSuccess || (this.data(this.current).furyCutterUsed && !move.is(MoveEntity.FURY_CUTTER)))
         {
             this.data(this.current).furyCutterUsed = false;
             this.data(this.current).furyCutterTurns = 0;
@@ -2308,7 +2329,7 @@ public class Duel
         }
 
         //Update Move Log
-        this.movesUsed.get(this.players[this.current].active.getUUID()).add(move.getName());
+        this.movesUsed.get(this.players[this.current].active.getUUID()).add(move.getEntity());
 
         //Give EVs and EXP if opponent has fainted
         if(this.players[this.other].active.isFainted())
@@ -2329,11 +2350,11 @@ public class Duel
                             if(this.players[this.other].active.isType(b.getObjective().asTypeObjective().getType())) b.update();
                         }
                         case DEFEAT_POKEMON_POOL -> {
-                            if(b.getObjective().asPoolObjective().getPool().contains(this.players[this.other].active.getName())) b.update();
+                            if(b.getObjective().asPoolObjective().getPool().contains(this.players[this.other].active.getEntity().toString())) b.update();
                         }
                         case DEFEAT_LEGENDARY -> {
-                            String otherName = this.players[this.other].active.getName();
-                            if(PokemonRarity.LEGENDARY.contains(otherName) || PokemonRarity.MYTHICAL.contains(otherName) || PokemonRarity.ULTRA_BEAST.contains(otherName)) b.update();
+                            PokemonEntity otherName = this.players[this.other].active.getEntity();
+                            if(EnumSet.of(PokemonRarity.Rarity.LEGENDARY, PokemonRarity.Rarity.MYTHICAL, PokemonRarity.Rarity.ULTRA_BEAST).contains(otherName.getRarity())) b.update();
                         }
                         case EARN_EVS -> b.update(this.players[this.other].active.getEVYield().values().stream().mapToInt(e -> e).sum());
                         case EARN_EVS_STAT -> {
@@ -2825,12 +2846,12 @@ public class Duel
                 if(p instanceof UserPlayer && pokemon.hasConsumedItem()) pokemon.updateItem();
 
                 //Mega Charge
-                if(p instanceof UserPlayer user && pokemon.isMega())
+                if(p instanceof UserPlayer user && MegaEvolutionRegistry.isMega(pokemon.getEntity()))
                 {
                     pokemon.removeMegaCharge();
                     pokemon.updateMegaCharges();
 
-                    MegaChargeManager.addChargeEvent(pokemon.getUUID(), pokemon.isMega());
+                    MegaChargeManager.addChargeEvent(pokemon.getUUID(), MegaEvolutionRegistry.isMega(pokemon.getEntity()));
 
                     if(pokemon.getMegaCharges() == 0)
                     {
@@ -3040,14 +3061,14 @@ public class Duel
         return this.entryHazards[this.players[0].active.getUUID().equals(UUID) ? 0 : 1];
     }
 
-    public List<String> getMovesUsed(String UUID)
+    public List<MoveEntity> getMovesUsed(String UUID)
     {
         return this.movesUsed.get(UUID);
     }
 
-    public String getLastUsedMove(String UUID)
+    public MoveEntity getLastUsedMove(String UUID)
     {
-        return this.getMovesUsed(UUID).isEmpty() ? "" : this.getMovesUsed(UUID).get(this.getMovesUsed(UUID).size() - 1);
+        return this.getMovesUsed(UUID).isEmpty() ? null : this.getMovesUsed(UUID).get(this.getMovesUsed(UUID).size() - 1);
     }
 
     public Player getWinner()
@@ -3075,16 +3096,30 @@ public class Duel
         {
             int size = this.players[0].active.isDynamaxed() ? (int)(baseSize * 1.25) : baseSize;
 
-            Image p1 = ImageIO.read(new URL(this.getPokemonURL(0))).getScaledInstance(size, size, hint);
-            combined.getGraphics().drawImage(p1, spacing, y, null);
+            String image = Pokemon.getImage(this.players[0].active.getEntity(), this.players[0].active.isShiny(), this.players[0].active, this.players[0].move.getEntity());
+            URL resource = Pokecord.class.getResource(image);
+
+            if(resource != null)
+            {
+                Image p = ImageIO.read(resource).getScaledInstance(size, size, hint);
+                combined.getGraphics().drawImage(p, spacing, y, null);
+            }
+            else LoggerHelper.warn(Duel.class, "Pokemon Image not found. Entity: " + this.players[0].active.getEntity().toString() + ", Image File: " + image);
         }
 
         if(!this.players[1].active.isFainted())
         {
             int size = this.players[1].active.isDynamaxed() ? (int)(baseSize * 1.25) : baseSize;
 
-            Image p2 = ImageIO.read(new URL(this.getPokemonURL(1))).getScaledInstance(size, size, hint);
-            combined.getGraphics().drawImage(p2, (backgroundW - spacing) - size, y, null);
+            String image = Pokemon.getImage(this.players[1].active.getEntity(), this.players[1].active.isShiny(), this.players[1].active, this.players[1].move.getEntity());
+            URL resource = Pokecord.class.getResource(image);
+
+            if(resource != null)
+            {
+                Image p = ImageIO.read(resource).getScaledInstance(size, size, hint);
+                combined.getGraphics().drawImage(p, (backgroundW - spacing) - size, y, null);
+            }
+            else LoggerHelper.warn(Duel.class, "Pokemon Image not found. Entity: " + this.players[1].active.getEntity().toString() + ", Image File: " + image);
         }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -3093,30 +3128,6 @@ public class Duel
         byte[] bytes = out.toByteArray(); //This is the slow line
 
         return new ByteArrayInputStream(bytes);
-    }
-
-    protected String getPokemonURL(int player)
-    {
-        Pokemon p = this.players[player].active;
-        Move m = this.players[player].move;
-
-        if(p.getName().equals("Marshadow"))
-        {
-            return !p.isShiny() ? "https://archives.bulbagarden.net/media/upload/thumb/1/11/802Marshadow-Alt.png/600px-802Marshadow-Alt.png" : "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/e48d6b9d-3b1d-46a0-a254-3a448ec3a8a5/ddn43ra-94a76142-591e-4f64-917a-3659635d4bff.png";
-        }
-        else if(m != null && p.getName().equals("Solgaleo") && (m.getName().equals("Sunsteel Strike") || m.getName().equals("Searing Sunraze Smash")))
-        {
-            return "https://archives.bulbagarden.net/media/upload/thumb/5/58/791Solgaleo-RadiantSunPhase.png/600px-791Solgaleo-RadiantSunPhase.png";
-        }
-        else if(m != null && p.getName().equals("Lunala") && (m.getName().equals("Moongeist Beam") || m.getName().equals("Menacing Moonraze Maelstrom")))
-        {
-            return "https://archives.bulbagarden.net/media/upload/thumb/6/64/792Lunala-FullMoonPhase.png/600px-792Lunala-FullMoonPhase.png";
-        }
-        else if(m != null && p.getName().equals("Eternatus") && m.getName().equals("Eternabeam"))
-        {
-            return "https://static.wikia.nocookie.net/villains/images/7/76/HOME890E.png/revision/latest/scale-to-width-down/512?cb=20200221025522";
-        }
-        else return p.getImage();
     }
 
     protected String getHealthBars()
@@ -3130,7 +3141,7 @@ public class Duel
     protected String getHB(int p)
     {
         StringBuilder sb = new StringBuilder().append(this.players[p].getName()).append("'s ").append(this.players[p].active.getDisplayName());
-        sb.append(this.players[p].active.isDynamaxed() ? (this.players[p].active.canGigantamax() ? " (Gigantamaxed)" : " (Dynamaxed)") : "");
+        sb.append(this.players[p].active.isDynamaxed() ? (GigantamaxRegistry.hasGMax(this.players[p].active.getEntity()) ? " (Gigantamaxed)" : " (Dynamaxed)") : "");
 
         sb.append(": ");
         if(this.players[p].active.isFainted()) sb.append("FAINTED");

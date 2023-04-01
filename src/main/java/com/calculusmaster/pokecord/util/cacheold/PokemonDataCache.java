@@ -1,6 +1,6 @@
-package com.calculusmaster.pokecord.util.cache;
+package com.calculusmaster.pokecord.util.cacheold;
 
-import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
 import org.bson.Document;

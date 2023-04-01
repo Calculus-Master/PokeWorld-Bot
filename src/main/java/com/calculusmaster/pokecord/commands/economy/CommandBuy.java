@@ -7,18 +7,18 @@ import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Nature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.Item;
-import com.calculusmaster.pokecord.game.enums.items.TM;
-import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
+import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.enums.Prices;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class CommandBuy extends Command
@@ -51,8 +51,6 @@ public class CommandBuy extends Command
         boolean mega = this.msg[1].equals("mega");
         //p!buy tm <tm>
         boolean tm = this.msg[1].equals("tm");
-        //p!buy tm <tr>
-        boolean tr = this.msg[1].equals("tr");
         //p!buy movetutor <index> <move>
         boolean movetutor = this.msg.length >= 4 && List.of("movetutor", "move", "tutor", "mt").contains(this.msg[1]) && this.isNumeric(2);
         //p!buy zcrystal <zcrystal>
@@ -123,57 +121,64 @@ public class CommandBuy extends Command
         }
         else if(form)
         {
+            //TODO: Forms only available if registered as switchable, and owned by player
+            //TODO: Are we allowing any forms to be bought?
             if(this.insufficientMasteryLevel(Feature.ACQUIRE_POKEMON_FORMS)) return this.invalidMasteryLevel(Feature.ACQUIRE_POKEMON_FORMS);
 
-            String requestedForm = Global.normalize(this.getMultiWordContent(2));
+            this.response = "Form purchase is currently disabled!";
 
-            if(!selected.hasForms()) this.response = selected.getName() + " does not have any forms!";
-            else if(!this.isPokemon(requestedForm)) this.response = "Invalid form name!";
-            else if(Arrays.asList("Aegislash", "Aegislash Blade").contains(selected.getName())) this.response = selected.getName() + "'s forms cannot be purchased!";
-            else if(this.playerData.getOwnedForms().contains(requestedForm)) this.response = "You already own this form!";
-            else if(this.playerData.getCredits() < Prices.SHOP_FORM.get()) this.invalidCredits(Prices.SHOP_FORM.get());
-            else
-            {
-                this.response = selected.getName() + " transformed into `" + requestedForm + "`!";
-
-                this.playerData.addOwnedForm(requestedForm);
-                this.playerData.changeCredits(-1 * Prices.SHOP_FORM.get());
-
-                selected.changeForm(requestedForm);
-                selected.updateName();
-
-                Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_FORM, this.event);
-            }
+//            String requestedForm = Global.normalize(this.getMultiWordContent(2));
+//
+//            if(false) this.response = selected.getName() + " does not have any forms!";
+//            else if(!this.isPokemon(requestedForm)) this.response = "Invalid form name!";
+//            else if(Arrays.asList("Aegislash", "Aegislash Blade").contains(selected.getName())) this.response = selected.getName() + "'s forms cannot be purchased!";
+//            else if(this.playerData.getOwnedForms().contains(requestedForm)) this.response = "You already own this form!";
+//            else if(this.playerData.getCredits() < Prices.SHOP_FORM.get()) this.invalidCredits(Prices.SHOP_FORM.get());
+//            else
+//            {
+//                PokemonEntity f = PokemonEntity.cast(requestedForm);
+//                this.response = selected.getName() + " transformed into `" + f.getName() + "`!";
+//
+//                this.playerData.addOwnedForm(f);
+//                this.playerData.changeCredits(-1 * Prices.SHOP_FORM.get());
+//
+//                selected.changePokemon(f);
+//                selected.updateEntity();
+//
+//                Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_FORM, this.event);
+//            }
         }
         else if(mega)
         {
             if(this.insufficientMasteryLevel(Feature.ACQUIRE_POKEMON_MEGA_EVOLUTIONS)) return this.invalidMasteryLevel(Feature.ACQUIRE_POKEMON_MEGA_EVOLUTIONS);
             else if(this.msg.length != 2 && this.msg.length != 3) this.response = CommandInvalid.getShort();
-            else if(!selected.hasMega()) this.response = selected.getName() + " cannot Mega Evolve!";
+            else if(MegaEvolutionRegistry.hasMegaData(selected.getEntity()) && !MegaEvolutionRegistry.isMega(selected.getEntity())) this.response = selected.getName() + " cannot Mega Evolve!";
             else if(this.playerData.getCredits() < Prices.SHOP_MEGA.get()) this.invalidCredits(Prices.SHOP_MEGA.get());
-            else if(selected.getMegaList().size() == 1 && this.msg.length == 3) this.response = "Use `p!buy mega` instead!";
-            else if(selected.getMegaList().size() == 2 && this.msg.length == 2) this.response = "Use `p!buy mega x` or `p!buy mega y` instead!";
+            else if(MegaEvolutionRegistry.getData(selected.getEntity()).isSingle() && this.msg.length == 3) this.response = "Use `p!buy mega` instead!";
+            else if(MegaEvolutionRegistry.getData(selected.getEntity()).isXY() && this.msg.length == 2) this.response = "Use `p!buy mega x` or `p!buy mega y` instead!";
             else if(this.msg.length == 3 && (!this.msg[2].equals("x") && !this.msg[2].equals("y"))) this.response = "Use either `p!buy mega x` or `p!buy mega y`!";
             else
             {
-                String requestedMega = selected.getMegaList().get(this.msg.length == 2 ? 0 : (this.msg.length == 3 && this.msg[2].equals("x") ? 0 : 1));
+                MegaEvolutionRegistry.MegaEvolutionData data = MegaEvolutionRegistry.getData(selected.getEntity());
 
-                if(this.playerData.getOwnedMegas().contains(requestedMega)) this.response = "You already own this Mega! Use `p!mega` to Mega Evolve your Pokemon!";
+                PokemonEntity target = this.msg.length == 3 ? (this.msg[2].equals("x") ? data.getMegaX() : data.getMegaY()) : data.getMega();
+
+                if(this.playerData.getOwnedMegas().contains(target)) this.response = "You already own this Mega! Use `p!mega` to Mega Evolve your Pokemon!";
                 else
                 {
                     this.response = selected.getName() + " Mega Evolved!";
 
-                    this.playerData.addOwnedMegas(requestedMega);
+                    this.playerData.addOwnedMegas(target);
                     this.playerData.changeCredits(-1 * Prices.SHOP_MEGA.get());
 
-                    selected.changeForm(requestedMega);
-                    selected.updateName();
+                    selected.changePokemon(target);
+                    selected.updateEntity();
 
                     Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_MEGA, this.event);
                 }
             }
         }
-        else if(tm || tr)
+        else if(tm)
         {
             if(this.insufficientMasteryLevel(Feature.ACCESS_TMS) || this.insufficientMasteryLevel(Feature.ACCESS_TRS))
             {
@@ -181,55 +186,42 @@ public class CommandBuy extends Command
                 return this.invalidMasteryLevel(Feature.ACCESS_TRS);
             }
 
-            this.msg[2] = this.msg[2].replaceAll("tm", "").replaceAll("tr", "").trim();
+            this.response = "TM purchases are currently disabled!";
 
-            boolean numberError = !this.isNumeric(2) || ((tm && TM.isOutOfBounds(this.getInt(2))) || (tr && TR.isOutOfBounds(this.getInt(2))));
-            int cost = tm ? CommandShop.TM_PRICE : CommandShop.TR_PRICE;
-
-            if(numberError) this.response = "Invalid " + (tm ? "TM" : "TR") + " number!";
-            else if(this.playerData.getCredits() < cost) this.invalidCredits(cost);
-            else if(tm)
-            {
-                TM request = TM.get(this.getInt(2));
-
-                if(!CommandShop.TM_ENTRIES.contains(request)) this.response = "`" + request + "` is not in the shop right now!";
-                else
-                {
-                    this.playerData.addTM(request.toString());
-                    this.playerData.changeCredits(-1 * cost);
-
-                    this.playerData.getStatistics().incr(PlayerStatistic.SHOP_TMS_BOUGHT);
-
-                    this.response = "Successfully bought " + request.getShopEntry() + "!";
-                }
-            }
-            else if(tr)
-            {
-                TR request = TR.get(this.getInt(2));
-
-                if(!CommandShop.TR_ENTRIES.contains(request)) this.response = "`" + request + "` is not in the shop right now!";
-                else
-                {
-                    this.playerData.addTR(request.toString());
-                    this.playerData.changeCredits(-1 * cost);
-
-                    this.playerData.getStatistics().incr(PlayerStatistic.SHOP_TRS_BOUGHT);
-
-                    this.response = "Successfully bought " + request.getShopEntry() + "!";
-                }
-            }
+//            this.msg[2] = this.msg[2].replaceAll("tm", "").replaceAll("tr", "").trim();
+//
+//            boolean numberError = !this.isNumeric(2) || ((tm && TM.isOutOfBounds(this.getInt(2))) || (tr && TR.isOutOfBounds(this.getInt(2))));
+//            int cost = tm ? CommandShop.TM_PRICE : CommandShop.TR_PRICE;
+//
+//            if(numberError) this.response = "Invalid " + (tm ? "TM" : "TR") + " number!";
+//            else if(this.playerData.getCredits() < cost) this.invalidCredits(cost);
+//            else if(tm)
+//            {
+//                TM request = TM.get(this.getInt(2));
+//
+//                if(!CommandShop.TM_ENTRIES.contains(request)) this.response = "`" + request + "` is not in the shop right now!";
+//                else
+//                {
+//                    this.playerData.addTM(request.toString());
+//                    this.playerData.changeCredits(-1 * cost);
+//
+//                    this.playerData.getStatistics().incr(PlayerStatistic.SHOP_TMS_BOUGHT);
+//
+//                    this.response = "Successfully bought " + request.getShopEntry() + "!";
+//                }
+//            }
         }
         else if(movetutor)
         {
             if(this.insufficientMasteryLevel(Feature.PURCHASE_MOVE_TUTOR_MOVES)) return this.invalidMasteryLevel(Feature.PURCHASE_MOVE_TUTOR_MOVES);
 
-            String move = Global.normalize(this.getMultiWordContent(3));
+            String moveInput = Global.normalize(this.getMultiWordContent(3));
+            MoveEntity move = MoveEntity.cast(moveInput);
 
-            if(!Move.isMove(move)) this.response = "Invalid move name!";
-            else if(!Move.isImplemented(move)) this.response = move + " has not been implemented yet!";
-            else if(!MoveTutorRegistry.MOVE_TUTOR_MOVES.contains(move)) this.response = move + " cannot be learned from a Move Tutor!";
-            else if(!MoveTutorRegistry.VALIDATORS.get(move).test(selected)) this.response = "Your Pokemon cannot learn `" + move + "` from a Move Tutor!";
-            else if(!MoveTutorRegistry.MOVE_TUTOR_MOVES.contains(move) || !MoveTutorRegistry.VALIDATORS.get(selected.getName()).test(selected)) this.response = "Your Pokemon cannot learn that Move Tutor move!";
+            if(!Move.isMove(moveInput)) this.response = "Invalid move name!";
+            else if(!Move.isImplemented(move)) this.response = moveInput + " has not been implemented yet!";
+            else if(!MoveTutorRegistry.MOVE_TUTOR_MOVES.contains(move)) this.response = moveInput + " cannot be learned from a Move Tutor!";
+            else if(!MoveTutorRegistry.VALIDATORS.get(move).test(selected)) this.response = "Your Pokemon cannot learn `" + moveInput + "` from a Move Tutor!";
             else if(this.getInt(2) < 1 || this.getInt(2) > 4) this.response = "Invalid move index!";
             else if(this.playerData.getCredits() < Prices.SHOP_MOVETUTOR.get()) this.invalidCredits(Prices.SHOP_MOVETUTOR.get());
             else
@@ -237,7 +229,7 @@ public class CommandBuy extends Command
                 this.playerData.changeCredits(-1 * Prices.SHOP_MOVETUTOR.get());
                 selected.learnMove(move, this.getInt(2) - 1);
 
-                this.response = selected.getName() + " learned `" + move + "`!";
+                this.response = selected.getName() + " learned `" + moveInput + "`!";
             }
         }
         else if(zcrystal)

@@ -15,10 +15,13 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.EntitySelectInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.awt.*;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public abstract class CommandV2
 {
@@ -51,6 +54,33 @@ public abstract class CommandV2
         this.response = errorMessage;
         this.ephemeral = true;
         return false;
+    }
+
+    protected boolean error() //Default Error method
+    {
+        return this.error("An error has occurred. Please report this with as much detail as possible in `/report`! For example, include the UUID of your selected Pokemon, the command or activity you were using, etc.");
+    }
+
+    protected List<String> getAutocompleteOptions(String currentInput, List<String> sourceList)
+    {
+        String input = currentInput.toLowerCase();
+
+        //"Starts With" Autocompletions
+        List<String> options = sourceList.stream()
+                .map(String::toLowerCase)
+                .filter(s -> s.startsWith(input))
+                .limit(OptionData.MAX_CHOICES)
+                .collect(Collectors.toList());
+
+        //"Contains" Autocompletions – Only if there are not enough "Starts With" Autocompletions
+        if(options.size() < OptionData.MAX_CHOICES) sourceList.stream()
+                .map(String::toLowerCase)
+                .filter(s -> s.contains(input))
+                .filter(s -> !options.contains(s))
+                .limit(OptionData.MAX_CHOICES - options.size())
+                .forEach(options::add);
+
+        return options;
     }
 
     //Internal

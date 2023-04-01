@@ -6,10 +6,12 @@ import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
+import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.EnumSet;
+import java.util.stream.Collectors;
 
 public class DuelChecks
 {
@@ -44,7 +46,7 @@ public class DuelChecks
     }
 
     //Other Useful Data Storage Variables
-    static final List<String> dynamaxBanList = Arrays.asList("Zacian", "Zamazenta", "Eternatus", "Ultra Necrozma");
+    public static final EnumSet<PokemonEntity> DYNAMAX_BAN_LIST = EnumSet.of(PokemonEntity.ZACIAN, PokemonEntity.ZAMAZENTA, PokemonEntity.ETERNATUS, PokemonEntity.NECROZMA_ULTRA);
 
     //Main Method
     public boolean checkFailed(CheckType check)
@@ -132,7 +134,7 @@ public class DuelChecks
     private boolean checkZMove_Move()
     {
         //Is the base move compatible with the Z Crystal?
-        return ZCrystal.isValid(this.z, this.move, this.p.active.getName());
+        return ZCrystal.isValid(this.z, this.move, this.p.active.getEntity());
     }
 
     //Dynamax
@@ -145,13 +147,13 @@ public class DuelChecks
     private boolean checkDynamax_Mega()
     {
         //Is the active Pokemon a mega or primal?
-        return !this.p.active.getName().contains("Mega") && !this.p.active.getName().contains("Primal");
+        return !MegaEvolutionRegistry.isMega(this.p.active.getEntity());
     }
 
     private boolean checkDynamax_BanList()
     {
         //Is the active Pokemon on the Dynamax Ban List?
-        return dynamaxBanList.stream().noneMatch(ban -> this.p.active.getName().contains(ban));
+        return !DYNAMAX_BAN_LIST.contains(this.p.active.getEntity());
     }
 
     //Core
@@ -173,9 +175,9 @@ public class DuelChecks
         //Dynamax
         DYNAMAX_USED("You have already Dynamaxed!"),
         DYNAMAX_MEGA("Mega and Primal Pokemon cannot Dynamax!"),
-        DYNAMAX_BANLIST("This Pokemon is banned from Dynamaxing! The banned Pokemon are: " + dynamaxBanList);
+        DYNAMAX_BANLIST("This Pokemon is banned from Dynamaxing! The banned Pokemon are: " + DYNAMAX_BAN_LIST.stream().map(PokemonEntity::getName).collect(Collectors.joining(", ")));
 
-        private String invalidMessage;
+        private final String invalidMessage;
 
         CheckType(String invalidMessage)
         {

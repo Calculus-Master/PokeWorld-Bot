@@ -3,7 +3,7 @@ package com.calculusmaster.pokecord.util.helpers;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import com.calculusmaster.pokecord.Pokecord;
-import com.calculusmaster.pokecord.util.Mongo;
+import com.calculusmaster.pokecord.mongo.Mongo;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -21,7 +21,7 @@ public class LoggerHelper
 
     public static void init(String name, Runnable init, boolean time)
     {
-        info(Pokecord.class, "Starting " + name + " Init!");
+        info(Pokecord.class, "Initializing " + name + ".");
         long i = System.currentTimeMillis();
 
         init.run();

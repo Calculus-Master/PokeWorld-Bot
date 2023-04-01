@@ -11,6 +11,7 @@ public enum ItemType
     POWER,
     INCENSE,
     PLATE,
+    MEMORY,
     STAT,
     BATTLE;
 }

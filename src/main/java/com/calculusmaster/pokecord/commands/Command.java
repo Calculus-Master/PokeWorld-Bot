@@ -3,7 +3,7 @@ package com.calculusmaster.pokecord.commands;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Tips;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
-import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
@@ -68,7 +68,7 @@ public abstract class Command
 
     protected boolean isPokemon(String pokemon)
     {
-        return PokemonData.POKEMON.stream().anyMatch(pokemon::equalsIgnoreCase);
+        return PokemonEntity.cast(pokemon) != null;
     }
 
     protected int getInt(int index)

@@ -1,7 +1,8 @@
 package com.calculusmaster.pokecord.util.helpers.event;
 
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
+import com.calculusmaster.pokecord.game.pokemon.data.CustomPokemonData;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
@@ -16,20 +17,18 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URL;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class SpawnEventHelper
 {
     public static int RAID_CHANCE;
     public static int SPAWN_INTERVAL;
 
-    private static final Map<String, String> SERVER_SPAWNS = new HashMap<>();
+    private static final Map<String, SpawnData> SERVER_SPAWNS = new HashMap<>();
     private static final Map<String, ScheduledFuture<?>> SCHEDULERS = new HashMap<>();
 
     public static void start(Guild g)
@@ -44,28 +43,28 @@ public class SpawnEventHelper
         SCHEDULERS.put(g.getId(), spawnEvent);
     }
 
-    public static String getSpawn(String id)
+    public static SpawnData getSpawn(String serverID)
     {
-        return SERVER_SPAWNS.getOrDefault(id, "");
+        return SERVER_SPAWNS.getOrDefault(serverID, null);
     }
 
-    public static void clearSpawn(String id)
+    public static void clearSpawn(String serverID)
     {
-        SERVER_SPAWNS.put(id, "");
+        SERVER_SPAWNS.put(serverID, null);
     }
 
     private static void spawnPokemon(Guild g)
     {
-        spawnPokemon(g, PokemonRarity.getSpawn());
+        SpawnEventHelper.spawnPokemon(g, PokemonRarity.getSpawn());
     }
 
-    public static void forceSpawn(Guild g, String spawn)
+    public static void forceSpawn(Guild g, PokemonEntity spawn)
     {
-        removeServer(g.getId());
+        SpawnEventHelper.removeServer(g.getId());
 
-        spawnPokemon(g, spawn);
+        SpawnEventHelper.spawnPokemon(g, spawn);
 
-        start(g);
+        SpawnEventHelper.start(g);
     }
 
     public static void updateSpawnRate(Guild g, int messages)
@@ -93,32 +92,37 @@ public class SpawnEventHelper
         LoggerHelper.info(SpawnEventHelper.class, "Updating Spawn Rate in " + g.getName() + "! New Interval: " + (int)(interval) + "s!");
     }
 
-    private static void spawnPokemon(Guild g, String spawn)
+    private static void spawnPokemon(Guild g, PokemonEntity spawn)
     {
-        List<TextChannel> channels = new ServerDataQuery(g.getId()).getSpawnChannels().stream().map(g::getTextChannelById).filter(Objects::nonNull).collect(Collectors.toList());
-        final SplittableRandom random = new SplittableRandom();
+        List<TextChannel> channels = new ServerDataQuery(g.getId()).getSpawnChannels().stream().map(g::getTextChannelById).filter(Objects::nonNull).toList();
+        final Random random = new Random();
 
+        //Check if spawn channels are available
         if(channels.isEmpty())
         {
             LoggerHelper.warn(SpawnEventHelper.class, g.getName() + " has no Spawn Channels! Skipping spawn event...");
             return;
         }
 
+        //No spawns during Raids
         if(RaidEventHelper.hasRaid(g.getId())) return;
 
+        //Random chance to convert this spawn into a Raid Event
         if(random.nextInt(100) < RAID_CHANCE)
         {
             RaidEventHelper.start(g, channels.get(0));
             return;
         }
 
-        spawn = Global.normalize(spawn);
+        //Shiny odds
         boolean shiny = random.nextInt(4096) < 1;
 
-        if(LocalDateTime.now(ZoneId.of("America/Los_Angeles")).getHour() == 20 && random.nextInt(100) < 1)
-        {
+        //Custom data
+        CustomPokemonData customData = new CustomPokemonData().generateOnSpawn(spawn);
+
+        //Legendary Hour
+        if(Global.timeNow().getHour() == 20 && random.nextInt(100) < 1)
             spawn = PokemonRarity.getLegendarySpawn();
-        }
 
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("A wild Pokemon spawned!")
@@ -128,14 +132,11 @@ public class SpawnEventHelper
 
         try
         {
-            String URLString;
+            String subpath = Pokemon.getImage(spawn, shiny, null, null) + ".png";
+            URI resourcesURI = SpawnEventHelper.class.getResource(subpath).toURI();
 
-            if(spawn.equals("Deerling")) URLString = Global.getDeerlingImage(shiny);
-            else if(spawn.equals("Sawsbuck")) URLString = Global.getSawsbuckImage(shiny);
-            else URLString = shiny ? PokemonData.get(spawn).shinyURL : PokemonData.get(spawn).normalURL;
-
-            URL url = new URL(URLString.equals("") ? Pokemon.getWIPImage() : URLString);
-            BufferedImage img = ImageIO.read(url);
+            int hint = BufferedImage.TYPE_INT_ARGB;
+            BufferedImage img = ImageIO.read(resourcesURI.toURL()); //.getScaledInstance(300, 300, hint)
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             ImageIO.write(img, "png", out);
 
@@ -143,13 +144,13 @@ public class SpawnEventHelper
 
             for(TextChannel c : channels) c.sendFiles(FileUpload.fromData(bytes, "pkmn.png")).setEmbeds(embed.build()).queue();
         }
-        catch (IOException e)
+        catch (IOException | URISyntaxException | NullPointerException e)
         {
             LoggerHelper.reportError(SpawnEventHelper.class, "Spawn Event failed in " + g.getName() + " (" + g.getId() + ") trying to spawn " + spawn + "!", e);
         }
 
         LoggerHelper.info(SpawnEventHelper.class, "New Spawn Event – " + g.getName() + " (" + g.getId() + ") - " + spawn + " (Shiny? " + shiny + ")!");
-        SERVER_SPAWNS.put(g.getId(), (shiny ? "Shiny " : "") + spawn);
+        SERVER_SPAWNS.put(g.getId(), new SpawnData(spawn, shiny, customData));
     }
 
     public static void removeServer(String serverID)
@@ -164,5 +165,34 @@ public class SpawnEventHelper
         SERVER_SPAWNS.clear();
         SCHEDULERS.values().forEach(future -> future.cancel(true));
         SCHEDULERS.clear();
+    }
+
+    public static class SpawnData
+    {
+        private final PokemonEntity spawn;
+        private final boolean shiny;
+        private final CustomPokemonData customData;
+
+        SpawnData(PokemonEntity spawn, boolean shiny, CustomPokemonData customData)
+        {
+            this.spawn = spawn;
+            this.shiny = shiny;
+            this.customData = customData;
+        }
+
+        public boolean isShiny()
+        {
+            return this.shiny;
+        }
+
+        public PokemonEntity getSpawn()
+        {
+            return spawn;
+        }
+
+        public CustomPokemonData getCustomData()
+        {
+            return customData;
+        }
     }
 }

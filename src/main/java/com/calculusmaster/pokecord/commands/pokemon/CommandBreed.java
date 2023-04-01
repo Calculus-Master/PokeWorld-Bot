@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Gender;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.PokemonEgg;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -56,10 +57,10 @@ public class CommandBreed extends Command
                 if(this.playerData.getOwnedEggIDs().size() >= PokemonEgg.MAX_EGGS) this.response = "You have the maximum number of eggs! To breed more, hatch some of your existing eggs!";
                 else if(UNABLE_TO_BREED.contains(parent1.getUUID()) || UNABLE_TO_BREED.contains(parent2.getUUID())) this.response = failed + " Either " + parent1.getName() + " or " + parent2.getName() + " is on a breeding cooldown and cannot breed right now!";
                 else if(parent1.getEggGroups().contains(EggGroup.NO_EGGS) || parent2.getEggGroups().contains(EggGroup.NO_EGGS)) this.response = failed + " Either " + parent1.getName() + " or " + parent2.getName() + " is part of the " + EggGroup.NO_EGGS.getName() + " Egg Group (and cannot breed)!";
-                else if(parent1.getName().equals("Ditto") && parent2.getName().equals("Ditto")) this.response = failed + " Ditto cannot breed with itself!";
-                else if(!validEggGroup && !parent1.getName().equals(parent2.getName()) && !parent1.getName().equals("Ditto") && !parent2.getName().equals("Ditto")) this.response = failed + " " + parent1.getName() + " and " + parent2.getName() + " do not share a common Egg Group and therefore cannot breed!";
-                else if((!parent1.getName().equals("Ditto") && parent2.getGender().equals(Gender.UNKNOWN)) && (!parent2.getName().equals("Ditto") && parent1.getGender().equals(Gender.UNKNOWN))) this.response = failed + " Either " + parent1.getName() + " or " + parent2.getName() + " has an unknown gender and cannot breed!";
-                else if(parent1.getGender().equals(parent2.getGender())) this.response = failed + " " + parent1.getName() + " and " + parent2.getName() + " are not opposite genders and cannot breed!";
+                else if(parent1.is(PokemonEntity.DITTO) && parent2.is(PokemonEntity.DITTO)) this.response = failed + " Ditto cannot breed with itself!";
+                else if(!validEggGroup && !parent1.is(parent2.getEntity()) && !parent1.is(PokemonEntity.DITTO) && !parent2.is(PokemonEntity.DITTO)) this.response = failed + " " + parent1.getName() + " and " + parent2.getName() + " do not share a common Egg Group and therefore cannot breed!";
+                else if((!parent1.is(PokemonEntity.DITTO) && parent2.getGender().equals(Gender.UNKNOWN)) && (!parent2.is(PokemonEntity.DITTO) && parent1.getGender().equals(Gender.UNKNOWN))) this.response = failed + " Either " + parent1.getName() + " or " + parent2.getName() + " has an unknown gender and cannot breed!";
+                else if(parent1.getGender().equals(parent2.getGender())) this.response = failed + " " + parent1.getName() + " and " + parent2.getName() + " are the same gender and cannot breed!";
                 else
                 {
                     PokemonEgg egg = PokemonEgg.create(parent1, parent2);
@@ -71,7 +72,7 @@ public class CommandBreed extends Command
                     this.playerData.getStatistics().incr(PlayerStatistic.POKEMON_BRED);
 
                     Achievements.grant(this.player.getId(), Achievements.BRED_FIRST_POKEMON, this.event);
-                    if(parent1.getName().equals("Ditto") || parent2.getName().equals("Ditto")) Achievements.grant(this.player.getId(), Achievements.BRED_FIRST_DITTO, this.event);
+                    if(parent1.is(PokemonEntity.DITTO) || parent2.is(PokemonEntity.DITTO)) Achievements.grant(this.player.getId(), Achievements.BRED_FIRST_DITTO, this.event);
                     if(parent1.getGender().equals(Gender.UNKNOWN) || parent2.getGender().equals(Gender.UNKNOWN)) Achievements.grant(this.player.getId(), Achievements.BRED_FIRST_UNKNOWN, this.event);
 
                     this.startCooldown(parent1.getUUID());

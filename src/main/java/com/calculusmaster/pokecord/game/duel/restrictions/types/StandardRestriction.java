@@ -3,9 +3,9 @@ package com.calculusmaster.pokecord.game.duel.restrictions.types;
 import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestriction;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
+import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
 
 import java.util.List;
-import java.util.function.Function;
 
 public class StandardRestriction extends TeamRestriction
 {
@@ -17,12 +17,16 @@ public class StandardRestriction extends TeamRestriction
     @Override
     public boolean validate(List<Pokemon> team)
     {
-        Function<List<String>, Integer> check = list -> (int)team.stream().filter(p -> list.contains(p.getName())).count();
-        int countMegaPrimalLegendary = check.apply(PokemonRarity.MEGA_LEGENDARY);
-        int countLegendary = check.apply(PokemonRarity.LEGENDARY);
-        int countMythical = check.apply(PokemonRarity.MYTHICAL);
-        int countUltraBeast = check.apply(PokemonRarity.ULTRA_BEAST);
-        int countMega = check.apply(PokemonRarity.MEGA);
+        int countMegaPrimalLegendary = 0, countLegendary = 0, countMythical = 0, countUltraBeast = 0, countMega = 0;
+
+        for(Pokemon p : team)
+        {
+            if(MegaEvolutionRegistry.isMegaLegendary(p.getEntity())) countMegaPrimalLegendary++;
+            else if(PokemonRarity.isLegendary(p.getEntity())) countLegendary++;
+            else if(PokemonRarity.isMythical(p.getEntity())) countMythical++;
+            else if(PokemonRarity.isUltraBeast(p.getEntity())) countUltraBeast++;
+            else if(MegaEvolutionRegistry.isMega(p.getEntity())) countMega++;
+        }
 
         //PLP: Pokemon Load Points
         int totalPLP = countMegaPrimalLegendary * 4 + countLegendary * 3 + countMythical * 2 + countUltraBeast + countMega;

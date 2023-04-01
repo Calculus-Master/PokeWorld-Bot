@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game.tournament;
+package com.calculusmaster.pokecord.game.duel.tournament;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,29 +5,35 @@ import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
-import com.calculusmaster.pokecord.game.enums.items.TR;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugmentRegistry;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonBoosts;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonDuelStatChanges;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonDuelStatOverrides;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
+import com.calculusmaster.pokecord.game.pokemon.data.CustomPokemonData;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
+import com.calculusmaster.pokecord.game.pokemon.evolution.GigantamaxRegistry;
+import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
+import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.Mongo;
-import com.calculusmaster.pokecord.util.cache.PlayerDataCache;
-import com.calculusmaster.pokecord.util.cache.PokemonDataCache;
-import com.calculusmaster.pokecord.util.helpers.DataHelper;
+import com.calculusmaster.pokecord.util.cacheold.PlayerDataCache;
+import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.time.Month;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -40,7 +46,7 @@ public class Pokemon
     private PokemonData data;
 
     private String UUID;
-    private String name;
+    private PokemonEntity entity;
     private String nickname;
     private int number;
     private boolean shiny;
@@ -52,12 +58,12 @@ public class Pokemon
     private int prestigeLevel;
     private PokemonStats ivs;
     private PokemonStats evs;
-    private List<String> moves;
+    private List<MoveEntity> moves;
     private Item item;
     private TM tm;
-    private TR tr;
     private EnumSet<PokemonAugment> augments;
     private int megaCharges;
+    private CustomPokemonData customData;
 
     //Duel Fields
     private List<Type> type;
@@ -73,19 +79,23 @@ public class Pokemon
     private boolean statChangesIgnored;
 
     //Misc
-    private PokemonRarity.Rarity rarity;
+    private final Random random;
 
     //Private Constructor
     private Pokemon() {}
 
+    {
+        this.random = new Random();
+    }
+
     //Factory Creator and Builder
-    public static Pokemon create(String name)
+    public static Pokemon create(PokemonEntity entity)
     {
         Pokemon p = new Pokemon();
 
-        p.setData(name);
+        p.setEntity(entity);
+        p.setData(entity);
         p.setUUID();
-        p.setName(name);
         p.setNickname("");
         p.setNumber(-1);
         p.setShiny();
@@ -98,11 +108,12 @@ public class Pokemon
         p.setIVs();
         p.setEVs();
         p.setMoves();
+        p.setAbilities();
         p.setItem(Item.NONE);
         p.setTM();
-        p.setTR();
         p.setAugments(List.of());
         p.setDefaultMegaCharges();
+        p.setCustomData();
 
         p.setupMisc();
         p.setDuelDefaults();
@@ -114,9 +125,9 @@ public class Pokemon
     {
         Pokemon p = new Pokemon();
 
-        p.setData(data.getString("name"));
+        p.setEntity(data.getString("entity"));
+        p.setData(PokemonEntity.cast(data.getString("entity")));
         p.setUUID(data.getString("UUID"));
-        p.setName(data.getString("name"));
         p.setNickname(data.getString("nickname"));
         p.setNumber(number);
         p.setShiny(data.getBoolean("shiny"));
@@ -128,12 +139,13 @@ public class Pokemon
         p.setExp(data.getInteger("exp"));
         p.setIVs(data.get("ivs", Document.class));
         p.setEVs(data.get("evs", Document.class));
-        p.setMoves(data.getList("moves", String.class));
+        p.setMoves(data.getList("moves", String.class).stream().map(MoveEntity::cast).toList());
+        p.setAbilities(data.getList("abilities", String.class).stream().map(Ability::cast).toList());
         p.setItem(Item.cast(data.getString("item")));
-        p.setTM(data.getInteger("tm") == -1 ? null : TM.get(data.getInteger("tm")));
-        p.setTR(data.getInteger("tr") == -1 ? null : TR.get(data.getInteger("tr")));
+        p.setTM(data.getString("tm").isEmpty() ? null : TM.cast(data.getString("tm")));
         p.setAugments(data.getList("augments", String.class));
         p.setMegaCharges(data.getInteger("megacharges"));
+        p.setCustomData(data.get("custom", Document.class));
 
         p.setupMisc();
         p.setDuelDefaults();
@@ -143,8 +155,7 @@ public class Pokemon
 
     private void setDuelDefaults()
     {
-        this.type = new ArrayList<>(List.copyOf(this.data.types));
-        this.abilities = new ArrayList<>(List.copyOf(this.data.abilities));
+        this.type = new ArrayList<>(List.copyOf(this.data.getTypes()));
         this.statChanges = new PokemonDuelStatChanges();
         this.boosts = new PokemonBoosts();
         this.health = this.getMaxHealth();
@@ -158,7 +169,7 @@ public class Pokemon
 
     private void setupMisc()
     {
-        this.rarity = PokemonRarity.POKEMON_RARITIES.getOrDefault(this.name.replaceAll("Primal|Mega|\\sY|\\sX", "").trim(), PokemonRarity.Rarity.EXTREME);
+
     }
 
     public static Pokemon build(String UUID)
@@ -186,7 +197,7 @@ public class Pokemon
     //Querying for the Player Owner of this Pokemon; if no owner (AI Pokemon), returns null
     public PlayerDataQuery getOwner()
     {
-        String poke = "{Name: %s, UUID: %s}".formatted(this.name, this.UUID);
+        String poke = "{Name: %s, UUID: %s}".formatted(this.data.getName(), this.UUID);
         LoggerHelper.info(Pokemon.class, "Searching for Player Owner of " + poke);
 
         PlayerDataQuery out =  PlayerDataCache.CACHE.values().stream().map(PlayerDataCache::data).filter(data -> data.getPokemonList().contains(this.getUUID())).findFirst().orElse(null);
@@ -201,7 +212,7 @@ public class Pokemon
     {
         return new Document()
                 .append("UUID", this.UUID)
-                .append("name", this.name)
+                .append("entity", this.entity.toString())
                 .append("nickname", this.nickname)
                 .append("shiny", this.shiny)
                 .append("gender", this.gender.toString())
@@ -212,12 +223,12 @@ public class Pokemon
                 .append("prestigeLevel", this.prestigeLevel)
                 .append("ivs", this.ivs.serialized())
                 .append("evs", this.evs.serialized())
-                .append("moves", this.moves)
+                .append("moves", this.moves.stream().map(Enum::toString).toList())
                 .append("item", this.item.toString())
-                .append("tm", this.tm == null ? -1 : this.tm.getNumber())
-                .append("tr", this.tr == null ? -1 : this.tr.getNumber())
+                .append("tm", this.tm == null ? "" : this.tm.toString())
                 .append("augments", this.augments.stream().map(Enum::toString).toList())
-                .append("megacharges", this.megaCharges);
+                .append("megacharges", this.megaCharges)
+                .append("custom", this.customData.serialize());
     }
 
     public void upload()
@@ -252,9 +263,9 @@ public class Pokemon
         PokemonDataCache.updateCache(this.getUUID());
     }
 
-    public void updateName()
+    public void updateEntity()
     {
-        this.update(Updates.set("name", this.name));
+        this.update(Updates.set("entity", this.entity.toString()));
     }
 
     public void updateNickname()
@@ -294,7 +305,7 @@ public class Pokemon
 
     public void updateMoves()
     {
-        this.update(Updates.set("moves", this.moves));
+        this.update(Updates.set("moves", this.moves.stream().map(Enum::toString).toList()));
     }
 
     public void updateItem()
@@ -302,9 +313,9 @@ public class Pokemon
         this.update(Updates.set("item", this.item.toString()));
     }
 
-    public void updateTMTR()
+    public void updateTM()
     {
-        this.update(Updates.set("tm", this.tm == null ? -1 : this.tm.getNumber()), Updates.set("tr", this.tr == null ? -1 : this.tr.getNumber()));
+        this.update(Updates.set("tm", this.tm == null ? "" : this.tm.toString()));
     }
 
     public void updateAugments()
@@ -326,6 +337,7 @@ public class Pokemon
     //Mastery
     public boolean isMastered()
     {
+        //TODO: Check again
         //Level must be 100
         if(this.getLevel() < 100) return false;
 
@@ -346,6 +358,48 @@ public class Pokemon
 
         //If checks have been passed, the Pokemon has been Mastered
         else return true;
+    }
+
+    //Custom Data
+    public CustomPokemonData getCustomData()
+    {
+        return this.customData;
+    }
+
+    public void setCustomData()
+    {
+        this.customData = new CustomPokemonData();
+    }
+
+    public void setCustomData(Document data)
+    {
+        this.customData = new CustomPokemonData(data);
+    }
+
+    public void setCustomData(CustomPokemonData data)
+    {
+        this.customData = data;
+    }
+
+    //Entity
+    public PokemonEntity getEntity()
+    {
+        return this.entity;
+    }
+
+    public void setEntity(PokemonEntity entity)
+    {
+        this.entity = entity;
+    }
+
+    public void setEntity(String entity)
+    {
+        this.entity = Objects.requireNonNull(PokemonEntity.cast(entity));
+    }
+
+    public boolean is(PokemonEntity... entity)
+    {
+        return List.of(entity).contains(this.entity);
     }
 
     //Other
@@ -423,7 +477,7 @@ public class Pokemon
 
     public int getBaseStat(Stat s)
     {
-        return this.data.baseStats.get(s);
+        return this.data.getBaseStats().get(s);
     }
 
     public int getStat(Stat s)
@@ -555,7 +609,11 @@ public class Pokemon
 
     public double getWeight()
     {
-        return this.hasAbility(Ability.HEAVY_METAL) ? this.data.weight * 2 : this.data.weight;
+        double modifiers = 1.0;
+
+        if(this.hasAbility(Ability.HEAVY_METAL)) modifiers *= 2.0;
+
+        return this.data.getWeight() * modifiers;
     }
 
     public int getMegaCharges()
@@ -565,8 +623,8 @@ public class Pokemon
 
     public int getMaxMegaCharges()
     {
-        return PokemonRarity.MEGA.stream().anyMatch(s -> s.contains(this.getName())) ? 5
-                : (PokemonRarity.MEGA_LEGENDARY.stream().anyMatch(s -> s.contains(this.getName())) ? 3 : 0);
+        return MegaEvolutionRegistry.isMegaLegendary(this.entity) ? 3 :
+                (MegaEvolutionRegistry.isMega(this.entity) ? 5 : 0);
     }
 
     public void setMegaCharges(int megaCharge)
@@ -591,65 +649,136 @@ public class Pokemon
 
     public void removeMegaEvolution()
     {
-        if(!this.isMega()) throw new IllegalStateException(this.getName() + " is not Mega-Evolved! Cannot remove Mega-Evolution.");
+        if(!MegaEvolutionRegistry.isMega(this.entity))
+            throw new IllegalStateException(this.getName() + " is not Mega-Evolved! Cannot remove Mega-Evolution.");
 
-        String mega = this.getName();
-        String original = "";
-        if(this.getName().contains("Mega")) original = mega.substring("Mega ".length(), mega.contains(" X") || mega.contains(" Y") ? mega.length() - 2 : mega.length());
-        else if(this.getName().contains("Primal")) original = mega.substring("Primal ".length());
+        PokemonEntity baseForm = MegaEvolutionRegistry.getData(this.entity).getBase();
 
-        this.changeForm(original);
-        this.updateName();
+        this.changePokemon(baseForm);
+        this.updateEntity();
     }
 
-    public boolean isMega()
+    //Mega Evolutions, Forms, Evolution
+    public void changePokemon(PokemonEntity entity)
     {
-        return this.name.contains("Mega") || this.name.contains("Primal");
+        this.entity = entity;
+        this.data = entity.data();
     }
 
-    public boolean hasMega()
+    //If pokemon == null, this is being called from somewhere without a relevant Pokemon object.
+    //If moveEntity == null, this is being called outside a Duel.
+    public static String getImage(@NotNull PokemonEntity pokemonEntity, boolean shiny, @Nullable Pokemon pokemon, @Nullable MoveEntity moveEntity)
     {
-        return !this.data.megas.isEmpty();
-    }
+        String type = shiny ? "shiny" : "normal";
 
-    public boolean hasForms()
-    {
-        return !this.data.forms.isEmpty();
-    }
+        //Default
+        String dir = type + "/";
+        String image = pokemonEntity.getImageName(shiny);
 
-    public List<String> getMegaList()
-    {
-        return this.data.megas;
-    }
+        //Stuff that requires a Pokemon object
+        if(pokemon != null)
+        {
+            //TODO: Dynamax pictures that just have a cloud attached
+            if(pokemon.isDynamaxed() && GigantamaxRegistry.hasGMax(pokemonEntity))
+            {
+                dir = "gigantamax_" + type + "/";
+                image = image + "_Gigantamax";
+            }
+            else if(pokemonEntity == PokemonEntity.ARCEUS && pokemon.hasItem() && pokemon.getItem().isPlateItem())
+            {
+                String plateItemName = pokemon.getItem().getStyledName();
+                plateItemName = plateItemName.split(" ")[0];
 
-    public List<String> getFormsList()
-    {
-        return this.data.forms;
-    }
+                dir = "extra_" + type + "/arceus/";
+                image = image + "_" + plateItemName;
+            }
+            else if(pokemonEntity == PokemonEntity.SILVALLY && pokemon.hasItem() && pokemon.getItem().isMemoryItem())
+            {
+                String memoryType = pokemon.getItem().getMemoryType().getStyledName();
 
-    public void changeForm(String form)
-    {
-        form = Global.normalize(form);
-        this.setData(form);
-        this.name = form;
-    }
+                dir = "extra_" + type + "/silvally/";
+                image = image + "_" + memoryType;
+            }
+            else if(pokemonEntity == PokemonEntity.GENESECT && pokemon.hasItem() && pokemon.getItem().isDriveItem())
+            {
+                String driveItemName = pokemon.getItem().getStyledName();
+                driveItemName = driveItemName.split(" ")[0];
 
-    public void evolve(String evolution)
-    {
-        this.changeForm(evolution);
-    }
+                dir = "extra_" + type + "/genesect/";
+                image = image + "_" + driveItemName;
+            }
+            else if(pokemonEntity == PokemonEntity.MINIOR_CORE)
+            {
+                dir = "extra_" + type + "/minior/";
+                image = image + "_" + pokemon.getCustomData().getMiniorCoreColor();
+            }
+            else if(EnumSet.of(PokemonEntity.FLABEBE, PokemonEntity.FLOETTE, PokemonEntity.FLORGES).contains(pokemonEntity))
+            {
+                dir = "extra_" + type + "/flabebe_floette_florges/";
+                image = image + "_" + pokemon.getCustomData().getFlowerColor();
+            }
+            else if(pokemonEntity == PokemonEntity.MAGEARNA && pokemon.getCustomData().isOriginalColorMagearna())
+            {
+                dir = "extra_" + type + "/magearna/";
+                image = image + "_Original";
+            }
+            else if(EnumSet.of(PokemonEntity.UNFEZANT, PokemonEntity.FRILLISH, PokemonEntity.JELLICENT, PokemonEntity.PYROAR).contains(pokemonEntity))
+            {
+                dir = "extra_" + type + "/gender_differences/";
+                image = image + "_" + (pokemon.getGender().equals(Gender.MALE) ? "Male" : "Female");
+            }
+            else if(pokemonEntity == PokemonEntity.SHELLOS || pokemonEntity == PokemonEntity.GASTRODON)
+            {
+                dir = "extra_" + type + "/shellos_gastrodon/";
+                image = image + "_" + Global.normalize(pokemon.getCustomData().getSlugDirection());
+            }
+        }
 
-    public String getImage()
-    {
-        if (this.getName().equals("Deerling")) return Global.getDeerlingImage(this.isShiny());
-        else if (this.getName().equals("Sawsbuck")) return Global.getSawsbuckImage(this.isShiny());
+        //Stuff that requires a MoveEntity and Pokemon object
+        if(pokemon != null && moveEntity != null)
+        {
+            dir = "extra_move/";
 
-        //TODO: Basic Dynamax Image
-        if (this.isDynamaxed && this.canGigantamax())
-            return this.isShiny() ? DataHelper.getGigantamaxData(this.getName()).shinyImage() : DataHelper.getGigantamaxData(this.getName()).normalImage();
+            if(pokemonEntity == PokemonEntity.SOLGALEO && (moveEntity == MoveEntity.SUNSTEEL_STRIKE || moveEntity == MoveEntity.SEARING_SUNRAZE_SMASH))
+                image = image + "_RadiantSunPhase";
+            else if(pokemonEntity == PokemonEntity.LUNALA && (moveEntity == MoveEntity.MOONGEIST_BEAM || moveEntity == MoveEntity.MENACING_MOONRAZE_MAELSTROM))
+                image = image + "_FullMoonPhase";
+            else if(pokemonEntity == PokemonEntity.MARSHADOW)
+                image = image + "_Zenith_" + (shiny ? "S" : "N");
+            else if(pokemonEntity == PokemonEntity.ARTICUNO_GALAR && moveEntity == MoveEntity.FREEZING_GLARE)
+                image = image + "_FreezingGlare";
+            else if(pokemonEntity == PokemonEntity.ZAPDOS_GALAR && moveEntity == MoveEntity.THUNDEROUS_KICK)
+                image = image + "_ThunderousKick";
+            else if(pokemonEntity == PokemonEntity.MOLTRES_GALAR && moveEntity == MoveEntity.FIERY_WRATH)
+                image = image + "_FieryWrath";
 
-        String image = this.isShiny() ? this.data.shinyURL : this.data.normalURL;
-        return image.equals("") ? com.calculusmaster.pokecord.game.pokemon.Pokemon.getWIPImage() : image;
+            if((pokemonEntity == PokemonEntity.RESHIRAM && (moveEntity == MoveEntity.BLUE_FLARE || moveEntity == MoveEntity.FUSION_FLARE))
+                    || (pokemonEntity == PokemonEntity.ZEKROM && (moveEntity == MoveEntity.BOLT_STRIKE || moveEntity == MoveEntity.FUSION_BOLT))
+                    || (pokemonEntity == PokemonEntity.KYUREM_WHITE && (moveEntity == MoveEntity.FUSION_FLARE || moveEntity == MoveEntity.ICE_BURN))
+                    || (pokemonEntity == PokemonEntity.KYUREM_BLACK && (moveEntity == MoveEntity.FUSION_BOLT || moveEntity == MoveEntity.FREEZE_SHOCK)))
+            {
+                dir = "extra_" + type + "/unova_dragons/";
+                image = image + "_Activated";
+            }
+        }
+
+        //Deerling & Sawsbuck
+        if(pokemonEntity == PokemonEntity.DEERLING || pokemonEntity == PokemonEntity.SAWSBUCK)
+        {
+            Month month = Global.timeNow().getMonth();
+
+            String season = switch(month) {
+                case DECEMBER, JANUARY, FEBRUARY -> "Winter";
+                case MARCH, APRIL, MAY -> "Spring";
+                case JUNE, JULY, AUGUST -> "Summer";
+                case SEPTEMBER, OCTOBER, NOVEMBER -> "Autumn";
+            };
+
+            dir = "extra_" + type + "/deerling_sawsbuck/";
+            image = image + "_" + season;
+        }
+
+        return "data/images/" + dir + image + ".png";
     }
 
     public static String getWIPImage()
@@ -657,19 +786,9 @@ public class Pokemon
         return "http://clipart-library.com/img/1657818.png";
     }
 
-    public boolean canGigantamax()
-    {
-        return DataHelper.hasGigantamax(this.getName());
-    }
-
-    public DataHelper.GigantamaxData getGigantamaxData()
-    {
-        return DataHelper.GIGANTAMAX_DATA.get(this.getName());
-    }
-
     public PokemonRarity.Rarity getRarity()
     {
-        return this.rarity;
+        return this.entity.getRarity();
     }
 
     public List<Ability> getAbilities()
@@ -695,7 +814,19 @@ public class Pokemon
 
     public void setAbilities(List<Ability> abilities)
     {
-        this.abilities = new ArrayList<>(List.copyOf(abilities));
+        this.abilities = new ArrayList<>(abilities);
+    }
+
+    public void setAbilities()
+    {
+        this.abilities = new ArrayList<>();
+
+        //Main Ability
+        Ability main = this.data.getMainAbilities().stream().toList().get(this.random.nextInt(this.data.getMainAbilities().size()));
+        this.abilities.add(main);
+
+        //Hidden
+        this.abilities.addAll(this.data.getHiddenAbilities());
     }
 
     public void clearAbilities()
@@ -750,12 +881,7 @@ public class Pokemon
 
     public boolean canLearnTM(TM tm)
     {
-        return this.data.validTMs.contains(tm);
-    }
-
-    public boolean canLearnTR(TR tr)
-    {
-        return this.data.validTRs.contains(tr);
+        return this.data.getTMs().contains(tm.getMove());
     }
 
     public boolean hasTM()
@@ -763,19 +889,9 @@ public class Pokemon
         return this.tm != null;
     }
 
-    public boolean hasTR()
-    {
-        return this.tr != null;
-    }
-
     public void setTM()
     {
         this.tm = null;
-    }
-
-    public void setTR()
-    {
-        this.tr = null;
     }
 
     public void setTM(TM tm)
@@ -783,19 +899,9 @@ public class Pokemon
         this.tm = tm;
     }
 
-    public void setTR(TR tr)
-    {
-        this.tr = tr;
-    }
-
     public TM getTM()
     {
         return this.tm;
-    }
-
-    public TR getTR()
-    {
-        return this.tr;
     }
 
     //Item
@@ -858,50 +964,60 @@ public class Pokemon
 
     //Moves
 
-    public List<String> allMoves()
+    public List<MoveEntity> getLevelUpMoves()
     {
-        List<String> all = new ArrayList<>(List.copyOf(this.data.moves.keySet()));
-        all.sort(Comparator.comparingInt(s -> this.data.moves.get(s)));
+        Map<MoveEntity, Integer> moves = this.data.getLevelUpMoves();
+
+        List<MoveEntity> all = new ArrayList<>(moves.keySet());
+        all.sort(Comparator.comparingInt(moves::get));
 
         return this.withMovesOverride(all);
     }
 
-    public List<String> availableMoves()
+    public List<MoveEntity> availableMoves()
     {
-        List<String> available = new ArrayList<>(this.allMoves().stream().filter(s -> this.data.moves.get(s) <= this.getLevel()).sorted(Comparator.comparingInt(s -> this.data.moves.get(s))).toList());
+        List<MoveEntity> available = new ArrayList<>(
+                this.getLevelUpMoves().stream()
+                        .filter(s -> this.data.getLevelUpMoves().get(s) <= this.getLevel())
+                        .sorted(Comparator.comparingInt(s -> this.data.getLevelUpMoves().get(s)))
+                        .toList()
+        );
 
-        if(this.hasTM()) available.add(this.tm.getMoveName());
-        if(this.hasTR()) available.add(this.tr.getMoveName());
+        if(this.hasTM()) available.add(this.tm.getMove());
 
         return this.withMovesOverride(available);
     }
 
-    private List<String> withMovesOverride(List<String> input)
+    private List<MoveEntity> withMovesOverride(List<MoveEntity> input)
     {
-        if(this.getName().contains("Zygarde") && this.item.equals(Item.ZYGARDE_CUBE))
-        {
-            Collections.addAll(input, "Core Enforcer", "Dragon Dance", "Extreme Speed", "Thousand Arrows", "Thousand Waves");
-        }
+        if(this.is(PokemonEntity.ZYGARDE_10, PokemonEntity.ZYGARDE_50, PokemonEntity.ZYGARDE_COMPLETE) && this.item.equals(Item.ZYGARDE_CUBE))
+            Collections.addAll(input,
+                    MoveEntity.CORE_ENFORCER,
+                    MoveEntity.DRAGON_DANCE,
+                    MoveEntity.EXTREME_SPEED,
+                    MoveEntity.THOUSAND_ARROWS,
+                    MoveEntity.THOUSAND_WAVES
+            );
 
         return input;
     }
 
-    public void learnMove(String move, int index)
+    public void learnMove(MoveEntity move, int index)
     {
         this.moves.set(index, move);
     }
 
     public void setMoves()
     {
-        this.setMoves(List.of("Tackle", "Tackle", "Tackle", "Tackle"));
+        this.setMoves(List.of(MoveEntity.TACKLE, MoveEntity.TACKLE, MoveEntity.TACKLE, MoveEntity.TACKLE));
     }
 
-    public void setMoves(List<String> moves)
+    public void setMoves(List<MoveEntity> moves)
     {
         this.moves = new ArrayList<>(moves);
     }
 
-    public List<String> getMoves()
+    public List<MoveEntity> getMoves()
     {
         return this.moves;
     }
@@ -989,7 +1105,7 @@ public class Pokemon
 
     public LinkedHashMap<Stat, Integer> getEVYield()
     {
-        return this.data.yield.get();
+        return this.data.getEVYield().get();
     }
 
     public LinkedHashMap<Stat, Integer> getIVs()
@@ -1059,7 +1175,7 @@ public class Pokemon
 
     public boolean isValidAugment(PokemonAugment augment)
     {
-        return PokemonAugmentRegistry.AUGMENT_DATA.get(this.getName()).has(augment);
+        return PokemonAugmentRegistry.AUGMENT_DATA.get(this.entity).has(augment);
     }
 
     public double getAugmentStatBoost(Stat s)
@@ -1083,10 +1199,10 @@ public class Pokemon
 
             boolean hp = s.equals(Stat.HP);
             boolean speed = s.equals(Stat.SPD);
-            double maxBonus = switch(this.rarity) {
+            double maxBonus = switch(this.getRarity()) {
                 case COPPER, SILVER, GOLD -> hp ? 0.75 : (speed ? 0.30 : 0.50);
                 case DIAMOND, PLATINUM -> hp ? 0.50 : (speed ? 0.15 : 0.35);
-                case MYTHICAL, LEGENDARY, EXTREME -> hp ? 0.30 : (speed ? 0.05 : 0.25);
+                case MYTHICAL, ULTRA_BEAST, LEGENDARY -> hp ? 0.30 : (speed ? 0.05 : 0.25);
             };
 
             return 1.0 + (ratio * maxBonus);
@@ -1110,14 +1226,14 @@ public class Pokemon
 
     public int getMaxPrestigeLevel()
     {
-        return switch(this.rarity) {
+        return switch(this.getRarity()) {
             case COPPER -> 7;
             case SILVER -> 6;
             case GOLD -> 5;
             case DIAMOND -> 4;
             case PLATINUM -> 3;
-            case MYTHICAL -> 2;
-            case LEGENDARY, EXTREME -> 1;
+            case MYTHICAL, ULTRA_BEAST -> 2;
+            case LEGENDARY -> 1;
         };
     }
 
@@ -1149,21 +1265,21 @@ public class Pokemon
     {
         this.exp += exp;
 
-        int req = GrowthRate.getRequiredExp(this.data.growthRate, this.level);
+        int req = GrowthRate.getRequiredExp(this.data.getGrowthRate(), this.level);
 
         while(this.exp >= req && this.level < 100)
         {
             this.level++;
             this.exp -= req;
 
-            req = GrowthRate.getRequiredExp(this.data.growthRate, this.level);
+            req = GrowthRate.getRequiredExp(this.data.getGrowthRate(), this.level);
         }
     }
 
     public int getDefeatExp(Pokemon other)
     {
         int a = 1;
-        int b = this.data.baseEXP;
+        int b = this.data.getBaseExperience();
         int e = 1;
         int L = other.getLevel();
         int Lp = this.getLevel();
@@ -1213,7 +1329,7 @@ public class Pokemon
     //Gender
     public void setGender()
     {
-        this.setGender(this.data.genderRate == -1 ? Gender.UNKNOWN : (new SplittableRandom().nextInt(8) < this.data.genderRate ? Gender.FEMALE : Gender.MALE));
+        this.setGender(this.data.getGenderRate() == -1 ? Gender.UNKNOWN : (new SplittableRandom().nextInt(8) < this.data.getGenderRate() ? Gender.FEMALE : Gender.MALE));
     }
 
     public void setGender(Gender gender)
@@ -1228,7 +1344,7 @@ public class Pokemon
 
     public EnumSet<EggGroup> getEggGroups()
     {
-        return EnumSet.copyOf(this.data.eggGroups);
+        return EnumSet.copyOf(this.data.getEggGroups());
     }
 
     //Shiny
@@ -1258,7 +1374,7 @@ public class Pokemon
         return this.number;
     }
 
-    //Nickname
+    //Nickname / Name
     public void setNickname(String nickname)
     {
         this.nickname = nickname;
@@ -1276,35 +1392,12 @@ public class Pokemon
 
     public String getDisplayName()
     {
-        return this.hasNickname() ? "\"" + this.getNickname() + "\"" : this.getNameWithOverride();
-    }
-
-    //Name
-
-    public void setName(String name)
-    {
-        this.name = name;
+        return this.hasNickname() ? "\"" + this.getNickname() + "\"" : this.getName();
     }
 
     public String getName()
     {
-        return this.name;
-    }
-
-    public String getNameWithOverride()
-    {
-        return switch(this.getName()) {
-            case "Ho Oh" -> "Ho-oh";
-            case "Porygon Z" -> "Porygon-Z";
-            case "Jangmo O" -> "Jangmo-o";
-            case "Hakamo O" -> "Hakamo-o";
-            case "Kommo O" -> "Kommo-o";
-            case "Mr Mime" -> "Mr. Mime";
-            case "Mime Jr" -> "Mime Jr.";
-            case "Galarian Mr Mime" -> "Galarian Mr. Mime";
-            case "Mr Rime" -> "Mr. Rime";
-            default -> this.getName();
-        };
+        return this.data.getName();
     }
 
     //UUID
@@ -1326,9 +1419,9 @@ public class Pokemon
 
     //Data
 
-    public void setData(String name)
+    public void setData(PokemonEntity entity)
     {
-        this.data = PokemonData.get(name);
+        this.data = entity.data();
     }
 
     public PokemonData getData()

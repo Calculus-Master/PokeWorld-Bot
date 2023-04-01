@@ -5,7 +5,7 @@ import org.bson.Document;
 
 public abstract class AbstractNameObjective extends Objective
 {
-    protected String name;
+    protected String entityName;
 
     public AbstractNameObjective(ObjectiveType type)
     {
@@ -19,16 +19,16 @@ public abstract class AbstractNameObjective extends Objective
     public Document addObjectiveData(Document document)
     {
         return super.addObjectiveData(document)
-                .append("name", this.name);
+                .append("name", this.entityName);
     }
 
     public String getName()
     {
-        return this.name;
+        return this.entityName;
     }
 
     public void setName(String name)
     {
-        this.name = name;
+        this.entityName = name;
     }
 }

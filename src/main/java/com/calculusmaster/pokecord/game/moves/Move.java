@@ -2,42 +2,42 @@ package com.calculusmaster.pokecord.game.moves;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.enums.elements.*;
+import com.calculusmaster.pokecord.game.moves.data.MoveData;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.moves.types.*;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
+import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 
-import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Move
 {
     //TODO: Keep checking the custom moves and see if they can function as close to the original as possible
-    public static final List<String> WIP_MOVES = List.of("Roar", "Whirlwind", "Rage Powder", "Frustration", "Return", "Magnetic Flux", "After You", "Disable", "Miracle Eye", "Me First", "Gravity", "Spite", "Mean Look", "Foresight", "Wide Guard", "Teleport", "Odor Sleuth", "Helping Hand", "Stuff Cheeks", "Copycat", "Follow Me", "Sky Drop", "Simple Beam", "Fling", "Telekinesis", "Quash", "No Retreat", "Encore", "Substitute", "Magic Coat", "Embargo", "Ally Switch", "Sleep Talk", "Gear Up", "Struggle");
-    public static final List<String> CUSTOM_MOVES = List.of("Leech Seed", "Rapid Spin", "Mirror Shot", "Worry Seed", "Aromatic Mist", "Pay Day", "Pollen Puff");
-    public static List<String> INCOMPLETE_MOVES = new ArrayList<>();
+    public static final EnumSet<MoveEntity> WIP_MOVES = EnumSet.of(MoveEntity.ROAR, MoveEntity.WHIRLWIND, MoveEntity.RAGE_POWDER, MoveEntity.FRUSTRATION, MoveEntity.RETURN, MoveEntity.MAGNETIC_FLUX, MoveEntity.AFTER_YOU, MoveEntity.DISABLE, MoveEntity.MIRACLE_EYE, MoveEntity.ME_FIRST, MoveEntity.GRAVITY, MoveEntity.SPITE, MoveEntity.MEAN_LOOK, MoveEntity.FORESIGHT, MoveEntity.WIDE_GUARD, MoveEntity.TELEPORT, MoveEntity.ODOR_SLEUTH, MoveEntity.HELPING_HAND, MoveEntity.STUFF_CHEEKS, MoveEntity.COPYCAT, MoveEntity.FOLLOW_ME, MoveEntity.SKY_DROP, MoveEntity.SIMPLE_BEAM, MoveEntity.FLING, MoveEntity.TELEKINESIS, MoveEntity.QUASH, MoveEntity.NO_RETREAT, MoveEntity.ENCORE, MoveEntity.SUBSTITUTE, MoveEntity.MAGIC_COAT, MoveEntity.EMBARGO, MoveEntity.ALLY_SWITCH, MoveEntity.SLEEP_TALK, MoveEntity.GEAR_UP, MoveEntity.STRUGGLE);
+    public static final EnumSet<MoveEntity> CUSTOM_MOVES = EnumSet.of(MoveEntity.LEECH_SEED, MoveEntity.RAPID_SPIN, MoveEntity.MIRROR_SHOT, MoveEntity.WORRY_SEED, MoveEntity.AROMATIC_MIST, MoveEntity.PAY_DAY, MoveEntity.POLLEN_PUFF);
+    public static EnumSet<MoveEntity> INCOMPLETE_MOVES = EnumSet.noneOf(MoveEntity.class);
 
     //Other Data Storage
-    public static final List<String> SOUND_BASED_MOVES = List.of("Boomburst", "Bug Buzz", "Chatter", "Clanging Scales", "Clangorous Soul", "Clangorous Soulblaze", "Confide", "Disarming Voice", "Echoed Voice", "Eerie Spell", "Grass Whistle", "Growl", "Heal Bell", "Howl", "Hyper Voice", "Metal Sound", "Noble Roar", "Overdrive", "Parting Shot", "Perish Song", "Relic Song", "Roar", "Round", "Screech", "Shadow Panic", "Sing", "Snarl", "Snore", "Sparkling Aria", "Supersonic", "Uproar");
-    public static final List<String> BITING_MOVES = List.of("Bite", "Crunch", "Fire Fang", "Fishious Rend", "Hyper Fang", "Ice Fang", "Jaw Lock", "Poison Fang", "Psychic Fangs", "Thunder Fang");
-    public static final List<String> PULSE_MOVES = List.of("Aura Sphere", "Dark Pulse", "Dragon Pulse", "Heal Pulse", "Origin Pulse", "Terrain Pulse", "Water Pulse");
-    public static final List<String> BALL_AND_BOMB_MOVES = List.of("Acid Spray", "Aura Sphere", "Barrage", "Beak Blast", "Bullet Seed", "Egg Bomb", "Electro Ball", "Energy Ball", "Focus Blast", "Gyro Ball", "Ice Ball", "Magnet Bomb", "Mist Ball", "Mud Bomb", "Octazooka", "Pollen Puff", "Pyro Ball", "Rock Blast", "Rock Wrecker", "Searing Shot", "Seed Bomb", "Shadow Ball", "Sludge Bomb", "Weather Ball", "Zap Cannon");
-    public static final List<String> OHKO_MOVES = List.of("Fissure", "Guillotine", "Horn Drill", "Sheer Cold");
-    public static final List<String> DIRECT_DAMAGE_MOVES = List.of("Bide", "Comeuppance", "Counter", "Dragon Rage", "Endeavor", "Final Gambit", "Guardian of Alola", "Metal Burst", "Mirror Coat", "Nature's Madness", "Night Shade", "Psywave", "Ruination", "Seismic Toss", "Sonic Boom", "Super Fang");
+    public static final EnumSet<MoveEntity> SOUND_BASED_MOVES = EnumSet.of(MoveEntity.BOOMBURST, MoveEntity.BUG_BUZZ, MoveEntity.CHATTER, MoveEntity.CLANGING_SCALES, MoveEntity.CLANGOROUS_SOUL, MoveEntity.CLANGOROUS_SOULBLAZE, MoveEntity.CONFIDE, MoveEntity.DISARMING_VOICE, MoveEntity.ECHOED_VOICE, MoveEntity.EERIE_SPELL, MoveEntity.GRASS_WHISTLE, MoveEntity.GROWL, MoveEntity.HEAL_BELL, MoveEntity.HOWL, MoveEntity.HYPER_VOICE, MoveEntity.METAL_SOUND, MoveEntity.NOBLE_ROAR, MoveEntity.OVERDRIVE, MoveEntity.PARTING_SHOT, MoveEntity.PERISH_SONG, MoveEntity.RELIC_SONG, MoveEntity.ROAR, MoveEntity.ROUND, MoveEntity.SCREECH, MoveEntity.SING, MoveEntity.SNARL, MoveEntity.SNORE, MoveEntity.SPARKLING_ARIA, MoveEntity.SUPERSONIC, MoveEntity.UPROAR);
+    public static final EnumSet<MoveEntity> BITING_MOVES = EnumSet.of(MoveEntity.BITE, MoveEntity.CRUNCH, MoveEntity.FIRE_FANG, MoveEntity.FISHIOUS_REND, MoveEntity.HYPER_FANG, MoveEntity.ICE_FANG, MoveEntity.JAW_LOCK, MoveEntity.POISON_FANG, MoveEntity.PSYCHIC_FANGS, MoveEntity.THUNDER_FANG);
+    public static final EnumSet<MoveEntity> PULSE_MOVES = EnumSet.of(MoveEntity.AURA_SPHERE, MoveEntity.DARK_PULSE, MoveEntity.DRAGON_PULSE, MoveEntity.HEAL_PULSE, MoveEntity.ORIGIN_PULSE, MoveEntity.TERRAIN_PULSE, MoveEntity.WATER_PULSE);
+    public static final EnumSet<MoveEntity> BALL_AND_BOMB_MOVES = EnumSet.of(MoveEntity.ACID_SPRAY, MoveEntity.AURA_SPHERE, MoveEntity.BARRAGE, MoveEntity.BEAK_BLAST, MoveEntity.BULLET_SEED, MoveEntity.EGG_BOMB, MoveEntity.ELECTRO_BALL, MoveEntity.ENERGY_BALL, MoveEntity.FOCUS_BLAST, MoveEntity.GYRO_BALL, MoveEntity.ICE_BALL, MoveEntity.MAGNET_BOMB, MoveEntity.MIST_BALL, MoveEntity.MUD_BOMB, MoveEntity.OCTAZOOKA, MoveEntity.POLLEN_PUFF, MoveEntity.PYRO_BALL, MoveEntity.ROCK_BLAST, MoveEntity.ROCK_WRECKER, MoveEntity.SEARING_SHOT, MoveEntity.SEED_BOMB, MoveEntity.SHADOW_BALL, MoveEntity.SLUDGE_BOMB, MoveEntity.WEATHER_BALL, MoveEntity.ZAP_CANNON);
+    public static final EnumSet<MoveEntity> OHKO_MOVES = EnumSet.of(MoveEntity.FISSURE, MoveEntity.GUILLOTINE, MoveEntity.HORN_DRILL, MoveEntity.SHEER_COLD);
+    public static final EnumSet<MoveEntity> DIRECT_DAMAGE_MOVES = EnumSet.of(MoveEntity.BIDE, MoveEntity.COMEUPPANCE, MoveEntity.COUNTER, MoveEntity.DRAGON_RAGE, MoveEntity.ENDEAVOR, MoveEntity.FINAL_GAMBIT, MoveEntity.GUARDIAN_OF_ALOLA, MoveEntity.METAL_BURST, MoveEntity.MIRROR_COAT, MoveEntity.NATURES_MADNESS, MoveEntity.NIGHT_SHADE, MoveEntity.PSYWAVE, MoveEntity.RUINATION, MoveEntity.SEISMIC_TOSS, MoveEntity.SONIC_BOOM, MoveEntity.SUPER_FANG);
+    public static final EnumSet<MoveEntity> PUNCH_MOVES = EnumSet.of(MoveEntity.BULLET_PUNCH, MoveEntity.DIZZY_PUNCH, MoveEntity.DRAIN_PUNCH, MoveEntity.DYNAMIC_PUNCH, MoveEntity.FIRE_PUNCH, MoveEntity.FOCUS_PUNCH, MoveEntity.ICE_PUNCH, MoveEntity.MACH_PUNCH, MoveEntity.MEGA_PUNCH, MoveEntity.METEOR_MASH, MoveEntity.POWER_UP_PUNCH, MoveEntity.SHADOW_PUNCH, MoveEntity.SKULL_BASH, MoveEntity.THUNDER_PUNCH);
 
-    private String name;
-    private MoveData data;
+    private final MoveEntity entity;
+    private final MoveData data;
     private Type type;
     private Category category;
     private int power;
     private int accuracy;
     private int priority;
-
-    public boolean isZMove;
-    public boolean isMaxMove;
 
     private double damageMultiplier;
     private double accuracyMultiplier;
@@ -47,38 +47,33 @@ public class Move
 
     public static void init()
     {
-        //Incomplete Moves
+        //Incomplete Moves TODO - Eventually remove
         INCOMPLETE_MOVES.clear();
 
-        for(String m : MoveData.MOVES) if(!WIP_MOVES.contains(m) && !Move.isImplemented(m) && !INCOMPLETE_MOVES.contains(m)) INCOMPLETE_MOVES.add(m);
-
-        INCOMPLETE_MOVES = INCOMPLETE_MOVES.stream().distinct().collect(Collectors.toList());
+        for(MoveEntity m : MoveEntity.values()) if(!WIP_MOVES.contains(m) && !Move.isImplemented(m) && !INCOMPLETE_MOVES.contains(m)) INCOMPLETE_MOVES.add(m);
     }
 
-    //From Data
-    public Move(String name)
+    public Move(MoveEntity entity)
     {
-        if(!Move.isMove(name)) name = "Tackle";
-
-        this.data = MoveData.get(name);
-        this.name = this.data.name;
+        this.entity = entity;
+        this.data = entity.data();
 
         this.setDefaultValues();
     }
 
-    private Move() {}
-
-    //For temporary one-time moves (mainly Raid Pokemon)
-    public static Move create(String name, Type type, Category category, int power, int accuracy)
+    public void setDefaultValues()
     {
-        Move m = new Move();
+        this.type = this.data.getType();
+        this.category = this.data.getCategory();
+        this.power = this.data.getBasePower();
+        this.accuracy = this.data.getBaseAccuracy();
+        this.priority = this.data.getPriority();
 
-        m.data = new MoveData(name, type, category, power, accuracy, new ArrayList<>(), false, false);
-        m.name = name;
+        this.hitCrit = false;
+        this.critChance = 1;
 
-        m.setDefaultValues();
-
-        return m;
+        this.damageMultiplier = 1.0;
+        this.accuracyMultiplier = 1.0;
     }
 
     public String logic(Pokemon user, Pokemon opponent, Duel duel)
@@ -95,48 +90,44 @@ public class Move
         }
         catch (Exception e)
         {
-            LoggerHelper.reportError(Move.class, "Could not find Move Method (" + this.getName() + ")", e);
+            LoggerHelper.reportError(Move.class, "Could not find Move Method for %s (Looking for: %s)".formatted(this.entity.toString(), moveName), e);
 
-            results = "An error occurred while using this move (" + this.getName() + "). Defaulting to Tackle..." + new Move("Tackle").logic(user, opponent, duel);
+            results = "An error occurred while using %s. Defaulting to Tackle...\n".formatted(this.entity.toString()) + new Move(MoveEntity.TACKLE).logic(user, opponent, duel);
         }
 
         return results;
     }
 
-    public static boolean isImplemented(String name)
+    public static boolean isImplemented(MoveEntity entity)
     {
         boolean implemented;
 
-        if(WIP_MOVES.contains(name)) implemented = false;
+        if(WIP_MOVES.contains(entity)) implemented = false;
         else
         {
-            Move m = new Move(name);
+            Move m = new Move(entity);
 
             try { m.getHostClass().getMethod(m.getMethodName(), Pokemon.class, Pokemon.class, Duel.class, Move.class); implemented = true; }
             catch (NoSuchMethodException e) { implemented = false; }
         }
-
-        //TODO: Temporarily Disabled: if(!implemented) LoggerHelper.warn(Move.class, "Unimplemented Move `" + name + "`!");
 
         return implemented;
     }
 
     public String getMethodName()
     {
-        String out = this.name;
+        String out = Global.normalize(this.entity.toString().replaceAll("_", " ")).replaceAll(" ", "");
 
-        if(this.name.equals("10,000,000 Volt Thunderbolt")) out = "TenMillionVoltThunderbolt";
-
-        out = out.replaceAll("\\s", "").replaceAll("'", "");
+        if(this.is(MoveEntity.TEN_MILLION_VOLT_THUNDERBOLT)) out = "TenMillionVoltThunderbolt";
 
         return out;
     }
 
     public Class<?> getHostClass()
     {
-        if(this.isZMove) return ZMoves.class;
-        else if(this.isMaxMove) return MaxMoves.class;
-        else return switch(this.data.type) {
+        if(this.isZMove()) return ZMoves.class;
+        else if(this.isMaxMove()) return MaxMoves.class;
+        else return switch(this.data.getType()) {
             case BUG -> BugMoves.class;
             case DARK -> DarkMoves.class;
             case DRAGON -> DragonMoves.class;
@@ -160,7 +151,7 @@ public class Move
 
     public String getMoveUsedResult(Pokemon user)
     {
-        return user.getName() + " used **" + this.name + "**! ";
+        return user.getName() + " used **" + this.getName() + "**! ";
     }
 
     public String getDamageResult(Pokemon opponent, int dmg)
@@ -175,10 +166,7 @@ public class Move
 
     private String getTypeEffectivenessText(Pokemon other, boolean forBattle)
     {
-        double e = TypeEffectiveness.getEffectiveness(other.getType()).get(this.type);
-
-        //Freeze Dry
-        if(this.name.equals("Freeze Dry")) e = this.getEffectivenessOverride(other);
+        double e = this.getTypeEffectiveness(other);
 
         if(e == 4.0) return forBattle ? "**Extremely Effective**" : "It's **extremely** effective (4x)!";
         else if(e == 2.0) return forBattle ? "**Super Effective**" : "It's **super** effective (2x)!";
@@ -211,9 +199,14 @@ public class Move
 
     //Other Methods
 
-    public boolean is(String... names)
+    public boolean is(EnumSet<MoveEntity> entities)
     {
-        return Stream.of(names).anyMatch(s -> s.equalsIgnoreCase(this.getName()));
+        return entities.contains(this.entity);
+    }
+
+    public boolean is(MoveEntity... entities)
+    {
+        return Stream.of(entities).anyMatch(e -> e == this.entity);
     }
 
     public boolean is(Category... categories)
@@ -226,19 +219,24 @@ public class Move
         return List.of(types).contains(this.getType());
     }
 
-    public boolean is(List<String> names)
+    public boolean isZMove()
     {
-        return names.contains(this.getName());
+        return this.entity.isZMove();
+    }
+
+    public boolean isMaxMove()
+    {
+        return this.entity.isMaxMove();
     }
 
     public boolean isContact()
     {
-        return this.is(Category.PHYSICAL) ||this.is("Petal Dance", "Trump Card", "Wring Out", "Grass Knot", "Draining Kiss", "Infestation");
+        return this.is(Category.PHYSICAL) || this.is(MoveEntity.PETAL_DANCE, MoveEntity.TRUMP_CARD, MoveEntity.WRING_OUT, MoveEntity.GRASS_KNOT, MoveEntity.DRAINING_KISS, MoveEntity.INFESTATION);
     }
 
     public static boolean isMove(String move)
     {
-        return MoveData.MOVES.stream().anyMatch(move::equalsIgnoreCase);
+        return MoveEntity.cast(move) != null;
     }
 
     public boolean isAccurate(Pokemon user, Pokemon opponent)
@@ -274,7 +272,7 @@ public class Move
         double critical = (r.nextInt(24) < this.critChance) ? 1.5 : 1.0;
         double random = (r.nextInt(16) + 85.0) / 100.0;
         double stab = user.isType(this.type) ? 1.5 : 1.0;
-        double type = TypeEffectiveness.getEffectiveness(opponent.getType()).get(this.type);
+        double type = this.getTypeEffectiveness(opponent);
         double burned = this.category.equals(Category.PHYSICAL) && user.hasStatusCondition(StatusCondition.BURNED) ? 0.5 : 1.0;
 
         if(critical > 1.0) hitCrit = true;
@@ -282,22 +280,19 @@ public class Move
         //Any nuances go here
 
         //Psyshock, Psystrike, Secret Sword
-        if(this.name.equals("Psyshock") || this.name.equals("Psystrike") || this.name.equals("Secret Sword")) defStat = opponent.getStat(Stat.DEF);
+        if(this.is(MoveEntity.PSYSHOCK, MoveEntity.PSYSTRIKE, MoveEntity.SECRET_SWORD)) defStat = opponent.getStat(Stat.DEF);
 
         //Photon Geyser, Light That Burns The Sky
-        if(this.name.equals("Photon Geyser") || this.name.equals("Light That Burns The Sky")) atkStat = Math.max(user.getStat(Stat.ATK), user.getStat(Stat.SPATK));
-
-        //Freeze Dry
-        if(this.name.equals("Freeze Dry")) type = this.getEffectivenessOverride(opponent);
+        if(this.is(MoveEntity.PHOTON_GEYSER, MoveEntity.LIGHT_THAT_BURNS_THE_SKY)) atkStat = Math.max(user.getStat(Stat.ATK), user.getStat(Stat.SPATK));
 
         //Gensect Z-Move: Elemental Techno Overdrive
-        if(this.name.equals("Elemental Techno Overdrive")) stab = Math.random() + 1;
+        if(this.is(MoveEntity.ELEMENTAL_TECHNO_OVERDRIVE)) stab = Math.random() + 1;
 
         //Body Press
-        if(this.name.equals("Body Press")) atkStat = user.getStat(Stat.DEF);
+        if(this.is(MoveEntity.BODY_PRESS)) atkStat = user.getStat(Stat.DEF);
 
         //Foul Play
-        if(this.name.equals("Foul Play")) atkStat = opponent.getStat(Stat.ATK);
+        if(this.is(MoveEntity.FOUL_PLAY)) atkStat = opponent.getStat(Stat.ATK);
 
         //Ability: Adaptability
         if(stab > 1.0 && user.hasAbility(Ability.ADAPTABILITY)) stab *= 2.0;
@@ -353,7 +348,7 @@ public class Move
         }
 
         //Augment: Meteor Shower
-        if(user.hasAugment(PokemonAugment.METEOR_SHOWER) && this.is("Meteor Mash"))
+        if(user.hasAugment(PokemonAugment.METEOR_SHOWER) && this.is(MoveEntity.METEOR_MASH))
         {
             power -= 20;
         }
@@ -373,37 +368,14 @@ public class Move
         return (int)(finalDMG + 0.5);
     }
 
-    private double getEffectivenessOverride(Pokemon other)
+    //Handles Moves with Custom Type Effectiveness Charts (ie, Freeze Dry, Flying Press)
+    private double getTypeEffectiveness(Pokemon other)
     {
-        return switch(this.getName()) {
-            case "Freeze Dry" -> Stream.of(Type.WATER, Type.GRASS, Type.GROUND, Type.FLYING, Type.DRAGON).anyMatch(other::isType) ? 2.0 : (Stream.of(Type.FIRE, Type.ICE, Type.STEEL).anyMatch(other::isType) ? 0.5 : 1.0);
-            case "Flying Press" -> Stream.of(Type.NORMAL, Type.GRASS, Type.ICE, Type.FIGHTING, Type.DARK).anyMatch(other::isType) ? 2.0 : (Stream.of(Type.ELECTRIC, Type.POISON, Type.FLYING, Type.PSYCHIC, Type.FAIRY).anyMatch(other::isType) ? 0.5 : (other.isType(Type.GHOST) ? 0.0 : 1.0));
-            default -> 1.0;
+        return switch(this.entity) {
+            case FREEZE_DRY -> Stream.of(Type.WATER, Type.GRASS, Type.GROUND, Type.FLYING, Type.DRAGON).anyMatch(other::isType) ? 2.0 : (Stream.of(Type.FIRE, Type.ICE, Type.STEEL).anyMatch(other::isType) ? 0.5 : 1.0);
+            case FLYING_PRESS -> Stream.of(Type.NORMAL, Type.GRASS, Type.ICE, Type.FIGHTING, Type.DARK).anyMatch(other::isType) ? 2.0 : (Stream.of(Type.ELECTRIC, Type.POISON, Type.FLYING, Type.PSYCHIC, Type.FAIRY).anyMatch(other::isType) ? 0.5 : (other.isType(Type.GHOST) ? 0.0 : 1.0));
+            default -> TypeEffectiveness.getEffectiveness(other.getType()).get(this.type);
         };
-    }
-
-    public void setDefaultValues()
-    {
-        this.type = this.data.type;
-        this.category = this.data.category;
-        this.power = this.data.basePower;
-        this.accuracy = this.data.baseAccuracy;
-
-        this.setPriority();
-
-        this.isZMove = this.data.isZMove;
-        this.isMaxMove = this.data.isMaxMove;
-
-        this.hitCrit = false;
-        this.critChance = 1;
-
-        this.damageMultiplier = 1.0;
-        this.accuracyMultiplier = 1.0;
-    }
-
-    public static String getRandomMove()
-    {
-        return MoveData.MOVES.get(new Random().nextInt(MoveData.MOVES.size()));
     }
 
     //Other
@@ -428,27 +400,14 @@ public class Move
         this.priority = priority;
     }
 
-    public void setPriority()
+    public MoveEntity getEntity()
     {
-        this.setPriority(switch(this.getName()) {
-            case "Helping Hand" -> 5;
-            case "Baneful Bunker", "Detect", "Endure", "Kings Shield", "Magic Coat", "Protect", "Spiky Shield", "Snatch" -> 4;
-            case "Crafty Shield", "Fake Out", "Quick Guard", "Wide Guard", "Spotlight" -> 3;
-            case "Ally Switch", "Extreme Speed", "Feint", "First Impression", "Follow Me", "Rage Powder" -> 2;
-            case "Accelerock", "Aqua Jet", "Baby Doll Eyes", "Bide", "Bullet Punch", "Ice Shard", "Ion Deluge", "Mach Punch", "Powder", "Quick Attack", "Shadow Sneak", "Sucker Punch", "Vacuum Wave", "Water Shuriken" -> 1;
-            case "Vital Throw" -> -1;
-            case "Beak Blast", "Focus Punch", "Shell Trap" -> -3;
-            case "Avalanche", "Revenge" -> -4;
-            case "Counter", "Mirror Coat" -> -5;
-            case "Circle Throw", "Dragon Tail", "Roar", "Whirlwind" -> -6;
-            case "Trick Room" -> -7;
-            default -> 0;
-        });
+        return this.entity;
     }
 
     public String getName()
     {
-        return this.name;
+        return this.data.getName();
     }
 
     public Type getType()

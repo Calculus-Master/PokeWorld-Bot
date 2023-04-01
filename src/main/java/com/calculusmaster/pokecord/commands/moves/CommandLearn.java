@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.Commands;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 public class CommandLearn extends Command
 {
-    public static Map<String, String> moveLearnRequests = new HashMap<>();
+    public static Map<String, MoveEntity> moveLearnRequests = new HashMap<>();
 
     public CommandLearn(MessageReceivedEvent event, String[] msg)
     {
@@ -35,16 +36,16 @@ public class CommandLearn extends Command
         }
 
         Pokemon selected = this.playerData.getSelectedPokemon();
-        String move = Global.normalize(this.getMultiWordContent(1));
+        MoveEntity move = MoveEntity.cast(Global.normalize(this.getMultiWordContent(1)));
 
         boolean autoReplace = false;
         if(this.isNumeric(1) && this.msg.length > 2 && this.getInt(1) > 0 && this.getInt(1) < 5)
         {
-            move = Global.normalize(this.getMultiWordContent(2));
+            move = MoveEntity.cast(Global.normalize(this.getMultiWordContent(2)));
             autoReplace = true;
         }
 
-        if(!Move.isMove(move)) this.response = "Invalid move name!";
+        if(move == null) this.response = "Invalid move name!";
         else if(!Move.isImplemented(move)) this.response = "`" + move + "` has not been implemented yet!";
         else if(!selected.availableMoves().contains(move)) this.response = selected.getName() + " does not know `" + move + "`";
         else

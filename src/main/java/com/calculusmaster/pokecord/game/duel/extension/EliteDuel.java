@@ -11,7 +11,9 @@ import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
+import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -80,13 +82,10 @@ public class EliteDuel extends TrainerDuel
     {
         Random r = new Random();
 
-        List<String> pool = new ArrayList<>();
-        pool.addAll(PokemonRarity.LEGENDARY);
-        pool.addAll(PokemonRarity.MYTHICAL);
-        pool.addAll(PokemonRarity.ULTRA_BEAST);
-        pool.addAll(PokemonRarity.MEGA);
+        List<PokemonEntity> pool = Arrays.stream(PokemonEntity.values())
+                .filter(e -> PokemonRarity.isLegendary(e) || PokemonRarity.isMythical(e) || PokemonRarity.isUltraBeast(e) || MegaEvolutionRegistry.isMega(e)).toList();
 
-        String[] team = new String[6];
+        PokemonEntity[] team = new PokemonEntity[6];
         for(int i = 0; i < 6; i++) team[i] = pool.get(r.nextInt(pool.size()));
 
         TrainerData elite = new TrainerData("Elite Trainer", -1, List.of(team), ZCrystal.values()[r.nextInt(18)], 100, 1.25F);

@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.commands.economy;
 
+import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.Command;
 import com.calculusmaster.pokecord.commands.CommandInvalid;
 import com.calculusmaster.pokecord.commands.pokemon.CommandInfo;
@@ -19,6 +20,7 @@ import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -96,7 +98,7 @@ public class CommandMarket extends Command
 
                 String title = "**Level " + chosen.getLevel() + " " + chosen.getName() + (chosen.hasNickname() ? " (" + chosen.getNickname() + ")" : "") + "**" + (chosen.isShiny() ? " :star2:" : "");
                 String market = "Market ID: " + entry.marketID + " | Price: " + entry.price + "\nSold by: " + entry.sellerName;
-                String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getData().growthRate, chosen.getLevel()) + " XP";
+                String exp = chosen.getLevel() == 100 ? " Max Level " : chosen.getExp() + " / " + GrowthRate.getRequiredExp(chosen.getData().getGrowthRate(), chosen.getLevel()) + " XP";
                 String gender = "Gender: " + Global.normalize(chosen.getGender().toString());
                 String type = "Type: " + chosen.getType().stream().map(Type::getStyledName).collect(Collectors.joining(" | "));
                 String nature = "Nature: " + Global.normalize(chosen.getNature().toString());
@@ -106,8 +108,14 @@ public class CommandMarket extends Command
                 this.embed.setTitle(title);
                 this.embed.setDescription(market + "\n" + exp + "\n" + gender + "\n" + type + "\n" + nature + "\n" + item + "\n\n" + stats);
                 this.color = chosen.getType().get(0).getColor();
-                this.embed.setImage(chosen.getImage());
                 this.embed.setFooter("Buy this pokemon with `p!market buy " + entry.marketID + "`!");
+
+                String image = Pokemon.getImage(chosen.getEntity(), chosen.isShiny(), chosen, null);
+                String imageAttachmentName = "info_" + chosen.getUUID() + ".png";
+                this.embed.setImage("attachment://" + imageAttachmentName);
+                this.event.getChannel().sendFiles(FileUpload.fromData(Pokecord.class.getResourceAsStream(image), imageAttachmentName)).setEmbeds(this.embed.build()).queue();
+
+                this.embed = null;
             }
             else this.embed.setDescription(CommandInvalid.getShort());
         }
@@ -137,7 +145,7 @@ public class CommandMarket extends Command
 
             pokemonSorter.sortSearchName(PokemonSorterFlag.NAME, (p, s) -> p.getName().toLowerCase().contains(s));
 
-            pokemonSorter.sortSearchName(PokemonSorterFlag.MOVE, (p, s) -> p.allMoves().contains(Global.normalize(s)));
+            pokemonSorter.sortSearchName(PokemonSorterFlag.MOVE, (p, s) -> p.getLevelUpMoves().contains(Global.normalize(s)));
 
             //Standards
             pokemonSorter.sortStandardNumeric();
