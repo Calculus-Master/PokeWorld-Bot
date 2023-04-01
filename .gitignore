@@ -3,9 +3,8 @@
 /.idea/
 /build/
 /build/classes/java/main/
-/src/main/resources/PokemonJSONs/
 /src/main/java/com/calculusmaster/pokecord/util/PrivateInfo.java
-/data/
-/incomplete_moves.txt
 /src/main/java/com/calculusmaster/pokecord/game/pokemon/data/PokeAPIHelper.java
+/incomplete_moves.txt
+/data/
 /src/main/resources/data/
