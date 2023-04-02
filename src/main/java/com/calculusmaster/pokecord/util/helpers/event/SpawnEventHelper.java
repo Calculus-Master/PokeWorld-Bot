@@ -155,7 +155,6 @@ public class SpawnEventHelper
         try
         {
             String subpath = "/" + Pokemon.getImage(spawn, shiny, null, null);
-            System.out.println(subpath);
             URI resourcesURI = SpawnEventHelper.class.getResource(subpath).toURI();
 
             BufferedImage img = ImageIO.read(resourcesURI.toURL()); //.getScaledInstance(300, 300, hint)

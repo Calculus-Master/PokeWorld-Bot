@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
+import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -70,6 +71,7 @@ public abstract class CommandV2
                 .map(String::toLowerCase)
                 .filter(s -> s.startsWith(input))
                 .limit(OptionData.MAX_CHOICES)
+                .map(Global::normalize)
                 .collect(Collectors.toList());
 
         //"Contains" Autocompletions – Only if there are not enough "Starts With" Autocompletions
@@ -78,6 +80,7 @@ public abstract class CommandV2
                 .filter(s -> s.contains(input))
                 .filter(s -> !options.contains(s))
                 .limit(OptionData.MAX_CHOICES - options.size())
+                .map(Global::normalize)
                 .forEach(options::add);
 
         return options;

@@ -7,10 +7,9 @@ import com.calculusmaster.pokecord.game.bounties.objectives.CatchPoolObjective;
 import com.calculusmaster.pokecord.game.bounties.objectives.CatchTypeObjective;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
+import com.calculusmaster.pokecord.game.player.PlayerPokedex;
 import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
-import com.calculusmaster.pokecord.mongo.CollectionsQuery;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
@@ -83,6 +82,22 @@ public class CommandCatch extends CommandV2
 
                 caught.setLevel(random.nextInt(baseLevel, maxLevel));
 
+                //PokeDex
+
+                PlayerPokedex pokedex = this.playerData.getPokedex();
+                int a = pokedex.add(caught.getEntity());
+
+                int credits = pokedex.getCollectionReward(caught.getEntity());
+                String creditsText = credits == 0 ? "" : "(**+" + credits + "c**)";
+                if(a == 1) extraResponses.add("*Added " + caught.getName() + " to your PokeDex.* " + creditsText);
+                else if(a % 5 == 0) extraResponses.add("*Reached new PokeDex Milestone for " + caught.getName() + ": **" + a + "** " + creditsText);
+
+                if(credits > 0) this.playerData.changeCredits(credits);
+
+                if(a >= 10) Achievements.REACHED_COLLECTION_MILESTONE_10.grant(this.player.getId(), event.getChannel().asTextChannel());
+                if(a >= 20) Achievements.REACHED_COLLECTION_MILESTONE_20.grant(this.player.getId(), event.getChannel().asTextChannel());
+                if(a >= 50) Achievements.REACHED_COLLECTION_MILESTONE_50.grant(this.player.getId(), event.getChannel().asTextChannel());
+
                 //Database Stuff
                 ThreadPoolHandler.CATCH.execute(() -> {
                     caught.upload();
@@ -90,7 +105,7 @@ public class CommandCatch extends CommandV2
 
                     if(this.playerData.getSettings().get(Settings.CLIENT_CATCH_AUTO_INFO, Boolean.class));
                     //TODO: Fix this with new Commands System
-                        //com.calculusmaster.pokecord.commands.Commands.execute("info", this.event, new String[]{"info", "latest"});
+                    //com.calculusmaster.pokecord.commands.Commands.execute("info", this.event, new String[]{"info", "latest"});
 
                     //Achievements TODO - Restructure Achievements
                     Achievements.CAUGHT_FIRST_POKEMON.grant(this.player.getId(), event.getChannel().asTextChannel());
@@ -107,74 +122,19 @@ public class CommandCatch extends CommandV2
                             case CATCH_POKEMON_POOL -> b.updateIf(((CatchPoolObjective)b.getObjective()).getPool().contains(caught.getEntity().toString()));
                         }
                     });
+
+                    //Update PokeDex
+                    this.playerData.updatePokedex();
                 });
 
-                //Collections TODO - Redo collections system
-                CollectionsQuery collection = new CollectionsQuery(caught.getName(), this.player.getId());
-
-                collection.increase();
-                int amount = collection.getCaughtAmount();
-                int[] rarityCredits = this.collectionCredits(caught.getRarity());
-
-                if(amount == -1 || amount == 0) this.response = "An error has occurred with collections!";
-                else if(amount % 5 == 0)
-                {
-                    int credits = rarityCredits[1] + rarityCredits[2] * (amount / 5 - 1);
-                    this.playerData.changeCredits(credits);
-
-                    extraResponses.add("Reached Collection Milestone for " + caught.getName() + ": **" + amount + "** (**+" + credits + "**c)!");
-                }
-                else if(amount == 1)
-                {
-                    int credits = rarityCredits[0];
-                    this.playerData.changeCredits(credits);
-
-                    extraResponses.add("Unlocked Collection for " + caught.getName() + " (**+" + credits + "**c)!");
-                }
-
-                if(amount >= 10) Achievements.REACHED_COLLECTION_MILESTONE_10.grant(this.player.getId(), event.getChannel().asTextChannel());
-                if(amount >= 20) Achievements.REACHED_COLLECTION_MILESTONE_20.grant(this.player.getId(), event.getChannel().asTextChannel());
-                if(amount >= 50) Achievements.REACHED_COLLECTION_MILESTONE_50.grant(this.player.getId(), event.getChannel().asTextChannel());
-
-
-                //Redeem Unlocks on High IV Catches
-                if(caught.getTotalIVRounded() >= 90 || (caught.getTotalIVRounded() >= 80 && new Random().nextInt(100) < 20))
-                {
-                    this.playerData.changeRedeems(1);
-
-                    this.playerData.getStatistics().incr(PlayerStatistic.NATURAL_REDEEMS_EARNED);
-
-                    extraResponses.add("You earned a redeem for catching a Pokemon with high IVs!");
-                }
-
                 //Main Response
-                this.response = "You caught a **Level " + caught.getLevel() + " " + caught.getName() + "**!";
-
-                if(!extraResponses.isEmpty())
-                {
-                    extraResponses.add(0, event.getMember().getAsMention());
-                    event.getChannel().sendMessage(String.join("\n", extraResponses)).queue();
-                }
+                this.response = "You caught a **Level " + caught.getLevel() + " " + caught.getName() + "**!"
+                        + (!extraResponses.isEmpty() ? "\n" + String.join("\n", extraResponses) : "");
 
                 SpawnEventHelper.clearSpawn(this.server.getId());
 
                 return true;
             }
         }
-    }
-
-    private int[] collectionCredits(PokemonRarity.Rarity r)
-    {
-        return switch(r) {
-            //Format: new int[] {<new collection>, <base for milestone>, <multiplier per milestone level>}
-            case COPPER -> new int[]{150, 200, 150};
-            case SILVER -> new int[]{175, 215, 165};
-            case GOLD -> new int[]{200, 240, 175};
-            case DIAMOND -> new int[]{225, 260, 190};
-            case PLATINUM -> new int[]{250, 300, 200};
-            case MYTHICAL -> new int[]{300, 350, 250};
-            case ULTRA_BEAST -> new int[]{325, 375, 275};
-            case LEGENDARY -> new int[]{500, 400, 750};
-        };
     }
 }

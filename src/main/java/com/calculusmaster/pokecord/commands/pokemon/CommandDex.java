@@ -11,7 +11,6 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
-import com.calculusmaster.pokecord.mongo.CollectionsQuery;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -76,7 +75,7 @@ public class CommandDex extends Command
         this.embed.setTitle("**" + data.getName() + (isShiny ? ":star2:" : "") + " (#" + data.getDex() + " – Gen. " + Global.getGeneration(data) + ")**");
         this.color = data.getTypes().get(0).getColor();
         this.embed.setImage(image.equals("") ? Pokemon.getWIPImage() : image);
-        this.embed.setFooter("You have collected " + new CollectionsQuery(pokemon, this.player.getId()).getCaughtAmount() + "!");
+        //this.embed.setFooter("You have collected " + new CollectionsQuery(pokemon, this.player.getId()).getCaughtAmount() + "!");
 
         this.event.getChannel().sendFiles(FileUpload.fromData(Pokecord.class.getResourceAsStream(image), imageAttachmentName)).setEmbeds(this.embed.build()).queue();
         this.embed = null;

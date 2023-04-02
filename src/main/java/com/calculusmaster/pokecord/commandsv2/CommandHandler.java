@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.commandsv2.move.CommandMoveInfo;
 import com.calculusmaster.pokecord.commandsv2.player.CommandStart;
 import com.calculusmaster.pokecord.commandsv2.pokemon.CommandCatch;
 import com.calculusmaster.pokecord.commandsv2.pokemon.CommandMega;
+import com.calculusmaster.pokecord.commandsv2.pokemon.CommandPokeDex;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
@@ -41,6 +42,7 @@ public class CommandHandler extends ListenerAdapter
     {
         CommandStart.init();
         CommandCatch.init();
+        CommandPokeDex.init();
 
         CommandBalance.init();
 

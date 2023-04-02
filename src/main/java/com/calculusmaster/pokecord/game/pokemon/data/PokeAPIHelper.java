@@ -72,6 +72,11 @@ public class PokeAPIHelper
 //        System.out.println(PokemonEntity.values()[new Random().nextInt(PokemonEntity.values().length)].data());
 
 
+        //Mongo.PlayerData.findOneAndUpdate(Filters.eq("playerID", "309135641453527040"), , new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER))
+
+//        long i = System.currentTimeMillis();
+//        Mongo.PlayerData.find(Filters.eq("playerID", "309135641453527040")).projection(Projections.fields(Projections.include("team"))).first();
+//        System.out.println((System.currentTimeMillis() - i) / 1000.);
     }
 
     private static void checkMissingAndUnusedImageFiles()

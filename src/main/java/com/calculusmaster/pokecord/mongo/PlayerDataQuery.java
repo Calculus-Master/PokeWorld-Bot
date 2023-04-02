@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.duel.trainer.TrainerData;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
+import com.calculusmaster.pokecord.game.player.PlayerPokedex;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -36,6 +37,7 @@ public class PlayerDataQuery extends MongoQuery
 {
     private Optional<PlayerSettingsQuery> settings = Optional.empty();
     private Optional<PlayerStatisticsQuery> statistics = Optional.empty();
+    private PlayerPokedex pokedex;
 
     public PlayerDataQuery(String playerID)
     {
@@ -95,6 +97,7 @@ public class PlayerDataQuery extends MongoQuery
                 .append("active_egg", "")
                 .append("owned_augments", new ArrayList<>())
                 .append("defeated_trainers", new ArrayList<>())
+                .append("pokedex", new Document())
 
                 ;
 
@@ -149,6 +152,18 @@ public class PlayerDataQuery extends MongoQuery
     {
         if(this.statistics.isEmpty()) this.statistics = Optional.of(new PlayerStatisticsQuery(this.getID()));
         return this.statistics.get();
+    }
+
+    //Pokedex (key: "pokedex")
+    public PlayerPokedex getPokedex()
+    {
+        if(this.pokedex == null) this.pokedex = new PlayerPokedex(this.document.get("pokedex", Document.class));
+        return this.pokedex;
+    }
+
+    public void updatePokedex()
+    {
+        this.update(Updates.set("pokedex", this.pokedex.serialize()));
     }
 
     //key: "playerID"
