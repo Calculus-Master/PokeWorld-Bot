@@ -42,7 +42,7 @@ public class CommandCatch extends CommandV2
     @Override
     protected boolean slashCommandLogic(SlashCommandInteractionEvent event)
     {
-        OptionMapping guessOption = Objects.requireNonNull(event.getOption("name"));
+        OptionMapping guessOption = Objects.requireNonNull(Objects.requireNonNull(event.getOption("name")));
 
         String guess = guessOption.getAsString();
         SpawnEventHelper.SpawnData spawnData = SpawnEventHelper.getSpawn(this.server.getId());

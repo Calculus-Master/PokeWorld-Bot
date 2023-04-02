@@ -2,8 +2,10 @@ package com.calculusmaster.pokecord.commandsv2;
 
 import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commandsv2.economy.CommandBalance;
+import com.calculusmaster.pokecord.commandsv2.misc.CommandDev;
 import com.calculusmaster.pokecord.commandsv2.move.CommandMoveInfo;
 import com.calculusmaster.pokecord.commandsv2.player.CommandStart;
+import com.calculusmaster.pokecord.commandsv2.pokemon.CommandCatch;
 import com.calculusmaster.pokecord.commandsv2.pokemon.CommandMega;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -37,10 +39,16 @@ public class CommandHandler extends ListenerAdapter
 
     public static void init()
     {
-        CommandBalance.init();
-        CommandMega.init();
-        CommandMoveInfo.init();
         CommandStart.init();
+        CommandCatch.init();
+
+        CommandBalance.init();
+
+        CommandMega.init();
+
+        CommandMoveInfo.init();
+
+        CommandDev.init();
 
         //TODO: Global Commands
         Pokecord.BOT_JDA.getGuildById(Pokecord.TEST_SERVER_ID).updateCommands().addCommands(COMMANDS.stream().map(CommandData::getSlashCommandData).toList()).queue();

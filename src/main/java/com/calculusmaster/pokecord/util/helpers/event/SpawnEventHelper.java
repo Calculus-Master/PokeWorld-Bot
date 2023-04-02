@@ -31,6 +31,25 @@ public class SpawnEventHelper
     private static final Map<String, SpawnData> SERVER_SPAWNS = new HashMap<>();
     private static final Map<String, ScheduledFuture<?>> SCHEDULERS = new HashMap<>();
 
+    public static List<String> getSnapshot()
+    {
+        List<String> out = new ArrayList<>();
+        out.add("Count: " + SCHEDULERS.size());
+
+        SCHEDULERS.keySet().forEach(serverID -> {
+            SpawnData d = SERVER_SPAWNS.get(serverID);
+
+            long delay = SCHEDULERS.get(serverID).getDelay(TimeUnit.SECONDS);
+            int min = (int)delay / 60;
+            int sec = (int)delay % 60;
+
+            String line = "Server: %s | Spawn: %s %s | T-%s".formatted(serverID, d == null ? "None" : d.getSpawn().getName(), d == null || !d.isShiny() ? "" : " (Shiny)", min + "m" + sec + "s");
+            out.add(line);
+        });
+
+        return out;
+    }
+
     public static void start(Guild g)
     {
         start(g, SPAWN_INTERVAL);
@@ -100,17 +119,20 @@ public class SpawnEventHelper
         //Check if spawn channels are available
         if(channels.isEmpty())
         {
-            LoggerHelper.warn(SpawnEventHelper.class, g.getName() + " has no Spawn Channels! Skipping spawn event...");
+            LoggerHelper.info(SpawnEventHelper.class, "Skipped Spawn Event! Reason: No Spawn Channels | Server: %s (%s)".formatted(g.getName(), g.getId()));
             return;
         }
-
         //No spawns during Raids
-        if(RaidEventHelper.hasRaid(g.getId())) return;
-
+        else if(RaidEventHelper.hasRaid(g.getId()))
+        {
+            LoggerHelper.info(SpawnEventHelper.class, "Skipped Spawn Event! Reason: Active Raid | Server: %s (%s)".formatted(g.getName(), g.getId()));
+            return;
+        }
         //Random chance to convert this spawn into a Raid Event
-        if(random.nextInt(100) < RAID_CHANCE)
+        else if(random.nextInt(100) < RAID_CHANCE)
         {
             RaidEventHelper.start(g, channels.get(0));
+            LoggerHelper.info(SpawnEventHelper.class, "New Raid Event! Server: %s (%s)".formatted(g.getName(), g.getId()));
             return;
         }
 
@@ -132,10 +154,10 @@ public class SpawnEventHelper
 
         try
         {
-            String subpath = Pokemon.getImage(spawn, shiny, null, null) + ".png";
+            String subpath = "/" + Pokemon.getImage(spawn, shiny, null, null);
+            System.out.println(subpath);
             URI resourcesURI = SpawnEventHelper.class.getResource(subpath).toURI();
 
-            int hint = BufferedImage.TYPE_INT_ARGB;
             BufferedImage img = ImageIO.read(resourcesURI.toURL()); //.getScaledInstance(300, 300, hint)
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             ImageIO.write(img, "png", out);

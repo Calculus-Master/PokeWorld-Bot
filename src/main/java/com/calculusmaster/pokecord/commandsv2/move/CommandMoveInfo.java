@@ -14,10 +14,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CommandMoveInfo extends CommandV2
@@ -38,9 +35,7 @@ public class CommandMoveInfo extends CommandV2
     @Override
     protected boolean slashCommandLogic(SlashCommandInteractionEvent event)
     {
-        OptionMapping moveNameOption = event.getOption("move");
-
-        if(moveNameOption == null) return this.error("You must specify a move name.");
+        OptionMapping moveNameOption = Objects.requireNonNull(event.getOption("move"));
 
         String moveName = moveNameOption.getAsString();
         MoveEntity moveEntity = MoveEntity.cast(moveName);

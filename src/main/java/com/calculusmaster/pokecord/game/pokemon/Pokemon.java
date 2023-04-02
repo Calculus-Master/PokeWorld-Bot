@@ -224,6 +224,7 @@ public class Pokemon
                 .append("ivs", this.ivs.serialized())
                 .append("evs", this.evs.serialized())
                 .append("moves", this.moves.stream().map(Enum::toString).toList())
+                .append("abilities", this.abilities.stream().map(Enum::toString).toList())
                 .append("item", this.item.toString())
                 .append("tm", this.tm == null ? "" : this.tm.toString())
                 .append("augments", this.augments.stream().map(Enum::toString).toList())
