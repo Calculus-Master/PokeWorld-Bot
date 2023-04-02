@@ -2,8 +2,13 @@ package com.calculusmaster.pokecord.commandsv2.pokemon;
 
 import com.calculusmaster.pokecord.commandsv2.CommandData;
 import com.calculusmaster.pokecord.commandsv2.CommandV2;
+import com.calculusmaster.pokecord.game.enums.elements.Ability;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.player.PlayerPokedex;
+import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -13,11 +18,14 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.api.utils.FileUpload;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class CommandPokeDex extends CommandV2
 {
@@ -33,7 +41,8 @@ public class CommandPokeDex extends CommandV2
                         .slash("pokedex", "View your PokeDex and information about specific Pokemon!")
                         .addSubcommands(
                                 new SubcommandData("info", "View information about a specific Pokemon.")
-                                        .addOption(OptionType.STRING, "name", "Name of the Pokemon.", true, true),
+                                        .addOption(OptionType.STRING, "name", "Name of the Pokemon.", true, true)
+                                        .addOption(OptionType.BOOLEAN, "shiny", "Whether or not to display the Pokemon's Shiny form picture.", false, false),
                                 new SubcommandData("view", "View your PokeDex and how many Pokemon you've collected.")
                                         .addOption(OptionType.INTEGER, "page", "Page number of your PokeDex.", false, false)
                         )
@@ -48,7 +57,70 @@ public class CommandPokeDex extends CommandV2
 
         if(subcommand.equals("info"))
         {
+            OptionMapping nameOption = Objects.requireNonNull(event.getOption("name"));
+            OptionMapping shinyOption = event.getOption("shiny");
 
+            PokemonEntity entity = PokemonEntity.cast(nameOption.getAsString());
+            if(entity == null) return this.error("\"" + nameOption.getAsString() + "\" is not a valid Pokemon name.");
+
+            PokemonData data = entity.data();
+            boolean shiny = shinyOption != null && shinyOption.getAsBoolean();
+
+            String generation = "Generation " + Global.getGeneration(data);
+            String genus = data.getGenus().isEmpty() ? "Unknown Species" : data.getGenus();
+            String flavorText = data.getFlavorText().isEmpty() ? "" : data.getFlavorText().get(this.random.nextInt(data.getFlavorText().size()));
+
+            String height = BigDecimal.valueOf(data.getHeight()).stripTrailingZeros() + "m";
+            String weight = BigDecimal.valueOf(data.getWeight()).stripTrailingZeros() + "kg";
+            String type = data.getTypes().stream().map(Type::getStyledName).collect(Collectors.joining("\n"));
+
+            String growthRate = Global.normalize(data.getGrowthRate().toString().replaceAll("_", " "));
+            String expYield = String.valueOf(data.getBaseExperience());
+            String evYield = data.getEVYield().get().entrySet().stream().filter(e -> e.getValue() > 0).map(e -> e.getValue() + " " + e.getKey().toString()).collect(Collectors.joining(", "));
+
+            String eggGroups = data.getEggGroups().stream().map(eg -> Global.normalize(eg.toString().replaceAll("_", " "))).collect(Collectors.joining(", "));
+            String genderRate = data.getGenderRate() == -1 ? "N/A" : (BigDecimal.valueOf(100 * data.getGenderRate() / 8.).stripTrailingZeros() + "% Male | " + BigDecimal.valueOf(100 * (8 - data.getGenderRate()) / 8.).stripTrailingZeros() + "% Female");
+            String eggMoves = data.getEggMoves().isEmpty() ? "None" : data.getEggMoves().stream().map(e -> e.data().getName()).collect(Collectors.joining(", "));
+
+            String mainAbilities = data.getMainAbilities().stream().map(Ability::getName).collect(Collectors.joining(", "));
+            String hiddenAbilities = data.getHiddenAbilities().isEmpty() ? "None" : data.getHiddenAbilities().stream().map(Ability::getName).collect(Collectors.joining(", "));
+            String tms = data.getTMs().isEmpty() ? "None" : data.getTMs().stream().filter(tm -> TM.cast(tm.data().getName()) != null).map(tm -> TM.cast(tm.data().getName()).toString()).collect(Collectors.joining(", "));
+
+            String baseStats = data.getBaseStats().get().entrySet().stream().map(e -> "**" + e.getKey().name + "**: " + e.getValue()).collect(Collectors.joining("\n"));
+
+            this.embed
+                    .setTitle("PokeDex Entry #" + entity.getDex() + ": " + entity.getName() + (shiny ? "🌟" : ""))
+                    .setDescription("""
+                            %s
+                            __%s__
+                            *%s*
+                            """.formatted(generation, genus, flavorText))
+                    .addField("Height", height, true)
+                    .addField("Weight", weight, true)
+                    .addField("Type", type, true)
+                    .addField("Experience & Yields", """
+                            **Growth Rate**: %s
+                            **Experience Yield**: %s
+                            **EV Yield**: %s
+                            """.formatted(growthRate, expYield, evYield), false)
+                    .addField("Breeding Information", """
+                            **Egg Groups**: %s
+                            **Gender Rate**: %s
+                            **Egg Moves**: %s
+                            """.formatted(eggGroups, genderRate, eggMoves), false)
+                    .addField("Abilities & TMs", """
+                            **Main Abilities**: %s
+                            **Hidden Abilities**: %s
+                            
+                            **TMs**: %s
+                            """.formatted(mainAbilities, hiddenAbilities, tms.isEmpty() ? "None" : tms), false)
+                    .addField("Base Stats", baseStats, false)
+                    .setColor(data.getTypes().get(0).getColor())
+            ;
+
+            FileUpload image = this.setEmbedPokemonImage("/" + Pokemon.getImage(entity, shiny, null, null), "dex_pokemon.png");
+            event.replyFiles(image).setEmbeds(this.embed.build()).queue();
+            this.embed = null;
         }
         else if(subcommand.equals("view"))
         {
@@ -115,7 +187,7 @@ public class CommandPokeDex extends CommandV2
     {
         if(event.getFocusedOption().getName().equals("name"))
         {
-            String currentInput = event.getFocusedOption().getName();
+            String currentInput = event.getFocusedOption().getValue();
 
             List<String> pokemon = Arrays.stream(PokemonEntity.values()).map(PokemonEntity::getName).toList();
 

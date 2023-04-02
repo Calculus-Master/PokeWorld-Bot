@@ -1,10 +1,10 @@
 package com.calculusmaster.pokecord.commandsv2;
 
+import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
-import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -17,10 +17,12 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.EntitySelectInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -38,6 +40,8 @@ public abstract class CommandV2
     protected boolean ephemeral;
     protected EmbedBuilder embed;
     protected String response;
+
+    protected final Random random = new Random();
 
     public CommandV2()
     {
@@ -59,31 +63,36 @@ public abstract class CommandV2
 
     protected boolean error() //Default Error method
     {
-        return this.error("An error has occurred. Please report this with as much detail as possible in `/report`! For example, include the UUID of your selected Pokemon, the command or activity you were using, etc.");
+        return this.error("An error has occurred. Please report this with as much detail as possible using `/report`! For example, include the UUID of your selected Pokemon, the command or activity you were using, etc.");
     }
 
     protected List<String> getAutocompleteOptions(String currentInput, List<String> sourceList)
     {
         String input = currentInput.toLowerCase();
 
+        //If empty, return a random assortment of options
+        if(currentInput.isEmpty()) return sourceList.stream().limit(OptionData.MAX_CHOICES).toList();
+
         //"Starts With" Autocompletions
         List<String> options = sourceList.stream()
-                .map(String::toLowerCase)
-                .filter(s -> s.startsWith(input))
+                .filter(s -> s.toLowerCase().startsWith(input))
                 .limit(OptionData.MAX_CHOICES)
-                .map(Global::normalize)
                 .collect(Collectors.toList());
 
         //"Contains" Autocompletions – Only if there are not enough "Starts With" Autocompletions
         if(options.size() < OptionData.MAX_CHOICES) sourceList.stream()
-                .map(String::toLowerCase)
-                .filter(s -> s.contains(input))
+                .filter(s -> s.toLowerCase().contains(input))
                 .filter(s -> !options.contains(s))
                 .limit(OptionData.MAX_CHOICES - options.size())
-                .map(Global::normalize)
                 .forEach(options::add);
 
         return options;
+    }
+
+    protected FileUpload setEmbedPokemonImage(String fileName, String attachmentName)
+    {
+        this.embed.setImage("attachment://" + attachmentName);
+        return FileUpload.fromData(Objects.requireNonNull(Pokecord.class.getResourceAsStream(fileName)), attachmentName);
     }
 
     //Internal

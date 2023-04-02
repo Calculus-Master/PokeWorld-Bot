@@ -79,6 +79,13 @@ public class PokeAPIHelper
 //        System.out.println((System.currentTimeMillis() - i) / 1000.);
     }
 
+    private static void timed(Runnable r)
+    {
+        long i = System.currentTimeMillis();
+        r.run();
+        System.out.println((System.currentTimeMillis() - i) / 1000.);
+    }
+
     private static void checkMissingAndUnusedImageFiles()
     {
         String normalFolder = "/Users/saptarshimallick/Desktop/Pokemon Images/Pokemon Normal/";

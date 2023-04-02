@@ -11,7 +11,7 @@ public enum Feature
     VIEW_LEVEL("View your Pokemon Mastery Level"),
     VIEW_TIPS("View helpful tips for your adventure"),
     ACCESS_SETTINGS("Access your player settings (and if applicable, server settings)"),
-    VIEW_DEX_INFO("View Pokedex information about any Pokemon"),
+    VIEW_DEX_INFO("View your PokeDex, and PokeDex information about specific Pokemon"),
     VIEW_UNIQUE_INFO("View specific information about any of your Pokemon"),
     VIEW_SERVER_INFO("View information about the current server"),
     VIEW_PROFILE("View your player profile"),
