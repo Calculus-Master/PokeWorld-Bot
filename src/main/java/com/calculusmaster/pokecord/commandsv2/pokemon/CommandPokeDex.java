@@ -10,6 +10,7 @@ import com.calculusmaster.pokecord.game.player.PlayerPokedex;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
+import com.calculusmaster.pokecord.game.pokemon.evolution.*;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
@@ -86,6 +87,23 @@ public class CommandPokeDex extends CommandV2
             String hiddenAbilities = data.getHiddenAbilities().isEmpty() ? "None" : data.getHiddenAbilities().stream().map(Ability::getName).collect(Collectors.joining(", "));
             String tms = data.getTMs().isEmpty() ? "None" : data.getTMs().stream().filter(tm -> TM.cast(tm.data().getName()) != null).map(tm -> TM.cast(tm.data().getName()).toString()).collect(Collectors.joining(", "));
 
+            String mega = "None";
+            if(MegaEvolutionRegistry.isMega(entity)) mega = "Mega-Evolution of *" + MegaEvolutionRegistry.getData(entity).getBase().getName() + "*";
+            else if(MegaEvolutionRegistry.hasMegaData(entity))
+            {
+                MegaEvolutionRegistry.MegaEvolutionData megaData = MegaEvolutionRegistry.getData(entity);
+                if(megaData.isSingle()) mega = "*" + megaData.getMega().getName() + "*";
+                else mega = "*" + megaData.getMegaX().getName() + "* or *" + megaData.getMegaY().getName() + "*";
+            }
+            String forms = FormRegistry.hasFormData(entity) ? FormRegistry.getFormData(entity).getForms().stream().filter(e -> e != entity).map(PokemonEntity::getName).collect(Collectors.joining(", ")) : "None";
+            String evolution = "Does not evolve";
+            if(EvolutionRegistry.hasEvolutionData(entity))
+            {
+                List<EvolutionData> evoData = EvolutionRegistry.getEvolutionData(entity);
+                evolution = evoData.stream().map(eData -> "*" + eData.getTarget().getName() + "*").collect(Collectors.joining(" | "));
+            }
+            String gmax = GigantamaxRegistry.hasGMax(entity) ? "*Exists*" : "None";
+
             String baseStats = data.getBaseStats().get().entrySet().stream().map(e -> "**" + e.getKey().name + "**: " + e.getValue()).collect(Collectors.joining("\n"));
 
             this.embed
@@ -114,6 +132,12 @@ public class CommandPokeDex extends CommandV2
                             
                             **TMs**: %s
                             """.formatted(mainAbilities, hiddenAbilities, tms.isEmpty() ? "None" : tms), false)
+                    .addField("Evolution & Forms", """
+                            **Evolution**: %s
+                            **Forms**: %s
+                            **Mega-Evolution**: %s
+                            **Gigantamax Form**: %s
+                            """.formatted(evolution, forms, mega, gmax), false)
                     .addField("Base Stats", baseStats, false)
                     .setColor(data.getTypes().get(0).getColor())
             ;

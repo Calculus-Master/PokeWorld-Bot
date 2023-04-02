@@ -622,6 +622,15 @@ public class EvolutionRegistry
     }
 
     //Access
+    public static boolean hasEvolutionData(PokemonEntity entity)
+    {
+        return EVOLUTION_DATA.containsKey(entity) && EvolutionRegistry.getEvolutionData(entity).size() > 0;
+    }
+
+    public static List<EvolutionData> getEvolutionData(PokemonEntity entity)
+    {
+        return EVOLUTION_DATA.get(entity);
+    }
 
     //Registering
     private static void register(PokemonEntity source, PokemonEntity target, EvolutionTrigger trigger1, EvolutionTrigger... triggers)
