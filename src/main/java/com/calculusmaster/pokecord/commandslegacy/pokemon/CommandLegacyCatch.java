@@ -1,0 +1,124 @@
+package com.calculusmaster.pokecord.commandslegacy.pokemon;
+
+import com.calculusmaster.pokecord.commandslegacy.CommandLegacy;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
+import com.calculusmaster.pokecord.util.Global;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+
+public class CommandLegacyCatch extends CommandLegacy
+{
+    public CommandLegacyCatch(MessageReceivedEvent event, String[] msg)
+    {
+        super(event, msg);
+    }
+
+    @Override
+    public CommandLegacy runCommand()
+    {
+        this.response = "The text-based Catch command has been deprecated. Please use `/catch` instead!";
+//        if(this.msg.length < 2)
+//        {
+//            this.embed.setDescription(CommandInvalid.getShort());
+//            return this;
+//        }
+//
+//        String spawn = SpawnEventHelper.getSpawn(this.server.getId());
+//        String guess = this.getPokemon();
+//
+//        if(spawn.isEmpty()) this.response = "Nothing has spawned yet in this server!";
+//        else if(!guess.equals(spawn)) this.response = "Incorrect name!";
+//        else
+//        {
+//            String poke = spawn.contains("Shiny") ? spawn.substring("Shiny ".length()) : spawn;
+//
+//            Pokemon caught = Pokemon.create(poke);
+//            caught.setLevel(new SplittableRandom().nextInt(1, 15));
+//            if(!caught.isShiny()) caught.setShiny(spawn.contains("Shiny"));
+//
+//            //Longest 2 methods in this entire command (~100-200 ms each) - Thread Pool?
+//            ThreadPoolHandler.CATCH.execute(() -> {
+//                caught.upload();
+//                this.playerData.addPokemon(caught.getUUID());
+//
+//                if(this.playerData.getSettings().get(Settings.CLIENT_CATCH_AUTO_INFO, Boolean.class))
+//                    Commands.execute("info", this.event, new String[]{"info", "latest"});
+//            });
+//
+//            //Collections
+//            CollectionsQuery collection = new CollectionsQuery(caught.getName(), this.player.getId());
+//
+//            collection.increase();
+//            int amount = collection.getCaughtAmount();
+//            int[] rarityCredits = this.collectionCredits(PokemonRarity.POKEMON_RARITIES.getOrDefault(caught.getName(), PokemonRarity.Rarity.EXTREME));
+//
+//            if(amount == -1 || amount == 0) this.response = "An error has occurred with collections!";
+//            else if(amount % 5 == 0)
+//            {
+//                int credits = rarityCredits[1] + rarityCredits[2] * (amount / 5 - 1);
+//                this.playerData.changeCredits(credits);
+//
+//                this.response = "Reached Collection Milestone for " + caught.getName() + ": **" + amount + "** (**" + credits + "**c)!";
+//            }
+//            else if(amount == 1)
+//            {
+//                int credits = rarityCredits[0];
+//                this.playerData.changeCredits(credits);
+//
+//                this.response = "Unlocked Collection for " + caught.getName() + " (**" + credits + "**c)!";
+//            }
+//
+//            if(amount >= 10) Achievements.grant(this.player.getId(), Achievements.REACHED_COLLECTION_MILESTONE_10, this.event);
+//            if(amount >= 20) Achievements.grant(this.player.getId(), Achievements.REACHED_COLLECTION_MILESTONE_20, this.event);
+//            if(amount >= 50) Achievements.grant(this.player.getId(), Achievements.REACHED_COLLECTION_MILESTONE_50, this.event);
+//
+//            if(caught.getTotalIVRounded() >= 90 || (caught.getTotalIVRounded() >= 80 && new Random().nextInt(100) < 20))
+//            {
+//                this.playerData.changeRedeems(1);
+//
+//                this.playerData.getStatistics().incr(PlayerStatistic.NATURAL_REDEEMS_EARNED);
+//
+//                this.response = "You earned a redeem for catching a Pokemon with high IVs!";
+//            }
+//
+//            //Statistics
+//            this.playerData.getStatistics().incr(PlayerStatistic.POKEMON_CAUGHT);
+//
+//            Achievements.grant(this.player.getId(), Achievements.CAUGHT_FIRST_POKEMON, this.event);
+//
+//            this.playerData.updateBountyProgression(b -> {
+//                switch(b.getType()) {
+//                    case CATCH_POKEMON -> b.update();
+//                    case CATCH_POKEMON_TYPE -> b.updateIf(caught.isType(((CatchTypeObjective)b.getObjective()).getType()));
+//                    case CATCH_POKEMON_NAME -> b.updateIf(caught.getName().equals(((CatchNameObjective)b.getObjective()).getName()));
+//                    case CATCH_POKEMON_POOL -> b.updateIf(((CatchPoolObjective)b.getObjective()).getPool().contains(caught.getName()));
+//                }
+//            });
+//
+//            this.response = "You caught a **Level " + caught.getLevel() + " " + caught.getName() + "** (Collection: " + amount + ")!";
+//
+//            SpawnEventHelper.clearSpawn(this.server.getId());
+//        }
+
+        return this;
+    }
+
+    private String getPokemon()
+    {
+        return Global.normalize(this.getMultiWordContent(1));
+    }
+
+    private int[] collectionCredits(PokemonRarity.Rarity r)
+    {
+        return switch(r) {
+            //Format: new int[] {<new collection>, <base for milestone>, <multiplier per milestone level>}
+            case COPPER -> new int[]{150, 200, 150};
+            case SILVER -> new int[]{175, 215, 165};
+            case GOLD -> new int[]{200, 240, 175};
+            case DIAMOND -> new int[]{225, 260, 190};
+            case PLATINUM -> new int[]{250, 300, 200};
+            case MYTHICAL -> new int[]{300, 350, 250};
+            case ULTRA_BEAST -> new int[]{350, 400, 300};
+            case LEGENDARY -> new int[]{500, 400, 750};
+        };
+    }
+}

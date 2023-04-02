@@ -1,80 +1,93 @@
 package com.calculusmaster.pokecord.commands.pokemon;
 
-import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.commands.CommandData;
+import com.calculusmaster.pokecord.commands.PokeWorldCommand;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
+import com.calculusmaster.pokecord.game.pokemon.evolution.MegaChargeManager;
+import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
-public class CommandMega extends Command
+public class CommandMega extends PokeWorldCommand
 {
-    public CommandMega(MessageReceivedEvent event, String[] msg)
+    public static void init()
     {
-        super(event, msg);
+        CommandData
+                .create("mega")
+                .withConstructor(CommandMega::new)
+                .withFeature(Feature.ACQUIRE_POKEMON_MEGA_EVOLUTIONS)
+                .withCommand(Commands
+                        .slash("mega", "Mega-Evolve your Pokemon!")
+                        .addOption(OptionType.STRING, "type", "Mega-Evolve into an X or Y form, if available.", false, true)
+                )
+                .register();
     }
 
     @Override
-    public Command runCommand()
+    protected boolean slashCommandLogic(SlashCommandInteractionEvent event)
     {
-        if(this.insufficientMasteryLevel(Feature.ACQUIRE_POKEMON_MEGA_EVOLUTIONS)) return this.invalidMasteryLevel(Feature.ACQUIRE_POKEMON_MEGA_EVOLUTIONS);
+        Pokemon p = this.playerData.getSelectedPokemon();
 
-        this.response = "The text-based Mega-Evolution command is currently deprecated. Please use `/mega`.";
+        if(!MegaEvolutionRegistry.hasMegaData(p.getEntity())) return this.error("This Pokemon cannot Mega Evolve.");
+        else
+        {
+            OptionMapping optionXY = event.getOption("type");
+            MegaEvolutionRegistry.MegaEvolutionData megaData = MegaEvolutionRegistry.getData(p.getEntity());
 
-//        Pokemon selected = this.playerData.getSelectedPokemon();
-//
-//        if(selected.getName().contains("Mega") || selected.getName().contains("Primal"))
-//        {
-//            String mega = selected.getName();
-//            selected.removeMegaEvolution();
-//
-//            MegaChargeManager.removeBlocking(selected.getUUID());
-//
-//            this.response = mega + " has de-evolved into " + selected.getName() + "!";
-//        }
-//        else
-//        {
-//            if(selected.getMegaList().size() > 0 && selected.getMegaCharges() == 0)
-//                this.response = selected.getName() + " cannot Mega-Evolve! It has no Mega Charges available currently.";
-//            else if(selected.getMegaList().size() == 1)
-//            {
-//                String mega = selected.getMegaList().get(0);
-//
-//                if(this.playerData.getOwnedMegas().contains(mega))
-//                {
-//                    this.embed.setDescription(selected.getName() + " mega evolved into " + selected.getMegaList().get(0) + "!");
-//
-//                    selected.changeForm(selected.getMegaList().get(0));
-//                    selected.updateName();
-//
-//                    MegaChargeManager.blockCharging(selected.getUUID());
-//                }
-//                else this.embed.setDescription("You don't own this Mega Evolution!");
-//            }
-//            else if(selected.getMegaList().size() == 2)
-//            {
-//                if(this.msg.length != 2)
-//                {
-//                    this.embed.setDescription("You need to specific which Mega to evolve into! Either use p!mega x or p!mega y");
-//                    return this;
-//                }
-//
-//                String chosenMega = selected.getMegaList().get(this.msg[1].equals("x") ? 0 : 1);
-//
-//                if(this.playerData.getOwnedMegas().contains(chosenMega))
-//                {
-//                    this.embed.setDescription(selected.getName() + " mega evolved into " + chosenMega + "!");
-//
-//                    selected.changeForm(chosenMega);
-//                    selected.updateName();
-//
-//                    MegaChargeManager.blockCharging(selected.getUUID());
-//                }
-//                else this.embed.setDescription("You don't own this Mega Evolution!");
-//            }
-//            else
-//            {
-//                this.embed.setDescription("Either your Pokemon cannot mega evolve, or you do not own the Mega Evolution!");
-//            }
-//        }
+            if(MegaEvolutionRegistry.isMega(p.getEntity()))
+            {
+                this.response = p.getName() + " has reverted from its Mega Evolution into " + megaData.getBase().getName() + "!";
 
-        return this;
+                p.removeMegaEvolution();
+
+                MegaChargeManager.removeBlocking(p.getUUID());
+            }
+            else
+            {
+                PokemonEntity target;
+
+                if(megaData.isSingle()) target = megaData.getMega();
+                else if(megaData.isXY())
+                {
+                    if(optionXY == null) return this.error(p.getName() + " has both an X and a Y Mega-Evolution. You must specify which one to Mega-Evolve into.");
+                    else if(!optionXY.getAsString().equalsIgnoreCase("X") && !optionXY.getAsString().equalsIgnoreCase("Y")) return this.error("Invalid Mega Form input. Allowed values: **X**, **Y**.");
+                    else target = optionXY.getAsString().equalsIgnoreCase("X") ? megaData.getMegaX() : megaData.getMegaY();
+                }
+                else
+                {
+                    LoggerHelper.error(CommandMega.class, "Mega Evolution Data for " + p.getName() + " returned false for both #isSingle and #isXY.");
+                    return this.error();
+                }
+
+                if(this.playerData.getOwnedMegas().contains(target))
+                {
+                    this.response = p.getName() + " has Mega-Evolved into " + megaData.getMega().getName() + "!";
+
+                    p.changePokemon(megaData.getMega());
+                    p.updateEntity();
+
+                    MegaChargeManager.blockCharging(p.getUUID());
+                }
+                else return this.error("You do not own the Mega Evolution: " + megaData.getMega().getName() + ".");
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    protected boolean autocompleteLogic(CommandAutoCompleteInteractionEvent event)
+    {
+        if(event.getFocusedOption().getName().equals("type"))
+            event.replyChoiceStrings("X", "Y").queue();
+        else return false;
+
+        return true;
     }
 }

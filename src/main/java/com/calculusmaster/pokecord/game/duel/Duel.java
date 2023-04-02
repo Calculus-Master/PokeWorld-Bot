@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.game.duel;
 
 import com.calculusmaster.pokecord.Pokecord;
-import com.calculusmaster.pokecord.commands.duel.CommandTarget;
+import com.calculusmaster.pokecord.commandslegacy.duel.CommandLegacyTarget;
 import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.component.*;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
@@ -2880,21 +2880,21 @@ public class Duel
         {
             Guild g = this.channels.get(0).getGuild();
 
-            if(CommandTarget.isTarget(g, this.players[winner].ID))
+            if(CommandLegacyTarget.isTarget(g, this.players[winner].ID))
             {
-                c = (new Random().nextInt(201) + 50) * (CommandTarget.SERVER_TARGET_DUELS_WON.get(g.getId()) + 1);
+                c = (new Random().nextInt(201) + 50) * (CommandLegacyTarget.SERVER_TARGET_DUELS_WON.get(g.getId()) + 1);
 
-                CommandTarget.SERVER_TARGET_DUELS_WON.put(g.getId(), CommandTarget.SERVER_TARGET_DUELS_WON.get(g.getId()) + 1);
+                CommandLegacyTarget.SERVER_TARGET_DUELS_WON.put(g.getId(), CommandLegacyTarget.SERVER_TARGET_DUELS_WON.get(g.getId()) + 1);
 
                 embed.setFooter("The Server Target has won another duel!");
             }
-            else if(CommandTarget.isTarget(g, this.players[loser].ID))
+            else if(CommandLegacyTarget.isTarget(g, this.players[loser].ID))
             {
-                CommandTarget.SERVER_TARGETS.remove(g.getId());
+                CommandLegacyTarget.SERVER_TARGETS.remove(g.getId());
 
                 c = new Random().nextInt(501) + 500;
 
-                CommandTarget.generateNewServerTarget(g);
+                CommandLegacyTarget.generateNewServerTarget(g);
 
                 embed.setFooter("The Server Target has been defeated!");
             }

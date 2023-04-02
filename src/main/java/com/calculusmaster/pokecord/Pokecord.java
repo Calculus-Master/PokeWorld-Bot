@@ -1,10 +1,10 @@
 package com.calculusmaster.pokecord;
 
-import com.calculusmaster.pokecord.commands.Commands;
-import com.calculusmaster.pokecord.commands.duel.CommandTarget;
-import com.calculusmaster.pokecord.commands.economy.CommandShop;
-import com.calculusmaster.pokecord.commands.pokemon.CommandBreed;
-import com.calculusmaster.pokecord.commandsv2.CommandHandler;
+import com.calculusmaster.pokecord.commands.CommandHandler;
+import com.calculusmaster.pokecord.commandslegacy.CommandsLegacy;
+import com.calculusmaster.pokecord.commandslegacy.duel.CommandLegacyTarget;
+import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyShop;
+import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyBreed;
 import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
 import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestrictionRegistry;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
@@ -102,8 +102,8 @@ public class Pokecord
         LoggerHelper.init("Pokemon Rarity", PokemonRarity::init);
         LoggerHelper.init("Trainer Manager", TrainerManager::init);
         LoggerHelper.init("Pokemon Augments", PokemonAugmentRegistry::init);
-        LoggerHelper.init("Command Handler", Commands::init);
-        LoggerHelper.init("Shops", CommandShop::updateShops);
+        LoggerHelper.init("Command Handler", CommandsLegacy::init);
+        LoggerHelper.init("Shops", CommandLegacyShop::updateShops);
         LoggerHelper.init("Pokemon Mastery Level", MasteryLevelManager::init);
         LoggerHelper.init("Achievement Cache", CacheHelper::initAchievementCache);
         LoggerHelper.init("Market", CacheHelper::initMarketEntries, true);
@@ -146,7 +146,7 @@ public class Pokecord
                 SpawnEventHelper.start(g);
                 LocationEventHelper.start(g);
 
-                CommandTarget.generateNewServerTarget(g);
+                CommandLegacyTarget.generateNewServerTarget(g);
             }
             else
             {
@@ -164,7 +164,7 @@ public class Pokecord
         SpawnEventHelper.close();
         RaidEventHelper.close();
         LocationEventHelper.close();
-        CommandBreed.close();
+        CommandLegacyBreed.close();
         ThreadPoolHandler.close();
 
         Executors.newScheduledThreadPool(1).schedule(() -> {

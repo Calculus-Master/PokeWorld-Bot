@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.mongo;
 
 import com.calculusmaster.pokecord.Pokecord;
-import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
+import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyTeam;
 import com.calculusmaster.pokecord.game.bounties.Bounty;
 import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerData;
@@ -83,7 +83,7 @@ public class PlayerDataQuery extends MongoQuery
                 .append("selected", 1)
                 .append("pokemon", new ArrayList<>())
                 .append("team", new ArrayList<>())
-                .append("saved_teams", IntStream.range(0, CommandTeam.MAX_TEAM_SIZE).mapToObj(i -> new Document("name", "").append("team", new ArrayList<>())).toList())
+                .append("saved_teams", IntStream.range(0, CommandLegacyTeam.MAX_TEAM_SIZE).mapToObj(i -> new Document("name", "").append("team", new ArrayList<>())).toList())
                 .append("favorites", new ArrayList<>())
                 .append("items", new ArrayList<>())
                 .append("tms", new ArrayList<>())

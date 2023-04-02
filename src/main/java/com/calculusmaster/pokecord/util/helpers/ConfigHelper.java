@@ -1,8 +1,8 @@
 package com.calculusmaster.pokecord.util.helpers;
 
-import com.calculusmaster.pokecord.commands.Commands;
-import com.calculusmaster.pokecord.commands.economy.CommandShop;
-import com.calculusmaster.pokecord.commands.pokemon.CommandTeam;
+import com.calculusmaster.pokecord.commandslegacy.CommandsLegacy;
+import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyShop;
+import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyTeam;
 import com.calculusmaster.pokecord.game.bounties.Bounty;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
@@ -27,20 +27,20 @@ public class ConfigHelper
 
             ThreadPoolHandler.THREAD_POOL_TYPE = config.getInteger("thread_pool_type");
             CacheHelper.DYNAMIC_CACHING_ACTIVE = config.getBoolean("dynamic_caching");
-            CommandShop.ITEM_COUNT_MIN = config.getList("item_counts", Integer.class).get(0);
-            CommandShop.ITEM_COUNT_MAX = config.getList("item_counts", Integer.class).get(1);
-            CommandShop.TM_COUNT = config.getInteger("tm_count");
-            CommandShop.ZCRYSTAL_COUNT_MIN = config.getList("zcrystal_counts", Integer.class).get(0);
-            CommandShop.ZCRYSTAL_COUNT_MAX = config.getList("zcrystal_counts", Integer.class).get(1);
-            Commands.COMMAND_THREAD_POOL = config.getBoolean("command_thread_pool");
+            CommandLegacyShop.ITEM_COUNT_MIN = config.getList("item_counts", Integer.class).get(0);
+            CommandLegacyShop.ITEM_COUNT_MAX = config.getList("item_counts", Integer.class).get(1);
+            CommandLegacyShop.TM_COUNT = config.getInteger("tm_count");
+            CommandLegacyShop.ZCRYSTAL_COUNT_MIN = config.getList("zcrystal_counts", Integer.class).get(0);
+            CommandLegacyShop.ZCRYSTAL_COUNT_MAX = config.getList("zcrystal_counts", Integer.class).get(1);
+            CommandsLegacy.COMMAND_THREAD_POOL = config.getBoolean("command_thread_pool");
             Bounty.MAX_BOUNTIES_HELD = config.getInteger("bounty_max_held");
             Bounty.BOUNTY_REWARD_MIN = config.getList("bounty_rewards", Integer.class).get(0);
             Bounty.BOUNTY_REWARD_MAX = config.getList("bounty_rewards", Integer.class).get(1);
             SpawnEventHelper.SPAWN_INTERVAL = config.getInteger("spawn_event_interval");
             SpawnEventHelper.RAID_CHANCE = config.getInteger("spawn_event_raid_chance");
             PokemonEgg.MAX_EGGS = config.getInteger("egg_limit");
-            CommandTeam.MAX_TEAM_SIZE = config.getInteger("team_limit");
-            CommandTeam.MAX_SLOTS = config.getInteger("team_slots");
+            CommandLegacyTeam.MAX_TEAM_SIZE = config.getInteger("team_limit");
+            CommandLegacyTeam.MAX_SLOTS = config.getInteger("team_slots");
             MasteryLevelManager.ACTIVE = config.getBoolean("mastery_levels");
             TrainerManager.REGULAR_TRAINER_INTERVAL = config.getInteger("trainer_rotation_interval");
 
@@ -52,20 +52,20 @@ public class ConfigHelper
 
             ThreadPoolHandler.THREAD_POOL_TYPE = 1;
             CacheHelper.DYNAMIC_CACHING_ACTIVE = false;
-            CommandShop.ITEM_COUNT_MAX = 10;
-            CommandShop.ITEM_COUNT_MIN = 5;
-            CommandShop.TM_COUNT = 10;
-            CommandShop.ZCRYSTAL_COUNT_MAX = 10;
-            CommandShop.ZCRYSTAL_COUNT_MIN = 5;
-            Commands.COMMAND_THREAD_POOL = false;
+            CommandLegacyShop.ITEM_COUNT_MAX = 10;
+            CommandLegacyShop.ITEM_COUNT_MIN = 5;
+            CommandLegacyShop.TM_COUNT = 10;
+            CommandLegacyShop.ZCRYSTAL_COUNT_MAX = 10;
+            CommandLegacyShop.ZCRYSTAL_COUNT_MIN = 5;
+            CommandsLegacy.COMMAND_THREAD_POOL = false;
             Bounty.MAX_BOUNTIES_HELD = 3;
             Bounty.BOUNTY_REWARD_MIN = 50;
             Bounty.BOUNTY_REWARD_MAX = 250;
             SpawnEventHelper.SPAWN_INTERVAL = 450;
             SpawnEventHelper.RAID_CHANCE = 1;
             PokemonEgg.MAX_EGGS = 9;
-            CommandTeam.MAX_TEAM_SIZE = 6;
-            CommandTeam.MAX_SLOTS = 5;
+            CommandLegacyTeam.MAX_TEAM_SIZE = 6;
+            CommandLegacyTeam.MAX_SLOTS = 5;
             TrainerManager.REGULAR_TRAINER_INTERVAL = 24 * 7;
         }
     }

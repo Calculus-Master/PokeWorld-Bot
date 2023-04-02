@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.util.helpers;
 
-import com.calculusmaster.pokecord.commands.economy.CommandShop;
+import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyShop;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
@@ -43,7 +43,7 @@ public class TimeHelper
 
     private enum TimeTask
     {
-        SHOPS("shops", CommandShop::updateShops);
+        SHOPS("shops", CommandLegacyShop::updateShops);
 
         private final String target;
         private final Runnable task;

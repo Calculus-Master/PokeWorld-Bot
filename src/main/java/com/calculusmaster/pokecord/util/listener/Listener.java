@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.util.listener;
 
 import com.calculusmaster.pokecord.Pokecord;
-import com.calculusmaster.pokecord.commands.Commands;
+import com.calculusmaster.pokecord.commandslegacy.CommandsLegacy;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.custom.ExtendedIntegerMap;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
@@ -97,8 +97,8 @@ public class Listener extends ListenerAdapter
 
             try
             {
-                if(Commands.COMMAND_THREAD_POOL) ThreadPoolHandler.LISTENER_COMMAND.execute(() -> Commands.execute(msg[0], event, msg));
-                else Commands.execute(msg[0], event, msg);
+                if(CommandsLegacy.COMMAND_THREAD_POOL) ThreadPoolHandler.LISTENER_COMMAND.execute(() -> CommandsLegacy.execute(msg[0], event, msg));
+                else CommandsLegacy.execute(msg[0], event, msg);
             }
             catch (Exception e)
             {

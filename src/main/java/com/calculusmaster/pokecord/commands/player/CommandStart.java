@@ -1,6 +1,8 @@
 package com.calculusmaster.pokecord.commands.player;
 
-import com.calculusmaster.pokecord.commands.Command;
+import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.commands.CommandData;
+import com.calculusmaster.pokecord.commands.PokeWorldCommand;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -8,33 +10,53 @@ import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.SplittableRandom;
+import java.util.Random;
 
-public class CommandStart extends Command
+public class CommandStart extends PokeWorldCommand
 {
-    //Command Format: p!start <starter>
-    public CommandStart(MessageReceivedEvent event, String[] msg)
+    private static final String STARTERS_IMAGE = "https://vignette.wikia.nocookie.net/pokeverse/images/4/46/Pokemon_starters_.png/revision/latest/scale-to-width-down/1000?cb=20180424013225";
+
+    public static void init()
     {
-        super(event, msg);
+        CommandData
+                .create("start")
+                .withConstructor(CommandStart::new)
+                .withCommand(Commands
+                        .slash("start", "Start your adventure!")
+                        .addOption(OptionType.STRING, "starter", "The starter you want to begin your journey with.", false, true)
+                )
+                .register();
     }
 
     @Override
-    public Command runCommand()
+    protected boolean slashCommandLogic(SlashCommandInteractionEvent event)
     {
-        boolean isRegistered = PlayerDataQuery.isRegistered(this.player.getId());
+        if(PlayerDataQuery.isRegistered(this.player.getId())) return this.error("You have already started your journey.");
 
-        if(isRegistered) this.response = "You have already started your journey!";
-        else if(this.msg.length != 2 || !this.msg[0].contains("start"))
+        OptionMapping starterOption = event.getOption("starter");
+
+        //Info Embed
+        if(starterOption == null)
         {
             this.embed
                     .setTitle("Welcome to the world of Pokemon!")
+                    .setDescription("""
+                            %s is a Discord bot that lets you catch, battle, trade, and do many other things with Pokemon!
+                            It uses a level-based progression system, and you'll unlock more and more features as you level up (more information below).
+                            
+                            *But, before all that, select a Starter to begin your journey!*
+                            """.formatted(Pokecord.NAME))
                     .addField("Starter", """
-                            To begin, use the `p!start <starter>` command to select your starter Pokemon. Replace <starter> with the name of the starter you pick.
-                            Possible Starters:\s
+                            You may select any of the following Pokemon to be your starter:
                             Generation 1: **Bulbasaur** | **Charmander** | **Squirtle**
                             Generation 2: **Chikorita** | **Cyndaquil** | **Totodile**
                             Generation 3: **Treecko** | **Torchic** | **Mudkip**
@@ -44,47 +66,75 @@ public class CommandStart extends Command
                             Generation 7: **Rowlet** | **Litten** | **Popplio**
                             Generation 8: **Grookey** | **Scorbunny** | **Sobble**
                             Generation 9: **Sprigatito** | **Fuecoco** | **Quaxly**
+                            
+                            *Once you've decided who you'll pick, use `/start` again, with the name of the starter you chose, to begin!*
                             """, false)
                     .addField("Progression", """
-                            This bot uses a Level-based progression system. To unlock certain features, you have to earn enough experience and complete certain tasks in order to advance to the next level.
+                            This bot uses a Level-based progression system.
+                            To unlock certain features, you have to earn enough experience and complete certain tasks in order to advance to the next level.
+                            
                             After selecting a starter, you'll receive a DM with more information about Pokemon Mastery Level!
                             """, false)
                     .addField("Help", """
-                            Use `/help` to learn how to use certain commands!
-                            Certain commands will have built-in help sections as well.
+                            If you're ever feeling stuck, take a closer look at the information provided on each slash command.
+                            More complicated systems will have built-in tutorial systems, primarily in the form of a subcommand called "tutorial".
+                            
+                            The Pokemon Mastery Level system will also send you a DM with more information about newly unlocked features, as you level up!
                             """, false)
-                    .setImage("https://vignette.wikia.nocookie.net/pokeverse/images/4/46/Pokemon_starters_.png/revision/latest/scale-to-width-down/1000?cb=20180424013225");
+                    .setImage(STARTERS_IMAGE);
         }
-        else if(!Global.isStarter(PokemonEntity.cast(this.msg[1]))) this.response = "Please input a valid starter!";
+        //Starter Selected - Start the Player
         else
         {
-            PlayerDataQuery.register(this.player);
-            DataHelper.updateServerPlayers(this.server);
+            String rawStarterName = starterOption.getAsString();
+            PokemonEntity starterEntity = PokemonEntity.cast(rawStarterName);
 
-            this.playerData = PlayerDataQuery.of(this.player.getId());
+            if(starterEntity == null) return this.error("\"%s\" is not a valid starter name. Please check your spelling.".formatted(rawStarterName));
+            else
+            {
+                //Registering Player
+                PlayerDataQuery.register(this.player);
+                DataHelper.addServerPlayer(this.server, this.player);
 
-            Pokemon starter = Pokemon.create(PokemonEntity.cast(this.msg[1]));
-            starter.setLevel(5);
-            starter.setIVs(this.getStarterIVs());
+                this.playerData = PlayerDataQuery.of(this.player.getId());
 
-            Achievements.grant(this.player.getId(), Achievements.START_JOURNEY, this.event);
+                //Creating the Starter
+                Pokemon starter = Pokemon.create(starterEntity);
+                starter.setLevel(5);
 
-            starter.upload();
-            this.playerData.addPokemon(starter.getUUID());
+                Map<Stat, Integer> starterIVs = new LinkedHashMap<>();
+                Random r = new Random();
+                for(Stat s : Stat.values()) starterIVs.put(s, r.nextInt(22, 30));
+                starter.setIVs(starterIVs);
 
-            this.playerData.dmMasteryLevel();
+                Achievements.START_JOURNEY.grant(this.player.getId(), event.getChannel().asTextChannel());
 
-            this.response = "You started your journey with " + starter.getName() + "! Check out its stats using %s!".formatted(this.getCommandFormatted("info latest"));
+                //Registering the Starter
+                starter.upload();
+                this.playerData.addPokemon(starter.getUUID());
+
+                //Next Steps
+                this.playerData.dmMasteryLevel();
+
+                this.response = "You started your journey with **" + starter.getName() + "**! Check your DMs for more information about where to head next, and welcome to " + Pokecord.NAME + "!";
+            }
         }
 
-        return this;
+        return true;
     }
 
-    private Map<Stat, Integer> getStarterIVs()
+    @Override
+    protected boolean autocompleteLogic(CommandAutoCompleteInteractionEvent event)
     {
-        LinkedHashMap<Stat, Integer> ivs = new LinkedHashMap<>();
-        SplittableRandom r = new SplittableRandom();
-        for(Stat s : Stat.values()) ivs.put(s, r.nextInt(22, 30));
-        return ivs;
+        if(event.getFocusedOption().getName().equals("starter"))
+        {
+            String currentInput = event.getFocusedOption().getValue();
+
+            List<String> starters = Global.STARTERS.stream().map(PokemonEntity::getName).filter(s -> s.startsWith(currentInput)).toList();
+
+            event.replyChoiceStrings(this.getAutocompleteOptions(currentInput, starters)).queue();
+        }
+
+        return true;
     }
 }
