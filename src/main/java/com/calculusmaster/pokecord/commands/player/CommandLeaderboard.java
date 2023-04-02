@@ -192,7 +192,6 @@ public class CommandLeaderboard extends Command
         CREDITS(1.25, p -> p.getCredits(), "Credits"),
         REDEEMS(1.85, p -> p.getRedeems(), "Redeems"),
         TMS(1.5, p -> p.getTMList().size(), "TMs"),
-        TRS(1.5, p -> p.getTRList().size(), "TRs"),
         ITEMS(0.75, p -> p.getItemList().size(), "Items"),
         FORMS_OWNED(1.5, p -> p.getOwnedForms().size(), "Owned Forms"),
         MEGA_OWNED(1.5, p -> p.getOwnedMegas().size(), "Owned Mega Evolutions"),

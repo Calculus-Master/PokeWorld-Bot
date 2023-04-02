@@ -81,10 +81,10 @@ public class PlayerDataQuery extends MongoQuery
                 .append("selected", 1)
                 .append("pokemon", new ArrayList<>())
                 .append("team", new ArrayList<>())
+                .append("saved_teams", IntStream.range(0, CommandTeam.MAX_TEAM_SIZE).mapToObj(i -> new Document("name", "").append("team", new ArrayList<>())).toList())
                 .append("favorites", new ArrayList<>())
                 .append("items", new ArrayList<>())
                 .append("tms", new ArrayList<>())
-                .append("trs", new ArrayList<>())
                 .append("zcrystals", new ArrayList<>())
                 .append("active_zcrystal", "")
                 .append("achievements", new ArrayList<>())
@@ -95,7 +95,8 @@ public class PlayerDataQuery extends MongoQuery
                 .append("active_egg", "")
                 .append("owned_augments", new ArrayList<>())
                 .append("defeated_trainers", new ArrayList<>())
-                .append("saved_teams", IntStream.range(0, CommandTeam.MAX_TEAM_SIZE).mapToObj(i -> new Document("name", "").append("team", new ArrayList<>())).toList());
+
+                ;
 
         LoggerHelper.logDatabaseInsert(PlayerDataQuery.class, data);
 
@@ -359,6 +360,32 @@ public class PlayerDataQuery extends MongoQuery
         this.setTeam(team);
     }
 
+    //key: "saved_teams"
+    public List<Document> getSavedTeams()
+    {
+        return this.document.getList("saved_teams", Document.class);
+    }
+
+    public void setSavedTeam(int slot, List<String> team)
+    {
+        this.update(Updates.set("saved_teams." + slot + ".team", team));
+    }
+
+    public List<String> getSavedTeam(int slot)
+    {
+        return this.getSavedTeams().get(slot).getList("team", String.class);
+    }
+
+    public String getSavedTeamName(int slot)
+    {
+        return this.getSavedTeams().get(slot).getString("name");
+    }
+
+    public void renameSavedTeam(int slot, String name)
+    {
+        this.update(Updates.set("saved_teams." + slot + ".name", name));
+    }
+
     //key: "favorites"
     public List<String> getFavorites()
     {
@@ -421,28 +448,6 @@ public class PlayerDataQuery extends MongoQuery
         this.update(Updates.pull("tms", TM));
 
         for(int i = 0; i < counts - 1; i++) this.addTM(TM);
-    }
-
-    //key: "trs"
-    public List<String> getTRList()
-    {
-        return this.document.getList("trs", String.class);
-    }
-
-    public void addTR(String TR)
-    {
-        this.update(Updates.push("trs", TR));
-    }
-
-    //Removes a TR from the player's owned TRs
-    public void removeTR(String TR)
-    {
-        int counts = 0;
-        for (int i = 0; i < this.getTRList().size(); i++) if(this.getTRList().get(i).equals(TR)) counts++;
-
-        this.update(Updates.pull("trs", TR));
-
-        for(int i = 0; i < counts - 1; i++) this.addTR(TR);
     }
 
     //key: "zcrystals"
@@ -670,31 +675,5 @@ public class PlayerDataQuery extends MongoQuery
     public boolean hasDefeatedAllTrainerClasses()
     {
         return TrainerManager.REGULAR_TRAINERS.stream().map(TrainerData::getTrainerClass).distinct().allMatch(this::hasDefeatedAllTrainersOfClass);
-    }
-
-    //key: "saved_teams"
-    public List<Document> getSavedTeams()
-    {
-        return this.document.getList("saved_teams", Document.class);
-    }
-
-    public void setSavedTeam(int slot, List<String> team)
-    {
-        this.update(Updates.set("saved_teams." + slot + ".team", team));
-    }
-
-    public List<String> getSavedTeam(int slot)
-    {
-        return this.getSavedTeams().get(slot).getList("team", String.class);
-    }
-
-    public String getSavedTeamName(int slot)
-    {
-        return this.getSavedTeams().get(slot).getString("name");
-    }
-
-    public void renameSavedTeam(int slot, String name)
-    {
-        this.update(Updates.set("saved_teams." + slot + ".name", name));
     }
 }
