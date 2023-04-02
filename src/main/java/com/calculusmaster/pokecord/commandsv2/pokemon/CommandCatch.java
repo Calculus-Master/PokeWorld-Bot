@@ -91,6 +91,22 @@ public class CommandCatch extends CommandV2
                     if(this.playerData.getSettings().get(Settings.CLIENT_CATCH_AUTO_INFO, Boolean.class));
                     //TODO: Fix this with new Commands System
                         //com.calculusmaster.pokecord.commands.Commands.execute("info", this.event, new String[]{"info", "latest"});
+
+                    //Achievements TODO - Restructure Achievements
+                    Achievements.CAUGHT_FIRST_POKEMON.grant(this.player.getId(), event.getChannel().asTextChannel());
+
+                    //Statistics TODO - Restructure Statistics to be more like telemetry, with a lot more data collected
+                    this.playerData.getStatistics().incr(PlayerStatistic.POKEMON_CAUGHT);
+
+                    //Bounties
+                    this.playerData.updateBountyProgression(b -> {
+                        switch(b.getType()) {
+                            case CATCH_POKEMON -> b.update();
+                            case CATCH_POKEMON_TYPE -> b.updateIf(caught.isType(((CatchTypeObjective)b.getObjective()).getType()));
+                            case CATCH_POKEMON_NAME -> b.updateIf(caught.getEntity().toString().equals(((CatchNameObjective)b.getObjective()).getName()));
+                            case CATCH_POKEMON_POOL -> b.updateIf(((CatchPoolObjective)b.getObjective()).getPool().contains(caught.getEntity().toString()));
+                        }
+                    });
                 });
 
                 //Collections TODO - Redo collections system
@@ -106,25 +122,20 @@ public class CommandCatch extends CommandV2
                     int credits = rarityCredits[1] + rarityCredits[2] * (amount / 5 - 1);
                     this.playerData.changeCredits(credits);
 
-                    extraResponses.add("Reached Collection Milestone for " + caught.getName() + ": **" + amount + "** (**" + credits + "**c)!");
+                    extraResponses.add("Reached Collection Milestone for " + caught.getName() + ": **" + amount + "** (**+" + credits + "**c)!");
                 }
                 else if(amount == 1)
                 {
                     int credits = rarityCredits[0];
                     this.playerData.changeCredits(credits);
 
-                    extraResponses.add("Unlocked Collection for " + caught.getName() + " (**" + credits + "**c)!");
+                    extraResponses.add("Unlocked Collection for " + caught.getName() + " (**+" + credits + "**c)!");
                 }
-
-                //Achievements TODO - Restructure Achievements
-                Achievements.CAUGHT_FIRST_POKEMON.grant(this.player.getId(), event.getChannel().asTextChannel());
 
                 if(amount >= 10) Achievements.REACHED_COLLECTION_MILESTONE_10.grant(this.player.getId(), event.getChannel().asTextChannel());
                 if(amount >= 20) Achievements.REACHED_COLLECTION_MILESTONE_20.grant(this.player.getId(), event.getChannel().asTextChannel());
                 if(amount >= 50) Achievements.REACHED_COLLECTION_MILESTONE_50.grant(this.player.getId(), event.getChannel().asTextChannel());
 
-                //Statistics TODO - Restructure Statistics to be more like telemetry, with a lot more data collected
-                this.playerData.getStatistics().incr(PlayerStatistic.POKEMON_CAUGHT);
 
                 //Redeem Unlocks on High IV Catches
                 if(caught.getTotalIVRounded() >= 90 || (caught.getTotalIVRounded() >= 80 && new Random().nextInt(100) < 20))
@@ -136,21 +147,14 @@ public class CommandCatch extends CommandV2
                     extraResponses.add("You earned a redeem for catching a Pokemon with high IVs!");
                 }
 
-                //Bounties
-                this.playerData.updateBountyProgression(b -> {
-                    switch(b.getType()) {
-                        case CATCH_POKEMON -> b.update();
-                        case CATCH_POKEMON_TYPE -> b.updateIf(caught.isType(((CatchTypeObjective)b.getObjective()).getType()));
-                        case CATCH_POKEMON_NAME -> b.updateIf(caught.getEntity().toString().equals(((CatchNameObjective)b.getObjective()).getName()));
-                        case CATCH_POKEMON_POOL -> b.updateIf(((CatchPoolObjective)b.getObjective()).getPool().contains(caught.getEntity().toString()));
-                    }
-                });
-
                 //Main Response
-                this.response = "You caught a **Level " + caught.getLevel() + " " + caught.getName() + "** (Collection: " + amount + ")!";
+                this.response = "You caught a **Level " + caught.getLevel() + " " + caught.getName() + "**!";
 
-                extraResponses.add(0, event.getMember().getAsMention());
-                event.getChannel().sendMessage(String.join("\n", extraResponses)).queue();
+                if(!extraResponses.isEmpty())
+                {
+                    extraResponses.add(0, event.getMember().getAsMention());
+                    event.getChannel().sendMessage(String.join("\n", extraResponses)).queue();
+                }
 
                 SpawnEventHelper.clearSpawn(this.server.getId());
 
