@@ -116,7 +116,6 @@ public class Mongo
 
     public static final MongoCollection<Document> PokemonData = PokecordDB.getCollection("PokemonData");
     public static final MongoCollection<Document> MarketData = PokecordDB.getCollection("MarketData");
-    public static final MongoCollection<Document> DexData = PokecordDB.getCollection("DexData");
 
     public static final MongoCollection<Document> BountyData = PokecordDB.getCollection("BountyData");
     public static final MongoCollection<Document> EggData = PokecordDB.getCollection("EggData");
