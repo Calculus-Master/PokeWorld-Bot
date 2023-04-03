@@ -131,9 +131,14 @@ public abstract class PokeWorldCommand
         else if(this.embed != null) embed.accept(this.embed.build());
     }
 
-    protected void respondInvalidMasteryLevel(Feature feature)
+    protected boolean isInvalidMasteryLevel(Feature feature)
     {
-        this.response = Feature.DISABLED.contains(feature) ? "This feature has been temporarily disabled!" : "This feature requires **Pokemon Mastery Level " + feature.getRequiredLevel() + "**!";
+        return Feature.DISABLED.contains(feature) || (MasteryLevelManager.ACTIVE && this.playerData.getLevel() < feature.getRequiredLevel());
+    }
+
+    protected boolean respondInvalidMasteryLevel(Feature feature)
+    {
+        return this.error(Feature.DISABLED.contains(feature) ? "This feature has been temporarily disabled!" : "This feature requires **Pokemon Mastery Level " + feature.getRequiredLevel() + "**!");
     }
 
     //Parsers
@@ -147,10 +152,7 @@ public abstract class PokeWorldCommand
 
         boolean result;
         if(this.commandData.hasFeature() && (Feature.DISABLED.contains(this.commandData.getFeature()) || (MasteryLevelManager.ACTIVE && this.playerData.getLevel() < this.commandData.getFeature().getRequiredLevel())))
-        {
-            this.respondInvalidMasteryLevel(this.commandData.getFeature());
-            result = false;
-        }
+            result = this.respondInvalidMasteryLevel(this.commandData.getFeature());
         else result = this.slashCommandLogic(event);
 
         if(!result && this.embed != null && !this.embed.isEmpty()) this.embed.setColor(Color.RED);

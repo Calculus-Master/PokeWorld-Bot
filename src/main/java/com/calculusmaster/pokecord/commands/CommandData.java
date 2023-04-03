@@ -36,6 +36,7 @@ public class CommandData
     public void register()
     {
         CommandHandler.COMMANDS.add(this);
+        CommandHandler.COMMAND_DATA.put(this.commandName, this);
     }
 
     public static CommandData create(String commandName)

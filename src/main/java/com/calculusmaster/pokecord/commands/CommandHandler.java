@@ -22,7 +22,9 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.security.auth.login.LoginException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -36,7 +38,9 @@ public class CommandHandler extends ListenerAdapter
         CommandHandler.init();
     }
 
+    //HashMap used for Slash Commands for optimization, other Interaction Entities use the List since it needs to be iterated through
     public static final List<CommandData> COMMANDS = new ArrayList<>();
+    public static final Map<String, CommandData> COMMAND_DATA = new HashMap<>();
 
     public static void init()
     {
@@ -65,7 +69,7 @@ public class CommandHandler extends ListenerAdapter
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event)
     {
-        CommandData data = this.findCommandData(c -> c.getCommandName().equals(event.getName()));
+        CommandData data = COMMAND_DATA.get(event.getName());
 
         if(data == null)
         {
@@ -87,7 +91,7 @@ public class CommandHandler extends ListenerAdapter
     @Override
     public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent event)
     {
-        CommandData data = this.findCommandData(c -> c.getCommandName().equals(event.getName()));
+        CommandData data = COMMAND_DATA.get(event.getName());
 
         if(data == null) LoggerHelper.error(CommandHandler.class, "Autocomplete Slash Command not found: " + event.getName());
         else data.getInstance().parseAutocomplete(event);
