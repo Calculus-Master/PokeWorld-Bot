@@ -185,6 +185,7 @@ public class CommandMoves extends PokeWorldCommand
                     else if(active.is(PokemonEntity.ZYGARDE_50, PokemonEntity.ZYGARDE_10, PokemonEntity.ZYGARDE_COMPLETE) && active.getItem().equals(Item.ZYGARDE_CUBE) && Move.ZYGARDE_CUBE_MOVES.contains(m.getEntity())) source = "Zygarde Cube";
                     else if(MoveTutorRegistry.MOVE_TUTOR_MOVES.contains(m.getEntity())) source = "Move Tutor";
                     else if(active.getData().getEggMoves().contains(m.getEntity())) source = "Breeding";
+                    else if(m.is(MoveEntity.TACKLE)) source = "Default";
 
                     activeMoveSources.add("*" + source + "*");
                     activeMoves.add((i + 1) + ": **" + m.getName() + "**");
@@ -218,6 +219,7 @@ public class CommandMoves extends PokeWorldCommand
                         .addBlankField(true)
 
                         .addField("Available Moves", String.join("\n", levelUpMoves), false)
+                        .addField("Version", "**%s**".formatted(active.getData().getLevelUpMovesVersion()), false)
 
                         .setFooter("A green circle indicates a move that can be learned. A yellow circle indicates a move that is currently in your moveset. A lock indicates a move that cannot be learned yet. An exclamation point signifies that the move is not implemented yet, meaning it will not work within duels.");
             }
