@@ -9,7 +9,7 @@ public class TradeEvoTrigger implements EvolutionTrigger
     @Override
     public boolean canEvolve(Pokemon p, String serverID)
     {
-        return true;
+        return false;
     }
 
     @Override
