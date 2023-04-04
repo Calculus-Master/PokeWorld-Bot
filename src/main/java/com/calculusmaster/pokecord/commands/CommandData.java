@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands;
 
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.util.List;
@@ -53,6 +54,11 @@ public class CommandData
     public CommandData withCommand(SlashCommandData slashCommandData)
     {
         this.slashCommandData = slashCommandData;
+        if(!slashCommandData.getName().equals(this.commandName))
+        {
+            LoggerHelper.warn(CommandData.class, "Slash Command Name (" + this.slashCommandData.getName() + ") does not match CommandData name (" + this.commandName + ")! Manually overwriting Slash Command Name to CommandData name!");
+            this.slashCommandData.setName(this.commandName);
+        }
         return this;
     }
 
