@@ -37,7 +37,6 @@ public class CommandMoves extends PokeWorldCommand
         CommandData
                 .create("moves")
                 .withConstructor(CommandMoves::new)
-                .withFeature(Feature.VIEW_MOVE_INFO)
                 .withCommand(Commands
                         .slash("moves", "View your Pokemon's moves, learn new ones, analyze information about them, and more!")
                         .addSubcommands(
@@ -282,6 +281,11 @@ public class CommandMoves extends PokeWorldCommand
                 return this.error("Your active move learn request is not with your active Pokemon, " + active.getDisplayName() + ". Your old request has now been deleted - please use `/moves learn` to learn a move for your active Pokemon!");
             }
             else if(slot < 1 || slot > 4) return this.error("Invalid slot number: " + slot + ". The slot must be either 1, 2, 3, or 4.");
+            else if(DuelHelper.isInDuel(this.player.getId()))
+            {
+                MOVE_LEARN_REQUESTS.remove(this.player.getId());
+                return this.error("You cannot learn new moves while in a Duel.");
+            }
 
             MoveEntity move = MOVE_LEARN_REQUESTS.remove(this.player.getId()).getSecond();
             MoveEntity oldMove = active.getMove(slot - 1).getEntity();
