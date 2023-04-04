@@ -6,8 +6,10 @@ import com.calculusmaster.pokecord.game.enums.elements.Time;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
+import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.triggers.*;
+import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +21,24 @@ import static com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity.*;
 public class EvolutionRegistry
 {
     private static final Map<PokemonEntity, List<EvolutionData>> EVOLUTION_DATA = new HashMap<>();
+
+    public static void checkAutomaticEvolution(Pokemon p, PlayerDataQuery playerData, String serverID)
+    {
+        if(playerData != null & !serverID.isEmpty() && EvolutionRegistry.hasEvolutionData(p.getEntity()))
+        {
+            List<EvolutionData> dataList = EvolutionRegistry.getEvolutionData(p.getEntity());
+            for(EvolutionData data : dataList)
+                if(data.validate(p, serverID))
+                {
+                    String original = p.hasNickname() ? p.getDisplayName() + " (" + p.getName() + ")" : p.getName();
+
+                    p.evolve(data.getTarget(), playerData);
+
+                    playerData.directMessage("Your " + original + " evolved into a **" + p.getName() + "**!");
+                    break;
+                }
+        }
+    }
 
     //TODO: Go through each Evolution trigger and assign checks in the respective parts of the bot
     //like level up trigger is checked during level up, etc

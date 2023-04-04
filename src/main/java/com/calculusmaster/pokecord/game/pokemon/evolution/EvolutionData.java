@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game.pokemon.evolution;
 
+import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.triggers.EvolutionTrigger;
 import com.calculusmaster.pokecord.game.pokemon.evolution.triggers.LevelEvoTrigger;
@@ -15,7 +16,7 @@ public class EvolutionData
     private final List<EvolutionTrigger> triggers;
 
     //Properties – Avoiding looping through the trigger list constantly
-    private boolean hasLevelTrigger = false; public boolean hasLevel() { return this.hasLevelTrigger; }
+    private boolean hasLevelTrigger = false; public boolean hasLevelTrigger() { return this.hasLevelTrigger; }
 
     EvolutionData(PokemonEntity source, PokemonEntity target, EvolutionTrigger trigger1, EvolutionTrigger... triggers)
     {
@@ -27,8 +28,17 @@ public class EvolutionData
 
         for(EvolutionTrigger t : this.triggers)
         {
-            if(t instanceof LevelEvoTrigger) this.hasLevelTrigger = true;
+            if(t instanceof LevelEvoTrigger)
+            {
+                this.hasLevelTrigger = true;
+                break;
+            }
         }
+    }
+
+    public boolean validate(Pokemon p, String serverID)
+    {
+        return this.triggers.stream().allMatch(t -> t.canEvolve(p, serverID));
     }
 
     public PokemonEntity getSource()

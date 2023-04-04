@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.commandslegacy.CommandLegacyInvalid;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionRegistry;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandLegacyGive extends CommandLegacy
@@ -40,6 +41,8 @@ public class CommandLegacyGive extends CommandLegacy
 
             this.playerData.removeItem(item.getName());
             s.updateItem();
+
+            EvolutionRegistry.checkAutomaticEvolution(s, this.playerData, this.server.getId());
 
             this.event.getChannel().sendMessage(this.playerData.getMention() + ": Gave " + s.getName() + " a `" + item.getStyledName() + "`!").queue();
             this.embed = null;

@@ -89,6 +89,9 @@ public class CommandLegacyTrade extends CommandLegacy
 
                 if(trade.isComplete())
                 {
+                    //TODO: Trade Evolutions
+                    //Executors.newSingleThreadExecutor().execute(() -> IntStream.range(1, 3).forEach(i -> trade.offer(trade.getPlayers()[i].ID).pokemon.forEach(uuid -> EvolutionRegistry.checkAutomaticEvolution(Pokemon.build(uuid), trade.getPlayers()[i].data, this.server.getId()))));
+
                     trade.onComplete();
 
                     String mention1 = trade.getPlayers()[0].data.getMention();

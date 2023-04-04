@@ -97,7 +97,7 @@ public class MessageEventHandler
 
         if(experience == 0) experience = 50;
 
-        p.addExp(experience);
+        p.addExp(experience, this.data, this.event.getGuild().getId());
 
         this.data.updateBountyProgression(ObjectiveType.EARN_XP_POKEMON, experience);
 

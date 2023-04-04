@@ -2,12 +2,10 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
-import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionData;
 import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionRegistry;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
@@ -47,17 +45,11 @@ public class CommandEvolve extends PokeWorldCommand
             List<EvolutionData> evolutionOptions = EvolutionRegistry.getEvolutionData(active.getEntity());
 
             for(EvolutionData data : evolutionOptions)
-                if(data.getTriggers().stream().allMatch(trigger -> trigger.canEvolve(active, this.server.getId())))
+                if(data.validate(active, this.server.getId()))
                 {
                     String original = active.hasNickname() ? active.getDisplayName()  + " (" + active.getEntity().getName() + ")" : active.getName();
 
-                    active.changePokemon(data.getTarget());
-                    active.updateEntity();
-
-                    active.resetAugments();
-
-                    this.playerData.updateBountyProgression(ObjectiveType.EVOLVE_POKEMON);
-                    this.playerData.getStatistics().incr(PlayerStatistic.POKEMON_EVOLVED);
+                    active.evolve(data.getTarget(), this.playerData);
 
                     this.response = "Congratulations! " + original + " evolved into a **" + active.getName() + "**!";
                     return true;

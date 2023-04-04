@@ -16,6 +16,7 @@ import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
+import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionRegistry;
 import com.calculusmaster.pokecord.util.Global;
 import kotlin.Pair;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
@@ -261,6 +262,8 @@ public class CommandMoves extends PokeWorldCommand
                     active.learnMove(move, slot - 1);
                     active.updateMoves();
 
+                    EvolutionRegistry.checkAutomaticEvolution(active, this.playerData, this.server.getId());
+
                     this.response = active.getDisplayName() + " learned **" + move.data().getName() + "**! It replaced *" + oldMove.data().getName() + "* in Slot " + slot + ".";
                 }
             }
@@ -292,6 +295,8 @@ public class CommandMoves extends PokeWorldCommand
 
             active.learnMove(move, slot - 1);
             active.updateMoves();
+
+            EvolutionRegistry.checkAutomaticEvolution(active, this.playerData, this.server.getId());
 
             this.response = active.getDisplayName() + " learned **" + move.data().getName() + "**! It replaced *" + oldMove.data().getName() + "* in Slot " + slot + ".";
         }

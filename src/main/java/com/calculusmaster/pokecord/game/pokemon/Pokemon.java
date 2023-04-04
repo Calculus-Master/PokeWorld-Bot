@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.game.pokemon;
 
+import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.*;
@@ -13,6 +14,7 @@ import com.calculusmaster.pokecord.game.pokemon.component.*;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
+import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionRegistry;
 import com.calculusmaster.pokecord.game.pokemon.evolution.GigantamaxRegistry;
 import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
 import com.calculusmaster.pokecord.mongo.Mongo;
@@ -20,6 +22,7 @@ import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.cacheold.PlayerDataCache;
 import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
+import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
@@ -662,6 +665,18 @@ public class Pokemon
         this.data = entity.data();
     }
 
+    //Endpoint that involves database calls - specifically for Evolution
+    public void evolve(PokemonEntity target, PlayerDataQuery playerData)
+    {
+        this.changePokemon(target);
+        this.updateEntity();
+
+        this.resetAugments();
+
+        playerData.updateBountyProgression(ObjectiveType.EVOLVE_POKEMON);
+        playerData.getStatistics().incr(PlayerStatistic.POKEMON_EVOLVED);
+    }
+
     //If pokemon == null, this is being called from somewhere without a relevant Pokemon object.
     //If moveEntity == null, this is being called outside a Duel.
     public static String getImage(@NotNull PokemonEntity pokemonEntity, boolean shiny, @Nullable Pokemon pokemon, @Nullable MoveEntity moveEntity)
@@ -1252,19 +1267,24 @@ public class Pokemon
 
     //Level & Experience
 
-    public void addExp(int exp)
+    public void addExp(int exp, PlayerDataQuery playerData, String serverID)
     {
         this.exp += exp;
 
         int req = GrowthRate.getRequiredExp(this.data.getGrowthRate(), this.level);
 
+        boolean levelUp = false;
         while(this.exp >= req && this.level < 100)
         {
             this.level++;
             this.exp -= req;
 
             req = GrowthRate.getRequiredExp(this.data.getGrowthRate(), this.level);
+
+            levelUp = true;
         }
+
+        if(levelUp) EvolutionRegistry.checkAutomaticEvolution(this, playerData, serverID);
     }
 
     public int getDefeatExp(Pokemon other)
