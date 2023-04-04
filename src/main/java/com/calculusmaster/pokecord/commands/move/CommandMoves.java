@@ -17,6 +17,7 @@ import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.util.Global;
+import kotlin.Pair;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -29,6 +30,8 @@ import java.util.stream.Collectors;
 
 public class CommandMoves extends PokeWorldCommand
 {
+    private static final Map<String, Pair<String, MoveEntity>> MOVE_LEARN_REQUESTS = new HashMap<>();
+
     public static void init()
     {
         CommandData
@@ -40,7 +43,12 @@ public class CommandMoves extends PokeWorldCommand
                         .addSubcommands(
                                 new SubcommandData("info", "View information about a specific move.")
                                         .addOption(OptionType.STRING, "move", "The name of the move to view information about.", true, true),
-                                new SubcommandData("view", "View your active Pokemon's moves, and moves they could learn.")
+                                new SubcommandData("view", "View your active Pokemon's moves, and moves they could learn."),
+                                new SubcommandData("learn", "Teach your active Pokemon a new move that they can learn by leveling up.")
+                                        .addOption(OptionType.STRING, "move", "The name of the move to learn.", true, true)
+                                        .addOption(OptionType.INTEGER, "slot", "Optional: Include the slot to learn this move into, skipping the replace command.", false, false),
+                                new SubcommandData("replace", "Upon request, replace a slot in your active Pokemon's moveset with the move you want to learn.")
+                                        .addOption(OptionType.INTEGER, "slot", "The slot to replace with the new move.", true, false)
                         )
                 )
                 .register();
@@ -145,8 +153,8 @@ public class CommandMoves extends PokeWorldCommand
                 moves = String.join("\n", moveList);
 
                 ZCrystal crystal = ZCrystal.cast(active.data.getEquippedZCrystal());
-                String zmove = (active.usedZMove ? "Used." : "Available!") + "\t\t" + "Equipped Z-Crystal: **" + (crystal == null ? "None" : crystal.getStyledName()) + "**";
-                String dynamax = (active.usedDynamax ? "Used." : "Available!");
+                String zmove = !this.serverData.areZMovesEnabled() ? "**Disabled in this server!**" : ((active.usedZMove ? "Used." : "Available!") + "\t\t" + "Equipped Z-Crystal: **" + (crystal == null ? "None" : crystal.getStyledName()) + "**");
+                String dynamax = !this.serverData.isDynamaxEnabled() ? "**Disabled in this server!**" : (active.usedDynamax ? "Used." : "Available!");
 
                 this.embed
                         .setTitle(active.active.getName() + "'s Moveset")
@@ -165,6 +173,7 @@ public class CommandMoves extends PokeWorldCommand
             {
                 Pokemon active = this.playerData.getSelectedPokemon();
                 List<String> activeMoves = new ArrayList<>();
+                List<String> activeMoveSources = new ArrayList<>();
 
                 for(int i = 0; i < active.getMoves().size(); i++)
                 {
@@ -177,7 +186,8 @@ public class CommandMoves extends PokeWorldCommand
                     else if(MoveTutorRegistry.MOVE_TUTOR_MOVES.contains(m.getEntity())) source = "Move Tutor";
                     else if(active.getData().getEggMoves().contains(m.getEntity())) source = "Breeding";
 
-                    activeMoves.add((i + 1) + ": **" + m.getName() + "** (Source: *" + source + "*)");
+                    activeMoveSources.add("*" + source + "*");
+                    activeMoves.add((i + 1) + ": **" + m.getName() + "**");
                 }
 
                 List<String> levelUpMoves = new ArrayList<>();
@@ -202,10 +212,84 @@ public class CommandMoves extends PokeWorldCommand
                                 This is the moveset for your active Pokemon.
                                 You can learn new moves, provided your active Pokemon's level is higher than the requirement, using `/moves learn`.
                                 """)
-                        .addField("Active Move Set", String.join("\n", activeMoves), false)
+
+                        .addField("Active Moves", String.join("\n", activeMoves), true)
+                        .addField("Source", String.join("\n", activeMoveSources), true)
+                        .addBlankField(true)
+
                         .addField("Available Moves", String.join("\n", levelUpMoves), false)
+
                         .setFooter("A green circle indicates a move that can be learned. A yellow circle indicates a move that is currently in your moveset. A lock indicates a move that cannot be learned yet. An exclamation point signifies that the move is not implemented yet, meaning it will not work within duels.");
             }
+        }
+        else if(event.getSubcommandName().equals("learn"))
+        {
+            if(this.isInvalidMasteryLevel(Feature.LEARN_REPLACE_MOVES)) return this.respondInvalidMasteryLevel(Feature.LEARN_REPLACE_MOVES);
+
+            OptionMapping moveOption = Objects.requireNonNull(event.getOption("move"));
+            OptionMapping slotOption = event.getOption("slot");
+
+            MoveEntity move = MoveEntity.cast(moveOption.getAsString());
+            if(move == null) return this.error("\"" + moveOption.getAsString() + "\" is not a valid Move name. Please check your spelling.");
+            else if(DuelHelper.isInDuel(this.player.getId())) return this.error("You cannot learn new moves while in a Duel.");
+
+            Pokemon active = this.playerData.getSelectedPokemon();
+
+            if(!active.availableMoves().contains(move)) return this.error(active.getName() + " cannot learn " + move.data().getName() + ". Either it is not a high enough level, or cannot learn the move at all. Use `/moves view` to see what " + active.getName() + " can learn currently.");
+            else
+            {
+                int slot = slotOption == null ? -1 : slotOption.getAsInt();
+
+                if(slot == -1) //Forward to /moves replace
+                {
+                    MOVE_LEARN_REQUESTS.put(this.player.getId(), new Pair<>(active.getUUID(), move));
+
+                    List<String> movesetDisplay = new ArrayList<>();
+
+                    for(int i = 0; i < active.getMoves().size(); i++)
+                        movesetDisplay.add("`/moves replace slot:" + (i + 1) + "` – Current Move: *" + active.getMoves().get(i).data().getName() + "*");
+
+                    this.embed.setDescription("""
+                            Which of your moves would you like to replace with **%s**?
+                            %s
+                            """.formatted(move.data().getName(), String.join("\n", movesetDisplay)));
+                }
+                else //Automatically do the replacement
+                {
+                    if(slot < 1 || slot > 4) return this.error("Invalid slot number: " + slot + ". The slot must be either 1, 2, 3, or 4.");
+
+                    MoveEntity oldMove = active.getMove(slot - 1).getEntity();
+                    active.learnMove(move, slot - 1);
+                    active.updateMoves();
+
+                    this.response = active.getDisplayName() + " learned **" + move.data().getName() + "**! It replaced *" + oldMove.data().getName() + "* in Slot " + slot + ".";
+                }
+            }
+        }
+        else if(event.getSubcommandName().equals("replace"))
+        {
+            if(this.isInvalidMasteryLevel(Feature.LEARN_REPLACE_MOVES)) return this.respondInvalidMasteryLevel(Feature.LEARN_REPLACE_MOVES);
+
+            OptionMapping slotOption = Objects.requireNonNull(event.getOption("slot"));
+            int slot = slotOption.getAsInt();
+
+            Pokemon active = this.playerData.getSelectedPokemon();
+
+            if(!MOVE_LEARN_REQUESTS.containsKey(this.player.getId())) return this.error("You do not have an active learn request. Please use `/moves learn` first to learn a new Move!");
+            else if(!MOVE_LEARN_REQUESTS.get(this.player.getId()).getFirst().equals(active.getUUID()))
+            {
+                MOVE_LEARN_REQUESTS.remove(this.player.getId());
+                return this.error("Your active move learn request is not with your active Pokemon, " + active.getDisplayName() + ". Your old request has now been deleted - please use `/moves learn` to learn a move for your active Pokemon!");
+            }
+            else if(slot < 1 || slot > 4) return this.error("Invalid slot number: " + slot + ". The slot must be either 1, 2, 3, or 4.");
+
+            MoveEntity move = MOVE_LEARN_REQUESTS.remove(this.player.getId()).getSecond();
+            MoveEntity oldMove = active.getMove(slot - 1).getEntity();
+
+            active.learnMove(move, slot - 1);
+            active.updateMoves();
+
+            this.response = active.getDisplayName() + " learned **" + move.data().getName() + "**! It replaced *" + oldMove.data().getName() + "* in Slot " + slot + ".";
         }
 
         return true;
@@ -214,7 +298,7 @@ public class CommandMoves extends PokeWorldCommand
     @Override
     protected boolean autocompleteLogic(CommandAutoCompleteInteractionEvent event)
     {
-        if(event.getFocusedOption().getName().equals("move"))
+        if(event.getFocusedOption().getName().equals("move")) //Covers both "move" autocompletes
         {
             String currentInput = event.getFocusedOption().getValue();
 
