@@ -43,6 +43,7 @@ public class CommandInventory extends PokeWorldCommand
         PlayerInventory inv = this.playerData.getInventory();
 
         String title = "";
+        String description = "";
         List<String> contents = new ArrayList<>();
         switch(page)
         {
@@ -59,7 +60,16 @@ public class CommandInventory extends PokeWorldCommand
                     contents.add((i + 1) + ": **" + item.getStyledName() + "** | Count: " + inv.getItems().get(item));
                 }
 
-                //TODO: Descriptions for each page
+                description = """
+                        Items can be given to Pokemon, and have a wide variety of uses.
+                        They could provide minor boosts, immunities, affect specific Pokemon, assist in Evolutions, and much more.
+                        
+                        To give an item to your active Pokemon, use `/give`.
+                        Most items can be purchased from the shop – use `/shop items` to see current shop offerings.
+                        
+                        *Note: Items are one-time use! Giving them to a Pokemon will remove them from your inventory.
+                        If you want to give multiple Pokemon the same item, you will need to acquire multiple copies of the item.*
+                        """;
             }
             case "zcrystals" ->
             {
@@ -73,6 +83,12 @@ public class CommandInventory extends PokeWorldCommand
 
                     contents.add((i + 1) + ": **" + crystal.getStyledName() + "**");
                 }
+
+                description = """
+                        Z-Crystals are special kinds of Items that will empower your Pokemon to use a Z-Move in battle.
+                        You can earn the typed Z-Crystals (ones that will empower a certain Typed move), by completing Z-Trial Duels.
+                        Unique Z-Crystals, which are special to certain Pokemon & moves, can be purchased from the shop.
+                        """;
             }
             case "tms" ->
             {
@@ -86,10 +102,19 @@ public class CommandInventory extends PokeWorldCommand
 
                     contents.add((i + 1) + ": **" + tm.toString() + "** | Count: " + inv.getTMs().get(tm) + " | Move: " + tm.getMove().getName());
                 }
+
+                description = """
+                        TMs (Technical Machines) are special items that let you teach your Pokemon moves that they normally could not learn by leveling up.
+                        Every Pokemon can learn a certain number of TM moves, visible in their PokeDex entry.
+                        You can purchase TMs from the shop!
+                        """;
             }
         }
 
-        this.embed.addField(title, String.join("\n", contents), false);
+        this.embed
+                .setTitle(this.playerData.getUsername() + "'s Inventory")
+                .setDescription(description)
+                .addField(title, String.join("\n", contents), false);
 
         return true;
     }
