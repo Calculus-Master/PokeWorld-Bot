@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.duel.trainer.TrainerData;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
+import com.calculusmaster.pokecord.game.player.PlayerInventory;
 import com.calculusmaster.pokecord.game.player.PlayerPokedex;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
@@ -37,7 +38,9 @@ public class PlayerDataQuery extends MongoQuery
 {
     private Optional<PlayerSettingsQuery> settings = Optional.empty();
     private Optional<PlayerStatisticsQuery> statistics = Optional.empty();
+
     private PlayerPokedex pokedex;
+    private PlayerInventory inventory;
 
     public PlayerDataQuery(String playerID)
     {
@@ -85,9 +88,6 @@ public class PlayerDataQuery extends MongoQuery
                 .append("team", new ArrayList<>())
                 .append("saved_teams", IntStream.range(0, CommandLegacyTeam.MAX_TEAM_SIZE).mapToObj(i -> new Document("name", "").append("team", new ArrayList<>())).toList())
                 .append("favorites", new ArrayList<>())
-                .append("items", new ArrayList<>())
-                .append("tms", new ArrayList<>())
-                .append("zcrystals", new ArrayList<>())
                 .append("active_zcrystal", "")
                 .append("achievements", new ArrayList<>())
                 .append("owned_forms", new ArrayList<>())
@@ -98,6 +98,7 @@ public class PlayerDataQuery extends MongoQuery
                 .append("owned_augments", new ArrayList<>())
                 .append("defeated_trainers", new ArrayList<>())
                 .append("pokedex", new Document())
+                .append("inventory", new PlayerInventory().serialize())
 
                 ;
 
@@ -164,6 +165,18 @@ public class PlayerDataQuery extends MongoQuery
     public void updatePokedex()
     {
         this.update(Updates.set("pokedex", this.pokedex.serialize()));
+    }
+
+    //Inventory (key: "inventory")
+    public PlayerInventory getInventory()
+    {
+        if(this.inventory == null) this.inventory = new PlayerInventory(this.document.get("inventory", Document.class));
+        return this.inventory;
+    }
+
+    public void updateInventory()
+    {
+        this.update(Updates.set("inventory", this.inventory.serialize()));
     }
 
     //key: "playerID"
@@ -420,65 +433,6 @@ public class PlayerDataQuery extends MongoQuery
     public void clearFavorites()
     {
         this.update(Updates.set("favorites", new ArrayList<>()));
-    }
-
-
-    //key: "items"
-    public List<String> getItemList()
-    {
-        return this.document.getList("items", String.class);
-    }
-
-    public void addItem(String item)
-    {
-        this.update(Updates.push("items", item));
-    }
-
-    public void removeItem(String item)
-    {
-        int counts = 0;
-        for(String s : this.getItemList()) if(s.equalsIgnoreCase(item)) counts++;
-
-        this.update(Updates.pull("items", item));
-
-        for(int i = 0; i < counts - 1; i++) this.addItem(item);
-    }
-
-    //key: "tms"
-    public List<String> getTMList()
-    {
-        return this.document.getList("tms", String.class);
-    }
-
-    public void addTM(String TM)
-    {
-        this.update(Updates.push("tms", TM));
-    }
-
-    public void removeTM(String TM)
-    {
-        int counts = 0;
-        for (int i = 0; i < this.getTMList().size(); i++) if(this.getTMList().get(i).equals(TM)) counts++;
-
-        this.update(Updates.pull("tms", TM));
-
-        for(int i = 0; i < counts - 1; i++) this.addTM(TM);
-    }
-
-    //key: "zcrystals"
-    public List<String> getZCrystalList()
-    {
-        return this.document.getList("zcrystals", String.class);
-    }
-
-    public boolean hasZCrystal(String z)
-    {
-        return this.getZCrystalList().contains(z);
-    }
-
-    public void addZCrystal(String z)
-    {
-        this.update(Updates.push("zcrystals", z));
     }
 
     //key: "active_zcrystal"

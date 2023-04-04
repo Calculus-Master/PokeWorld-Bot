@@ -2,9 +2,15 @@ package com.calculusmaster.pokecord.commands.misc;
 
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
+import com.calculusmaster.pokecord.game.bounties.Bounty;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
+import com.calculusmaster.pokecord.mongo.DatabaseCollection;
+import com.calculusmaster.pokecord.mongo.Mongo;
+import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.util.cacheold.PlayerDataCache;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
+import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -51,6 +57,21 @@ public class CommandDev extends PokeWorldCommand
             this.playerData.addPokemon(p.getUUID());
 
             this.response = "Added a new **" + p.getName() + "** to your Pokemon.";
+        }
+        else if(command[0].equals("reset"))
+        {
+            PlayerDataQuery target = command.length > 1 ? PlayerDataQuery.of(command[1]) : this.playerData;
+
+            if(!target.getBountyIDs().isEmpty()) target.getBounties().forEach(Bounty::delete);
+            if(!target.getOwnedEggIDs().isEmpty()) target.getOwnedEggs().forEach(e -> Mongo.deleteOne("CommandDev - Reset Player (Delete Eggs)", DatabaseCollection.EGG, Filters.eq("eggID", e.getEggID())));
+            if(!target.getPokemonList().isEmpty()) target.getPokemon().forEach(Pokemon::delete);
+            Mongo.MarketData.deleteMany(Filters.eq("sellerID", target.getID()));
+            Mongo.deleteOne("CommandDev - Reset Player (Delete Settings)", DatabaseCollection.SETTINGS, Filters.eq("playerID", target.getID()));
+            Mongo.deleteOne("CommandDev - Reset Player (Delete Statistics)", DatabaseCollection.STATISTICS, Filters.eq("playerID", target.getID()));
+
+            Mongo.deleteOne("CommandDev - Reset Player (Delete Player Data)", DatabaseCollection.PLAYER, Filters.eq("playerID", target.getID()));
+            PlayerDataCache.CACHE.remove(target.getID());
+            this.response = target.getUsername() + " has been reset!";
         }
         else return this.error("Invalid command.");
 

@@ -30,7 +30,7 @@ public class CommandLegacyZTrialDuel extends CommandLegacy
             ZCrystal crystal = Objects.requireNonNull(ZCrystal.getCrystalOfType(type));
 
             if(DuelHelper.isInDuel(this.player.getId())) this.response = CommandLegacyInvalid.ALREADY_IN_DUEL;
-            else if(this.playerData.hasZCrystal(crystal.toString())) this.response = "You already have `" + crystal.getStyledName() + "`!";
+            else if(this.playerData.getInventory().hasZCrystal(crystal)) this.response = "You already have `" + crystal.getStyledName() + "`!";
             else if(!this.isEligibleForTrial(type)) this.response = "You are not ready for a Z Trial! You will need to have 50 " + type.getStyledName() + "-Type Pokemon and 2000 credits!";
             else
             {

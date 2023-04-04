@@ -63,7 +63,8 @@ public class ZTrialDuel extends WildDuel
         {
             this.onWildDuelWon(true);
 
-            player.data.addZCrystal(crystal.toString());
+            player.data.getInventory().addZCrystal(crystal);
+            player.data.updateInventory();
             Achievements.grant(this.players[this.current].ID, Achievements.ACQUIRED_FIRST_TYPED_ZCRYSTAL, null);
 
             embed.setDescription("You won! You acquired a new Z-Crystal: `%s`.".formatted(crystal.getStyledName()));

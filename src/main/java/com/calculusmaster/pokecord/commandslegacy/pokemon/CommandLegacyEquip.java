@@ -7,6 +7,8 @@ import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.util.ArrayList;
+
 public class CommandLegacyEquip extends CommandLegacy
 {
     public CommandLegacyEquip(MessageReceivedEvent event, String[] msg)
@@ -25,12 +27,12 @@ public class CommandLegacyEquip extends CommandLegacy
         {
             int num = this.getInt(1);
 
-            if(this.playerData.getZCrystalList().isEmpty()) this.response = "You do not have any Z Crystals!";
-            else if(num < 1 || num > this.playerData.getZCrystalList().size()) this.response = "Invalid number!";
+            if(this.playerData.getInventory().getZCrystals().isEmpty()) this.response = "You do not have any Z Crystals!";
+            else if(num < 1 || num > this.playerData.getInventory().getZCrystals().size()) this.response = "Invalid number!";
             else if(!this.serverData.canEquipZCrystalDuel() && DuelHelper.isInDuel(this.player.getId())) this.response = "You can't equip Z Crystals while in a Duel!";
             else
             {
-                String z = this.playerData.getZCrystalList().get(this.getInt(1) - 1);
+                String z = new ArrayList<>(this.playerData.getInventory().getZCrystals()).get(this.getInt(1) - 1).toString();
 
                 if(DuelHelper.isInDuel(this.player.getId()))
                     ((UserPlayer)(DuelHelper.instance(this.player.getId()).getPlayer(this.player.getId()))).data.equipZCrystal(z);

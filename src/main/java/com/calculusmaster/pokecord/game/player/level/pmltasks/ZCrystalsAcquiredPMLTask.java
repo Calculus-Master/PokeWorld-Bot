@@ -15,12 +15,12 @@ public class ZCrystalsAcquiredPMLTask extends AbstractPMLTask
     @Override
     public boolean isCompleted(PlayerDataQuery p)
     {
-        return p.getZCrystalList().size() >= this.amount;
+        return p.getInventory().getZCrystals().size() >= this.amount;
     }
 
     @Override
     public String getProgressOverview(PlayerDataQuery p)
     {
-        return p.getZCrystalList().size() + " / " + this.amount + " Z-Crystals Acquired";
+        return p.getInventory().getZCrystals().size() + " / " + this.amount + " Z-Crystals Acquired";
     }
 }

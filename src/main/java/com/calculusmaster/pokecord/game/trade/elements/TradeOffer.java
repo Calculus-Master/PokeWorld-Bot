@@ -60,7 +60,7 @@ public class TradeOffer
 
         if(!this.tms.isEmpty())
         {
-            for(TM tm : this.tms) if(!this.player.getTMList().contains(tm.toString())) return false;
+            for(TM tm : this.tms) if(!this.player.getInventory().hasTM(tm)) return false;
         }
 
         return true;
@@ -96,11 +96,14 @@ public class TradeOffer
         {
             for(TM tm : this.tms)
             {
-                this.player.removeTM(tm.toString());
+                this.player.getInventory().removeTM(tm);
 
-                receiver.addTM(tm.toString());
+                receiver.getInventory().addTM(tm);
             }
         }
+
+        this.player.updateInventory();
+        receiver.updateInventory();
     }
 
     public String asString()

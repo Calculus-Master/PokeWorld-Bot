@@ -982,6 +982,11 @@ public enum MoveEntity
         return MOVE_ENTITY_DATA.get(this);
     }
 
+    public String getName()
+    {
+        return this.data().getName();
+    }
+
     public String getJSONFileName()
     {
         return Global.normalize(this.apiID.replaceAll("-", " ")).replaceAll(" ", "_");

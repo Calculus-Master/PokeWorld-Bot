@@ -111,7 +111,8 @@ public class CommandLegacyBuy extends CommandLegacy
                 Item i = CommandLegacyShop.ITEM_ENTRIES.get(this.getInt(2) - 1);
 
                 this.playerData.changeCredits(-1 * cost);
-                this.playerData.addItem(i.toString());
+                this.playerData.getInventory().addItem(i);
+                this.playerData.updateInventory();
 
                 final int amt = amount;
                 this.playerData.updateBountyProgression(ObjectiveType.BUY_ITEMS, b -> b.update(amt));
@@ -243,11 +244,12 @@ public class CommandLegacyBuy extends CommandLegacy
 
             if(z == null) this.response = "Invalid Z Crystal!";
             else if(!CommandLegacyShop.ZCRYSTAL_ENTRIES.contains(z)) this.response = "This Z Crystal is not in the shop right now!";
-            else if(this.playerData.getZCrystalList().contains(z.getStyledName())) this.response = "You already own this Z Crystal!";
+            else if(this.playerData.getInventory().hasZCrystal(z)) this.response = "You already own this Z Crystal!";
             else if(this.playerData.getCredits() < Prices.SHOP_ZCRYSTAL.get()) this.invalidCredits(Prices.SHOP_ZCRYSTAL.get());
             else
             {
-                this.playerData.addZCrystal(z.getStyledName());
+                this.playerData.getInventory().addZCrystal(z);
+                this.playerData.updateInventory();
                 this.playerData.changeCredits(-1 * Prices.SHOP_ZCRYSTAL.get());
 
                 Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_UNIQUE_ZCRYSTAL, this.event);

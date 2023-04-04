@@ -57,9 +57,9 @@ public class MasteryLevelManager
                                 Leveling up Pokemon unlocks new moves and makes them more powerful! The maximum level any Pokemon can be is 100.
                                 """, false)
                         .addField("Moves", """
-                                You can view your selected Pokemon's available moves using `/moves`.\s
+                                You can view your selected Pokemon's available moves using `/moves view`.\s
                                 Some moves will be locked – you need to level up that Pokemon further to unlock them! Additionally, a select few moves may be permanently locked. These are either not going to be implemented, or are currently a work-in-progress!\s
-                                To learn a new move, use `/learn`. This will prompt you to replace one of the moves your current Pokemon knows using `/replace`. There is no penalty or cost for switching out moves, so feel free to experiment and craft that perfect set of moves for your Pokemon!
+                                To learn a new move, use `/moves learn`. This will prompt you to replace one of the moves your current Pokemon knows using `/moves replace`. There is no penalty or cost for switching out moves, so feel free to experiment and craft that perfect set of moves for your Pokemon!
                                 Moves can do a variety of different things in Duels (which you'll unlock soon!).
                                 """, false)
                         .addField("Evolution", """
@@ -75,7 +75,7 @@ public class MasteryLevelManager
                                 You can use `/help` if you ever feel lost with a certain command.
                                 
                                 **Information**: Interested in information regarding a specific Pokemon, ability, move, or more?\s
-                                There are plenty of commands such as `/dex`, `/info`, `/moveinfo` and more that will show you data regarding a specific aspect of the world of Pokemon.
+                                There are plenty of commands such as `/pokedex`, `/info`, `/moves info` and more that will show you data regarding a specific aspect of the world of Pokemon.
                                 """.formatted(Pokecord.NAME), false)
                 )
                 .withFeaturesUnlocked(VIEW_POKEMON_LIST, VIEW_LEVEL, VIEW_TIPS, ACCESS_SETTINGS, VIEW_DEX_INFO, VIEW_UNIQUE_INFO, VIEW_SERVER_INFO, VIEW_PROFILE, CREATE_REPORT, VIEW_HELP, VIEW_BALANCE, VIEW_ABILITY_INFO, VIEW_MOVE_INFO, VIEW_MOVES, VIEW_LOCATION, VIEW_ACHIEVEMENTS, ACCESS_INVENTORY, ACCESS_LEADERBOARD,
