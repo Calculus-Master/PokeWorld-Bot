@@ -2,6 +2,8 @@ package com.calculusmaster.pokecord.commands.misc;
 
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
+import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -38,6 +40,17 @@ public class CommandDev extends PokeWorldCommand
             List<String> spawnTimers = SpawnEventHelper.getSnapshot();
 
             this.response = "SpawnEventHelper Snapshot:\n\n" + String.join("\n - ", spawnTimers);
+        }
+        else if(command[0].equals("addpokemon"))
+        {
+            PokemonEntity e = command.length > 1 ? PokemonEntity.cast(command[1]) : PokemonEntity.getRandom();
+
+            Pokemon p = Pokemon.create(e);
+            p.upload();
+
+            this.playerData.addPokemon(p.getUUID());
+
+            this.response = "Added a new **" + p.getName() + "** to your Pokemon.";
         }
         else return this.error("Invalid command.");
 

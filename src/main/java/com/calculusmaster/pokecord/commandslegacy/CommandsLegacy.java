@@ -26,12 +26,6 @@ public class CommandsLegacy
 
     public static void init()
     {
-        register("select")
-                .setCommand(CommandLegacySelect::new)
-                .setCategory(Category.POKEMON)
-                .setDesc("Select a Pokemon as your active one!")
-                .addTerminalPoint("select <number>", "Selects the Pokemon at <number> to be your active Pokemon!");
-
         register("info")
                 .setCommand(CommandLegacyInfo::new)
                 .setCategory(Category.POKEMON)
@@ -135,10 +129,6 @@ public class CommandsLegacy
         register("market")
                 .setCommand(CommandLegacyMarket::new)
                 .setCategory(Category.ECONOMY);
-
-        register("evolve")
-                .setCommand(CommandLegacyEvolve::new)
-                .setCategory(Category.POKEMON);
 
         register("equip")
                 .setCommand(CommandLegacyEquip::new)
