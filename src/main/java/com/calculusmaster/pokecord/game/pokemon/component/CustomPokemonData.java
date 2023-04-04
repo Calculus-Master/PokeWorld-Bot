@@ -1,5 +1,6 @@
-package com.calculusmaster.pokecord.game.pokemon.data;
+package com.calculusmaster.pokecord.game.pokemon.component;
 
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import org.bson.Document;
 
 import java.util.EnumSet;

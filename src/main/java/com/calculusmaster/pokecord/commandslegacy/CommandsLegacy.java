@@ -1,9 +1,15 @@
 package com.calculusmaster.pokecord.commandslegacy;
 
 import com.calculusmaster.pokecord.commandslegacy.duel.*;
-import com.calculusmaster.pokecord.commandslegacy.economy.*;
+import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyBuy;
+import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyInventory;
+import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyMarket;
+import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyShop;
 import com.calculusmaster.pokecord.commandslegacy.misc.*;
-import com.calculusmaster.pokecord.commandslegacy.moves.*;
+import com.calculusmaster.pokecord.commandslegacy.moves.CommandLegacyMoveDex;
+import com.calculusmaster.pokecord.commandslegacy.moves.CommandLegacyMoves;
+import com.calculusmaster.pokecord.commandslegacy.moves.CommandLegacyTMInfo;
+import com.calculusmaster.pokecord.commandslegacy.moves.CommandLegacyTeach;
 import com.calculusmaster.pokecord.commandslegacy.player.*;
 import com.calculusmaster.pokecord.commandslegacy.pokemon.*;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -20,32 +26,11 @@ public class CommandsLegacy
 
     public static void init()
     {
-        register("start")
-                .setCommand(CommandLegacyStart::new)
-                .setCategory(Category.MISC)
-                .setDesc("Start your Journey!")
-                .addTerminalPoint("start", "Shows a list of all the possible starters.")
-                .addTerminalPoint("start <starter>", "Start your journey with <starter>!");
-
-        register("balance", "bal", "credits", "redeems", "c", "r")
-                .setCommand(CommandLegacyBalance::new)
-                .setCategory(Category.ECONOMY)
-                .setDesc("View your balance!")
-                .addTerminalPoint("balance", "Displays your credit, redeem and item balance!")
-                .addTerminalPoint("balance <@player>", "Displays the balance of the player that is mentioned.");
-
         register("select")
                 .setCommand(CommandLegacySelect::new)
                 .setCategory(Category.POKEMON)
                 .setDesc("Select a Pokemon as your active one!")
                 .addTerminalPoint("select <number>", "Selects the Pokemon at <number> to be your active Pokemon!");
-
-        register("dex")
-                .setCommand(CommandLegacyDex::new)
-                .setCategory(Category.POKEMON)
-                .setDesc("View generic information about a Pokemon by name, or your collections!")
-                .addTerminalPoint("dex <name>", "Displays information about the Pokemon given by <name>. Optionally, type \"Shiny\" before <name> to show the shiny sprite, or \"Gigantamax\" before <name> to show the Gigantamax sprite (if applicable).")
-                .addTerminalPoint("dex <number>", "Shows a page of your Pokedex collections. <number> can be left out, and this command will display page 1.");
 
         register("info")
                 .setCommand(CommandLegacyInfo::new)
@@ -54,12 +39,6 @@ public class CommandsLegacy
                 .addTerminalPoint("info", "Displays information about your selected Pokemon.")
                 .addTerminalPoint("info <number>", "Displays information about your Pokemon at <number>.")
                 .addTerminalPoint("info latest", "Display information about your most recently acquired Pokemon.");
-
-        register("catch")
-                .setCommand(CommandLegacyCatch::new)
-                .setCategory(Category.POKEMON)
-                .setDesc("Catch a Pokemon!")
-                .addTerminalPoint("catch <guess>", "Attempt to catch a spawn by guessing its name (<guess>).");
 
         register("pokemon", "p")
                 .setCommand(CommandLegacyPokemon::new)
@@ -73,24 +52,6 @@ public class CommandsLegacy
                 .setDesc("View your active Pokemon's moves!")
                 .addTerminalPoint("moves", "Shows your active Pokemon's move set. In duels, this will show the move's type effectiveness against the opponent), otherwise, this will show your Pokemon's available moves.")
                 .addTerminalPoint("moves info", "Shows information about all the available moves for your active Pokemon. This can help you create the perfect move set!");
-
-        register("moveinfo", "mi")
-                .setCommand(CommandLegacyMoveInfo::new)
-                .setCategory(Category.MOVES)
-                .setDesc("View information about a specific move!")
-                .addTerminalPoint("moveinfo <name>", "View more information about a move given by <name>. <name can also be a TM or TR (formatted like TM01 or TR00), and this will display information about the move that the TM/TR is linked to.");
-
-        register("learn")
-                .setCommand(CommandLegacyLearn::new)
-                .setCategory(Category.MOVES)
-                .setDesc("Learn a move!")
-                .addTerminalPoint("learn <name>", "Learn a move from your Pokemon's available moves.");
-
-        register("replace")
-                .setCommand(CommandLegacyReplace::new)
-                .setCategory(Category.MOVES)
-                .setDesc("Replace a move in your move set!")
-                .addTerminalPoint("replace <number>", "Must be used after `learn`. Replaces a move in your active Pokemon's current move set with one requested by the `learn` command.");
 
         register("duel")
                 .setCommand(CommandLegacyDuel::new)
@@ -185,10 +146,6 @@ public class CommandsLegacy
 
         register("team")
                 .setCommand(CommandLegacyTeam::new)
-                .setCategory(Category.POKEMON);
-
-        register("mega")
-                .setCommand(CommandLegacyMega::new)
                 .setCategory(Category.POKEMON);
 
         register("wildduel", "wild")

@@ -33,6 +33,7 @@ public class CommandLegacyMoves extends CommandLegacy
 
         Pokemon selected = this.playerData.getSelectedPokemon();
 
+        //TODO: Added /moves analysis to the slash command
         if(analysis)
         {
             this.embed.setDescription("Note: Not all moves that can be learned by your Pokemon are listed here, because moves that have not been implemented yet are excluded from this. Also, some moves listed here might not be able to be learned by your Pokemon right now due to your Pokemon not being high enough level. Use `p!moves` to see what moves your Pokemon can learn at its current level!");

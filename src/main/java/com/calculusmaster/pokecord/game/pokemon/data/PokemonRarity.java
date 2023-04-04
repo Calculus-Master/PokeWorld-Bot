@@ -46,14 +46,14 @@ public class PokemonRarity
         return filteredSpawns.get(new Random().nextInt(filteredSpawns.size()));
     }
 
+    public static PokemonEntity getSpawn(Rarity... rarities)
+    {
+        return PokemonRarity.getSpawn(e -> List.of(rarities).contains(e.getRarity()));
+    }
+
     public static PokemonEntity getLegendarySpawn()
     {
         return PokemonRarity.getSpawn(PokemonRarity::isLegendary);
-    }
-
-    public static PokemonEntity getSpawnOfRarities(Rarity... rarities)
-    {
-        return PokemonRarity.getSpawn(e -> List.of(rarities).contains(e.getRarity()));
     }
 
     public enum Rarity

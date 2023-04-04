@@ -1,9 +1,10 @@
-package com.calculusmaster.pokecord.game.pokemon.data;
+package com.calculusmaster.pokecord.game.pokemon.data.api;
 
 import com.calculusmaster.pokecord.game.enums.elements.Ability;
 import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.util.Global;
 import kotlin.Pair;
 import org.bson.Document;
@@ -12,7 +13,7 @@ import org.json.JSONObject;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static com.calculusmaster.pokecord.game.pokemon.data.PokeAPIHelper.GET;
+import static com.calculusmaster.pokecord.game.pokemon.data.api.PokeAPIHelper.GET;
 
 public class PokeAPIQuery
 {
