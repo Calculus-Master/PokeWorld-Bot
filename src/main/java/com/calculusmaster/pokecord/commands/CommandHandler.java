@@ -3,12 +3,13 @@ package com.calculusmaster.pokecord.commands;
 import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.economy.CommandBalance;
 import com.calculusmaster.pokecord.commands.misc.CommandDev;
-import com.calculusmaster.pokecord.commands.move.CommandMoveInfo;
+import com.calculusmaster.pokecord.commands.move.CommandMoves;
 import com.calculusmaster.pokecord.commands.player.CommandStart;
 import com.calculusmaster.pokecord.commands.pokemon.CommandCatch;
 import com.calculusmaster.pokecord.commands.pokemon.CommandMega;
 import com.calculusmaster.pokecord.commands.pokemon.CommandPokeDex;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
@@ -19,6 +20,7 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.EntitySelectInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.Command;
 
 import javax.security.auth.login.LoginException;
 import java.util.ArrayList;
@@ -35,7 +37,9 @@ public class CommandHandler extends ListenerAdapter
     {
         //Guild Commands
         Pokecord.initializeDiscordBot();
-        CommandHandler.init();
+
+        //TODO: Global Commands
+        CommandHandler.updateGuildCommands();
     }
 
     //HashMap used for Slash Commands for optimization, other Interaction Entities use the List since it needs to be iterated through
@@ -52,12 +56,23 @@ public class CommandHandler extends ListenerAdapter
 
         CommandMega.init();
 
-        CommandMoveInfo.init();
+        CommandMoves.init();
 
         CommandDev.init();
 
-        //TODO: Global Commands
-        Pokecord.BOT_JDA.getGuildById(Pokecord.TEST_SERVER_ID).updateCommands().addCommands(COMMANDS.stream().map(CommandData::getSlashCommandData).toList()).queue();
+        CommandHandler.updateGuildCommands(); //TODO: Remove this once Global Commands are implemented
+    }
+
+    public static void updateGuildCommands()
+    {
+        Guild testServer = Pokecord.BOT_JDA.getGuildById(Pokecord.TEST_SERVER_ID);
+
+        List<String> registeredCommands = new ArrayList<>();
+        testServer.retrieveCommands().onSuccess(l -> registeredCommands.addAll(l.stream().map(Command::getName).toList())).queue();
+
+        List<CommandData> commandsToAdd = new ArrayList<>();
+        for(CommandData d : COMMANDS) if(!registeredCommands.contains(d.getCommandName())) commandsToAdd.add(d);
+        testServer.updateCommands().addCommands(commandsToAdd.stream().map(CommandData::getSlashCommandData).toList()).queue();
     }
 
     //Listeners

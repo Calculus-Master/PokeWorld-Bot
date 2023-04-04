@@ -3210,6 +3210,11 @@ public class Duel
         return this.players[this.indexOf(ID)];
     }
 
+    public Player getOpponent(String ID)
+    {
+        return this.players[this.indexOf(ID) == 0 ? 1 : 0];
+    }
+
     public int indexOf(String id)
     {
         for(int i = 0; i < this.players.length; i++) if(this.players[i].ID.equals(id)) return i;

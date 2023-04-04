@@ -29,7 +29,8 @@ public class DuelHelper
 
     public static Duel instance(String id)
     {
-        if(id.chars().allMatch(Character::isDigit)) return DUELS.stream().filter(d -> d.hasPlayer(id)).toList().get(0);
+        if(DUELS.isEmpty()) return null;
+        else if(id.chars().allMatch(Character::isDigit)) return DUELS.stream().filter(d -> d.hasPlayer(id)).toList().get(0);
         else return DUELS.stream().filter(d -> Arrays.stream(d.getPlayers()).anyMatch(p -> p.active.getUUID().equals(id))).toList().get(0);
     }
 

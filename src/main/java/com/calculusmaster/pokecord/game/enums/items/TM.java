@@ -8,6 +8,7 @@ import static com.calculusmaster.pokecord.game.moves.data.MoveEntity.*;
 public enum TM
 {
     //TODO: update to Scarlet Violet TMs, and use Move Entity instead of String
+    //TODO: Make single-use
     TM001(TAKE_DOWN),
     TM002(CHARM),
     TM003(FAKE_TEARS),

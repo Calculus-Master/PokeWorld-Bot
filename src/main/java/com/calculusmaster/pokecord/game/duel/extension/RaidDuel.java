@@ -516,6 +516,12 @@ public class RaidDuel extends WildDuel
         return this.players[this.players.length - 1];
     }
 
+    @Override
+    public Player getOpponent(String ID)
+    {
+        return this.getRaidBoss();
+    }
+
     public void addPlayer(String ID)
     {
         if(!this.waiting.contains(ID)) this.waiting.add(ID);

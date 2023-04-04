@@ -972,7 +972,7 @@ public class Pokemon
         List<MoveEntity> all = new ArrayList<>(moves.keySet());
         all.sort(Comparator.comparingInt(moves::get));
 
-        return this.withMovesOverride(all);
+        return all;
     }
 
     public List<MoveEntity> availableMoves()
@@ -992,13 +992,7 @@ public class Pokemon
     private List<MoveEntity> withMovesOverride(List<MoveEntity> input)
     {
         if(this.is(PokemonEntity.ZYGARDE_10, PokemonEntity.ZYGARDE_50, PokemonEntity.ZYGARDE_COMPLETE) && this.item.equals(Item.ZYGARDE_CUBE))
-            Collections.addAll(input,
-                    MoveEntity.CORE_ENFORCER,
-                    MoveEntity.DRAGON_DANCE,
-                    MoveEntity.EXTREME_SPEED,
-                    MoveEntity.THOUSAND_ARROWS,
-                    MoveEntity.THOUSAND_WAVES
-            );
+            input.addAll(Move.ZYGARDE_CUBE_MOVES);
 
         return input;
     }

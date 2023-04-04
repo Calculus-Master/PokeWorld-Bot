@@ -30,6 +30,7 @@ public class Move
     public static final EnumSet<MoveEntity> OHKO_MOVES = EnumSet.of(MoveEntity.FISSURE, MoveEntity.GUILLOTINE, MoveEntity.HORN_DRILL, MoveEntity.SHEER_COLD);
     public static final EnumSet<MoveEntity> DIRECT_DAMAGE_MOVES = EnumSet.of(MoveEntity.BIDE, MoveEntity.COMEUPPANCE, MoveEntity.COUNTER, MoveEntity.DRAGON_RAGE, MoveEntity.ENDEAVOR, MoveEntity.FINAL_GAMBIT, MoveEntity.GUARDIAN_OF_ALOLA, MoveEntity.METAL_BURST, MoveEntity.MIRROR_COAT, MoveEntity.NATURES_MADNESS, MoveEntity.NIGHT_SHADE, MoveEntity.PSYWAVE, MoveEntity.RUINATION, MoveEntity.SEISMIC_TOSS, MoveEntity.SONIC_BOOM, MoveEntity.SUPER_FANG);
     public static final EnumSet<MoveEntity> PUNCH_MOVES = EnumSet.of(MoveEntity.BULLET_PUNCH, MoveEntity.DIZZY_PUNCH, MoveEntity.DRAIN_PUNCH, MoveEntity.DYNAMIC_PUNCH, MoveEntity.FIRE_PUNCH, MoveEntity.FOCUS_PUNCH, MoveEntity.ICE_PUNCH, MoveEntity.MACH_PUNCH, MoveEntity.MEGA_PUNCH, MoveEntity.METEOR_MASH, MoveEntity.POWER_UP_PUNCH, MoveEntity.SHADOW_PUNCH, MoveEntity.SKULL_BASH, MoveEntity.THUNDER_PUNCH);
+    public static final EnumSet<MoveEntity> ZYGARDE_CUBE_MOVES = EnumSet.of(MoveEntity.CORE_ENFORCER, MoveEntity.DRAGON_DANCE, MoveEntity.EXTREME_SPEED, MoveEntity.THOUSAND_ARROWS, MoveEntity.THOUSAND_WAVES);
 
     private final MoveEntity entity;
     private final MoveData data;
