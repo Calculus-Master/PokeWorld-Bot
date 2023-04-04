@@ -1415,7 +1415,7 @@ public class Pokemon
 
     public void setUUID()
     {
-        this.setUUID(IntStream.rangeClosed(1, 6).mapToObj(i -> IDHelper.alphanumeric(4)).collect(Collectors.joining("-")));
+        this.setUUID(IntStream.rangeClosed(1, 6).mapToObj(i -> IDHelper.alphanumeric(4)).collect(Collectors.joining("")));
     }
 
     public void setUUID(String UUID)
