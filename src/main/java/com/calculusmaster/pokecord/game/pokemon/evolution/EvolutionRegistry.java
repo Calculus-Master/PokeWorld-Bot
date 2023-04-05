@@ -24,7 +24,7 @@ public class EvolutionRegistry
 
     public static void checkAutomaticEvolution(Pokemon p, PlayerDataQuery playerData, String serverID)
     {
-        if(playerData != null & !serverID.isEmpty() && EvolutionRegistry.hasEvolutionData(p.getEntity()))
+        if(playerData != null & !serverID.isEmpty() && !p.hasItem(Item.EVERSTONE) && EvolutionRegistry.hasEvolutionData(p.getEntity()))
         {
             List<EvolutionData> dataList = EvolutionRegistry.getEvolutionData(p.getEntity());
             for(EvolutionData data : dataList)

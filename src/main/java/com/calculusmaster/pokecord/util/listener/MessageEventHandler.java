@@ -5,6 +5,8 @@ import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionData;
+import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionRegistry;
 import com.calculusmaster.pokecord.game.pokemon.evolution.PokemonEgg;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
@@ -97,16 +99,20 @@ public class MessageEventHandler
 
         if(experience == 0) experience = 50;
 
-        p.addExp(experience, this.data, this.event.getGuild().getId());
+        p.addExp(experience);
 
         this.data.updateBountyProgression(ObjectiveType.EARN_XP_POKEMON, experience);
 
+        //Level Up Occurred
         if(p.getLevel() != initL)
         {
             this.data.updateBountyProgression(ObjectiveType.LEVEL_POKEMON, p.getLevel() - initL);
             this.data.addExp(PMLExperience.LEVEL_POKEMON, 100);
 
             this.send("Your " + p.getDisplayName() + " is now **Level " + p.getLevel() + "**!");
+
+            if(EvolutionRegistry.hasEvolutionData(p.getEntity()) && EvolutionRegistry.getEvolutionData(p.getEntity()).stream().anyMatch(EvolutionData::hasLevelTrigger))
+                EvolutionRegistry.checkAutomaticEvolution(p, this.data, this.event.getGuild().getId());
         }
 
         p.updateExperience();

@@ -57,7 +57,7 @@ public class CommandLegacyBounties extends CommandLegacy
                 this.playerData.getStatistics().incr(PlayerStatistic.BOUNTIES_COMPLETED);
                 Achievements.grant(this.player.getId(), Achievements.COMPLETED_FIRST_BOUNTY, this.event);
 
-                if(new Random().nextInt(50) < 10 && this.playerData.getSelectedPokemon().getLevel() != 100) this.playerData.getSelectedPokemon().addExp(500, this.playerData, this.server.getId());
+                if(new Random().nextInt(50) < 10 && this.playerData.getSelectedPokemon().getLevel() != 100) this.playerData.getSelectedPokemon().addExp(500);
 
                 this.response = "You earned " + b.getReward() + " credits for completing this bounty!";
             }

@@ -10,6 +10,7 @@ import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.player.PlayerPokedex;
 import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.evolution.FormRegistry;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
@@ -126,6 +127,14 @@ public class CommandCatch extends PokeWorldCommand
                     //Update PokeDex
                     this.playerData.updatePokedex();
                 });
+
+                //Form Checks
+                if(FormRegistry.hasFormData(caught.getEntity()))
+                {
+                    FormRegistry.FormData data = FormRegistry.getFormData(caught.getEntity());
+                    if(!data.getDefaultForm().equals(caught.getEntity()) && !this.playerData.getOwnedForms().contains(caught.getEntity()))
+                        this.playerData.addOwnedForm(caught.getEntity());
+                }
 
                 //Main Response
                 this.response = "You caught a **Level " + caught.getLevel() + " " + caught.getName() + "**!"

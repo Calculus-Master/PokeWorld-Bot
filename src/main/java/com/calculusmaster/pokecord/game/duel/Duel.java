@@ -2967,7 +2967,7 @@ public class Duel
             {
                 double experience = this.expGains.get(uuid);
 
-                p.addExp((int)(experience), ((UserPlayer)this.players[this.playerIndexFromUUID(uuid)]).data, this.channels.get(0).getGuild().getId());
+                p.addExp((int)(experience));
                 p.updateExperience();
             }
         }

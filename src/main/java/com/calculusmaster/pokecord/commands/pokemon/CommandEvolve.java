@@ -4,9 +4,12 @@ import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionData;
 import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionRegistry;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
@@ -25,7 +28,8 @@ public class CommandEvolve extends PokeWorldCommand
                 .withCommand(Commands
                         .slash("evolve", "Evolve your Pokemon, if eligible!")
                         .addSubcommands(
-                                new SubcommandData("pokemon", "Evolve your active Pokemon."),
+                                new SubcommandData("pokemon", "Evolve your active Pokemon.")
+                                        .addOption(OptionType.STRING, "target", "Optional: Specific evolution to evolve into. If not present, the first valid target will be chosen."),
                                 new SubcommandData("info", "View the evolution requirements for your active Pokemon.")
                         )
                 )
@@ -42,21 +46,38 @@ public class CommandEvolve extends PokeWorldCommand
 
         if(subcommand.equals("pokemon"))
         {
+            OptionMapping targetOption = event.getOption("target");
             List<EvolutionData> evolutionOptions = EvolutionRegistry.getEvolutionData(active.getEntity());
 
-            for(EvolutionData data : evolutionOptions)
-                if(data.validate(active, this.server.getId()))
+            PokemonEntity target = null;
+
+            if(targetOption != null)
+            {
+                PokemonEntity input = PokemonEntity.cast(targetOption.getAsString());
+
+                if(input == null) return this.error("\"" + targetOption.getAsString() + "\" is not a valid Pokemon name.");
+                else
                 {
-                    String original = active.hasNickname() ? active.getDisplayName()  + " (" + active.getEntity().getName() + ")" : active.getName();
+                    EvolutionData specificTargetData = evolutionOptions.stream().filter(d -> d.getTarget().equals(input)).findFirst().orElse(null);
 
-                    active.evolve(data.getTarget(), this.playerData);
-
-                    this.response = "Congratulations! " + original + " evolved into a **" + active.getName() + "**!";
-                    return true;
+                    if(specificTargetData == null) return this.error(active.getName() + " cannot evolve into a " + input.getName() + ".");
+                    else if(specificTargetData.validate(active, this.server.getId())) target = input;
                 }
+            }
+            else for(EvolutionData data : evolutionOptions)
+                if(data.validate(active, this.server.getId())) { target = data.getTarget(); break; }
 
-            //If this stage is reached, evolution did not take place
-            this.response = active.getName() + " was not able to evolve. Check its evolution requirements in detail using `/evolve info`.";
+            if(target != null)
+            {
+                String original = active.hasNickname() ? active.getDisplayName()  + " (" + active.getEntity().getName() + ")" : active.getName();
+
+                active.evolve(target, this.playerData);
+
+                this.response = "Congratulations! " + original + " evolved into a **" + active.getName() + "**!";
+                return true;
+            }
+            else //If this stage is reached, evolution did not take place
+                this.response = active.getName() + " did not meet fulfill its evolution requirements. Check its evolution requirements in detail using `/evolve info`.";
         }
         else if(subcommand.equals("info"))
         {

@@ -167,7 +167,7 @@ public class RaidDuel extends WildDuel
                 double multiplier = highestDamage.equals(p.ID) ? 1.3 : (p.active.isFainted() ? 0.3 : 1.0);
 
                 userPlayer.data.changeCredits((int)(credits * multiplier));
-                userPlayer.active.addExp((int)(pokeXP * multiplier), userPlayer.data, this.channels.get(0).getGuild().getId());
+                userPlayer.active.addExp((int)(pokeXP * multiplier));
 
                 if(highestDamage.equals(p.ID)) userPlayer.data.addExp(PMLExperience.DUEL_RAID_MVP, 100);
                 else if(!p.active.isFainted()) userPlayer.data.addExp(PMLExperience.DUEL_RAID_PARTICIPANT, 75);

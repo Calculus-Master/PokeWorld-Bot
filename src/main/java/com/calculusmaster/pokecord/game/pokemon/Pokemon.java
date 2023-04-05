@@ -675,6 +675,12 @@ public class Pokemon
 
         playerData.updateBountyProgression(ObjectiveType.EVOLVE_POKEMON);
         playerData.getStatistics().incr(PlayerStatistic.POKEMON_EVOLVED);
+
+        EvolutionRegistry.getEvolutionData(this.entity).stream()
+                .filter(data -> data.getTarget().equals(target))
+                .findFirst().ifPresentOrElse(data -> {
+                    if(data.hasItemTrigger()) { this.removeItem(); this.updateItem(); }
+                }, () -> LoggerHelper.warn(Pokemon.class, "Pokemon " + this.getName() + " evolved, but cannot find EvolutionData for target " + target.getName() + "."));
     }
 
     //If pokemon == null, this is being called from somewhere without a relevant Pokemon object.
@@ -1267,24 +1273,19 @@ public class Pokemon
 
     //Level & Experience
 
-    public void addExp(int exp, PlayerDataQuery playerData, String serverID)
+    public void addExp(int exp)
     {
         this.exp += exp;
 
         int req = GrowthRate.getRequiredExp(this.data.getGrowthRate(), this.level);
 
-        boolean levelUp = false;
         while(this.exp >= req && this.level < 100)
         {
             this.level++;
             this.exp -= req;
 
             req = GrowthRate.getRequiredExp(this.data.getGrowthRate(), this.level);
-
-            levelUp = true;
         }
-
-        if(levelUp) EvolutionRegistry.checkAutomaticEvolution(this, playerData, serverID);
     }
 
     public int getDefeatExp(Pokemon other)

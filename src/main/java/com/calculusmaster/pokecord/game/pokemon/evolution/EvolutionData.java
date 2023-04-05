@@ -2,8 +2,7 @@ package com.calculusmaster.pokecord.game.pokemon.evolution;
 
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
-import com.calculusmaster.pokecord.game.pokemon.evolution.triggers.EvolutionTrigger;
-import com.calculusmaster.pokecord.game.pokemon.evolution.triggers.LevelEvoTrigger;
+import com.calculusmaster.pokecord.game.pokemon.evolution.triggers.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +16,8 @@ public class EvolutionData
 
     //Properties – Avoiding looping through the trigger list constantly
     private boolean hasLevelTrigger = false; public boolean hasLevelTrigger() { return this.hasLevelTrigger; }
+    private boolean hasTradeTrigger = false; public boolean hasTradeTrigger() { return this.hasTradeTrigger; }
+    private boolean hasItemTrigger = false; public boolean hasItemTrigger() { return this.hasItemTrigger; }
 
     EvolutionData(PokemonEntity source, PokemonEntity target, EvolutionTrigger trigger1, EvolutionTrigger... triggers)
     {
@@ -31,6 +32,16 @@ public class EvolutionData
             if(t instanceof LevelEvoTrigger)
             {
                 this.hasLevelTrigger = true;
+                break;
+            }
+            else if(t instanceof TradeEvoTrigger || t instanceof TradeWithEvoTrigger)
+            {
+                this.hasTradeTrigger = true;
+                break;
+            }
+            else if(t instanceof ItemEvoTrigger)
+            {
+                this.hasItemTrigger = true;
                 break;
             }
         }

@@ -100,7 +100,7 @@ public class WildDuel extends Duel
     {
         int exp = this.players[0].active.getDefeatExp(this.players[1].active);
         Pokemon p = this.getUser().data.getSelectedPokemon();
-        p.addExp(exp, ((UserPlayer)this.players[0]).data, this.channels.get(0).getGuild().getId());
+        p.addExp(exp);
 
         if(evs) this.getUser().active.updateEVs();
         p.updateExperience();
