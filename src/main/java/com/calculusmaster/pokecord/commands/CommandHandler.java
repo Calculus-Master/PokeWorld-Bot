@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.commands.economy.CommandBalance;
 import com.calculusmaster.pokecord.commands.economy.CommandInventory;
 import com.calculusmaster.pokecord.commands.misc.CommandDev;
 import com.calculusmaster.pokecord.commands.move.CommandMoves;
+import com.calculusmaster.pokecord.commands.move.CommandTM;
 import com.calculusmaster.pokecord.commands.player.CommandStart;
 import com.calculusmaster.pokecord.commands.pokemon.*;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -56,6 +57,7 @@ public class CommandHandler extends ListenerAdapter
         CommandEvolve.init();
 
         CommandMoves.init();
+        CommandTM.init();
 
         CommandBalance.init();
         CommandInventory.init();

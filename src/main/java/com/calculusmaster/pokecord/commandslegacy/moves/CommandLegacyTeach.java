@@ -16,7 +16,7 @@ public class CommandLegacyTeach extends CommandLegacy
     @Override
     public CommandLegacy runCommand()
     {
-        if(this.insufficientMasteryLevel(Feature.TEACH_TMS_TRS)) return this.invalidMasteryLevel(Feature.TEACH_TMS_TRS);
+        if(this.insufficientMasteryLevel(Feature.TEACH_TMS)) return this.invalidMasteryLevel(Feature.TEACH_TMS);
 
         if(this.msg.length < 3 || (!this.msg[1].equals("tr") && !this.msg[1].equals("tm")) || !this.msg[2].chars().allMatch(Character::isDigit))
         {

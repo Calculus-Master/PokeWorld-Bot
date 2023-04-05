@@ -897,11 +897,6 @@ public class Pokemon
 
     //TM & TR
 
-    public boolean canLearnTM(TM tm)
-    {
-        return this.data.getTMs().contains(tm.getMove());
-    }
-
     public boolean hasTM()
     {
         return this.tm != null;

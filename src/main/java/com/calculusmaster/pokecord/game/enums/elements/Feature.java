@@ -62,7 +62,7 @@ public enum Feature
     //Level 6 – Advanced Battle Mechanics (TMs, Dynamaxing, Move Tutor)
     ACCESS_TMS("Buy Technical Machines (TMs) that can be used to teach your Pokemon new moves"),
     ACCESS_TRS("Buy Technical Records (TRs) that can be used to teach your Pokemon new moves"),
-    TEACH_TMS_TRS("Teach TMs and TRs to your Pokemon to grant them new moves"),
+    TEACH_TMS("Teach TMs to your Pokemon to grant them new moves"),
     DYNAMAX_POKEMON("Dynamax Pokemon in Duels to improve their health and be able to use Max Moves"),
     PURCHASE_MOVE_TUTOR_MOVES("Purchase Move Tutor moves to teach your Pokemon"),
 

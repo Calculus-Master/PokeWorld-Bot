@@ -2,7 +2,6 @@ package com.calculusmaster.pokecord.commandslegacy;
 
 import com.calculusmaster.pokecord.commandslegacy.duel.*;
 import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyBuy;
-import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyInventory;
 import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyMarket;
 import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyShop;
 import com.calculusmaster.pokecord.commandslegacy.misc.*;
@@ -106,12 +105,6 @@ public class CommandsLegacy
                 .setDesc("Teach TMs and TRs to your Pokemon!")
                 .addTerminalPoint("teach tm <number>", "Teach a TM to your selected Pokemon.")
                 .addTerminalPoint("teach tr <number>", "Teach a TR to your selected Pokemon.");
-
-        register("inventory", "inv", "items", "tms", "trs")
-                .setCommand(CommandLegacyInventory::new)
-                .setCategory(Category.ECONOMY)
-                .setDesc("View your inventory: items, TMs, TRs, and Z-Crystals!")
-                .addTerminalPoint("inventory <page>", "View a specific subpage of your inventory in more detail.");
 
         register("help")
                 .setCommand(CommandLegacyHelp::new)

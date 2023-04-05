@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game.pokemon.data;
 
 import com.calculusmaster.pokecord.game.enums.elements.*;
+import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.moves.data.MoveData;
 import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
@@ -100,15 +101,19 @@ public final class PokemonData
         this.levelUpMovesVersion = levelUpMoves.getString("version");
 
         JSONObject eggMoves = moves.getJSONObject("egg");
-        this.eggMoves = EnumSet.noneOf(MoveEntity.class); for(Object o : eggMoves.getJSONArray("moves")) this.eggMoves.add(MoveEntity.cast((String)o));
+        this.eggMoves = EnumSet.noneOf(MoveEntity.class);
+        for(Object o : eggMoves.getJSONArray("moves")) this.eggMoves.add(MoveEntity.cast((String)o));
         this.eggMovesVersion = eggMoves.getString("version");
 
         JSONObject tms = moves.getJSONObject("tm");
-        this.tms = EnumSet.noneOf(MoveEntity.class); for(Object o : tms.getJSONArray("moves")) this.tms.add(MoveEntity.cast((String)o));
+        this.tms = EnumSet.noneOf(MoveEntity.class);
+        for(Object o : tms.getJSONArray("moves")) this.tms.add(MoveEntity.cast((String)o));
+        this.tms.removeIf(e -> !TM.isMoveTM(e));
         this.tmsVersion = tms.getString("version");
 
         JSONObject tutorMoves = moves.getJSONObject("tutor");
-        this.tutorMoves = EnumSet.noneOf(MoveEntity.class); for(Object o : tutorMoves.getJSONArray("moves")) this.tutorMoves.add(MoveEntity.cast((String)o));
+        this.tutorMoves = EnumSet.noneOf(MoveEntity.class);
+        for(Object o : tutorMoves.getJSONArray("moves")) this.tutorMoves.add(MoveEntity.cast((String)o));
         this.tutorMovesVersion = tutorMoves.getString("version");
     }
 

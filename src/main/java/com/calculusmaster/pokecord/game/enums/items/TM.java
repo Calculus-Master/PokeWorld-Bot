@@ -3,12 +3,13 @@ package com.calculusmaster.pokecord.game.enums.items;
 import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.util.Global;
 
+import java.util.Arrays;
+
 import static com.calculusmaster.pokecord.game.moves.data.MoveEntity.*;
 
 public enum TM
 {
     //TODO: update to Scarlet Violet TMs, and use Move Entity instead of String
-    //TODO: Make single-use
     TM001(TAKE_DOWN),
     TM002(CHARM),
     TM003(FAKE_TEARS),
@@ -27,7 +28,7 @@ public enum TM
 
     ;
 
-    private MoveEntity moveEntity;
+    private final MoveEntity moveEntity;
     TM(MoveEntity moveEntity)
     {
         this.moveEntity = moveEntity;
@@ -43,13 +44,15 @@ public enum TM
         return "`" + this + "` - " + this.getMove().data().getName();
     }
 
-    public static boolean isInvalid(String str)
-    {
-        return TM.cast(str) == null;
-    }
-
     public static TM cast(String str)
     {
-        return Global.getEnumFromString(TM.values(), str);
+        TM tm = Global.getEnumFromString(TM.values(), str);
+        if(tm == null) tm = Arrays.stream(TM.values()).filter(tmEnum -> tmEnum.getMove().equals(MoveEntity.cast(str))).findFirst().orElse(null);
+        return tm;
+    }
+
+    public static boolean isMoveTM(MoveEntity move)
+    {
+        return Arrays.stream(TM.values()).anyMatch(tm -> tm.getMove().equals(move));
     }
 }

@@ -2,13 +2,9 @@ package com.calculusmaster.pokecord.game.pokemon.data.api;
 
 import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
-import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionData;
-import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionRegistry;
-import com.calculusmaster.pokecord.game.pokemon.evolution.triggers.EvolutionTrigger;
-import com.calculusmaster.pokecord.game.pokemon.evolution.triggers.TradeEvoTrigger;
-import com.calculusmaster.pokecord.game.pokemon.evolution.triggers.TradeWithEvoTrigger;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
@@ -25,7 +21,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class PokeAPIHelper
 {
@@ -91,12 +86,15 @@ public class PokeAPIHelper
 //            FormRegistry.FormData d = FormRegistry.getFormData(e);
 //            if(e.isNotSpawnable() && d.isSwitchable()) System.out.println("Checking " + e.getName() + " – " + d.getDefaultForm().getName() + " - Others: " + d.getForms().stream().map(PokemonEntity::getName).collect(Collectors.joining(", ")) + ", Switchable: " + d.isSwitchable());
 //        });
-        MoveEntity.init();
-        EvolutionRegistry.init();
-        Arrays.stream(PokemonEntity.values()).filter(EvolutionRegistry::hasEvolutionData).forEach(e -> {
-            List<EvolutionData> d = EvolutionRegistry.getEvolutionData(e);
-            if(d.size() > 1 && d.stream().anyMatch(ed -> ed.getTriggers().stream().anyMatch(tr -> tr instanceof TradeEvoTrigger || tr instanceof TradeWithEvoTrigger))) System.out.println(e.getName() + " - " + d.stream().map(data -> data.getTarget().getName() + ": " + data.getTriggers().stream().map(EvolutionTrigger::getDescription).collect(Collectors.joining(", "))).collect(Collectors.joining(" -----|----- ")));
-        });
+//        MoveEntity.init();
+//        EvolutionRegistry.init();
+//        Arrays.stream(PokemonEntity.values()).filter(EvolutionRegistry::hasEvolutionData).forEach(e -> {
+//            List<EvolutionData> d = EvolutionRegistry.getEvolutionData(e);
+//            if(d.size() > 1 && d.stream().anyMatch(ed -> ed.getTriggers().stream().anyMatch(tr -> tr instanceof TradeEvoTrigger || tr instanceof TradeWithEvoTrigger))) System.out.println(e.getName() + " - " + d.stream().map(data -> data.getTarget().getName() + ": " + data.getTriggers().stream().map(EvolutionTrigger::getDescription).collect(Collectors.joining(", "))).collect(Collectors.joining(" -----|----- ")));
+//        });
+        PokemonData d = new PokemonData(PokemonEntity.CHARMELEON);
+
+        System.out.println(d.getTMs());
     }
 
     private static void timed(Runnable r)

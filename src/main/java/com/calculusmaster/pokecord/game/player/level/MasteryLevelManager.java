@@ -272,13 +272,13 @@ public class MasteryLevelManager
                                 Now that you've been exposed to 3 kinds of Duels, let's take a first look towards improving your Pokemon.
                                 There are many ways to do so, that you'll unlock as you level, but let's start with three basic options.
                                 """)
-                        .addField("Technical Machines (TMs) and Records (TRs)", """
-                                Technical Machines and Records are items that each contain a single move.
-                                You can use them to each your Pokemon the move they contain, and they are unlimited use!
-                                Not all TMs and TRs can be used by every Pokemon, use `/dex <name>` to see what TMs/TRs a particular Pokemon can accept.
+                        .addField("Technical Machines (TMs)", """
+                                Technical Machines are items that represent a particular move.
+                                You can use them to teach your Pokemon their respective move – however, they are a one-time use.
+                                Not all TMs can be used by every Pokemon, use `/pokedex <name>` to see what TMs a particular Pokemon can accept.
                                 
-                                Pokemon can only hold one TM and one TR at a time, so choose wisely!
-                                You can teach your Pokemon a TM/TR using `/teach <tm/trNumber> <pokemonNumber>`, and view your owned TMs and TRs using `/inventory`.
+                                When you teach your Pokemon a TM, they will hold it in their inventory. If you teach a different TM to the same Pokemon, the original TM will be removed (and that TM's move will be forgotten).
+                                You can teach your Pokemon a TM using `/tm teach`, and view your owned TMs using `/inventory`.
                                 """, false)
                         .addField("Move Tutors", """
                                 Move Tutors are also another way to teach your Pokemon special moves.
@@ -294,7 +294,7 @@ public class MasteryLevelManager
                                 *Note:* Dynamaxing can only be done once per Duel, and only lasts 3 turns! Pick carefully!
                                 """, false)
                 )
-                .withFeaturesUnlocked(ACCESS_TMS, ACCESS_TRS, TEACH_TMS_TRS, DYNAMAX_POKEMON, PURCHASE_MOVE_TUTOR_MOVES)
+                .withFeaturesUnlocked(ACCESS_TMS, ACCESS_TRS, TEACH_TMS, DYNAMAX_POKEMON, PURCHASE_MOVE_TUTOR_MOVES)
                 .withExperienceRequirement(180)
                 .withTaskRequirement(new CreditsPMLTask(Prices.SHOP_BASE_TM.get()))
                 .withTaskRequirement(new TrainerPMLTask(4))
