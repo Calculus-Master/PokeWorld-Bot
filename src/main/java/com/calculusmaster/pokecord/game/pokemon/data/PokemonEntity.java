@@ -812,7 +812,7 @@ public enum PokemonEntity
     PYROAR	                    ("pyroar", "Pyroar", 668, SILVER),
     FLABEBE	                    ("flabebe", "Flabébé", 669, COPPER),
     FLOETTE	                    ("floette", "Floette", 670, SILVER),
-    FLOETTE_ETERNAL	            ("floette-eternal", "Floette (Eternal Flower)", 670, SILVER),
+    FLOETTE_ETERNAL	            ("floette-eternal", "Floette (Eternal Flower)", 670, PLATINUM),
     FLORGES	                    ("florges", "Florges", 671, GOLD),
     SKIDDO	                    ("skiddo", "Skiddo", 672, COPPER),
     GOGOAT	                    ("gogoat", "Gogoat", 673, SILVER),
