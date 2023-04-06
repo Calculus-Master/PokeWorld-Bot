@@ -3096,7 +3096,7 @@ public class Duel
         {
             int size = this.players[0].active.isDynamaxed() ? (int)(baseSize * 1.25) : baseSize;
 
-            String image = Pokemon.getImage(this.players[0].active.getEntity(), this.players[0].active.isShiny(), this.players[0].active, this.players[0].move.getEntity());
+            String image = Pokemon.getImage(this.players[0].active.getEntity(), this.players[0].active.isShiny(), this.players[0].active, this.players[0].move == null ? null : this.players[0].move.getEntity());
             URL resource = Pokecord.class.getResource(image);
 
             if(resource != null)
@@ -3111,7 +3111,7 @@ public class Duel
         {
             int size = this.players[1].active.isDynamaxed() ? (int)(baseSize * 1.25) : baseSize;
 
-            String image = Pokemon.getImage(this.players[1].active.getEntity(), this.players[1].active.isShiny(), this.players[1].active, this.players[1].move.getEntity());
+            String image = Pokemon.getImage(this.players[1].active.getEntity(), this.players[1].active.isShiny(), this.players[1].active, this.players[1].move == null ? null : this.players[1].move.getEntity());
             URL resource = Pokecord.class.getResource(image);
 
             if(resource != null)

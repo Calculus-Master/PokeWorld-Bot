@@ -333,7 +333,7 @@ public class RaidDuel extends WildDuel
             {
                 int size = this.players[i].active.isDynamaxed() ? (int)(basePlayerSize * 1.25) : basePlayerSize;
 
-                String image = Pokemon.getImage(this.players[i].active.getEntity(), this.players[i].active.isShiny(), this.players[i].active, this.players[i].move.getEntity());
+                String image = Pokemon.getImage(this.players[i].active.getEntity(), this.players[i].active.isShiny(), this.players[i].active, this.players[i].move == null ? null : this.players[i].move.getEntity());
                 URL resource = Pokecord.class.getResource(image);
 
                 if(resource != null)
@@ -351,7 +351,7 @@ public class RaidDuel extends WildDuel
         {
             int size = this.players[this.players.length - 1].active.isDynamaxed() ? (int)(bossSize * 1.25) : bossSize;
 
-            String image = Pokemon.getImage(this.players[this.players.length - 1].active.getEntity(), this.players[this.players.length - 1].active.isShiny(), this.players[this.players.length - 1].active, this.players[this.players.length - 1].move.getEntity());
+            String image = Pokemon.getImage(this.players[this.players.length - 1].active.getEntity(), this.players[this.players.length - 1].active.isShiny(), this.players[this.players.length - 1].active, this.players[this.players.length - 1].move == null ? null : this.players[this.players.length - 1].move.getEntity());
             URL resource = Pokecord.class.getResource(image);
 
             if(resource != null)
