@@ -14,11 +14,13 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.utils.FileUpload;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.*;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -148,8 +150,8 @@ public class SpawnEventHelper
 
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("A wild Pokemon spawned!")
-                .setDescription("Try to guess its name and catch it with p!catch <name>!")
-                .setColor(Global.getRandomColor())
+                .setDescription("*Try to catch it with* `/catch`!")
+                .setColor(shiny ? new Color(255, 249, 194) : spawn.data().getTypes().get(0).getColor())
                 .setImage("attachment://pkmn.png");
 
         try
