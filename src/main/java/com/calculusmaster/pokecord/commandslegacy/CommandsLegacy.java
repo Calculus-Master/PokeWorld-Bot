@@ -82,13 +82,6 @@ public class CommandsLegacy
                 .addTerminalPoint("buy movetutor <move>", "Buy a Move Tutor move. If valid, the move will be automatically inserted into the first slot of your selected Pokemon's move set.")
                 .addTerminalPoint("buy zcrystal <name>", "Buy an available Z Crystal from the shop. You cannot buy or own multiple of the same Z Crystals.");
 
-        register("release")
-                .setCommand(CommandLegacyRelease::new)
-                .setCategory(Category.POKEMON)
-                .setDesc("Release a Pokemon into the wild!")
-                .addTerminalPoint("release <number>", "Start a release request for your Pokemon at <number>. You will then be prompted to confirm or deny.")
-                .addTerminalPoint("release confirm", "Confirm a release request. Your Pokemon will be deleted forever!")
-                .addTerminalPoint("release deny", "Deny a release request. Your Pokemon will remain unchanged.");
 
         register("report", "bugreport", "suggest")
                 .setCommand(CommandLegacyReport::new)
