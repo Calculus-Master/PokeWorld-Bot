@@ -125,23 +125,23 @@ public class Pokemon
         Pokemon p = new Pokemon();
 
         p.setEntity(data.getString("entity"));
-        p.setData(PokemonEntity.cast(data.getString("entity")));
+        p.setData(PokemonEntity.valueOf(data.getString("entity")));
         p.setUUID(data.getString("UUID"));
         p.setNickname(data.getString("nickname"));
         p.setNumber(number);
         p.setShiny(data.getBoolean("shiny"));
-        p.setGender(Gender.cast(data.getString("gender")));
-        p.setNature(Nature.cast(data.getString("nature")));
+        p.setGender(Gender.valueOf(data.getString("gender")));
+        p.setNature(Nature.valueOf(data.getString("nature")));
         p.setLevel(data.getInteger("level"));
         p.setDynamaxLevel(data.getInteger("dynamaxLevel"));
         p.setPrestigeLevel(data.getInteger("prestigeLevel"));
         p.setExp(data.getInteger("exp"));
         p.setIVs(data.get("ivs", Document.class));
         p.setEVs(data.get("evs", Document.class));
-        p.setMoves(data.getList("moves", String.class).stream().map(MoveEntity::cast).toList());
-        p.setAbilities(data.getList("abilities", String.class).stream().map(Ability::cast).toList());
-        p.setItem(Item.cast(data.getString("item")));
-        p.setTM(data.getString("tm").isEmpty() ? null : TM.cast(data.getString("tm")));
+        p.setMoves(data.getList("moves", String.class).stream().map(MoveEntity::valueOf).toList());
+        p.setAbilities(data.getList("abilities", String.class).stream().map(Ability::valueOf).toList());
+        p.setItem(Item.valueOf(data.getString("item")));
+        p.setTM(data.getString("tm").isEmpty() ? null : TM.valueOf(data.getString("tm")));
         p.setAugments(data.getList("augments", String.class));
         p.setMegaCharges(data.getInteger("megacharges"));
         p.setCustomData(data.get("custom", Document.class));
@@ -394,7 +394,7 @@ public class Pokemon
 
     public void setEntity(String entity)
     {
-        this.entity = Objects.requireNonNull(PokemonEntity.cast(entity));
+        this.entity = Objects.requireNonNull(PokemonEntity.valueOf(entity));
     }
 
     public boolean is(PokemonEntity... entity)
@@ -840,7 +840,8 @@ public class Pokemon
         this.abilities = new ArrayList<>();
 
         //Main Ability
-        Ability main = this.data.getMainAbilities().stream().toList().get(this.random.nextInt(this.data.getMainAbilities().size()));
+        EnumSet<Ability> mainAbilities = this.data.getMainAbilities();
+        Ability main = mainAbilities.stream().skip(this.random.nextInt(mainAbilities.size())).findAny().get();
         this.abilities.add(main);
 
         //Hidden

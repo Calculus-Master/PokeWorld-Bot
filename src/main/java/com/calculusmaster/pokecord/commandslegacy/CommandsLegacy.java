@@ -8,7 +8,6 @@ import com.calculusmaster.pokecord.commandslegacy.misc.*;
 import com.calculusmaster.pokecord.commandslegacy.moves.CommandLegacyMoveDex;
 import com.calculusmaster.pokecord.commandslegacy.moves.CommandLegacyMoves;
 import com.calculusmaster.pokecord.commandslegacy.moves.CommandLegacyTMInfo;
-import com.calculusmaster.pokecord.commandslegacy.moves.CommandLegacyTeach;
 import com.calculusmaster.pokecord.commandslegacy.player.*;
 import com.calculusmaster.pokecord.commandslegacy.pokemon.*;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -98,13 +97,6 @@ public class CommandsLegacy
                 .setCategory(Category.MISC)
                 .setDesc("Submit a bug report or suggestion!")
                 .addTerminalPoint("report <content>", "Replace <content> with what you want to report. The report will include anything you type after the initial command.");
-
-        register("teach")
-                .setCommand(CommandLegacyTeach::new)
-                .setCategory(Category.POKEMON)
-                .setDesc("Teach TMs and TRs to your Pokemon!")
-                .addTerminalPoint("teach tm <number>", "Teach a TM to your selected Pokemon.")
-                .addTerminalPoint("teach tr <number>", "Teach a TR to your selected Pokemon.");
 
         register("help")
                 .setCommand(CommandLegacyHelp::new)

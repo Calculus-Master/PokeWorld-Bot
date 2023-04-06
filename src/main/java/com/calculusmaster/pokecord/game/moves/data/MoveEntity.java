@@ -989,6 +989,7 @@ public enum MoveEntity
 
     public String getJSONFileName()
     {
+        //TODO: Add these to enum (or maybe make a hashmap on loadup) - also do for PokemonEntity
         return Global.normalize(this.apiID.replaceAll("-", " ")).replaceAll(" ", "_");
     }
 

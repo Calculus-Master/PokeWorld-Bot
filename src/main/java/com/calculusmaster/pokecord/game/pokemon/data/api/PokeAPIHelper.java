@@ -2,7 +2,6 @@ package com.calculusmaster.pokecord.game.pokemon.data.api;
 
 import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.util.Global;
@@ -92,9 +91,20 @@ public class PokeAPIHelper
 //            List<EvolutionData> d = EvolutionRegistry.getEvolutionData(e);
 //            if(d.size() > 1 && d.stream().anyMatch(ed -> ed.getTriggers().stream().anyMatch(tr -> tr instanceof TradeEvoTrigger || tr instanceof TradeWithEvoTrigger))) System.out.println(e.getName() + " - " + d.stream().map(data -> data.getTarget().getName() + ": " + data.getTriggers().stream().map(EvolutionTrigger::getDescription).collect(Collectors.joining(", "))).collect(Collectors.joining(" -----|----- ")));
 //        });
-        PokemonData d = new PokemonData(PokemonEntity.CHARMELEON);
 
-        System.out.println(d.getTMs());
+//        Mongo.PlayerData.find(Filters.eq("playerID", "309135641453527040")).first();
+//
+//        timed(() -> {
+//            System.out.println("Old");
+//            List<String> uuids = Mongo.PlayerData.find(Filters.eq("playerID", "309135641453527040")).first().getList("pokemon", String.class);
+//            uuids.forEach(s -> Mongo.PokemonData.find(Filters.eq("UUID", "1v788ickww9iyrxxgdzss7k2")).first());
+//        });
+//
+//        timed(() -> {
+//            System.out.println("New");
+//            List<String> uuids = Mongo.PlayerData.find(Filters.eq("playerID", "309135641453527040")).projection(Projections.fields(Projections.include("pokemon"))).first().getList("pokemon", String.class);
+//            uuids.forEach(s -> Mongo.PokemonData.find(Filters.eq("UUID", "1v788ickww9iyrxxgdzss7k2")).projection(Projections.include("ivs", "evs")).first());
+//        });
     }
 
     private static void timed(Runnable r)

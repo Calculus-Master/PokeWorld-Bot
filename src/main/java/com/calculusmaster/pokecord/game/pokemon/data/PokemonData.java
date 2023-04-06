@@ -74,46 +74,46 @@ public final class PokemonData
         this.genus = background.getString("genus");
         this.height = background.getDouble("height");
         this.weight = background.getDouble("weight");
-        this.types = background.getJSONArray("types").toList().stream().map(o -> Type.cast(o.toString())).toList();
+        this.types = background.getJSONArray("types").toList().stream().map(o -> Type.valueOf(o.toString())).toList();
         this.flavorText = background.getJSONArray("flavor").toList().stream().map(Object::toString).toList();
 
         JSONObject stats = json.getJSONObject("stats");
         this.baseStats = new PokemonStats(); for(Stat s : Stat.values()) this.baseStats.set(s, stats.getJSONArray("baseStats").getInt(s.ordinal()));
         this.yield = new PokemonStats(); for(Stat s : Stat.values()) this.yield.set(s, stats.getJSONArray("yield").getInt(s.ordinal()));
         this.baseExperience = stats.getInt("exp");
-        this.growthRate = GrowthRate.cast(stats.getString("growthRate"));
+        this.growthRate = GrowthRate.valueOf(stats.getString("growthRate"));
         this.captureRate = stats.getInt("captureRate");
 
         JSONObject breeding = json.getJSONObject("breeding");
         this.genderRate = breeding.getInt("genderRate");
-        this.eggGroups = EnumSet.noneOf(EggGroup.class); for(String s : breeding.getJSONArray("eggGroups").toList().stream().map(Object::toString).toList()) this.eggGroups.add(EggGroup.cast(s));
+        this.eggGroups = EnumSet.noneOf(EggGroup.class); for(String s : breeding.getJSONArray("eggGroups").toList().stream().map(Object::toString).toList()) this.eggGroups.add(EggGroup.valueOf(s));
         this.baseHappiness = breeding.getInt("happiness");
         this.rawHatchTarget = breeding.getInt("hatchTarget");
 
         JSONObject abilities = json.getJSONObject("abilities");
-        this.mainAbilities = EnumSet.noneOf(Ability.class); for(String s : abilities.getJSONArray("main").toList().stream().map(Object::toString).toList()) this.mainAbilities.add(Ability.cast(s));
-        this.hiddenAbilities = EnumSet.noneOf(Ability.class); for(String s : abilities.getJSONArray("hidden").toList().stream().map(Object::toString).toList()) this.hiddenAbilities.add(Ability.cast(s));
+        this.mainAbilities = EnumSet.noneOf(Ability.class); for(String s : abilities.getJSONArray("main").toList().stream().map(Object::toString).toList()) this.mainAbilities.add(Ability.valueOf(s));
+        this.hiddenAbilities = EnumSet.noneOf(Ability.class); for(String s : abilities.getJSONArray("hidden").toList().stream().map(Object::toString).toList()) this.hiddenAbilities.add(Ability.valueOf(s));
 
         JSONObject moves = json.getJSONObject("moves");
 
         JSONObject levelUpMoves = moves.getJSONObject("level");
-        this.levelUpMoves = new LinkedHashMap<>(); for(String s : levelUpMoves.getJSONObject("moves").keySet()) this.levelUpMoves.put(MoveEntity.cast(s), levelUpMoves.getJSONObject("moves").getInt(s));
+        this.levelUpMoves = new LinkedHashMap<>(); for(String s : levelUpMoves.getJSONObject("moves").keySet()) this.levelUpMoves.put(MoveEntity.valueOf(s), levelUpMoves.getJSONObject("moves").getInt(s));
         this.levelUpMovesVersion = levelUpMoves.getString("version");
 
         JSONObject eggMoves = moves.getJSONObject("egg");
         this.eggMoves = EnumSet.noneOf(MoveEntity.class);
-        for(Object o : eggMoves.getJSONArray("moves")) this.eggMoves.add(MoveEntity.cast((String)o));
+        for(Object o : eggMoves.getJSONArray("moves")) this.eggMoves.add(MoveEntity.valueOf((String)o));
         this.eggMovesVersion = eggMoves.getString("version");
 
         JSONObject tms = moves.getJSONObject("tm");
         this.tms = EnumSet.noneOf(MoveEntity.class);
-        for(Object o : tms.getJSONArray("moves")) this.tms.add(MoveEntity.cast((String)o));
+        for(Object o : tms.getJSONArray("moves")) this.tms.add(MoveEntity.valueOf((String)o));
         this.tms.removeIf(e -> !TM.isMoveTM(e));
         this.tmsVersion = tms.getString("version");
 
         JSONObject tutorMoves = moves.getJSONObject("tutor");
         this.tutorMoves = EnumSet.noneOf(MoveEntity.class);
-        for(Object o : tutorMoves.getJSONArray("moves")) this.tutorMoves.add(MoveEntity.cast((String)o));
+        for(Object o : tutorMoves.getJSONArray("moves")) this.tutorMoves.add(MoveEntity.valueOf((String)o));
         this.tutorMovesVersion = tutorMoves.getString("version");
     }
 

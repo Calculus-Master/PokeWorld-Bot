@@ -30,7 +30,9 @@ public class CommandTM extends PokeWorldCommand
                         .addSubcommands(
                                 new SubcommandData("teach", "Teach your active Pokemon a move from an owned TM.")
                                         .addOption(OptionType.STRING, "tm", "The TM you want to teach your active Pokemon.", true, true),
-                                new SubcommandData("remove", "Remove a TM from your active Pokemon. Note: This will also remove the corresponding move.")
+                                new SubcommandData("remove", "Remove a TM from your active Pokemon. Note: This will also remove the corresponding move."),
+                                new SubcommandData("info", "View what move a TM teaches.")
+                                        .addOption(OptionType.STRING, "tm", "The TM you want to view information about.", true, true)
                         )
                 )
                 .register();
@@ -108,6 +110,14 @@ public class CommandTM extends PokeWorldCommand
 
                 this.response = "**" + tm + "** has been removed from " + active.getName() + " and returned to your inventory!" + (hadMove ? "\n*" + active.getName() + " has forgotten " + tm.getMove().getName() + "*." : "");
             }
+        }
+        else if(subcommand.equals("info"))
+        {
+            OptionMapping tmOption = Objects.requireNonNull(event.getOption("tm"));
+            TM tm = TM.cast(tmOption.getAsString());
+
+            if(tm == null) return this.error("\"" + tmOption.getAsString() + "\" is not a valid TM!");
+            else this.response = tm + " teaches a Pokemon **" + tm.getMove().getName() + "**.\nView information about this move with the command: `/moves info move:" + tm.getMove().getName() + "`.";
         }
 
         return true;

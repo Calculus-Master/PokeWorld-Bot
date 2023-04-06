@@ -79,7 +79,6 @@ public class Pokecord
         INIT_COMPLETE = false;
 
         LoggerHelper.init("Config", ConfigHelper::init);
-        LoggerHelper.init("CSV Helper", CSVHelper::init);
 
         LoggerHelper.init("Move Entities", MoveEntity::init);
         LoggerHelper.init("Custom Move Data", CustomMoveDataRegistry::init);
