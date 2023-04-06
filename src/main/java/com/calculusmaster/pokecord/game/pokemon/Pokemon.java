@@ -755,20 +755,36 @@ public class Pokemon
         //Stuff that requires a MoveEntity and Pokemon object
         if(pokemon != null && moveEntity != null)
         {
-            dir = "extra_move/";
-
             if(pokemonEntity == PokemonEntity.SOLGALEO && (moveEntity == MoveEntity.SUNSTEEL_STRIKE || moveEntity == MoveEntity.SEARING_SUNRAZE_SMASH))
+            {
+                dir = "extra_move/";
                 image = image + "_RadiantSunPhase";
+            }
             else if(pokemonEntity == PokemonEntity.LUNALA && (moveEntity == MoveEntity.MOONGEIST_BEAM || moveEntity == MoveEntity.MENACING_MOONRAZE_MAELSTROM))
+            {
+                dir = "extra_move/";
                 image = image + "_FullMoonPhase";
+            }
             else if(pokemonEntity == PokemonEntity.MARSHADOW)
+            {
+                dir = "extra_move/";
                 image = image + "_Zenith_" + (shiny ? "S" : "N");
+            }
             else if(pokemonEntity == PokemonEntity.ARTICUNO_GALAR && moveEntity == MoveEntity.FREEZING_GLARE)
+            {
+                dir = "extra_move/";
                 image = image + "_FreezingGlare";
+            }
             else if(pokemonEntity == PokemonEntity.ZAPDOS_GALAR && moveEntity == MoveEntity.THUNDEROUS_KICK)
+            {
+                dir = "extra_move/";
                 image = image + "_ThunderousKick";
+            }
             else if(pokemonEntity == PokemonEntity.MOLTRES_GALAR && moveEntity == MoveEntity.FIERY_WRATH)
+            {
+                dir = "extra_move/";
                 image = image + "_FieryWrath";
+            }
 
             if((pokemonEntity == PokemonEntity.RESHIRAM && (moveEntity == MoveEntity.BLUE_FLARE || moveEntity == MoveEntity.FUSION_FLARE))
                     || (pokemonEntity == PokemonEntity.ZEKROM && (moveEntity == MoveEntity.BOLT_STRIKE || moveEntity == MoveEntity.FUSION_BOLT))
@@ -796,7 +812,7 @@ public class Pokemon
             image = image + "_" + season;
         }
 
-        return "data/images/" + dir + image + ".png";
+        return "/data/images/" + dir + image + ".png";
     }
 
     public static String getWIPImage()

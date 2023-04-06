@@ -142,7 +142,7 @@ public class CommandPokeDex extends PokeWorldCommand
                     .setColor(data.getTypes().get(0).getColor())
             ;
 
-            FileUpload image = this.setEmbedPokemonImage("/" + Pokemon.getImage(entity, shiny, null, null), "dex_pokemon.png");
+            FileUpload image = this.setEmbedPokemonImage(Pokemon.getImage(entity, shiny, null, null), "dex_pokemon.png");
             event.replyFiles(image).setEmbeds(this.embed.build()).queue();
             this.embed = null;
         }
