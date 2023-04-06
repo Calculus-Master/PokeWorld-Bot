@@ -82,13 +82,6 @@ public class CommandsLegacy
                 .addTerminalPoint("buy movetutor <move>", "Buy a Move Tutor move. If valid, the move will be automatically inserted into the first slot of your selected Pokemon's move set.")
                 .addTerminalPoint("buy zcrystal <name>", "Buy an available Z Crystal from the shop. You cannot buy or own multiple of the same Z Crystals.");
 
-
-        register("report", "bugreport", "suggest")
-                .setCommand(CommandLegacyReport::new)
-                .setCategory(Category.MISC)
-                .setDesc("Submit a bug report or suggestion!")
-                .addTerminalPoint("report <content>", "Replace <content> with what you want to report. The report will include anything you type after the initial command.");
-
         register("help")
                 .setCommand(CommandLegacyHelp::new)
                 .setCategory(Category.MISC)
