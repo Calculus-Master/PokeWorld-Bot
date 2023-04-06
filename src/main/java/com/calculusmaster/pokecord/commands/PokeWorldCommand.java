@@ -66,6 +66,12 @@ public abstract class PokeWorldCommand
         return this.error("An error has occurred. Please report this with as much detail as possible using `/report`! For example, include the UUID of your selected Pokemon, the command or activity you were using, etc.");
     }
 
+    protected void setResponsesHandled() //For Commands that either manually respond to an event or forward to an activity
+    {
+        this.response = "";
+        this.embed = null;
+    }
+
     protected List<String> getAutocompleteOptions(String currentInput, List<String> sourceList)
     {
         String input = currentInput.toLowerCase();

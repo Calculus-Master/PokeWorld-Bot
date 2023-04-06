@@ -5,9 +5,7 @@ import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyBuy;
 import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyMarket;
 import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyShop;
 import com.calculusmaster.pokecord.commandslegacy.misc.*;
-import com.calculusmaster.pokecord.commandslegacy.moves.CommandLegacyMoveDex;
 import com.calculusmaster.pokecord.commandslegacy.moves.CommandLegacyMoves;
-import com.calculusmaster.pokecord.commandslegacy.moves.CommandLegacyTMInfo;
 import com.calculusmaster.pokecord.commandslegacy.player.*;
 import com.calculusmaster.pokecord.commandslegacy.pokemon.*;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -211,10 +209,6 @@ public class CommandsLegacy
                 .setCommand(CommandLegacyEggs::new)
                 .setCategory(Category.POKEMON);
 
-        register("tminfo", "tmi")
-                .setCommand(CommandLegacyTMInfo::new)
-                .setCategory(Category.MOVES);
-
         register("level")
                 .setCommand(CommandLegacyLevel::new)
                 .setCategory(Category.PLAYER);
@@ -226,10 +220,6 @@ public class CommandsLegacy
         register("eliteduel", "elite")
                 .setCommand(CommandLegacyEliteDuel::new)
                 .setCategory(Category.DUEL);
-
-        register("learninfo", "li", "movedex", "md")
-                .setCommand(CommandLegacyMoveDex::new)
-                .setCategory(Category.MOVES);
 
         register("prestige")
                 .setCommand(CommandLegacyPrestige::new)

@@ -15,6 +15,7 @@ import com.calculusmaster.pokecord.game.moves.data.MoveData;
 import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionRegistry;
 import com.calculusmaster.pokecord.util.Global;
@@ -25,6 +26,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.api.utils.SplitUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -48,7 +50,9 @@ public class CommandMoves extends PokeWorldCommand
                                         .addOption(OptionType.STRING, "move", "The name of the move to learn.", true, true)
                                         .addOption(OptionType.INTEGER, "slot", "Optional: Include the slot to learn this move into, skipping the replace command.", false, false),
                                 new SubcommandData("replace", "Upon request, replace a slot in your active Pokemon's moveset with the move you want to learn.")
-                                        .addOption(OptionType.INTEGER, "slot", "The slot to replace with the new move.", true, false)
+                                        .addOption(OptionType.INTEGER, "slot", "The slot to replace with the new move.", true, false),
+                                new SubcommandData("search", "Search for Pokemon that know a particular move.")
+                                        .addOption(OptionType.STRING, "move", "The name of the move to search for.", true, true)
                         )
                 )
                 .register();
@@ -57,9 +61,9 @@ public class CommandMoves extends PokeWorldCommand
     @Override
     protected boolean slashCommandLogic(SlashCommandInteractionEvent event)
     {
-        if(event.getSubcommandName() == null) return this.error();
+        String subcommand = Objects.requireNonNull(event.getSubcommandName());
 
-        if(event.getSubcommandName().equals("info"))
+        if(subcommand.equals("info"))
         {
             if(this.isInvalidMasteryLevel(Feature.VIEW_MOVE_INFO)) return this.respondInvalidMasteryLevel(Feature.VIEW_MOVE_INFO);
 
@@ -127,7 +131,7 @@ public class CommandMoves extends PokeWorldCommand
                     .addField("Effects", effects.isEmpty() ? "No Information Available" : effects, false)
                     .setColor(data.getType().getColor());
         }
-        else if(event.getSubcommandName().equals("view"))
+        else if(subcommand.equals("view"))
         {
             if(this.isInvalidMasteryLevel(Feature.VIEW_MOVES)) return this.respondInvalidMasteryLevel(Feature.VIEW_MOVES);
 
@@ -224,7 +228,7 @@ public class CommandMoves extends PokeWorldCommand
                         .setFooter("A green circle indicates a move that can be learned. A yellow circle indicates a move that is currently in your moveset. A lock indicates a move that cannot be learned yet. An exclamation point signifies that the move is not implemented yet, meaning it will not work within duels.");
             }
         }
-        else if(event.getSubcommandName().equals("learn"))
+        else if(subcommand.equals("learn"))
         {
             if(this.isInvalidMasteryLevel(Feature.LEARN_REPLACE_MOVES)) return this.respondInvalidMasteryLevel(Feature.LEARN_REPLACE_MOVES);
 
@@ -270,7 +274,7 @@ public class CommandMoves extends PokeWorldCommand
                 }
             }
         }
-        else if(event.getSubcommandName().equals("replace"))
+        else if(subcommand.equals("replace"))
         {
             if(this.isInvalidMasteryLevel(Feature.LEARN_REPLACE_MOVES)) return this.respondInvalidMasteryLevel(Feature.LEARN_REPLACE_MOVES);
 
@@ -301,6 +305,47 @@ public class CommandMoves extends PokeWorldCommand
             EvolutionRegistry.checkAutomaticEvolution(active, this.playerData, this.server.getId());
 
             this.response = active.getDisplayName() + " learned **" + move.data().getName() + "**! It replaced *" + oldMove.data().getName() + "* in Slot " + slot + ".";
+        }
+        else if(subcommand.equals("search"))
+        {
+            OptionMapping moveOption = Objects.requireNonNull(event.getOption("move"));
+            MoveEntity move = MoveEntity.cast(moveOption.getAsString());
+
+            if(move == null) return this.error("\"" + moveOption.getAsString() + "\" is not a valid move name!");
+
+            List<String> knowByLevelUp = new ArrayList<>();
+            List<String> knowByTM = new ArrayList<>();
+            List<String> knowByEgg = new ArrayList<>();
+
+            for(PokemonEntity e : PokemonEntity.values())
+            {
+                PokemonData data = e.data();
+
+                if(data.getLevelUpMoves().containsKey(move)) knowByLevelUp.add(e.getName());
+                if(data.getTMs().contains(move)) knowByTM.add(e.getName());
+                if(data.getEggMoves().contains(move)) knowByEgg.add(e.getName());
+            }
+
+            int max = 1021;
+
+            String levelUp = knowByLevelUp.isEmpty() ? "None" : String.join(", ", knowByLevelUp);
+            String tm = knowByTM.isEmpty() ? "None" : String.join(", ", knowByTM);
+            String egg = knowByEgg.isEmpty() ? "None" : String.join(", ", knowByEgg);
+
+            if(levelUp.length() > max) levelUp = SplitUtil.split(levelUp, max, SplitUtil.Strategy.WHITESPACE).get(0) + "...";
+            if(tm.length() > max) tm = SplitUtil.split(tm, max, SplitUtil.Strategy.WHITESPACE).get(0) + "...";
+            if(egg.length() > max) egg = SplitUtil.split(egg, max, SplitUtil.Strategy.WHITESPACE).get(0) + "...";
+
+            //TODO: Add pagination for move search results somehow
+
+            this.embed
+                    .setTitle("Move Search Results: " + move.getName())
+                    .setDescription("""
+                            These are all the Pokemon that can learn **%s** from various Move sources.
+                            """.formatted(move.getName()))
+                    .addField("Learn by Level Up", levelUp, false)
+                    .addField("Learn by TM", tm, false)
+                    .addField("Learn by Breeding (Egg Move)", egg, false);
         }
 
         return true;
