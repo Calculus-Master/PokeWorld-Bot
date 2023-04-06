@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.misc;
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
 import com.calculusmaster.pokecord.game.bounties.Bounty;
+import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.mongo.DatabaseCollection;
@@ -70,6 +71,12 @@ public class CommandDev extends PokeWorldCommand
                 Mongo.deleteOne("CommandDev - Reset Player (Delete Player Data)", DatabaseCollection.PLAYER, Filters.eq("playerID", target.getID()));
                 PlayerDataCache.CACHE.remove(target.getID());
                 this.response = target.getUsername() + " has been reset!";
+            }
+            case "resettrainers" ->
+            {
+                Mongo.TrainerData.deleteMany(Filters.exists("trainerID"));
+                TrainerManager.createRegularTrainers();
+                this.response = "Trainers have been deleted and re-created.";
             }
             default -> {
                 return this.error("Invalid dev command: " + Arrays.toString(command));

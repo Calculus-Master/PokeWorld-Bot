@@ -6,15 +6,13 @@ import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.mongo.Mongo;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Updates;
-import org.bson.Document;
-import org.bson.conversions.Bson;
 
-import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
@@ -22,47 +20,20 @@ import static com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity.Rarity
 
 public class TrainerManager
 {
-    public static int REGULAR_TRAINER_INTERVAL;
-
     public static final List<TrainerData> REGULAR_TRAINERS = new ArrayList<>();
-    private static final ScheduledExecutorService TIMER = Executors.newSingleThreadScheduledExecutor();
-
-    private static final Bson TIMER_QUERY = Filters.eq("type", "timer");
 
     public static void init()
     {
-        //No Timer Document
-        if(Mongo.TrainerData.find(Filters.eq("type", "timer")).first() == null)
-        {
-            Mongo.TrainerData.insertOne(new Document("type", "timer").append("time", REGULAR_TRAINER_INTERVAL));
+        Mongo.TrainerData.find(Filters.exists("trainerID")).forEach(d -> REGULAR_TRAINERS.add(new TrainerData(d)));
 
-            TrainerManager.createRegularTrainers();
-        }
-
-        if(REGULAR_TRAINERS.isEmpty()) Mongo.TrainerData.find(Filters.exists("trainerID")).forEach(d -> REGULAR_TRAINERS.add(new TrainerData(d)));
-
-        TIMER.scheduleAtFixedRate(TrainerManager::updateTrainers, 0, 1, TimeUnit.HOURS);
-    }
-
-    private static void updateTrainers()
-    {
-        int time = Objects.requireNonNull(Mongo.TrainerData.find(TIMER_QUERY).first()).getInteger("time");
-
-        if(--time <= 0)
-        {
-            Mongo.TrainerData.updateOne(TIMER_QUERY, Updates.set("time", REGULAR_TRAINER_INTERVAL));
-
-            Mongo.PlayerData.updateMany(Filters.exists("playerID"), Updates.set("defeated_trainers", new ArrayList<>()));
-
-            REGULAR_TRAINERS.clear();
-
-            TrainerManager.createRegularTrainers();
-        }
-        else Mongo.TrainerData.updateOne(TIMER_QUERY, Updates.set("time", time));
+        //If the list is empty that means the database didn't have any trainers, so create them
+        if(REGULAR_TRAINERS.isEmpty()) TrainerManager.createRegularTrainers();
     }
 
     public static void createRegularTrainers()
     {
+        LoggerHelper.info(TrainerManager.class, "Creating new Regular Trainers.");
+
         final Random random = new Random();
         final List<String> trainerNames = List.of("Team Rocket Grunt", "Team Aqua Grunt", "Team Magma Grunt", "Team Galactic Grunt", "Team Plasma Grunt", "Team Flare Grunt", "Team Skull Grunt", "Team Yell Grunt");
         final Supplier<String> randomName = () -> trainerNames.get(random.nextInt(trainerNames.size()));

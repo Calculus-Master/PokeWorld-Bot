@@ -17,6 +17,7 @@ import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugmentRegistry;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.*;
+import com.calculusmaster.pokecord.game.world.RotationManager;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.util.PrivateInfo;
 import com.calculusmaster.pokecord.util.cacheold.PlayerDataCache;
@@ -155,7 +156,7 @@ public class Pokecord
             }
         });
 
-        TimeHelper.start();
+        LoggerHelper.init("Rotation Tasks", RotationManager::init);
     }
 
     public static void close()

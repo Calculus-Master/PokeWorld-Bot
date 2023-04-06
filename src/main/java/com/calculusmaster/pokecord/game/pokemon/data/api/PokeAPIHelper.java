@@ -105,6 +105,21 @@ public class PokeAPIHelper
 //            List<String> uuids = Mongo.PlayerData.find(Filters.eq("playerID", "309135641453527040")).projection(Projections.fields(Projections.include("pokemon"))).first().getList("pokemon", String.class);
 //            uuids.forEach(s -> Mongo.PokemonData.find(Filters.eq("UUID", "1v788ickww9iyrxxgdzss7k2")).projection(Projections.include("ivs", "evs")).first());
 //        });
+
+//        LocalDateTime time = Global.timeNow().plusHours(12);
+//        int targetHour = 19;
+//
+//        //Remove minutes, seconds, nanos
+//        time = time.minusSeconds(time.getSecond()).minusMinutes(time.getMinute()).minusNanos(time.getNano());
+//
+//        if(time.getHour() > targetHour) time = time.plusHours(24 - time.getHour());
+//        time = time.plusHours(targetHour);
+//        System.out.println(time);
+//
+//        long epoch = time.toEpochSecond(ZoneOffset.of("-7"));
+//        System.out.println(LocalDateTime.ofEpochSecond(epoch, 0, ZoneOffset.of("-7")));
+//
+//        System.out.println(LocalDateTime.ofEpochSecond(1680832800, 0, ZoneOffset.of("-7")));
     }
 
     private static void timed(Runnable r)

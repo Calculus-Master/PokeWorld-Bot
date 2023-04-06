@@ -4,7 +4,6 @@ import com.calculusmaster.pokecord.commandslegacy.CommandsLegacy;
 import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyShop;
 import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyTeam;
 import com.calculusmaster.pokecord.game.bounties.Bounty;
-import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.evolution.PokemonEgg;
 import com.calculusmaster.pokecord.mongo.Mongo;
@@ -42,7 +41,6 @@ public class ConfigHelper
             CommandLegacyTeam.MAX_TEAM_SIZE = config.getInteger("team_limit");
             CommandLegacyTeam.MAX_SLOTS = config.getInteger("team_slots");
             MasteryLevelManager.ACTIVE = config.getBoolean("mastery_levels");
-            TrainerManager.REGULAR_TRAINER_INTERVAL = config.getInteger("trainer_rotation_interval");
 
             LoggerHelper.info(ConfigHelper.class, "Loaded config values!");
         }
@@ -66,7 +64,6 @@ public class ConfigHelper
             PokemonEgg.MAX_EGGS = 9;
             CommandLegacyTeam.MAX_TEAM_SIZE = 6;
             CommandLegacyTeam.MAX_SLOTS = 5;
-            TrainerManager.REGULAR_TRAINER_INTERVAL = 24 * 7;
         }
     }
 }

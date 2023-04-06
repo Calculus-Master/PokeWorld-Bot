@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.entities.User;
 import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.EnumSet;
 import java.util.SplittableRandom;
 
@@ -32,6 +33,11 @@ public class Global
     public static LocalDateTime timeNow()
     {
         return LocalDateTime.now(ZoneId.of("America/Los_Angeles"));
+    }
+
+    public static long timeNowEpoch()
+    {
+        return Global.timeNow().toEpochSecond(ZoneOffset.UTC);
     }
 
     public static boolean isStarter(PokemonEntity entity)
