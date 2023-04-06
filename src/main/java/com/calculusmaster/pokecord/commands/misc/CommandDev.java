@@ -78,6 +78,11 @@ public class CommandDev extends PokeWorldCommand
                 TrainerManager.createRegularTrainers();
                 this.response = "Trainers have been deleted and re-created.";
             }
+            case "clearcrashreports" ->
+            {
+                Mongo.CrashData.deleteMany(Filters.exists("error"));
+                this.response = "Crash Reports have been deleted.";
+            }
             default -> {
                 return this.error("Invalid dev command: " + Arrays.toString(command));
             }

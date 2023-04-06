@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.mongo.Mongo;
+import com.calculusmaster.pokecord.util.Global;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -40,7 +41,8 @@ public class LoggerHelper
         Document crashReport = new Document()
                 .append("error", error)
                 .append("source", clazz.getName())
-                .append("stack", ExceptionUtils.getStackTrace(exception));
+                .append("stack", ExceptionUtils.getStackTrace(exception))
+                .append("time", Global.timeNow().toString().replaceFirst("T", "  Time: "));
 
         Mongo.CrashData.insertOne(crashReport);
 
