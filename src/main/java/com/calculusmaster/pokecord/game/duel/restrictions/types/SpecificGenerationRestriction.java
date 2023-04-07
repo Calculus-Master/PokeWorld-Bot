@@ -2,7 +2,6 @@ package com.calculusmaster.pokecord.game.duel.restrictions.types;
 
 import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestriction;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.util.Global;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class SpecificGenerationRestriction extends TeamRestriction
     @Override
     public boolean validate(List<Pokemon> team)
     {
-        return team.stream().allMatch(p -> Global.getGeneration(p.getData()) == this.generation);
+        return team.stream().allMatch(p -> p.getEntity().getGeneration() == this.generation);
     }
 
     @Override

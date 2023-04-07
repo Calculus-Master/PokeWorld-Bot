@@ -1242,6 +1242,19 @@ public enum PokemonEntity
         return this.dex + "_" + Global.normalize(this.apiID.replaceAll("-", " ")).replaceAll(" ", "_");
     }
 
+    public int getGeneration()
+    {
+        if(this.dex <= 151) return 1;
+        else if(this.dex <= 251) return 2;
+        else if(this.dex <= 386) return 3;
+        else if(this.dex <= 493) return 4;
+        else if(this.dex <= 649) return 5;
+        else if(this.dex <= 721) return 6;
+        else if(this.dex <= 809) return 7;
+        else if(this.dex <= 905) return 8;
+        else return 9;
+    }
+
     public String getAPIID()
     {
         return this.apiID;

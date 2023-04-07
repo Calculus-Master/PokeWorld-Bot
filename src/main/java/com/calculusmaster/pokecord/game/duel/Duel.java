@@ -26,10 +26,10 @@ import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.GigantamaxRegistry;
 import com.calculusmaster.pokecord.game.pokemon.evolution.MegaChargeManager;
 import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
+import com.calculusmaster.pokecord.game.world.RegionManager;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
-import com.calculusmaster.pokecord.util.helpers.event.LocationEventHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -1453,7 +1453,7 @@ public class Duel
         //Augment: Umbral Enhancements
         if(c.hasAugment(PokemonAugment.UMBRAL_ENHANCEMENTS) && move.is(Type.DARK) && !move.is(Category.STATUS))
         {
-            boolean night = LocationEventHelper.getTime().isNight();
+            boolean night = RegionManager.getCurrentTime().isNight();
 
             if(night) move.setPower(1.3);
             else move.setPower(0.9);

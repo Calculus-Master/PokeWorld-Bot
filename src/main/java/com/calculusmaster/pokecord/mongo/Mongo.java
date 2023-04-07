@@ -108,6 +108,7 @@ public class Mongo
     //Old accessors for databases
 
     public static final MongoCollection<Document> ConfigData = PokecordDB.getCollection("ConfigData");
+    public static final MongoCollection<Document> MiscData = PokecordDB.getCollection("MiscData");
 
     public static final MongoCollection<Document> PlayerData = PokecordDB.getCollection("PlayerData");
     public static final MongoCollection<Document> ServerData = PokecordDB.getCollection("ServerData");

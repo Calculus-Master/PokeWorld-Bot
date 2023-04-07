@@ -14,8 +14,11 @@ import java.util.Random;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+@Deprecated
 public class LocationEventHelper
 {
+    //TODO: Rework/Remove
+
     private static final Map<String, Location> SERVER_LOCATIONS = new HashMap<>();
     private static final Map<String, ScheduledFuture<?>> SCHEDULERS = new HashMap<>();
 

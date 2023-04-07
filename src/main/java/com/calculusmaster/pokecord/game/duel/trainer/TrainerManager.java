@@ -41,7 +41,7 @@ public class TrainerManager
         //Class I Trainers: No Restrictions
         List.of(20, 40, 60).forEach(level -> {
             int teamSize = random.nextInt(3, 6);
-            List<PokemonEntity> team = IntStream.range(0, teamSize).mapToObj(i -> PokemonRarity.getSpawn(COPPER, SILVER, GOLD, PLATINUM, DIAMOND)).toList();
+            List<PokemonEntity> team = IntStream.range(0, teamSize).mapToObj(i -> PokemonRarity.getSpawn(true, COPPER, SILVER, GOLD, PLATINUM, DIAMOND)).toList();
 
             REGULAR_TRAINERS.add(new TrainerData(randomName.get(), 1, team, null, level, 1.05F));
         });
@@ -49,7 +49,7 @@ public class TrainerManager
         //Class II Trainers: Default Restrictions
         List.of(25, 50, 75, 100).forEach(level -> {
             int teamSize = random.nextInt(5, 7);
-            List<PokemonEntity> team = IntStream.range(0, teamSize).mapToObj(i -> PokemonRarity.getSpawn(COPPER, SILVER, GOLD, PLATINUM, DIAMOND, MYTHICAL)).toList();
+            List<PokemonEntity> team = IntStream.range(0, teamSize).mapToObj(i -> PokemonRarity.getSpawn(true, COPPER, SILVER, GOLD, PLATINUM, DIAMOND, MYTHICAL)).toList();
 
             TrainerData data = new TrainerData(randomName.get(), 2, team, null, level, 1.15F);
             data.addRestriction(TeamRestrictionRegistry.STANDARD);
@@ -58,7 +58,7 @@ public class TrainerManager
 
         //Class III Trainers: Single Tier 1 Restriction
         List.of(50, 70, 90, 100).forEach(level -> {
-            List<PokemonEntity> team = IntStream.range(0, 6).mapToObj(i -> PokemonRarity.getSpawn()).toList();
+            List<PokemonEntity> team = IntStream.range(0, 6).mapToObj(i -> PokemonRarity.getSpawn(true)).toList();
 
             TrainerData data = new TrainerData(randomName.get(), 3, team, random.nextFloat() < 0.15F ? ZCrystal.getCrystalOfType(Type.getRandom()) : null, level, 1.25F);
             data.addRestriction(TeamRestrictionRegistry.STANDARD);
@@ -68,7 +68,7 @@ public class TrainerManager
 
         //Class IV Trainers: Double Tier 1 Restriction
         List.of(70, 90, 100).forEach(level -> {
-            List<PokemonEntity> team = IntStream.range(0, 6).mapToObj(i -> PokemonRarity.getSpawn()).toList();
+            List<PokemonEntity> team = IntStream.range(0, 6).mapToObj(i -> PokemonRarity.getSpawn(true)).toList();
 
             TrainerData data = new TrainerData(randomName.get(), 4, team, random.nextFloat() < 0.5F ? ZCrystal.getCrystalOfType(Type.getRandom()) : null, level, 1.35F);
             data.addRestriction(TeamRestrictionRegistry.STANDARD);
@@ -78,7 +78,7 @@ public class TrainerManager
 
         //Class V Trainers: Single Tier 2 Restriction
         List.of(85, 100).forEach(level -> {
-            List<PokemonEntity> team = IntStream.range(0, 6).mapToObj(i -> PokemonRarity.getSpawn(GOLD, PLATINUM, DIAMOND, MYTHICAL, ULTRA_BEAST, LEGENDARY)).toList();
+            List<PokemonEntity> team = IntStream.range(0, 6).mapToObj(i -> PokemonRarity.getSpawn(true, GOLD, PLATINUM, DIAMOND, MYTHICAL, ULTRA_BEAST, LEGENDARY)).toList();
 
             TrainerData data = new TrainerData(randomName.get(), 5, team, ZCrystal.getCrystalOfType(Type.getRandom()), level, 1.4F);
             data.addRestriction(TeamRestrictionRegistry.STANDARD);
@@ -88,7 +88,7 @@ public class TrainerManager
 
         //Class VI (Bonus) Trainers: Single Tier 3 Restriction
         List.of(100).forEach(level -> {
-            List<PokemonEntity> team = IntStream.range(0, 6).mapToObj(i -> PokemonRarity.getSpawn(DIAMOND, MYTHICAL, ULTRA_BEAST, LEGENDARY)).toList();
+            List<PokemonEntity> team = IntStream.range(0, 6).mapToObj(i -> PokemonRarity.getSpawn(true, DIAMOND, MYTHICAL, ULTRA_BEAST, LEGENDARY)).toList();
 
             TrainerData data = new TrainerData(randomName.get(), 6, team, ZCrystal.getCrystalOfType(Type.getRandom()), level, 1.5F);
             data.addRestriction(TeamRestrictionRegistry.STANDARD);

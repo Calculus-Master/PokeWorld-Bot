@@ -17,13 +17,13 @@ import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugmentRegistry;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.*;
+import com.calculusmaster.pokecord.game.world.RegionManager;
 import com.calculusmaster.pokecord.game.world.RotationManager;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.util.PrivateInfo;
 import com.calculusmaster.pokecord.util.cacheold.PlayerDataCache;
 import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
 import com.calculusmaster.pokecord.util.helpers.*;
-import com.calculusmaster.pokecord.util.helpers.event.LocationEventHelper;
 import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import com.calculusmaster.pokecord.util.listener.Listener;
@@ -97,6 +97,8 @@ public class Pokecord
 
         LoggerHelper.init("Player Data Cache", PlayerDataCache::init);
 
+        LoggerHelper.init("Region Manager", RegionManager::init);
+
         LoggerHelper.init("Team Restrictions", TeamRestrictionRegistry::init, true);
         LoggerHelper.init("Incomplete Moves", Move::init);
         LoggerHelper.init("Pokemon Rarity", PokemonRarity::init);
@@ -144,7 +146,6 @@ public class Pokecord
             if(g != null)
             {
                 SpawnEventHelper.start(g);
-                LocationEventHelper.start(g);
 
                 CommandLegacyTarget.generateNewServerTarget(g);
             }
@@ -163,7 +164,6 @@ public class Pokecord
     {
         SpawnEventHelper.close();
         RaidEventHelper.close();
-        LocationEventHelper.close();
         CommandLegacyBreed.close();
         ThreadPoolHandler.close();
 

@@ -34,6 +34,7 @@ public class RotationManager
         //Register the Runnable for each Task
         TASKS.put("SHOP", PokeWorldShop::refreshShops);
         TASKS.put("TRAINERS", TrainerManager::createRegularTrainers);
+        TASKS.put("REGION", RegionManager::updateRegion);
 
         //Encode the Database into Objects
         Mongo.TimeData.find(Filters.exists("taskID")).forEach(d -> TIMERS.add(new RotationTaskTimer(d)));

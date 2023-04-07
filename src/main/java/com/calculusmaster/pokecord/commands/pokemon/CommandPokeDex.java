@@ -67,7 +67,7 @@ public class CommandPokeDex extends PokeWorldCommand
             PokemonData data = entity.data();
             boolean shiny = shinyOption != null && shinyOption.getAsBoolean();
 
-            String generation = "Generation " + Global.getGeneration(data);
+            String generation = "Generation " + entity.getGeneration();
             String genus = data.getGenus().isEmpty() ? "Unknown Species" : data.getGenus();
             String flavorText = data.getFlavorText().isEmpty() ? "" : data.getFlavorText().get(this.random.nextInt(data.getFlavorText().size()));
 

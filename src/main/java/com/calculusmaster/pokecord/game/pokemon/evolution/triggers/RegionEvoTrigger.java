@@ -2,8 +2,8 @@ package com.calculusmaster.pokecord.game.pokemon.evolution.triggers;
 
 import com.calculusmaster.pokecord.game.enums.elements.Region;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.world.RegionManager;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.helpers.event.LocationEventHelper;
 
 public class RegionEvoTrigger implements EvolutionTrigger
 {
@@ -19,7 +19,7 @@ public class RegionEvoTrigger implements EvolutionTrigger
     @Override
     public boolean canEvolve(Pokemon p, String serverID)
     {
-        return !serverID.isEmpty() && (this.invert != LocationEventHelper.getLocation(serverID).region.equals(this.region));
+        return !serverID.isEmpty() && (this.invert != RegionManager.getCurrentRegion().equals(this.region));
     }
 
     @Override
