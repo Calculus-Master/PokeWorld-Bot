@@ -62,8 +62,8 @@ public class CommandLegacyDev extends CommandLegacy
         {
             case "forcespawn" -> {
                 PokemonEntity spawn;
-                if (this.msg[2].equals("random")) spawn = PokemonRarity.getSpawn(false);
-                else if (this.msg[2].equals("legendary")) spawn = PokemonRarity.getLegendarySpawn(false);
+                if (this.msg[2].equals("random")) spawn = PokemonRarity.getSpawn();
+                else if (this.msg[2].equals("legendary")) spawn = PokemonRarity.getLegendarySpawn();
                 else spawn = PokemonEntity.cast(this.getMultiWordContent(2));
                 SpawnEventHelper.forceSpawn(this.server, spawn);
             }

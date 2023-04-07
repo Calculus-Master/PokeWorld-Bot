@@ -73,7 +73,7 @@ public class RotationManager
         RotationTaskTimer(Document data)
         {
             this.taskID = data.getString("taskID");
-            this.targetTime = data.getInteger("targetTime");
+            this.targetTime = data.getLong("targetTime");
             this.interval = data.getInteger("interval");
         }
 
