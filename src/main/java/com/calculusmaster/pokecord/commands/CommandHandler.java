@@ -7,6 +7,7 @@ import com.calculusmaster.pokecord.commands.misc.CommandDev;
 import com.calculusmaster.pokecord.commands.misc.CommandWorld;
 import com.calculusmaster.pokecord.commands.move.CommandMoves;
 import com.calculusmaster.pokecord.commands.move.CommandTM;
+import com.calculusmaster.pokecord.commands.player.CommandAchievements;
 import com.calculusmaster.pokecord.commands.player.CommandBugReport;
 import com.calculusmaster.pokecord.commands.player.CommandStart;
 import com.calculusmaster.pokecord.commands.pokemon.*;
@@ -53,6 +54,7 @@ public class CommandHandler extends ListenerAdapter
     {
         CommandStart.init();
         CommandBugReport.init();
+        CommandAchievements.init();
 
         CommandCatch.init();
         CommandPokeDex.init();

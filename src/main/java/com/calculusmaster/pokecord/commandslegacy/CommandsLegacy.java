@@ -159,10 +159,6 @@ public class CommandsLegacy
                 .setCommand(CommandLegacyTournament::new)
                 .setCategory(Category.DUEL);
 
-        register("achievements")
-                .setCommand(CommandLegacyAchievements::new)
-                .setCategory(Category.PLAYER);
-
         register("serverinfo", "server")
                 .setCommand(CommandLegacyServerInfo::new)
                 .setCategory(Category.MISC);
@@ -173,10 +169,6 @@ public class CommandsLegacy
 
         register("tip", "tips")
                 .setCommand(CommandLegacyTip::new)
-                .setCategory(Category.MISC);
-
-        register("location", "time", "region")
-                .setCommand(CommandLegacyLocation::new)
                 .setCategory(Category.MISC);
 
         register("gauntlet", "gauntletduel")
