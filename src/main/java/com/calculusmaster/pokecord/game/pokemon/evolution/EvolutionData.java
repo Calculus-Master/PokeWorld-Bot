@@ -10,6 +10,7 @@ import java.util.List;
 public class EvolutionData
 {
     //Fields
+    private final String evolutionID;
     private final PokemonEntity source;
     private final PokemonEntity target;
     private final List<EvolutionTrigger> triggers;
@@ -21,6 +22,7 @@ public class EvolutionData
 
     EvolutionData(PokemonEntity source, PokemonEntity target, EvolutionTrigger trigger1, EvolutionTrigger... triggers)
     {
+        this.evolutionID = "EVO_DATA__" + source.toString() + "->" + target.toString();
         this.source = source;
         this.target = target;
 
@@ -50,6 +52,11 @@ public class EvolutionData
     public boolean validate(Pokemon p, String serverID)
     {
         return this.triggers.stream().allMatch(t -> t.canEvolve(p, serverID));
+    }
+
+    public String getEvolutionID()
+    {
+        return this.evolutionID;
     }
 
     public PokemonEntity getSource()

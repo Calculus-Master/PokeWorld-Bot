@@ -1,13 +1,8 @@
 package com.calculusmaster.pokecord.game.moves.data;
 
-import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import static com.calculusmaster.pokecord.game.moves.data.MoveTag.*;
 
@@ -957,12 +952,7 @@ public enum MoveEntity
 
     public static void init()
     {
-        ExecutorService manager = Executors.newFixedThreadPool(5);
-        for(MoveEntity moveEntity : values()) if(!moveEntity.isZMove() && !moveEntity.isMaxMove()) manager.submit(() -> MOVE_ENTITY_DATA.put(moveEntity, new MoveData(moveEntity)));
-
-        manager.shutdown();
-        try { manager.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS); }
-        catch(InterruptedException e) { LoggerHelper.error(PokemonEntity.class, "Error trying to initialize MoveData."); e.printStackTrace(); }
+        for(MoveEntity moveEntity : values()) if(!moveEntity.isZMove() && !moveEntity.isMaxMove()) MOVE_ENTITY_DATA.put(moveEntity, new MoveData(moveEntity));
     }
 
     private final String apiID;
