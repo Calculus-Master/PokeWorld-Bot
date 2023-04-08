@@ -32,7 +32,7 @@ public class RotationManager
     public static void init()
     {
         //Register the Runnable for each Task
-        TASKS.put("SHOP", PokeWorldShop::refreshShops);
+        TASKS.put("SHOP", PokeWorldShop::refresh);
         TASKS.put("TRAINERS", TrainerManager::createRegularTrainers);
         TASKS.put("REGION", RegionManager::updateRegion);
 

@@ -1,9 +1,7 @@
 package com.calculusmaster.pokecord.commandslegacy;
 
 import com.calculusmaster.pokecord.commandslegacy.duel.*;
-import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyBuy;
 import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyMarket;
-import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyShop;
 import com.calculusmaster.pokecord.commandslegacy.misc.*;
 import com.calculusmaster.pokecord.commandslegacy.moves.CommandLegacyMoves;
 import com.calculusmaster.pokecord.commandslegacy.player.*;
@@ -60,27 +58,6 @@ public class CommandsLegacy
                 .addTerminalPoint("use swap <number>", "Swap out your active Pokemon to another on your team (index given by <number>). Cannot be used in Wild Pokemon duels.")
                 .addTerminalPoint("use z <number>", "Use a Z-Move of one of your learned moves given by <number>.")
                 .addTerminalPoint("use d <number>", "Enter Dynamax, and then use one of your learned moves.");
-
-        register("shop", "store")
-                .setCommand(CommandLegacyShop::new)
-                .setCategory(Category.ECONOMY)
-                .setDesc("View the shop!")
-                .addTerminalPoint("shop", "View a list of all shop categories. Use `shop <page>` to see the listings in a specific category.")
-                .addTerminalPoint("shop <page>", "View a specific shop page, category given by <page>.");
-
-        register("buy")
-                .setCommand(CommandLegacyBuy::new)
-                .setCategory(Category.ECONOMY)
-                .setDesc("Buy items from the shop!")
-                .addTerminalPoint("buy nature <nature>", "Buy a nature for your selected Pokemon, where <nature> is the name of the nature.")
-                .addTerminalPoint("buy candy <number>", "Buy a specific number of rare candies. <number> is optional, and will default to 1.")
-                .addTerminalPoint("buy item <index> <amount>", "Buy an item listed on the shop. <amount> is optional and will default to 1.")
-                .addTerminalPoint("buy form <name>", "Buy a form for your selected Pokemon, if applicable. Bought Forms are permanent, so you only need to purchase the form once to be able to transform any of your Pokemon of the same kind. The shop page for forms dynamically changes based on your selected Pokemon, and shows you the possible forms you can buy.")
-                .addTerminalPoint("buy mega <x:y>", "Buy the Mega Evolution for your selected Pokemon, if available. Bought Mega Evolutions are permanent, so you only need to purchase the form once to be able to Mega Evolve any of your Pokemon of the same kind. For Pokemon with a single Mega Evolution, omit the <x:y> argument. For Pokemon with both X and Y Mega Evolutions, you have to specify which one to buy.")
-                .addTerminalPoint("buy tm <number>", "Buy an available TM from the shop. <number> can either be a number, such as 69, or formatted as a TM, like TM69.")
-                .addTerminalPoint("buy tr <number>", "Buy an available TR from the shop. <number> can either be a number, such as 69, or formatted as a TR, like TR69.")
-                .addTerminalPoint("buy movetutor <move>", "Buy a Move Tutor move. If valid, the move will be automatically inserted into the first slot of your selected Pokemon's move set.")
-                .addTerminalPoint("buy zcrystal <name>", "Buy an available Z Crystal from the shop. You cannot buy or own multiple of the same Z Crystals.");
 
         register("help")
                 .setCommand(CommandLegacyHelp::new)

@@ -1,11 +1,11 @@
 package com.calculusmaster.pokecord.util.helpers;
 
 import com.calculusmaster.pokecord.commandslegacy.CommandsLegacy;
-import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyShop;
 import com.calculusmaster.pokecord.game.bounties.Bounty;
 import com.calculusmaster.pokecord.game.player.PlayerTeam;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.evolution.PokemonEgg;
+import com.calculusmaster.pokecord.game.world.PokeWorldShop;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import org.bson.Document;
@@ -26,11 +26,9 @@ public class ConfigHelper
 
             ThreadPoolHandler.THREAD_POOL_TYPE = config.getInteger("thread_pool_type");
             CacheHelper.DYNAMIC_CACHING_ACTIVE = config.getBoolean("dynamic_caching");
-            CommandLegacyShop.ITEM_COUNT_MIN = config.getList("item_counts", Integer.class).get(0);
-            CommandLegacyShop.ITEM_COUNT_MAX = config.getList("item_counts", Integer.class).get(1);
-            CommandLegacyShop.TM_COUNT = config.getInteger("tm_count");
-            CommandLegacyShop.ZCRYSTAL_COUNT_MIN = config.getList("zcrystal_counts", Integer.class).get(0);
-            CommandLegacyShop.ZCRYSTAL_COUNT_MAX = config.getList("zcrystal_counts", Integer.class).get(1);
+            PokeWorldShop.ITEM_COUNTS = new int[]{config.getList("item_counts", Integer.class).get(0), config.getList("item_counts", Integer.class).get(1)};
+            PokeWorldShop.TM_COUNTS = new int[]{config.getList("tm_counts", Integer.class).get(0), config.getList("tm_counts", Integer.class).get(1)};
+            PokeWorldShop.Z_CRYSTAL_COUNTS = new int[]{config.getList("zcrystal_counts", Integer.class).get(0), config.getList("zcrystal_counts", Integer.class).get(1)};
             CommandsLegacy.COMMAND_THREAD_POOL = config.getBoolean("command_thread_pool");
             Bounty.MAX_BOUNTIES_HELD = config.getInteger("bounty_max_held");
             Bounty.BOUNTY_REWARD_MIN = config.getList("bounty_rewards", Integer.class).get(0);
@@ -50,11 +48,9 @@ public class ConfigHelper
 
             ThreadPoolHandler.THREAD_POOL_TYPE = 1;
             CacheHelper.DYNAMIC_CACHING_ACTIVE = false;
-            CommandLegacyShop.ITEM_COUNT_MAX = 10;
-            CommandLegacyShop.ITEM_COUNT_MIN = 5;
-            CommandLegacyShop.TM_COUNT = 10;
-            CommandLegacyShop.ZCRYSTAL_COUNT_MAX = 10;
-            CommandLegacyShop.ZCRYSTAL_COUNT_MIN = 5;
+            PokeWorldShop.ITEM_COUNTS = new int[]{5, 10};
+            PokeWorldShop.TM_COUNTS = new int[]{10, 12};
+            PokeWorldShop.Z_CRYSTAL_COUNTS = new int[]{5, 10};
             CommandsLegacy.COMMAND_THREAD_POOL = false;
             Bounty.MAX_BOUNTIES_HELD = 3;
             Bounty.BOUNTY_REWARD_MIN = 50;

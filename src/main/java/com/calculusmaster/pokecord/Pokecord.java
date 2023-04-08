@@ -3,7 +3,6 @@ package com.calculusmaster.pokecord;
 import com.calculusmaster.pokecord.commands.CommandHandler;
 import com.calculusmaster.pokecord.commandslegacy.CommandsLegacy;
 import com.calculusmaster.pokecord.commandslegacy.duel.CommandLegacyTarget;
-import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyShop;
 import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyBreed;
 import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
 import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestrictionRegistry;
@@ -17,6 +16,7 @@ import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugmentRegistry;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.*;
+import com.calculusmaster.pokecord.game.world.PokeWorldShop;
 import com.calculusmaster.pokecord.game.world.RegionManager;
 import com.calculusmaster.pokecord.game.world.RotationManager;
 import com.calculusmaster.pokecord.mongo.Mongo;
@@ -98,6 +98,7 @@ public class Pokecord
         LoggerHelper.init("Player Data Cache", PlayerDataCache::init);
 
         LoggerHelper.init("Region Manager", RegionManager::init);
+        LoggerHelper.init("PokeWorld Shop", PokeWorldShop::init);
 
         LoggerHelper.init("Team Restrictions", TeamRestrictionRegistry::init, true);
         LoggerHelper.init("Incomplete Moves", Move::init);
@@ -105,7 +106,6 @@ public class Pokecord
         LoggerHelper.init("Trainer Manager", TrainerManager::init);
         LoggerHelper.init("Pokemon Augments", PokemonAugmentRegistry::init);
         LoggerHelper.init("Command Handler", CommandsLegacy::init);
-        LoggerHelper.init("Shops", CommandLegacyShop::updateShops);
         LoggerHelper.init("Pokemon Mastery Level", MasteryLevelManager::init);
         LoggerHelper.init("Achievement Cache", CacheHelper::initAchievementCache);
         LoggerHelper.init("Market", CacheHelper::initMarketEntries, true);

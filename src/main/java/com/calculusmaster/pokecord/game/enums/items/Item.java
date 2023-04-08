@@ -4,6 +4,8 @@ import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.util.Global;
 
 import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
 
 import static com.calculusmaster.pokecord.game.enums.items.ItemType.*;
 
@@ -160,8 +162,8 @@ public enum Item
 
     ;
 
-    public int cost;
-    public ItemType type;
+    private final int cost;
+    private final ItemType type;
 
     Item(int cost, ItemType type)
     {
@@ -186,7 +188,9 @@ public enum Item
 
     public static Item cast(String input)
     {
-        return Arrays.stream(values()).filter(i -> i.toString().equalsIgnoreCase(input)).findFirst().orElse(null);
+        Item item = Global.getEnumFromString(values(), input);
+        if(item == null) item = Arrays.stream(values()).filter(c -> c.getStyledName().equalsIgnoreCase(input)).findFirst().orElse(null);
+        return item;
     }
 
     public Type getArceusPlateType()
@@ -237,6 +241,18 @@ public enum Item
         };
     }
 
+    public static List<Item> getAll(ItemType... type)
+    {
+        EnumSet<ItemType> types = EnumSet.copyOf(Arrays.asList(type));
+        return Arrays.stream(values()).filter(i -> types.contains(i.type)).toList();
+    }
+
+    public static List<Item> getAllNot(ItemType... type)
+    {
+        EnumSet<ItemType> types = EnumSet.copyOf(Arrays.asList(type));
+        return Arrays.stream(values()).filter(i -> !types.contains(i.type)).toList();
+    }
+
     public boolean isPlateItem()
     {
         return this.type.equals(PLATE);
@@ -266,5 +282,15 @@ public enum Item
     {
         //TODO: Currently only berries, but will need to be expanded if other items are consumable
         return this.isBerry();
+    }
+
+    public int getCost()
+    {
+        return this.cost;
+    }
+
+    public ItemType getType()
+    {
+        return this.type;
     }
 }

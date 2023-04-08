@@ -83,6 +83,12 @@ public class CommandDev extends PokeWorldCommand
                 Mongo.CrashData.deleteMany(Filters.exists("error"));
                 this.response = "Crash Reports have been deleted.";
             }
+            case "addcredits" ->
+            {
+                int amount = command.length > 1 ? Integer.parseInt(command[1]) : 1000;
+                this.playerData.changeCredits(amount);
+                this.response = "Added " + amount + " credits.";
+            }
             default -> {
                 return this.error("Invalid dev command: " + Arrays.toString(command));
             }

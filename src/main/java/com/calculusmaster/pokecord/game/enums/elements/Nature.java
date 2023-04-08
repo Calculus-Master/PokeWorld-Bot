@@ -71,11 +71,11 @@ public enum Nature
 
     public static Nature cast(String nature)
     {
-        return (Nature) Global.getEnumFromString(values(), nature);
+        return Global.getEnumFromString(values(), nature);
     }
 
     public String getShopEntry()
     {
-        return "+10% **" + this.increase + "**\n-10% **" + this.decrease + "**";
+        return "**+** 10% " + this.increase + "\n**-** 10% " + this.decrease + "";
     }
 }

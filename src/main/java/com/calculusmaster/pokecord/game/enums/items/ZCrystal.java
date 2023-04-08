@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
+import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.interfaces.ZCrystalValidator;
 import org.jooq.lambda.Seq;
 
@@ -15,6 +16,7 @@ import static com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity.*;
 
 public enum ZCrystal
 {
+    //Typed
     BUGINIUM_Z(Type.BUG),
     DARKINIUM_Z(Type.DARK),
     DRAGONIUM_Z(Type.DRAGON),
@@ -33,6 +35,7 @@ public enum ZCrystal
     ROCKIUM_Z(Type.ROCK),
     STEELIUM_Z(Type.STEEL),
     WATERIUM_Z(Type.WATER),
+    //Unique
     ALORAICHIUM_Z(RAICHU_ALOLA, THUNDERBOLT),
     DECIDIUM_Z(DECIDUEYE, SPIRIT_SHACKLE),
     EEVIUM_Z(EEVEE, LAST_RESORT),
@@ -113,8 +116,9 @@ public enum ZCrystal
 
     public static ZCrystal cast(String z)
     {
-        for(ZCrystal zc : values()) if(z.equalsIgnoreCase(zc.getStyledName()) || z.equalsIgnoreCase(zc.toString())) return zc;
-        return null;
+        ZCrystal zc = Global.getEnumFromString(values(), z);
+        if(zc == null) zc = Arrays.stream(values()).filter(c -> c.getStyledName().equalsIgnoreCase(z) || c.getStyledName().equalsIgnoreCase(z + " Z")).findFirst().orElse(null);
+        return zc;
     }
 
     public static ZCrystal getCrystalOfType(Type t)

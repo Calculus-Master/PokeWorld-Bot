@@ -28,6 +28,7 @@ public class CommandTeam extends PokeWorldCommand
         CommandData
                 .create("team")
                 .withConstructor(CommandTeam::new)
+                .withFeature(Feature.CREATE_POKEMON_TEAMS)
                 .withCommand(Commands
                         .slash("team", "Create your Pokemon team!")
                         .addSubcommands(
@@ -63,8 +64,6 @@ public class CommandTeam extends PokeWorldCommand
     @Override
     protected boolean slashCommandLogic(SlashCommandInteractionEvent event)
     {
-        if(this.isInvalidMasteryLevel(Feature.CREATE_POKEMON_TEAMS)) return this.respondInvalidMasteryLevel(Feature.CREATE_POKEMON_TEAMS);
-
         String subcommand = Objects.requireNonNull(event.getSubcommandName());
 
         if(!subcommand.equals("view") && DuelHelper.isInDuel(this.player.getId())) return this.error("You cannot edit your team while in a Duel.");

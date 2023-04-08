@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands;
 import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.economy.CommandBalance;
 import com.calculusmaster.pokecord.commands.economy.CommandInventory;
+import com.calculusmaster.pokecord.commands.economy.CommandShop;
 import com.calculusmaster.pokecord.commands.misc.CommandDev;
 import com.calculusmaster.pokecord.commands.misc.CommandWorld;
 import com.calculusmaster.pokecord.commands.move.CommandMoves;
@@ -69,6 +70,7 @@ public class CommandHandler extends ListenerAdapter
 
         CommandBalance.init();
         CommandInventory.init();
+        CommandShop.init();
 
         CommandWorld.init();
 

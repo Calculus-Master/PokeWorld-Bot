@@ -7,7 +7,6 @@ public enum ItemType
     BERRY,
     EVOLUTION,
     DRIVE,
-    RKS_MEMORY,
     POWER,
     INCENSE,
     PLATE,
