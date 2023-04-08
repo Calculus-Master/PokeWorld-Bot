@@ -136,25 +136,24 @@ public class CommandMoves extends PokeWorldCommand
             if(this.isInvalidMasteryLevel(Feature.VIEW_MOVES)) return this.respondInvalidMasteryLevel(Feature.VIEW_MOVES);
 
             Duel duel = DuelHelper.instance(this.player.getId());
-            boolean isInDuel = duel != null && duel.getStatus().equals(DuelHelper.DuelStatus.DUELING);
 
-            if(isInDuel)
+            if(duel != null)
             {
                 UserPlayer active = (UserPlayer)duel.getPlayer(this.player.getId());
                 Player opponent = duel.getOpponent(this.player.getId());
 
-                String moves;
-
                 List<String> moveList = new ArrayList<>();
+                List<String> moveTypeEffectList = new ArrayList<>();
+                List<String> moveUseCommandList = new ArrayList<>();
                 for(int i = 0; i < active.active.getMoves().size(); i++)
                 {
                     Move m = active.active.getMove(i);
                     if(active.active.isDynamaxed()) m = DuelHelper.getMaxMove(active.active, m);
 
-                    moveList.add((i + 1) + ": " + m.getName() + " (" + m.getEffectivenessOverview(opponent.active) + ")\t |\t `/use move " + (i + 1) + "`");
+                    moveList.add((i + 1) + ": " + m.getName());
+                    moveTypeEffectList.add(m.getEffectivenessOverview(opponent.active));
+                    moveUseCommandList.add("`/use move slot:" + (i + 1) + "`");
                 }
-
-                moves = String.join("\n", moveList);
 
                 ZCrystal crystal = ZCrystal.cast(active.data.getEquippedZCrystal());
                 String zmove = !this.serverData.areZMovesEnabled() ? "**Disabled in this server!**" : ((active.usedZMove ? "Used." : "Available!") + "\t\t" + "Equipped Z-Crystal: **" + (crystal == null ? "None" : crystal.getStyledName()) + "**");
@@ -166,8 +165,12 @@ public class CommandMoves extends PokeWorldCommand
                                 *You're currently in a Duel.*
                                 This is the equipped moveset for your active Pokemon, %s.
                                 Also shown are the status of your Z-Move and Dynamax usage in the Duel. You can only use each one once, so choose wisely!
-                                """)
-                        .addField("Moves", moves, false)
+                                """.formatted(active.active.getName()))
+
+                        .addField("Moves", String.join("\n", moveList), true)
+                        .addField("Type Effectiveness", String.join("\n", moveTypeEffectList), true)
+                        .addField("Use", String.join("\n", moveUseCommandList), true)
+
                         .addField("Techniques", """
                                 Z-Move: %s
                                 Dynamax: %s
