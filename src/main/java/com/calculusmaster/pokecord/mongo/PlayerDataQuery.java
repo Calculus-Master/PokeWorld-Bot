@@ -6,7 +6,7 @@ import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerData;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
-import com.calculusmaster.pokecord.game.enums.functional.Achievements;
+import com.calculusmaster.pokecord.game.enums.functional.Achievement;
 import com.calculusmaster.pokecord.game.player.PlayerInventory;
 import com.calculusmaster.pokecord.game.player.PlayerPokedex;
 import com.calculusmaster.pokecord.game.player.PlayerTeam;
@@ -25,7 +25,6 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 
@@ -252,8 +251,6 @@ public class PlayerDataQuery extends MongoQuery
                             .forEach(p -> this.addAugment(p.getAugmentID()));
                 }
 
-                if(this.getLevel() == MasteryLevelManager.MASTERY_LEVELS.get(MasteryLevelManager.MASTERY_LEVELS.size() - 1).getLevel()) Achievements.grant(this.getID(), Achievements.REACH_MAX_MASTERY_LEVEL, null);
-
                 this.directMessage("You are now **Pokemon Mastery Level " + this.getLevel() + "**! You've unlocked the following features:\n" + MasteryLevelManager.MASTERY_LEVELS.get(this.getLevel()).getUnlockedFeaturesOverview());
                 this.dmMasteryLevel();
             }
@@ -368,19 +365,19 @@ public class PlayerDataQuery extends MongoQuery
     }
 
     //key: "achievements"
-    public List<String> getAchievementsList()
+    public List<Achievement> getAchievements()
     {
-        return this.document.getList("achievements", String.class);
+        return this.document.getList("achievements", String.class).stream().map(Achievement::valueOf).toList();
     }
 
-    public void addAchievement(Achievements a)
+    public void addAchievement(Achievement a)
     {
         this.update(Updates.push("achievements", a.toString()));
     }
 
-    public void grantAchievement(Achievements a, MessageReceivedEvent event)
+    public boolean hasAchievement(Achievement a)
     {
-        Achievements.grant(this.getID(), a, event);
+        return this.getAchievements().contains(a);
     }
 
     //key: "owned_forms"

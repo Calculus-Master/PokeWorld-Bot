@@ -6,7 +6,6 @@ import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Gender;
-import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.PokemonEgg;
@@ -70,10 +69,6 @@ public class CommandLegacyBreed extends CommandLegacy
 
                     this.playerData.updateBountyProgression(ObjectiveType.BREED_POKEMON);
                     this.playerData.getStatistics().incr(PlayerStatistic.POKEMON_BRED);
-
-                    Achievements.grant(this.player.getId(), Achievements.BRED_FIRST_POKEMON, this.event);
-                    if(parent1.is(PokemonEntity.DITTO) || parent2.is(PokemonEntity.DITTO)) Achievements.grant(this.player.getId(), Achievements.BRED_FIRST_DITTO, this.event);
-                    if(parent1.getGender().equals(Gender.UNKNOWN) || parent2.getGender().equals(Gender.UNKNOWN)) Achievements.grant(this.player.getId(), Achievements.BRED_FIRST_UNKNOWN, this.event);
 
                     this.startCooldown(parent1.getUUID());
                     this.startCooldown(parent2.getUUID());

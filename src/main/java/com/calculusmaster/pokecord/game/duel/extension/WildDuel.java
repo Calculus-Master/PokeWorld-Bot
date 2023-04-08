@@ -7,7 +7,6 @@ import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
 import com.calculusmaster.pokecord.game.duel.players.WildPlayer;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -105,7 +104,6 @@ public class WildDuel extends Duel
         if(evs) this.getUser().active.updateEVs();
         p.updateExperience();
 
-        Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_WILD_DUEL, null);
         this.getUser().data.updateBountyProgression(b -> {
             if(b.getType().equals(ObjectiveType.WIN_WILD_DUEL) || b.getType().equals(ObjectiveType.COMPLETE_WILD_DUEL)) b.update();
         });

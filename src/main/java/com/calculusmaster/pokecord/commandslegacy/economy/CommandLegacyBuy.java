@@ -5,7 +5,6 @@ import com.calculusmaster.pokecord.commandslegacy.CommandLegacyInvalid;
 import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Nature;
-import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
@@ -174,8 +173,6 @@ public class CommandLegacyBuy extends CommandLegacy
 
                     selected.changePokemon(target);
                     selected.updateEntity();
-
-                    Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_MEGA, this.event);
                 }
             }
         }
@@ -252,8 +249,6 @@ public class CommandLegacyBuy extends CommandLegacy
                 this.playerData.updateInventory();
                 this.playerData.changeCredits(-1 * Prices.SHOP_ZCRYSTAL.get());
 
-                Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_UNIQUE_ZCRYSTAL, this.event);
-
                 this.response = "You acquired `" + z.getStyledName() + "`!";
             }
         }
@@ -267,7 +262,6 @@ public class CommandLegacyBuy extends CommandLegacy
         {
             selected.completeUpdate();
 
-            Achievements.grant(this.player.getId(), Achievements.BOUGHT_FIRST_ITEM_SHOP, this.event);
             this.playerData.getStatistics().incr(PlayerStatistic.SHOP_ITEMS_BOUGHT);
         }
 

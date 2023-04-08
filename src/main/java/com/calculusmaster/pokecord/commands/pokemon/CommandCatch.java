@@ -6,10 +6,11 @@ import com.calculusmaster.pokecord.game.bounties.objectives.CatchNameObjective;
 import com.calculusmaster.pokecord.game.bounties.objectives.CatchPoolObjective;
 import com.calculusmaster.pokecord.game.bounties.objectives.CatchTypeObjective;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
-import com.calculusmaster.pokecord.game.enums.functional.Achievements;
+import com.calculusmaster.pokecord.game.enums.functional.Achievement;
 import com.calculusmaster.pokecord.game.player.PlayerPokedex;
 import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.FormRegistry;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
@@ -19,10 +20,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 public class CommandCatch extends PokeWorldCommand
 {
@@ -95,10 +93,6 @@ public class CommandCatch extends PokeWorldCommand
 
                 if(credits > 0) this.playerData.changeCredits(credits);
 
-                if(a >= 10) Achievements.REACHED_COLLECTION_MILESTONE_10.grant(this.player.getId(), event.getChannel().asTextChannel());
-                if(a >= 20) Achievements.REACHED_COLLECTION_MILESTONE_20.grant(this.player.getId(), event.getChannel().asTextChannel());
-                if(a >= 50) Achievements.REACHED_COLLECTION_MILESTONE_50.grant(this.player.getId(), event.getChannel().asTextChannel());
-
                 //Database Stuff
                 ThreadPoolHandler.CATCH.execute(() -> {
                     caught.upload();
@@ -107,9 +101,6 @@ public class CommandCatch extends PokeWorldCommand
                     if(this.playerData.getSettings().get(Settings.CLIENT_CATCH_AUTO_INFO, Boolean.class));
                     //TODO: Fix this with new Commands System
                     //com.calculusmaster.pokecord.commands.Commands.execute("info", this.event, new String[]{"info", "latest"});
-
-                    //Achievements TODO - Restructure Achievements
-                    Achievements.CAUGHT_FIRST_POKEMON.grant(this.player.getId(), event.getChannel().asTextChannel());
 
                     //Statistics TODO - Restructure Statistics to be more like telemetry, with a lot more data collected
                     this.playerData.getStatistics().incr(PlayerStatistic.POKEMON_CAUGHT);
@@ -123,6 +114,9 @@ public class CommandCatch extends PokeWorldCommand
                             case CATCH_POKEMON_POOL -> b.updateIf(((CatchPoolObjective)b.getObjective()).getPool().contains(caught.getEntity().toString()));
                         }
                     });
+
+                    //Achievements
+                    Achievement.COMPLETE_POKEDEX.grant(this.playerData, () -> Arrays.stream(PokemonEntity.values()).allMatch(pokedex::hasCollected), this.channel);
 
                     //Update PokeDex
                     this.playerData.updatePokedex();

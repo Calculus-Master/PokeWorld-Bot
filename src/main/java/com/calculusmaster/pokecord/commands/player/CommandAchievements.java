@@ -3,7 +3,7 @@ package com.calculusmaster.pokecord.commands.player;
 import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
-import com.calculusmaster.pokecord.game.enums.functional.Achievements;
+import com.calculusmaster.pokecord.game.enums.functional.Achievement;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -40,25 +40,38 @@ public class CommandAchievements extends PokeWorldCommand
             else return this.error("This user has not started their %s journey!".formatted(Pokecord.NAME));
         }
 
-        int completed = target.getAchievementsList().size();
-        int total = Achievements.values().length - 1; // -1 because of the "Final" achievement
+        int totalCompleted = target.getAchievements().size();
+        int total = Achievement.values().length;
 
-        float progressPercent = completed / (float)total; // -1 because of the "Final" achievement
+        int standardCompleted = (int)target.getAchievements().stream().filter(a -> !a.isExtreme()).count();
+        int standardTotal = Achievement.getStandardCount();
+
+        int extremeCompleted = (int)target.getAchievements().stream().filter(Achievement::isExtreme).count();
+        int extremeTotal = Achievement.getExtremeCount();
 
         List<String> latest = new ArrayList<>();
         latest.add("*These are your most recently completed achievements.*\n");
 
-        for(int i = 0; i < Math.min(5, completed); i++)
+        for(int i = 0; i < Math.min(5, totalCompleted); i++)
         {
-            Achievements a = Achievements.valueOf(target.getAchievementsList().get(completed - 1 - i));
+            Achievement a = target.getAchievements().get(totalCompleted - 1 - i);
 
-            latest.add(a.desc);
+            latest.add("**" + a.getName() + "** - ||" + a.getDescription() + "||");
         }
 
         this.embed
                 .setTitle(target.getUsername() + "'s Pokemon Achievements")
-                .setDescription("Achievements can be earned by completing various tasks in %s!".formatted(Pokecord.NAME))
-                .addField("Achievement Progress", "**" + String.format("%.2f", progressPercent * 100) + "%\n" + completed + " / " + total + "** Achievements Earned.", false)
+                .setDescription("Achievements can be earned by completing various tasks in %s!\nExtreme Achievements are often very challenging, and represent the ultimate level of mastery in the bot.".formatted(Pokecord.NAME))
+                .addField("Achievement Progress", """
+                        *Standard Achievements:* **%d / %d** (**%s%s** completed)
+                        *Extreme Achievements:* **%d / %d** (**%s%s** completed)
+                        
+                        *Total Achievements:* **%d / %d** (**%s%s** completed)
+                        """.formatted(
+                                standardCompleted, standardTotal, String.format("%.2f", (double)standardCompleted / standardTotal * 100), "%",
+                                extremeCompleted, extremeTotal, String.format("%.2f", (double)extremeCompleted / extremeTotal * 100), "%",
+                                totalCompleted, total, String.format("%.2f", (double)totalCompleted / total * 100), "%"
+                ), false)
                 .addField("Latest Achievements", String.join("\n", latest), false);
 
         return true;

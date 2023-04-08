@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord.commandslegacy.pokemon;
 
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacy;
-import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.sort.PokemonListSorter;
@@ -83,12 +82,6 @@ public class CommandLegacyPokemon extends CommandLegacy
         else this.embed.setDescription("You have no Pokemon with those characteristics!");
 
         int owned = this.playerData.getPokemonList().size();
-        if(owned >= 10) Achievements.grant(this.player.getId(), Achievements.OWNED_10_POKEMON, this.event);
-        if(owned >= 100) Achievements.grant(this.player.getId(), Achievements.OWNED_100_POKEMON, this.event);
-        if(owned >= 500) Achievements.grant(this.player.getId(), Achievements.OWNED_500_POKEMON, this.event);
-        if(owned >= 1000) Achievements.grant(this.player.getId(), Achievements.OWNED_1000_POKEMON, this.event);
-        if(owned >= 5000) Achievements.grant(this.player.getId(), Achievements.OWNED_5000_POKEMON, this.event);
-        if(owned >= 10000) Achievements.grant(this.player.getId(), Achievements.OWNED_10000_POKEMON, this.event);
 
         return this;
     }

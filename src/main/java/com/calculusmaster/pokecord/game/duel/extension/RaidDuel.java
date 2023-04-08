@@ -13,7 +13,6 @@ import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
 import com.calculusmaster.pokecord.game.duel.players.WildPlayer;
 import com.calculusmaster.pokecord.game.enums.elements.Room;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
@@ -174,7 +173,6 @@ public class RaidDuel extends WildDuel
 
                 userPlayer.data.getStatistics().incr(PlayerStatistic.RAIDS_WON);
                 userPlayer.data.updateBountyProgression(ObjectiveType.WIN_RAID_DUEL);
-                Achievements.grant(p.ID, Achievements.WON_FIRST_RAID, null);
 
                 winnings.append(userPlayer.data.getUsername()).append(" - `").append((int)(credits * multiplier)).append("c`\n");
 
@@ -191,7 +189,6 @@ public class RaidDuel extends WildDuel
                     userPlayer.data.addPokemon(reward.getUUID());
 
                     userPlayer.data.getStatistics().incr(PlayerStatistic.RAIDS_WON_MVP);
-                    Achievements.grant(p.ID, Achievements.WON_FIRST_RAID_HIGHEST_DAMAGE, null);
 
                     extraWinnings = "\n\n**" + p.getName() + " caught the Raid Pokemon!**";
                 }
@@ -207,7 +204,6 @@ public class RaidDuel extends WildDuel
         {
             ((UserPlayer)p).data.getStatistics().incr(PlayerStatistic.RAIDS_COMPLETED);
             ((UserPlayer)p).data.updateBountyProgression(ObjectiveType.PARTICIPATE_RAID);
-            Achievements.grant(p.ID, Achievements.COMPLETED_FIRST_RAID, null);
         }
 
         this.sendEmbed(embed.build());

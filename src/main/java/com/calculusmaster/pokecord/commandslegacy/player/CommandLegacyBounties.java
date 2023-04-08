@@ -3,7 +3,6 @@ package com.calculusmaster.pokecord.commandslegacy.player;
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacy;
 import com.calculusmaster.pokecord.game.bounties.Bounty;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
-import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -55,7 +54,6 @@ public class CommandLegacyBounties extends CommandLegacy
                 b.delete();
 
                 this.playerData.getStatistics().incr(PlayerStatistic.BOUNTIES_COMPLETED);
-                Achievements.grant(this.player.getId(), Achievements.COMPLETED_FIRST_BOUNTY, this.event);
 
                 if(new Random().nextInt(50) < 10 && this.playerData.getSelectedPokemon().getLevel() != 100) this.playerData.getSelectedPokemon().addExp(500);
 

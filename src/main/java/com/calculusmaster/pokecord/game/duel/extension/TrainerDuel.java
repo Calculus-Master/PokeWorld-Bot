@@ -9,7 +9,6 @@ import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerData;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -56,7 +55,6 @@ public class TrainerDuel extends Duel
 
             embed.setDescription("You defeated " + botTrainer.getName() + "!");
 
-            Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_TRAINER_DUEL, null);
             player.data.updateBountyProgression(ObjectiveType.WIN_TRAINER_DUEL);
 
             //Regular Trainer
@@ -92,8 +90,6 @@ public class TrainerDuel extends Duel
                     //TODO: Rewards for defeating all trainers totally
 
                     player.data.directMessage("You've defeated all the current rotation of Trainers! Congratulations! Reward: ?? Credits!");
-
-                    Achievements.grant(this.players[0].ID, Achievements.DEFEATED_ROTATION_TRAINERS, null);
                 }
             }
 

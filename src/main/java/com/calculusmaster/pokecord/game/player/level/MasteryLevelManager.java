@@ -488,6 +488,6 @@ public class MasteryLevelManager
 
     public static boolean isMax(PlayerDataQuery p)
     {
-        return p.getLevel() == MASTERY_LEVELS.size();
+        return p.getLevel() == MASTERY_LEVELS.get(MASTERY_LEVELS.size() - 1).getLevel();
     }
 }

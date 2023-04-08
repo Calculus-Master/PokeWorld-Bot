@@ -7,7 +7,6 @@ import com.calculusmaster.pokecord.game.duel.players.TrainerPlayer;
 import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerData;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -49,9 +48,6 @@ public class EliteDuel extends TrainerDuel
         //Player won
         if(this.getWinner() instanceof UserPlayer player)
         {
-            Achievements.grant(this.players[0].ID, Achievements.WON_FIRST_TRAINER_DUEL, null);
-            Achievements.grant(this.players[0].ID, Achievements.DEFEATED_FIRST_ELITE_TRAINER, null);
-
             int credits = new SplittableRandom().nextInt(500, 1000);
             player.data.changeCredits(credits);
 

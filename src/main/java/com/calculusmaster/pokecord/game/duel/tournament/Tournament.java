@@ -1,6 +1,5 @@
 package com.calculusmaster.pokecord.game.duel.tournament;
 
-import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -104,9 +103,6 @@ public class Tournament
 
         int credits = 1000 * this.allPlayers.size();
         int xp = (int)(2000 * Math.pow(this.allPlayers.size(), 2) / 2);
-
-        Achievements.grant(this.playerPool.get(0), Achievements.WON_FIRST_TOURNAMENT, this.event);
-        for(String s : this.allPlayers) Achievements.grant(s, Achievements.PARTICIPATED_FIRST_TOURNAMENT, this.event);
 
         PlayerDataQuery winner = this.playerQueries.get(this.playerPool.get(0));
 

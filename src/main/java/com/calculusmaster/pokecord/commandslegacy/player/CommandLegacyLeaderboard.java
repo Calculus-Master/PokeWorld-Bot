@@ -2,7 +2,6 @@ package com.calculusmaster.pokecord.commandslegacy.player;
 
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacy;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
-import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -72,15 +71,6 @@ public class CommandLegacyLeaderboard extends CommandLegacy
         }
         else
         {
-            if(!server)
-            {
-                String currentID = this.player.getId();
-
-                if(SORTED_FINAL_SCORES.get(0).getKey().equals(currentID)) Achievements.grant(currentID, Achievements.REACHED_TOP_1_LEADERBOARD, this.event);
-
-                for(int i = 0; i < Math.min(10, SORTED_FINAL_SCORES.size()); i++) if(SORTED_FINAL_SCORES.get(i).getKey().equals(currentID)) Achievements.grant(currentID, Achievements.REACHED_TOP_10_LEADERBOARD, this.event);
-            }
-
             StringBuilder leaderboard = new StringBuilder();
 
             PlayerDataQuery p;
@@ -185,7 +175,7 @@ public class CommandLegacyLeaderboard extends CommandLegacy
     enum ScoreComponent
     {
         POKEMON_LISTS(2.5, p -> p.getPokemonList().size(), "Pokemon"),
-        ACHIEVEMENTS(2.5, p -> p.getAchievementsList().size(), "Achievements"),
+        ACHIEVEMENTS(2.5, p -> p.getAchievements().size(), "Achievements"),
         MASTERY_LEVEL(1.9, p -> p.getLevel(), "Pokemon Mastery Level"),
         POKEMON_PRESTIGED(2.5, p -> p.getPokemon().stream().filter(Pokemon::hasPrestiged).mapToInt(Pokemon::getPrestigeLevel).sum(), "Prestiged Pokemon"),
         POKEMON_MASTERED(5.0, p -> p.getPokemon().stream().filter(Pokemon::isMastered).mapToInt(i -> 1).sum(), "Mastered Pokemon"),

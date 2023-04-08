@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.util.helpers;
 
-import com.calculusmaster.pokecord.game.enums.functional.Achievements;
+import com.calculusmaster.pokecord.game.enums.functional.Achievement;
 import com.calculusmaster.pokecord.game.trade.elements.MarketEntry;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.mongodb.client.model.Filters;
@@ -22,7 +22,7 @@ public class CacheHelper
     public static final List<MarketEntry> MARKET_ENTRIES = new ArrayList<>();
 
     //Stored Data Type: Player IDs
-    public static final Map<Achievements, List<String>> ACHIEVEMENT_CACHE = new HashMap<>();
+    public static final Map<Achievement, List<String>> ACHIEVEMENT_CACHE = new HashMap<>();
 
     public static void initMarketEntries()
     {
@@ -59,6 +59,6 @@ public class CacheHelper
 
     public static void initAchievementCache()
     {
-        for(Achievements a : Achievements.values()) ACHIEVEMENT_CACHE.put(a, new ArrayList<>());
+        for(Achievement a : Achievement.values()) ACHIEVEMENT_CACHE.put(a, new ArrayList<>());
     }
 }

@@ -4,7 +4,7 @@ import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.functional.Achievements;
+import com.calculusmaster.pokecord.game.enums.functional.Achievement;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -107,7 +107,7 @@ public class CommandStart extends PokeWorldCommand
                 for(Stat s : Stat.values()) starterIVs.put(s, r.nextInt(22, 30));
                 starter.setIVs(starterIVs);
 
-                Achievements.START_JOURNEY.grant(this.player.getId(), event.getChannel().asTextChannel());
+                Achievement.START.grant(this.playerData, () -> true, event.getChannel().asTextChannel());
 
                 //Registering the Starter
                 starter.upload();

@@ -3,7 +3,6 @@ package com.calculusmaster.pokecord.commandslegacy.pokemon;
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacy;
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacyInvalid;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
-import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.util.Global;
@@ -38,8 +37,6 @@ public class CommandLegacyRedeem extends CommandLegacy
 
                 this.playerData.changeRedeems(-1);
                 this.playerData.addPokemon(p.getUUID());
-
-                Achievements.grant(this.player.getId(), Achievements.REDEEMED_FIRST_POKEMON, this.event);
 
                 this.response = "You redeemed a Level " + p.getLevel() + " " + p.getName() + "!";
             }

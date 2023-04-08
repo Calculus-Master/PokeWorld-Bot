@@ -2,7 +2,6 @@ package com.calculusmaster.pokecord.util.listener;
 
 import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
-import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionData;
@@ -138,12 +137,6 @@ public class MessageEventHandler
             this.data.removeEgg(egg.getEggID());
 
             this.data.getStatistics().incr(PlayerStatistic.EGGS_HATCHED);
-
-            Achievements.grant(this.data.getID(), Achievements.HATCHED_FIRST_EGG, event);
-            if(p.getTotalIVRounded() >= 60) Achievements.grant(this.data.getID(), Achievements.HATCHED_FIRST_DECENT_IV, event);
-            if(p.getTotalIVRounded() >= 70) Achievements.grant(this.data.getID(), Achievements.HATCHED_FIRST_GREAT_IV, event);
-            if(p.getTotalIVRounded() >= 80) Achievements.grant(this.data.getID(), Achievements.HATCHED_FIRST_EXCELLENT_IV, event);
-            if(p.getTotalIVRounded() >= 90) Achievements.grant(this.data.getID(), Achievements.HATCHED_FIRST_NEARLY_PERFECT_IV, event);
 
             this.send("Your Egg hatched into a new " + p.getName() + "!");
         }

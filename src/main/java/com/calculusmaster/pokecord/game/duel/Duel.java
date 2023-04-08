@@ -11,7 +11,6 @@ import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
 import com.calculusmaster.pokecord.game.duel.tournament.Tournament;
 import com.calculusmaster.pokecord.game.duel.tournament.TournamentHelper;
 import com.calculusmaster.pokecord.game.enums.elements.*;
-import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.TypeEffectiveness;
@@ -939,16 +938,12 @@ public class Duel
             this.players[this.current].usedZMove = true;
 
             if(c.hasAugment(PokemonAugment.Z_AFFINITY)) move.setPower(2.0);
-
-            Achievements.DUEL_USE_ZMOVE.grant(this.players[this.current].ID, this.channels.get(0));
         }
 
         if(move.isMaxMove())
         {
             accurate = true;
             this.players[this.current].usedDynamax = true;
-
-            Achievements.DUEL_USE_DYNAMAX.grant(this.players[this.current].ID, this.channels.get(0));
         }
 
         if(this.data(this.other).imprisonUsed && this.players[this.other].active.getMoves().contains(move.getEntity())) cantUse = true;
@@ -2905,8 +2900,6 @@ public class Duel
         embed.setDescription(this.getWinner().getName() + " has won!" + (c != 0 ? "\nThey earned " + c + " credits!" : ""));
 
         this.sendEmbed(embed.build());
-
-        Achievements.grant(this.getWinner().ID, Achievements.WON_FIRST_PVP_DUEL, null);
 
         if(this.players[winner] instanceof UserPlayer player)
         {
