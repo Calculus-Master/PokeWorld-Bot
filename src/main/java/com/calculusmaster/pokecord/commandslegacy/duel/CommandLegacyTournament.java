@@ -2,7 +2,6 @@ package com.calculusmaster.pokecord.commandslegacy.duel;
 
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacy;
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacyInvalid;
-import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyTeam;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.tournament.Tournament;
 import com.calculusmaster.pokecord.game.duel.tournament.TournamentHelper;
@@ -14,6 +13,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.calculusmaster.pokecord.game.player.PlayerTeam.MAX_TEAM_SIZE;
 
 public class CommandLegacyTournament extends CommandLegacy
 {
@@ -131,7 +132,7 @@ public class CommandLegacyTournament extends CommandLegacy
                 if(msg.contains("--size") && msg.indexOf("--size") + 1 < msg.size())
                 {
                     int index = msg.indexOf("--size") + 1;
-                    if(this.isNumeric(index) && this.getInt(index) < CommandLegacyTeam.MAX_TEAM_SIZE) teamSize = this.getInt(msg.indexOf("--size") + 1);
+                    if(this.isNumeric(index) && this.getInt(index) < MAX_TEAM_SIZE) teamSize = this.getInt(msg.indexOf("--size") + 1);
                 }
 
                 Tournament t = Tournament.create(this.player.getId(), players, this.event, teamSize);

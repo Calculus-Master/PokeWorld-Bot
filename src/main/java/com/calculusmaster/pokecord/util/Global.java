@@ -14,6 +14,7 @@ import java.util.SplittableRandom;
 
 public class Global
 {
+    public static final int MAX_NAME_LIMIT = 40;
     public static final EnumSet<PokemonEntity> STARTERS = EnumSet.of(PokemonEntity.BULBASAUR, PokemonEntity.CHARMANDER, PokemonEntity.SQUIRTLE, PokemonEntity.CHIKORITA, PokemonEntity.CYNDAQUIL, PokemonEntity.TOTODILE, PokemonEntity.TREECKO, PokemonEntity.TORCHIC, PokemonEntity.MUDKIP, PokemonEntity.TURTWIG, PokemonEntity.CHIMCHAR, PokemonEntity.PIPLUP, PokemonEntity.SNIVY, PokemonEntity.TEPIG, PokemonEntity.OSHAWOTT, PokemonEntity.CHESPIN, PokemonEntity.FENNEKIN, PokemonEntity.FROAKIE, PokemonEntity.ROWLET, PokemonEntity.LITTEN, PokemonEntity.POPPLIO, PokemonEntity.GROOKEY, PokemonEntity.SCORBUNNY, PokemonEntity.SOBBLE, PokemonEntity.SPRIGATITO, PokemonEntity.FUECOCO, PokemonEntity.QUAXLY);
 
     public static boolean userHasAdmin(Guild server, User player)

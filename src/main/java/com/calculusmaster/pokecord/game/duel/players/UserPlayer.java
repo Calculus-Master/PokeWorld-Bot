@@ -21,7 +21,7 @@ public class UserPlayer extends Player
         int size = Math.min(this.data.getTeam().size(), maxTeamSize);
 
         List<Pokemon> team = new ArrayList<>();
-        for(int i = 0; i < size; i++) team.add(Pokemon.build(this.data.getTeam().get(i)));
+        for(int i = 0; i < size; i++) team.add(Pokemon.build(this.data.getTeam().getActiveTeam().get(i)));
 
         this.setTeam(Collections.unmodifiableList(team));
     }

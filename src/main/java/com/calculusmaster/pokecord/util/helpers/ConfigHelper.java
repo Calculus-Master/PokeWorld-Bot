@@ -2,8 +2,8 @@ package com.calculusmaster.pokecord.util.helpers;
 
 import com.calculusmaster.pokecord.commandslegacy.CommandsLegacy;
 import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyShop;
-import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyTeam;
 import com.calculusmaster.pokecord.game.bounties.Bounty;
+import com.calculusmaster.pokecord.game.player.PlayerTeam;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.evolution.PokemonEgg;
 import com.calculusmaster.pokecord.mongo.Mongo;
@@ -38,8 +38,8 @@ public class ConfigHelper
             SpawnEventHelper.SPAWN_INTERVAL = config.getInteger("spawn_event_interval");
             SpawnEventHelper.RAID_CHANCE = config.getInteger("spawn_event_raid_chance");
             PokemonEgg.MAX_EGGS = config.getInteger("egg_limit");
-            CommandLegacyTeam.MAX_TEAM_SIZE = config.getInteger("team_limit");
-            CommandLegacyTeam.MAX_SLOTS = config.getInteger("team_slots");
+            PlayerTeam.MAX_TEAM_SIZE = config.getInteger("team_limit");
+            PlayerTeam.MAX_SLOTS = config.getInteger("team_slots");
             MasteryLevelManager.ACTIVE = config.getBoolean("mastery_levels");
 
             LoggerHelper.info(ConfigHelper.class, "Loaded config values!");
@@ -62,8 +62,8 @@ public class ConfigHelper
             SpawnEventHelper.SPAWN_INTERVAL = 450;
             SpawnEventHelper.RAID_CHANCE = 1;
             PokemonEgg.MAX_EGGS = 9;
-            CommandLegacyTeam.MAX_TEAM_SIZE = 6;
-            CommandLegacyTeam.MAX_SLOTS = 5;
+            PlayerTeam.MAX_TEAM_SIZE = 6;
+            PlayerTeam.MAX_SLOTS = 5;
         }
     }
 }

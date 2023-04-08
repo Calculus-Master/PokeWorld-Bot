@@ -103,10 +103,6 @@ public class CommandsLegacy
                 .setCommand(CommandLegacyEquip::new)
                 .setCategory(Category.POKEMON);
 
-        register("team")
-                .setCommand(CommandLegacyTeam::new)
-                .setCategory(Category.POKEMON);
-
         register("wildduel", "wild")
                 .setCommand(CommandLegacyWildDuel::new)
                 .setCategory(Category.DUEL);

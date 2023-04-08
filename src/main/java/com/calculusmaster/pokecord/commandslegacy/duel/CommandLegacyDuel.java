@@ -2,7 +2,6 @@ package com.calculusmaster.pokecord.commandslegacy.duel;
 
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacy;
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacyInvalid;
-import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyTeam;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
@@ -14,6 +13,7 @@ import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Projections;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+
+import static com.calculusmaster.pokecord.game.player.PlayerTeam.MAX_TEAM_SIZE;
 
 public class CommandLegacyDuel extends CommandLegacy
 {
@@ -45,7 +47,7 @@ public class CommandLegacyDuel extends CommandLegacy
         if(this.msg.length == 1 || info)
         {
             this.embed.setTitle("Duel Info");
-            this.embed.setDescription("This is a PvP Duel! Duel another player with a Pokemon team of any size, up to a maximum of " + CommandLegacyTeam.MAX_TEAM_SIZE + "!");
+            this.embed.setDescription("This is a PvP Duel! Duel another player with a Pokemon team of any size, up to a maximum of " + MAX_TEAM_SIZE + "!");
             this.embed
                     .addField("Limits", "Duel Teams are limited by default. This means, that depending on the size of the Duel, there is a certain maximum number of Legendary and Mythical/Ultra Beast Pokemon you can have on your team. You will be notified about this when you request a duel (if your team violates the limits), and it can be disabled by including the `--nolimit` argument when requesting a duel.", false)
                     .addField("1v1", "To initiate a simple 1v1 duel, simply use `p!duel <@player>`. This will start a duel using you and your opponent's selected Pokemon, and will not involve either of your Pokemon teams.", false)
@@ -79,7 +81,7 @@ public class CommandLegacyDuel extends CommandLegacy
                 if(CasualMatchmadeDuel.isQueueing(this.player.getId())) this.response = "You are already queuing!";
                 else if(this.playerData.getTeam().isEmpty()) this.response = "You must have a team to queue!";
                 else if(size != 1 && this.playerData.getTeam().size() > size) this.response = "Your team must be have at most " + this.getInt(2) + " Pokemon!";
-                else if(size != 1 && !TeamRestrictionRegistry.STANDARD.validate(this.playerData.getTeamPokemon())) this.response = "Your team does not meet the Standard Duel Team restrictions!";
+                else if(size != 1 && !TeamRestrictionRegistry.STANDARD.validate(this.playerData.getTeam().getActiveTeamPokemon())) this.response = "Your team does not meet the Standard Duel Team restrictions!";
                 else
                 {
                     if(size != 1 && this.playerData.getTeam().size() < size) this.playerData.directMessage("Warning! Your team is smaller than the size of the duel you are queuing for!");
@@ -97,9 +99,9 @@ public class CommandLegacyDuel extends CommandLegacy
                 }
             }
         }
-        else if(this.msg.length >= 3 && (!isNumeric(2) || this.getInt(2) > CommandLegacyTeam.MAX_TEAM_SIZE || this.getInt(2) > this.playerData.getTeam().size()))
+        else if(this.msg.length >= 3 && (!isNumeric(2) || this.getInt(2) > MAX_TEAM_SIZE || this.getInt(2) > this.playerData.getTeam().size()))
         {
-            this.response = "Error with size. Either it isn't a number, larger than the max of " + CommandLegacyTeam.MAX_TEAM_SIZE + ", or larger than your team's size!";
+            this.response = "Error with size. Either it isn't a number, larger than the max of " + MAX_TEAM_SIZE + ", or larger than your team's size!";
             return this;
         }
 
@@ -226,11 +228,11 @@ public class CommandLegacyDuel extends CommandLegacy
         int ub = 0;
 
         PokemonEntity entity;
-        List<String> team = this.playerData.getTeam();
+        List<String> team = this.playerData.getTeam().getActiveTeam();
 
         for(int i = 0; i < this.playerData.getTeam().size(); i++)
         {
-            entity = PokemonEntity.cast(Mongo.PokemonData.find(Filters.eq("UUID", team.get(i))).first().getString("entity"));
+            entity = PokemonEntity.cast(Mongo.PokemonData.find(Filters.eq("UUID", team.get(i))).projection(Projections.include("entity")).first().getString("entity"));
 
             if(PokemonRarity.isLegendary(entity)) legendary++;
             if(PokemonRarity.isMythical(entity)) mythical++;

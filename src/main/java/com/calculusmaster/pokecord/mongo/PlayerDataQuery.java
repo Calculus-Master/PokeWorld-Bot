@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord.mongo;
 
 import com.calculusmaster.pokecord.Pokecord;
-import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyTeam;
 import com.calculusmaster.pokecord.game.bounties.Bounty;
 import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerData;
@@ -10,6 +9,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievements;
 import com.calculusmaster.pokecord.game.player.PlayerInventory;
 import com.calculusmaster.pokecord.game.player.PlayerPokedex;
+import com.calculusmaster.pokecord.game.player.PlayerTeam;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -32,7 +32,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class PlayerDataQuery extends MongoQuery
 {
@@ -41,6 +40,7 @@ public class PlayerDataQuery extends MongoQuery
 
     private PlayerPokedex pokedex;
     private PlayerInventory inventory;
+    private PlayerTeam team;
 
     public PlayerDataQuery(String playerID)
     {
@@ -85,8 +85,6 @@ public class PlayerDataQuery extends MongoQuery
                 .append("redeems", 0)
                 .append("selected", 1)
                 .append("pokemon", new ArrayList<>())
-                .append("team", new ArrayList<>())
-                .append("saved_teams", IntStream.range(0, CommandLegacyTeam.MAX_TEAM_SIZE).mapToObj(i -> new Document("name", "").append("team", new ArrayList<>())).toList())
                 .append("favorites", new ArrayList<>())
                 .append("active_zcrystal", "")
                 .append("achievements", new ArrayList<>())
@@ -99,6 +97,7 @@ public class PlayerDataQuery extends MongoQuery
                 .append("defeated_trainers", new ArrayList<>())
                 .append("pokedex", new Document())
                 .append("inventory", new PlayerInventory().serialize())
+                .append("team", new PlayerTeam().serialize())
 
                 ;
 
@@ -177,6 +176,18 @@ public class PlayerDataQuery extends MongoQuery
     public void updateInventory()
     {
         this.update(Updates.set("inventory", this.inventory.serialize()));
+    }
+
+    //Team (key: "team")
+    public PlayerTeam getTeam()
+    {
+        if(this.team == null) this.team = new PlayerTeam(this.document.get("team", Document.class));
+        return this.team;
+    }
+
+    public void updateTeam()
+    {
+        this.update(Updates.set("team", this.team.serialize()));
     }
 
     //key: "playerID"
@@ -313,7 +324,6 @@ public class PlayerDataQuery extends MongoQuery
     public void addPokemon(String UUID)
     {
         this.update(Updates.push("pokemon", UUID));
-
     }
 
     public void removePokemon(String UUID)
@@ -321,97 +331,8 @@ public class PlayerDataQuery extends MongoQuery
         this.update(Updates.pull("pokemon", UUID));
         PokemonDataCache.removeCache(UUID);
 
-        if(this.getTeam().contains(UUID)) this.removePokemonFromTeam(this.getTeam().indexOf(UUID));
+        if(this.getTeam().contains(UUID)) this.getTeam().remove(UUID);
         if(this.getFavorites().contains(UUID)) this.removePokemonFromFavorites(UUID);
-    }
-
-    public void removePokemon(int index)
-    {
-        removePokemon(this.getPokemonList().get(index - 1));
-    }
-
-    //key: "team"
-    public List<String> getTeam()
-    {
-        return this.document.getList("team", String.class);
-    }
-
-    public void setTeam(List<String> team)
-    {
-        this.update(Updates.set("team", team));
-    }
-
-    public List<Pokemon> getTeamPokemon()
-    {
-        return this.getTeam().stream().map(s -> Pokemon.build(s, this.getPokemonList().indexOf(s) + 1)).toList();
-    }
-
-    public void clearTeam()
-    {
-        this.setTeam(new ArrayList<>());
-    }
-
-    public void addPokemonToTeam(String UUID, int index)
-    {
-        List<String> team = new ArrayList<>(this.getTeam());
-
-        index--;
-
-        if(index >= team.size()) team.add(UUID);
-        else team.set(index, UUID);
-
-        this.setTeam(team);
-    }
-
-    public void removePokemonFromTeam(int index)
-    {
-        List<String> team = new ArrayList<>(this.getTeam());
-
-        index--;
-
-        team.remove(index);
-
-        this.setTeam(team);
-    }
-
-    public void swapPokemonInTeam(int from, int to)
-    {
-        List<String> team = new ArrayList<>(this.getTeam());
-
-        from--;
-        to--;
-
-        String temp = team.get(from);
-        team.set(from, team.get(to));
-        team.set(to, temp);
-
-        this.setTeam(team);
-    }
-
-    //key: "saved_teams"
-    public List<Document> getSavedTeams()
-    {
-        return this.document.getList("saved_teams", Document.class);
-    }
-
-    public void setSavedTeam(int slot, List<String> team)
-    {
-        this.update(Updates.set("saved_teams." + slot + ".team", team));
-    }
-
-    public List<String> getSavedTeam(int slot)
-    {
-        return this.getSavedTeams().get(slot).getList("team", String.class);
-    }
-
-    public String getSavedTeamName(int slot)
-    {
-        return this.getSavedTeams().get(slot).getString("name");
-    }
-
-    public void renameSavedTeam(int slot, String name)
-    {
-        this.update(Updates.set("saved_teams." + slot + ".name", name));
     }
 
     //key: "favorites"

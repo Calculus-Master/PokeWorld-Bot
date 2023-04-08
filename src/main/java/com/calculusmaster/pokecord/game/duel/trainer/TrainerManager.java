@@ -32,6 +32,15 @@ public class TrainerManager
 
     public static void createRegularTrainers()
     {
+        //Clear existing trainers
+        if(!REGULAR_TRAINERS.isEmpty())
+        {
+            LoggerHelper.info(TrainerManager.class, "Deleting existing Regular Trainers to prepare for new ones.");
+
+            Mongo.TrainerData.deleteMany(Filters.exists("trainerID"));
+            REGULAR_TRAINERS.clear();
+        }
+
         LoggerHelper.info(TrainerManager.class, "Creating new Regular Trainers.");
 
         final Random random = new Random();

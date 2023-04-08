@@ -46,7 +46,7 @@ public class CommandLegacyTrainerDuel extends CommandLegacy
                 return this;
             }
 
-            List<Pokemon> team = this.playerData.getTeamPokemon();
+            List<Pokemon> team = this.playerData.getTeam().getActiveTeamPokemon();
             if(!trainer.getRestrictions().stream().allMatch(tr -> tr.validate(team)))
             {
                 this.response = "Your team does not meet this Trainer's Team Restrictions! For more information on the Trainer's Team Restrictions, use the `p!trainerinfo <num>` command!";

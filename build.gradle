@@ -9,6 +9,10 @@ mainClassName = "com.calculusmaster.pokecord.Pokecord"
 group 'com.calculusmaster'
 version '1.0-BETA'
 
+test {
+    useJUnitPlatform()
+}
+
 repositories {
     mavenCentral()
     maven {
@@ -31,4 +35,5 @@ dependencies {
     implementation 'org.jooq:joor:0.9.14'
     implementation 'org.jooq:jool:0.9.14'
     implementation 'one.util:streamex:0.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
 }

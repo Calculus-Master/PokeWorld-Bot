@@ -28,7 +28,7 @@ public class CommandLegacyPokemon extends CommandLegacy
         super(event, msg);
 
         this.pokemon = new TreeList<>(this.playerData.getPokemon());
-        this.team = List.copyOf(this.playerData.getTeam());
+        this.team = List.copyOf(this.playerData.getTeam().getActiveTeam());
         this.favorites = List.copyOf(this.playerData.getFavorites());
 
         this.detailed = this.playerData.getSettings().get(Settings.CLIENT_DETAILED, Boolean.class);

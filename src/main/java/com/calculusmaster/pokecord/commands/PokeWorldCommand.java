@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -134,7 +135,16 @@ public abstract class PokeWorldCommand
             this.channel.sendMessageEmbeds(this.embed.build()).queue();
         }
         else if(!this.response.isEmpty()) text.accept(this.response);
-        else if(this.embed != null) embed.accept(this.embed.build());
+        else if(this.embed != null)
+        {
+            if(!this.embed.isEmpty()) embed.accept(this.embed.build());
+            else
+            {
+                LoggerHelper.warn(PokeWorldCommand.class, "Empty Embed attempting to be sent. Command: " + this.getClass().getName() + ", Data: " + this.commandData + ", User: " + this.player.getName() + " (" + this.player.getId() + ")");
+                this.error();
+                this.respond(text, embed);
+            }
+        }
     }
 
     protected boolean isInvalidMasteryLevel(Feature feature)
