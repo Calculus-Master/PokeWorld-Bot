@@ -1,8 +1,12 @@
 package com.calculusmaster.pokecord.game.pokemon.data;
 
 import com.calculusmaster.pokecord.util.Global;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity.PokemonEntityFlag.NOT_SPAWNABLE;
 import static com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity.Rarity.*;
@@ -1205,7 +1209,12 @@ public enum PokemonEntity
 
     public static void init()
     {
-        for(PokemonEntity pokemon : values()) POKEMON_ENTITY_DATA.put(pokemon, new PokemonData(pokemon));
+        ExecutorService manager = Executors.newFixedThreadPool(5);
+        for(PokemonEntity pokemon : values()) manager.submit(() -> POKEMON_ENTITY_DATA.put(pokemon, new PokemonData(pokemon)));
+
+        manager.shutdown();
+        try { manager.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS); }
+        catch(InterruptedException e) { LoggerHelper.error(PokemonEntity.class, "Error trying to initialize PokemonData."); e.printStackTrace(); }
     }
 
     private final String apiID;
