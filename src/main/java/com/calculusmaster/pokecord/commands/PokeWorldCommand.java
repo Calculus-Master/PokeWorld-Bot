@@ -176,10 +176,10 @@ public abstract class PokeWorldCommand
 
         this.respond(s -> {
             if(event.isAcknowledged()) event.getHook().editOriginal(s).queue();
-            else event.reply(s).setEphemeral(this.ephemeral).queue();
+            else event.reply(s).setEphemeral(this.ephemeral).mentionRepliedUser(true).queue();
         }, e -> {
             if(event.isAcknowledged()) event.getHook().editOriginalEmbeds(e).queue();
-            else event.replyEmbeds(e).setEphemeral(this.ephemeral).queue();
+            else event.replyEmbeds(e).setEphemeral(this.ephemeral).mentionRepliedUser(true).queue();
         });
     }
 
@@ -201,7 +201,7 @@ public abstract class PokeWorldCommand
 
         this.setDefaultResponses();
         boolean result = this.buttonLogic(event);
-        this.respond(s -> event.reply(s).setEphemeral(this.ephemeral).queue(), e -> event.replyEmbeds(e).setEphemeral(this.ephemeral).queue());
+        this.respond(s -> event.reply(s).setEphemeral(this.ephemeral).mentionRepliedUser(true).queue(), e -> event.replyEmbeds(e).mentionRepliedUser(true).setEphemeral(this.ephemeral).queue());
     }
 
     public void parseModalInteraction(ModalInteractionEvent event)
@@ -212,7 +212,7 @@ public abstract class PokeWorldCommand
 
         this.setDefaultResponses();
         boolean result = this.modalLogic(event);
-        this.respond(s -> event.reply(s).setEphemeral(this.ephemeral).queue(), e -> event.replyEmbeds(e).setEphemeral(this.ephemeral).queue());
+        this.respond(s -> event.reply(s).mentionRepliedUser(true).setEphemeral(this.ephemeral).queue(), e -> event.replyEmbeds(e).mentionRepliedUser(true).setEphemeral(this.ephemeral).queue());
     }
 
     public void parseStringSelectMenuInteraction(StringSelectInteractionEvent event)
@@ -223,7 +223,7 @@ public abstract class PokeWorldCommand
 
         this.setDefaultResponses();
         boolean result = this.stringSelectLogic(event);
-        this.respond(s -> event.reply(s).setEphemeral(this.ephemeral).queue(), e -> event.replyEmbeds(e).setEphemeral(this.ephemeral).queue());
+        this.respond(s -> event.reply(s).mentionRepliedUser(true).setEphemeral(this.ephemeral).queue(), e -> event.replyEmbeds(e).mentionRepliedUser(true).setEphemeral(this.ephemeral).queue());
     }
 
     public void parseEntitySelectMenuInteraction(EntitySelectInteractionEvent event)
@@ -234,7 +234,7 @@ public abstract class PokeWorldCommand
 
         this.setDefaultResponses();
         boolean result = this.entitySelectLogic(event);
-        this.respond(s -> event.reply(s).setEphemeral(this.ephemeral).queue(), e -> event.replyEmbeds(e).setEphemeral(this.ephemeral).queue());
+        this.respond(s -> event.reply(s).setEphemeral(this.ephemeral).mentionRepliedUser(true).queue(), e -> event.replyEmbeds(e).mentionRepliedUser(true).setEphemeral(this.ephemeral).queue());
     }
 
     //Overrides (Slash Command is required)
