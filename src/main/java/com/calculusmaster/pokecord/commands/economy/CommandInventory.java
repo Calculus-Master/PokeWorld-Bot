@@ -64,7 +64,7 @@ public class CommandInventory extends PokeWorldCommand
                         Items can be given to Pokemon, and have a wide variety of uses.
                         They could provide minor boosts, immunities, affect specific Pokemon, assist in Evolutions, and much more.
                         
-                        To give an item to your active Pokemon, use `/give`.
+                        To give an item to your active Pokemon, use `/item give`.
                         Most items can be purchased from the shop – use `/shop items` to see current shop offerings.
                         
                         *Note: Items are one-time use! Giving them to a Pokemon will remove them from your inventory.

@@ -71,10 +71,6 @@ public class CommandsLegacy
                 .setCommand(CommandLegacyTrade::new)
                 .setCategory(Category.PLAYER);
 
-        register("give")
-                .setCommand(CommandLegacyGive::new)
-                .setCategory(Category.POKEMON);
-
         register("market")
                 .setCommand(CommandLegacyMarket::new)
                 .setCategory(Category.ECONOMY);

@@ -86,6 +86,11 @@ public class PlayerInventory
         return this.items;
     }
 
+    public boolean hasItem(Item i)
+    {
+        return this.items.containsKey(i);
+    }
+
     public int getItemCount()
     {
         return this.items.values().stream().mapToInt(i -> i).sum();
