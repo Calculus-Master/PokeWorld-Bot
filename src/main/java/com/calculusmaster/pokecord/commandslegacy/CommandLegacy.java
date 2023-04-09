@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord.commandslegacy;
 
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
-import com.calculusmaster.pokecord.game.enums.functional.Tips;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -142,9 +141,6 @@ public abstract class CommandLegacy
 
             //Color
             this.embed.setColor(this.color == null ? Global.getRandomColor() : this.color);
-
-            //Tip Footer
-            if(this.embed.build().getFooter() == null) this.embed.setFooter("Tip: " + Tips.get().tip);
 
             //Timestamp
             this.embed.setTimestamp(Instant.now());

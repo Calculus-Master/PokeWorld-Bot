@@ -2,7 +2,10 @@ package com.calculusmaster.pokecord.commandslegacy;
 
 import com.calculusmaster.pokecord.commandslegacy.duel.*;
 import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyMarket;
-import com.calculusmaster.pokecord.commandslegacy.misc.*;
+import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyDev;
+import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyHelp;
+import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyServerInfo;
+import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacySettings;
 import com.calculusmaster.pokecord.commandslegacy.moves.CommandLegacyMoves;
 import com.calculusmaster.pokecord.commandslegacy.player.*;
 import com.calculusmaster.pokecord.commandslegacy.pokemon.*;
@@ -139,10 +142,6 @@ public class CommandsLegacy
         register("profile")
                 .setCommand(CommandLegacyProfile::new)
                 .setCategory(Category.PLAYER);
-
-        register("tip", "tips")
-                .setCommand(CommandLegacyTip::new)
-                .setCategory(Category.MISC);
 
         register("gauntlet", "gauntletduel")
                 .setCommand(CommandLegacyGauntletDuel::new)
