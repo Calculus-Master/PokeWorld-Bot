@@ -342,7 +342,7 @@ public class Pokemon
         if(this.getLevel() < 100) return false;
 
         //EVs must be maxed out
-        else if(this.getEVTotal() < 510) return false;
+        else if(this.getTotalEV() < 510) return false;
 
         //Must have 4 moves that aren't Tackle
         else if(this.moves.stream().anyMatch(s -> s.equals("Tackle"))) return false;
@@ -623,8 +623,17 @@ public class Pokemon
 
     public int getMaxMegaCharges()
     {
-        return MegaEvolutionRegistry.isMegaLegendary(this.entity) ? 3 :
-                (MegaEvolutionRegistry.isMega(this.entity) ? 5 : 0);
+        if(MegaEvolutionRegistry.isMegaLegendary(this.entity)) return 3;
+        else if(MegaEvolutionRegistry.isMega(this.entity)) return 5;
+
+        MegaEvolutionRegistry.MegaEvolutionData d = MegaEvolutionRegistry.getData(this.entity);
+
+        if(d != null)
+        {
+            PokemonEntity target = d.isSingle() ? d.getMega() : d.getMegaX();
+            return MegaEvolutionRegistry.isMegaLegendary(target) ? 3 : 5;
+        }
+        else return 0;
     }
 
     public void setMegaCharges(int megaCharge)
@@ -663,6 +672,8 @@ public class Pokemon
     {
         this.entity = entity;
         this.data = entity.data();
+
+        this.setDefaultMegaCharges();
     }
 
     //Endpoint that involves database calls - specifically for Evolution
@@ -1102,7 +1113,7 @@ public class Pokemon
 
     public void addEVs(Stat stat, int amount)
     {
-        if(this.getEVTotal() < 510 && this.getEVs().get(stat) + amount <= 252) this.evs.increase(stat, amount);
+        if(this.getTotalEV() < 510 && this.getEVs().get(stat) + amount <= 252) this.evs.increase(stat, amount);
     }
 
     public void gainEVs(Pokemon other)
@@ -1111,7 +1122,7 @@ public class Pokemon
         for(Stat s : other.getEVYield().keySet()) this.addEVs(s, other.getEVYield().get(s) * boost);
     }
 
-    public int getEVTotal()
+    public int getTotalEV()
     {
         return this.getEVs().values().stream().mapToInt(i -> i).sum();
     }

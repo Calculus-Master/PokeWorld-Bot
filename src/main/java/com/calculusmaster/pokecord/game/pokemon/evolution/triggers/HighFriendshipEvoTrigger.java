@@ -10,7 +10,7 @@ public class HighFriendshipEvoTrigger implements EvolutionTrigger
     public boolean canEvolve(Pokemon p, String serverID)
     {
         //TODO: Friendship Evolutions - this is a temporary replacement
-        return p.getLevel() > 50 && p.getEVTotal() > 20;
+        return p.getLevel() > 50 && p.getTotalEV() > 20;
     }
 
     @Override

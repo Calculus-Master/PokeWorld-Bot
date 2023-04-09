@@ -103,7 +103,7 @@ public class CommandLegacyPokemon extends CommandLegacy
         {
             case NUMBER -> this.pokemon.sort(Comparator.comparingInt(Pokemon::getNumber));
             case IV -> this.pokemon.sort(Comparator.comparingDouble(Pokemon::getTotalIVRounded));
-            case EV -> this.pokemon.sort(Comparator.comparingInt(Pokemon::getEVTotal));
+            case EV -> this.pokemon.sort(Comparator.comparingInt(Pokemon::getTotalEV));
             case STAT -> this.pokemon.sort(Comparator.comparingInt(Pokemon::getTotalStat));
             case LEVEL -> this.pokemon.sort(Comparator.comparingInt(Pokemon::getLevel));
             case NAME -> this.pokemon.sort(Comparator.comparing(Pokemon::getName));
@@ -164,7 +164,7 @@ public class CommandLegacyPokemon extends CommandLegacy
                 "Number: " + p.getNumber() + " | " +
                 "Level: " + p.getLevel() + "\n" +
                 (this.detailed ? "IV: " + p.getTotalIV() + "\n" : "") +
-                (this.detailed ? "EV: " + p.getEVTotal() + "\n" : ""),
+                (this.detailed ? "EV: " + p.getTotalEV() + "\n" : ""),
                 true);
     }
 
@@ -190,7 +190,7 @@ public class CommandLegacyPokemon extends CommandLegacy
                 "Number: " + p.getNumber(),
                 "Level " + p.getLevel(),
                 this.detailed ? "IV: " + p.getTotalIV() : "",
-                this.detailed ? "EV: " + p.getEVTotal() : ""
+                this.detailed ? "EV: " + p.getTotalEV() : ""
         ).filter(s -> !s.isEmpty()).collect(Collectors.joining(" | "));
     }
 

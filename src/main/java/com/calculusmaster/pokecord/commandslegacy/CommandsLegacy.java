@@ -22,14 +22,6 @@ public class CommandsLegacy
 
     public static void init()
     {
-        register("info")
-                .setCommand(CommandLegacyInfo::new)
-                .setCategory(Category.POKEMON)
-                .setDesc("View specific information about one of your Pokemon!")
-                .addTerminalPoint("info", "Displays information about your selected Pokemon.")
-                .addTerminalPoint("info <number>", "Displays information about your Pokemon at <number>.")
-                .addTerminalPoint("info latest", "Display information about your most recently acquired Pokemon.");
-
         register("pokemon", "p")
                 .setCommand(CommandLegacyPokemon::new)
                 .setCategory(Category.POKEMON)

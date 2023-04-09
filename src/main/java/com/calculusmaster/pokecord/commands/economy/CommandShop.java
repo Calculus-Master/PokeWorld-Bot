@@ -58,7 +58,7 @@ public class CommandShop extends PokeWorldCommand
                                                 new SubcommandData("item", "Buy an item from the shop.")
                                                         .addOption(OptionType.STRING, "item", "The item to buy.", true, true),
                                                 new SubcommandData("mega", "Buy a Mega-Evolution for your active Pokemon.")
-                                                        .addOption(OptionType.STRING, "mega", "Specify buying an X or Y Mega-Evolution.", true, true),
+                                                        .addOption(OptionType.STRING, "mega", "Specify buying an X or Y Mega-Evolution.", false, true),
                                                 new SubcommandData("tm", "Buy a TM from the shop.")
                                                         .addOption(OptionType.STRING, "tm", "The TM to buy.", true, true),
                                                 new SubcommandData("move-tutor", "Buy a Move Tutor move from the shop.")

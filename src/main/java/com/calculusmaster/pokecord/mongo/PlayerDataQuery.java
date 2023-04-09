@@ -301,7 +301,7 @@ public class PlayerDataQuery extends MongoQuery
 
     public Pokemon getSelectedPokemon()
     {
-        return Pokemon.build(this.getPokemonList().get(this.getSelected()));
+        return Pokemon.build(this.getPokemonList().get(this.getSelected()), this.getSelected() + 1);
     }
 
     //key: "pokemon"

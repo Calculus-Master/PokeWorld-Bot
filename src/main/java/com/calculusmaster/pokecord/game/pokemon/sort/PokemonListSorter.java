@@ -40,7 +40,7 @@ public class PokemonListSorter
         this.sortNumeric(PokemonSorterFlag.DYNAMAX_LEVEL, Pokemon::getDynamaxLevel);
         this.sortNumeric(PokemonSorterFlag.PRESTIGE_LEVEL, Pokemon::getPrestigeLevel);
         this.sortNumeric(PokemonSorterFlag.IV, p -> (int)(p.getTotalIVRounded()));
-        this.sortNumeric(PokemonSorterFlag.EV, Pokemon::getEVTotal);
+        this.sortNumeric(PokemonSorterFlag.EV, Pokemon::getTotalEV);
         this.sortNumeric(PokemonSorterFlag.STAT, Pokemon::getTotalStat);
     }
 

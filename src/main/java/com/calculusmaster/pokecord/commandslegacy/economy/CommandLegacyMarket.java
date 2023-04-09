@@ -3,7 +3,6 @@ package com.calculusmaster.pokecord.commandslegacy.economy;
 import com.calculusmaster.pokecord.Pokecord;
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacy;
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacyInvalid;
-import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyInfo;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
@@ -100,10 +99,10 @@ public class CommandLegacyMarket extends CommandLegacy
                 String type = "Type: " + chosen.getType().stream().map(Type::getStyledName).collect(Collectors.joining(" | "));
                 String nature = "Nature: " + Global.normalize(chosen.getNature().toString());
                 String item = "Held Item: " + chosen.getItem().getStyledName();
-                String stats = CommandLegacyInfo.getStatsFormatted(chosen, this.playerData.getSettings().get(Settings.CLIENT_DETAILED, Boolean.class));
+//                String stats = CommandLegacyInfo.getStatsFormatted(chosen, this.playerData.getSettings().get(Settings.CLIENT_DETAILED, Boolean.class));
 
                 this.embed.setTitle(title);
-                this.embed.setDescription(market + "\n" + exp + "\n" + gender + "\n" + type + "\n" + nature + "\n" + item + "\n\n" + stats);
+                this.embed.setDescription(market + "\n" + exp + "\n" + gender + "\n" + type + "\n" + nature + "\n" + item + "\n\n" + "stats");
                 this.color = chosen.getType().get(0).getColor();
                 this.embed.setFooter("Buy this pokemon with `p!market buy " + entry.marketID + "`!");
 
@@ -181,7 +180,7 @@ public class CommandLegacyMarket extends CommandLegacy
         switch(o)
         {
             case IV -> entries.sort(Comparator.comparingDouble(m -> m.pokemon.getTotalIVRounded()));
-            case EV -> entries.sort(Comparator.comparingInt(m -> m.pokemon.getEVTotal()));
+            case EV -> entries.sort(Comparator.comparingInt(m -> m.pokemon.getTotalEV()));
             case STAT -> entries.sort(Comparator.comparingInt(m -> m.pokemon.getTotalStat()));
             case LEVEL -> entries.sort(Comparator.comparingInt(m -> m.pokemon.getLevel()));
             case NAME -> entries.sort(Comparator.comparing(m -> m.pokemon.getName()));

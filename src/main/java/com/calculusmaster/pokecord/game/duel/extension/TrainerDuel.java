@@ -213,14 +213,14 @@ public class TrainerDuel extends Duel
         this.players[1] = new TrainerPlayer(data);
 
         //TODO: Determine EV handling for trainer pokemon
-        int highest = this.players[0].team.get(0).getEVTotal();
+        int highest = this.players[0].team.get(0).getTotalEV();
         LinkedHashMap<Stat, Integer> evs = this.players[0].team.get(0).getEVs();
         //Copy EVs
         for(int i = 0; i < this.players[0].team.size(); i++)
         {
-            if(this.players[1].team.get(i).getEVTotal() > highest)
+            if(this.players[1].team.get(i).getTotalEV() > highest)
             {
-                highest = this.players[0].team.get(i).getEVTotal();
+                highest = this.players[0].team.get(i).getTotalEV();
                 evs = this.players[0].team.get(i).getEVs();
             }
         }
