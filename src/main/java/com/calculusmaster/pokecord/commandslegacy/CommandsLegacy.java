@@ -4,7 +4,6 @@ import com.calculusmaster.pokecord.commandslegacy.duel.*;
 import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyMarket;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyDev;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyHelp;
-import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyServerInfo;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacySettings;
 import com.calculusmaster.pokecord.commandslegacy.moves.CommandLegacyMoves;
 import com.calculusmaster.pokecord.commandslegacy.player.*;
@@ -114,14 +113,6 @@ public class CommandsLegacy
         register("bounties", "bounty", "tasks", "quests")
                 .setCommand(CommandLegacyBounties::new)
                 .setCategory(Category.PLAYER);
-
-        register("target")
-                .setCommand(CommandLegacyTarget::new)
-                .setCategory(Category.DUEL);
-
-        register("serverinfo", "server")
-                .setCommand(CommandLegacyServerInfo::new)
-                .setCategory(Category.MISC);
 
         register("profile")
                 .setCommand(CommandLegacyProfile::new)

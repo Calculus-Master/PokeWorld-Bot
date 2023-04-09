@@ -2,7 +2,6 @@ package com.calculusmaster.pokecord;
 
 import com.calculusmaster.pokecord.commands.CommandHandler;
 import com.calculusmaster.pokecord.commandslegacy.CommandsLegacy;
-import com.calculusmaster.pokecord.commandslegacy.duel.CommandLegacyTarget;
 import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyBreed;
 import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
 import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestrictionRegistry;
@@ -146,8 +145,6 @@ public class Pokecord
             if(g != null)
             {
                 SpawnEventHelper.start(g);
-
-                CommandLegacyTarget.generateNewServerTarget(g);
             }
             else
             {

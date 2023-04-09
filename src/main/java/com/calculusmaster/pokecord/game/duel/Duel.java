@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord.game.duel;
 
 import com.calculusmaster.pokecord.Pokecord;
-import com.calculusmaster.pokecord.commandslegacy.duel.CommandLegacyTarget;
 import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.component.*;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
@@ -28,7 +27,6 @@ import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -2868,32 +2866,8 @@ public class Duel
 
         int c = new Random().nextInt(11) + 10;
 
-        //If not matchmade Duel, Target system
-        if(this.channels.size() == 1)
-        {
-            Guild g = this.channels.get(0).getGuild();
-
-            if(CommandLegacyTarget.isTarget(g, this.players[winner].ID))
-            {
-                c = (new Random().nextInt(201) + 50) * (CommandLegacyTarget.SERVER_TARGET_DUELS_WON.get(g.getId()) + 1);
-
-                CommandLegacyTarget.SERVER_TARGET_DUELS_WON.put(g.getId(), CommandLegacyTarget.SERVER_TARGET_DUELS_WON.get(g.getId()) + 1);
-
-                embed.setFooter("The Server Target has won another duel!");
-            }
-            else if(CommandLegacyTarget.isTarget(g, this.players[loser].ID))
-            {
-                CommandLegacyTarget.SERVER_TARGETS.remove(g.getId());
-
-                c = new Random().nextInt(501) + 500;
-
-                CommandLegacyTarget.generateNewServerTarget(g);
-
-                embed.setFooter("The Server Target has been defeated!");
-            }
-        }
         // Casual Matchmade Duel Rewards
-        else if(this instanceof CasualMatchmadeDuel) c = new Random().nextInt(100, 201);
+        if(this instanceof CasualMatchmadeDuel) c = new Random().nextInt(100, 201);
 
         embed.setDescription(this.getWinner().getName() + " has won!" + (c != 0 ? "\nThey earned " + c + " credits!" : ""));
 
