@@ -13,6 +13,12 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+
+import java.awt.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.IntStream;
 
 public class CommandMega extends PokeWorldCommand
 {
@@ -24,7 +30,11 @@ public class CommandMega extends PokeWorldCommand
                 .withFeature(Feature.ACQUIRE_POKEMON_MEGA_EVOLUTIONS)
                 .withCommand(Commands
                         .slash("mega", "Mega-Evolve your Pokemon!")
-                        .addOption(OptionType.STRING, "type", "Mega-Evolve into an X or Y form, if available.", false, true)
+                        .addSubcommands(
+                                new SubcommandData("evolve", "Mega-Evolve a Pokemon, or remove its Mega-Evolution.")
+                                        .addOption(OptionType.STRING, "type", "Mega-Evolve into an X or Y form, if available.", false, true),
+                                new SubcommandData("charges", "View the status of your active Pokemon's Mega Charges.")
+                        )
                 )
                 .register();
     }
@@ -32,10 +42,12 @@ public class CommandMega extends PokeWorldCommand
     @Override
     protected boolean slashCommandLogic(SlashCommandInteractionEvent event)
     {
-        Pokemon p = this.playerData.getSelectedPokemon();
+        String subcommand = Objects.requireNonNull(event.getSubcommandName());
 
+        Pokemon p = this.playerData.getSelectedPokemon();
         if(!MegaEvolutionRegistry.hasMegaData(p.getEntity())) return this.error("This Pokemon cannot Mega Evolve.");
-        else
+
+        if(subcommand.equals("evolve"))
         {
             OptionMapping optionXY = event.getOption("type");
             MegaEvolutionRegistry.MegaEvolutionData megaData = MegaEvolutionRegistry.getData(p.getEntity());
@@ -46,7 +58,7 @@ public class CommandMega extends PokeWorldCommand
 
                 p.removeMegaEvolution();
 
-                MegaChargeManager.removeBlocking(p.getUUID());
+                MegaChargeManager.removeBlocked(p.getUUID());
             }
             else
             {
@@ -65,17 +77,66 @@ public class CommandMega extends PokeWorldCommand
                     return this.error();
                 }
 
-                if(this.playerData.getOwnedMegas().contains(target))
+                if(p.getMegaCharges() == 0) return this.error(p.getName() + " has run out of Mega Charges, and cannot Mega-Evolve until one regenerates! Use `/mega charges` for more information.");
+                else if(this.playerData.getOwnedMegas().contains(target))
                 {
                     this.response = p.getName() + " has Mega-Evolved into " + megaData.getMega().getName() + "!";
 
-                    p.changePokemon(megaData.getMega());
+                    p.changePokemon(target);
                     p.updateEntity();
 
-                    MegaChargeManager.blockCharging(p.getUUID());
+                    MegaChargeManager.setBlocked(p.getUUID());
                 }
                 else return this.error("You do not own the Mega Evolution: " + megaData.getMega().getName() + ".");
             }
+        }
+        else if(subcommand.equals("charges"))
+        {
+            this.embed
+                    .setTitle("Mega Charge Events for " + p.getName())
+                    .setDescription("""
+                            All Pokemon that can Mega-Evolve have a certain amount of *Mega Charges*.
+                            These are consumed when the Mega-Evolved form completes a Duel.
+                            
+                            Once a charge is consumed, it will begin to regenerate slowly.
+                            *Note*: Charges will NOT regenerate while the Pokemon is Mega-Evolved! You must revert it to its base form to let the timer count down for regeneration.
+                            
+                            If a Pokemon's Mega Charges reach zero, the Pokemon will revert to its base form, and be unable to Mega-Evolve until all of its charges have regenerated.
+                            """);
+
+            List<MegaChargeManager.MegaChargeEvent> events = MegaChargeManager.getEvents(p.getUUID());
+
+            String blockedStatus;
+            if(events.isEmpty()) blockedStatus = "*" + p.getName() + "* has its maximum Mega Charges.*";
+            else if(events.get(0).isBlocked()) blockedStatus = "*Charge Regeneration:* **__Blocked__**.\n--- *" + p.getName() + "'s Mega Charges will not regenerate until it reverts to its base form!*";
+            else blockedStatus = "*Charge Regeneration:* **__Active__**.\n--- *" + p.getName() + "'s Mega Charges will regenerate normally.*";
+
+            this.embed.addField("Mega Charge Overview", """
+                    *Charges:* %s (Max: %s)
+                    
+                    %s
+                    """.formatted(p.getMegaCharges(), p.getMaxMegaCharges(), blockedStatus), false);
+
+            for(int i = 0; i < events.size(); i++)
+            {
+                MegaChargeManager.MegaChargeEvent e = events.get(i);
+                String status = e.isBlocked() ? "Blocked" : "Charging";
+
+                int time = e.getTime();
+                int seconds = time % 60;
+                int minutes = (time % 3600) / 60;
+                int hours = time / 3600;
+
+                this.embed.addField("Charge Event #" + (i + 1), """
+                        *Charge ID:* %s
+                        *Status:* %s
+                        *Time Left:* `%sH %sM %sS`
+                        """.formatted(e.getChargeID(), status, hours, minutes, seconds), true);
+            }
+
+            if(events.size() % 3 != 0) IntStream.range(0, 3 - events.size() % 3).forEach(i -> this.embed.addBlankField(true));
+
+            this.embed.setColor(events.get(0).isBlocked() ? Color.RED : Color.GREEN);
         }
 
         return true;

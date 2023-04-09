@@ -83,6 +83,9 @@ public class StatusConditionEffect extends MoveEffect
                 if(poisonImmune && !corrosionOverride) return p.getName() + " was immune to the poison!";
             }
 
+            if(this.status.equals(StatusCondition.FLINCHED) && this.duel.first.equals(p.getUUID()))
+                return "The flinch had no effect since " + p.getName() + " moved first!";
+
             p.addStatusCondition(this.status);
 
             if(this.status.equals(StatusCondition.BOUND)) this.duel.data(p.getUUID()).boundTurns = 5;
@@ -103,11 +106,6 @@ public class StatusConditionEffect extends MoveEffect
             if(this.status.equals(StatusCondition.BADLY_POISONED))
             {
                 this.duel.data(opponent.getUUID()).badlyPoisonedTurns++;
-            }
-
-            if(this.status.equals(StatusCondition.FLINCHED) && this.duel.first.equals(p.getUUID()))
-            {
-                return p.getName() + " did not flinch!";
             }
 
             if(this.status.equals(StatusCondition.INFATUATED) && p.getItem().equals(Item.DESTINY_KNOT))

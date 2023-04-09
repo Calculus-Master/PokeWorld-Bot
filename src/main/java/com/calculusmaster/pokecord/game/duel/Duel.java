@@ -2847,7 +2847,7 @@ public class Duel
                     if(pokemon.getMegaCharges() == 0)
                     {
                         pokemon.removeMegaEvolution();
-                        MegaChargeManager.removeBlocking(pokemon.getUUID());
+                        MegaChargeManager.removeBlocked(pokemon.getUUID());
 
                         user.data.directMessage(pokemon.getName() + " has returned to its original form! Its Mega Charges have been depleted, and will slowly regenerate while the Pokemon is not Mega-Evolved.");
                         LoggerHelper.info(Duel.class, "Removing Mega-Evolution from " + pokemon.getName() + " (" + pokemon.getUUID() + ") as its Mega Charges have been depleted.");
