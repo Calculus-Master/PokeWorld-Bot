@@ -10,6 +10,7 @@ import com.calculusmaster.pokecord.commands.move.CommandMoves;
 import com.calculusmaster.pokecord.commands.move.CommandTM;
 import com.calculusmaster.pokecord.commands.player.CommandAchievements;
 import com.calculusmaster.pokecord.commands.player.CommandBugReport;
+import com.calculusmaster.pokecord.commands.player.CommandLevel;
 import com.calculusmaster.pokecord.commands.player.CommandStart;
 import com.calculusmaster.pokecord.commands.pokemon.*;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -56,6 +57,7 @@ public class CommandHandler extends ListenerAdapter
         CommandStart.init();
         CommandBugReport.init();
         CommandAchievements.init();
+        CommandLevel.init();
 
         CommandCatch.init();
         CommandPokeDex.init();
@@ -67,6 +69,7 @@ public class CommandHandler extends ListenerAdapter
         CommandItem.init();
         CommandNickname.init();
         CommandInfo.init();
+        CommandFavorites.init();
 
         CommandMoves.init();
         CommandTM.init();

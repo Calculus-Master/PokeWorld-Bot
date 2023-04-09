@@ -22,7 +22,7 @@ public abstract class AbstractPMLTask
 
     protected enum LevelTaskType
     {
-        EXPERIENCE("Earn Pokemon Mastery Level Experience"),
+        EXPERIENCE("Earn Mastery Level Experience"),
         POKEMON("Collect Pokemon"),
         POKEMON_CAUGHT("Catch Pokemon"),
         POKEMON_LEVEL("Have Pokemon at a Certain Level"),

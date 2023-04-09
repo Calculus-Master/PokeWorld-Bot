@@ -6,7 +6,10 @@ import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyDev;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyHelp;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacySettings;
 import com.calculusmaster.pokecord.commandslegacy.moves.CommandLegacyMoves;
-import com.calculusmaster.pokecord.commandslegacy.player.*;
+import com.calculusmaster.pokecord.commandslegacy.player.CommandLegacyBounties;
+import com.calculusmaster.pokecord.commandslegacy.player.CommandLegacyLeaderboard;
+import com.calculusmaster.pokecord.commandslegacy.player.CommandLegacyProfile;
+import com.calculusmaster.pokecord.commandslegacy.player.CommandLegacyTrade;
 import com.calculusmaster.pokecord.commandslegacy.pokemon.*;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.interfaces.CommandSupplier;
@@ -82,10 +85,6 @@ public class CommandsLegacy
                 .setCommand(CommandLegacyTrainerDuel::new)
                 .setCategory(Category.DUEL);
 
-        register("favorites", "fav")
-                .setCommand(CommandLegacyFavorites::new)
-                .setCategory(Category.POKEMON);
-
         register("form")
                 .setCommand(CommandLegacyForm::new)
                 .setCategory(Category.POKEMON);
@@ -125,10 +124,6 @@ public class CommandsLegacy
         register("eggs", "egg")
                 .setCommand(CommandLegacyEggs::new)
                 .setCategory(Category.POKEMON);
-
-        register("level")
-                .setCommand(CommandLegacyLevel::new)
-                .setCategory(Category.PLAYER);
 
         register("ztrialduel", "ztrial", "trial", "ztduel")
                 .setCommand(CommandLegacyZTrialDuel::new)
