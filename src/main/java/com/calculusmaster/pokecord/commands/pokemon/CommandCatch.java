@@ -72,14 +72,7 @@ public class CommandCatch extends PokeWorldCommand
                     default -> 1;
                 };
 
-                int maxLevel = 15 + switch(caught.getRarity()) {
-                    case COPPER, SILVER, GOLD -> 0;
-                    case DIAMOND, PLATINUM -> -2;
-                    case MYTHICAL, ULTRA_BEAST -> -3;
-                    case LEGENDARY -> -5;
-                } + 1;
-
-                caught.setLevel(random.nextInt(baseLevel, maxLevel));
+                caught.setLevel(random.nextInt(baseLevel, baseLevel + 5 + 1));
 
                 //PokeDex
 
