@@ -13,9 +13,9 @@ public enum Item
 {
     NONE(0, MISC),
     //Functional Items (p!activate)
-    EV_REALLOCATOR(0, FUNCTIONAL),
-    IV_REROLLER(0, FUNCTIONAL),
-    EV_CLEARER(0, FUNCTIONAL),
+//    EV_REALLOCATOR(0, FUNCTIONAL),
+//    IV_REROLLER(0, FUNCTIONAL),
+//    EV_CLEARER(0, FUNCTIONAL),
     //Pokemon Evolution Items
     FRIENDSHIP_BAND(500, EVOLUTION),
     THUNDER_STONE(250, EVOLUTION),
@@ -178,12 +178,7 @@ public enum Item
 
     public String getStyledName()
     {
-        return switch(this) {
-            case EV_REALLOCATOR -> "EV Reallocator";
-            case IV_REROLLER -> "IV Reroller";
-            case EV_CLEARER -> "EV Clearer";
-            default -> Global.normalize(this.getName().replaceAll("_", " "));
-        };
+        return Global.normalize(this.getName().replaceAll("_", " "));
     }
 
     public static Item cast(String input)

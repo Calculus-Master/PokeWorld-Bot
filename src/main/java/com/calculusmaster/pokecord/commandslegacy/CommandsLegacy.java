@@ -91,10 +91,6 @@ public class CommandsLegacy
                 .setCommand(CommandLegacyTrainerDuel::new)
                 .setCategory(Category.DUEL);
 
-        register("activate")
-                .setCommand(CommandLegacyActivate::new)
-                .setCategory(Category.POKEMON);
-
         register("favorites", "fav")
                 .setCommand(CommandLegacyFavorites::new)
                 .setCategory(Category.POKEMON);
