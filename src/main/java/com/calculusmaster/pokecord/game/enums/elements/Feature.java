@@ -83,7 +83,6 @@ public enum Feature
 
     //Level 10 – Advanced Dueling TODO: Ranked Duels
     PVE_DUELS_ELITE("Duel Elite Trainers for large rewards"),
-    PVP_DUELS_TOURNAMENT("Participate in PvP Tournaments"),
 
     //Level 11 – Pokemon Augments
     AUGMENT_POKEMON("Apply Augments to your Pokemon, customizing their capabilities"),

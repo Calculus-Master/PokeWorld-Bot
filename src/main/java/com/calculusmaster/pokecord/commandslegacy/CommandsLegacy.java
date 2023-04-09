@@ -119,10 +119,6 @@ public class CommandsLegacy
                 .setCommand(CommandLegacyTarget::new)
                 .setCategory(Category.DUEL);
 
-        register("tournament")
-                .setCommand(CommandLegacyTournament::new)
-                .setCategory(Category.DUEL);
-
         register("serverinfo", "server")
                 .setCommand(CommandLegacyServerInfo::new)
                 .setCategory(Category.MISC);

@@ -439,7 +439,7 @@ public class MasteryLevelManager
                                 Test your skills against Elite Trainers using `/elite`!
                                 """, false)
                 )
-                .withFeaturesUnlocked(PVE_DUELS_ELITE, PVP_DUELS_TOURNAMENT)
+                .withFeaturesUnlocked(PVE_DUELS_ELITE)
                 .withExperienceRequirement(240)
                 .withTaskRequirement(new ZCrystalsAcquiredPMLTask(2))
                 .withTaskRequirement(new PokemonPrestigedPMLTask(1))

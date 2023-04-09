@@ -8,8 +8,6 @@ import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
-import com.calculusmaster.pokecord.game.duel.tournament.Tournament;
-import com.calculusmaster.pokecord.game.duel.tournament.TournamentHelper;
 import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.moves.Move;
@@ -2918,16 +2916,6 @@ public class Duel
             player.data.getStatistics().incr(PlayerStatistic.PVP_DUELS_COMPLETED);
 
             player.data.updateBountyProgression(ObjectiveType.COMPLETE_PVP_DUEL);
-        }
-
-        if(TournamentHelper.isInTournament(this.players[winner].ID) && TournamentHelper.isInTournament(this.players[loser].ID))
-        {
-            Tournament t = TournamentHelper.instance(this.getWinner().ID);
-
-            boolean neitherElim = !t.isPlayerEliminated(this.players[winner].ID) && !t.isPlayerEliminated(this.players[loser].ID);
-            boolean matchupValid = t.getMatchups().stream().anyMatch(m -> m.has(this.players[winner].ID) && m.has(this.players[loser].ID));
-
-            if(neitherElim && matchupValid) t.addDuelResults(this.players[winner].ID, this.players[loser].ID);
         }
 
         this.uploadExperience();

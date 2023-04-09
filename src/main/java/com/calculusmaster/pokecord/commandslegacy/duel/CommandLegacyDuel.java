@@ -6,7 +6,6 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
 import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestrictionRegistry;
-import com.calculusmaster.pokecord.game.duel.tournament.TournamentHelper;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
@@ -143,7 +142,6 @@ public class CommandLegacyDuel extends CommandLegacy
         int size = 1;
 
         if(this.msg.length >= 3) size = this.getInt(2);
-        if(TournamentHelper.isInTournament(this.player.getId())) size = TournamentHelper.instance(this.player.getId()).getSize();
 
         //Player wants to start a duel with the mention, check all necessary things
 
