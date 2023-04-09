@@ -65,6 +65,7 @@ public class CommandHandler extends ListenerAdapter
         CommandRelease.init();
         CommandTeam.init();
         CommandItem.init();
+        CommandNickname.init();
 
         CommandMoves.init();
         CommandTM.init();

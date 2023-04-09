@@ -107,10 +107,6 @@ public class CommandsLegacy
                 .setCommand(CommandLegacyFlee::new)
                 .setCategory(Category.DUEL);
 
-        register("nickname", "nick")
-                .setCommand(CommandLegacyNickname::new)
-                .setCategory(Category.POKEMON);
-
         register("settings", "config")
                 .setCommand(CommandLegacySettings::new)
                 .setCategory(Category.MISC);
