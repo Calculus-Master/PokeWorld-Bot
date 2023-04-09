@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.util.listener;
 
-import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.commandslegacy.CommandsLegacy;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.custom.ExtendedIntegerMap;
@@ -30,10 +30,10 @@ public class Listener extends ListenerAdapter
 
     public static void startSpawnIntervalUpdater()
     {
-        SERVER_RECENT_MESSAGES = new ExtendedIntegerMap<String>().withDefaultKeys(Pokecord.BOT_JDA.getGuilds().stream().map(ISnowflake::getId).collect(Collectors.toList()));
+        SERVER_RECENT_MESSAGES = new ExtendedIntegerMap<String>().withDefaultKeys(Pokeworld.BOT_JDA.getGuilds().stream().map(ISnowflake::getId).collect(Collectors.toList()));
 
         Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
-            SERVER_RECENT_MESSAGES.forEach((server, messages) -> SpawnEventHelper.updateSpawnRate(Pokecord.BOT_JDA.getGuildById(server), messages));
+            SERVER_RECENT_MESSAGES.forEach((server, messages) -> SpawnEventHelper.updateSpawnRate(Pokeworld.BOT_JDA.getGuildById(server), messages));
             SERVER_RECENT_MESSAGES.reset();
         }, 5, 5, TimeUnit.MINUTES);
     }
@@ -71,7 +71,7 @@ public class Listener extends ListenerAdapter
             {
                 if(!PLAYERS_NOTIFIED_BOT_CHANNELS.contains(player.getId()))
                 {
-                    Pokecord.BOT_JDA.openPrivateChannelById(player.getId()).flatMap(channel -> channel.sendMessage("Bot Commands are not allowed in that channel!")).queue();
+                    Pokeworld.BOT_JDA.openPrivateChannelById(player.getId()).flatMap(channel -> channel.sendMessage("Bot Commands are not allowed in that channel!")).queue();
                     PLAYERS_NOTIFIED_BOT_CHANNELS.add(player.getId());
                 }
 

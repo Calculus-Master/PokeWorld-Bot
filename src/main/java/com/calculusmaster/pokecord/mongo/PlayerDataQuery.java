@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.mongo;
 
-import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.game.bounties.Bounty;
 import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerData;
@@ -114,7 +114,7 @@ public class PlayerDataQuery extends MongoQuery
     {
         try
         {
-            Pokecord.BOT_JDA.openPrivateChannelById(this.getID()).flatMap(channel -> channel.sendMessage(msg)).queue();
+            Pokeworld.BOT_JDA.openPrivateChannelById(this.getID()).flatMap(channel -> channel.sendMessage(msg)).queue();
         }
         catch (Exception e)
         {
@@ -126,7 +126,7 @@ public class PlayerDataQuery extends MongoQuery
     {
         try
         {
-            Pokecord.BOT_JDA.openPrivateChannelById(this.getID()).flatMap(channel -> channel.sendMessageEmbeds(embed)).queue();
+            Pokeworld.BOT_JDA.openPrivateChannelById(this.getID()).flatMap(channel -> channel.sendMessageEmbeds(embed)).queue();
         }
         catch (Exception e)
         {

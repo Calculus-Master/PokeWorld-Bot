@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.commands.economy;
 
-import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
@@ -38,7 +38,7 @@ public class CommandShop extends PokeWorldCommand
                 .withConstructor(CommandShop::new)
                 .withFeature(Feature.ACCESS_BUY_SHOP)
                 .withCommand(Commands
-                        .slash("shop", "Access the %s Shop and buy items, TMs, Megas, Natures, Rare Candies, and more!".formatted(Pokecord.NAME))
+                        .slash("shop", "Access the %s Shop and buy items, TMs, Megas, Natures, Rare Candies, and more!".formatted(Pokeworld.NAME))
                         .addSubcommands(
                                 new SubcommandData("candy", "View information about rare candies."),
                                 new SubcommandData("nature", "View information about Pokemon natures."),
@@ -86,7 +86,7 @@ public class CommandShop extends PokeWorldCommand
                 Pokemon p = this.playerData.getSelectedPokemon();
 
                 this.embed
-                        .setTitle(Pokecord.NAME + " Shop: Rare Candies")
+                        .setTitle(Pokeworld.NAME + " Shop: Rare Candies")
                         .setDescription("""
                                 Rare Candies are special items that instantly level your Pokemon by 1.
                                 You can buy rare candies from the shop using `/shop buy candy`.
@@ -100,7 +100,7 @@ public class CommandShop extends PokeWorldCommand
                 Pokemon p = this.playerData.getSelectedPokemon();
 
                 this.embed
-                        .setTitle(Pokecord.NAME + " Shop: Natures")
+                        .setTitle(Pokeworld.NAME + " Shop: Natures")
                         .setDescription("""
                         Natures provide a boost to one stat at the cost of another.
                         You can buy a nature from the shop to instantly change your active Pokemon's nature, using `/shop buy nature`.
@@ -126,7 +126,7 @@ public class CommandShop extends PokeWorldCommand
                 }
 
                 this.embed
-                        .setTitle(Pokecord.NAME + " Shop: Items")
+                        .setTitle(Pokeworld.NAME + " Shop: Items")
                         .setDescription("""
                                 Items can be held by Pokemon and have various uses.
                                 Some items can be used in battle, some assist in evolution, and much more.
@@ -151,7 +151,7 @@ public class CommandShop extends PokeWorldCommand
                     else contents = p.getName() + " has two Mega-Evolutions: " + megaData.getMegaX().getName() + " and " + megaData.getMegaY().getName();
                 }
 
-                this.embed.setTitle(Pokecord.NAME + " Shop: Mega Evolutions")
+                this.embed.setTitle(Pokeworld.NAME + " Shop: Mega Evolutions")
                         .setDescription("""
                                 Mega-Evolutions are powerful transformations available to certain Pokemon that greatly increase their stats and introduce new abilities.
                                 Some Pokemon have two possible Mega-Evolutions – an X or Y Mega-Evolution.
@@ -174,7 +174,7 @@ public class CommandShop extends PokeWorldCommand
                 }
 
                 this.embed
-                        .setTitle(Pokecord.NAME + " Shop – Technical Machines (TMs)")
+                        .setTitle(Pokeworld.NAME + " Shop – Technical Machines (TMs)")
                         .setDescription("""
                                 Technical Machines (TMs) are items that let you teach Pokemon moves they could not normally learn by leveling up.
                                 You can view the PokeDex entry for a Pokemon to see what TMs they can learn.
@@ -198,7 +198,7 @@ public class CommandShop extends PokeWorldCommand
                     if(MoveTutorRegistry.VALIDATORS.get(move).test(p)) available.add(move.getName());
 
                 this.embed
-                        .setTitle(Pokecord.NAME + " Shop – Move Tutors")
+                        .setTitle(Pokeworld.NAME + " Shop – Move Tutors")
                         .setDescription("""
                                 Move Tutor moves are special moves that they could not normally learn by leveling up.
                                 To buy a Move Tutor to teach your Pokemon a particular move, use `/shop buy move-tutor`.
@@ -219,7 +219,7 @@ public class CommandShop extends PokeWorldCommand
                     zCrystalNames.add((owned ? "~~" : "") + zc.getStyledName() + (owned ? "~~" : ""));
                 }
 
-                this.embed.setTitle(Pokecord.NAME + " Shop: Z-Crystals")
+                this.embed.setTitle(Pokeworld.NAME + " Shop: Z-Crystals")
                         .setDescription("""
                                 Z-Crystals are items that when equipped, let you unleash powerful Z-Moves in Duels.
                                 The shop sells "Unique" Z-Crystals – these are crystals dedicated to a particular Pokemon species, and permit the use of a special Z-Move.

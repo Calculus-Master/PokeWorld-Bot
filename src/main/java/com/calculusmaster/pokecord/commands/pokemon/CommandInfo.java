@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.commands.pokemon;
 
-import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
 import com.calculusmaster.pokecord.game.enums.elements.*;
@@ -124,7 +124,7 @@ public class CommandInfo extends PokeWorldCommand
         String attachment = "pokemon_info.png";
 
         this.embed.setImage("attachment://" + attachment);
-        event.replyFiles(FileUpload.fromData(Pokecord.class.getResourceAsStream(image), attachment)).setEmbeds(this.embed.build()).queue();
+        event.replyFiles(FileUpload.fromData(Pokeworld.class.getResourceAsStream(image), attachment)).setEmbeds(this.embed.build()).queue();
         this.embed = null;
 
         return true;

@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.commands.player;
 
-import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
@@ -54,7 +54,7 @@ public class CommandStart extends PokeWorldCommand
                             It uses a level-based progression system, and you'll unlock more and more features as you level up (more information below).
                             
                             *But, before all that, select a Starter to begin your journey!*
-                            """.formatted(Pokecord.NAME))
+                            """.formatted(Pokeworld.NAME))
                     .addField("Starter", """
                             You may select any of the following Pokemon to be your starter:
                             Generation 1: **Bulbasaur** | **Charmander** | **Squirtle**
@@ -116,7 +116,7 @@ public class CommandStart extends PokeWorldCommand
                 //Next Steps
                 this.playerData.dmMasteryLevel();
 
-                this.response = "You started your journey with **" + starter.getName() + "**! Check your DMs for more information about where to head next, and welcome to " + Pokecord.NAME + "!";
+                this.response = "You started your journey with **" + starter.getName() + "**! Check your DMs for more information about where to head next, and welcome to " + Pokeworld.NAME + "!";
             }
         }
 

@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.commands.misc;
 
-import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
 import com.calculusmaster.pokecord.game.world.RegionManager;
@@ -16,7 +16,7 @@ public class CommandWorld extends PokeWorldCommand
                 .create("world")
                 .withConstructor(CommandWorld::new)
                 .withCommand(Commands
-                        .slash("world", "View the current Region and Time in " + Pokecord.NAME + "!")
+                        .slash("world", "View the current Region and Time in " + Pokeworld.NAME + "!")
                 )
                 .register();
     }
@@ -46,7 +46,7 @@ public class CommandWorld extends PokeWorldCommand
                         *Note*: The time is **not synchronized** with your timezone.
                         *%s operates off of __UTC-7__!* 
                         As a result daytime in the bot may be nighttime for you. Use `/world` to check if you're not sure!
-                        """.formatted(Pokecord.NAME), false)
+                        """.formatted(Pokeworld.NAME), false)
                 .setTimestamp(Global.timeNow());
 
         return true;

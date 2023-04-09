@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.util.helpers;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
-import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.util.Global;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -22,13 +22,13 @@ public class LoggerHelper
 
     public static void init(String name, Runnable init, boolean time)
     {
-        info(Pokecord.class, "Initializing " + name + ".");
+        info(Pokeworld.class, "Initializing " + name + ".");
         long i = System.currentTimeMillis();
 
         init.run();
 
         long f = System.currentTimeMillis();
-        if(time) info(Pokecord.class, "Completed " + name + " Init!" + " Time: " + (f - i) + " ms!");
+        if(time) info(Pokeworld.class, "Completed " + name + " Init!" + " Time: " + (f - i) + " ms!");
     }
 
     public static void init(String name, Runnable init)
@@ -69,7 +69,7 @@ public class LoggerHelper
 
     public static void info(Class<?> clazz, String msg, boolean requireInit)
     {
-        if(requireInit && Pokecord.INIT_COMPLETE) info(clazz, msg);
+        if(requireInit && Pokeworld.INIT_COMPLETE) info(clazz, msg);
     }
 
     public static void warn(Class<?> clazz, String msg)

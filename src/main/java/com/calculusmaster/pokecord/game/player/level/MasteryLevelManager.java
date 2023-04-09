@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.game.player.level;
 
-import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.game.player.level.pmltasks.*;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.Prices;
@@ -23,7 +23,7 @@ public class MasteryLevelManager
         PokemonMasteryLevel
                 .create(0)
                 .withEmbed(() -> new EmbedBuilder()
-                        .setTitle("Pokemon Mastery Level 0 – Welcome to " + Pokecord.NAME + "!")
+                        .setTitle("Pokemon Mastery Level 0 – Welcome to " + Pokeworld.NAME + "!")
                         .setDescription("""
                                 ***Welcome to the world of Pokemon! Let's start with some basic key features you'll be using throughout your journey.***
                                 
@@ -76,7 +76,7 @@ public class MasteryLevelManager
                                 
                                 **Information**: Interested in information regarding a specific Pokemon, ability, move, or more?\s
                                 There are plenty of commands such as `/pokedex`, `/info`, `/moves info` and more that will show you data regarding a specific aspect of the world of Pokemon.
-                                """.formatted(Pokecord.NAME), false)
+                                """.formatted(Pokeworld.NAME), false)
                 )
                 .withFeaturesUnlocked(VIEW_POKEMON_LIST, VIEW_LEVEL, VIEW_TIPS, ACCESS_SETTINGS, VIEW_DEX_INFO, VIEW_UNIQUE_INFO, VIEW_SERVER_INFO, VIEW_PROFILE, CREATE_REPORT, VIEW_HELP, VIEW_BALANCE, VIEW_ABILITY_INFO, VIEW_MOVE_INFO, VIEW_MOVES, VIEW_LOCATION, VIEW_ACHIEVEMENTS, ACCESS_INVENTORY, ACCESS_LEADERBOARD,
                         CATCH_POKEMON, SELECT_POKEMON, EVOLVE_POKEMON, RELEASE_POKEMON, LEARN_REPLACE_MOVES)

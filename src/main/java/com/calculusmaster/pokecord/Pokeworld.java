@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class Pokecord
+public class Pokeworld
 {
     public static final String TEST_SERVER_ID = "873993084155887617";
     public static final String NAME = "PokeWorld";
@@ -114,12 +114,12 @@ public class Pokecord
 
         long end = System.currentTimeMillis();
 
-        LoggerHelper.info(Pokecord.class, "Initialization Finished - " + (end - start) + "ms!");
+        LoggerHelper.info(Pokeworld.class, "Initialization Finished - " + (end - start) + "ms!");
 
         start = System.currentTimeMillis();
 
         //Create Bot
-        Pokecord.initializeDiscordBot();
+        Pokeworld.initializeDiscordBot();
 
         //Interaction Commands
         LoggerHelper.init("Commands V2", CommandHandler::init, true);
@@ -132,7 +132,7 @@ public class Pokecord
 
         end = System.currentTimeMillis();
 
-        LoggerHelper.info(Pokecord.class, "Bot Loading Complete (" + (end - start) + "ms)!");
+        LoggerHelper.info(Pokeworld.class, "Bot Loading Complete (" + (end - start) + "ms)!");
 
         INIT_COMPLETE = true;
 
@@ -148,7 +148,7 @@ public class Pokecord
             }
             else
             {
-                LoggerHelper.warn(Pokecord.class, "Bot is not connected to server (%s), removing from Database.".formatted(d.getString("serverID")));
+                LoggerHelper.warn(Pokeworld.class, "Bot is not connected to server (%s), removing from Database.".formatted(d.getString("serverID")));
 
                 Mongo.ServerData.deleteOne(Filters.eq("serverID", d.getString("serverID")));
             }
@@ -167,7 +167,7 @@ public class Pokecord
         Executors.newScheduledThreadPool(1).schedule(() -> {
             BOT_JDA.shutdownNow();
 
-            LoggerHelper.info(Pokecord.class, "Bot has shutdown successfully!");
+            LoggerHelper.info(Pokeworld.class, "Bot has shutdown successfully!");
         }, 15, TimeUnit.SECONDS);
     }
 }

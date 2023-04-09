@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.util.helpers;
 
-import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.Pokeworld;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 
@@ -58,7 +58,7 @@ public class CSVHelper
 
         try
         {
-            InputStream fileStream = Objects.requireNonNull(Pokecord.class.getResourceAsStream(path));
+            InputStream fileStream = Objects.requireNonNull(Pokeworld.class.getResourceAsStream(path));
             CSVReader reader = new CSVReader(new InputStreamReader(fileStream));
 
             List<String[]> lines = reader.readAll();

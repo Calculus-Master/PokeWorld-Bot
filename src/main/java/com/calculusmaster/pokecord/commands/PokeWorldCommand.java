@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.commands;
 
-import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -99,7 +99,7 @@ public abstract class PokeWorldCommand
     protected FileUpload setEmbedPokemonImage(String fileName, String attachmentName)
     {
         this.embed.setImage("attachment://" + attachmentName);
-        return FileUpload.fromData(Objects.requireNonNull(Pokecord.class.getResourceAsStream(fileName)), attachmentName);
+        return FileUpload.fromData(Objects.requireNonNull(Pokeworld.class.getResourceAsStream(fileName)), attachmentName);
     }
 
     //Internal

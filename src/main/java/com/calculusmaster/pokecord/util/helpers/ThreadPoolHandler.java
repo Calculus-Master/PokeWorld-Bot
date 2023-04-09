@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.util.helpers;
 
-import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.Pokeworld;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ public class ThreadPoolHandler
             case CUSTOM_CACHED -> new ThreadPoolExecutor(0, Integer.MAX_VALUE, 30L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
             case DEFAULT_FIXED -> Executors.newFixedThreadPool(4);
             case DEFAULT_SCHEDULED -> Executors.newScheduledThreadPool(4);
-            case GUILDS_SCHEDULED -> Executors.newScheduledThreadPool(Pokecord.BOT_JDA.getGuilds().size());
+            case GUILDS_SCHEDULED -> Executors.newScheduledThreadPool(Pokeworld.BOT_JDA.getGuilds().size());
             case CUSTOM_TIME_HELPER -> Executors.newScheduledThreadPool(1);
         };
 

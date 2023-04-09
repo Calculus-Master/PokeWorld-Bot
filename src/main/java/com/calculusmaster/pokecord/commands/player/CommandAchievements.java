@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.commands.player;
 
-import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
 import com.calculusmaster.pokecord.game.enums.functional.Achievement;
@@ -22,7 +22,7 @@ public class CommandAchievements extends PokeWorldCommand
                 .withConstructor(CommandAchievements::new)
                 .withCommand(Commands
                         .slash("achievements", "Take a look at the Achievements you've earned!")
-                        .addOption(OptionType.USER, "user", "Optional: View the achievement progress of another %s user.".formatted(Pokecord.NAME), false)
+                        .addOption(OptionType.USER, "user", "Optional: View the achievement progress of another %s user.".formatted(Pokeworld.NAME), false)
                 )
                 .register();
     }
@@ -37,7 +37,7 @@ public class CommandAchievements extends PokeWorldCommand
         {
             String targetID = userOption.getAsUser().getId();
             if(PlayerDataQuery.isRegistered(targetID)) target = PlayerDataQuery.of(targetID);
-            else return this.error("This user has not started their %s journey!".formatted(Pokecord.NAME));
+            else return this.error("This user has not started their %s journey!".formatted(Pokeworld.NAME));
         }
 
         int totalCompleted = target.getAchievements().size();
@@ -61,7 +61,7 @@ public class CommandAchievements extends PokeWorldCommand
 
         this.embed
                 .setTitle(target.getUsername() + "'s Pokemon Achievements")
-                .setDescription("Achievements can be earned by completing various tasks in %s!\nExtreme Achievements are often very challenging, and represent the ultimate level of mastery in the bot.".formatted(Pokecord.NAME))
+                .setDescription("Achievements can be earned by completing various tasks in %s!\nExtreme Achievements are often very challenging, and represent the ultimate level of mastery in the bot.".formatted(Pokeworld.NAME))
                 .addField("Achievement Progress", """
                         *Standard Achievements:* **%d / %d** (**%s%s** completed)
                         *Extreme Achievements:* **%d / %d** (**%s%s** completed)

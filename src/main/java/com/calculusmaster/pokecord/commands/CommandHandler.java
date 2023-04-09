@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.commands;
 
-import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.commands.economy.CommandBalance;
 import com.calculusmaster.pokecord.commands.economy.CommandInventory;
 import com.calculusmaster.pokecord.commands.economy.CommandShop;
@@ -42,7 +42,7 @@ public class CommandHandler extends ListenerAdapter
     public static void main(String[] args) throws LoginException, InterruptedException
     {
         //Guild Commands
-        Pokecord.initializeDiscordBot();
+        Pokeworld.initializeDiscordBot();
 
         //TODO: Global Commands
         CommandHandler.updateGuildCommands();
@@ -87,7 +87,7 @@ public class CommandHandler extends ListenerAdapter
 
     public static void updateGuildCommands()
     {
-        Guild testServer = Pokecord.BOT_JDA.getGuildById(Pokecord.TEST_SERVER_ID);
+        Guild testServer = Pokeworld.BOT_JDA.getGuildById(Pokeworld.TEST_SERVER_ID);
 
         List<String> registeredCommands = new ArrayList<>();
         testServer.retrieveCommands().onSuccess(l -> registeredCommands.addAll(l.stream().map(Command::getName).toList())).queue();
@@ -119,7 +119,7 @@ public class CommandHandler extends ListenerAdapter
             event.reply("Slash Command usage outside of standard Text Channels is not currently supported.").setEphemeral(true).queue();
         }
         else if(!data.getCommandName().equals("start") && !PlayerDataQuery.isRegistered(event.getUser().getId()))
-            event.reply("You have not started your journey with " + Pokecord.NAME + " yet! Use the `/start` command to begin.").setEphemeral(true).queue();
+            event.reply("You have not started your journey with " + Pokeworld.NAME + " yet! Use the `/start` command to begin.").setEphemeral(true).queue();
         else
         {
             LoggerHelper.info(CommandHandler.class, "Parsing Slash Command: /" + event.getFullCommandName() + " " + event.getOptions().stream().map(o -> o.getName() + ": " + o.getAsString()).collect(Collectors.joining(" ")));

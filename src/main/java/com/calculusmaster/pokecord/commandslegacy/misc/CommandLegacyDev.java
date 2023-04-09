@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.commandslegacy.misc;
 
-import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacy;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
@@ -98,7 +98,7 @@ public class CommandLegacyDev extends CommandLegacy
                 Move.init();
             }
             case "clearduels" -> DuelHelper.DUELS.clear();
-            case "close" -> Pokecord.close();
+            case "close" -> Pokeworld.close();
             case "reloadconfig" -> ConfigHelper.init();
             case "forcelocation" -> {
                 Location l = Location.cast(this.msg[2]);
@@ -106,7 +106,7 @@ public class CommandLegacyDev extends CommandLegacy
             }
             case "forceraid" -> RaidEventHelper.forceRaid(this.server, this.event.getChannel().asTextChannel());
             case "restartspawns" -> {
-                for(Guild g : Pokecord.BOT_JDA.getGuilds())
+                for(Guild g : Pokeworld.BOT_JDA.getGuilds())
                 {
                     try
                     {
@@ -166,7 +166,7 @@ public class CommandLegacyDev extends CommandLegacy
             }
             case "dmmasteryleveltext" -> {
                 int lvl = Integer.parseInt(this.msg[2]);
-                Pokecord.BOT_JDA.openPrivateChannelById(this.player.getId()).flatMap(channel -> channel.sendMessageEmbeds(MasteryLevelManager.MASTERY_LEVELS.get(lvl).getEmbed().build())).queue();
+                Pokeworld.BOT_JDA.openPrivateChannelById(this.player.getId()).flatMap(channel -> channel.sendMessageEmbeds(MasteryLevelManager.MASTERY_LEVELS.get(lvl).getEmbed().build())).queue();
             }
         }
 

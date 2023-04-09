@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.commandslegacy.economy;
 
-import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacy;
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacyInvalid;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
@@ -109,7 +109,7 @@ public class CommandLegacyMarket extends CommandLegacy
                 String image = Pokemon.getImage(chosen.getEntity(), chosen.isShiny(), chosen, null);
                 String imageAttachmentName = "info_" + chosen.getUUID() + ".png";
                 this.embed.setImage("attachment://" + imageAttachmentName);
-                this.event.getChannel().sendFiles(FileUpload.fromData(Pokecord.class.getResourceAsStream(image), imageAttachmentName)).setEmbeds(this.embed.build()).queue();
+                this.event.getChannel().sendFiles(FileUpload.fromData(Pokeworld.class.getResourceAsStream(image), imageAttachmentName)).setEmbeds(this.embed.build()).queue();
 
                 this.embed = null;
             }

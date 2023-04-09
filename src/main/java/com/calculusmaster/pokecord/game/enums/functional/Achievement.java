@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.game.enums.functional;
 
-import com.calculusmaster.pokecord.Pokecord;
+import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
@@ -18,7 +18,7 @@ public enum Achievement
 {
     //Standard
 
-    START("A New Adventurer", "Begin your journey in " + Pokecord.NAME + " as a Pokemon Trainer.", ACHIEVEMENT_TIER_1),
+    START("A New Adventurer", "Begin your journey in " + Pokeworld.NAME + " as a Pokemon Trainer.", ACHIEVEMENT_TIER_1),
 
     //Extreme
     COMPLETE_POKEDEX("PokeDex Completionist", "Complete the entire PokeDex.", 10_000, true)
@@ -88,7 +88,7 @@ public enum Achievement
                 {
                     playerData.changeCredits(ACHIEVEMENT_COMPLETE_ALL);
 
-                    playerData.directMessage("***CONGRATULATIONS!*** *You've completed all %s Achievements!* (**+%sc**).".formatted(Pokecord.NAME, ACHIEVEMENT_COMPLETE_ALL));
+                    playerData.directMessage("***CONGRATULATIONS!*** *You've completed all %s Achievements!* (**+%sc**).".formatted(Pokeworld.NAME, ACHIEVEMENT_COMPLETE_ALL));
                 }
             }
         });
