@@ -4,8 +4,8 @@ import com.calculusmaster.pokecord.commandslegacy.CommandLegacy;
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacyInvalid;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import com.calculusmaster.pokecord.util.enums.Prices;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandLegacyPrestige extends CommandLegacy
@@ -58,7 +58,7 @@ public class CommandLegacyPrestige extends CommandLegacy
 
                 p.completeUpdate();
 
-                this.playerData.getStatistics().incr(PlayerStatistic.POKEMON_PRESTIGED);
+                this.playerData.getStatistics().increase(StatisticType.POKEMON_PRESTIGED);
 
                 this.response = p.getName() + " successfully prestiged to **Prestige Level " + p.getPrestigeLevel() + "!**";
             }

@@ -8,7 +8,6 @@ import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacySettings;
 import com.calculusmaster.pokecord.commandslegacy.moves.CommandLegacyMoves;
 import com.calculusmaster.pokecord.commandslegacy.player.CommandLegacyBounties;
 import com.calculusmaster.pokecord.commandslegacy.player.CommandLegacyLeaderboard;
-import com.calculusmaster.pokecord.commandslegacy.player.CommandLegacyProfile;
 import com.calculusmaster.pokecord.commandslegacy.player.CommandLegacyTrade;
 import com.calculusmaster.pokecord.commandslegacy.pokemon.*;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -103,10 +102,6 @@ public class CommandsLegacy
 
         register("bounties", "bounty", "tasks", "quests")
                 .setCommand(CommandLegacyBounties::new)
-                .setCategory(Category.PLAYER);
-
-        register("profile")
-                .setCommand(CommandLegacyProfile::new)
                 .setCategory(Category.PLAYER);
 
         register("gauntlet", "gauntletduel")

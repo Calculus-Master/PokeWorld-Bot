@@ -16,6 +16,7 @@ import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
 import com.calculusmaster.pokecord.game.world.PokeWorldShop;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.enums.Prices;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -256,6 +257,8 @@ public class CommandShop extends PokeWorldCommand
                 p.setLevel(p.getLevel() + amount);
                 p.updateExperience();
 
+                this.playerData.getStatistics().increase(StatisticType.RARE_CANDIES_BOUGHT, amount);
+
                 this.response = "Successfully purchased **" + amount + "** Rare Candies for **" + cost + "c**! Your " + p.getName() + " is now **Level " + p.getLevel() + "**.";
             }
             else if(subcommand.equals("nature"))
@@ -274,6 +277,8 @@ public class CommandShop extends PokeWorldCommand
                 p.setNature(nature);
                 p.updateNature();
 
+                this.playerData.getStatistics().increase(StatisticType.NATURES_BOUGHT);
+
                 this.response = "Your " + p.getName() + " now has a **" + Global.normalize(nature.toString()) + "** nature! (Cost: **" + Prices.SHOP_NATURE.get() + "c**).";
             }
             else if(subcommand.equals("item"))
@@ -290,7 +295,8 @@ public class CommandShop extends PokeWorldCommand
 
                 this.playerData.changeCredits(-shop.getItemPrice(item));
                 this.playerData.getInventory().addItem(item);
-                this.playerData.updateInventory();
+
+                this.playerData.getStatistics().increase(StatisticType.ITEMS_BOUGHT);
 
                 this.response = "Successfully purchased a **" + item.getStyledName() + "** for **" + shop.getItemPrice(item) + "c**!";
             }
@@ -336,7 +342,8 @@ public class CommandShop extends PokeWorldCommand
 
                 this.playerData.changeCredits(-shop.getTMPrice());
                 this.playerData.getInventory().addTM(tm);
-                this.playerData.updateInventory();
+
+                this.playerData.getStatistics().increase(StatisticType.TMS_BOUGHT);
 
                 this.response = "Successfully purchased **" + tm + "** for **" + shop.getTMPrice() + "c**!";
             }
@@ -360,6 +367,8 @@ public class CommandShop extends PokeWorldCommand
                 p.learnMove(moveTutor, moveSlotInput - 1);
                 p.updateMoves();
 
+                this.playerData.getStatistics().increase(StatisticType.MOVE_TUTORS_BOUGHT);
+
                 this.response = "Successfully taught " + p.getName() + " the move **" + moveTutor.getName() + "** from a Move Tutor, for **" + Prices.SHOP_MOVETUTOR.get() + "c**!";
             }
             else if(subcommand.equals("z-crystal"))
@@ -378,7 +387,6 @@ public class CommandShop extends PokeWorldCommand
 
                 this.playerData.changeCredits(-shop.getZCrystalPrice());
                 this.playerData.getInventory().addZCrystal(zCrystal);
-                this.playerData.updateInventory();
 
                 this.response = "Successfully purchased **" + zCrystal.getStyledName() + "** for **" + shop.getZCrystalPrice() + "c**!";
             }

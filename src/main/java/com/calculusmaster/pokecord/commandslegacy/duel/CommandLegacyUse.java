@@ -7,7 +7,7 @@ import com.calculusmaster.pokecord.game.duel.core.DuelChecks;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import static com.calculusmaster.pokecord.game.duel.core.DuelChecks.CheckType.*;
@@ -70,7 +70,7 @@ public class CommandLegacyUse extends CommandLegacy
         //Normal Move
         if(normal)
         {
-            this.playerData.getStatistics().incr(PlayerStatistic.MOVES_USED);
+            this.playerData.getStatistics().increase(StatisticType.MOVES_USED);
 
             d.submitMove(this.player.getId(), this.getInt(1), 'm');
             this.deleteOriginal();
@@ -141,8 +141,8 @@ public class CommandLegacyUse extends CommandLegacy
                 return this;
             }
 
-            this.playerData.getStatistics().incr(PlayerStatistic.MOVES_USED);
-            this.playerData.getStatistics().incr(PlayerStatistic.ZMOVES_USED);
+            this.playerData.getStatistics().increase(StatisticType.MOVES_USED);
+            this.playerData.getStatistics().increase(StatisticType.ZMOVES_USED);
 
             d.submitMove(this.player.getId(), this.getInt(2), 'z');
             this.deleteOriginal();
@@ -175,8 +175,8 @@ public class CommandLegacyUse extends CommandLegacy
                 return this;
             }
 
-            this.playerData.getStatistics().incr(PlayerStatistic.MOVES_USED);
-            this.playerData.getStatistics().incr(PlayerStatistic.MAX_MOVES_USED);
+            this.playerData.getStatistics().increase(StatisticType.MOVES_USED);
+            this.playerData.getStatistics().increase(StatisticType.MAX_MOVES_USED);
 
             d.submitMove(this.player.getId(), this.getInt(2), 'd');
             this.deleteOriginal();

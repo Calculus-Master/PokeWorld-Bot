@@ -9,6 +9,12 @@ mainClassName = "com.calculusmaster.pokecord.Pokecord"
 group 'com.calculusmaster'
 version '1.0-BETA'
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(19))
+    }
+}
+
 test {
     useJUnitPlatform()
 }

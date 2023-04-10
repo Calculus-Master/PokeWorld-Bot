@@ -9,7 +9,7 @@ import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionRegistry;
 import com.calculusmaster.pokecord.game.pokemon.evolution.PokemonEgg;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -58,8 +58,6 @@ public class MessageEventHandler
     private void activateRedeemEvent()
     {
         this.data.changeRedeems(1);
-
-        this.data.getStatistics().incr(PlayerStatistic.NATURAL_REDEEMS_EARNED);
 
         this.send("You earned a Redeem!");
     }
@@ -136,7 +134,7 @@ public class MessageEventHandler
             this.data.removeActiveEgg();
             this.data.removeEgg(egg.getEggID());
 
-            this.data.getStatistics().incr(PlayerStatistic.EGGS_HATCHED);
+            this.data.getStatistics().increase(StatisticType.EGGS_HATCHED);
 
             this.send("Your Egg hatched into a new " + p.getName() + "!");
         }

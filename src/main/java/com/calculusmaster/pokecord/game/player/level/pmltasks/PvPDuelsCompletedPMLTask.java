@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.game.player.level.pmltasks;
 
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 
 public class PvPDuelsCompletedPMLTask extends AbstractPMLTask
 {
@@ -16,12 +16,12 @@ public class PvPDuelsCompletedPMLTask extends AbstractPMLTask
     @Override
     public boolean isCompleted(PlayerDataQuery p)
     {
-        return p.getStatistics().get(PlayerStatistic.PVP_DUELS_COMPLETED) >= this.amount;
+        return p.getStatistics().get(StatisticType.PVP_DUELS_COMPLETED) >= this.amount;
     }
 
     @Override
     public String getProgressOverview(PlayerDataQuery p)
     {
-        return p.getStatistics().get(PlayerStatistic.PVP_DUELS_COMPLETED) + " / " + this.amount + " Players dueled";
+        return p.getStatistics().get(StatisticType.PVP_DUELS_COMPLETED) + " / " + this.amount + " Players dueled";
     }
 }

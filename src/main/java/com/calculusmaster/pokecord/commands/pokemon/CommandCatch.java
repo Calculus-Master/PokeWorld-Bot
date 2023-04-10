@@ -8,11 +8,10 @@ import com.calculusmaster.pokecord.game.bounties.objectives.CatchTypeObjective;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievement;
 import com.calculusmaster.pokecord.game.player.PlayerPokedex;
-import com.calculusmaster.pokecord.game.player.Settings;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.FormRegistry;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -91,12 +90,8 @@ public class CommandCatch extends PokeWorldCommand
                     caught.upload();
                     this.playerData.addPokemon(caught.getUUID());
 
-                    if(this.playerData.getSettings().get(Settings.CLIENT_CATCH_AUTO_INFO, Boolean.class));
-                    //TODO: Fix this with new Commands System
-                    //com.calculusmaster.pokecord.commands.Commands.execute("info", this.event, new String[]{"info", "latest"});
-
-                    //Statistics TODO - Restructure Statistics to be more like telemetry, with a lot more data collected
-                    this.playerData.getStatistics().incr(PlayerStatistic.POKEMON_CAUGHT);
+                    //Statistics
+                    this.playerData.getStatistics().increase(StatisticType.POKEMON_CAUGHT);
 
                     //Bounties
                     this.playerData.updateBountyProgression(b -> {

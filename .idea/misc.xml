@@ -7,7 +7,7 @@
   <component name="PWA">
     <option name="wasEnabledAtLeastOnce" value="true" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_20_PREVIEW" project-jdk-name="zulu-20" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_19" default="true" project-jdk-name="zulu-19.32.13" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

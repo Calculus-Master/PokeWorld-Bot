@@ -12,7 +12,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -93,7 +93,7 @@ public class TrainerDuel extends Duel
                 }
             }
 
-            player.data.getStatistics().incr(PlayerStatistic.TRAINER_DUELS_WON);
+            player.data.getStatistics().increase(StatisticType.TRAINER_DUELS_WON);
 
         }
         //Player lost
@@ -103,7 +103,7 @@ public class TrainerDuel extends Duel
         this.uploadExperience();
 
         this.getUser().data.updateBountyProgression(ObjectiveType.COMPLETE_TRAINER_DUEL);
-        this.getUser().data.getStatistics().incr(PlayerStatistic.TRAINER_DUELS_COMPLETED);
+        this.getUser().data.getStatistics().increase(StatisticType.TRAINER_DUELS_COMPLETED);
 
         this.sendEmbed(embed.build());
         DuelHelper.delete(this.players[0].ID);

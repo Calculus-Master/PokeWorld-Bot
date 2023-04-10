@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.bounties.objectives.ReleaseNameObjective
 import com.calculusmaster.pokecord.game.bounties.objectives.ReleasePoolObjective;
 import com.calculusmaster.pokecord.game.bounties.objectives.ReleaseTypeObjective;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -81,6 +82,8 @@ public class CommandRelease extends PokeWorldCommand
                     }
                 }
             });
+
+            this.playerData.getStatistics().increase(StatisticType.POKEMON_RELEASED);
 
             this.playerData.removePokemon(UUID);
             p.delete();

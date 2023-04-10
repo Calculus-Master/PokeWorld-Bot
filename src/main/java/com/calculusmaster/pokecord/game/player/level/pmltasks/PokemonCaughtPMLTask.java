@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.game.player.level.pmltasks;
 
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 
 public class PokemonCaughtPMLTask extends AbstractPMLTask
 {
@@ -16,12 +16,12 @@ public class PokemonCaughtPMLTask extends AbstractPMLTask
     @Override
     public boolean isCompleted(PlayerDataQuery p)
     {
-        return p.getStatistics().get(PlayerStatistic.POKEMON_CAUGHT) >= this.amount;
+        return p.getStatistics().get(StatisticType.POKEMON_CAUGHT) >= this.amount;
     }
 
     @Override
     public String getProgressOverview(PlayerDataQuery p)
     {
-        return p.getStatistics().get(PlayerStatistic.POKEMON_CAUGHT) + " / " + this.amount + " Pokemon Caught";
+        return p.getStatistics().get(StatisticType.POKEMON_CAUGHT) + " / " + this.amount + " Pokemon Caught";
     }
 }

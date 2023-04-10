@@ -61,7 +61,7 @@ public class MegaChargeManager
     {
         //Update Pokemon
         PokemonEntity e = PokemonEntity.valueOf(
-                Mongo.PokemonData.findOneAndUpdate(Filters.eq("UUID", event.getUUID()), Updates.inc("megacharges", 1))
+                Objects.requireNonNull(Mongo.PokemonData.findOneAndUpdate(Filters.eq("UUID", event.getUUID()), Updates.inc("megacharges", 1)))
                         .getString("entity")
         );
 

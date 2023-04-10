@@ -1223,7 +1223,7 @@ public enum PokemonEntity
         this.rarity = rarity;
 
         this.flags = EnumSet.noneOf(PokemonEntityFlag.class);
-        for(PokemonEntityFlag flag : flags) this.flags.add(flag);
+        this.flags.addAll(Arrays.asList(flags));
     }
 
     public PokemonData data()

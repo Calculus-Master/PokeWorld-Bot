@@ -9,7 +9,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Gender;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.PokemonEgg;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Map;
@@ -68,7 +68,7 @@ public class CommandLegacyBreed extends CommandLegacy
                     this.playerData.addEgg(egg.getEggID());
 
                     this.playerData.updateBountyProgression(ObjectiveType.BREED_POKEMON);
-                    this.playerData.getStatistics().incr(PlayerStatistic.POKEMON_BRED);
+                    this.playerData.getStatistics().increase(StatisticType.POKEMON_BRED);
 
                     this.startCooldown(parent1.getUUID());
                     this.startCooldown(parent2.getUUID());

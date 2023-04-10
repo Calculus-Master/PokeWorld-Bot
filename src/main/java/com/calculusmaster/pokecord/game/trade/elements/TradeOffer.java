@@ -101,9 +101,6 @@ public class TradeOffer
                 receiver.getInventory().addTM(tm);
             }
         }
-
-        this.player.updateInventory();
-        receiver.updateInventory();
     }
 
     public String asString()

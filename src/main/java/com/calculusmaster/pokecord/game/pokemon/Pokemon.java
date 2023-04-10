@@ -22,7 +22,7 @@ import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.cacheold.PlayerDataCache;
 import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
@@ -685,7 +685,7 @@ public class Pokemon
         this.resetAugments();
 
         playerData.updateBountyProgression(ObjectiveType.EVOLVE_POKEMON);
-        playerData.getStatistics().incr(PlayerStatistic.POKEMON_EVOLVED);
+        playerData.getStatistics().increase(StatisticType.POKEMON_EVOLVED);
 
         EvolutionRegistry.getEvolutionData(this.entity).stream()
                 .filter(data -> data.getTarget().equals(target))

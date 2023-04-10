@@ -24,7 +24,7 @@ import com.calculusmaster.pokecord.game.pokemon.evolution.MegaChargeManager;
 import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
 import com.calculusmaster.pokecord.game.world.RegionManager;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -264,7 +264,7 @@ public class Duel
             this.players[p].dynamaxTurns = 3;
             this.players[p].usedDynamax = true;
 
-            if(this.players[p] instanceof UserPlayer user) user.data.getStatistics().incr(PlayerStatistic.DYNAMAXED_POKEMON);
+            if(this.players[p] instanceof UserPlayer user) user.data.getStatistics().increase(StatisticType.POKEMON_DYNAMAXED);
 
             this.results.add(this.players[p].active.getName() + " dynamaxed!\n");
         }
@@ -2355,7 +2355,7 @@ public class Duel
                     }
                 });
 
-                player.data.getStatistics().incr(PlayerStatistic.POKEMON_DEFEATED);
+                player.data.getStatistics().increase(StatisticType.POKEMON_DEFEATED);
 
                 //General Augments
                 boolean augmentEarned = false;
@@ -2373,7 +2373,7 @@ public class Duel
                         player.data.addAugment(chosen.getAugmentID());
 
                         augmentEarned = true;
-                        turnResult.add(player.data.getUsername() + " has found an Augment! They earned: " + chosen.getAugmentName());
+                        turnResult.add(player.data.getUsername() + " has found an Augment! They earned: " + chosen.getAugmentName() + ".");
                     }
                 }
 
@@ -2406,12 +2406,12 @@ public class Duel
 
                         augmentEarned = true;
 
-                        turnResult.add(player.data.getUsername() + " has found an Augment! They earned: " + typeAugment.getAugmentName());
+                        turnResult.add(player.data.getUsername() + " has found an Augment! They earned: " + typeAugment.getAugmentName() + ".");
                     }
                 }
             }
 
-            if(this.players[this.other] instanceof UserPlayer player) player.data.getStatistics().incr(PlayerStatistic.POKEMON_FAINTED);
+            if(this.players[this.other] instanceof UserPlayer player) player.data.getStatistics().increase(StatisticType.POKEMON_FAINTED);
 
             if(this.players[this.current].active.isDynamaxed() && this.players[this.current].active.getDynamaxLevel() < 10 && new Random().nextInt(100) < 40)
             {
@@ -2875,8 +2875,8 @@ public class Duel
 
         if(this.players[winner] instanceof UserPlayer player)
         {
-            player.data.getStatistics().incr(PlayerStatistic.PVP_DUELS_WON);
-            player.data.getStatistics().incr(PlayerStatistic.PVP_DUELS_COMPLETED);
+            player.data.getStatistics().increase(StatisticType.PVP_DUELS_WON);
+            player.data.getStatistics().increase(StatisticType.PVP_DUELS_COMPLETED);
 
             player.data.addExp(PMLExperience.DUEL_PVP, 95);
 
@@ -2887,7 +2887,7 @@ public class Duel
 
         if(this.players[loser] instanceof UserPlayer player)
         {
-            player.data.getStatistics().incr(PlayerStatistic.PVP_DUELS_COMPLETED);
+            player.data.getStatistics().increase(StatisticType.PVP_DUELS_COMPLETED);
 
             player.data.updateBountyProgression(ObjectiveType.COMPLETE_PVP_DUEL);
         }

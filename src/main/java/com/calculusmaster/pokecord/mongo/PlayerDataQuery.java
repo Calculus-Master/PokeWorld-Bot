@@ -9,6 +9,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievement;
 import com.calculusmaster.pokecord.game.player.PlayerInventory;
 import com.calculusmaster.pokecord.game.player.PlayerPokedex;
+import com.calculusmaster.pokecord.game.player.PlayerStatisticsRecord;
 import com.calculusmaster.pokecord.game.player.PlayerTeam;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
@@ -18,7 +19,7 @@ import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.PokemonEgg;
 import com.calculusmaster.pokecord.util.cacheold.PlayerDataCache;
 import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import com.mongodb.client.model.Filters;
@@ -26,8 +27,10 @@ import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -35,15 +38,18 @@ import java.util.stream.Collectors;
 public class PlayerDataQuery extends MongoQuery
 {
     private Optional<PlayerSettingsQuery> settings = Optional.empty();
-    private Optional<PlayerStatisticsQuery> statistics = Optional.empty();
 
+    private final Random random;
     private PlayerPokedex pokedex;
     private PlayerInventory inventory;
     private PlayerTeam team;
+    private PlayerStatisticsRecord statistics;
 
     public PlayerDataQuery(String playerID)
     {
         super("playerID", playerID, Mongo.PlayerData);
+
+        this.random = new Random();
     }
 
     //Cache
@@ -66,6 +72,11 @@ public class PlayerDataQuery extends MongoQuery
         return Objects.requireNonNull(PlayerDataQuery.of(playerID));
     }
 
+    public Bson getQuery()
+    {
+        return Filters.eq("playerID", this.getID());
+    }
+
     //Registered
 
     public static boolean isRegistered(String id)
@@ -78,6 +89,7 @@ public class PlayerDataQuery extends MongoQuery
         Document data = new Document()
                 .append("playerID", player.getId())
                 .append("username", player.getName())
+                .append("join", OffsetDateTime.now().toEpochSecond())
                 .append("level", 0)
                 .append("exp", 0)
                 .append("credits", 100)
@@ -94,9 +106,10 @@ public class PlayerDataQuery extends MongoQuery
                 .append("active_egg", "")
                 .append("owned_augments", new ArrayList<>())
                 .append("defeated_trainers", new ArrayList<>())
-                .append("pokedex", new Document())
-                .append("inventory", new PlayerInventory().serialize())
+                .append("pokedex", new PlayerPokedex().serialize())
+                .append("inventory", new PlayerInventory(null).serialize())
                 .append("team", new PlayerTeam().serialize())
+                .append("statistics", new PlayerStatisticsRecord(null).serialize())
 
                 ;
 
@@ -105,7 +118,6 @@ public class PlayerDataQuery extends MongoQuery
         Mongo.PlayerData.insertOne(data);
 
         PlayerSettingsQuery.register(player.getId());
-        PlayerStatisticsQuery.register(player.getId());
 
         PlayerDataCache.addCache(player.getId());
     }
@@ -146,13 +158,6 @@ public class PlayerDataQuery extends MongoQuery
         return this.settings.get();
     }
 
-    //Get the PlayerStatisticsQuery object
-    public PlayerStatisticsQuery getStatistics()
-    {
-        if(this.statistics.isEmpty()) this.statistics = Optional.of(new PlayerStatisticsQuery(this.getID()));
-        return this.statistics.get();
-    }
-
     //Pokedex (key: "pokedex")
     public PlayerPokedex getPokedex()
     {
@@ -168,13 +173,8 @@ public class PlayerDataQuery extends MongoQuery
     //Inventory (key: "inventory")
     public PlayerInventory getInventory()
     {
-        if(this.inventory == null) this.inventory = new PlayerInventory(this.document.get("inventory", Document.class));
+        if(this.inventory == null) this.inventory = new PlayerInventory(this, this.document.get("inventory", Document.class));
         return this.inventory;
-    }
-
-    public void updateInventory()
-    {
-        this.update(Updates.set("inventory", this.inventory.serialize()));
     }
 
     //Team (key: "team")
@@ -187,6 +187,13 @@ public class PlayerDataQuery extends MongoQuery
     public void updateTeam()
     {
         this.update(Updates.set("team", this.team.serialize()));
+    }
+
+    //Statistics (key: "statistics")
+    public PlayerStatisticsRecord getStatistics()
+    {
+        if(this.statistics == null) this.statistics = new PlayerStatisticsRecord(this, this.document.get("statistics", Document.class));
+        return this.statistics;
     }
 
     //key: "playerID"
@@ -204,6 +211,12 @@ public class PlayerDataQuery extends MongoQuery
     public String getUsername()
     {
         return this.document.getString("username");
+    }
+
+    //key: "join"
+    public long getJoinTime()
+    {
+        return this.document.getLong("join");
     }
 
     //key: "level"
@@ -234,11 +247,9 @@ public class PlayerDataQuery extends MongoQuery
     {
         int amount = experienceEnum.experience;
 
-        if(new SplittableRandom().nextInt(100) < chance)
+        if(this.random.nextInt(100) < chance)
         {
             this.update(Updates.inc("exp", amount));
-
-            this.getStatistics().incr(PlayerStatistic.MASTERY_EXP_EARNED, amount);
 
             if(!MasteryLevelManager.isMax(this) && MasteryLevelManager.MASTERY_LEVELS.get(this.getLevel() + 1).canLevelUp(this))
             {
@@ -267,8 +278,8 @@ public class PlayerDataQuery extends MongoQuery
     {
         this.update(Updates.set("credits", this.getCredits() + amount));
 
-        if(amount < 0) this.getStatistics().incr(PlayerStatistic.CREDITS_SPENT, Math.abs(amount));
-        else if(amount > 0) this.getStatistics().incr(PlayerStatistic.CREDITS_EARNED, Math.abs(amount));
+        if(amount < 0) this.getStatistics().increase(StatisticType.CREDITS_SPENT, Math.abs(amount));
+        else if(amount > 0) this.getStatistics().increase(StatisticType.CREDITS_EARNED, Math.abs(amount));
     }
 
     //key: "redeems"

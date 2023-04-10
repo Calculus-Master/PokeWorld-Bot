@@ -15,7 +15,7 @@ import com.calculusmaster.pokecord.game.pokemon.sort.PokemonSorterFlag;
 import com.calculusmaster.pokecord.game.trade.elements.MarketEntry;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.utils.FileUpload;
@@ -72,10 +72,10 @@ public class CommandLegacyMarket extends CommandLegacy
                     seller.changeCredits(m.price);
                     seller.directMessage("Your `Level " + m.pokemon.getLevel() + " " + m.pokemon.getName() + "` was sold from your Market Listing to " + this.playerData.getUsername() + " for " + m.price + " credits!");
 
-                    seller.getStatistics().incr(PlayerStatistic.POKEMON_SOLD_MARKET);
+                    seller.getStatistics().increase(StatisticType.POKEMON_SOLD_MARKET);
                 }
 
-                this.playerData.getStatistics().incr(PlayerStatistic.POKEMON_BOUGHT_MARKET);
+                this.playerData.getStatistics().increase(StatisticType.POKEMON_BOUGHT_MARKET);
 
                 this.response = "You successfully bought `Level " + m.pokemon.getLevel() + " " + m.pokemon.getName() + "` for " + m.price + " credits!";
                 MarketEntry.delete(m.marketID);

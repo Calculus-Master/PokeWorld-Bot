@@ -20,7 +20,7 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
@@ -171,7 +171,7 @@ public class RaidDuel extends WildDuel
                 if(highestDamage.equals(p.ID)) userPlayer.data.addExp(PMLExperience.DUEL_RAID_MVP, 100);
                 else if(!p.active.isFainted()) userPlayer.data.addExp(PMLExperience.DUEL_RAID_PARTICIPANT, 75);
 
-                userPlayer.data.getStatistics().incr(PlayerStatistic.RAIDS_WON);
+                userPlayer.data.getStatistics().increase(StatisticType.RAIDS_WON);
                 userPlayer.data.updateBountyProgression(ObjectiveType.WIN_RAID_DUEL);
 
                 winnings.append(userPlayer.data.getUsername()).append(" - `").append((int)(credits * multiplier)).append("c`\n");
@@ -188,7 +188,7 @@ public class RaidDuel extends WildDuel
                     reward.upload();
                     userPlayer.data.addPokemon(reward.getUUID());
 
-                    userPlayer.data.getStatistics().incr(PlayerStatistic.RAIDS_WON_MVP);
+                    userPlayer.data.getStatistics().increase(StatisticType.RAID_POKEMON_CAUGHT);
 
                     extraWinnings = "\n\n**" + p.getName() + " caught the Raid Pokemon!**";
                 }
@@ -202,7 +202,7 @@ public class RaidDuel extends WildDuel
 
         for(Player p : this.getUserPlayers())
         {
-            ((UserPlayer)p).data.getStatistics().incr(PlayerStatistic.RAIDS_COMPLETED);
+            ((UserPlayer)p).data.getStatistics().increase(StatisticType.RAIDS_COMPLETED);
             ((UserPlayer)p).data.updateBountyProgression(ObjectiveType.PARTICIPATE_RAID);
         }
 

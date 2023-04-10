@@ -2,7 +2,6 @@ package com.calculusmaster.pokecord.game.duel.extension;
 
 import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -44,7 +43,6 @@ public class GauntletDuel extends WildDuel
             this.level++;
 
             this.getUser().data.updateBountyProgression(ObjectiveType.COMPLETE_GAUNTLET_LEVELS);
-            this.getUser().data.getStatistics().incr(PlayerStatistic.GAUNTLETS_WON);
 
             this.setWildPokemon(null);
             this.setDuelPokemonObjects(1);
@@ -65,8 +63,6 @@ public class GauntletDuel extends WildDuel
 
             DuelHelper.delete(this.players[0].ID);
         }
-
-        this.getUser().data.getStatistics().incr(PlayerStatistic.GAUNTLETS_COMPLETED);
 
         this.sendEmbed(embed.build());
         if(this.getWinner().ID.equals(this.players[0].ID)) this.sendTurnEmbed();

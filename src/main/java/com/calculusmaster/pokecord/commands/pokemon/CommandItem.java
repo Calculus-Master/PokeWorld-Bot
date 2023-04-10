@@ -76,7 +76,6 @@ public class CommandItem extends PokeWorldCommand
                 this.response = "Gave **" + item.getStyledName() + "** to " + active.getName() + "!";
             }
 
-            this.playerData.updateInventory();
             active.updateItem();
         }
         else if(subcommand.equals("remove"))
@@ -89,7 +88,6 @@ public class CommandItem extends PokeWorldCommand
             active.updateItem();
 
             this.playerData.getInventory().addItem(i);
-            this.playerData.updateInventory();
 
             this.response = "Removed **" + i.getStyledName() + "** from " + active.getName() + "!";
         }

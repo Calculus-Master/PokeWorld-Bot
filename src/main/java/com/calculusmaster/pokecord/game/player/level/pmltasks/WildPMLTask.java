@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.game.player.level.pmltasks;
 
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 
 public class WildPMLTask extends AbstractPMLTask
 {
@@ -16,12 +16,12 @@ public class WildPMLTask extends AbstractPMLTask
     @Override
     public boolean isCompleted(PlayerDataQuery p)
     {
-        return p.getStatistics().get(PlayerStatistic.WILD_DUELS_WON) >= this.amount;
+        return p.getStatistics().get(StatisticType.WILD_DUELS_WON) >= this.amount;
     }
 
     @Override
     public String getProgressOverview(PlayerDataQuery p)
     {
-        return p.getStatistics().get(PlayerStatistic.WILD_DUELS_WON) + " / " + this.amount + " Wild Pokemon defeated";
+        return p.getStatistics().get(StatisticType.WILD_DUELS_WON) + " / " + this.amount + " Wild Pokemon defeated";
     }
 }

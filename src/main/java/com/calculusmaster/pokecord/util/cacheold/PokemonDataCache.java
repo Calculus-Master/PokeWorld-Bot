@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord.util.cacheold;
 
 import com.calculusmaster.pokecord.mongo.Mongo;
-import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
 import org.bson.Document;
 
@@ -10,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class PokemonDataCache
 {
@@ -22,10 +20,7 @@ public class PokemonDataCache
 
         Mongo.PokemonData.find().forEach(d -> pool.execute(() -> PokemonDataCache.addCacheData(d.getString("UUID"), d)));
 
-        pool.shutdown();
-
-        try { pool.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS); }
-        catch (Exception e) { LoggerHelper.reportError(PokemonDataCache.class, "New Cacher Init Failed!", e); }
+        pool.close();
     }
 
     public static void addCacheData(String UUID, Document cache)

@@ -57,7 +57,6 @@ public class CommandTM extends PokeWorldCommand
             else
             {
                 this.playerData.getInventory().removeTM(tm);
-                this.playerData.updateInventory();
 
                 if(active.hasTM())
                 {
@@ -105,7 +104,6 @@ public class CommandTM extends PokeWorldCommand
                 }
 
                 this.playerData.getInventory().addTM(tm);
-                this.playerData.updateInventory();
                 if(hadMove) active.updateMoves();
 
                 this.response = "**" + tm + "** has been removed from " + active.getName() + " and returned to your inventory!" + (hadMove ? "\n*" + active.getName() + " has forgotten " + tm.getMove().getName() + "*." : "");

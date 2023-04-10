@@ -13,7 +13,7 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -55,8 +55,8 @@ public class EliteDuel extends TrainerDuel
 
             player.data.updateBountyProgression(ObjectiveType.WIN_ELITE_DUEL);
 
-            player.data.getStatistics().incr(PlayerStatistic.ELITE_DUELS_WON);
-            player.data.getStatistics().incr(PlayerStatistic.TRAINER_DUELS_WON);
+            player.data.getStatistics().increase(StatisticType.ELITE_DUELS_WON);
+            player.data.getStatistics().increase(StatisticType.TRAINER_DUELS_WON);
 
             embed.setDescription("You defeated the Elite Trainer and earned " + credits + " credits!");
         }
@@ -69,7 +69,7 @@ public class EliteDuel extends TrainerDuel
         this.uploadExperience();
 
         this.getUser().data.updateBountyProgression(ObjectiveType.COMPLETE_ELITE_DUEL);
-        this.getUser().data.getStatistics().incr(PlayerStatistic.ELITE_DUELS_COMPLETED);
+        this.getUser().data.getStatistics().increase(StatisticType.ELITE_DUELS_COMPLETED);
 
         DuelHelper.delete(this.players[0].ID);
     }

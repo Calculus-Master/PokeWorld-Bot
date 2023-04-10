@@ -12,7 +12,7 @@ import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -77,7 +77,7 @@ public class WildDuel extends Duel
         {
             this.onWildDuelWon(true);
 
-            player.data.getStatistics().incr(PlayerStatistic.WILD_DUELS_WON);
+            player.data.getStatistics().increase(StatisticType.WILD_DUELS_WON);
 
             embed.setDescription("You won! Your " + this.players[0].active.getName() + " earned some EVs!");
         }
@@ -89,7 +89,7 @@ public class WildDuel extends Duel
             embed.setDescription("You lost! Your " + this.getUser().active.getName() + " didn't earn any EVs...");
         }
 
-        this.getUser().data.getStatistics().incr(PlayerStatistic.WILD_DUELS_COMPLETED);
+        this.getUser().data.getStatistics().increase(StatisticType.WILD_DUELS_COMPLETED);
 
         this.sendEmbed(embed.build());
         DuelHelper.delete(this.players[0].ID);

@@ -5,7 +5,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.interfaces.IScoreComponent;
@@ -186,10 +186,10 @@ public class CommandLegacyLeaderboard extends CommandLegacy
         FORMS_OWNED(1.5, p -> p.getOwnedForms().size(), "Owned Forms"),
         MEGA_OWNED(1.5, p -> p.getOwnedMegas().size(), "Owned Mega Evolutions"),
         ZCRYSTALS(1.8, p -> p.getInventory().getZCrystals().size(), "Z Crystals"),
-        DUELS_PVP_WON(1.75, p -> p.getStatistics().get(PlayerStatistic.PVP_DUELS_WON), "PvP Duels Won"),
-        DUELS_WILD_WON(0.5, p -> p.getStatistics().get(PlayerStatistic.WILD_DUELS_WON), "Wild Duels Won"),
-        DUELS_TRAINER_WON(0.75, p -> p.getStatistics().get(PlayerStatistic.TRAINER_DUELS_WON), "Trainer Duels Won"),
-        DUELS_TRAINER_ELITE_WON(1.25, p -> p.getStatistics().get(PlayerStatistic.ELITE_DUELS_WON), "Elite Duels Won");
+        DUELS_PVP_WON(1.75, p -> p.getStatistics().get(StatisticType.PVP_DUELS_WON), "PvP Duels Won"),
+        DUELS_WILD_WON(0.5, p -> p.getStatistics().get(StatisticType.WILD_DUELS_WON), "Wild Duels Won"),
+        DUELS_TRAINER_WON(0.75, p -> p.getStatistics().get(StatisticType.TRAINER_DUELS_WON), "Trainer Duels Won"),
+        DUELS_TRAINER_ELITE_WON(1.25, p -> p.getStatistics().get(StatisticType.ELITE_DUELS_WON), "Elite Duels Won");
 
         double weight;
         IScoreComponent value;

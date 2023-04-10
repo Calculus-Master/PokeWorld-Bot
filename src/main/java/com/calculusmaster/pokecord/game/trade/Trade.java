@@ -3,7 +3,7 @@ package com.calculusmaster.pokecord.game.trade;
 import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.trade.elements.TradeOffer;
 import com.calculusmaster.pokecord.game.trade.elements.TradePlayer;
-import com.calculusmaster.pokecord.util.enums.PlayerStatistic;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import static com.calculusmaster.pokecord.game.trade.TradeHelper.TRADES;
@@ -32,8 +32,8 @@ public class Trade
         //Transfer Offer from 1 to 0
         this.players[1].offer.transfer(this.players[0].data);
 
-        this.players[0].data.getStatistics().incr(PlayerStatistic.TRADES_COMPLETED);
-        this.players[1].data.getStatistics().incr(PlayerStatistic.TRADES_COMPLETED);
+        this.players[0].data.getStatistics().increase(StatisticType.TRADES_COMPLETED);
+        this.players[1].data.getStatistics().increase(StatisticType.TRADES_COMPLETED);
 
         this.players[0].data.updateBountyProgression(ObjectiveType.COMPLETE_TRADE);
         this.players[1].data.updateBountyProgression(ObjectiveType.COMPLETE_TRADE);
