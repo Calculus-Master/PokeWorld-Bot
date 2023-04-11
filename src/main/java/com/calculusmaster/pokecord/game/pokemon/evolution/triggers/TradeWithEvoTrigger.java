@@ -23,4 +23,9 @@ public class TradeWithEvoTrigger implements EvolutionTrigger
     {
         return "Trade with a " + this.other.getName();
     }
+
+    public PokemonEntity getOther()
+    {
+        return this.other;
+    }
 }

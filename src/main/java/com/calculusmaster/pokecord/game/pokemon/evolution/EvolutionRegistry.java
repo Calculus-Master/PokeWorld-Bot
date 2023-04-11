@@ -32,7 +32,7 @@ public class EvolutionRegistry
                 {
                     String original = p.hasNickname() ? p.getDisplayName() + " (" + p.getName() + ")" : p.getName();
 
-                    p.evolve(data.getTarget(), playerData);
+                    p.evolve(data, playerData);
 
                     playerData.directMessage("Your " + original + " evolved into a **" + p.getName() + "**!");
                     break;

@@ -23,6 +23,8 @@ import java.util.Objects;
 
 public class CommandDev extends PokeWorldCommand
 {
+    public static List<String> DEVELOPERS = List.of("309135641453527040", "1065845045665738852");
+
     public static void init()
     {
         CommandData
@@ -38,6 +40,8 @@ public class CommandDev extends PokeWorldCommand
     @Override
     protected boolean slashCommandLogic(SlashCommandInteractionEvent event)
     {
+        if(!DEVELOPERS.contains(event.getUser().getId())) return this.error("You are not a developer.");
+
         OptionMapping commandOption = Objects.requireNonNull(event.getOption("command"));
 
         String[] command = commandOption.getAsString().split("-");

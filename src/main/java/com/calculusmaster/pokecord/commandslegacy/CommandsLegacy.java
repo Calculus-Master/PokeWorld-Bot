@@ -8,7 +8,6 @@ import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacySettings;
 import com.calculusmaster.pokecord.commandslegacy.moves.CommandLegacyMoves;
 import com.calculusmaster.pokecord.commandslegacy.player.CommandLegacyBounties;
 import com.calculusmaster.pokecord.commandslegacy.player.CommandLegacyLeaderboard;
-import com.calculusmaster.pokecord.commandslegacy.player.CommandLegacyTrade;
 import com.calculusmaster.pokecord.commandslegacy.pokemon.*;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.interfaces.CommandSupplier;
@@ -59,10 +58,6 @@ public class CommandsLegacy
                 .setCommand(CommandLegacyHelp::new)
                 .setCategory(Category.MISC)
                 .setDesc("View help for commands!");
-
-        register("trade")
-                .setCommand(CommandLegacyTrade::new)
-                .setCategory(Category.PLAYER);
 
         register("market")
                 .setCommand(CommandLegacyMarket::new)

@@ -25,7 +25,7 @@ public class DataHelper
 
     public static void addServerPlayer(Guild g, User u)
     {
-        SERVER_PLAYERS.get(g.getId()).add(u.getId());
+        if(SERVER_PLAYERS.containsKey(g.getId())) SERVER_PLAYERS.get(g.getId()).add(u.getId());
     }
 
     public static void removeServer(String ID)

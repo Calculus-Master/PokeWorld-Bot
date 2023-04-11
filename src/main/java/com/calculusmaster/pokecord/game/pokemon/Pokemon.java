@@ -14,7 +14,7 @@ import com.calculusmaster.pokecord.game.pokemon.component.*;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonData;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
-import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionRegistry;
+import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionData;
 import com.calculusmaster.pokecord.game.pokemon.evolution.GigantamaxRegistry;
 import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
 import com.calculusmaster.pokecord.mongo.Mongo;
@@ -677,9 +677,9 @@ public class Pokemon
     }
 
     //Endpoint that involves database calls - specifically for Evolution
-    public void evolve(PokemonEntity target, PlayerDataQuery playerData)
+    public void evolve(EvolutionData data, PlayerDataQuery playerData)
     {
-        this.changePokemon(target);
+        this.changePokemon(data.getTarget());
         this.updateEntity();
 
         this.resetAugments();
@@ -687,11 +687,13 @@ public class Pokemon
         playerData.updateBountyProgression(ObjectiveType.EVOLVE_POKEMON);
         playerData.getStatistics().increase(StatisticType.POKEMON_EVOLVED);
 
-        EvolutionRegistry.getEvolutionData(this.entity).stream()
-                .filter(data -> data.getTarget().equals(target))
-                .findFirst().ifPresentOrElse(data -> {
-                    if(data.hasItemTrigger()) { this.removeItem(); this.updateItem(); }
-                }, () -> LoggerHelper.warn(Pokemon.class, "Pokemon " + this.getName() + " evolved, but cannot find EvolutionData for target " + target.getName() + "."));
+        if(data.hasItemTrigger())
+        {
+            this.removeItem();
+            this.updateItem();
+
+            LoggerHelper.info(Pokemon.class, "Item Evolution Triggered – Removing Item | Evolution: %s -> %s.".formatted(data.getSource().getName(), data.getTarget().getName()));
+        }
     }
 
     //If pokemon == null, this is being called from somewhere without a relevant Pokemon object.

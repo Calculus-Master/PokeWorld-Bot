@@ -49,7 +49,7 @@ public class CommandEvolve extends PokeWorldCommand
             OptionMapping targetOption = event.getOption("target");
             List<EvolutionData> evolutionOptions = EvolutionRegistry.getEvolutionData(active.getEntity());
 
-            PokemonEntity target = null;
+            EvolutionData targetData = null;
 
             if(targetOption != null)
             {
@@ -61,17 +61,17 @@ public class CommandEvolve extends PokeWorldCommand
                     EvolutionData specificTargetData = evolutionOptions.stream().filter(d -> d.getTarget().equals(input)).findFirst().orElse(null);
 
                     if(specificTargetData == null) return this.error(active.getName() + " cannot evolve into a " + input.getName() + ".");
-                    else if(specificTargetData.validate(active, this.server.getId())) target = input;
+                    else if(specificTargetData.validate(active, this.server.getId())) targetData = specificTargetData;
                 }
             }
             else for(EvolutionData data : evolutionOptions)
-                if(data.validate(active, this.server.getId())) { target = data.getTarget(); break; }
+                if(data.validate(active, this.server.getId())) { targetData = data; break; }
 
-            if(target != null)
+            if(targetData != null)
             {
                 String original = active.hasNickname() ? active.getDisplayName()  + " (" + active.getEntity().getName() + ")" : active.getName();
 
-                active.evolve(target, this.playerData);
+                active.evolve(targetData, this.playerData);
 
                 this.response = "Congratulations! " + original + " evolved into a **" + active.getName() + "**!";
                 return true;
