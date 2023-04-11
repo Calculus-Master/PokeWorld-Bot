@@ -62,10 +62,6 @@ public class CommandsLegacy
                 .setCommand(CommandLegacyMarket::new)
                 .setCategory(Category.ECONOMY);
 
-        register("equip")
-                .setCommand(CommandLegacyEquip::new)
-                .setCategory(Category.POKEMON);
-
         register("wildduel", "wild")
                 .setCommand(CommandLegacyWildDuel::new)
                 .setCategory(Category.DUEL);

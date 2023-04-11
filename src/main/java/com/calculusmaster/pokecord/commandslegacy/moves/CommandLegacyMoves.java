@@ -124,7 +124,7 @@ public class CommandLegacyMoves extends CommandLegacy
                 if(this.serverData.isDynamaxEnabled()) movesList.append(d.getPlayers()[current].usedDynamax ? "Already Used!" : "Available!");
                 else movesList.append("Disabled in this Server!");
 
-                ZCrystal z = ZCrystal.cast(this.playerData.getEquippedZCrystal());
+                ZCrystal z = this.playerData.getInventory().getEquippedZCrystal();
                 movesList.append("\nZ-Crystal: ").append(z == null ? "None" : z.getStyledName()).append(" – ");
 
                 if(z == null) movesList.append("*Equip a Z-Crystal to be able to use it in Duels!*");

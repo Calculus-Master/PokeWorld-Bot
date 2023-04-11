@@ -156,7 +156,7 @@ public class CommandMoves extends PokeWorldCommand
                     moveUseCommandList.add("`/use move slot:" + (i + 1) + "`");
                 }
 
-                ZCrystal crystal = ZCrystal.cast(active.data.getEquippedZCrystal());
+                ZCrystal crystal = this.playerData.getInventory().getEquippedZCrystal();
                 String zmove = !this.serverData.areZMovesEnabled() ? "**Disabled in this server!**" : ((active.usedZMove ? "Used." : "Available!") + "\t\t" + "Equipped Z-Crystal: **" + (crystal == null ? "None" : crystal.getStyledName()) + "**");
                 String dynamax = !this.serverData.isDynamaxEnabled() ? "**Disabled in this server!**" : (active.usedDynamax ? "Used." : "Available!");
 

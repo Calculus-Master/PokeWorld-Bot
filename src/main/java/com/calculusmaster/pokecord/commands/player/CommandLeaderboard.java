@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.player;
 import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.player.leaderboard.LeaderboardScoreComponent;
 import com.calculusmaster.pokecord.game.player.leaderboard.PlayerScoreData;
 import com.calculusmaster.pokecord.game.player.leaderboard.PokeWorldLeaderboard;
@@ -24,6 +25,7 @@ public class CommandLeaderboard extends PokeWorldCommand
         CommandData
                 .create("leaderboard")
                 .withConstructor(CommandLeaderboard::new)
+                .withFeature(Feature.ACCESS_LEADERBOARD)
                 .withCommand(Commands
                         .slash("leaderboard", "View the global leaderboard!")
                         .addSubcommands(

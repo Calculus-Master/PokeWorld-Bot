@@ -98,7 +98,6 @@ public class PlayerDataQuery extends MongoQuery
                 .append("selected", 1)
                 .append("pokemon", new ArrayList<>())
                 .append("favorites", new ArrayList<>())
-                .append("active_zcrystal", "")
                 .append("achievements", new ArrayList<>())
                 .append("owned_forms", new ArrayList<>())
                 .append("owned_megas", new ArrayList<>())
@@ -375,17 +374,6 @@ public class PlayerDataQuery extends MongoQuery
     public void clearFavorites()
     {
         this.update(Updates.set("favorites", new ArrayList<>()));
-    }
-
-    //key: "active_zcrystal"
-    public String getEquippedZCrystal()
-    {
-        return this.document.getString("active_zcrystal");
-    }
-
-    public void equipZCrystal(String z)
-    {
-        this.update(Updates.set("active_zcrystal", z));
     }
 
     //key: "achievements"

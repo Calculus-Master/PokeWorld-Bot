@@ -25,6 +25,8 @@ public class PlayerInventory
     private final EnumSet<ZCrystal> zcrystals;
     private final Map<TM, Integer> tms;
 
+    private ZCrystal equippedZCrystal;
+
     public PlayerInventory(PlayerDataQuery playerData)
     {
         this.playerData = playerData;
@@ -32,6 +34,8 @@ public class PlayerInventory
         this.items = new LinkedHashMap<>();
         this.zcrystals = EnumSet.noneOf(ZCrystal.class);
         this.tms = new LinkedHashMap<>();
+
+        this.equippedZCrystal = null;
     }
 
     public PlayerInventory(PlayerDataQuery playerData, Document data)
@@ -41,6 +45,8 @@ public class PlayerInventory
         data.get("items", Document.class).forEach((i, amount) -> this.items.put(Item.cast(i), (int)amount));
         data.getList("zcrystals", String.class).forEach(z -> this.zcrystals.add(ZCrystal.cast(z)));
         data.get("tms", Document.class).forEach((tm, amount) -> this.tms.put(TM.cast(tm), (int)amount));
+
+        this.equippedZCrystal = data.getString("equipped_zcrystal").isEmpty() ? null : ZCrystal.valueOf(data.getString("equipped_zcrystal"));
     }
 
     public Document serialize()
@@ -56,6 +62,8 @@ public class PlayerInventory
         Document tms = new Document(new LinkedHashMap<>());
         this.tms.forEach((tm, count) -> tms.append(tm.toString(), count));
         data.append("tms", tms);
+
+        data.append("equipped_zcrystal", this.equippedZCrystal == null ? "" : this.equippedZCrystal.toString());
 
         return data;
     }
@@ -120,6 +128,13 @@ public class PlayerInventory
         }
     }
 
+    public void setEquippedZCrystal(ZCrystal z)
+    {
+        this.equippedZCrystal = z;
+
+        UPDATER.submit(() -> Mongo.PlayerData.updateOne(this.playerData.getQuery(), Updates.set("inventory.equipped_zcrystal", z.toString())));
+    }
+
     //Accessors
     public Map<Item, Integer> getItems()
     {
@@ -158,5 +173,10 @@ public class PlayerInventory
     public int getTMCount()
     {
         return this.tms.values().stream().mapToInt(i -> i).sum();
+    }
+
+    public ZCrystal getEquippedZCrystal()
+    {
+        return this.equippedZCrystal;
     }
 }

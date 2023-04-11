@@ -74,7 +74,7 @@ public class DuelHelper
             return baseMove;
         }
 
-        ZCrystal z = p instanceof UserPlayer up ? ZCrystal.cast(up.data.getEquippedZCrystal()) : ((TrainerPlayer)(p)).getData().getZCrystal();
+        ZCrystal z = p instanceof UserPlayer up ? up.data.getInventory().getEquippedZCrystal() : ((TrainerPlayer)(p)).getData().getZCrystal();
         MoveEntity fallback = MoveEntity.TACKLE;
 
         if(z == null) return new Move(fallback);
