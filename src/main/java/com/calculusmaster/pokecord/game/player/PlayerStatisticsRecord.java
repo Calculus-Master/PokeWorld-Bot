@@ -49,7 +49,7 @@ public class PlayerStatisticsRecord
     {
         this.statistics.put(type, this.get(type) + amount);
 
-        UPDATER.submit(() -> Mongo.PlayerData.updateOne(Filters.eq("playerID", this.playerData), Updates.inc("statistics." + type.toString(), amount)));
+        UPDATER.submit(() -> Mongo.PlayerData.updateOne(Filters.eq("playerID", this.playerData.getID()), Updates.inc("statistics." + type.toString(), amount)));
     }
 
     public void increase(StatisticType type)
