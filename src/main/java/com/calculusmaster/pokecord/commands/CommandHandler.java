@@ -57,6 +57,7 @@ public class CommandHandler extends ListenerAdapter
         CommandAchievements.init();
         CommandLevel.init();
         CommandProfile.init();
+        CommandLeaderboard.init();
 
         CommandCatch.init();
         CommandPokeDex.init();

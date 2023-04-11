@@ -10,6 +10,7 @@ import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.data.CustomMoveDataRegistry;
 import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.moves.registry.MoveTutorRegistry;
+import com.calculusmaster.pokecord.game.player.leaderboard.PokeWorldLeaderboard;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugmentRegistry;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
@@ -110,6 +111,7 @@ public class Pokeworld
         LoggerHelper.init("Market", CacheHelper::initMarketEntries, true);
 
         LoggerHelper.init("Pokemon Data Cache", PokemonDataCache::init);
+        LoggerHelper.init("Global Leaderboard", PokeWorldLeaderboard::init);
         //LoggerHelper.init("CommandPokemon", CacheHelper::initPokemonLists, true);
 
         long end = System.currentTimeMillis();

@@ -11,6 +11,7 @@ import com.calculusmaster.pokecord.game.player.PlayerInventory;
 import com.calculusmaster.pokecord.game.player.PlayerPokedex;
 import com.calculusmaster.pokecord.game.player.PlayerStatisticsRecord;
 import com.calculusmaster.pokecord.game.player.PlayerTeam;
+import com.calculusmaster.pokecord.game.player.leaderboard.PokeWorldLeaderboard;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -122,6 +123,14 @@ public class PlayerDataQuery extends MongoQuery
         PlayerDataCache.addCache(player.getId());
     }
 
+    @Override
+    protected void update(Bson update)
+    {
+        super.update(update);
+
+        PokeWorldLeaderboard.addUpdatedPlayer(this.getID());
+    }
+
     public void directMessage(String msg)
     {
         try
@@ -173,6 +182,8 @@ public class PlayerDataQuery extends MongoQuery
     //Inventory (key: "inventory")
     public PlayerInventory getInventory()
     {
+        PokeWorldLeaderboard.addUpdatedPlayer(this.getID());
+
         if(this.inventory == null) this.inventory = new PlayerInventory(this, this.document.get("inventory", Document.class));
         return this.inventory;
     }
@@ -192,6 +203,8 @@ public class PlayerDataQuery extends MongoQuery
     //Statistics (key: "statistics")
     public PlayerStatisticsRecord getStatistics()
     {
+        PokeWorldLeaderboard.addUpdatedPlayer(this.getID());
+
         if(this.statistics == null) this.statistics = new PlayerStatisticsRecord(this, this.document.get("statistics", Document.class));
         return this.statistics;
     }
