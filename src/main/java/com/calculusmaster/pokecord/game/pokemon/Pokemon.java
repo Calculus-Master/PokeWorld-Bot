@@ -699,6 +699,7 @@ public class Pokemon
         if(data.getTarget().isNotSpawnable() && !playerData.getPokedex().hasCollected(data.getTarget()))
         {
             playerData.getPokedex().add(data.getTarget());
+            playerData.updatePokedex();
             playerData.directMessage("*" + data.getTarget().getName() + " has been registered to your PokeDex!*");
         }
     }
@@ -717,6 +718,7 @@ public class Pokemon
             if(target.isNotSpawnable() && !playerData.getPokedex().hasCollected(target))
             {
                 playerData.getPokedex().add(target);
+                playerData.updatePokedex();
                 playerData.directMessage("*" + target.getName() + " has been registered to your PokeDex!*");
             }
         }
@@ -735,6 +737,7 @@ public class Pokemon
         if(target.isNotSpawnable() && !playerData.getPokedex().hasCollected(target))
         {
             playerData.getPokedex().add(target);
+            playerData.updatePokedex();
             playerData.directMessage("*" + target.getName() + " has been registered to your PokeDex!*");
         }
     }

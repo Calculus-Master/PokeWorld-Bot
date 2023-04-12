@@ -112,6 +112,9 @@ public class CommandStart extends PokeWorldCommand
                 starter.upload();
                 this.playerData.addPokemon(starter.getUUID());
 
+                this.playerData.getPokedex().add(starter.getEntity());
+                this.playerData.updatePokedex();
+
                 //Next Steps
                 this.playerData.dmMasteryLevel();
 
