@@ -114,10 +114,6 @@ public class CommandsLegacy
                 .setCommand(CommandLegacyEliteDuel::new)
                 .setCategory(Category.DUEL);
 
-        register("prestige")
-                .setCommand(CommandLegacyPrestige::new)
-                .setCategory(Category.POKEMON);
-
         register("trainerinfo", "ti")
                 .setCommand(CommandLegacyTrainerInfo::new)
                 .setCategory(Category.DUEL);
