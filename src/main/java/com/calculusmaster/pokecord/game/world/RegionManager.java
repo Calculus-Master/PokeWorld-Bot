@@ -54,8 +54,6 @@ public class RegionManager
     {
         int hour = Global.timeNow().getHour();
 
-        if(true) return Time.NIGHT;
-
         if(hour == 17 || hour == 18) return Time.DUSK;
         else if(hour <= 5 || hour >= 19) return Time.NIGHT;
         else return Time.DAY;
