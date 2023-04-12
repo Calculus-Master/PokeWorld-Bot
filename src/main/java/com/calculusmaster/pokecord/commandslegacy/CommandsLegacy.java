@@ -10,7 +10,6 @@ import com.calculusmaster.pokecord.commandslegacy.player.CommandLegacyBounties;
 import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyBreed;
 import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyEggs;
 import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyPokemon;
-import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyRedeem;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.interfaces.CommandSupplier;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -68,10 +67,6 @@ public class CommandsLegacy
         register("wildduel", "wild")
                 .setCommand(CommandLegacyWildDuel::new)
                 .setCategory(Category.DUEL);
-
-        register("redeem")
-                .setCommand(CommandLegacyRedeem::new)
-                .setCategory(Category.POKEMON);
 
         register("trainerduel", "trainer", "fight")
                 .setCommand(CommandLegacyTrainerDuel::new)
