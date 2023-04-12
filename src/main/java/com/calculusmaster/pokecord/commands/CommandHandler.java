@@ -11,6 +11,7 @@ import com.calculusmaster.pokecord.commands.move.CommandMoves;
 import com.calculusmaster.pokecord.commands.move.CommandTM;
 import com.calculusmaster.pokecord.commands.player.*;
 import com.calculusmaster.pokecord.commands.pokemon.*;
+import com.calculusmaster.pokecord.game.pokemon.evolution.CommandForm;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.entities.Guild;
@@ -73,6 +74,7 @@ public class CommandHandler extends ListenerAdapter
         CommandZCrystal.init();
         CommandAugments.init();
         CommandPrestige.init();
+        CommandForm.init();
 
         CommandMoves.init();
         CommandTM.init();

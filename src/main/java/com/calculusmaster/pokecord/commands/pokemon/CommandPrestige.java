@@ -75,7 +75,7 @@ public class CommandPrestige extends PokeWorldCommand
 
             active.setMoves(); active.updateMoves();
 
-            active.clearAugments(); active.updateAugments();
+            active.resetAugments();
 
             this.playerData.getStatistics().increase(StatisticType.POKEMON_PRESTIGED);
 

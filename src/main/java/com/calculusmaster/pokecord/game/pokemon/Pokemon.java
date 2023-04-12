@@ -16,6 +16,7 @@ import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionData;
 import com.calculusmaster.pokecord.game.pokemon.evolution.GigantamaxRegistry;
+import com.calculusmaster.pokecord.game.pokemon.evolution.MegaChargeManager;
 import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -668,7 +669,7 @@ public class Pokemon
     }
 
     //Mega Evolutions, Forms, Evolution
-    public void changePokemon(PokemonEntity entity)
+    private void changePokemon(PokemonEntity entity)
     {
         this.entity = entity;
         this.data = entity.data();
@@ -693,6 +694,44 @@ public class Pokemon
             this.updateItem();
 
             LoggerHelper.info(Pokemon.class, "Item Evolution Triggered – Removing Item | Evolution: %s -> %s.".formatted(data.getSource().getName(), data.getTarget().getName()));
+        }
+
+        if(data.getTarget().isNotSpawnable() && !playerData.getPokedex().hasCollected(data.getTarget()))
+        {
+            playerData.getPokedex().add(data.getTarget());
+            playerData.directMessage("*" + data.getTarget().getName() + " has been registered to your PokeDex!*");
+        }
+    }
+
+    //Endpoint that involves database calls - specifically for Form changes
+    public void changeForm(PokemonEntity target, PlayerDataQuery playerData)
+    {
+        this.changePokemon(target);
+        this.updateEntity();
+
+        this.resetAugments();
+
+        if(target.isNotSpawnable() && !playerData.getPokedex().hasCollected(target))
+        {
+            playerData.getPokedex().add(target);
+            playerData.directMessage("*" + target.getName() + " has been registered to your PokeDex!*");
+        }
+    }
+
+    //Endpoint that involves database calls - specifically for Mega-Evolutions
+    public void megaEvolve(PokemonEntity target, PlayerDataQuery playerData)
+    {
+        this.changePokemon(target);
+        this.updateEntity();
+
+        this.resetAugments();
+
+        MegaChargeManager.setBlocked(this.getUUID());
+
+        if(target.isNotSpawnable() && !playerData.getPokedex().hasCollected(target))
+        {
+            playerData.getPokedex().add(target);
+            playerData.directMessage("*" + target.getName() + " has been registered to your PokeDex!*");
         }
     }
 

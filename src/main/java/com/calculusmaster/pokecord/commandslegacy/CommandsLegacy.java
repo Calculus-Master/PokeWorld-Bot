@@ -7,7 +7,10 @@ import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyHelp;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacySettings;
 import com.calculusmaster.pokecord.commandslegacy.moves.CommandLegacyMoves;
 import com.calculusmaster.pokecord.commandslegacy.player.CommandLegacyBounties;
-import com.calculusmaster.pokecord.commandslegacy.pokemon.*;
+import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyBreed;
+import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyEggs;
+import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyPokemon;
+import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyRedeem;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.interfaces.CommandSupplier;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -73,10 +76,6 @@ public class CommandsLegacy
         register("trainerduel", "trainer", "fight")
                 .setCommand(CommandLegacyTrainerDuel::new)
                 .setCategory(Category.DUEL);
-
-        register("form")
-                .setCommand(CommandLegacyForm::new)
-                .setCategory(Category.POKEMON);
 
         register("flee", "concede", "surrender")
                 .setCommand(CommandLegacyFlee::new)
