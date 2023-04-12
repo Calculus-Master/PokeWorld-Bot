@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.commands.PokeWorldCommand;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.enums.Prices;
+import com.calculusmaster.pokecord.util.enums.StatisticType;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
@@ -75,6 +76,8 @@ public class CommandPrestige extends PokeWorldCommand
             active.setMoves(); active.updateMoves();
 
             active.clearAugments(); active.updateAugments();
+
+            this.playerData.getStatistics().increase(StatisticType.POKEMON_PRESTIGED);
 
             this.response = "**" + active.getName() + "** has advanced to **Prestige Level " + active.getPrestigeLevel() + "**! Its stats have been permanently boosted.\n*Additionally, its level, experience, moves and augments have been reset.*";
         }
