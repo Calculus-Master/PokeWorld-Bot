@@ -113,8 +113,7 @@ public class CommandCatch extends PokeWorldCommand
                 //Form Checks
                 if(FormRegistry.hasFormData(caught.getEntity()))
                 {
-                    FormRegistry.FormData data = FormRegistry.getFormData(caught.getEntity());
-                    if(!data.getDefaultForm().equals(caught.getEntity()) && !this.playerData.getOwnedForms().contains(caught.getEntity()))
+                    if(!this.playerData.getOwnedForms().contains(caught.getEntity()))
                         this.playerData.addOwnedForm(caught.getEntity());
                 }
 

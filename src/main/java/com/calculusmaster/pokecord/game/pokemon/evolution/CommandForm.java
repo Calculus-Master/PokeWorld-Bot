@@ -66,6 +66,8 @@ public class CommandForm extends PokeWorldCommand
                             
                             A Pokemon's other forms maybe be possible to acquire from catching, or some other method.
                             However, some forms may not be "switchable" - this means you cannot manually switch your active Pokemon to that form, as the form changes will happen automatically when reaching certain requirements.
+                            
+                            To switch to a Pokemon form, you must acquire it first.
                             """)
                     .addField("Base Form", "**" + formData.getDefaultForm().getName() + "**", true)
                     .addField("Switchable", formData.isSwitchable() ? ":white_check_mark:" : ":x:", true)
@@ -91,7 +93,7 @@ public class CommandForm extends PokeWorldCommand
             if(target.equals(active.getEntity())) return this.error(active.getName() + " is already in the form: " + target.getName() + ".");
             else if(!formData.isSwitchable()) return this.error(active.getName() + "'s forms are not manually switchable.");
             else if(!formData.getForms().contains(target)) return this.error(target.getName() + " is not a form that " + active.getName() + " can switch to.");
-            else if(!target.equals(formData.getDefaultForm()) && !this.playerData.getOwnedForms().contains(target)) return this.error("You have not yet acquired this Pokemon form.");
+            else if(!this.playerData.getOwnedForms().contains(target)) return this.error("You have not yet acquired this Pokemon form.");
 
             String original = active.getName();
 

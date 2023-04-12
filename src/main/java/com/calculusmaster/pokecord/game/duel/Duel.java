@@ -1708,10 +1708,7 @@ public class Duel
         {
             //TODO: Rethink this form change
             if(this.players[this.current].active.is(PokemonEntity.AEGISLASH_SHIELD))
-            {
-                this.players[this.current].active.changePokemon(PokemonEntity.AEGISLASH_BLADE);
-                this.players[this.current].active.updateEntity();
-            }
+                this.players[this.current].active.changeForm(PokemonEntity.AEGISLASH_BLADE, this.players[this.current] instanceof UserPlayer user ? user.data : null);
         }
 
         boolean isMoveSuccess = false;

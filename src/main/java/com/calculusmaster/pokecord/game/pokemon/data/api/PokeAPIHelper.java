@@ -4,7 +4,6 @@ import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
-import com.calculusmaster.pokecord.game.pokemon.evolution.FormRegistry;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
@@ -121,10 +120,6 @@ public class PokeAPIHelper
 //        System.out.println(LocalDateTime.ofEpochSecond(epoch, 0, ZoneOffset.of("-7")));
 //
 //        System.out.println(LocalDateTime.ofEpochSecond(1680832800, 0, ZoneOffset.of("-7")));
-
-        FormRegistry.init();
-
-        Arrays.stream(PokemonEntity.values()).filter(FormRegistry::hasFormData).filter(PokemonEntity::isNotSpawnable).forEach(System.out::println);
     }
 
     private static void timed(Runnable r)

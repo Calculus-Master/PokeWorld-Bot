@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game.moves.types;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Terrain;
@@ -142,10 +143,7 @@ public class SteelMoves
         duel.data(user.getUUID()).kingsShieldUsed = true;
 
         if(user.is(PokemonEntity.AEGISLASH_BLADE))
-        {
-            user.changePokemon(PokemonEntity.AEGISLASH_SHIELD);
-            user.updateEntity();
-        }
+            user.changeForm(PokemonEntity.AEGISLASH_SHIELD, duel.getPlayers()[duel.playerIndexFromUUID(user.getUUID())] instanceof UserPlayer userPlayer ? userPlayer.data : null);
 
         return user.getName() + " defended itself with its Shield!";
     }

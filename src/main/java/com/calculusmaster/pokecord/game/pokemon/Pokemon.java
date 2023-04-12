@@ -707,14 +707,18 @@ public class Pokemon
     public void changeForm(PokemonEntity target, PlayerDataQuery playerData)
     {
         this.changePokemon(target);
-        this.updateEntity();
 
-        this.resetAugments();
-
-        if(target.isNotSpawnable() && !playerData.getPokedex().hasCollected(target))
+        if(playerData != null)
         {
-            playerData.getPokedex().add(target);
-            playerData.directMessage("*" + target.getName() + " has been registered to your PokeDex!*");
+            this.updateEntity();
+
+            this.resetAugments();
+
+            if(target.isNotSpawnable() && !playerData.getPokedex().hasCollected(target))
+            {
+                playerData.getPokedex().add(target);
+                playerData.directMessage("*" + target.getName() + " has been registered to your PokeDex!*");
+            }
         }
     }
 
