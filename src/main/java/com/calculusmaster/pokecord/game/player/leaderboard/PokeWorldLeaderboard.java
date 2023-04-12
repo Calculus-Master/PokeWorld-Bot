@@ -10,10 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -23,7 +20,7 @@ public class PokeWorldLeaderboard
     private static final ExecutorService MANAGER = Executors.newFixedThreadPool(4);
 
     private static PokeWorldLeaderboard CURRENT;
-    private static List<String> PLAYERS_UPDATED = new ArrayList<>();
+    private static final List<String> PLAYERS_UPDATED = new ArrayList<>();
     private static final int TOP_PLAYERS = 10;
 
     public static void init()
@@ -37,9 +34,10 @@ public class PokeWorldLeaderboard
     {
         long timeI = System.currentTimeMillis();
 
-        if(CURRENT == null) CURRENT = new PokeWorldLeaderboard();
+        boolean initial = CURRENT == null;
+        if(initial) CURRENT = new PokeWorldLeaderboard();
 
-        CURRENT.recalculate();
+        CURRENT.recalculate(initial);
 
         LoggerHelper.time(PokeWorldLeaderboard.class, "Updating PokeWorld Leaderboard", timeI, System.currentTimeMillis());
     }
@@ -66,35 +64,38 @@ public class PokeWorldLeaderboard
         this.timestamp = Global.timeNowEpoch();
     }
 
-    public void recalculate()
+    public void recalculate(boolean initial)
     {
         Mongo.PlayerData.find().projection(Projections.include("playerID")).forEach(d -> {
             String playerID = d.getString("playerID");
             if(!this.scores.containsKey(playerID)) this.scores.put(playerID, new PlayerScoreData(playerID));
         });
 
+        List<Callable<Object>> calculationTasks = new ArrayList<>();
+
         this.scores
                 .entrySet()
                 .stream()
-                .filter(e -> !PLAYERS_UPDATED.contains(e.getKey())) //Skip players that don't need an update
-                .map(Map.Entry::getValue)//Get PlayerScoreData
-                .forEach(data -> MANAGER.submit(data::calculate)); //Calculate
-
-        this.determineTopPlayers();
-
-        this.timestamp = Global.timeNowEpoch();
+                .filter(e -> initial || PLAYERS_UPDATED.contains(e.getKey())) //Skip players that don't need an update
+                .map(Map.Entry::getValue) //Get PlayerScoreData
+                .forEach(data -> calculationTasks.add(Executors.callable(data::calculate))); //Calculate
 
         PLAYERS_UPDATED.clear();
+
+        try { MANAGER.invokeAll(calculationTasks); }
+        catch (InterruptedException e) { e.printStackTrace(); LoggerHelper.error(PokeWorldLeaderboard.class, "Thread Pool interrupted trying to calculate leaderboard scores."); }
+
+        this.determineTopPlayers();
+        this.timestamp = Global.timeNowEpoch();
     }
 
     private void determineTopPlayers()
     {
         this.rankings.clear();
 
-        this.scores.entrySet()
-                .stream()
-                .sorted((e1, e2) -> (int)(e2.getValue().getScore() - e1.getValue().getScore()))
-                .forEach(e -> this.rankings.add(e.getKey()));
+        this.rankings.addAll(this.scores.keySet());
+
+        this.rankings.sort((p1, p2) -> (int)(this.scores.get(p2).getScore() - this.scores.get(p1).getScore()));
     }
 
     //Returns Pairs where left is Rank and Username, right is Score
