@@ -98,6 +98,18 @@ public class PokemonAugmentRegistry
                 augmentData.registerAugment(90, PokemonAugment.VICTORY_ENSURED);
             }
 
+            //Stat Augments
+            Stat maxStat = Collections.max(List.of(Stat.values()), Comparator.comparingInt(data.getBaseStats()::get));
+
+            augmentData.registerAugment(15, switch(maxStat) {
+                case HP -> PokemonAugment.HP_BOOST;
+                case ATK -> PokemonAugment.ATK_BOOST;
+                case DEF -> PokemonAugment.DEF_BOOST;
+                case SPATK -> PokemonAugment.SPATK_BOOST;
+                case SPDEF -> PokemonAugment.SPDEF_BOOST;
+                case SPD -> PokemonAugment.SPD_BOOST;
+            });
+
             //Move Augments
 
             if(data.getLevelUpMoves().keySet().stream().anyMatch(Move.PUNCH_MOVES::contains))
@@ -139,18 +151,6 @@ public class PokemonAugmentRegistry
                     case FAIRY -> PokemonAugment.FLOWERING_GRACE;
                 });
             }
-
-            //Stat Augments
-            Stat maxStat = Collections.max(List.of(Stat.values()), Comparator.comparingInt(data.getBaseStats()::get));
-
-            augmentData.registerAugment(15, switch(maxStat) {
-                case HP -> PokemonAugment.HP_BOOST;
-                case ATK -> PokemonAugment.ATK_BOOST;
-                case DEF -> PokemonAugment.DEF_BOOST;
-                case SPATK -> PokemonAugment.SPATK_BOOST;
-                case SPDEF -> PokemonAugment.SPDEF_BOOST;
-                case SPD -> PokemonAugment.SPD_BOOST;
-            });
 
             //Misc
 
