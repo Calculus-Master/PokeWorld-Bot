@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.commands.PokeWorldCommand;
 import com.calculusmaster.pokecord.game.bounties.Bounty;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.mongo.DatabaseCollection;
 import com.calculusmaster.pokecord.mongo.Mongo;
@@ -92,6 +93,12 @@ public class CommandDev extends PokeWorldCommand
                 int amount = command.length > 1 ? Integer.parseInt(command[1]) : 1000;
                 this.playerData.changeCredits(amount);
                 this.response = "Added " + amount + " credits.";
+            }
+            case "addaugment" ->
+            {
+                PokemonAugment a = PokemonAugment.valueOf(command[1]);
+                this.playerData.getInventory().addAugment(a);
+                this.response = "Added " + a.getAugmentName() + " to your inventory.";
             }
             default -> {
                 return this.error("Invalid dev command: " + Arrays.toString(command));

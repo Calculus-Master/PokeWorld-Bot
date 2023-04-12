@@ -1,17 +1,21 @@
 package com.calculusmaster.pokecord.game.pokemon.augments;
 
+import com.calculusmaster.pokecord.util.Global;
+
+import java.util.Arrays;
+
 public enum PokemonAugment
 {
     //TODO: Add acquisition sourecs for Augments (first 3 sections are done)
     //TODO: Make acquisition sources more deterministic (currently they are random)
 
     //Stat Boost Augments
-    HP_BOOST            (1, "Health Boost",         "Automatically given upon reaching the correct PML.", "Increases HP by 5%"),
-    ATK_BOOST           (1, "Attack Boost",         "Automatically given upon reaching the correct PML.", "Increases Attack by 5%"),
-    DEF_BOOST           (1, "Defense Boost",        "Automatically given upon reaching the correct PML.", "Increases Defense by 5%"),
-    SPATK_BOOST         (1, "Special Attack Boost", "Automatically given upon reaching the correct PML.", "Increases Special Attack by 5%"),
-    SPDEF_BOOST         (1, "Special Defense Boost","Automatically given upon reaching the correct PML.", "Increases Special Defense by 5%"),
-    SPD_BOOST           (1, "Speed Boost",          "Automatically given upon reaching the correct PML.", "Increases Speed by 5%"),
+    HP_BOOST            (1, "Health Boost",         "Automatically given upon unlocking the Augment feature.", "Increases HP by 5%."),
+    ATK_BOOST           (1, "Attack Boost",         "Automatically given upon unlocking the Augment feature.", "Increases Attack by 5%."),
+    DEF_BOOST           (1, "Defense Boost",        "Automatically given upon unlocking the Augment feature.", "Increases Defense by 5%."),
+    SPATK_BOOST         (1, "Special Attack Boost", "Automatically given upon unlocking the Augment feature.", "Increases Special Attack by 5%."),
+    SPDEF_BOOST         (1, "Special Defense Boost","Automatically given upon unlocking the Augment feature.", "Increases Special Defense by 5%."),
+    SPD_BOOST           (1, "Speed Boost",          "Automatically given upon unlocking the Augment feature.", "Increases Speed by 5%."),
 
     //General Augments
     SUPERCHARGED        (3, "Supercharged",     "Found randomly after defeating Pokemon.", "All moves deal 25% more damage, but increases damage taken by 25%."),
@@ -114,9 +118,10 @@ public enum PokemonAugment
         return this.description;
     }
 
-    public static PokemonAugment fromID(String augmentID)
+    public static PokemonAugment cast(String input)
     {
-        for(PokemonAugment augment : PokemonAugment.values()) if(augment.toString().equalsIgnoreCase(augmentID)) return augment;
-        return null;
+        PokemonAugment augment = Global.getEnumFromString(values(), input);
+        if(augment == null) augment = Arrays.stream(values()).filter(a -> a.augmentName.equalsIgnoreCase(input)).findFirst().orElse(null);
+        return augment;
     }
 }

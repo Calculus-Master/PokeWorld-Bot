@@ -27,7 +27,7 @@ public class CommandZCrystal extends PokeWorldCommand
                         .slash("zcrystal", "Equip Z-Crystals to use Z-Moves in Duels!")
                         .addSubcommands(
                                 new SubcommandData("equip", "Equip a Z-Crystal.")
-                                        .addOption(OptionType.STRING, "name", "The name of the Z-Crystal to equip.", true)
+                                        .addOption(OptionType.STRING, "name", "The name of the Z-Crystal to equip.", true, true)
                         )
                 )
                 .register();

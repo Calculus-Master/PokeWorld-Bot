@@ -118,14 +118,6 @@ public class CommandsLegacy
                 .setCommand(CommandLegacyPrestige::new)
                 .setCategory(Category.POKEMON);
 
-        register("augments")
-                .setCommand(CommandLegacyAugments::new)
-                .setCategory(Category.POKEMON);
-
-        register("augmentinfo", "auginfo")
-                .setCommand(CommandLegacyAugmentInfo::new)
-                .setCategory(Category.POKEMON);
-
         register("trainerinfo", "ti")
                 .setCommand(CommandLegacyTrainerInfo::new)
                 .setCategory(Category.DUEL);

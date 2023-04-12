@@ -104,7 +104,6 @@ public class PlayerDataQuery extends MongoQuery
                 .append("bounties", new ArrayList<>())
                 .append("owned_eggs", new ArrayList<>())
                 .append("active_egg", "")
-                .append("owned_augments", new ArrayList<>())
                 .append("defeated_trainers", new ArrayList<>())
                 .append("pokedex", new PlayerPokedex().serialize())
                 .append("inventory", new PlayerInventory(null).serialize())
@@ -269,10 +268,7 @@ public class PlayerDataQuery extends MongoQuery
 
                 //Starting Augments
                 if(MasteryLevelManager.MASTERY_LEVELS.get(this.getLevel()).getFeatures().contains(Feature.AUGMENT_POKEMON))
-                {
-                    EnumSet.of(PokemonAugment.HP_BOOST, PokemonAugment.ATK_BOOST, PokemonAugment.DEF_BOOST, PokemonAugment.SPATK_BOOST, PokemonAugment.SPDEF_BOOST, PokemonAugment.SPD_BOOST)
-                            .forEach(p -> this.addAugment(p.getAugmentID()));
-                }
+                    this.getInventory().addAugments(EnumSet.of(PokemonAugment.HP_BOOST, PokemonAugment.ATK_BOOST, PokemonAugment.DEF_BOOST, PokemonAugment.SPATK_BOOST, PokemonAugment.SPDEF_BOOST, PokemonAugment.SPD_BOOST));
 
                 this.directMessage("You are now **Pokemon Mastery Level " + this.getLevel() + "**! You've unlocked the following features:\n" + MasteryLevelManager.MASTERY_LEVELS.get(this.getLevel()).getUnlockedFeaturesOverview());
                 this.dmMasteryLevel();
@@ -527,27 +523,6 @@ public class PlayerDataQuery extends MongoQuery
     public void removeActiveEgg()
     {
         this.update(Updates.set("active_egg", ""));
-    }
-
-    //key: "owned_augments"
-    public List<String> getOwnedAugmentIDs()
-    {
-        return this.document.getList("owned_augments", String.class);
-    }
-
-    public List<PokemonAugment> getOwnedAugments()
-    {
-        return this.getOwnedAugmentIDs().stream().map(PokemonAugment::fromID).collect(Collectors.toList());
-    }
-
-    public boolean isAugmentUnlocked(String augmentID)
-    {
-        return this.getOwnedAugmentIDs().contains(augmentID);
-    }
-
-    public void addAugment(String augmentID)
-    {
-        this.update(Updates.push("owned_augments", augmentID));
     }
 
     //key: "defeated_trainers"

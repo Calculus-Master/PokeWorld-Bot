@@ -1167,10 +1167,9 @@ public class Pokemon
 
     public int getLevelForNextSlot()
     {
-        List<Integer> scaling = PokemonAugmentRegistry.AUGMENT_SLOTS.get(this.getRarity());
+        List<Integer> slotUnlocks = PokemonAugmentRegistry.AUGMENT_SLOTS.get(this.getRarity());
 
-        if(scaling.size() == this.getTotalAugmentSlots()) return -1;
-        else for(int i = scaling.size() - 1; i >= 0; i--) if(this.getLevel() >= scaling.get(i)) return scaling.get(i + 1);
+        for(int lvl : slotUnlocks) if(lvl > this.getLevel()) return lvl;
         return -1;
     }
 
@@ -1187,7 +1186,7 @@ public class Pokemon
     public void setAugments(List<String> augments)
     {
         this.augments = EnumSet.noneOf(PokemonAugment.class);
-        augments.forEach(s -> this.augments.add(PokemonAugment.fromID(s)));
+        augments.forEach(s -> this.augments.add(PokemonAugment.cast(s)));
     }
 
     public void clearAugments()

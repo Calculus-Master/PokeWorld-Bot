@@ -71,6 +71,7 @@ public class CommandHandler extends ListenerAdapter
         CommandInfo.init();
         CommandFavorites.init();
         CommandZCrystal.init();
+        CommandAugments.init();
 
         CommandMoves.init();
         CommandTM.init();
@@ -114,6 +115,11 @@ public class CommandHandler extends ListenerAdapter
         {
             LoggerHelper.error(CommandHandler.class, "Slash Command not found: " + event.getName());
             event.reply("An error has occurred.").setEphemeral(true).queue();
+        }
+        else if(!event.isFromGuild())
+        {
+            LoggerHelper.warn(CommandHandler.class, "Attempted use of Slash Command (%s) outside of a Guild (%s)".formatted(event.getName(), event.getChannel().getName()));
+            event.reply("Slash Command usage outside of a Guild is not currently supported.").setEphemeral(true).queue();
         }
         else if(!(event.getChannel() instanceof TextChannel))
         {

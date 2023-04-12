@@ -13,6 +13,7 @@ import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.TypeEffectiveness;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
+import com.calculusmaster.pokecord.game.player.PlayerInventory;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
@@ -45,6 +46,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.*;
@@ -2359,21 +2361,20 @@ public class Duel
 
                 //General Augments
                 boolean augmentEarned = false;
+                PlayerInventory inv = player.data.getInventory();
+                List<PokemonAugment> earned = new ArrayList<>();
 
                 if(random.nextFloat() < 0.1F)
                 {
                     List<PokemonAugment> pool = new ArrayList<>(List.of(PokemonAugment.SUPERCHARGED, PokemonAugment.SUPERFORTIFIED, PokemonAugment.HARMONY, PokemonAugment.PINNACLE_EVASION, PokemonAugment.PRECISION_STRIKES, PokemonAugment.PRECISION_BURST, PokemonAugment.RAW_FORCE, PokemonAugment.MODIFYING_FORCE));
-                    pool.removeIf(pa -> player.data.isAugmentUnlocked(pa.getAugmentID()));
+                    pool.removeIf(inv::hasAugment);
 
                     if(!pool.isEmpty())
                     {
-                        Collections.shuffle(pool);
+                        PokemonAugment chosen = pool.get(random.nextInt(pool.size()));
+                        inv.addAugment(chosen);
 
-                        PokemonAugment chosen = pool.get(0);
-                        player.data.addAugment(chosen.getAugmentID());
-
-                        augmentEarned = true;
-                        turnResult.add(player.data.getUsername() + " has found an Augment! They earned: " + chosen.getAugmentName() + ".");
+                        earned.add(chosen);
                     }
                 }
 
@@ -2400,15 +2401,15 @@ public class Duel
                         case FAIRY -> PokemonAugment.FLOWERING_GRACE;
                     };
 
-                    if(!player.data.isAugmentUnlocked(typeAugment.getAugmentID()))
+                    if(!inv.hasAugment(typeAugment))
                     {
-                        player.data.addAugment(typeAugment.getAugmentID());
-
-                        augmentEarned = true;
-
-                        turnResult.add(player.data.getUsername() + " has found an Augment! They earned: " + typeAugment.getAugmentName() + ".");
+                        inv.addAugment(typeAugment);
+                        earned.add(typeAugment);
                     }
                 }
+
+                if(!earned.isEmpty())
+                    turnResult.add(player.data.getUsername() + " has earned augment(s)! Augments: " + earned.stream().map(PokemonAugment::getAugmentName).collect(Collectors.joining(", ")));
             }
 
             if(this.players[this.other] instanceof UserPlayer player) player.data.getStatistics().increase(StatisticType.POKEMON_FAINTED);

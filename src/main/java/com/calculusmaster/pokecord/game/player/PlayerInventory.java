@@ -3,12 +3,14 @@ package com.calculusmaster.pokecord.game.player;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
+import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -21,11 +23,16 @@ public class PlayerInventory
 
     private final PlayerDataQuery playerData;
 
+    //Items
     private final Map<Item, Integer> items;
     private final EnumSet<ZCrystal> zcrystals;
     private final Map<TM, Integer> tms;
 
+    //Equipped
     private ZCrystal equippedZCrystal;
+
+    //Owned
+    private final EnumSet<PokemonAugment> augments;
 
     public PlayerInventory(PlayerDataQuery playerData)
     {
@@ -36,6 +43,8 @@ public class PlayerInventory
         this.tms = new LinkedHashMap<>();
 
         this.equippedZCrystal = null;
+
+        this.augments = EnumSet.noneOf(PokemonAugment.class);
     }
 
     public PlayerInventory(PlayerDataQuery playerData, Document data)
@@ -43,10 +52,12 @@ public class PlayerInventory
         this(playerData);
 
         data.get("items", Document.class).forEach((i, amount) -> this.items.put(Item.cast(i), (int)amount));
-        data.getList("zcrystals", String.class).forEach(z -> this.zcrystals.add(ZCrystal.cast(z)));
+        data.getList("zcrystals", String.class).forEach(z -> this.zcrystals.add(ZCrystal.valueOf(z)));
         data.get("tms", Document.class).forEach((tm, amount) -> this.tms.put(TM.cast(tm), (int)amount));
 
         this.equippedZCrystal = data.getString("equipped_zcrystal").isEmpty() ? null : ZCrystal.valueOf(data.getString("equipped_zcrystal"));
+
+        data.getList("augments", String.class).forEach(a -> this.augments.add(PokemonAugment.valueOf(a)));
     }
 
     public Document serialize()
@@ -64,6 +75,8 @@ public class PlayerInventory
         data.append("tms", tms);
 
         data.append("equipped_zcrystal", this.equippedZCrystal == null ? "" : this.equippedZCrystal.toString());
+
+        data.append("augments", this.augments.stream().map(Enum::toString).toList());
 
         return data;
     }
@@ -135,6 +148,20 @@ public class PlayerInventory
         UPDATER.submit(() -> Mongo.PlayerData.updateOne(this.playerData.getQuery(), Updates.set("inventory.equipped_zcrystal", z.toString())));
     }
 
+    public void addAugment(PokemonAugment augment)
+    {
+        this.augments.add(augment);
+
+        UPDATER.submit(() -> Mongo.PlayerData.updateOne(this.playerData.getQuery(), Updates.push("inventory.augments", augment.toString())));
+    }
+
+    public void addAugments(Collection<PokemonAugment> augments)
+    {
+        this.augments.addAll(augments);
+
+        UPDATER.submit(() -> Mongo.PlayerData.updateOne(this.playerData.getQuery(), Updates.pushEach("inventory.augments", augments.stream().map(Enum::toString).toList())));
+    }
+
     //Accessors
     public Map<Item, Integer> getItems()
     {
@@ -150,6 +177,7 @@ public class PlayerInventory
     {
         return this.items.values().stream().mapToInt(i -> i).sum();
     }
+
     public boolean hasZCrystal(ZCrystal z)
     {
         return this.zcrystals.contains(z);
@@ -178,5 +206,15 @@ public class PlayerInventory
     public ZCrystal getEquippedZCrystal()
     {
         return this.equippedZCrystal;
+    }
+
+    public boolean hasAugment(PokemonAugment augment)
+    {
+        return this.augments.contains(augment);
+    }
+
+    public EnumSet<PokemonAugment> getOwnedAugments()
+    {
+        return this.augments;
     }
 }
