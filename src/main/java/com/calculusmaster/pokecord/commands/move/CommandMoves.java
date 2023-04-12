@@ -199,7 +199,7 @@ public class CommandMoves extends PokeWorldCommand
                     activeMoves.add((i + 1) + ": **" + m.getName() + "**");
                 }
 
-                List<String> levelUpMoves = new ArrayList<>();
+                List<String> levelUpMoveNames = new ArrayList<>(), levelUpMoveLevels = new ArrayList<>();
                 for(int i = 0; i < active.getLevelUpMoves().size(); i++)
                 {
                     MoveEntity e = active.getLevelUpMoves().get(i);
@@ -212,7 +212,8 @@ public class CommandMoves extends PokeWorldCommand
 
                     if(!Move.isImplemented(e)) tag += ":exclamation:";
 
-                    levelUpMoves.add(tag + " **" + e.data().getName() + "** – Level " + active.getData().getLevelUpMoves().get(e));
+                    levelUpMoveNames.add(tag + " **" + e.data().getName() + "**");
+                    levelUpMoveLevels.add("**" + active.getData().getLevelUpMoves().get(e) + "**");
                 }
 
                 this.embed
@@ -226,7 +227,10 @@ public class CommandMoves extends PokeWorldCommand
                         .addField("Source", String.join("\n", activeMoveSources), true)
                         .addBlankField(true)
 
-                        .addField("Available Moves", String.join("\n", levelUpMoves), false)
+                        .addField("Available Moves", String.join("\n", levelUpMoveNames), true)
+                        .addField("Level", String.join("\n", levelUpMoveLevels), true)
+                        .addBlankField(true)
+
                         .addField("Version", "**%s**".formatted(active.getData().getLevelUpMovesVersion()), false)
 
                         .setFooter("A green circle indicates a move that can be learned. A yellow circle indicates a move that is currently in your moveset. A lock indicates a move that cannot be learned yet. An exclamation point signifies that the move is not implemented yet, meaning it will not work within duels.");
