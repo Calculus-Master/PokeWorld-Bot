@@ -24,7 +24,7 @@ public class CommandRedeem extends PokeWorldCommand
                 .withFeature(Feature.REDEEM_POKEMON)
                 .withCommand(Commands
                         .slash("redeem", "Redeem any catchable Pokemon!")
-                        .addOption(OptionType.USER, "name", "Name of the Pokemon you want to redeem.", true, true)
+                        .addOption(OptionType.STRING, "name", "Name of the Pokemon you want to redeem.", true, true)
                 )
                 .register();
     }
