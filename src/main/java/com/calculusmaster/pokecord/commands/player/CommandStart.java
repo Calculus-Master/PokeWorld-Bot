@@ -17,7 +17,6 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -127,13 +126,7 @@ public class CommandStart extends PokeWorldCommand
     protected boolean autocompleteLogic(CommandAutoCompleteInteractionEvent event)
     {
         if(event.getFocusedOption().getName().equals("starter"))
-        {
-            String currentInput = event.getFocusedOption().getValue();
-
-            List<String> starters = Global.STARTERS.stream().map(PokemonEntity::getName).filter(s -> s.startsWith(currentInput)).toList();
-
-            event.replyChoiceStrings(this.getAutocompleteOptions(currentInput, starters)).queue();
-        }
+            event.replyChoiceStrings(this.getAutocompleteOptions(event.getFocusedOption().getValue(), Global.STARTERS.stream().map(PokemonEntity::getName).toList())).queue();
 
         return true;
     }
