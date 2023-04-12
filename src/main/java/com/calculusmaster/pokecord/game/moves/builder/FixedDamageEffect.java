@@ -68,13 +68,16 @@ public class FixedDamageEffect extends MoveEffect
             List<Pokemon> targetTeam = this.duel.getPlayers()[this.duel.playerIndexFromUUID(this.opponent.getUUID())].team;
             long targets = targetTeam.stream().filter(p -> !p.isFainted()).count() - 1;
 
-            int diffractionDamage = (int)(totalTeamDamage / targets);
-            if(radiant) diffractionDamage *= 1.1;
+            if(targets > 0)
+            {
+                int diffractionDamage = (int)(totalTeamDamage / targets);
+                if(radiant) diffractionDamage *= 1.1;
 
-            for(Pokemon p : targetTeam.stream().filter(p -> !p.isFainted()).filter(p -> !p.getUUID().equals(this.opponent.getUUID())).toList())
-                p.damage(diffractionDamage);
+                for(Pokemon p : targetTeam.stream().filter(p -> !p.isFainted()).filter(p -> !p.getUUID().equals(this.opponent.getUUID())).toList())
+                    p.damage(diffractionDamage);
 
-            augment.add(" The beam diffracted due to the %s Augment! Each opposing team member took %s damage!".formatted(radiant ? PokemonAugment.DIFFRACTED_BEAMS.getAugmentName() : PokemonAugment.RADIANT_DIFFRACTED_BEAMS.getAugmentName(), diffractionDamage));
+                augment.add(" The beam diffracted due to the %s Augment! Each opposing team member took %s damage!".formatted(radiant ? PokemonAugment.DIFFRACTED_BEAMS.getAugmentName() : PokemonAugment.RADIANT_DIFFRACTED_BEAMS.getAugmentName(), diffractionDamage));
+            }
         }
 
         if(this.opponent.hasAugment(PokemonAugment.PRISMATIC_MOONLIT_SHIELD))
