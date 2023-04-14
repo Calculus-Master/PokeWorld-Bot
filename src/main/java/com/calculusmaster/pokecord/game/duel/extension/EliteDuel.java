@@ -1,6 +1,5 @@
 package com.calculusmaster.pokecord.game.duel.extension;
 
-import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.TrainerPlayer;
@@ -53,8 +52,6 @@ public class EliteDuel extends TrainerDuel
 
             player.data.addExp(PMLExperience.DUEL_ELITE, 95);
 
-            player.data.updateBountyProgression(ObjectiveType.WIN_ELITE_DUEL);
-
             player.data.getStatistics().increase(StatisticType.ELITE_DUELS_WON);
             player.data.getStatistics().increase(StatisticType.TRAINER_DUELS_WON);
 
@@ -68,7 +65,6 @@ public class EliteDuel extends TrainerDuel
         this.uploadEVs(0);
         this.uploadExperience();
 
-        this.getUser().data.updateBountyProgression(ObjectiveType.COMPLETE_ELITE_DUEL);
         this.getUser().data.getStatistics().increase(StatisticType.ELITE_DUELS_COMPLETED);
 
         DuelHelper.delete(this.players[0].ID);

@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord.game.duel;
 
 import com.calculusmaster.pokecord.Pokeworld;
-import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.component.*;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
@@ -13,6 +12,7 @@ import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.TypeEffectiveness;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
+import com.calculusmaster.pokecord.game.objectives.ObjectiveType;
 import com.calculusmaster.pokecord.game.player.PlayerInventory;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -353,7 +353,7 @@ public class Duel
             this.results.add(Ability.GRASSY_SURGE.formatActivation(this.players[p].active.getName(), "A Grassy Terrain was created!"));
         }
 
-        if(this.players[p] instanceof UserPlayer player) player.data.updateBountyProgression(ObjectiveType.SWAP_POKEMON);
+        if(this.players[p] instanceof UserPlayer player) player.data.updateObjective(ObjectiveType.SWAP_POKEMON, 1);
     }
 
     //Always use this.current!
@@ -2222,36 +2222,30 @@ public class Duel
             if(damageDealt > 0 && this.players[this.current] instanceof UserPlayer player)
             {
                 final Move m = move;
-                player.data.updateBountyProgression(b -> {
-                    switch(b.getType()) {
-                        case DAMAGE_POKEMON -> b.update(damageDealt);
-                        case DAMAGE_POKEMON_TYPE -> b.updateIf(this.players[this.other].active.isType(b.getObjective().asTypeObjective().getType()), damageDealt);
-                        case DAMAGE_POKEMON_CATEGORY -> b.updateIf(b.getObjective().asCategoryObjective().getCategory().equals(m.getCategory()), damageDealt);
-                    }
-                });
+
+                player.data.updateObjective(ObjectiveType.DAMAGE_POKEMON, damageDealt);
+                player.data.updateObjective(ObjectiveType.DAMAGE_POKEMON_TYPE, obj -> o.isType(obj.asType().getType()), damageDealt);
             }
 
             if(this.players[this.current] instanceof UserPlayer player)
             {
                 final Move m = move;
-                player.data.updateBountyProgression(b -> {
-                    switch(b.getType()) {
-                        case USE_MOVES -> b.update();
-                        case USE_MOVES_TYPE -> b.updateIf(b.getObjective().asTypeObjective().getType().equals(m.getType()));
-                        case USE_MOVES_CATEGORY -> b.updateIf(b.getObjective().asCategoryObjective().getCategory().equals(m.getCategory()));
-                        case USE_MOVES_NAME -> b.updateIf(b.getObjective().asNameObjective().getName().equals(m.getEntity().toString()));
-                        case USE_MOVES_POOL -> b.updateIf(b.getObjective().asPoolObjective().getPool().contains(m.getEntity().toString()));
-                        case USE_MOVES_POWER_LESS -> b.updateIf(m.getPower() < b.getObjective().asPowerObjective().getPower());
-                        case USE_MOVES_POWER_GREATER -> b.updateIf(m.getPower() > b.getObjective().asPowerObjective().getPower());
-                        case USE_MOVES_ACCURACY_LESS -> b.updateIf(m.getAccuracy() < b.getObjective().asAccuracyObjective().getAccuracy());
-                        case USE_MOVES_PRIORITY_HIGH -> b.updateIf(m.getPriority() > 0);
-                        case USE_MOVES_PRIORITY_LOW -> b.updateIf(m.getPriority() < 0);
-                        case USE_ZMOVE -> b.updateIf(m.isZMove());
-                        case USE_ZMOVE_TYPE -> b.updateIf(m.isZMove() && b.getObjective().asTypeObjective().getType().equals(m.getType()));
-                        case USE_MAX_MOVE -> b.updateIf(m.isMaxMove());
-                        case USE_MAX_MOVE_TYPE -> b.updateIf(m.isMaxMove() && b.getObjective().asTypeObjective().getType().equals(m.getType()));
-                    }
-                });
+
+                player.data.updateObjective(ObjectiveType.USE_MOVES, 1);
+                player.data.updateObjective(ObjectiveType.USE_MOVES_CATEGORY, obj -> obj.asCategory().getCategory().equals(m.getCategory()), 1);
+                player.data.updateObjective(ObjectiveType.USE_MOVES_TYPE, obj -> obj.asType().getType().equals(m.getType()), 1);
+                player.data.updateObjective(ObjectiveType.USE_MOVES_NAME, obj -> m.is(obj.asMove().getEntity()), 1);
+                player.data.updateObjective(ObjectiveType.USE_MOVES_POOL, obj -> obj.asMoveList().getList().contains(m.getEntity()), 1);
+                player.data.updateObjective(ObjectiveType.USE_MOVES_POWER_LESS, obj -> m.getPower() < obj.asPower().getPower(), 1);
+                player.data.updateObjective(ObjectiveType.USE_MOVES_POWER_GREATER, obj -> m.getPower() > obj.asPower().getPower(), 1);
+                player.data.updateObjective(ObjectiveType.USE_MOVES_PRIORITY_HIGH, obj -> m.getPriority() > 0, 1);
+                player.data.updateObjective(ObjectiveType.USE_MOVES_PRIORITY_LOW, obj -> m.getPriority() < 0, 1);
+
+                player.data.updateObjective(ObjectiveType.USE_ZMOVE, obj -> m.isZMove(), 1);
+                player.data.updateObjective(ObjectiveType.USE_ZMOVE_TYPE, obj -> m.isZMove() && m.is(obj.asType().getType()), 1);
+
+                player.data.updateObjective(ObjectiveType.USE_MAX_MOVE, obj -> m.isMaxMove(), 1);
+                player.data.updateObjective(ObjectiveType.USE_MAX_MOVE_TYPE, obj -> m.isMaxMove() && m.is(obj.asType().getType()), 1);
             }
         }
 
@@ -2321,7 +2315,7 @@ public class Duel
         //Update Move Log
         this.movesUsed.get(this.players[this.current].active.getUUID()).add(move.getEntity());
 
-        //Give EVs and EXP if opponent has fainted
+        //Event Handler for if the opponent is defeated
         if(this.players[this.other].active.isFainted())
         {
             this.players[this.current].active.gainEVs(this.players[this.other].active);
@@ -2332,31 +2326,16 @@ public class Duel
 
             if(this.players[this.current] instanceof UserPlayer player)
             {
-                player.data.updateBountyProgression(b -> {
-                    switch(b.getType())
-                    {
-                        case DEFEAT_POKEMON -> b.update();
-                        case DEFEAT_POKEMON_TYPE -> {
-                            if(this.players[this.other].active.isType(b.getObjective().asTypeObjective().getType())) b.update();
-                        }
-                        case DEFEAT_POKEMON_POOL -> {
-                            if(b.getObjective().asPoolObjective().getPool().contains(this.players[this.other].active.getEntity().toString())) b.update();
-                        }
-                        case DEFEAT_LEGENDARY -> {
-                            PokemonEntity otherName = this.players[this.other].active.getEntity();
-                            if(EnumSet.of(PokemonRarity.Rarity.LEGENDARY, PokemonRarity.Rarity.MYTHICAL, PokemonRarity.Rarity.ULTRA_BEAST).contains(otherName.getRarity())) b.update();
-                        }
-                        case EARN_EVS -> b.update(this.players[this.other].active.getEVYield().values().stream().mapToInt(e -> e).sum());
-                        case EARN_EVS_STAT -> {
-                            int statYield = this.players[this.other].active.getEVYield().get(b.getObjective().asStatObjective().getStat());
-                            if(statYield != 0) b.update(statYield);
-                        }
-                    }
-                });
+                //Bounties
+                player.data.updateObjective(ObjectiveType.DEFEAT_POKEMON, 1);
+                player.data.updateObjective(ObjectiveType.DEFEAT_LEGENDARY, obj -> PokemonRarity.isLegendary(o.getEntity()), 1);
+                player.data.updateObjective(ObjectiveType.DEFEAT_POKEMON_TYPE, obj -> o.isType(obj.asType().getType()), 1);
+                player.data.updateObjective(ObjectiveType.DEFEAT_POKEMON_POOL, obj -> obj.asPokemonList().getList().contains(o.getEntity()), 1);
 
+                //Statistics
                 player.data.getStatistics().increase(StatisticType.POKEMON_DEFEATED);
 
-                //General Augments
+                //Augment Unlocks
                 boolean augmentEarned = false;
                 PlayerInventory inv = player.data.getInventory();
                 List<PokemonAugment> earned = new ArrayList<>();
@@ -2878,16 +2857,14 @@ public class Duel
 
             player.data.addExp(PMLExperience.DUEL_PVP, 95);
 
-            player.data.updateBountyProgression(b -> {
-                if(b.getType().equals(ObjectiveType.WIN_PVP_DUEL) || b.getType().equals(ObjectiveType.COMPLETE_PVP_DUEL)) b.update();
-            });
+            player.data.updateObjective(ObjectiveType.COMPLETE_PVP_DUEL, 1);
         }
 
         if(this.players[loser] instanceof UserPlayer player)
         {
             player.data.getStatistics().increase(StatisticType.PVP_DUELS_COMPLETED);
 
-            player.data.updateBountyProgression(ObjectiveType.COMPLETE_PVP_DUEL);
+            player.data.updateObjective(ObjectiveType.COMPLETE_PVP_DUEL, 1);
         }
 
         this.uploadExperience();

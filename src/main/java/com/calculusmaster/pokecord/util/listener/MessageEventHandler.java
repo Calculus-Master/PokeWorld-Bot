@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.util.listener;
 
-import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
+import com.calculusmaster.pokecord.game.objectives.ObjectiveType;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionData;
@@ -98,12 +98,12 @@ public class MessageEventHandler
 
         p.addExp(experience);
 
-        this.data.updateBountyProgression(ObjectiveType.EARN_XP_POKEMON, experience);
+        this.data.updateObjective(ObjectiveType.EARN_XP_POKEMON, experience);
 
         //Level Up Occurred
         if(p.getLevel() != initL)
         {
-            this.data.updateBountyProgression(ObjectiveType.LEVEL_POKEMON, p.getLevel() - initL);
+            this.data.updateObjective(ObjectiveType.LEVEL_POKEMON, p.getLevel() - initL);
             this.data.addExp(PMLExperience.LEVEL_POKEMON, 100);
 
             this.send("Your " + p.getDisplayName() + " is now **Level " + p.getLevel() + "**!");

@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.game.trade;
 
-import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
+import com.calculusmaster.pokecord.game.objectives.ObjectiveType;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionData;
 import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionRegistry;
@@ -59,8 +59,8 @@ public class Trade
         this.players[1].getPlayerData().getStatistics().increase(StatisticType.TRADES_COMPLETED);
 
         //Updated Objectives
-        this.players[0].getPlayerData().updateBountyProgression(ObjectiveType.COMPLETE_TRADE);
-        this.players[1].getPlayerData().updateBountyProgression(ObjectiveType.COMPLETE_TRADE);
+        this.players[0].getPlayerData().updateObjective(ObjectiveType.COMPLETE_TRADE, 1);
+        this.players[1].getPlayerData().updateObjective(ObjectiveType.COMPLETE_TRADE, 1);
 
         //Send the last message
         final String completeMessage = "***__Trade complete!__*** *Offers have been transferred into both of your inventories.*";

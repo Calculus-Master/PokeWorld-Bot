@@ -2,11 +2,9 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
-import com.calculusmaster.pokecord.game.bounties.objectives.CatchNameObjective;
-import com.calculusmaster.pokecord.game.bounties.objectives.CatchPoolObjective;
-import com.calculusmaster.pokecord.game.bounties.objectives.CatchTypeObjective;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievement;
+import com.calculusmaster.pokecord.game.objectives.ObjectiveType;
 import com.calculusmaster.pokecord.game.player.PlayerPokedex;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
@@ -94,14 +92,10 @@ public class CommandCatch extends PokeWorldCommand
                     this.playerData.getStatistics().increase(StatisticType.POKEMON_CAUGHT);
 
                     //Bounties
-                    this.playerData.updateBountyProgression(b -> {
-                        switch(b.getType()) {
-                            case CATCH_POKEMON -> b.update();
-                            case CATCH_POKEMON_TYPE -> b.updateIf(caught.isType(((CatchTypeObjective)b.getObjective()).getType()));
-                            case CATCH_POKEMON_NAME -> b.updateIf(caught.getEntity().toString().equals(((CatchNameObjective)b.getObjective()).getName()));
-                            case CATCH_POKEMON_POOL -> b.updateIf(((CatchPoolObjective)b.getObjective()).getPool().contains(caught.getEntity().toString()));
-                        }
-                    });
+                    this.playerData.updateObjective(ObjectiveType.CATCH_POKEMON, 1);
+                    this.playerData.updateObjective(ObjectiveType.CATCH_POKEMON_TYPE, o -> caught.isType(o.asType().getType()), 1);
+                    this.playerData.updateObjective(ObjectiveType.CATCH_POKEMON_NAME, o -> caught.is(o.asPokemon().getEntity()), 1);
+                    this.playerData.updateObjective(ObjectiveType.CATCH_POKEMON_POOL, o -> o.asPokemonList().getList().contains(caught.getEntity()), 1);
 
                     //Achievements
                     Achievement.COMPLETE_POKEDEX.grant(this.playerData, () -> Arrays.stream(PokemonEntity.values()).allMatch(pokedex::hasCollected), this.channel);

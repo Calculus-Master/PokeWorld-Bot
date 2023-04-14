@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.util.helpers;
 
 import com.calculusmaster.pokecord.commandslegacy.CommandsLegacy;
-import com.calculusmaster.pokecord.game.bounties.Bounty;
+import com.calculusmaster.pokecord.game.objectives.Bounty;
 import com.calculusmaster.pokecord.game.player.PlayerTeam;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.evolution.PokemonEgg;

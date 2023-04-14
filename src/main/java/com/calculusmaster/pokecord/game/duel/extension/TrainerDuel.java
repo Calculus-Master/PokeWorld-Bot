@@ -1,6 +1,5 @@
 package com.calculusmaster.pokecord.game.duel.extension;
 
-import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
@@ -11,6 +10,7 @@ import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.objectives.ObjectiveType;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -54,8 +54,6 @@ public class TrainerDuel extends Duel
             TrainerPlayer botTrainer = this.getTrainer();
 
             embed.setDescription("You defeated " + botTrainer.getName() + "!");
-
-            player.data.updateBountyProgression(ObjectiveType.WIN_TRAINER_DUEL);
 
             //Regular Trainer
 
@@ -102,7 +100,7 @@ public class TrainerDuel extends Duel
         this.uploadEVs(0);
         this.uploadExperience();
 
-        this.getUser().data.updateBountyProgression(ObjectiveType.COMPLETE_TRAINER_DUEL);
+        this.getUser().data.updateObjective(ObjectiveType.COMPLETE_TRAINER_DUEL, 1);
         this.getUser().data.getStatistics().increase(StatisticType.TRAINER_DUELS_COMPLETED);
 
         this.sendEmbed(embed.build());

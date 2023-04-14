@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord.game.duel.extension;
 
 import com.calculusmaster.pokecord.Pokeworld;
-import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
@@ -69,7 +68,6 @@ public class ZTrialDuel extends WildDuel
         //Player lost
         else
         {
-            this.getUser().data.updateBountyProgression(ObjectiveType.COMPLETE_WILD_DUEL);
             embed.setDescription("You lost! You weren't able to earn a Z-Crystal.");
         }
 

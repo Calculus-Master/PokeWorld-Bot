@@ -2,10 +2,10 @@ package com.calculusmaster.pokecord.commandslegacy.pokemon;
 
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacy;
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacyInvalid;
-import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.elements.Gender;
+import com.calculusmaster.pokecord.game.objectives.ObjectiveType;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.PokemonEgg;
@@ -67,7 +67,7 @@ public class CommandLegacyBreed extends CommandLegacy
 
                     this.playerData.addEgg(egg.getEggID());
 
-                    this.playerData.updateBountyProgression(ObjectiveType.BREED_POKEMON);
+                    this.playerData.updateObjective(ObjectiveType.BREED_POKEMON, 1);
                     this.playerData.getStatistics().increase(StatisticType.POKEMON_BRED);
 
                     this.startCooldown(parent1.getUUID());

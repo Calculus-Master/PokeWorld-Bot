@@ -1,6 +1,5 @@
 package com.calculusmaster.pokecord.game.duel.extension;
 
-import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
@@ -9,6 +8,7 @@ import com.calculusmaster.pokecord.game.duel.players.WildPlayer;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
+import com.calculusmaster.pokecord.game.objectives.ObjectiveType;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
@@ -84,12 +84,11 @@ public class WildDuel extends Duel
         //Player lost
         else
         {
-            this.getUser().data.updateBountyProgression(ObjectiveType.COMPLETE_WILD_DUEL);
-
             embed.setDescription("You lost! Your " + this.getUser().active.getName() + " didn't earn any EVs...");
         }
 
         this.getUser().data.getStatistics().increase(StatisticType.WILD_DUELS_COMPLETED);
+        this.getUser().data.updateObjective(ObjectiveType.COMPLETE_WILD_DUEL, 1);
 
         this.sendEmbed(embed.build());
         DuelHelper.delete(this.players[0].ID);
@@ -103,10 +102,6 @@ public class WildDuel extends Duel
 
         if(evs) this.getUser().active.updateEVs();
         p.updateExperience();
-
-        this.getUser().data.updateBountyProgression(b -> {
-            if(b.getType().equals(ObjectiveType.WIN_WILD_DUEL) || b.getType().equals(ObjectiveType.COMPLETE_WILD_DUEL)) b.update();
-        });
     }
 
     @Override

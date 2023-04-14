@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord.game.duel.extension;
 
 import com.calculusmaster.pokecord.Pokeworld;
-import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.component.EntryHazardHandler;
 import com.calculusmaster.pokecord.game.duel.component.FieldBarrierHandler;
@@ -172,7 +171,6 @@ public class RaidDuel extends WildDuel
                 else if(!p.active.isFainted()) userPlayer.data.addExp(PMLExperience.DUEL_RAID_PARTICIPANT, 75);
 
                 userPlayer.data.getStatistics().increase(StatisticType.RAIDS_WON);
-                userPlayer.data.updateBountyProgression(ObjectiveType.WIN_RAID_DUEL);
 
                 winnings.append(userPlayer.data.getUsername()).append(" - `").append((int)(credits * multiplier)).append("c`\n");
 
@@ -203,7 +201,6 @@ public class RaidDuel extends WildDuel
         for(Player p : this.getUserPlayers())
         {
             ((UserPlayer)p).data.getStatistics().increase(StatisticType.RAIDS_COMPLETED);
-            ((UserPlayer)p).data.updateBountyProgression(ObjectiveType.PARTICIPATE_RAID);
         }
 
         this.sendEmbed(embed.build());

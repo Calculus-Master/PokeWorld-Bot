@@ -2,8 +2,9 @@ package com.calculusmaster.pokecord.commands.misc;
 
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
-import com.calculusmaster.pokecord.game.bounties.Bounty;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
+import com.calculusmaster.pokecord.game.objectives.Bounty;
+import com.calculusmaster.pokecord.game.player.PlayerBounties;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
@@ -66,7 +67,6 @@ public class CommandDev extends PokeWorldCommand
             case "reset" ->
             {
                 PlayerDataQuery target = command.length > 1 ? PlayerDataQuery.of(command[1]) : this.playerData;
-                if(!target.getBountyIDs().isEmpty()) target.getBounties().forEach(Bounty::delete);
                 if(!target.getOwnedEggIDs().isEmpty())
                     target.getOwnedEggs().forEach(e -> Mongo.deleteOne("CommandDev - Reset Player (Delete Eggs)", DatabaseCollection.EGG, Filters.eq("eggID", e.getEggID())));
                 if(!target.getPokemonList().isEmpty()) target.getPokemon().forEach(Pokemon::delete);
@@ -99,6 +99,17 @@ public class CommandDev extends PokeWorldCommand
                 PokemonAugment a = PokemonAugment.valueOf(command[1]);
                 this.playerData.getInventory().addAugment(a);
                 this.response = "Added " + a.getAugmentName() + " to your inventory.";
+            }
+            case "addbounty" ->
+            {
+                PlayerBounties bounties = this.playerData.getBounties();
+
+                if(bounties.getBounties().size() == PlayerBounties.MAX_BOUNTIES) this.response = "Maximum bounties reached.";
+                else
+                {
+                    bounties.add(Bounty.create());
+                    this.response = "Added new bounty.";
+                }
             }
             default -> {
                 return this.error("Invalid dev command: " + Arrays.toString(command));

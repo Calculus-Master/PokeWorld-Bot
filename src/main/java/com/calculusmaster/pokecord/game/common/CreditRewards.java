@@ -10,4 +10,9 @@ public class CreditRewards
     public static final int ACHIEVEMENT_TIER_5 = 4000;
 
     public static final int ACHIEVEMENT_COMPLETE_ALL = 10000;
+
+    //Bounties
+    public static final int[] BOUNTY_TIER_1 = {120, 180};
+    public static final int[] BOUNTY_TIER_2 = {240, 300};
+    public static final int[] BOUNTY_TIER_3 = {400, 600};
 }

@@ -2,9 +2,6 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
-import com.calculusmaster.pokecord.game.bounties.objectives.ReleaseNameObjective;
-import com.calculusmaster.pokecord.game.bounties.objectives.ReleasePoolObjective;
-import com.calculusmaster.pokecord.game.bounties.objectives.ReleaseTypeObjective;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -67,21 +64,6 @@ public class CommandRelease extends PokeWorldCommand
 
             String UUID = this.playerData.getPokemonList().get(RELEASE_REQUESTS.get(this.player.getId()) - 1);
             Pokemon p = Pokemon.build(UUID);
-
-            this.playerData.updateBountyProgression(b -> {
-                switch(b.getType()) {
-                    case RELEASE_POKEMON -> b.update();
-                    case RELEASE_POKEMON_TYPE -> {
-                        if(p.isType(((ReleaseTypeObjective)b.getObjective()).getType())) b.update();
-                    }
-                    case RELEASE_POKEMON_NAME -> {
-                        if(p.getEntity().toString().equals(((ReleaseNameObjective)b.getObjective()).getName())) b.update();
-                    }
-                    case RELEASE_POKEMON_POOL -> {
-                        if(((ReleasePoolObjective)b.getObjective()).getPool().contains(p.getEntity().toString())) b.update();
-                    }
-                }
-            });
 
             this.playerData.getStatistics().increase(StatisticType.POKEMON_RELEASED);
 

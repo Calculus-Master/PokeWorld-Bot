@@ -1,16 +1,13 @@
 package com.calculusmaster.pokecord.mongo;
 
 import com.calculusmaster.pokecord.Pokeworld;
-import com.calculusmaster.pokecord.game.bounties.Bounty;
-import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerData;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievement;
-import com.calculusmaster.pokecord.game.player.PlayerInventory;
-import com.calculusmaster.pokecord.game.player.PlayerPokedex;
-import com.calculusmaster.pokecord.game.player.PlayerStatisticsRecord;
-import com.calculusmaster.pokecord.game.player.PlayerTeam;
+import com.calculusmaster.pokecord.game.objectives.ObjectiveType;
+import com.calculusmaster.pokecord.game.objectives.types.AbstractObjective;
+import com.calculusmaster.pokecord.game.player.*;
 import com.calculusmaster.pokecord.game.player.leaderboard.PokeWorldLeaderboard;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
@@ -22,7 +19,6 @@ import com.calculusmaster.pokecord.util.cacheold.PlayerDataCache;
 import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
-import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -33,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.OffsetDateTime;
 import java.util.*;
-import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class PlayerDataQuery extends MongoQuery
@@ -45,6 +41,7 @@ public class PlayerDataQuery extends MongoQuery
     private PlayerInventory inventory;
     private PlayerTeam team;
     private PlayerStatisticsRecord statistics;
+    private PlayerBounties bounties;
 
     public PlayerDataQuery(String playerID)
     {
@@ -101,7 +98,6 @@ public class PlayerDataQuery extends MongoQuery
                 .append("achievements", new ArrayList<>())
                 .append("owned_forms", new ArrayList<>())
                 .append("owned_megas", new ArrayList<>())
-                .append("bounties", new ArrayList<>())
                 .append("owned_eggs", new ArrayList<>())
                 .append("active_egg", "")
                 .append("defeated_trainers", new ArrayList<>())
@@ -109,6 +105,7 @@ public class PlayerDataQuery extends MongoQuery
                 .append("inventory", new PlayerInventory(null).serialize())
                 .append("team", new PlayerTeam().serialize())
                 .append("statistics", new PlayerStatisticsRecord(null).serialize())
+                .append("bounties", new PlayerBounties(null).serialize())
 
                 ;
 
@@ -205,6 +202,24 @@ public class PlayerDataQuery extends MongoQuery
 
         if(this.statistics == null) this.statistics = new PlayerStatisticsRecord(this, this.document.get("statistics", Document.class));
         return this.statistics;
+    }
+
+    //Bounties (key: "bounties")
+    public PlayerBounties getBounties()
+    {
+        if(this.bounties == null) this.bounties = new PlayerBounties(this, this.document.getList("bounties", Document.class));
+        return this.bounties;
+    }
+
+    public void updateObjective(ObjectiveType type, int amount)
+    {
+        this.updateObjective(type, o -> true, amount);
+    }
+
+    public void updateObjective(ObjectiveType type, Predicate<AbstractObjective> checker, int amount)
+    {
+        if(this.getBounties().hasObjective(type))
+            this.bounties.checkAndUpdateObjectives(type, checker, amount);
     }
 
     //key: "playerID"
@@ -408,69 +423,6 @@ public class PlayerDataQuery extends MongoQuery
     public void addOwnedMegas(PokemonEntity mega)
     {
         this.update(Updates.push("owned_megas", mega.toString()));
-    }
-
-    //key: "bounties"
-    public List<String> getBountyIDs()
-    {
-        return this.document.getList("bounties", String.class);
-    }
-
-    public List<Bounty> getBounties()
-    {
-        return this.getBountyIDs().stream().map(Bounty::fromDB).collect(Collectors.toList());
-    }
-
-    private void updateBounty(Consumer<Bounty> checker)
-    {
-        if(this.document == null) this.update(null);
-
-        //Basic Bounties
-        for(String ID : this.getBountyIDs())
-        {
-            Bounty b = Bounty.fromDB(ID);
-
-            if(!b.getObjective().isComplete())
-            {
-                checker.accept(b);
-
-                b.updateProgression();
-
-                if(b.getObjective().isComplete()) this.directMessage("You have unclaimed bounties!");
-            }
-        }
-    }
-
-    public void updateBountyProgression(final Consumer<Bounty> checker)
-    {
-        ThreadPoolHandler.BOUNTY.execute(() -> this.updateBounty(checker));
-    }
-
-    public void updateBountyProgression(ObjectiveType type, Consumer<Bounty> checker)
-    {
-        this.updateBountyProgression((b) -> {
-            if(b.getType().equals(type)) checker.accept(b);
-        });
-    }
-
-    public void updateBountyProgression(ObjectiveType type)
-    {
-        this.updateBountyProgression(type, Bounty::update);
-    }
-
-    public void updateBountyProgression(ObjectiveType type, int amount)
-    {
-        this.updateBountyProgression(type, b -> b.update(amount));
-    }
-
-    public void addBounty(String ID)
-    {
-        this.update(Updates.push("bounties", ID));
-    }
-
-    public void removeBounty(String ID)
-    {
-        this.update(Updates.pull("bounties", ID));
     }
 
     //key: "owned_eggs"

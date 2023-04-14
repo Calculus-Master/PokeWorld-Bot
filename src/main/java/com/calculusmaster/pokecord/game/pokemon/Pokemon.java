@@ -1,6 +1,5 @@
 package com.calculusmaster.pokecord.game.pokemon;
 
-import com.calculusmaster.pokecord.game.bounties.ObjectiveType;
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.enums.elements.*;
@@ -8,6 +7,7 @@ import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
+import com.calculusmaster.pokecord.game.objectives.ObjectiveType;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugmentRegistry;
 import com.calculusmaster.pokecord.game.pokemon.component.*;
@@ -685,7 +685,7 @@ public class Pokemon
 
         this.resetAugments();
 
-        playerData.updateBountyProgression(ObjectiveType.EVOLVE_POKEMON);
+        playerData.updateObjective(ObjectiveType.EVOLVE_POKEMON, 1);
         playerData.getStatistics().increase(StatisticType.POKEMON_EVOLVED);
 
         if(data.hasItemTrigger())
