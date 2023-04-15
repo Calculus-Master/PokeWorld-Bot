@@ -1758,6 +1758,7 @@ public class Duel
         }
         else if(o.hasAbility(Ability.LIGHTNING_ROD) && move.is(Type.ELECTRIC) && !move.is(Category.STATUS) && !move.is(MoveEntity.JUDGMENT, MoveEntity.NATURAL_GIFT, MoveEntity.HIDDEN_POWER))
         {
+            turnResult.add(move.getMoveUsedResult(c));
             turnResult.add(Ability.LIGHTNING_ROD.formatActivation(o.getName(), o.getName() + " was immune to the attack, and its Special Attack rose by 1 stage!"));
 
             o.changes().change(Stat.SPATK, 1);
@@ -2732,9 +2733,9 @@ public class Duel
         List<Ability> weatherAbilities = new ArrayList<>(); weatherAbilities.addAll(standard); weatherAbilities.addAll(primal);
 
         //If the user doesn't have any weather abilities, return
-        if(active.getAbilities().stream().noneMatch(weatherAbilities::contains)) return;
+        if(!weatherAbilities.contains(active.getAbility())) return;
 
-        Ability ab = active.getAbilities().stream().filter(weatherAbilities::contains).findFirst().orElseThrow();
+        Ability ab = active.getAbility();
         Weather w = switch(ab) {
             case DROUGHT -> Weather.HARSH_SUNLIGHT;
             case DRIZZLE -> Weather.RAIN;

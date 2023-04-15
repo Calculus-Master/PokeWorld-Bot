@@ -77,7 +77,7 @@ public class CommandTasks extends PokeWorldCommand
                     progress.add(o.getStatus());
                 }
 
-                if(researchTask.isComplete()) objectivesContents.add("***Task Complete!__***");
+                if(researchTask.isComplete()) objectivesContents.add("***__Task Complete!__***");
 
                 this.embed
                         .addField(title, String.join("\n", objectivesContents), true)
@@ -138,7 +138,7 @@ public class CommandTasks extends PokeWorldCommand
                     You can help out the team by enlisting tasks from them.
                     Research Tasks are quick objectives that you can complete to earn credits.
                     
-                    Claim a task using `/tasks claim`, and then once you've completed its objective(s), claim its reward using `/tasks complete`.
+                    Claim a task using `/tasks accept`, and then once you've completed its objective(s), claim its reward using `/tasks complete`.
                     """, false);
 
             for(int i = 0; i < board.getTaskHeaders().size(); i++)

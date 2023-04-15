@@ -123,6 +123,22 @@ public class PokeAPIHelper
 
         //Mongo.PlayerData.updateMany(Filters.exists("playerID"), Updates.unset("bounties"));
 //        Mongo.PlayerData.updateMany(Filters.exists("playerID"), Updates.set("bounties", new PlayerResearchTasks(null).serialize()));
+//
+//        PokemonEntity.init();
+//        EvolutionRegistry.init();
+//
+//        Arrays.stream(PokemonEntity.values()).filter(e -> EvolutionRegistry.hasEvolutionData(e)).forEach(e -> {
+//            List<EvolutionData> data = EvolutionRegistry.getEvolutionData(e);
+//            data.forEach(d -> {
+//                if(d.getSource().data().getMainAbilities().size() != d.getTarget().data().getMainAbilities().size())
+//                    System.out.println(d.getSource() + "(%s)".formatted(d.getSource().data().getMainAbilities().size()) + " -> " + d.getTarget() + "(%s)".formatted(d.getTarget().data().getMainAbilities().size()) + ": Main Abilities do not match.");
+//
+//                if(d.getSource().data().getHiddenAbilities().size() != d.getTarget().data().getHiddenAbilities().size())
+//                    System.out.println(d.getSource() + "(%s)".formatted(d.getSource().data().getHiddenAbilities().size()) + " -> " + d.getTarget() + "(%s)".formatted(d.getTarget().data().getHiddenAbilities().size()) + ": Hidden Abilities do not match.");
+//
+//                if(e.data().getHiddenAbilities().size() > 1) System.out.println(e + " has multiple Hidden Abilities.");
+//            });
+//        });
     }
 
     private static void timed(Runnable r)

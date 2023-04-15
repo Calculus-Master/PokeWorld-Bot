@@ -3,7 +3,10 @@ package com.calculusmaster.pokecord.commands.pokemon;
 import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
-import com.calculusmaster.pokecord.game.enums.elements.*;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
+import com.calculusmaster.pokecord.game.enums.elements.GrowthRate;
+import com.calculusmaster.pokecord.game.enums.elements.Stat;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -68,7 +71,7 @@ public class CommandInfo extends PokeWorldCommand
         String level = "**Level %s** (%s)".formatted(p.getLevel(), p.getLevel() == 100 ? "MAX" : p.getExp() + " / " + GrowthRate.getRequiredExp(p.getData().getGrowthRate(), p.getLevel() + 1) + " XP");
         String type = p.getType().stream().map(Type::getStyledName).collect(Collectors.joining("\n"));
 
-        String abilities = p.getAbilities().stream().map(Ability::getName).collect(Collectors.joining("\n"));
+        String ability = "*" + p.getAbility().getName() + "*";
         String item = p.hasItem() ? p.getItem().getStyledName() : "None";
         String tm = p.hasTM() ? p.getTM().toString() + " (" + p.getTM().getMove().getName() + ")" : "None";
 
@@ -85,7 +88,7 @@ public class CommandInfo extends PokeWorldCommand
                 .addField("Gender", Global.normalize(p.getGender().toString()), true)
                 .addField("Nature", Global.normalize(p.getNature().toString()), true)
 
-                .addField("Abilities", abilities, true)
+                .addField("Ability", ability, true)
                 .addField("Held Item", item, true)
                 .addField("Held TM", tm, true)
 

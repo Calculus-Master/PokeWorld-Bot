@@ -14,10 +14,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.EnumSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class PokemonData
 {
@@ -46,8 +43,8 @@ public final class PokemonData
     private final int rawHatchTarget; public int getRawHatchTarget() { return this.rawHatchTarget; }
 
     //Abilities
-    private final EnumSet<Ability> mainAbilities; public EnumSet<Ability> getMainAbilities() { return this.mainAbilities; }
-    private final EnumSet<Ability> hiddenAbilities; public EnumSet<Ability> getHiddenAbilities() { return this.hiddenAbilities; }
+    private final List<Ability> mainAbilities; public List<Ability> getMainAbilities() { return this.mainAbilities; }
+    private final List<Ability> hiddenAbilities; public List<Ability> getHiddenAbilities() { return this.hiddenAbilities; }
 
     //Moves
     private final Map<MoveEntity, Integer> levelUpMoves; public Map<MoveEntity, Integer> getLevelUpMoves() { return this.levelUpMoves; }
@@ -91,8 +88,8 @@ public final class PokemonData
         this.rawHatchTarget = breeding.getInt("hatchTarget");
 
         JSONObject abilities = json.getJSONObject("abilities");
-        this.mainAbilities = EnumSet.noneOf(Ability.class); for(String s : abilities.getJSONArray("main").toList().stream().map(Object::toString).toList()) this.mainAbilities.add(Ability.valueOf(s));
-        this.hiddenAbilities = EnumSet.noneOf(Ability.class); for(String s : abilities.getJSONArray("hidden").toList().stream().map(Object::toString).toList()) this.hiddenAbilities.add(Ability.valueOf(s));
+        this.mainAbilities = new ArrayList<>(); for(String s : abilities.getJSONArray("main").toList().stream().map(Object::toString).toList()) this.mainAbilities.add(Ability.valueOf(s));
+        this.hiddenAbilities = new ArrayList<>(); for(String s : abilities.getJSONArray("hidden").toList().stream().map(Object::toString).toList()) this.hiddenAbilities.add(Ability.valueOf(s));
 
         JSONObject moves = json.getJSONObject("moves");
 

@@ -59,6 +59,7 @@ public class Pokemon
     private PokemonStats ivs;
     private PokemonStats evs;
     private List<MoveEntity> moves;
+    private Ability ability;
     private Item item;
     private TM tm;
     private EnumSet<PokemonAugment> augments;
@@ -67,7 +68,6 @@ public class Pokemon
 
     //Duel Fields
     private List<Type> type;
-    private List<Ability> abilities;
     private PokemonDuelStatChanges statChanges;
     private PokemonBoosts boosts;
     private int health;
@@ -108,7 +108,7 @@ public class Pokemon
         p.setIVs();
         p.setEVs();
         p.setMoves();
-        p.setAbilities();
+        p.setAbility();
         p.setItem(Item.NONE);
         p.setTM();
         p.setAugments(List.of());
@@ -140,7 +140,7 @@ public class Pokemon
         p.setIVs(data.get("ivs", Document.class));
         p.setEVs(data.get("evs", Document.class));
         p.setMoves(data.getList("moves", String.class).stream().map(MoveEntity::valueOf).toList());
-        p.setAbilities(data.getList("abilities", String.class).stream().map(Ability::valueOf).toList());
+        p.setAbility(Ability.valueOf(data.getString("ability")));
         p.setItem(Item.valueOf(data.getString("item")));
         p.setTM(data.getString("tm").isEmpty() ? null : TM.valueOf(data.getString("tm")));
         p.setAugments(data.getList("augments", String.class));
@@ -224,7 +224,7 @@ public class Pokemon
                 .append("ivs", this.ivs.serialized())
                 .append("evs", this.evs.serialized())
                 .append("moves", this.moves.stream().map(Enum::toString).toList())
-                .append("abilities", this.abilities.stream().map(Enum::toString).toList())
+                .append("ability", this.ability.toString())
                 .append("item", this.item.toString())
                 .append("tm", this.tm == null ? "" : this.tm.toString())
                 .append("augments", this.augments.stream().map(Enum::toString).toList())
@@ -309,6 +309,11 @@ public class Pokemon
         this.update(Updates.set("moves", this.moves.stream().map(Enum::toString).toList()));
     }
 
+    public void updateAbility()
+    {
+        this.update(Updates.set("ability", this.ability.toString()));
+    }
+
     public void updateItem()
     {
         this.update(Updates.set("item", this.item.toString()));
@@ -338,27 +343,11 @@ public class Pokemon
     //Mastery
     public boolean isMastered()
     {
-        //TODO: Check again
-        //Level must be 100
-        if(this.getLevel() < 100) return false;
-
-        //EVs must be maxed out
-        else if(this.getTotalEV() < 510) return false;
-
-        //Must have 4 moves that aren't Tackle
-        else if(this.moves.stream().anyMatch(s -> s.equals("Tackle"))) return false;
-
-        //Dynamax Level must be 10
-        else if(this.getDynamaxLevel() < 10) return false;
-
-        //Prestige Level must be at its maximum
-        else if(this.getPrestigeLevel() < this.getMaxPrestigeLevel()) return false;
-
-        //Must have an Item
-        else if(this.getItem().equals(Item.NONE)) return false;
-
-        //If checks have been passed, the Pokemon has been Mastered
-        else return true;
+        return this.getLevel() == 100 //Level must be 100
+                && this.getTotalEV() == 510 //EVs must be maxed out
+                && this.moves.stream().noneMatch(m -> m.equals(MoveEntity.TACKLE)) //Must have 4 moves that aren't Tackle
+                && this.getDynamaxLevel() == 10 //Dynamax Level must be 10
+                && this.getPrestigeLevel() == this.getMaxPrestigeLevel(); //Prestige Level must be at its maximum
     }
 
     //Custom Data
@@ -671,6 +660,8 @@ public class Pokemon
     //Mega Evolutions, Forms, Evolution
     private void changePokemon(PokemonEntity entity)
     {
+        this.transformAbility(entity);
+
         this.entity = entity;
         this.data = entity.data();
 
@@ -874,25 +865,69 @@ public class Pokemon
         return "/data/images/" + dir + image + ".png";
     }
 
-    public static String getWIPImage()
-    {
-        return "http://clipart-library.com/img/1657818.png";
-    }
-
     public PokemonRarity.Rarity getRarity()
     {
         return this.entity.getRarity();
     }
 
-    public List<Ability> getAbilities()
+    public Ability getAbility()
     {
-        return this.abilities;
+        return this.ability;
+    }
+
+    public void transformAbility(PokemonEntity target)
+    {
+        List<Ability> sourceMain = this.data.getMainAbilities();
+        List<Ability> sourceHidden = this.data.getHiddenAbilities();
+        List<Ability> targetMain = target.data().getMainAbilities();
+        List<Ability> targetHidden = target.data().getHiddenAbilities();
+
+        boolean isMain = sourceMain.contains(this.ability);
+        boolean isHidden = sourceHidden.contains(this.ability);
+
+        if(isMain)
+        {
+            if(sourceMain.size() == targetMain.size()) //Main Ability slot transfer
+            {
+                //Random chance of hidden if target has Hidden but source didn't
+                if(sourceHidden.isEmpty() && !targetHidden.isEmpty() && this.random.nextFloat() < 0.33F)
+                    this.ability = targetHidden.get(0);
+                else
+                    this.ability = targetMain.get(sourceMain.indexOf(this.ability));
+            }
+            else //If target has different # of main abilities, randomly pick
+                this.ability = targetMain.get(this.random.nextInt(targetMain.size()));
+        }
+        else if(isHidden)
+        {
+            if(sourceHidden.size() == targetHidden.size()) //Hidden Ability slot transfer
+                this.ability = targetHidden.get(0);
+            else if(targetHidden.isEmpty()) //Source has hidden but target doesn't
+                this.ability = targetMain.get(this.random.nextInt(targetMain.size()));
+        }
+        else LoggerHelper.warn(Pokemon.class, "Pokemon " + this.entity + " has an ability that is not in its data: " + this.ability);
+    }
+
+    public void setAbility()
+    {
+        //75% chance of main ability
+        if(this.random.nextFloat() < 0.75)
+            this.ability = this.data.getMainAbilities().stream().toList().get(this.random.nextInt(this.data.getMainAbilities().size()));
+        //25% chance of hidden ability
+        else
+            this.ability = this.data.getHiddenAbilities().stream().toList().get(this.random.nextInt(this.data.getHiddenAbilities().size()));
+    }
+
+    public void setAbility(Ability ability)
+    {
+        this.ability = ability;
     }
 
     public boolean hasAbility(Ability ability)
     {
-        if(this.abilitiesIgnored && Ability.IGNORABLE.contains(ability)) return false;
-        else return this.abilities.contains(ability);
+        if(this.ability == null) return false;
+        else if(this.abilitiesIgnored && Ability.IGNORABLE.contains(ability)) return false;
+        else return this.ability.equals(ability);
     }
 
     public boolean hasAbility(Ability... abilities)
@@ -900,32 +935,9 @@ public class Pokemon
         return Stream.of(abilities).anyMatch(this::hasAbility);
     }
 
-    public void addAbility(Ability ability)
+    public void removeAbility()
     {
-        this.abilities.add(ability);
-    }
-
-    public void setAbilities(List<Ability> abilities)
-    {
-        this.abilities = new ArrayList<>(abilities);
-    }
-
-    public void setAbilities()
-    {
-        this.abilities = new ArrayList<>();
-
-        //Main Ability
-        EnumSet<Ability> mainAbilities = this.data.getMainAbilities();
-        Ability main = mainAbilities.stream().skip(this.random.nextInt(mainAbilities.size())).findAny().get();
-        this.abilities.add(main);
-
-        //Hidden
-        this.abilities.addAll(this.data.getHiddenAbilities());
-    }
-
-    public void clearAbilities()
-    {
-        this.abilities.clear();
+        this.ability = null;
     }
 
     //Type

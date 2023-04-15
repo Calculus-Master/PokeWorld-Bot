@@ -814,8 +814,8 @@ public class NormalMoves
         if(user.hasAbility(Ability.TRUANT, Ability.MULTITYPE, Ability.ZEN_MODE)) return move.getNoEffectResult(opponent);
         else
         {
-            opponent.setAbilities(user.getAbilities());
-            return opponent.getName() + "'s abilities were set to " + user.getName() + "'s abilities!";
+            opponent.setAbility(user.getAbility());
+            return opponent.getName() + "'s Ability was set to " + user.getName() + "'s Ability!";
         }
     }
 
