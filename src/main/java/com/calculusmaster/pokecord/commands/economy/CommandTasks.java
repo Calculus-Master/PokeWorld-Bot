@@ -77,7 +77,11 @@ public class CommandTasks extends PokeWorldCommand
                     progress.add(o.getStatus());
                 }
 
-                if(researchTask.isComplete()) objectivesContents.add("***__Task Complete!__***");
+                if(researchTask.isComplete())
+                {
+                    objectivesContents.add("***__Task Complete!__***");
+                    title = "~~" + title + "~~";
+                }
 
                 this.embed
                         .addField(title, String.join("\n", objectivesContents), true)
