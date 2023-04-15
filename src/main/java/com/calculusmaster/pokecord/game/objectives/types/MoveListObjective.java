@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class MoveListObjective extends AbstractObjective
 {
@@ -32,7 +31,13 @@ public class MoveListObjective extends AbstractObjective
         int listSize = new Random().nextInt(6) + 5;
 
         this.list = new ArrayList<>();
-        IntStream.range(0, listSize).forEach(i -> this.list.add(MoveEntity.getRandom()));
+
+        while(this.list.size() < listSize)
+        {
+            MoveEntity e = MoveEntity.getRandom();
+            while(e.isZMove() || e.isMaxMove()) e = MoveEntity.getRandom();
+            this.list.add(e);
+        }
 
         return this;
     }

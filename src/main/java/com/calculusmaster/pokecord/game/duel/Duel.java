@@ -2248,6 +2248,12 @@ public class Duel
 
                 player.data.updateObjective(ObjectiveType.USE_MAX_MOVE, obj -> m.isMaxMove(), 1);
                 player.data.updateObjective(ObjectiveType.USE_MAX_MOVE_TYPE, obj -> m.isMaxMove() && m.is(obj.asType().getType()), 1);
+
+                player.data.updateObjective(ObjectiveType.USE_STAB_MOVES, obj -> c.isType(m.getType()), 1);
+                player.data.updateObjective(ObjectiveType.USE_SUPER_EFFECTIVE_MOVES, obj -> TypeEffectiveness.getEffectiveness(c.getType()).get(m.getType()) > 1.0, 1);
+                player.data.updateObjective(ObjectiveType.USE_NOT_VERY_EFFECTIVE_MOVES, obj -> TypeEffectiveness.getEffectiveness(c.getType()).get(m.getType()) < 1.0, 1);
+
+                player.data.updateObjective(ObjectiveType.USE_MOVES_BEFORE_OPPONENT, obj -> this.first.equals(c.getUUID()), 1);
             }
         }
 

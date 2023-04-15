@@ -45,6 +45,10 @@ public enum ObjectiveType
     USE_ZMOVE_TYPE(TypeObjective::new, "Use Z-Moves of a specific type.", 2, 10),
     USE_MAX_MOVE(GenericObjective::new, "Use Max Moves.", 10, 30),
     USE_MAX_MOVE_TYPE(TypeObjective::new, "Use Max Moves of a specific type.", 10, 20),
+    USE_STAB_MOVES(GenericObjective::new, "Use moves with the same type as the Pokemon using them (STAB).", 5, 20),
+    USE_SUPER_EFFECTIVE_MOVES(GenericObjective::new, "Use super effective moves.", 5, 20),
+    USE_NOT_VERY_EFFECTIVE_MOVES(GenericObjective::new, "Use not very effective moves.", 5, 20),
+    USE_MOVES_BEFORE_OPPONENT(GenericObjective::new, "Use moves before the opponent in a turn.", 5, 20),
 
     ;
 

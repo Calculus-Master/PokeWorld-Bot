@@ -24,6 +24,7 @@ public class MoveSpecificObjective extends AbstractObjective
     public AbstractObjective generate()
     {
         this.entity = MoveEntity.getRandom();
+        while(this.entity.isZMove() || this.entity.isMaxMove()) this.entity = MoveEntity.getRandom();
         return this;
     }
 
