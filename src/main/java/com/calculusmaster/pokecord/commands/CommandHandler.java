@@ -73,6 +73,7 @@ public class CommandHandler extends ListenerAdapter
         CommandAugments.init();
         CommandPrestige.init();
         CommandForm.init();
+        CommandEggs.init();
 
         CommandMoves.init();
         CommandTM.init();

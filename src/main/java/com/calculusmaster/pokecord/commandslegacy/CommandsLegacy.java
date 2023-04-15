@@ -5,9 +5,7 @@ import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyMarket;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyDev;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyHelp;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacySettings;
-import com.calculusmaster.pokecord.commandslegacy.moves.CommandLegacyMoves;
 import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyBreed;
-import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyEggs;
 import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyPokemon;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.interfaces.CommandSupplier;
@@ -28,13 +26,6 @@ public class CommandsLegacy
                 .setCategory(Category.POKEMON)
                 .setDesc("View your Pokemon!")
                 .addTerminalPoint("pokemon", "View & sort your Pokemon list. There are many possible arguments.");
-
-        register("moves", "m")
-                .setCommand(CommandLegacyMoves::new)
-                .setCategory(Category.MOVES)
-                .setDesc("View your active Pokemon's moves!")
-                .addTerminalPoint("moves", "Shows your active Pokemon's move set. In duels, this will show the move's type effectiveness against the opponent), otherwise, this will show your Pokemon's available moves.")
-                .addTerminalPoint("moves info", "Shows information about all the available moves for your active Pokemon. This can help you create the perfect move set!");
 
         register("duel")
                 .setCommand(CommandLegacyDuel::new)
@@ -89,10 +80,6 @@ public class CommandsLegacy
 
         register("breed")
                 .setCommand(CommandLegacyBreed::new)
-                .setCategory(Category.POKEMON);
-
-        register("eggs", "egg")
-                .setCommand(CommandLegacyEggs::new)
                 .setCategory(Category.POKEMON);
 
         register("ztrialduel", "ztrial", "trial", "ztduel")
