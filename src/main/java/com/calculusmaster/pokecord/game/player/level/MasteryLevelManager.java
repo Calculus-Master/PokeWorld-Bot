@@ -207,18 +207,20 @@ public class MasteryLevelManager
 
         PokemonMasteryLevel.create(4)
                 .withEmbed(() -> new EmbedBuilder()
-                        .setTitle("Pokemon Mastery Level 4 – Bounties")
+                        .setTitle("Pokemon Mastery Level 4 – Research Tasks")///TODO: update this for new system
                         .setDescription("""
                                 ***How's your credit balance looking?***
                                 Who doesn't want more credits? Well, you're probably running a little low on them between the Shop, Pokemon Market, Forms, and Mega Evolutions.
-                                Bounties are small, quick objectives that reward you with credits!
                                 
-                                You can view your bounties with `/bounty`. If you ever see less than the maximum (%s) number of bounties, use `/bounty get` to automatically obtain more!
+                                Luckily, the %s Research Team has a solution for you!
+                                Research Tasks are small, quick objectives that reward you with credits.
+                                
+                                You can view your tasks with `/tasks`. If you ever see less than the maximum (%s) number of bounties, use `/bounty get` to automatically obtain more!
                                 You'll receive a DM when you've completed a bounty. You can collect a completed bounty using `/bounty collect <number>`. And that's it!
                                 
                                 If you ever receive a Bounty objective that seems too difficult, or you just don't feel like doing it, you can use `/bounty reroll <number>` to reroll the objective.
                                 *Note*: This will reduce the credits awarded by that bounty, so be careful!
-                                """)
+                                """.formatted(Pokeworld.NAME))
                         .addField("Items", """
                                 You've also just unlocked the ability to give your Pokemon items. These can range from anything from evolution items, boosters, potions, and more!
                                 Check out the Shop page to see what you can buy! You can use `/give <itemNumber> <pokemonNumber>` to give an item to one of your Pokemon.
@@ -260,7 +262,7 @@ public class MasteryLevelManager
                 .withExperienceRequirement(125)
                 .withTaskRequirement(new WildPMLTask(8))
                 .withTaskRequirement(new PvPDuelsCompletedPMLTask(6))
-                .withTaskRequirement(new BountiesPMLTask(4))
+                .withTaskRequirement(new ResearchTasksPMLTask(4))
                 .withTaskRequirement(new SpecificLevelPokemonPMLTask(3, 20))
                 .register();
 

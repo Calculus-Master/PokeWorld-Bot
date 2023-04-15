@@ -16,6 +16,7 @@ import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugmentRegistry;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.*;
+import com.calculusmaster.pokecord.game.world.PokeWorldResearchBoard;
 import com.calculusmaster.pokecord.game.world.PokeWorldShop;
 import com.calculusmaster.pokecord.game.world.RegionManager;
 import com.calculusmaster.pokecord.game.world.RotationManager;
@@ -112,6 +113,7 @@ public class Pokeworld
 
         LoggerHelper.init("Pokemon Data Cache", PokemonDataCache::init);
         LoggerHelper.init("Global Leaderboard", PokeWorldLeaderboard::init);
+        LoggerHelper.init("PokeWorld Research Board", PokeWorldResearchBoard::init);
         //LoggerHelper.init("CommandPokemon", CacheHelper::initPokemonLists, true);
 
         long end = System.currentTimeMillis();
@@ -131,6 +133,8 @@ public class Pokeworld
         LoggerHelper.init("Spawn Event Interval Updater", Listener::startSpawnIntervalUpdater);
         LoggerHelper.init("Casual Matchmade Duels", CasualMatchmadeDuel::init);
         LoggerHelper.init("Mega Charge Manager", MegaChargeManager::init);
+
+        LoggerHelper.init("Rotation Tasks", RotationManager::init);
 
         end = System.currentTimeMillis();
 
@@ -155,8 +159,6 @@ public class Pokeworld
                 Mongo.ServerData.deleteOne(Filters.eq("serverID", d.getString("serverID")));
             }
         });
-
-        LoggerHelper.init("Rotation Tasks", RotationManager::init);
     }
 
     public static void close()

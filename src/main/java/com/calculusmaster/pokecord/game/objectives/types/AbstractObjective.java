@@ -36,7 +36,7 @@ public abstract class AbstractObjective
 
     public String getDescription()
     {
-        return "*" + this.getObjectiveType().getDescription() + "* " + this.getSpecificDescription();
+        return "*" + this.getObjectiveType().getDescription() + "*" + (this.getSpecificDescription().isEmpty() ? "" : " (" + this.getSpecificDescription().replaceAll("\\.", "") + ")");
     }
 
     public String getStatus()

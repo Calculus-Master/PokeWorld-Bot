@@ -3,8 +3,8 @@ package com.calculusmaster.pokecord.commands.misc;
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
-import com.calculusmaster.pokecord.game.objectives.Bounty;
-import com.calculusmaster.pokecord.game.player.PlayerBounties;
+import com.calculusmaster.pokecord.game.objectives.ResearchTask;
+import com.calculusmaster.pokecord.game.player.PlayerResearchTasks;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
@@ -100,15 +100,15 @@ public class CommandDev extends PokeWorldCommand
                 this.playerData.getInventory().addAugment(a);
                 this.response = "Added " + a.getAugmentName() + " to your inventory.";
             }
-            case "addbounty" ->
+            case "addtask" ->
             {
-                PlayerBounties bounties = this.playerData.getBounties();
+                PlayerResearchTasks tasks = this.playerData.getResearchTasks();
 
-                if(bounties.getBounties().size() == PlayerBounties.MAX_BOUNTIES) this.response = "Maximum bounties reached.";
+                if(tasks.getResearchTasks().size() == PlayerResearchTasks.MAX_TASKS) this.response = "Maximum tasks reached.";
                 else
                 {
-                    bounties.add(Bounty.create());
-                    this.response = "Added new bounty.";
+                    tasks.add(ResearchTask.create());
+                    this.response = "Added new task.";
                 }
             }
             default -> {

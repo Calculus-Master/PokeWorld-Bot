@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.game.pokemon.data.api;
 
 import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
-import com.calculusmaster.pokecord.game.player.PlayerBounties;
+import com.calculusmaster.pokecord.game.player.PlayerResearchTasks;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
@@ -126,7 +126,7 @@ public class PokeAPIHelper
 //        System.out.println(LocalDateTime.ofEpochSecond(1680832800, 0, ZoneOffset.of("-7")));
 
         Mongo.PlayerData.updateMany(Filters.exists("playerID"), Updates.unset("bounties"));
-        Mongo.PlayerData.updateMany(Filters.exists("playerID"), Updates.set("bounties", new PlayerBounties(null).serialize()));
+        Mongo.PlayerData.updateMany(Filters.exists("playerID"), Updates.set("bounties", new PlayerResearchTasks(null).serialize()));
     }
 
     private static void timed(Runnable r)

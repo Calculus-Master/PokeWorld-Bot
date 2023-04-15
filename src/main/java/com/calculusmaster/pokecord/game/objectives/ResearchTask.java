@@ -8,18 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-public class Bounty
+public class ResearchTask
 {
-    public static int MAX_BOUNTIES_HELD;
-    public static int BOUNTY_REWARD_MAX;
-    public static int BOUNTY_REWARD_MIN;
+    public static int TASK_REWARD_MAX;
+    public static int TASK_REWARD_MIN;
 
     private List<AbstractObjective> objectives;
     private int creditReward;
 
-    public static Bounty create()
+    public static ResearchTask create()
     {
         Random r = new Random();
 
@@ -28,12 +26,12 @@ public class Bounty
         else if(r.nextFloat() < 0.8) tier = 2;
         else tier = 3;
 
-        return Bounty.create(tier);
+        return ResearchTask.create(tier);
     }
 
-    public static Bounty create(int tier)
+    public static ResearchTask create(int tier)
     {
-        Bounty b = new Bounty();
+        ResearchTask b = new ResearchTask();
 
         b.setReward(tier);
         b.setObjectives(tier);
@@ -41,9 +39,19 @@ public class Bounty
         return b;
     }
 
-    private Bounty() {}
+    public static ResearchTask create(List<ObjectiveType> types)
+    {
+        ResearchTask b = new ResearchTask();
 
-    public Bounty(Document data)
+        b.setReward(types.size());
+        b.setObjectives(types);
+
+        return b;
+    }
+
+    private ResearchTask() {}
+
+    public ResearchTask(Document data)
     {
         this.creditReward = data.getInteger("credits");
         this.objectives = data.getList("objectives", Document.class).stream().map(d -> ObjectiveType.valueOf(d.getString("objective_type")).build(d)).collect(Collectors.toList());
@@ -56,7 +64,7 @@ public class Bounty
                 .append("objectives", this.objectives.stream().map(AbstractObjective::serialize).toList());
     }
 
-    public void reroll()
+    public void reroll() //todo: decide if reimplementing
     {
         this.objectives.replaceAll(objective -> !objective.isComplete() ? objective.getObjectiveType().create() : objective);
         this.creditReward = new Random().nextInt((int)(this.creditReward * 0.5), (int)(this.creditReward * 0.8));
@@ -71,8 +79,22 @@ public class Bounty
     public void setObjectives(int tier)
     {
         Random r = new Random();
+
+        List<ObjectiveType> types = new ArrayList<>();
+        for(int i = 0; i < tier; i++)
+        {
+            ObjectiveType rand = ObjectiveType.values()[r.nextInt(ObjectiveType.values().length)];
+            if(types.contains(rand)) i--;
+            else types.add(rand);
+        }
+
+        this.setObjectives(types);
+    }
+
+    public void setObjectives(List<ObjectiveType> types)
+    {
         this.objectives = new ArrayList<>();
-        IntStream.range(0, tier).forEach(i -> this.objectives.add(ObjectiveType.values()[r.nextInt(ObjectiveType.values().length)].create()));
+        types.forEach(o -> this.objectives.add(o.create()));
     }
 
     public void setReward(int tier)
@@ -80,9 +102,9 @@ public class Bounty
         Random r = new Random();
 
         int[] source = switch(tier) {
-            case 1 -> CreditRewards.BOUNTY_TIER_1;
-            case 2 -> CreditRewards.BOUNTY_TIER_2;
-            case 3 -> CreditRewards.BOUNTY_TIER_3;
+            case 1 -> CreditRewards.TASK_TIER_1;
+            case 2 -> CreditRewards.TASK_TIER_2;
+            case 3 -> CreditRewards.TASK_TIER_3;
             default -> new int[]{tier * 80, tier * 120};
         };
 

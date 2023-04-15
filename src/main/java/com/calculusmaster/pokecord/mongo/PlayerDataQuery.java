@@ -41,7 +41,7 @@ public class PlayerDataQuery extends MongoQuery
     private PlayerInventory inventory;
     private PlayerTeam team;
     private PlayerStatisticsRecord statistics;
-    private PlayerBounties bounties;
+    private PlayerResearchTasks tasks;
 
     public PlayerDataQuery(String playerID)
     {
@@ -105,7 +105,7 @@ public class PlayerDataQuery extends MongoQuery
                 .append("inventory", new PlayerInventory(null).serialize())
                 .append("team", new PlayerTeam().serialize())
                 .append("statistics", new PlayerStatisticsRecord(null).serialize())
-                .append("bounties", new PlayerBounties(null).serialize())
+                .append("tasks", new PlayerResearchTasks(null).serialize())
 
                 ;
 
@@ -205,10 +205,10 @@ public class PlayerDataQuery extends MongoQuery
     }
 
     //Bounties (key: "bounties")
-    public PlayerBounties getBounties()
+    public PlayerResearchTasks getResearchTasks()
     {
-        if(this.bounties == null) this.bounties = new PlayerBounties(this, this.document.getList("bounties", Document.class));
-        return this.bounties;
+        if(this.tasks == null) this.tasks = new PlayerResearchTasks(this, this.document.getList("tasks", Document.class));
+        return this.tasks;
     }
 
     public void updateObjective(ObjectiveType type, int amount)
@@ -218,8 +218,8 @@ public class PlayerDataQuery extends MongoQuery
 
     public void updateObjective(ObjectiveType type, Predicate<AbstractObjective> checker, int amount)
     {
-        if(this.getBounties().hasObjective(type))
-            this.bounties.checkAndUpdateObjectives(type, checker, amount);
+        if(this.getResearchTasks().hasObjective(type))
+            this.tasks.checkAndUpdateObjectives(type, checker, amount);
     }
 
     //key: "playerID"

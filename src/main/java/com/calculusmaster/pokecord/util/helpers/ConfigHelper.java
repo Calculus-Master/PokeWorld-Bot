@@ -1,7 +1,8 @@
 package com.calculusmaster.pokecord.util.helpers;
 
 import com.calculusmaster.pokecord.commandslegacy.CommandsLegacy;
-import com.calculusmaster.pokecord.game.objectives.Bounty;
+import com.calculusmaster.pokecord.game.objectives.ResearchTask;
+import com.calculusmaster.pokecord.game.player.PlayerResearchTasks;
 import com.calculusmaster.pokecord.game.player.PlayerTeam;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.evolution.PokemonEgg;
@@ -30,9 +31,9 @@ public class ConfigHelper
             PokeWorldShop.TM_COUNTS = new int[]{config.getList("tm_counts", Integer.class).get(0), config.getList("tm_counts", Integer.class).get(1)};
             PokeWorldShop.Z_CRYSTAL_COUNTS = new int[]{config.getList("zcrystal_counts", Integer.class).get(0), config.getList("zcrystal_counts", Integer.class).get(1)};
             CommandsLegacy.COMMAND_THREAD_POOL = config.getBoolean("command_thread_pool");
-            Bounty.MAX_BOUNTIES_HELD = config.getInteger("bounty_max_held");
-            Bounty.BOUNTY_REWARD_MIN = config.getList("bounty_rewards", Integer.class).get(0);
-            Bounty.BOUNTY_REWARD_MAX = config.getList("bounty_rewards", Integer.class).get(1);
+            PlayerResearchTasks.MAX_TASKS = config.getInteger("bounty_max_held");
+            ResearchTask.TASK_REWARD_MIN = config.getList("bounty_rewards", Integer.class).get(0);
+            ResearchTask.TASK_REWARD_MAX = config.getList("bounty_rewards", Integer.class).get(1);
             SpawnEventHelper.SPAWN_INTERVAL = config.getInteger("spawn_event_interval");
             SpawnEventHelper.RAID_CHANCE = config.getInteger("spawn_event_raid_chance");
             PokemonEgg.MAX_EGGS = config.getInteger("egg_limit");
@@ -52,9 +53,9 @@ public class ConfigHelper
             PokeWorldShop.TM_COUNTS = new int[]{10, 12};
             PokeWorldShop.Z_CRYSTAL_COUNTS = new int[]{5, 10};
             CommandsLegacy.COMMAND_THREAD_POOL = false;
-            Bounty.MAX_BOUNTIES_HELD = 3;
-            Bounty.BOUNTY_REWARD_MIN = 50;
-            Bounty.BOUNTY_REWARD_MAX = 250;
+            PlayerResearchTasks.MAX_TASKS = 6;
+            ResearchTask.TASK_REWARD_MIN = 50;
+            ResearchTask.TASK_REWARD_MAX = 250;
             SpawnEventHelper.SPAWN_INTERVAL = 450;
             SpawnEventHelper.RAID_CHANCE = 1;
             PokemonEgg.MAX_EGGS = 9;

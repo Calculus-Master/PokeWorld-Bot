@@ -35,8 +35,7 @@ public class PokeWorldShop
 
             CURRENT = new PokeWorldShop();
 
-            CURRENT.generate();
-            CURRENT.update();
+            PokeWorldShop.refresh();
         }
         else CURRENT = new PokeWorldShop(data);
     }

@@ -51,6 +51,6 @@ public enum StatisticType
 
     //Misc
     TRADES_COMPLETED,
-    BOUNTIES_COMPLETED,
+    TASKS_COMPLETED,
     ;
 }

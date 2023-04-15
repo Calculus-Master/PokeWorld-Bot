@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game.duel;
 
 import com.calculusmaster.pokecord.Pokeworld;
+import com.calculusmaster.pokecord.game.common.CreditRewards;
 import com.calculusmaster.pokecord.game.duel.component.*;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
@@ -23,6 +24,7 @@ import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.GigantamaxRegistry;
 import com.calculusmaster.pokecord.game.pokemon.evolution.MegaChargeManager;
 import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
+import com.calculusmaster.pokecord.game.world.PokeWorldResearchBoard;
 import com.calculusmaster.pokecord.game.world.RegionManager;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
@@ -2331,6 +2333,12 @@ public class Duel
                 player.data.updateObjective(ObjectiveType.DEFEAT_LEGENDARY, obj -> PokemonRarity.isLegendary(o.getEntity()), 1);
                 player.data.updateObjective(ObjectiveType.DEFEAT_POKEMON_TYPE, obj -> o.isType(obj.asType().getType()), 1);
                 player.data.updateObjective(ObjectiveType.DEFEAT_POKEMON_POOL, obj -> obj.asPokemonList().getList().contains(o.getEntity()), 1);
+
+                if(PokeWorldResearchBoard.getCurrentResearchBoard().isFeatured(o.getEntity()))
+                {
+                    player.data.changeCredits(CreditRewards.FEATURED_POKEMON_DEFEATED);
+                    player.data.directMessage("You've defeated a Featured Pokemon! (**+" + CreditRewards.FEATURED_POKEMON_DEFEATED + "c**)");
+                }
 
                 //Statistics
                 player.data.getStatistics().increase(StatisticType.POKEMON_DEFEATED);

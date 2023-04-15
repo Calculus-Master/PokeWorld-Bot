@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
+import com.calculusmaster.pokecord.game.common.CreditRewards;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievement;
 import com.calculusmaster.pokecord.game.objectives.ObjectiveType;
@@ -9,6 +10,7 @@ import com.calculusmaster.pokecord.game.player.PlayerPokedex;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.FormRegistry;
+import com.calculusmaster.pokecord.game.world.PokeWorldResearchBoard;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
@@ -109,6 +111,13 @@ public class CommandCatch extends PokeWorldCommand
                 {
                     if(!this.playerData.getOwnedForms().contains(caught.getEntity()))
                         this.playerData.addOwnedForm(caught.getEntity());
+                }
+
+                //Featured Pokemon
+                if(PokeWorldResearchBoard.getCurrentResearchBoard().isFeatured(caught.getEntity()))
+                {
+                    this.playerData.changeCredits(CreditRewards.FEATURED_POKEMON_CAUGHT);
+                    extraResponses.add("*You caught a Featured Pokemon!* (**+" + CreditRewards.FEATURED_POKEMON_CAUGHT + "c**)");
                 }
 
                 //Main Response
