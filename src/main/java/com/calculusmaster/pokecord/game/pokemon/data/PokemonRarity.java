@@ -36,7 +36,7 @@ public class PokemonRarity
     public static void updateSpawnWeights(Region region)
     {
         final EnumSet<PokemonEntity> HISUIAN_POKEMON = EnumSet.of(PokemonEntity.WYRDEER, PokemonEntity.KLEAVOR, PokemonEntity.URSALUNA, PokemonEntity.BASCULEGION_MALE, PokemonEntity.BASCULEGION_FEMALE, PokemonEntity.SNEASLER, PokemonEntity.OVERQWIL, PokemonEntity.ENAMORUS);
-        Arrays.stream(PokemonEntity.values()).filter(e -> e.isNotSpawnable() && e.toString().contains("HISUI")).forEach(HISUIAN_POKEMON::add);
+        Arrays.stream(PokemonEntity.values()).filter(e -> !e.isNotSpawnable() && e.toString().contains("HISUI")).forEach(HISUIAN_POKEMON::add);
 
         CURRENT_SPAWN_LIST.clear();
         Arrays.stream(PokemonEntity.values()).filter(e -> !e.isNotSpawnable()).forEach(e -> {
