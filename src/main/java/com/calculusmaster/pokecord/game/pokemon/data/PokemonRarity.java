@@ -4,15 +4,24 @@ import com.calculusmaster.pokecord.game.enums.elements.Region;
 import com.calculusmaster.pokecord.util.Global;
 
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
 public class PokemonRarity
 {
     private static final Random r = new Random();
 
-    private static final List<PokemonEntity> DEFAULT_SPAWN_LIST = new ArrayList<>();
-    private static final List<PokemonEntity> CURRENT_SPAWN_LIST = new ArrayList<>();
+    private static final EnumSet<PokemonEntity> HISUIAN_POKEMON = EnumSet.of(PokemonEntity.WYRDEER, PokemonEntity.KLEAVOR, PokemonEntity.URSALUNA, PokemonEntity.BASCULEGION_MALE, PokemonEntity.BASCULEGION_FEMALE, PokemonEntity.SNEASLER, PokemonEntity.OVERQWIL, PokemonEntity.ENAMORUS);
+    static { Arrays.stream(PokemonEntity.values()).filter(e -> !e.isNotSpawnable() && e.toString().contains("HISUI")).forEach(HISUIAN_POKEMON::add); }
+
+    //Regular Spawn Weights, Excludes Non-Spawnables
+    private static final List<PokemonEntity> DEFAULT_SPAWNS = new ArrayList<>();
+    //Region-Based Spawn Weights, Excludes Non-Spawnables
+    private static final List<PokemonEntity> CURRENT_SPAWNS = new ArrayList<>();
+
+    //Regular Spawn Weights, Includes Non-Spawnables
+    private static final List<PokemonEntity> DEFAULT_POKEMON = new ArrayList<>();
+    //Region-Based Spawn Weights, Includes Non-Spawnables
+    private static final List<PokemonEntity> CURRENT_POKEMON = new ArrayList<>();
 
     public static float REGION_SPAWN_RATE_BOOST = 1.25F;
 
@@ -35,33 +44,41 @@ public class PokemonRarity
     //Updating Spawns based on World Region
     public static void updateSpawnWeights(Region region)
     {
-        final EnumSet<PokemonEntity> HISUIAN_POKEMON = EnumSet.of(PokemonEntity.WYRDEER, PokemonEntity.KLEAVOR, PokemonEntity.URSALUNA, PokemonEntity.BASCULEGION_MALE, PokemonEntity.BASCULEGION_FEMALE, PokemonEntity.SNEASLER, PokemonEntity.OVERQWIL, PokemonEntity.ENAMORUS);
-        Arrays.stream(PokemonEntity.values()).filter(e -> !e.isNotSpawnable() && e.toString().contains("HISUI")).forEach(HISUIAN_POKEMON::add);
+        CURRENT_POKEMON.clear();
+        CURRENT_SPAWNS.clear();
 
-        CURRENT_SPAWN_LIST.clear();
-        Arrays.stream(PokemonEntity.values()).filter(e -> !e.isNotSpawnable()).forEach(e -> {
+        Arrays.stream(PokemonEntity.values()).forEach(e -> {
             int weight = e.getRarity().weight;
 
             //Region-Specific Pokemon Boost
             if(region == Region.HISUI && HISUIAN_POKEMON.contains(e)) weight *= REGION_SPAWN_RATE_BOOST;
             else if(region != Region.HISUI && region.getGeneration() == e.getGeneration()) weight *= REGION_SPAWN_RATE_BOOST;
 
-            IntStream.range(0, weight).forEach(i -> CURRENT_SPAWN_LIST.add(e));
+            IntStream.range(0, weight).forEach(i -> CURRENT_POKEMON.add(e));
         });
+
+        CURRENT_POKEMON.stream().filter(p -> !p.isNotSpawnable()).forEach(CURRENT_SPAWNS::add);
     }
 
     //Rarity Methods
 
     public static void init()
     {
-        Arrays.stream(PokemonEntity.values()).filter(p -> !p.isNotSpawnable()).forEach(e -> IntStream.range(0, e.getRarity().weight).forEach(i -> DEFAULT_SPAWN_LIST.add(e)));
-        CURRENT_SPAWN_LIST.addAll(DEFAULT_SPAWN_LIST);
+        //General Weighted Pokemon List (+ copy into Current)
+        Arrays.stream(PokemonEntity.values()).forEach(e -> IntStream.range(0, e.getRarity().weight).forEach(i -> DEFAULT_POKEMON.add(e)));
+        CURRENT_POKEMON.addAll(DEFAULT_POKEMON);
+
+        //Filter from Default to get Spawn List
+        DEFAULT_POKEMON.stream().filter(p -> !p.isNotSpawnable()).forEach(DEFAULT_SPAWNS::add);
+        CURRENT_SPAWNS.addAll(DEFAULT_SPAWNS);
     }
 
-    public static PokemonEntity getSpawn(boolean useDefaultSpawnList)
+    //Accessors
+    public static PokemonEntity getSpawn(boolean isDefault)
     {
-        List<PokemonEntity> list = useDefaultSpawnList ? DEFAULT_SPAWN_LIST : CURRENT_SPAWN_LIST;
-        return list.get(r.nextInt(list.size()));
+        List<PokemonEntity> l = isDefault ? DEFAULT_SPAWNS : CURRENT_SPAWNS;
+
+        return l.get(r.nextInt(l.size()));
     }
 
     public static PokemonEntity getSpawn()
@@ -69,21 +86,32 @@ public class PokemonRarity
         return PokemonRarity.getSpawn(false);
     }
 
-    public static PokemonEntity getSpawn(boolean isDefault, Predicate<PokemonEntity> filter)
+    public static PokemonEntity getPokemon(boolean isDefault)
     {
-        List<PokemonEntity> filteredSpawns = (isDefault ? DEFAULT_SPAWN_LIST : CURRENT_SPAWN_LIST).stream().filter(filter).toList();
+        List<PokemonEntity> l = isDefault ? DEFAULT_POKEMON : CURRENT_POKEMON;
 
-        return filteredSpawns.get(r.nextInt(filteredSpawns.size()));
+        return l.get(r.nextInt(l.size()));
+    }
+
+    public static PokemonEntity getPokemon()
+    {
+        return PokemonRarity.getPokemon(false);
     }
 
     public static PokemonEntity getSpawn(boolean isDefault, Rarity... rarities)
     {
-        return PokemonRarity.getSpawn(isDefault, e -> List.of(rarities).contains(e.getRarity()));
+        EnumSet<Rarity> rarityList = EnumSet.copyOf(List.of(rarities));
+        List<PokemonEntity> l = (isDefault ? DEFAULT_SPAWNS : CURRENT_SPAWNS).stream().filter(p -> rarityList.contains(p.getRarity())).toList();
+
+        return l.get(r.nextInt(l.size()));
     }
 
-    public static PokemonEntity getLegendarySpawn()
+    public static PokemonEntity getPokemon(boolean isDefault, Rarity... rarities)
     {
-        return PokemonRarity.getSpawn(false, PokemonRarity::isLegendary);
+        EnumSet<Rarity> rarityList = EnumSet.copyOf(List.of(rarities));
+        List<PokemonEntity> l = (isDefault ? DEFAULT_POKEMON : CURRENT_POKEMON).stream().filter(p -> rarityList.contains(p.getRarity())).toList();
+
+        return l.get(r.nextInt(l.size()));
     }
 
     public enum Rarity

@@ -146,7 +146,7 @@ public class SpawnEventHelper
 
         //Legendary Hour
         if(Global.timeNow().getHour() == 20 && random.nextInt(100) < 1)
-            spawn = PokemonRarity.getLegendarySpawn();
+            spawn = PokemonRarity.getSpawn(false, PokemonRarity.Rarity.LEGENDARY);
 
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("A wild Pokemon spawned!")

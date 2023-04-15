@@ -227,8 +227,8 @@ public class RaidDuel extends WildDuel
         int bossSize = 150;
 
         Pokemon[] players = new Pokemon[new SplittableRandom().nextInt(5, 9) + 1];
-        for(int i = 0; i < players.length - 1; i++) players[i] = Pokemon.create(PokemonRarity.getSpawn());
-        Pokemon boss = Pokemon.create(PokemonRarity.getLegendarySpawn());
+        for(int i = 0; i < players.length - 1; i++) players[i] = Pokemon.create(PokemonRarity.getPokemon());
+        Pokemon boss = Pokemon.create(PokemonRarity.getPokemon(false, PokemonRarity.Rarity.LEGENDARY));
         players[players.length - 1] = boss;
 
         for(Pokemon p : players) p.setHealth(p.getStat(Stat.HP));

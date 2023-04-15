@@ -103,7 +103,7 @@ public class Pokeworld
 
         LoggerHelper.init("Team Restrictions", TeamRestrictionRegistry::init, true);
         LoggerHelper.init("Incomplete Moves", Move::init);
-        LoggerHelper.init("Pokemon Rarity", PokemonRarity::init);
+        LoggerHelper.init("Pokemon Rarity", PokemonRarity::init, true);
         LoggerHelper.init("Trainer Manager", TrainerManager::init);
         LoggerHelper.init("Pokemon Augments", PokemonAugmentRegistry::init);
         LoggerHelper.init("Command Handler", CommandsLegacy::init);
