@@ -44,30 +44,6 @@ public class WildDuel extends Duel
     }
 
     @Override
-    public void turnHandler()
-    {
-        this.turnSetup();
-
-        //No swapping, No Z-Moves
-        if(!this.isComplete())
-        {
-            //Get moves - [1] is the bot so get a random move
-            this.moveAction(0);
-
-            List<Move> botMoves = new ArrayList<>();
-            for(MoveEntity moveEntity : this.players[1].active.getLevelUpMoves()) if(Move.isImplemented(moveEntity)) botMoves.add(new Move(moveEntity));
-
-            //TODO: Better AI (progress made 5-11-22)
-            //if(this.players[1].active.getHealth() <= this.players[1].active.getStat(Stat.HP) / 4) this.players[1].move = new Move(new PokemonAI(this.players[1].active).getHighestDamageMove(this.players[0].active));
-            this.players[1].move = botMoves.get(new Random().nextInt(botMoves.size()));
-
-            this.fullMoveTurn();
-        }
-
-        this.onTurnEnd();
-    }
-
-    @Override
     public void sendWinEmbed()
     {
         EmbedBuilder embed = new EmbedBuilder();
@@ -102,6 +78,22 @@ public class WildDuel extends Duel
 
         if(evs) this.getUser().active.updateEVs();
         p.updateExperience();
+    }
+
+    @Override
+    protected void turnSetup()
+    {
+        super.turnSetup();
+
+        List<MoveEntity> botMoves = new ArrayList<>();
+        for(MoveEntity moveEntity : this.players[1].active.getLevelUpMoves()) if(Move.isImplemented(moveEntity)) botMoves.add(moveEntity);
+        //TODO: Better AI (progress made 5-11-22)
+        //if(this.players[1].active.getHealth() <= this.players[1].active.getStat(Stat.HP) / 4) this.players[1].move = new Move(new PokemonAI(this.players[1].active).getHighestDamageMove(this.players[0].active));
+
+        MoveEntity target = botMoves.get(new Random().nextInt(botMoves.size()));
+        this.players[1].active.setMoves(List.of(target, target, target, target));
+
+        this.submitMove(this.players[1].ID, 1, 'm');
     }
 
     @Override
