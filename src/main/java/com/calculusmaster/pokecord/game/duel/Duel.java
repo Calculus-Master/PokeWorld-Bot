@@ -32,7 +32,6 @@ import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.utils.FileUpload;
 
 import javax.imageio.ImageIO;
@@ -88,14 +87,14 @@ public class Duel
     public FieldGMaxDoTHandler[] gmaxDoT;
     public FieldEffectsHandler[] fieldEffects;
 
-    public static Duel create(String player1ID, String player2ID, int size, MessageReceivedEvent event)
+    public static Duel create(String player1ID, String player2ID, int size, TextChannel channel)
     {
         Duel duel = new Duel();
 
         duel.setStatus(DuelStatus.WAITING);
         duel.setSize(size);
         duel.setTurn();
-        duel.addChannel(event.getChannel().asTextChannel());
+        duel.addChannel(channel);
         duel.setPlayers(player1ID, player2ID, size);
         duel.setDefaults();
         duel.setDuelPokemonObjects(0);

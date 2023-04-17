@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands;
 
 import com.calculusmaster.pokecord.Pokeworld;
+import com.calculusmaster.pokecord.commands.duel.CommandDuel;
 import com.calculusmaster.pokecord.commands.duel.CommandUse;
 import com.calculusmaster.pokecord.commands.economy.*;
 import com.calculusmaster.pokecord.commands.misc.CommandDev;
@@ -77,6 +78,7 @@ public class CommandHandler extends ListenerAdapter
         CommandEggs.init();
 
         CommandUse.init();
+        CommandDuel.init();
 
         CommandMoves.init();
         CommandTM.init();
@@ -90,6 +92,8 @@ public class CommandHandler extends ListenerAdapter
         CommandWorld.init();
 
         CommandDev.init();
+
+        LoggerHelper.info(CommandHandler.class, "Loaded %d Interaction Commands.".formatted(COMMANDS.size()));
 
         CommandHandler.updateGuildCommands(); //TODO: Remove this once Global Commands are implemented
     }

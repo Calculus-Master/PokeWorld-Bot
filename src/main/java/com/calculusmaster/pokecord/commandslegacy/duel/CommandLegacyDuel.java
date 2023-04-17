@@ -169,7 +169,7 @@ public class CommandLegacyDuel extends CommandLegacy
         else if(checkTeam && this.isInvalidTeam(size)) this.createInvalidTeamEmbed(size);
         else
         {
-            Duel.create(this.player.getId(), opponentID, size, this.event);
+            Duel.create(this.player.getId(), opponentID, size, this.event.getChannel().asTextChannel());
 
             ScheduledFuture<?> request = Executors.newSingleThreadScheduledExecutor().schedule(() -> {
                 DuelHelper.delete(this.player.getId());
