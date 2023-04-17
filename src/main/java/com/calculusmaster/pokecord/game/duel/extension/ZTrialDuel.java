@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.game.duel.extension;
 
 import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.duel.component.DuelStatus;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
 import com.calculusmaster.pokecord.game.duel.players.WildPlayer;
@@ -37,7 +38,7 @@ public class ZTrialDuel extends WildDuel
     {
         ZTrialDuel duel = new ZTrialDuel();
 
-        duel.setStatus(DuelHelper.DuelStatus.WAITING);
+        duel.setStatus(DuelStatus.WAITING);
         duel.setTurn();
         duel.addChannel(event.getChannel().asTextChannel());
         duel.setPlayers(playerID, "BOT", 1);
@@ -46,7 +47,7 @@ public class ZTrialDuel extends WildDuel
         duel.setDuelPokemonObjects(0);
         duel.setDuelPokemonObjects(1);
 
-        DUELS.add(duel);
+        DUELS.put(playerID, duel);
         return duel;
     }
 

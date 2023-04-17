@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commandslegacy.duel;
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacy;
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacyInvalid;
 import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.duel.component.DuelFlag;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.extension.WildDuel;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
@@ -63,6 +64,7 @@ public class CommandLegacyWildDuel extends CommandLegacy
                 else pokemon = null;
 
                 Duel d = WildDuel.create(this.player.getId(), this.event, pokemon);
+                d.addFlags(DuelFlag.SWAP_BANNED, DuelFlag.ZMOVES_BANNED, DuelFlag.DYNAMAX_BANNED);
 
                 if(price != 0) this.playerData.changeCredits(-1 * price);
 

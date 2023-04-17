@@ -2,10 +2,7 @@ package com.calculusmaster.pokecord.game.duel.extension;
 
 import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.game.duel.Duel;
-import com.calculusmaster.pokecord.game.duel.component.EntryHazardHandler;
-import com.calculusmaster.pokecord.game.duel.component.FieldBarrierHandler;
-import com.calculusmaster.pokecord.game.duel.component.FieldEffectsHandler;
-import com.calculusmaster.pokecord.game.duel.component.FieldGMaxDoTHandler;
+import com.calculusmaster.pokecord.game.duel.component.*;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
@@ -50,19 +47,18 @@ public class RaidDuel extends WildDuel
         duel.setID();
         duel.setDefaults();
 
-        DUELS.add(duel);
         return duel;
     }
 
     public static RaidDuel instance(String duelID)
     {
-        return DUELS.stream().filter(d -> d instanceof RaidDuel).map(d -> (RaidDuel)d).filter(raid -> raid.getDuelID().equals(duelID)).collect(Collectors.toList()).get(0);
+        return DUELS.values().stream().filter(d -> d instanceof RaidDuel).map(d -> (RaidDuel)d).filter(raid -> raid.getDuelID().equals(duelID)).toList().get(0);
     }
 
     public static void delete(String duelID)
     {
         RaidDuel instance = instance(duelID);
-        DUELS.remove(instance);
+        Arrays.stream(instance.getPlayers()).forEach(p -> DuelHelper.delete(p.ID));
     }
 
     @Override
@@ -70,11 +66,11 @@ public class RaidDuel extends WildDuel
     {
         this.turnSetup();
 
-        for(Player p : this.players) if (p.active.isFainted()) this.queuedMoves.put(p.ID, new TurnAction(ActionType.IDLE, -1, -1));
+        for(Player p : this.players) if (p.active.isFainted()) this.queuedMoves.put(p.ID, new TurnAction(DuelActionType.IDLE, -1, -1));
 
         if(!this.isComplete())
         {
-            for(int i = 0; i < this.getUserPlayers().length; i++) if(!this.getAction(i).equals(ActionType.IDLE)) this.moveAction(i);
+            for(int i = 0; i < this.getUserPlayers().length; i++) if(!this.getAction(i).equals(DuelActionType.IDLE)) this.moveAction(i);
 
             List<MoveEntity> movePool = this.getRaidBoss().active.getLevelUpMoves().stream().filter(Move::isImplemented).collect(Collectors.collectingAndThen(Collectors.toList(), list -> { Collections.shuffle(list); return list; }));
             this.getRaidBoss().move = new Move(movePool.isEmpty() ? MoveEntity.TACKLE : movePool.get(new Random().nextInt(movePool.size())));
@@ -518,11 +514,13 @@ public class RaidDuel extends WildDuel
     public void addPlayer(String ID)
     {
         if(!this.waiting.contains(ID)) this.waiting.add(ID);
+        DUELS.put(ID, this);
     }
 
     public void removePlayer(String ID)
     {
         this.waiting.remove(ID);
+        DUELS.remove(ID);
     }
 
     public boolean isPlayerWaiting(String ID)

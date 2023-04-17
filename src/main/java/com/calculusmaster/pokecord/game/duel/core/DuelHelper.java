@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game.duel.core;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.duel.component.DuelActionType;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.duel.players.TrainerPlayer;
 import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
@@ -13,56 +14,41 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.evolution.GigantamaxRegistry;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DuelHelper
 {
-    public static final List<Duel> DUELS = new ArrayList<>();
+    public static final Map<String, Duel> DUELS = new HashMap<>(20);
     public static final String BACKGROUND = "https://cutewallpaper.org/21/pokemon-battle-background/Battle-backgrounds-for-Pokemon-Showdown-Smogon-Forums.jpg";
 
     public static boolean isInDuel(String id)
     {
-        return DUELS.stream().anyMatch(d -> d.hasPlayer(id));
+        return DuelHelper.instance(id) != null;
     }
 
     public static Duel instance(String id)
     {
-        if(DUELS.isEmpty()) return null;
-        else if(id.chars().allMatch(Character::isDigit)) return DUELS.stream().filter(d -> d.hasPlayer(id)).toList().get(0);
-        else return DUELS.stream().filter(d -> Arrays.stream(d.getPlayers()).anyMatch(p -> p.active.getUUID().equals(id))).toList().get(0);
+        return DUELS.getOrDefault(id, null);
     }
 
     public static void delete(String id)
     {
-        DUELS.removeIf(d -> Arrays.stream(d.getPlayers()).anyMatch(p -> p.ID.equals(id)));
+        Duel d = DuelHelper.instance(id);
+        if(d == null) return;
+
+        for(Player p : d.getPlayers()) DUELS.remove(p.ID);
     }
 
     public static Duel findDuel(Pokemon pokemon)
     {
-        return DuelHelper.DUELS.stream().filter(duel -> Arrays.stream(duel.getPlayers()).anyMatch(p -> p.team.contains(pokemon))).findFirst().orElse(null);
+        return DuelHelper.DUELS.values().stream().filter(duel -> Arrays.stream(duel.getPlayers()).anyMatch(p -> p.team.contains(pokemon))).findFirst().orElse(null);
     }
 
     //Core Components
 
-    public record TurnAction(ActionType action, int moveInd, int swapInd) {}
-
-    public enum ActionType
-    {
-        MOVE,
-        ZMOVE,
-        SWAP,
-        DYNAMAX,
-        IDLE
-    }
-
-    public enum DuelStatus
-    {
-        WAITING,
-        DUELING,
-        COMPLETE
-    }
+    public record TurnAction(DuelActionType action, int moveInd, int swapInd) {}
 
     //Z-Moves and Max Moves
 

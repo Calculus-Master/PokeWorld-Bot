@@ -1,6 +1,8 @@
 package com.calculusmaster.pokecord.game.duel.extension;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.duel.component.DuelActionType;
+import com.calculusmaster.pokecord.game.duel.component.DuelStatus;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
@@ -21,7 +23,6 @@ import java.util.List;
 import java.util.Random;
 
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.DUELS;
-import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.DuelStatus;
 
 //PVE Duel - 1v1 Against a Wild Pokemon for EXP and EV Grinding
 public class WildDuel extends Duel
@@ -39,7 +40,7 @@ public class WildDuel extends Duel
         duel.setDuelPokemonObjects(0);
         duel.setDuelPokemonObjects(1);
 
-        DUELS.add(duel);
+        DUELS.put(playerID, duel);
         return duel;
     }
 
@@ -93,7 +94,7 @@ public class WildDuel extends Duel
         MoveEntity target = botMoves.get(new Random().nextInt(botMoves.size()));
         this.players[1].active.setMoves(List.of(target, target, target, target));
 
-        this.submitMove(this.players[1].ID, 1, 'm');
+        this.submitMove(this.players[1].ID, 1, DuelActionType.MOVE);
     }
 
     @Override

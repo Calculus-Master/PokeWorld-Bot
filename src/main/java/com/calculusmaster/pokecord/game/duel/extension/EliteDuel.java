@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game.duel.extension;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.duel.component.DuelStatus;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.TrainerPlayer;
 import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
@@ -26,7 +27,7 @@ public class EliteDuel extends TrainerDuel
     {
         EliteDuel duel = new EliteDuel();
 
-        duel.setStatus(DuelHelper.DuelStatus.WAITING);
+        duel.setStatus(DuelStatus.WAITING);
         duel.setTurn();
         duel.addChannel(event.getChannel().asTextChannel());
         duel.setPlayers(playerID, "Elite Trainer", 6);
@@ -35,7 +36,7 @@ public class EliteDuel extends TrainerDuel
         duel.setDuelPokemonObjects(0);
         duel.setDuelPokemonObjects(1);
 
-        DUELS.add(duel);
+        DUELS.put(playerID, duel);
         return duel;
     }
 

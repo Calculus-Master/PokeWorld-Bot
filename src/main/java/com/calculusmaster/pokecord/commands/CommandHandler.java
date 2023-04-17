@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.commands;
 
 import com.calculusmaster.pokecord.Pokeworld;
+import com.calculusmaster.pokecord.commands.duel.CommandUse;
 import com.calculusmaster.pokecord.commands.economy.*;
 import com.calculusmaster.pokecord.commands.misc.CommandDev;
 import com.calculusmaster.pokecord.commands.misc.CommandWorld;
@@ -74,6 +75,8 @@ public class CommandHandler extends ListenerAdapter
         CommandPrestige.init();
         CommandForm.init();
         CommandEggs.init();
+
+        CommandUse.init();
 
         CommandMoves.init();
         CommandTM.init();

@@ -51,6 +51,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.calculusmaster.pokecord.game.duel.component.DuelActionType.IDLE;
+import static com.calculusmaster.pokecord.game.duel.component.DuelActionType.SWAP;
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.*;
 
 //PVP Duel - Infinitely Scalable
@@ -60,6 +62,7 @@ public class Duel
     protected List<TextChannel> channels;
     protected int size;
     protected Player[] players;
+    protected EnumSet<DuelFlag> flags = EnumSet.noneOf(DuelFlag.class);
     protected Map<String, TurnAction> queuedMoves = new HashMap<>();
     protected Map<String, PokemonDuelAttributes> pokemonAttributes = new HashMap<>();
     protected Map<String, Integer> expGains = new HashMap<>();
@@ -98,7 +101,8 @@ public class Duel
         duel.setDuelPokemonObjects(0);
         duel.setDuelPokemonObjects(1);
 
-        DUELS.add(duel);
+        DUELS.put(player1ID, duel);
+        DUELS.put(player2ID, duel);
         return duel;
     }
 
@@ -121,8 +125,8 @@ public class Duel
             this.checkFaintSwap(0);
             this.checkFaintSwap(1);
 
-            if(this.getAction(0).equals(ActionType.SWAP)) this.swapAction(0);
-            if(this.getAction(1).equals(ActionType.SWAP)) this.swapAction(1);
+            if(this.getAction(0).equals(DuelActionType.SWAP)) this.swapAction(0);
+            if(this.getAction(1).equals(DuelActionType.SWAP)) this.swapAction(1);
 
             if(this.isUsingMove(0))
             {
@@ -175,12 +179,12 @@ public class Duel
     protected void checkFaintSwap(int p)
     {
         int o = p == 0 ? 1 : 0;
-        if(this.getAction(p).equals(ActionType.SWAP) && this.players[p].active.isFainted() && !this.players[0].active.isFainted()) this.queuedMoves.put(this.players[o].ID, new TurnAction(ActionType.IDLE, -1, -1));
+        if(this.getAction(p).equals(DuelActionType.SWAP) && this.players[p].active.isFainted() && !this.players[0].active.isFainted()) this.queuedMoves.put(this.players[o].ID, new TurnAction(IDLE, -1, -1));
     }
 
     protected boolean isUsingMove(int p)
     {
-        return Arrays.asList(ActionType.MOVE, ActionType.ZMOVE, ActionType.DYNAMAX).contains(this.getAction(p));
+        return Arrays.asList(DuelActionType.MOVE, DuelActionType.ZMOVE, DuelActionType.DYNAMAX).contains(this.getAction(p));
     }
 
     protected void fullMoveTurn()
@@ -259,10 +263,10 @@ public class Duel
         Move move = new Move(this.players[p].active.getMoves().get(this.queuedMoves.get(this.players[p].ID).moveInd() - 1));
 
         //Z Move
-        if(this.getAction(p).equals(ActionType.ZMOVE)) move = DuelHelper.getZMove(this.players[p], move);
+        if(this.getAction(p).equals(DuelActionType.ZMOVE)) move = DuelHelper.getZMove(this.players[p], move);
 
         //Dynamax - Request (If the player is entering Dynamax this turn)
-        if(this.getAction(p).equals(ActionType.DYNAMAX))
+        if(this.getAction(p).equals(DuelActionType.DYNAMAX))
         {
             this.players[p].active.enterDynamax();
             this.players[p].dynamaxTurns = 3;
@@ -2942,19 +2946,12 @@ public class Duel
 
     //Useful Getters/Setters
 
-    public void submitMove(String id, int index, char type)
+    public void submitMove(String id, int index, DuelActionType action)
     {
-        type = Character.toLowerCase(type);
-
-        if(type == 'i') this.queuedMoves.put(id, new TurnAction(ActionType.IDLE, -1, -1));
+        if(action == IDLE) this.queuedMoves.put(id, new TurnAction(IDLE, -1, -1));
         //index functions as both the swapIndex and moveIndex, which one is dictated by type == 's' and type == 'm'
-        else if(type == 's')
-        {
-            Player p = this.players[this.indexOf(id)];
-            if(p.team.get(index - 1).isFainted()) ((UserPlayer)p).data.directMessage("That pokemon is fainted!");
-            else this.queuedMoves.put(id, new TurnAction(ActionType.SWAP, -1, index));
-        }
-        else this.queuedMoves.put(id, new TurnAction(type == 'z' ? ActionType.ZMOVE : (type == 'd' ? ActionType.DYNAMAX : ActionType.MOVE), index, -1));
+        else if(action == SWAP) this.queuedMoves.put(id, new TurnAction(DuelActionType.SWAP, -1, index));
+        else this.queuedMoves.put(id, new TurnAction(action, index, -1));
     }
 
     public void checkReady()
@@ -2964,21 +2961,21 @@ public class Duel
             turnHandler();
         }
 
-        boolean faintSwap1 = this.queuedMoves.containsKey(this.players[0].ID) && this.queuedMoves.get(this.players[0].ID).action().equals(ActionType.SWAP) && this.players[0].active.isFainted();
-        boolean faintSwap2 = this.queuedMoves.containsKey(this.players[1].ID) && this.queuedMoves.get(this.players[1].ID).action().equals(ActionType.SWAP) && this.players[1].active.isFainted();
+        boolean faintSwap1 = this.queuedMoves.containsKey(this.players[0].ID) && this.queuedMoves.get(this.players[0].ID).action().equals(DuelActionType.SWAP) && this.players[0].active.isFainted();
+        boolean faintSwap2 = this.queuedMoves.containsKey(this.players[1].ID) && this.queuedMoves.get(this.players[1].ID).action().equals(DuelActionType.SWAP) && this.players[1].active.isFainted();
 
         if((faintSwap1 || faintSwap2) && !(faintSwap1 && faintSwap2))
         {
-            if(faintSwap1) this.submitMove(this.players[1].ID, -1, 'i');
-            else this.submitMove(this.players[0].ID, -1, 'i');
+            if(faintSwap1) this.submitMove(this.players[1].ID, -1, IDLE);
+            else this.submitMove(this.players[0].ID, -1, IDLE);
 
             turnHandler();
         }
     }
 
-    public boolean hasPlayerSubmittedMove(String id)
+    public boolean hasSubmittedAction(String playerID)
     {
-        return this.queuedMoves.containsKey(id);
+        return this.queuedMoves.containsKey(playerID);
     }
 
     public boolean isComplete()
@@ -2986,7 +2983,7 @@ public class Duel
         return Arrays.stream(this.players).anyMatch(Player::lost);
     }
 
-    public ActionType getAction(int player)
+    public DuelActionType getAction(int player)
     {
         return this.queuedMoves.get(this.players[player].ID).action();
     }
@@ -3098,6 +3095,16 @@ public class Duel
     protected void iteratePlayers(Consumer<Integer> playerAction)
     {
         for(int i = 0; i < this.players.length; i++) playerAction.accept(i);
+    }
+
+    public void addFlags(DuelFlag... flags)
+    {
+        this.flags.addAll(List.of(flags));
+    }
+
+    public boolean hasFlag(DuelFlag flag)
+    {
+        return this.flags.contains(flag);
     }
 
     //Core Getters and Setters

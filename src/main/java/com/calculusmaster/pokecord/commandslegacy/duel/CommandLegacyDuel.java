@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commandslegacy.duel;
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacy;
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacyInvalid;
 import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.duel.component.DuelStatus;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
 import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestrictionRegistry;
@@ -112,7 +113,7 @@ public class CommandLegacyDuel extends CommandLegacy
         if(accept || deny)
         {
             if(!DuelHelper.isInDuel(this.player.getId())) this.response = "There are no pending requests to duel you!";
-            else if(DuelHelper.instance(this.player.getId()).getStatus().equals(DuelHelper.DuelStatus.DUELING)) this.response = "You are already in a duel!";
+            else if(DuelHelper.instance(this.player.getId()).getStatus().equals(DuelStatus.DUELING)) this.response = "You are already in a duel!";
             else if(accept)
             {
                 Duel d = DuelHelper.instance(this.player.getId());

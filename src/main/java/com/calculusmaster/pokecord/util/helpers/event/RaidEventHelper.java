@@ -1,5 +1,6 @@
 package com.calculusmaster.pokecord.util.helpers.event;
 
+import com.calculusmaster.pokecord.game.duel.component.DuelFlag;
 import com.calculusmaster.pokecord.game.duel.extension.RaidDuel;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
@@ -28,7 +29,7 @@ public class RaidEventHelper
 
     public static void createRaid(Guild g, TextChannel channel)
     {
-        RaidDuel raid = RaidDuel.create();
+        RaidDuel raid = RaidDuel.create(); raid.addFlags(DuelFlag.SWAP_BANNED);
         raid.addChannel(channel);
         SERVER_RAIDS.put(g.getId(), raid);
 

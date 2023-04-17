@@ -1,11 +1,11 @@
 package com.calculusmaster.pokecord.game.duel.extension;
 
+import com.calculusmaster.pokecord.game.duel.component.DuelStatus;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.DUELS;
-import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.DuelStatus;
 
 public class GauntletDuel extends WildDuel
 {
@@ -25,7 +25,7 @@ public class GauntletDuel extends WildDuel
         duel.setDuelPokemonObjects(0);
         duel.setDuelPokemonObjects(1);
 
-        DUELS.add(duel);
+        DUELS.put(playerID, duel);
         return duel;
     }
 

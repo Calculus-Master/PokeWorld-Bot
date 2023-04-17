@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.game.duel.extension;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
-import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
+import com.calculusmaster.pokecord.game.duel.component.DuelStatus;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -90,7 +90,7 @@ public class CasualMatchmadeDuel extends Duel
     {
         CasualMatchmadeDuel duel = new CasualMatchmadeDuel();
 
-        duel.setStatus(DuelHelper.DuelStatus.WAITING);
+        duel.setStatus(DuelStatus.WAITING);
         duel.setSize(size);
         duel.setTurn();
         channels.forEach(duel::addChannel);
@@ -99,7 +99,8 @@ public class CasualMatchmadeDuel extends Duel
         duel.setDuelPokemonObjects(0);
         duel.setDuelPokemonObjects(1);
 
-        DUELS.add(duel);
+        DUELS.put(player1ID, duel);
+        DUELS.put(player2ID, duel);
         return duel;
     }
 

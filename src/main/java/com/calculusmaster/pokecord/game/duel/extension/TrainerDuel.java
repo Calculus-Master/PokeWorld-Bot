@@ -1,6 +1,8 @@
 package com.calculusmaster.pokecord.game.duel.extension;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
+import com.calculusmaster.pokecord.game.duel.component.DuelActionType;
+import com.calculusmaster.pokecord.game.duel.component.DuelStatus;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.duel.players.TrainerPlayer;
@@ -21,7 +23,6 @@ import java.util.Random;
 import java.util.SplittableRandom;
 
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.DUELS;
-import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.DuelStatus;
 
 public class TrainerDuel extends Duel
 {
@@ -39,7 +40,7 @@ public class TrainerDuel extends Duel
         duel.setDuelPokemonObjects(0);
         duel.setDuelPokemonObjects(1);
 
-        DUELS.add(duel);
+        DUELS.put(playerID, duel);
         return duel;
     }
 
@@ -114,7 +115,7 @@ public class TrainerDuel extends Duel
 
         if(!this.isComplete() && this.players[1].active.isFainted())
         {
-            this.submitMove(this.players[1].ID, 1, 'm');
+            this.submitMove(this.players[1].ID, 1, DuelActionType.MOVE);
             this.checkReady();
         }
     }
@@ -134,12 +135,12 @@ public class TrainerDuel extends Duel
         super.turnSetup();
 
         int index;
-        char type;
+        DuelActionType type;
 
         if(this.players[0].active.isFainted() && !this.players[1].active.isFainted())
         {
             index = -1;
-            type = 'i';
+            type = DuelActionType.IDLE;
         }
         //If active is fainted, AI needs to swap
         else if(this.players[1].active.isFainted())
@@ -155,7 +156,7 @@ public class TrainerDuel extends Duel
             }
 
             index = ind;
-            type = 's';
+            type = DuelActionType.SWAP;
         }
         //Z-Move
         else if(!this.players[1].usedZMove)
@@ -165,21 +166,21 @@ public class TrainerDuel extends Duel
 
             index = ind + 1;
 
-            if(((TrainerPlayer)this.players[1]).hasZCrystal(ZCrystal.getCrystalOfType(move.getType()))) type = 'z';
-            else type = 'm';
+            if(((TrainerPlayer)this.players[1]).hasZCrystal(ZCrystal.getCrystalOfType(move.getType()))) type = DuelActionType.ZMOVE;
+            else type = DuelActionType.MOVE;
 
         }
         //Dynamax
         else if(!this.players[1].usedDynamax && new SplittableRandom().nextInt(100) < 33)
         {
             index = new SplittableRandom().nextInt(4) + 1;
-            type = 'd';
+            type = DuelActionType.DYNAMAX;
         }
         //Normal Move
         else
         {
             index = new SplittableRandom().nextInt(4) + 1;
-            type = 'm';
+            type = DuelActionType.MOVE;
         }
 
         this.submitMove(this.players[1].ID, index, type);

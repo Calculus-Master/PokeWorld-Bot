@@ -36,15 +36,6 @@ public class CommandsLegacy
                 .addTerminalPoint("duel deny", "Deny a duel request.")
                 .addTerminalPoint("duel cancel", "Cancel a duel request you have sent to someone else.");
 
-        register("use")
-                .setCommand(CommandLegacyUse::new)
-                .setCategory(Category.DUEL)
-                .setDesc("Use a move or swap out Pokemon in a duel!")
-                .addTerminalPoint("use <number>", "Use one of your learned moves. <number> must be between 1 and 4, inclusive.")
-                .addTerminalPoint("use swap <number>", "Swap out your active Pokemon to another on your team (index given by <number>). Cannot be used in Wild Pokemon duels.")
-                .addTerminalPoint("use z <number>", "Use a Z-Move of one of your learned moves given by <number>.")
-                .addTerminalPoint("use d <number>", "Enter Dynamax, and then use one of your learned moves.");
-
         register("help")
                 .setCommand(CommandLegacyHelp::new)
                 .setCategory(Category.MISC)
@@ -60,10 +51,6 @@ public class CommandsLegacy
 
         register("trainerduel", "trainer", "fight")
                 .setCommand(CommandLegacyTrainerDuel::new)
-                .setCategory(Category.DUEL);
-
-        register("flee", "concede", "surrender")
-                .setCommand(CommandLegacyFlee::new)
                 .setCategory(Category.DUEL);
 
         register("settings", "config")

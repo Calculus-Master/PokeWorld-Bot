@@ -910,8 +910,8 @@ public class Pokemon
 
     public void setAbility()
     {
-        //75% chance of main ability
-        if(this.random.nextFloat() < 0.75)
+        //75% chance of main ability (100% if Pokemon has no hidden abilities)
+        if(this.random.nextFloat() < 0.75 || this.data.getHiddenAbilities().isEmpty())
             this.ability = this.data.getMainAbilities().stream().toList().get(this.random.nextInt(this.data.getMainAbilities().size()));
         //25% chance of hidden ability
         else
