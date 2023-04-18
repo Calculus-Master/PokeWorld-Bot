@@ -509,7 +509,7 @@ public class Duel
         }
 
         //Unfreeze opponent if this move is a Fire Type, Scald or Steam Eruption
-        if(move.is(Type.FIRE))
+        if(this.players[this.current].active.hasStatusCondition(StatusCondition.FROZEN) && move.is(Type.FIRE))
         {
             this.players[this.other].active.removeStatusCondition(StatusCondition.FROZEN);
             turnResult.add(c.getName() + " is no longer frozen due to their Fire Type!");

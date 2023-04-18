@@ -38,13 +38,14 @@ public class StandardRestriction extends TeamRestriction
     public String getDescription()
     {
         return """
-                Team must follow **standard Duel team restrictions.** The team must contain at least 3 Pokemon, and cannot exceed 4 PLPs. PLP costs are as follows:
-                *Mega-Evolved/Primal Legendary Pokemon*:\t4 PLPs
-                *Legendary Pokemon*:\t3 PLPs
-                *Mythical Pokemon*:\t2 PLPs
-                *Ultra Beast Pokemon*:\t1 PLPs
-                *Mega-Evolved Pokemon*:\t1 PLPs
-                *All Other Pokemon*:\t0 PLPs
+                Team must follow **standard Duel team restrictions.** The team must contain **at least 3 Pokemon**, and **cannot exceed 4 PLPs**.
+                PLP costs are as follows:
+                *Mega-Evolved Legendary*: `4` PLPs
+                *Legendary*: `3` PLPs
+                *Mythical*: `2` PLPs
+                *Ultra Beast*: `1` PLPs
+                *Mega-Evolved*: `1` PLPs
+                *Other*: `0` PLPs
                 """;
     }
 }

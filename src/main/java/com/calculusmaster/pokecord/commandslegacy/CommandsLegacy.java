@@ -27,15 +27,6 @@ public class CommandsLegacy
                 .setDesc("View your Pokemon!")
                 .addTerminalPoint("pokemon", "View & sort your Pokemon list. There are many possible arguments.");
 
-        register("duel")
-                .setCommand(CommandLegacyDuel::new)
-                .setCategory(Category.DUEL)
-                .setDesc("Duel other players!")
-                .addTerminalPoint("duel <@player>", "Send a duel request to the mentioned player.")
-                .addTerminalPoint("duel confirm", "Accept a duel request.")
-                .addTerminalPoint("duel deny", "Deny a duel request.")
-                .addTerminalPoint("duel cancel", "Cancel a duel request you have sent to someone else.");
-
         register("help")
                 .setCommand(CommandLegacyHelp::new)
                 .setCategory(Category.MISC)
@@ -47,10 +38,6 @@ public class CommandsLegacy
 
         register("wildduel", "wild")
                 .setCommand(CommandLegacyWildDuel::new)
-                .setCategory(Category.DUEL);
-
-        register("trainerduel", "trainer", "fight")
-                .setCommand(CommandLegacyTrainerDuel::new)
                 .setCategory(Category.DUEL);
 
         register("settings", "config")
@@ -71,10 +58,6 @@ public class CommandsLegacy
 
         register("ztrialduel", "ztrial", "trial", "ztduel")
                 .setCommand(CommandLegacyZTrialDuel::new)
-                .setCategory(Category.DUEL);
-
-        register("eliteduel", "elite")
-                .setCommand(CommandLegacyEliteDuel::new)
                 .setCategory(Category.DUEL);
 
         register("trainerinfo", "ti")

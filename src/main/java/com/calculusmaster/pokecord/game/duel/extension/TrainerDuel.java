@@ -16,7 +16,7 @@ import com.calculusmaster.pokecord.game.objectives.ObjectiveType;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 import java.util.LinkedHashMap;
 import java.util.Random;
@@ -26,13 +26,13 @@ import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.DUELS;
 
 public class TrainerDuel extends Duel
 {
-    public static Duel create(String playerID, MessageReceivedEvent event, TrainerData trainer)
+    public static Duel create(String playerID, TextChannel channel, TrainerData trainer)
     {
         TrainerDuel duel = new TrainerDuel();
 
         duel.setStatus(DuelStatus.WAITING);
         duel.setTurn();
-        duel.addChannel(event.getChannel().asTextChannel());
+        duel.addChannel(channel);
         duel.setPlayers(playerID, trainer.getName(), trainer.getTeam().size());
         duel.setTrainer(trainer);
         duel.limitPlayerPokemon(trainer.getAveragePokemonLevel());

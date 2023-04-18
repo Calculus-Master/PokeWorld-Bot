@@ -5,7 +5,6 @@ import com.calculusmaster.pokecord.commands.PokeWorldCommand;
 import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestrictionRegistry;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
-import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.player.PlayerTeam;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.Global;
@@ -84,11 +83,11 @@ public class CommandTeam extends PokeWorldCommand
                     {
                         Pokemon p = duelTeam.get(i);
 
-                        int currentHP = p.getStat(Stat.HP);
+                        int currentHP = p.getHealth();
                         int maxHP = p.getMaxHealth();
                         float ratio = (float)currentHP / maxHP;
 
-                        String status = ratio > 0.6 ? "🟢" : (ratio > 0 ? "🟡" : "🔴");
+                        String status = ratio > 0.6 ? "🟢" : (p.isFainted() ? "🔴" : "🟡");
                         String name = p.hasNickname() ? p.getDisplayName() + " (" + p.getName() + ")" : p.getName();
                         String health = p.isFainted() ? "FAINTED" : currentHP + " / " + maxHP + " HP";
 

@@ -6,6 +6,7 @@ import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.mongo.Mongo;
+import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
 
@@ -50,7 +51,7 @@ public class TrainerManager
         //Class I Trainers: No Restrictions
         List.of(20, 40, 60).forEach(level -> {
             int teamSize = random.nextInt(3, 6);
-            List<PokemonEntity> team = IntStream.range(0, teamSize).mapToObj(i -> PokemonRarity.getSpawn(true, COPPER, SILVER, GOLD, PLATINUM, DIAMOND)).toList();
+            List<PokemonEntity> team = IntStream.range(0, teamSize).mapToObj(i -> PokemonRarity.getSpawn(true, COPPER, SILVER, GOLD, DIAMOND)).toList();
 
             REGULAR_TRAINERS.add(new TrainerData(randomName.get(), 1, team, null, level, 1.05F));
         });
@@ -58,7 +59,7 @@ public class TrainerManager
         //Class II Trainers: Default Restrictions
         List.of(25, 50, 75, 100).forEach(level -> {
             int teamSize = random.nextInt(5, 7);
-            List<PokemonEntity> team = IntStream.range(0, teamSize).mapToObj(i -> PokemonRarity.getSpawn(true, COPPER, SILVER, GOLD, PLATINUM, DIAMOND, MYTHICAL)).toList();
+            List<PokemonEntity> team = IntStream.range(0, teamSize).mapToObj(i -> PokemonRarity.getSpawn(true, COPPER, SILVER, GOLD, DIAMOND, PLATINUM, MYTHICAL)).toList();
 
             TrainerData data = new TrainerData(randomName.get(), 2, team, null, level, 1.15F);
             data.addRestriction(TeamRestrictionRegistry.STANDARD);
@@ -87,7 +88,7 @@ public class TrainerManager
 
         //Class V Trainers: Single Tier 2 Restriction
         List.of(85, 100).forEach(level -> {
-            List<PokemonEntity> team = IntStream.range(0, 6).mapToObj(i -> PokemonRarity.getPokemon(true, GOLD, PLATINUM, DIAMOND, MYTHICAL, ULTRA_BEAST, LEGENDARY)).toList();
+            List<PokemonEntity> team = IntStream.range(0, 6).mapToObj(i -> PokemonRarity.getPokemon(true, GOLD, DIAMOND, PLATINUM, MYTHICAL, ULTRA_BEAST, LEGENDARY)).toList();
 
             TrainerData data = new TrainerData(randomName.get(), 5, team, ZCrystal.getCrystalOfType(Type.getRandom()), level, 1.4F);
             data.addRestriction(TeamRestrictionRegistry.STANDARD);
@@ -97,7 +98,7 @@ public class TrainerManager
 
         //Class VI (Bonus) Trainers: Single Tier 3 Restriction
         List.of(100).forEach(level -> {
-            List<PokemonEntity> team = IntStream.range(0, 6).mapToObj(i -> PokemonRarity.getPokemon(true, DIAMOND, MYTHICAL, ULTRA_BEAST, LEGENDARY)).toList();
+            List<PokemonEntity> team = IntStream.range(0, 6).mapToObj(i -> PokemonRarity.getPokemon(true, PLATINUM, MYTHICAL, ULTRA_BEAST, LEGENDARY)).toList();
 
             TrainerData data = new TrainerData(randomName.get(), 6, team, ZCrystal.getCrystalOfType(Type.getRandom()), level, 1.5F);
             data.addRestriction(TeamRestrictionRegistry.STANDARD);
@@ -116,6 +117,15 @@ public class TrainerManager
     public static int getMax()
     {
         return Collections.max(REGULAR_TRAINERS.stream().map(TrainerData::getTrainerClass).toList());
+    }
+
+    public static int getPlayerMaxClass(PlayerDataQuery data)
+    {
+        int clazz = 1;
+        for(int i = 1; i < TrainerManager.getMax(); i++)
+            if(TrainerManager.getTrainersOfClass(i).stream().anyMatch(d -> data.hasDefeatedTrainer(d.getTrainerID()))) clazz = i;
+
+        return Math.min(clazz + 1, TrainerManager.getMax());
     }
 
     public static String getRoman(int clazz)

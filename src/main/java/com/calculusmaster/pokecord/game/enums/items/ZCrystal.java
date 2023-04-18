@@ -74,11 +74,13 @@ public enum ZCrystal
     ETERNIUM_Z(EnumSet.of(ETERNATUS, ETERNATUS_ETERNAMAX), ETERNABEAM, DYNAMAX_CANNON),
     DARKRAIUM_Z(DARKRAI, DARK_VOID);
 
+    private final EnumSet<PokemonEntity> pokemon;
     private final ZCrystalValidator rule;
     private Type type;
 
     ZCrystal(ZCrystalValidator rule)
     {
+        this.pokemon = EnumSet.noneOf(PokemonEntity.class);
         this.rule = rule;
         this.type = null;
     }
@@ -92,11 +94,13 @@ public enum ZCrystal
     ZCrystal(PokemonEntity pokemonEntity, MoveEntity... moveEntities)
     {
         this((p, m) -> p == pokemonEntity && List.of(moveEntities).contains(m.getEntity()));
+        this.pokemon.add(pokemonEntity);
     }
 
     ZCrystal(EnumSet<PokemonEntity> pokemonEntities, MoveEntity... moveEntities)
     {
         this((p, m) -> pokemonEntities.contains(p) && List.of(moveEntities).contains(m.getEntity()));
+        this.pokemon.addAll(pokemonEntities);
     }
 
     public boolean check(PokemonEntity pokemonEntity, Move move)
@@ -144,5 +148,13 @@ public enum ZCrystal
     public static ZCrystal getRandomUniqueZCrystal()
     {
         return Seq.seq(Arrays.stream(values())).filter(z -> z.type == null).shuffle().findFirst().orElse(ZCrystal.NORMALIUM_Z);
+    }
+
+    public static ZCrystal getRandomUniqueZCrystalFor(PokemonEntity entity)
+    {
+        List<ZCrystal> pool = Arrays.stream(values()).filter(z -> z.pokemon.contains(entity)).toList();
+        if(pool.isEmpty()) return null;
+
+        return pool.get(new Random().nextInt(pool.size()));
     }
 }
