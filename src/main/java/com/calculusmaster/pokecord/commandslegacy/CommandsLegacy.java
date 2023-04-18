@@ -3,7 +3,6 @@ package com.calculusmaster.pokecord.commandslegacy;
 import com.calculusmaster.pokecord.commandslegacy.duel.CommandLegacyGauntletDuel;
 import com.calculusmaster.pokecord.commandslegacy.duel.CommandLegacyRaidDuel;
 import com.calculusmaster.pokecord.commandslegacy.duel.CommandLegacyTrainerInfo;
-import com.calculusmaster.pokecord.commandslegacy.duel.CommandLegacyZTrialDuel;
 import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyMarket;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyDev;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyHelp;
@@ -54,10 +53,6 @@ public class CommandsLegacy
         register("breed")
                 .setCommand(CommandLegacyBreed::new)
                 .setCategory(Category.POKEMON);
-
-        register("ztrialduel", "ztrial", "trial", "ztduel")
-                .setCommand(CommandLegacyZTrialDuel::new)
-                .setCategory(Category.DUEL);
 
         register("trainerinfo", "ti")
                 .setCommand(CommandLegacyTrainerInfo::new)

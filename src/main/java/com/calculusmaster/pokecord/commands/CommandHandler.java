@@ -81,6 +81,7 @@ public class CommandHandler extends ListenerAdapter
         CommandTrainerDuel.init();
         CommandEliteDuel.init();
         CommandWildDuel.init();
+        CommandTrialDuel.init();
 
         CommandMoves.init();
         CommandTM.init();

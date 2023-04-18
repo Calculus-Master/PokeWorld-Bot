@@ -1,6 +1,7 @@
 package com.calculusmaster.pokecord.game.pokemon.data;
 
 import com.calculusmaster.pokecord.game.enums.elements.Region;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.util.Global;
 
 import java.util.*;
@@ -112,6 +113,17 @@ public class PokemonRarity
         List<PokemonEntity> l = (isDefault ? DEFAULT_POKEMON : CURRENT_POKEMON).stream().filter(p -> rarityList.contains(p.getRarity())).toList();
 
         return l.get(r.nextInt(l.size()));
+    }
+
+    public static PokemonEntity getPokemon(boolean isDefault, Type type, Rarity... rarities)
+    {
+        EnumSet<Rarity> rarityList = EnumSet.copyOf(List.of(rarities));
+        List<PokemonEntity> l = (isDefault ? DEFAULT_POKEMON : CURRENT_POKEMON).stream().filter(p -> rarityList.contains(p.getRarity())).toList();
+
+        PokemonEntity e;
+        do { e = l.get(r.nextInt(l.size())); } while(!e.data().getTypes().contains(type));
+
+        return e;
     }
 
     public enum Rarity

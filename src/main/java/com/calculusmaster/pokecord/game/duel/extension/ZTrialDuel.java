@@ -11,10 +11,10 @@ import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
-import com.calculusmaster.pokecord.util.helpers.DataHelper;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -23,24 +23,25 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.List;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Objects;
 
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.BACKGROUND;
 import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.DUELS;
+import static com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity.Rarity.*;
 
 //PVE Duel to Earn a Typed Z-Crystal
 public class ZTrialDuel extends WildDuel
 {
     private Type type;
 
-    public static Duel create(String playerID, MessageReceivedEvent event, Type type)
+    public static Duel create(String playerID, TextChannel channel, Type type)
     {
         ZTrialDuel duel = new ZTrialDuel();
 
         duel.setStatus(DuelStatus.WAITING);
         duel.setTurn();
-        duel.addChannel(event.getChannel().asTextChannel());
+        duel.addChannel(channel);
         duel.setPlayers(playerID, "BOT", 1);
         duel.setWildPokemon(type);
         duel.setDefaults();
@@ -78,14 +79,14 @@ public class ZTrialDuel extends WildDuel
 
     private void setWildPokemon(Type type)
     {
-        List<PokemonEntity> pool = new ArrayList<>(DataHelper.TYPE_LISTS.get(type));
-        PokemonEntity pokemon = pool.get(new Random().nextInt(pool.size()));
-
-        this.players[1] = new WildPlayer(pokemon, Math.max(80, this.players[0].active.getLevel()));
         this.type = type;
 
-        this.players[1].active.getBoosts().setStatBoost(1.5);
-        this.players[1].active.getBoosts().setHealthBoost(2.75);
+        PokemonEntity pokemon = PokemonRarity.getPokemon(false, type, DIAMOND, PLATINUM, MYTHICAL, ULTRA_BEAST, LEGENDARY);
+
+        this.players[1] = new WildPlayer(pokemon, Math.max(80, this.players[0].active.getLevel()));
+
+        this.players[1].active.getBoosts().setStatBoost(1.2);
+        this.players[1].active.getBoosts().setHealthBoost(1.8);
         Arrays.stream(Stat.values()).forEach(s -> this.players[1].active.setEV(s, 50));
         this.players[1].active.setHealth(this.players[1].active.getMaxHealth());
     }
@@ -96,7 +97,7 @@ public class ZTrialDuel extends WildDuel
         StringBuilder sb = new StringBuilder();
 
         if(this.players[p] instanceof UserPlayer player) sb.append(player.getName()).append("'s ");
-        else sb.append("Z-Trial Leader ");
+        else sb.append("Trial Pokemon ");
 
         sb.append(this.players[p].active.getName()).append(": ");
 
