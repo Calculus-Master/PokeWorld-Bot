@@ -1,6 +1,9 @@
 package com.calculusmaster.pokecord.commandslegacy;
 
-import com.calculusmaster.pokecord.commandslegacy.duel.*;
+import com.calculusmaster.pokecord.commandslegacy.duel.CommandLegacyGauntletDuel;
+import com.calculusmaster.pokecord.commandslegacy.duel.CommandLegacyRaidDuel;
+import com.calculusmaster.pokecord.commandslegacy.duel.CommandLegacyTrainerInfo;
+import com.calculusmaster.pokecord.commandslegacy.duel.CommandLegacyZTrialDuel;
 import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyMarket;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyDev;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyHelp;
@@ -35,10 +38,6 @@ public class CommandsLegacy
         register("market")
                 .setCommand(CommandLegacyMarket::new)
                 .setCategory(Category.ECONOMY);
-
-        register("wildduel", "wild")
-                .setCommand(CommandLegacyWildDuel::new)
-                .setCategory(Category.DUEL);
 
         register("settings", "config")
                 .setCommand(CommandLegacySettings::new)

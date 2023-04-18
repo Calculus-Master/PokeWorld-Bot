@@ -704,7 +704,7 @@ public class Pokemon
         {
             this.updateEntity();
 
-            this.resetAugments();
+            if(!this.augments.isEmpty()) this.resetAugments();
 
             if(target.isNotSpawnable() && !playerData.getPokedex().hasCollected(target))
             {

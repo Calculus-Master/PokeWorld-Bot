@@ -16,7 +16,7 @@ import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +27,13 @@ import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.DUELS;
 //PVE Duel - 1v1 Against a Wild Pokemon for EXP and EV Grinding
 public class WildDuel extends Duel
 {
-    public static Duel create(String playerID, MessageReceivedEvent event, PokemonEntity pokemonEntity)
+    public static Duel create(String playerID, TextChannel channel, PokemonEntity pokemonEntity)
     {
         WildDuel duel = new WildDuel();
 
         duel.setStatus(DuelStatus.WAITING);
         duel.setTurn();
-        duel.addChannel(event.getChannel().asTextChannel());
+        duel.addChannel(channel);
         duel.setPlayers(playerID, "BOT", 1);
         duel.setWildPokemon(pokemonEntity);
         duel.setDefaults();
