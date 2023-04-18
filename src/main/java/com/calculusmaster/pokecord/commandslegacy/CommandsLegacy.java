@@ -1,10 +1,8 @@
 package com.calculusmaster.pokecord.commandslegacy;
 
-import com.calculusmaster.pokecord.commandslegacy.duel.CommandLegacyGauntletDuel;
 import com.calculusmaster.pokecord.commandslegacy.duel.CommandLegacyRaidDuel;
 import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyMarket;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyDev;
-import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyHelp;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacySettings;
 import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyBreed;
 import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyPokemon;
@@ -28,11 +26,6 @@ public class CommandsLegacy
                 .setDesc("View your Pokemon!")
                 .addTerminalPoint("pokemon", "View & sort your Pokemon list. There are many possible arguments.");
 
-        register("help")
-                .setCommand(CommandLegacyHelp::new)
-                .setCategory(Category.MISC)
-                .setDesc("View help for commands!");
-
         register("market")
                 .setCommand(CommandLegacyMarket::new)
                 .setCategory(Category.ECONOMY);
@@ -40,10 +33,6 @@ public class CommandsLegacy
         register("settings", "config")
                 .setCommand(CommandLegacySettings::new)
                 .setCategory(Category.MISC);
-
-        register("gauntlet", "gauntletduel")
-                .setCommand(CommandLegacyGauntletDuel::new)
-                .setCategory(Category.DUEL);
 
         register("raidduel", "raid")
                 .setCommand(CommandLegacyRaidDuel::new)
