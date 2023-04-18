@@ -127,11 +127,11 @@ public class CommandUse extends PokeWorldCommand
             duel.submitMove(this.player.getId(), num, DYNAMAX);
         }
 
+        event.reply("Successfully submitted turn action.").setEphemeral(true).queue();
+        this.setResponsesHandled();
+
         //If execution reaches here, that means no errors have happened, ie an action has been submitted
         duel.checkReady();
-
-        this.ephemeral = true;
-        this.response = "Successfully submitted turn action.";
 
         return true;
     }
