@@ -9,19 +9,16 @@ public enum Feature
     //Level 0 – Basic Features (Non-Active)
     VIEW_POKEMON_LIST("View your caught Pokemon"),
     VIEW_LEVEL("View your Pokemon Mastery Level"),
-    VIEW_TIPS("View helpful tips for your adventure"),
     ACCESS_SETTINGS("Access your player settings (and if applicable, server settings)"),
     VIEW_DEX_INFO("View your PokeDex, and PokeDex information about specific Pokemon"),
     VIEW_UNIQUE_INFO("View specific information about any of your Pokemon"),
-    VIEW_SERVER_INFO("View information about the current server"),
     VIEW_PROFILE("View your player profile"),
     CREATE_REPORT("Submit feature requests and bug reports to help out with bot development"),
-    VIEW_HELP("Access the help command to understand other features"),
     VIEW_BALANCE("View your credits balance"),
-    VIEW_ABILITY_INFO("View information about any implemented Pokemon ability"),
+    VIEW_ABILITY_INFO("View information about any implemented Pokemon ability"), //TODO: /ability or /ability info
     VIEW_MOVE_INFO("View information about any Pokemon move"),
     VIEW_MOVES("View your active Pokemon's moveset"),
-    VIEW_LOCATION("View the server's current location, which will impact certain features"),
+    VIEW_WORLD_INFO("View global region and time, which will impact certain features"),
     VIEW_ACHIEVEMENTS("View your achievement progress"),
     ACCESS_INVENTORY("Access your Item inventory"),
     ACCESS_LEADERBOARD("View the Global Leaderboard"),
@@ -49,8 +46,8 @@ public enum Feature
     ACQUIRE_POKEMON_FORMS("Change the forms of certain Pokemon"),
     ACQUIRE_POKEMON_MEGA_EVOLUTIONS("Mega-Evolve your Pokemon"),
 
-    //Level 4 – Bounties & Items
-    ACCESS_BOUNTIES("Complete short bounties to earn gold and experience"),
+    //Level 4 – Tasks & Items
+    ACCESS_TASKS("Complete short research tasks to earn gold and experience"),
     GIVE_POKEMON_ITEMS("Give Items to your Pokemon"),
     REDEEM_POKEMON("Use redeems to obtain any Pokemon"),
 
@@ -61,7 +58,6 @@ public enum Feature
 
     //Level 6 – Advanced Battle Mechanics (TMs, Dynamaxing, Move Tutor)
     ACCESS_TMS("Buy Technical Machines (TMs) that can be used to teach your Pokemon new moves"),
-    ACCESS_TRS("Buy Technical Records (TRs) that can be used to teach your Pokemon new moves"),
     TEACH_TMS("Teach TMs to your Pokemon to grant them new moves"),
     DYNAMAX_POKEMON("Dynamax Pokemon in Duels to improve their health and be able to use Max Moves"),
     PURCHASE_MOVE_TUTOR_MOVES("Purchase Move Tutor moves to teach your Pokemon"),
@@ -94,7 +90,7 @@ public enum Feature
 
     public static final EnumSet<Feature> DISABLED = EnumSet.noneOf(Feature.class);
 
-    private String overview;
+    private final String overview;
 
     Feature(String overview) { this.overview = overview; }
 

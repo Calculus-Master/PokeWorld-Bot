@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.misc;
 import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.world.RegionManager;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -15,6 +16,7 @@ public class CommandWorld extends PokeWorldCommand
         CommandData
                 .create("world")
                 .withConstructor(CommandWorld::new)
+                .withFeature(Feature.VIEW_WORLD_INFO)
                 .withCommand(Commands
                         .slash("world", "View the current Region and Time in " + Pokeworld.NAME + "!")
                 )

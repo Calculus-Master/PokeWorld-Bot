@@ -30,7 +30,7 @@ public class CommandTasks extends PokeWorldCommand
         CommandData
                 .create("tasks")
                 .withConstructor(CommandTasks::new)
-                .withFeature(Feature.ACCESS_BOUNTIES)
+                .withFeature(Feature.ACCESS_TASKS)
                 .withCommand(Commands
                         .slash("tasks", "Manage your Research Tasks!")
                         .addSubcommands(

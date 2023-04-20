@@ -87,7 +87,7 @@ public class MasteryLevelManager
                                 There are plenty of commands such as `/pokedex`, `/info`, `/moves info` and more that will show you data regarding a specific aspect of the world of Pokemon.
                                 """.formatted(Pokeworld.NAME), false)
                 )
-                .withFeaturesUnlocked(VIEW_POKEMON_LIST, VIEW_LEVEL, VIEW_TIPS, ACCESS_SETTINGS, VIEW_DEX_INFO, VIEW_UNIQUE_INFO, VIEW_SERVER_INFO, VIEW_PROFILE, CREATE_REPORT, VIEW_HELP, VIEW_BALANCE, VIEW_ABILITY_INFO, VIEW_MOVE_INFO, VIEW_MOVES, VIEW_LOCATION, VIEW_ACHIEVEMENTS, ACCESS_INVENTORY, ACCESS_LEADERBOARD,
+                .withFeaturesUnlocked(VIEW_POKEMON_LIST, VIEW_LEVEL, ACCESS_SETTINGS, VIEW_DEX_INFO, VIEW_UNIQUE_INFO, VIEW_PROFILE, CREATE_REPORT, VIEW_BALANCE, VIEW_ABILITY_INFO, VIEW_MOVE_INFO, VIEW_MOVES, VIEW_WORLD_INFO, VIEW_ACHIEVEMENTS, ACCESS_INVENTORY, ACCESS_LEADERBOARD,
                         CATCH_POKEMON, SELECT_POKEMON, EVOLVE_POKEMON, RELEASE_POKEMON, LEARN_REPLACE_MOVES)
                 .register();
 
@@ -236,7 +236,7 @@ public class MasteryLevelManager
                                 You can view your items using `/inventory`.
                                 """, false)
                 )
-                .withFeaturesUnlocked(ACCESS_BOUNTIES, GIVE_POKEMON_ITEMS, REDEEM_POKEMON)
+                .withFeaturesUnlocked(ACCESS_TASKS, GIVE_POKEMON_ITEMS, REDEEM_POKEMON)
                 .withExperienceRequirement(100)
                 .withTaskRequirement(new ShopPurchasedPMLTask(5))
                 .withTaskRequirement(new WildPMLTask(5))
@@ -267,7 +267,7 @@ public class MasteryLevelManager
                                 Modifiers also become more restrictive or imposing as you duel higher class Trainers!
                                 """, false)
                 )
-                .withFeaturesUnlocked(PVE_DUELS_TRAINER, VIEW_TRAINER_INFO, FLEE_TRAINER_DUELS)
+                .withFeaturesUnlocked(PVE_DUELS_TRAINER, VIEW_TRAINER_INFO)
                 .withExperienceRequirement(125)
                 .withTaskRequirement(new WildPMLTask(8))
                 .withTaskRequirement(new PvPDuelsCompletedPMLTask(6))
@@ -305,7 +305,7 @@ public class MasteryLevelManager
                                 *Note:* Dynamaxing can only be done once per Duel, and only lasts 3 turns! Pick carefully!
                                 """, false)
                 )
-                .withFeaturesUnlocked(ACCESS_TMS, ACCESS_TRS, TEACH_TMS, DYNAMAX_POKEMON, PURCHASE_MOVE_TUTOR_MOVES)
+                .withFeaturesUnlocked(ACCESS_TMS, TEACH_TMS, DYNAMAX_POKEMON, PURCHASE_MOVE_TUTOR_MOVES)
                 .withExperienceRequirement(180)
                 .withTaskRequirement(new CreditsPMLTask(Prices.SHOP_BASE_TM.get()))
                 .withTaskRequirement(new TrainerPMLTask(4))
@@ -353,7 +353,7 @@ public class MasteryLevelManager
                                 Other players will only have a chance of receiving the Raid Pokemon, higher the more they contributed.
                                 """, false)
                 )
-                .withFeaturesUnlocked(BREED_POKEMON, HATCH_EGGS, PVE_DUELS_RAID, ACTIVATE_ITEMS)
+                .withFeaturesUnlocked(BREED_POKEMON, HATCH_EGGS, PVE_DUELS_RAID)
                 .withExperienceRequirement(200)
                 .withTaskRequirement(new PokemonCaughtPMLTask(25))
                 .withTaskRequirement(new ShopPurchasedPMLTask(10))

@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.player;
 import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievement;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -20,6 +21,7 @@ public class CommandAchievements extends PokeWorldCommand
         CommandData
                 .create("achievements")
                 .withConstructor(CommandAchievements::new)
+                .withFeature(Feature.VIEW_ACHIEVEMENTS)
                 .withCommand(Commands
                         .slash("achievements", "Take a look at the Achievements you've earned!")
                         .addOption(OptionType.USER, "user", "Optional: View the achievement progress of another %s user.".formatted(Pokeworld.NAME), false)

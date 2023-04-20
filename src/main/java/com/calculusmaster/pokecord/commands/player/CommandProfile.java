@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.player;
 import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.player.PlayerStatisticsRecord;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
@@ -21,6 +22,7 @@ public class CommandProfile extends PokeWorldCommand
         CommandData
                 .create("profile")
                 .withConstructor(CommandProfile::new)
+                .withFeature(Feature.VIEW_PROFILE)
                 .withCommand(Commands
                         .slash("profile", "View your player profile and statistics!")
                         .addOption(OptionType.USER, "player", "Optional: View the profile of another %s player.".formatted(Pokeworld.NAME), false)

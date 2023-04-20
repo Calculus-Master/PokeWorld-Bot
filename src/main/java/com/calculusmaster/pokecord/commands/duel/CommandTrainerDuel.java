@@ -84,6 +84,8 @@ public class CommandTrainerDuel extends PokeWorldCommand
         }
         else if(subcommand.equals("info"))
         {
+            if(this.isInvalidMasteryLevel(Feature.VIEW_TRAINER_INFO)) return this.respondInvalidMasteryLevel(Feature.VIEW_TRAINER_INFO);
+
             int number = Objects.requireNonNull(event.getOption("number")).getAsInt();
             if(number < 1 || number > TrainerManager.REGULAR_TRAINERS.size()) return this.error("Invalid Trainer number. Use `/trainer-duel view` to see the available trainers.");
 

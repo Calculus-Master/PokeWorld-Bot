@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -16,6 +17,7 @@ public class CommandSelect extends PokeWorldCommand
         CommandData
                 .create("select")
                 .withConstructor(CommandSelect::new)
+                .withFeature(Feature.SELECT_POKEMON)
                 .withCommand(Commands
                         .slash("select", "Select a Pokemon to become your Active Pokemon!")
                         .addOption(OptionType.INTEGER, "number", "The number of the Pokemon you want to make your active/selected.", true)

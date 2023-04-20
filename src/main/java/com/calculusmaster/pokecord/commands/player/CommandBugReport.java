@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.player;
 
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.mongo.DatabaseCollection;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.util.Global;
@@ -23,6 +24,7 @@ public class CommandBugReport extends PokeWorldCommand
         CommandData
                 .create("bugreport")
                 .withConstructor(CommandBugReport::new)
+                .withFeature(Feature.CREATE_REPORT)
                 .withCommand(Commands
                         .slash("bugreport", "Report a bug you've found, or make a suggestion!")
                         .addOption(OptionType.STRING, "type", "Either BUG for bug reports, or SUGGESTION for suggestions or feedback.", true, true)

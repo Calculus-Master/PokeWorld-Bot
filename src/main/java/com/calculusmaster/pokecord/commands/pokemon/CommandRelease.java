@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -24,6 +25,7 @@ public class CommandRelease extends PokeWorldCommand
         CommandData
                 .create("release")
                 .withConstructor(CommandRelease::new)
+                .withFeature(Feature.RELEASE_POKEMON)
                 .withCommand(Commands
                         .slash("release", "Release a Pokemon you no longer want into the wild!")
                         .addSubcommands(

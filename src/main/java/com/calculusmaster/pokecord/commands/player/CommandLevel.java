@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.commands.player;
 
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.player.level.pmltasks.AbstractPMLTask;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -20,6 +21,7 @@ public class CommandLevel extends PokeWorldCommand
         CommandData
                 .create("level")
                 .withConstructor(CommandLevel::new)
+                .withFeature(Feature.VIEW_LEVEL)
                 .withButtons(SEND_EMBED.getId())
                 .withCommand(Commands
                         .slash("level", "View your Pokemon Mastery Level progress!")

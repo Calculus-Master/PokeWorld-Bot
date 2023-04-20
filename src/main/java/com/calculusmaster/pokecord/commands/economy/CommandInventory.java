@@ -22,6 +22,7 @@ public class CommandInventory extends PokeWorldCommand
         CommandData
                 .create("inventory")
                 .withConstructor(CommandInventory::new)
+                .withFeature(Feature.ACCESS_INVENTORY)
                 .withCommand(Commands
                         .slash("inventory", "View your item, Z-Crystal and TM inventory.")
                         .addSubcommands(
@@ -36,8 +37,6 @@ public class CommandInventory extends PokeWorldCommand
     @Override
     protected boolean slashCommandLogic(SlashCommandInteractionEvent event)
     {
-        if(this.isInvalidMasteryLevel(Feature.ACCESS_INVENTORY)) return this.respondInvalidMasteryLevel(Feature.ACCESS_INVENTORY);
-
         String page = Objects.requireNonNull(event.getSubcommandName());
 
         PlayerInventory inv = this.playerData.getInventory();
