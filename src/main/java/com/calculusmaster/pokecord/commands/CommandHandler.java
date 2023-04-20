@@ -75,6 +75,7 @@ public class CommandHandler extends ListenerAdapter
         CommandPrestige.init();
         CommandForm.init();
         CommandEggs.init();
+        CommandPokemon.init();
 
         CommandUse.init();
         CommandDuel.init();
@@ -91,6 +92,7 @@ public class CommandHandler extends ListenerAdapter
         CommandShop.init();
         CommandTrade.init();
         CommandRedeem.init();
+        CommandMarket.init();
 
         CommandWorld.init();
 

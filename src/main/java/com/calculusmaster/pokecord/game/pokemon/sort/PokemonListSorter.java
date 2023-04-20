@@ -1,227 +1,463 @@
 package com.calculusmaster.pokecord.game.pokemon.sort;
 
-import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
-import com.calculusmaster.pokecord.game.enums.elements.Gender;
-import com.calculusmaster.pokecord.game.enums.elements.Stat;
-import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.enums.elements.*;
+import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
+import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
-import com.calculusmaster.pokecord.util.interfaces.Transformer;
+import com.calculusmaster.pokecord.game.world.PokeWorldMarket;
+import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
+import kotlin.Pair;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static com.calculusmaster.pokecord.game.pokemon.sort.PokemonListOrderType.NUMBER;
+import static com.calculusmaster.pokecord.game.pokemon.sort.PokemonListOrderType.TIME;
 
 public class PokemonListSorter
 {
-    private Stream<Pokemon> stream;
-    private List<String> msg;
+    private final boolean market;
 
-    public PokemonListSorter(Stream<Pokemon> stream, List<String> msg)
+    private final List<Pokemon> originalList;
+    private List<Pokemon> filteredList;
+
+    private final List<String> query;
+    private Pair<PokemonListOrderType, Boolean> sortType;
+    private boolean hasNicknameQuery;
+
+    private PlayerDataQuery playerData;
+
+    public PokemonListSorter(boolean market, List<Pokemon> originalList, List<String> query)
     {
-        this.stream = stream;
-        this.msg = msg;
+        this.market = market;
+
+        this.originalList = originalList;
+        this.filteredList = new ArrayList<>();
+
+        this.query = query;
+        this.sortType = null;
+        this.hasNicknameQuery = false;
+
+        this.playerData = null;
     }
 
-    public Stream<Pokemon> retrieveStream()
+    public PokemonListSorter withPlayerData(PlayerDataQuery playerData)
     {
-        return this.stream;
+        this.playerData = playerData;
+        return this;
     }
 
-    //Common Sorts
-    public void sortStandardNumeric()
+    //Queries that are added as Slash Command Options
+    //Pair Left: Queries | Right: Errors
+    public static Pair<List<String>, List<String>> parsePriorityQueries(SlashCommandInteractionEvent event)
     {
-        this.sortNumeric(PokemonSorterFlag.LEVEL, Pokemon::getLevel);
-        this.sortNumeric(PokemonSorterFlag.DYNAMAX_LEVEL, Pokemon::getDynamaxLevel);
-        this.sortNumeric(PokemonSorterFlag.PRESTIGE_LEVEL, Pokemon::getPrestigeLevel);
-        this.sortNumeric(PokemonSorterFlag.IV, p -> (int)(p.getTotalIVRounded()));
-        this.sortNumeric(PokemonSorterFlag.EV, Pokemon::getTotalEV);
-        this.sortNumeric(PokemonSorterFlag.STAT, Pokemon::getTotalStat);
-    }
+        List<String> query = new ArrayList<>(), errors = new ArrayList<>();
 
-    public void sortStandardEnum()
-    {
-        this.sortEnum(PokemonSorterFlag.TYPE, Type::cast, Pokemon::isType);
-        this.sortEnum(PokemonSorterFlag.MAIN_TYPE, Type::cast, (p, t) -> p.getType().get(0).equals(t));
-        this.sortEnum(PokemonSorterFlag.GENDER, Gender::cast, (p, g) -> p.getGender().equals(g));
-        this.sortEnum(PokemonSorterFlag.EGG_GROUP, EggGroup::cast, (p, e) -> p.getEggGroups().contains(e));
-        this.sortEnum(PokemonSorterFlag.RARITY, PokemonRarity.Rarity::cast, (p, r) -> p.getRarity().equals(r));
-    }
-
-    public void sortStandardBoolean()
-    {
-        this.sortGeneric(PokemonSorterFlag.SHINY, Pokemon::isShiny);
-        this.sortGeneric(PokemonSorterFlag.MASTERED, Pokemon::isMastered);
-        this.sortGeneric(PokemonSorterFlag.PRESTIGED, Pokemon::hasPrestiged);
-    }
-
-    public void sortStats()
-    {
-        this.sortNumeric(PokemonSorterFlag.HPIV, p -> p.getIVs().get(Stat.HP));
-        this.sortNumeric(PokemonSorterFlag.ATKIV, p -> p.getIVs().get(Stat.ATK));
-        this.sortNumeric(PokemonSorterFlag.DEFIV, p -> p.getIVs().get(Stat.DEF));
-        this.sortNumeric(PokemonSorterFlag.SPATKIV, p -> p.getIVs().get(Stat.SPATK));
-        this.sortNumeric(PokemonSorterFlag.SPDEFIV, p -> p.getIVs().get(Stat.SPDEF));
-        this.sortNumeric(PokemonSorterFlag.SPDIV, p -> p.getIVs().get(Stat.SPD));
-        this.sortNumeric(PokemonSorterFlag.HPEV, p -> p.getEVs().get(Stat.HP));
-        this.sortNumeric(PokemonSorterFlag.ATKEV, p -> p.getEVs().get(Stat.ATK));
-        this.sortNumeric(PokemonSorterFlag.DEFEV, p -> p.getEVs().get(Stat.DEF));
-        this.sortNumeric(PokemonSorterFlag.SPATKEV, p -> p.getEVs().get(Stat.SPATK));
-        this.sortNumeric(PokemonSorterFlag.SPDEFEV, p -> p.getEVs().get(Stat.SPDEF));
-        this.sortNumeric(PokemonSorterFlag.SPDEV, p -> p.getEVs().get(Stat.SPD));
-    }
-
-    public void sortNameCategories()
-    {
-        this.sortGeneric(PokemonSorterFlag.LEGENDARY, p -> PokemonRarity.isLegendary(p.getEntity()));
-        this.sortGeneric(PokemonSorterFlag.MYTHICAL, p -> PokemonRarity.isMythical(p.getEntity()));
-        this.sortGeneric(PokemonSorterFlag.ULTRA_BEAST, p -> PokemonRarity.isUltraBeast(p.getEntity()));
-        this.sortGeneric(PokemonSorterFlag.MEGA, p -> MegaEvolutionRegistry.isMega(p.getEntity()));
-        this.sortGeneric(PokemonSorterFlag.MEGA_LEGENDARY, p -> MegaEvolutionRegistry.isMegaLegendary(p.getEntity()));
-    }
-
-    //Sorters
-    public void sortGeneric(PokemonSorterFlag enumFlag, Predicate<Pokemon> predicate)
-    {
-        if(this.hasFlag(enumFlag)) this.stream = this.stream.filter(predicate);
-    }
-
-    public void sortSearchName(PokemonSorterFlag enumFlag, Matcher matcher)
-    {
-        final String flag = this.getExistentFlag(enumFlag);
-
-        if(this.isIndexedFlagValid(flag))
+        OptionMapping orderOption = event.getOption("order");
+        OptionMapping descendingOption = event.getOption("descending");
+        if(orderOption != null || descendingOption != null)
         {
-            this.stream = this.stream.filter(p -> this.getSearchNames(flag).stream().anyMatch(s -> matcher.match(p, s)));
+            String order = orderOption == null ? "number" : orderOption.getAsString();
+            boolean descending = descendingOption != null && descendingOption.getAsBoolean();
+            query.add("order:" + order + ":" + (descending ? "descending" : "ascending"));
         }
-    }
 
-    public void sortIsUUIDInList(PokemonSorterFlag enumFlag, List<String> validList)
-    {
-        if(this.hasFlag(enumFlag)) this.stream = this.stream.filter(p -> validList.contains(p.getUUID()));
-    }
+        OptionMapping shinyOption = event.getOption("shiny");
+        if(shinyOption != null) query.add(shinyOption.getAsBoolean() ? "is:shiny" : "-is:shiny");
 
-    public <E extends Enum<E>> void sortEnum(PokemonSorterFlag enumFlag, Caster<E> caster, EnumChecker<E> checker)
-    {
-        String flag = this.getExistentFlag(enumFlag);
+        OptionMapping masteredOption = event.getOption("mastered");
+        if(masteredOption != null) query.add(masteredOption.getAsBoolean() ? "is:mastered" : "-is:mastered");
 
-        if(!flag.equals(""))
+        OptionMapping teamOption = event.getOption("team");
+        if(teamOption != null) query.add(teamOption.getAsBoolean() ? "in:team" : "-in:team");
+
+        OptionMapping favoritesOption = event.getOption("favorite");
+        if(favoritesOption != null) query.add(favoritesOption.getAsBoolean() ? "in:favorites" : "-in:favorites");
+
+        OptionMapping nameOption = event.getOption("name");
+        if(nameOption != null && nameOption.getAsString().matches("[a-z0-9]+")) query.add("name:\"" + nameOption.getAsString() + "\"");
+        else if(nameOption != null) errors.add("name:\"" + nameOption.getAsString() + "\"");
+
+        OptionMapping nicknameOption = event.getOption("nickname");
+        if(nicknameOption != null && nicknameOption.getAsString().matches("[a-z0-9]+")) query.add("nickname:\"" + nicknameOption.getAsString() + "\"");
+        else if(nicknameOption != null) errors.add("name:\"" + nicknameOption.getAsString() + "\"");
+
+        Function<String, String> numericOperatorParser = s -> s.replaceAll(":", "")
+                .replaceAll("(>=)(?!:)(?<!:)", ":>=:")
+                .replaceAll("(<=)(?!:)(?<!:)", ":<=:")
+                .replaceAll("(>(?!=))(?!:)(?<!:)", ":>:")
+                .replaceAll("(<(?!=))(?!:)(?<!:)", ":<:")
+                .replaceAll("(=((?<!>)|(?!=>)))(?!:)(?<!:)", ":=:");
+
+        OptionMapping statOption = event.getOption("stat");
+        OptionMapping ivOption = event.getOption("iv");
+        OptionMapping evOption = event.getOption("ev");
+        OptionMapping levelOption = event.getOption("level");
+        OptionMapping dynamaxLevelOption = event.getOption("dynamax-level");
+        OptionMapping prestigeLevelOption = event.getOption("prestige-level");
+        OptionMapping priceOption = event.getOption("price");
+
+        if(statOption != null || ivOption != null || evOption != null || levelOption != null || dynamaxLevelOption != null || prestigeLevelOption != null || priceOption != null)
         {
-            E enumValue = caster.cast(this.msg.get(this.msg.indexOf(flag) + 1));
+            //Stat/IV/EV all need : attached since next option is the stat, the others dont since next option is the operator (which already adds a : )
+            String header = statOption != null ? "stat:" : ivOption != null ? "iv:" : evOption != null ? "ev:" : levelOption != null ? "level" : dynamaxLevelOption != null ? "dynamax-level" : prestigeLevelOption != null ? "prestige-level" : "price";
 
-            if(enumValue != null) this.stream = this.stream.filter(p -> checker.has(p, enumValue));
+            String content = statOption != null ? statOption.getAsString() : ivOption != null ? ivOption.getAsString() : evOption != null ? evOption.getAsString() : levelOption != null ? levelOption.getAsString() : dynamaxLevelOption != null ? dynamaxLevelOption.getAsString() : prestigeLevelOption != null ? prestigeLevelOption.getAsString() : priceOption.getAsString();
+
+            content = numericOperatorParser.apply(content);
+
+            query.add(header + (!content.contains(":") ? ":" : "") + content);
         }
+
+        OptionMapping typeOption = event.getOption("type");
+        if(typeOption != null) query.add("type:" + typeOption.getAsString());
+
+        OptionMapping rarityOption = event.getOption("rarity");
+        if(rarityOption != null) query.add("rarity:" + rarityOption.getAsString());
+
+        OptionMapping natureOption = event.getOption("nature");
+        if(natureOption != null) query.add("nature:" + natureOption.getAsString());
+
+        OptionMapping eggGroupOption = event.getOption("egg-group");
+        if(eggGroupOption != null) query.add("egg-group:" + eggGroupOption.getAsString());
+
+        OptionMapping tmOption = event.getOption("tm");
+        if(tmOption != null) query.add("tm:" + tmOption.getAsString());
+
+        OptionMapping moveOption = event.getOption("move");
+        if(moveOption != null) query.add("move:\"" + moveOption.getAsString() + "\"");
+
+        OptionMapping abilityOption = event.getOption("ability");
+        if(abilityOption != null) query.add("ability:" + abilityOption.getAsString());
+
+        OptionMapping itemOption = event.getOption("item");
+        if(itemOption != null) query.add("item:" + itemOption.getAsString());
+
+        return new Pair<>(query, errors);
     }
 
-    public void sortNumeric(PokemonSorterFlag enumFlag, Transformer<Pokemon, Integer> value)
+    public List<String> filter()
     {
-        String flag = this.getExistentFlag(enumFlag);
+        List<Predicate<Pokemon>> filters = new ArrayList<>();
+        List<String> erroredArgs = new ArrayList<>();
 
-        if(!flag.equals(""))
+        LoggerHelper.info(PokemonListSorter.class, "Parsing Pokemon List Sorting Query: " + this.query);
+
+        for(String argument : this.query)
         {
-            int index = this.msg.indexOf(flag) + 1;
-            String after = this.msg.get(index);
+            boolean negate = argument.startsWith("-");
+            String arg = (negate ? argument.substring(1) : argument).toLowerCase();
 
-            boolean valid = index + 1 < this.msg.size();
+            Predicate<Pokemon> predicate = null;
 
-            if(after.equals(">") && valid && this.isNumeric(index + 1)) this.stream = this.stream.filter(p -> value.transform(p) > this.getInt(index + 1));
-            else if(after.equals("<") && valid && this.isNumeric(index + 1)) this.stream = this.stream.filter(p -> value.transform(p) < this.getInt(index + 1));
-            else if(this.isNumeric(index)) this.stream = this.stream.filter(p -> value.transform(p) == this.getInt(index));
-        }
-    }
-
-    public void sortMachine(PokemonSorterFlag enumFlag)
-    {
-        String flag = this.getExistentFlag(enumFlag);
-
-        if(!flag.equals(""))
-        {
-            int index = this.msg.indexOf(flag) + 1;
-            String input = this.msg.get(index);
-
-            String machineFlag = flag.replaceAll("--", "");
-            if(input.startsWith(machineFlag) && input.length() > machineFlag.length()) input = input.substring(machineFlag.length());
-
-            if(!input.equals("") && TM.cast(input) != null)
+            //Team, Favorites
+            //in:team           in:favorites
+            if(!this.market && arg.matches("^in:(team|favorites)$"))
             {
-                final String tmInput = input;
-                this.stream = this.stream.filter(p -> p.getData().getTMs().contains(TM.cast(tmInput).getMove()));
+                if(arg.contains("team")) predicate = p -> this.playerData.getTeam().contains(p.getUUID());
+                else predicate = p -> this.playerData.getFavorites().contains(p.getUUID());
+            }
+            //Stat, EV, IV
+            //stat:hp:>=:100     ev:atk:<100     iv:spd:>=:100    stat:hp:100
+            else if(arg.matches("^(stat|ev|iv):(hp|atk|def|spatk|spdef|spd|total):((<|=|>|>=|<=|):)?(\\d+)$"))
+            {
+                String[] split = arg.split(":");
+
+                boolean isStat = split[0].equals("stat");
+                boolean isEV = split[0].equals("ev");
+                boolean isIV = split[0].equals("iv");
+
+                Function<Pokemon, Integer> valueGetter;
+
+                if(split[1].equals("total"))
+                {
+                    if(isStat) valueGetter = Pokemon::getTotalStat;
+                    else if(isEV) valueGetter = Pokemon::getTotalEV;
+                    else if(isIV) valueGetter = p -> (int)p.getTotalIVRounded();
+                    else valueGetter = null;
+                }
+                else
+                {
+                    Stat stat = Stat.valueOf(split[1].toUpperCase());
+
+                    if(isStat) valueGetter = p -> p.getStat(stat);
+                    else if(isEV) valueGetter = p -> p.getEVs().get(stat);
+                    else if(isIV) valueGetter = p -> p.getIVs().get(stat);
+                    else valueGetter = null;
+                }
+
+                if(valueGetter != null)
+                {
+                    String operator = split.length == 3 ? "=" : split[2];
+                    int number = Integer.parseInt(split.length == 3 ? split[2] : split[3]);
+
+                    predicate = p -> {
+                        int value = valueGetter.apply(p);
+
+                        return switch(operator)
+                        {
+                            case "<" -> value < number;
+                            case "=" -> value == number;
+                            case ">" -> value > number;
+                            case ">=" -> value >= number;
+                            case "<=" -> value <= number;
+                            default -> false;
+                        };
+                    };
+                }
+            }
+            //Levels
+            //level:>=:100       dynamax-level:100     prestige-level:<:100
+            else if(arg.matches("^(level|dynamax-level|prestige-level|price):((<|=|>|>=|<=|):)?(\\d+)$"))
+            {
+                String[] split = arg.split(":");
+                String type = split[0];
+
+                Function<Pokemon, Integer> valueGetter = switch(type)
+                {
+                    case "level" -> Pokemon::getLevel;
+                    case "dynamax-level" -> Pokemon::getDynamaxLevel;
+                    case "prestige-level" -> Pokemon::getPrestigeLevel;
+                    case "price" ->
+                    {
+                        if(this.market) yield p -> PokeWorldMarket.getMarketEntry(p).getPrice();
+                        else yield null;
+                    }
+                    default -> null;
+                };
+
+                if(valueGetter != null)
+                {
+                    int number = Integer.parseInt(split.length == 2 ? split[1] : split[2]);
+                    String operator = split.length == 2 ? "=" : split[1];
+
+                    predicate = p -> {
+                        int value = valueGetter.apply(p);
+
+                        return switch(operator)
+                        {
+                            case "<" -> value < number;
+                            case "=" -> value == number;
+                            case ">" -> value > number;
+                            case ">=" -> value >= number;
+                            case "<=" -> value <= number;
+                            default -> false;
+                        };
+                    };
+                }
+            }
+            //Basic boolean filters of the form is:option
+            else if(arg.matches("^is:(shiny|mastered|prestiged|legendary|mythical|ultrabeast|mega|mega-legendary|nicknamed)$"))
+            {
+                String[] split = arg.split(":");
+                String option = split[1];
+
+                predicate = switch(option)
+                {
+                    case "shiny" -> Pokemon::isShiny;
+                    case "mastered" -> Pokemon::isMastered;
+                    case "prestiged" -> p -> p.getPrestigeLevel() > 0;
+                    case "legendary" -> p -> PokemonRarity.isLegendary(p.getEntity());
+                    case "mythical" -> p -> PokemonRarity.isMythical(p.getEntity());
+                    case "ultrabeast" -> p -> PokemonRarity.isUltraBeast(p.getEntity());
+                    case "mega" -> p -> MegaEvolutionRegistry.isMega(p.getEntity());
+                    case "mega-legendary" -> p -> MegaEvolutionRegistry.isMegaLegendary(p.getEntity());
+                    case "nicknamed" -> Pokemon::hasNickname;
+                    default -> p -> false;
+                };
+            }
+            //Enums: Rarity, Type, Nature, Gender
+            //rarity:<rarity>
+            else if(arg.matches("^(rarity|type|maintype|nature|gender|egg-group|tm):[a-z0-9]+$"))
+            {
+                String[] split = arg.split(":");
+                String enumType = split[0];
+
+                switch(enumType)
+                {
+                    case "rarity" ->
+                    {
+                        PokemonRarity.Rarity rarity = PokemonRarity.Rarity.cast(split[1]);
+                        if(rarity != null) predicate = p -> p.getRarity().equals(rarity);
+                    }
+                    case "type" ->
+                    {
+                        Type type = Type.cast(split[1]);
+                        if(type != null) predicate = p -> p.isType(type);
+                    }
+                    case "maintype" ->
+                    {
+                        Type type = Type.cast(split[1]);
+                        if(type != null) predicate = p -> p.getType().get(0).equals(type);
+                    }
+                    case "nature" ->
+                    {
+                        Nature nature = Nature.cast(split[1]);
+                        if(nature != null) predicate = p -> p.getNature().equals(nature);
+                    }
+                    case "gender" ->
+                    {
+                        Gender gender = Gender.cast(split[1]);
+                        if(gender != null) predicate = p -> p.getGender().equals(gender);
+                    }
+                    case "egg-group" ->
+                    {
+                        EggGroup eggGroup = EggGroup.cast(split[1]);
+                        if(eggGroup != null) predicate = p -> p.getEggGroups().contains(eggGroup);
+                    }
+                    case "tm" ->
+                    {
+                        TM tm;
+                        if(split[1].matches("\\d+"))
+                        {
+                            int num = Integer.parseInt(split[1]);
+                            if(num >= 1 && num <= TM.values().length) tm = TM.values()[num - 1];
+                            else tm = null;
+                        }
+                        else tm = TM.cast(split[1]);
+
+                        if(tm != null) predicate = p -> p.hasTM() && p.getTM().equals(tm);
+                    }
+                }
+            }
+            //Name, Nickname, Ability, Move, Item, Augment
+            else if(arg.matches("^(name|nickname|ability|move|item|augment):\"[a-z0-9 -]+\"$"))
+            {
+                String[] split = arg.split(":");
+                String type = split[0];
+                String contents = split[1].substring(1, split[1].length() - 1);
+
+                if(type.equals("nickname")) this.hasNicknameQuery = true;
+
+                predicate = switch(type)
+                {
+                    case "name" -> p -> p.getName().toLowerCase().contains(contents);
+                    case "nickname" -> p -> p.hasNickname() && p.getNickname().toLowerCase().contains(contents);
+                    case "ability" ->
+                    {
+                        Ability ability = Ability.cast(contents);
+                        yield ability == null ? null : p -> p.getAbility().equals(ability);
+                    }
+                    case "move" ->
+                    {
+                        MoveEntity move = MoveEntity.cast(contents);
+                        yield move == null ? null : p -> p.getMoves().stream().anyMatch(m -> m.equals(move));
+                    }
+                    case "item" ->
+                    {
+                        Item item = Item.cast(contents);
+                        yield item == null ? null : p -> p.hasItem(item);
+                    }
+                    case "augment" ->
+                    {
+                        PokemonAugment augment = PokemonAugment.cast(contents);
+                        yield augment == null ? null : p -> p.hasAugment(augment);
+                    }
+                    default -> p -> false;
+                };
+            }
+            //Order
+            else if(arg.matches("^order:[a-z]+(:(a|ascending|d|descending))?$"))
+            {
+                String[] split = arg.split(":");
+                String type = split[1];
+
+                PokemonListOrderType orderType = PokemonListOrderType.cast(type);
+                if(orderType != null)
+                {
+                    boolean descending = split.length != 3 || (split[2].equals("d") || split[2].equals("descending"));
+                    this.sortType = new Pair<>(orderType, descending);
+                }
+
+                predicate = p -> true;
+            }
+            //Pokemon has an item/tm
+            //has:tm        has:item
+            else if(arg.matches("^has:(item|tm)$"))
+            {
+                String[] split = arg.split(":");
+                String type = split[1];
+
+                predicate = switch(type)
+                {
+                    case "item" -> Pokemon::hasItem;
+                    case "tm" -> Pokemon::hasTM;
+                    default -> p -> false;
+                };
+            }
+
+            //After parsing
+            if(predicate != null) filters.add(negate ? predicate.negate() : predicate);
+            //Didn't match any of the statements above
+            else erroredArgs.add(argument);
+        }
+
+        this.filteredList = this.originalList.stream()
+                .filter(filters
+                        .stream()
+                        .reduce(p -> true, Predicate::and))
+                .collect(Collectors.toList());
+
+        return erroredArgs;
+    }
+
+    public List<Pokemon> sort()
+    {
+        if(this.playerData != null); //setting
+
+        if(this.sortType == null) //Default Sort Type
+            this.sortType = this.market ? new Pair<>(TIME, true) : new Pair<>(NUMBER, false);
+
+        //Default is Ascending
+        switch(this.sortType.getFirst())
+        {
+            case NUMBER ->
+            {
+                if(!this.market)
+                    this.filteredList.sort(Comparator.comparingInt(Pokemon::getNumber));
+            }
+            case IV -> this.filteredList.sort(Comparator.comparingDouble(Pokemon::getTotalIVRounded));
+            case EV -> this.filteredList.sort(Comparator.comparingInt(Pokemon::getTotalEV));
+            case STAT -> this.filteredList.sort(Comparator.comparingInt(Pokemon::getTotalStat));
+            case LEVEL -> this.filteredList.sort(Comparator.comparingInt(Pokemon::getLevel));
+            case NAME -> this.filteredList.sort(Comparator.comparing(Pokemon::getName));
+            case RANDOM -> Collections.shuffle(this.filteredList);
+            case PRICE ->
+            {
+                if(this.market)
+                    this.filteredList.sort(Comparator.comparingInt((p -> PokeWorldMarket.getMarketEntry(p).getPrice())));
+            }
+            case TIME ->
+            {
+                if(this.market)
+                    this.filteredList.sort(Comparator.comparingLong((p -> PokeWorldMarket.getMarketEntry(p).getTimestamp())));
             }
         }
+
+        if(this.sortType.getSecond()) Collections.reverse(this.filteredList);
+
+        return this.filteredList;
     }
 
-    //Functional Interfaces
-    public interface Matcher
+    public Pair<PokemonListOrderType, Boolean> getSortType()
     {
-        boolean match(Pokemon p, String s);
+        return this.sortType;
     }
 
-    public interface Caster<E extends Enum<E>>
+    public boolean hasNicknameQuery()
     {
-        E cast(String s);
-    }
-
-    public interface EnumChecker<E extends Enum<E>>
-    {
-        boolean has(Pokemon p, E value);
-    }
-
-    //Utility
-    private List<String> getSearchNames(String flag)
-    {
-        int start = this.msg.indexOf(flag) + 1;
-        int end = this.msg.size() - 1;
-
-        for(int i = start; i < this.msg.size(); i++)
-        {
-            if(this.msg.get(i).contains("--"))
-            {
-                end = i - 1;
-                i = this.msg.size();
-            }
-        }
-
-        StringBuilder names = new StringBuilder();
-
-        for(int i = start; i <= end; i++)
-        {
-            names.append(this.msg.get(i)).append(" ");
-        }
-
-        String delimiter = "\\|"; //Currently the OR delimiter is |
-
-        return new ArrayList<>(Arrays.asList(names.toString().trim().split(delimiter))).stream().map(String::trim).map(String::toLowerCase).collect(Collectors.toList());
-    }
-
-    private int getInt(int index)
-    {
-        return Integer.parseInt(this.msg.get(index));
-    }
-
-    private boolean isNumeric(int index)
-    {
-        return this.msg.get(index).chars().allMatch(Character::isDigit);
-    }
-
-    private boolean hasFlag(PokemonSorterFlag flag)
-    {
-        return this.msg.stream().anyMatch(flag.flags::contains);
-    }
-
-    private boolean isIndexedFlagValid(String flag)
-    {
-        return this.msg.contains(flag) && this.msg.indexOf(flag) + 1 < this.msg.size();
-    }
-
-    private String getExistentFlag(PokemonSorterFlag flag)
-    {
-        String existent = "";
-        for(String s : flag.flags) if(this.msg.contains(s) && this.msg.indexOf(s) + 1 < this.msg.size()) existent = s;
-        return existent;
+        return this.hasNicknameQuery;
     }
 }

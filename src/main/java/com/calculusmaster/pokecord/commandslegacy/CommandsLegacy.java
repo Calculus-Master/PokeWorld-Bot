@@ -1,11 +1,9 @@
 package com.calculusmaster.pokecord.commandslegacy;
 
 import com.calculusmaster.pokecord.commandslegacy.duel.CommandLegacyRaidDuel;
-import com.calculusmaster.pokecord.commandslegacy.economy.CommandLegacyMarket;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyDev;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacySettings;
 import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyBreed;
-import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyPokemon;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.interfaces.CommandSupplier;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -20,16 +18,6 @@ public class CommandsLegacy
 
     public static void init()
     {
-        register("pokemon", "p")
-                .setCommand(CommandLegacyPokemon::new)
-                .setCategory(Category.POKEMON)
-                .setDesc("View your Pokemon!")
-                .addTerminalPoint("pokemon", "View & sort your Pokemon list. There are many possible arguments.");
-
-        register("market")
-                .setCommand(CommandLegacyMarket::new)
-                .setCategory(Category.ECONOMY);
-
         register("settings", "config")
                 .setCommand(CommandLegacySettings::new)
                 .setCategory(Category.MISC);

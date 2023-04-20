@@ -7,8 +7,6 @@ import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionRegistry;
 import com.calculusmaster.pokecord.game.pokemon.evolution.triggers.EvolutionTrigger;
 import com.calculusmaster.pokecord.game.pokemon.evolution.triggers.TradeEvoTrigger;
 import com.calculusmaster.pokecord.game.pokemon.evolution.triggers.TradeWithEvoTrigger;
-import com.calculusmaster.pokecord.game.trade.elements.TradeOffer;
-import com.calculusmaster.pokecord.game.trade.elements.TradePlayer;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.EmbedBuilder;

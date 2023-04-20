@@ -16,6 +16,15 @@ public class MasteryLevelManager
     public static boolean ACTIVE;
     public static final List<PokemonMasteryLevel> MASTERY_LEVELS = new ArrayList<>();
 
+    //Limits
+    public static int getMaxMarketListings(int masteryLevel)
+    {
+        if(!ACTIVE) masteryLevel = MASTERY_LEVELS.get(MASTERY_LEVELS.size() - 1).getLevel();
+
+        if(masteryLevel < ACCESS_MARKET.getRequiredLevel()) return 0;
+        else return 1 + (masteryLevel - ACCESS_MARKET.getRequiredLevel()) * 2;
+    }
+
     //TODO: Names for each Level?
     public static void init()
     {

@@ -20,7 +20,6 @@ import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.cacheold.PlayerDataCache;
 import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
-import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.ConfigHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.event.LocationEventHelper;
@@ -66,11 +65,6 @@ public class CommandLegacyDev extends CommandLegacy
                 else if (this.msg[2].equals("legendary")) spawn = PokemonRarity.getSpawn(false, PokemonRarity.Rarity.LEGENDARY);
                 else spawn = PokemonEntity.cast(this.getMultiWordContent(2));
                 SpawnEventHelper.forceSpawn(this.server, spawn);
-            }
-            case "deletebotmarket" -> {
-                Mongo.MarketData.deleteMany(Filters.eq("sellerID", "BOT"));
-                CacheHelper.MARKET_ENTRIES.clear();
-                CacheHelper.initMarketEntries();
             }
             case "randommoves" -> {
                 StringBuilder sb = new StringBuilder();

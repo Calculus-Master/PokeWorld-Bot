@@ -128,26 +128,35 @@ public class PokemonRarity
 
     public enum Rarity
     {
-        COPPER(100),
-        SILVER(75),
-        GOLD(50),
-        DIAMOND(25),
-        PLATINUM(15),
-        MYTHICAL(10),
-        ULTRA_BEAST(8),
-        LEGENDARY(5),
+        COPPER(100, "Copper"),
+        SILVER(75, "Silver"),
+        GOLD(50, "Gold"),
+        DIAMOND(25, "Diamond"),
+        PLATINUM(15, "Platinum"),
+        MYTHICAL(10, "Mythical"),
+        ULTRA_BEAST(8, "Ultra Beast"),
+        LEGENDARY(5, "Legendary"),
 
         ;
 
         public final int weight;
-        Rarity(int weight)
+        private final String name;
+        Rarity(int weight, String name)
         {
             this.weight = weight;
+            this.name = name;
+        }
+
+        public String getName()
+        {
+            return this.name;
         }
 
         public static Rarity cast(String input)
         {
-            return Global.getEnumFromString(values(), input);
+            Rarity r = Global.getEnumFromString(values(), input);
+            if(r == null) r = Arrays.stream(values()).filter(e -> e.getName().equalsIgnoreCase(input)).findFirst().orElse(null);
+            return r;
         }
     }
 }

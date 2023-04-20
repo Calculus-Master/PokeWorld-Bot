@@ -8,7 +8,7 @@ import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.trade.Trade;
-import com.calculusmaster.pokecord.game.trade.elements.TradeOffer;
+import com.calculusmaster.pokecord.game.trade.TradeOffer;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;

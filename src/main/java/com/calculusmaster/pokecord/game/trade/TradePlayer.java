@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game.trade.elements;
+package com.calculusmaster.pokecord.game.trade;
 
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 

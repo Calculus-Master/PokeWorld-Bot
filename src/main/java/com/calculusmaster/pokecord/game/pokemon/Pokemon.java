@@ -331,6 +331,8 @@ public class Pokemon
 
     public void resetAugments()
     {
+        if(this.augments.isEmpty()) return;
+
         this.clearAugments();
         this.updateAugments();
     }
@@ -655,6 +657,8 @@ public class Pokemon
 
         this.changePokemon(baseForm);
         this.updateEntity();
+        this.updateAbility();
+        this.resetAugments();
     }
 
     //Mega Evolutions, Forms, Evolution
@@ -674,6 +678,7 @@ public class Pokemon
         this.changePokemon(data.getTarget());
         this.updateEntity();
 
+        this.updateAbility();
         this.resetAugments();
 
         playerData.updateObjective(ObjectiveType.EVOLVE_POKEMON, 1);
@@ -703,8 +708,8 @@ public class Pokemon
         if(playerData != null)
         {
             this.updateEntity();
-
-            if(!this.augments.isEmpty()) this.resetAugments();
+            this.updateAbility();
+            this.resetAugments();
 
             if(target.isNotSpawnable() && !playerData.getPokedex().hasCollected(target))
             {
@@ -721,6 +726,7 @@ public class Pokemon
         this.changePokemon(target);
         this.updateEntity();
 
+        this.updateAbility();
         this.resetAugments();
 
         MegaChargeManager.setBlocked(this.getUUID());

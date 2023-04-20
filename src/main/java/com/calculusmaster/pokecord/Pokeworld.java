@@ -16,10 +16,7 @@ import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugmentRegistry;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.*;
-import com.calculusmaster.pokecord.game.world.PokeWorldResearchBoard;
-import com.calculusmaster.pokecord.game.world.PokeWorldShop;
-import com.calculusmaster.pokecord.game.world.RegionManager;
-import com.calculusmaster.pokecord.game.world.RotationManager;
+import com.calculusmaster.pokecord.game.world.*;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.util.PrivateInfo;
 import com.calculusmaster.pokecord.util.cacheold.PlayerDataCache;
@@ -109,11 +106,11 @@ public class Pokeworld
         LoggerHelper.init("Command Handler", CommandsLegacy::init);
         LoggerHelper.init("Pokemon Mastery Level", MasteryLevelManager::init);
         LoggerHelper.init("Achievement Cache", CacheHelper::initAchievementCache);
-        LoggerHelper.init("Market", CacheHelper::initMarketEntries, true);
 
         LoggerHelper.init("Pokemon Data Cache", PokemonDataCache::init);
         LoggerHelper.init("Global Leaderboard", PokeWorldLeaderboard::init);
         LoggerHelper.init("PokeWorld Research Board", PokeWorldResearchBoard::init);
+        LoggerHelper.init("PokeWorld Market", PokeWorldMarket::init, true);
         //LoggerHelper.init("CommandPokemon", CacheHelper::initPokemonLists, true);
 
         long end = System.currentTimeMillis();

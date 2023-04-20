@@ -2,9 +2,9 @@ package com.calculusmaster.pokecord.commandslegacy.misc;
 
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacy;
 import com.calculusmaster.pokecord.commandslegacy.CommandLegacyInvalid;
-import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyPokemon;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.player.Settings;
+import com.calculusmaster.pokecord.game.pokemon.sort.PokemonListOrderType;
 import com.calculusmaster.pokecord.mongo.PlayerSettingsQuery;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -102,12 +102,12 @@ public class CommandLegacySettings extends CommandLegacy
                 {
                     if(this.msg.length == 4)
                     {
-                        CommandLegacyPokemon.OrderSort order = CommandLegacyPokemon.OrderSort.cast(this.msg[3]);
+                        PokemonListOrderType order = PokemonListOrderType.cast(this.msg[3]);
 
                         if(order == null) this.response = "Invalid Order!";
                         else
                         {
-                            settings.update(CLIENT_DEFAULT_ORDER, order.toString());
+                            settings.update(CLIENT_DEFAULT_ORDER, order);
 
                             this.response = "Your Pokemon List will now be ordered by `" + order.toString().toLowerCase() + "`!";
                         }
