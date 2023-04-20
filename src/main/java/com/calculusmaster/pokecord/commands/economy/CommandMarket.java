@@ -207,6 +207,8 @@ public class CommandMarket extends PokeWorldCommand
             PokeWorldMarket.insertMarketEntry(entry);
             this.playerData.removePokemon(pokemon.getUUID());
 
+            pokemon.resetAugments();
+
             this.response = "Listed your **Level %s %s** for sale on the Market for **%sc** (Market ID: %s)!".formatted(
                     pokemon.getLevel(), pokemon.getName(),
                     price,
