@@ -3,10 +3,7 @@ package com.calculusmaster.pokecord.commands.economy;
 import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
-import com.calculusmaster.pokecord.game.enums.elements.Ability;
-import com.calculusmaster.pokecord.game.enums.elements.EggGroup;
-import com.calculusmaster.pokecord.game.enums.elements.Feature;
-import com.calculusmaster.pokecord.game.enums.elements.Type;
+import com.calculusmaster.pokecord.game.enums.elements.*;
 import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -16,6 +13,7 @@ import com.calculusmaster.pokecord.game.pokemon.sort.PokemonListSorter;
 import com.calculusmaster.pokecord.game.world.MarketEntry;
 import com.calculusmaster.pokecord.game.world.PokeWorldMarket;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import kotlin.Pair;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
@@ -24,8 +22,11 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.calculusmaster.pokecord.game.pokemon.sort.PokemonListOrderType.*;
 
@@ -270,7 +271,84 @@ public class CommandMarket extends PokeWorldCommand
         }
         else if(subcommand.equals("info"))
         {
+            OptionMapping marketIDOption = Objects.requireNonNull(event.getOption("market-id"));
+            String marketID = marketIDOption.getAsString();
 
+            MarketEntry entry = PokeWorldMarket.getMarketEntry(marketID);
+            if(entry == null) return this.error("Invalid Market ID.");
+
+            Pokemon p = entry.getPokemon();
+
+            //Info
+            String tags = (p.isShiny() ? ":star2:" : "") + (p.getPrestigeLevel() > 0 ? ":zap:" : "") + (p.isMastered() ? ":trophy:" : "");
+            String title = "Market Listing: %s%s (Price: %s)".formatted(p.getDisplayName(), tags.isEmpty() ? "" : " " + tags, entry.getPrice() + "c");
+
+            String level = "**Level %s**".formatted(p.getLevel());
+            String type = p.getType().stream().map(Type::getStyledName).collect(Collectors.joining("\n"));
+
+            String ability = "*" + p.getAbility().getName() + "*";
+            String item = p.hasItem() ? p.getItem().getStyledName() : "None";
+            String tm = p.hasTM() ? p.getTM().toString() + " (" + p.getTM().getMove().getName() + ")" : "None";
+
+            this.embed
+                    .setTitle(title)
+                    .setDescription("""
+                        **Sold by**: %s
+                        *Seller ID: %s*
+                        
+                        %s
+                        
+                        Dynamax Level %d (Max: 10)
+                        Prestige Level %d (Max: %d)
+                        """.formatted(
+                            entry.getSellerUsername(), entry.getSellerID(),
+                            level, p.getDynamaxLevel(), p.getPrestigeLevel(), p.getMaxPrestigeLevel()))
+
+                    .addField("Type", type, true)
+                    .addField("Gender", Global.normalize(p.getGender().toString()), true)
+                    .addField("Nature", Global.normalize(p.getNature().toString()), true)
+
+                    .addField("Ability", ability, true)
+                    .addField("Held Item", item, true)
+                    .addField("Held TM", tm, true)
+
+                    .setFooter("Buy this Pokemon with `/market buy market-id:" + entry.getMarketID() + "`!\nPokemon UUID: " + p.getUUID() + "");
+
+            if(p.getPrestigeLevel() > 0)
+            {
+                Function<Double, String> truncate = i -> ((int)(((i - 1.0) * 100) * 100)) / 100. + "%";
+
+                this.embed.addField("Prestige Boosts", """
+                    HP: **+%s**
+                    SPD: **+%s**
+                    Other: **+%s**
+                    """.formatted(truncate.apply(p.getPrestigeBonus(Stat.HP)),
+                        truncate.apply(p.getPrestigeBonus(Stat.SPD)),
+                        truncate.apply(p.getPrestigeBonus(Stat.ATK))), false);
+            }
+
+            List<String> statCalcs = new ArrayList<>(), statIVs = new ArrayList<>(), statEVs = new ArrayList<>();
+            for(Stat s : Stat.values())
+            {
+                statCalcs.add(s.toString() + ": **" + p.getStat(s) + "**");
+                statIVs.add(p.getIVs().get(s) + " / 31");
+                statEVs.add(String.valueOf(p.getEVs().get(s)));
+            }
+
+            statCalcs.add("__Total__: **" + p.getTotalStat() + "**");
+            statIVs.add("**" + p.getTotalIV() + "**");
+            statEVs.add("**" + p.getTotalEV() + "**");
+
+            this.embed.addField("Stats", String.join("\n", statCalcs), true);
+            this.embed.addField("IVs", String.join("\n", statIVs), true);
+            this.embed.addField("EVs", String.join("\n", statEVs), true);
+
+            String image = Pokemon.getImage(p.getEntity(), p.isShiny(), p, null);
+            String attachment = "market_info.png";
+
+            this.embed.setImage("attachment://" + attachment);
+            event.replyFiles(FileUpload.fromData(Pokeworld.class.getResourceAsStream(image), attachment)).setEmbeds(this.embed.build()).queue();
+            this.embed = null;
         }
         else if(subcommand.equals("listings"))
         {
