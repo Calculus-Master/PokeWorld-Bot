@@ -6,7 +6,6 @@ import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
 import com.calculusmaster.pokecord.game.enums.elements.Ability;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
-import com.calculusmaster.pokecord.game.enums.elements.Location;
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
@@ -22,7 +21,6 @@ import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 import com.calculusmaster.pokecord.util.helpers.ConfigHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
-import com.calculusmaster.pokecord.util.helpers.event.LocationEventHelper;
 import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import com.mongodb.client.model.Filters;
@@ -94,10 +92,6 @@ public class CommandLegacyDev extends CommandLegacy
             case "clearduels" -> DuelHelper.DUELS.clear();
             case "close" -> Pokeworld.close();
             case "reloadconfig" -> ConfigHelper.init();
-            case "forcelocation" -> {
-                Location l = Location.cast(this.msg[2]);
-                if(l != null) LocationEventHelper.forceLocation(this.server, l);
-            }
             case "forceraid" -> RaidEventHelper.forceRaid(this.server, this.event.getChannel().asTextChannel());
             case "restartspawns" -> {
                 for(Guild g : Pokeworld.BOT_JDA.getGuilds())
