@@ -48,7 +48,6 @@ public class CommandTasks extends PokeWorldCommand
     @Override
     protected boolean slashCommandLogic(SlashCommandInteractionEvent event)
     {
-        //TODO: task acquisition (research board)
         String subcommand = Objects.requireNonNull(event.getSubcommandName());
 
         if(subcommand.equals("view"))

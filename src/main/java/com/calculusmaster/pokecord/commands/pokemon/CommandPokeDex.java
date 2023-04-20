@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 public class CommandPokeDex extends PokeWorldCommand
 {
-    private static final int DEFAULT_POKEMON_PER_PAGE = 15; //TODO: Make this a client setting
+    private static final int DEFAULT_POKEMON_PER_PAGE = 15;
 
     public static void init()
     {
