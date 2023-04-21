@@ -2,8 +2,8 @@ package com.calculusmaster.pokecord.util.helpers;
 
 import com.calculusmaster.pokecord.commandslegacy.CommandsLegacy;
 import com.calculusmaster.pokecord.game.objectives.ResearchTask;
-import com.calculusmaster.pokecord.game.player.PlayerResearchTasks;
-import com.calculusmaster.pokecord.game.player.PlayerTeam;
+import com.calculusmaster.pokecord.game.player.components.PlayerResearchTasks;
+import com.calculusmaster.pokecord.game.player.components.PlayerTeam;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.evolution.PokemonEgg;
 import com.calculusmaster.pokecord.game.world.PokeWorldShop;

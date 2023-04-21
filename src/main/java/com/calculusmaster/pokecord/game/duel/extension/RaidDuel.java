@@ -396,7 +396,7 @@ public class RaidDuel extends WildDuel
 
         for(int i = 0; i < this.waiting.size(); i++)
         {
-            PlayerDataQuery p = PlayerDataQuery.ofNonNull(this.waiting.get(i));
+            PlayerDataQuery p = PlayerDataQuery.build(this.waiting.get(i));
             this.players[i] = new UserPlayer(p, p.getSelectedPokemon());
         }
 

@@ -57,7 +57,7 @@ public enum Achievement
     //Grant Achievements
     public void grant(String playerID, Supplier<Boolean> validator, TextChannel channel)
     {
-        this.grant(PlayerDataQuery.of(playerID), validator, channel);
+        this.grant(PlayerDataQuery.build(playerID), validator, channel);
     }
 
     public void grant(PlayerDataQuery playerData, Supplier<Boolean> validator, TextChannel channel)

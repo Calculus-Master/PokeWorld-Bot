@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game.player;
+package com.calculusmaster.pokecord.game.player.components;
 
 import com.calculusmaster.pokecord.game.objectives.ObjectiveType;
 import com.calculusmaster.pokecord.game.objectives.ResearchTask;

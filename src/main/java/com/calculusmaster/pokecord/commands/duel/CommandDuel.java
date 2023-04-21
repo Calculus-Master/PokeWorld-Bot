@@ -10,7 +10,7 @@ import com.calculusmaster.pokecord.game.duel.core.DuelHelper;
 import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
 import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestrictionRegistry;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
-import com.calculusmaster.pokecord.game.player.PlayerTeam;
+import com.calculusmaster.pokecord.game.player.components.PlayerTeam;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -74,7 +74,7 @@ public class CommandDuel extends PokeWorldCommand
             List<String> warnings = new ArrayList<>();
             if(size != 1)
             {
-                if(PlayerDataQuery.ofNonNull(user.getId()).getTeam().isEmpty()) return this.error(user.getName() + " has not created a Pokemon team.");
+                if(PlayerDataQuery.build(user.getId()).getTeam().isEmpty()) return this.error(user.getName() + " has not created a Pokemon team.");
 
                 PlayerTeam team = this.playerData.getTeam();
 
@@ -83,7 +83,7 @@ public class CommandDuel extends PokeWorldCommand
 
                 if(standard && !TeamRestrictionRegistry.STANDARD.validate(team.getActiveTeamPokemon()))
                     return this.error("Your team does not meet the standard team requirements. If you'd like to disable this for the Duel, set the `standard-restriction` option to `false`.");
-                else if(standard && !TeamRestrictionRegistry.STANDARD.validate(PlayerDataQuery.ofNonNull(user.getId()).getTeam().getActiveTeamPokemon()))
+                else if(standard && !TeamRestrictionRegistry.STANDARD.validate(PlayerDataQuery.build(user.getId()).getTeam().getActiveTeamPokemon()))
                     return this.error(user.getName() + "'s team does not meet the standard team requirements. If you'd like to disable this for the Duel, set the `standard-restriction` option to `false`.");
             }
 

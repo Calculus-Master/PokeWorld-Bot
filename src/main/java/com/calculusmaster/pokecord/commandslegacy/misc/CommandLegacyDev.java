@@ -15,8 +15,8 @@ import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.cache.CacheHandler;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.cacheold.PlayerDataCache;
 import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 import com.calculusmaster.pokecord.util.helpers.ConfigHelper;
@@ -116,10 +116,10 @@ public class CommandLegacyDev extends CommandLegacy
                 Mongo.PlayerData.deleteMany(Filters.exists("playerID"));
                 Mongo.PokemonData.deleteMany(Filters.in("UUID", UUIDs));
 
-                PlayerDataCache.init();
+                CacheHandler.PLAYER_DATA.invalidateAll();
             }
             case "addpokemon" -> {
-                PlayerDataQuery target = this.mentions.size() > 0 ? PlayerDataQuery.of(this.mentions.get(0).getId()) : this.playerData;
+                PlayerDataQuery target = this.mentions.size() > 0 ? PlayerDataQuery.build(this.mentions.get(0).getId()) : this.playerData;
                 List<String> msg = new ArrayList<>(List.of(this.msg));
                 msg.removeIf(s -> s.contains("@"));
 

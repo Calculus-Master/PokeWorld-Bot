@@ -236,7 +236,7 @@ public class CommandMarket extends PokeWorldCommand
                 this.playerData.addPokemon(entry.getPokemonID());
 
                 this.playerData.getStatistics().increase(StatisticType.POKEMON_BOUGHT_MARKET);
-                PlayerDataQuery.ofNonNull(entry.getSellerID()).getStatistics().increase(StatisticType.POKEMON_SOLD_MARKET);
+                PlayerDataQuery.build(entry.getSellerID()).getStatistics().increase(StatisticType.POKEMON_SOLD_MARKET);
 
                 PokeWorldMarket.deleteMarketEntry(entry.getMarketID());
 

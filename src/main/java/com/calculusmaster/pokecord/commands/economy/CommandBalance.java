@@ -36,7 +36,7 @@ public class CommandBalance extends PokeWorldCommand
         {
             if(!PlayerDataQuery.isRegistered(targetID))
                 return this.error("That user has not joined the world of Pokemon!");
-            else p = PlayerDataQuery.ofNonNull(userOption.getAsUser().getId());
+            else p = PlayerDataQuery.build(userOption.getAsUser().getId());
         }
         else p = this.playerData;
 

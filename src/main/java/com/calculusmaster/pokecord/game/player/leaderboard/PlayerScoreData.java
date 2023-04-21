@@ -14,7 +14,7 @@ public class PlayerScoreData
 
     public PlayerScoreData(String playerID)
     {
-        this.playerData = PlayerDataQuery.of(playerID);
+        this.playerData = PlayerDataQuery.build(playerID);
         this.scores = new HashMap<>(); Arrays.stream(LeaderboardScoreComponent.values()).forEach(c -> this.scores.put(c, 0F));
         this.totalScore = 0F;
     }

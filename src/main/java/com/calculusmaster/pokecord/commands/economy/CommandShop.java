@@ -319,11 +319,11 @@ public class CommandShop extends PokeWorldCommand
 
                 PokemonEntity targetMega = megaData.isSingle() ? megaData.getMega() : (megaInput.equals("X") ? megaData.getMegaX() : megaData.getMegaY());
 
-                if(this.playerData.getOwnedMegas().contains(targetMega)) return this.error("You already own the " + megaInput + " Mega-Evolution for " + p.getName() + ". Use `/mega` to Mega-Evolve it!");
+                if(this.playerData.getInventory().hasMega(targetMega)) return this.error("You already own the " + megaInput + " Mega-Evolution for " + p.getName() + ". Use `/mega` to Mega-Evolve it!");
                 else if(this.playerData.getCredits() < Prices.SHOP_MEGA.get()) return this.error("You do not have enough credits to purchase a Mega-Evolution (Cost: **" + Prices.SHOP_MEGA.get() + "c**).");
 
                 this.playerData.changeCredits(-Prices.SHOP_MEGA.get());
-                this.playerData.addOwnedMegas(megaData.getMega());
+                this.playerData.getInventory().addMega(megaData.getMega());
 
                 this.response = "Successfully purchased the " + (megaInput.isEmpty() ? "" : "**" + megaInput + "**") + "Mega-Evolution for " + p.getName() + " for " + "**" + Prices.SHOP_MEGA.get() + "c**! Use `/mega` to Mega-Evolve it!";
             }

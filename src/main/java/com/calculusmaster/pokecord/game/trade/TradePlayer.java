@@ -12,7 +12,7 @@ public class TradePlayer
     public TradePlayer(String ID)
     {
         this.ID = ID;
-        this.playerData = PlayerDataQuery.of(ID);
+        this.playerData = PlayerDataQuery.build(ID);
         this.offer = new TradeOffer();
         this.confirmed = false;
     }

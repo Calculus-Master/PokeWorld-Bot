@@ -95,7 +95,7 @@ public class CommandStart extends PokeWorldCommand
                 PlayerDataQuery.register(this.player);
                 DataHelper.addServerPlayer(this.server, this.player);
 
-                this.playerData = PlayerDataQuery.of(this.player.getId());
+                this.playerData = PlayerDataQuery.build(this.player.getId());
 
                 //Creating the Starter
                 Pokemon starter = Pokemon.create(starterEntity);

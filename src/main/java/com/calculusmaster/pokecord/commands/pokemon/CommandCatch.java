@@ -6,7 +6,7 @@ import com.calculusmaster.pokecord.game.common.CreditRewards;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievement;
 import com.calculusmaster.pokecord.game.objectives.ObjectiveType;
-import com.calculusmaster.pokecord.game.player.PlayerPokedex;
+import com.calculusmaster.pokecord.game.player.components.PlayerPokedex;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.FormRegistry;
@@ -109,8 +109,8 @@ public class CommandCatch extends PokeWorldCommand
                 //Form Checks
                 if(FormRegistry.hasFormData(caught.getEntity()))
                 {
-                    if(!this.playerData.getOwnedForms().contains(caught.getEntity()))
-                        this.playerData.addOwnedForm(caught.getEntity());
+                    if(!this.playerData.getInventory().hasForm(caught.getEntity()))
+                        this.playerData.getInventory().addForm(caught.getEntity());
                 }
 
                 //Featured Pokemon

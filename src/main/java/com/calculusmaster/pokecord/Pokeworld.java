@@ -19,7 +19,6 @@ import com.calculusmaster.pokecord.game.pokemon.evolution.*;
 import com.calculusmaster.pokecord.game.world.*;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.util.PrivateInfo;
-import com.calculusmaster.pokecord.util.cacheold.PlayerDataCache;
 import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
 import com.calculusmaster.pokecord.util.helpers.*;
 import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
@@ -92,8 +91,6 @@ public class Pokeworld
 
         LoggerHelper.init("EV Lists", DataHelper::createEVLists);
         LoggerHelper.init("Type Lists", DataHelper::createTypeLists);
-
-        LoggerHelper.init("Player Data Cache", PlayerDataCache::init);
 
         LoggerHelper.init("Region Manager", RegionManager::init);
         LoggerHelper.init("PokeWorld Shop", PokeWorldShop::init);

@@ -44,7 +44,7 @@ public abstract class CommandLegacy
         this.server = event.getGuild();
 
         this.serverData = serverData ? new ServerDataQuery(this.server.getId()) : null;
-        this.playerData = PlayerDataQuery.of(this.player.getId());
+        this.playerData = PlayerDataQuery.build(this.player.getId());
 
         this.embed = new EmbedBuilder();
         this.response = "";

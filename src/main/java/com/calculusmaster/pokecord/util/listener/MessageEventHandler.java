@@ -34,7 +34,7 @@ public class MessageEventHandler
         if(this.random.nextInt(5) < 1) this.random = new Random(System.currentTimeMillis());
 
         this.event = event;
-        if(PlayerDataQuery.isRegistered(event.getAuthor().getId())) this.data = PlayerDataQuery.ofNonNull(event.getAuthor().getId());
+        if(PlayerDataQuery.isRegistered(event.getAuthor().getId())) this.data = PlayerDataQuery.build(event.getAuthor().getId());
         this.canSendMessage = new ServerDataQuery(event.getGuild().getId()).isAbleToSendMessages(event.getChannel().getId());
     }
 

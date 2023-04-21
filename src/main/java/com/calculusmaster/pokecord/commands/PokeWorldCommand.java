@@ -106,7 +106,7 @@ public abstract class PokeWorldCommand
     protected void setPlayer(User player)
     {
         this.player = player;
-        this.playerData = PlayerDataQuery.of(player.getId());
+        this.playerData = PlayerDataQuery.build(player.getId());
     }
 
     protected void setServer(Guild server)

@@ -203,7 +203,7 @@ public class TrainerDuel extends Duel
     @Override
     public void setPlayers(String player1ID, String player2ID, int size)
     {
-        this.players = new Player[]{new UserPlayer(PlayerDataQuery.ofNonNull(player1ID), size), null};
+        this.players = new Player[]{new UserPlayer(PlayerDataQuery.build(player1ID), size), null};
         this.size = size;
     }
 

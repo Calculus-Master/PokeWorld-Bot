@@ -78,7 +78,7 @@ public class CommandMega extends PokeWorldCommand
                 }
 
                 if(p.getMegaCharges() == 0) return this.error(p.getName() + " has run out of Mega Charges, and cannot Mega-Evolve until one regenerates! Use `/mega charges` for more information.");
-                else if(this.playerData.getOwnedMegas().contains(target))
+                else if(this.playerData.getInventory().hasMega(target))
                 {
                     this.response = p.getName() + " has Mega-Evolved into " + target.getName() + "!";
 

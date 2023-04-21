@@ -3,6 +3,8 @@ package com.calculusmaster.pokecord.mongo;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.FindOneAndUpdateOptions;
+import com.mongodb.client.model.ReturnDocument;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -21,9 +23,7 @@ public abstract class MongoQuery
 
     protected void update(Bson update)
     {
-        this.database.updateOne(this.query, update);
-
-        this.document = this.database.find(this.query).first();
+        this.document = this.database.findOneAndUpdate(this.query, update, new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER));
 
         LoggerHelper.logDatabaseUpdate(MongoQuery.class, update);
     }

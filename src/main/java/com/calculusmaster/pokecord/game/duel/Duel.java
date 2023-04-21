@@ -14,7 +14,7 @@ import com.calculusmaster.pokecord.game.moves.TypeEffectiveness;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.objectives.ObjectiveType;
-import com.calculusmaster.pokecord.game.player.PlayerInventory;
+import com.calculusmaster.pokecord.game.player.components.PlayerInventory;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
@@ -3142,8 +3142,8 @@ public class Duel
 
     public void setPlayers(String player1ID, String player2ID, int size)
     {
-        PlayerDataQuery a = PlayerDataQuery.ofNonNull(player1ID);
-        PlayerDataQuery b = PlayerDataQuery.ofNonNull(player2ID);
+        PlayerDataQuery a = PlayerDataQuery.build(player1ID);
+        PlayerDataQuery b = PlayerDataQuery.build(player2ID);
 
         if(size == 1) this.players = new Player[]{new UserPlayer(a, a.getSelectedPokemon()), new UserPlayer(b, b.getSelectedPokemon())};
         else this.players = new Player[]{new UserPlayer(a, size), new UserPlayer(b, size)};

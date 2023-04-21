@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game.player;
+package com.calculusmaster.pokecord.game.player.components;
 
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import org.bson.Document;

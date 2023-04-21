@@ -93,7 +93,7 @@ public class CommandForm extends PokeWorldCommand
             if(target.equals(active.getEntity())) return this.error(active.getName() + " is already in the form: " + target.getName() + ".");
             else if(!formData.isSwitchable()) return this.error(active.getName() + "'s forms are not manually switchable.");
             else if(!formData.getForms().contains(target)) return this.error(target.getName() + " is not a form that " + active.getName() + " can switch to.");
-            else if(!this.playerData.getOwnedForms().contains(target)) return this.error("You have not yet acquired this Pokemon form.");
+            else if(!this.playerData.getInventory().hasForm(target)) return this.error("You have not yet acquired this Pokemon form.");
 
             String original = active.getName();
 

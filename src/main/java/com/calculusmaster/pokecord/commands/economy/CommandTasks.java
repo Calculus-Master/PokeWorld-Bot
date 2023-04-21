@@ -7,7 +7,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.objectives.ObjectiveType;
 import com.calculusmaster.pokecord.game.objectives.ResearchTask;
 import com.calculusmaster.pokecord.game.objectives.types.AbstractObjective;
-import com.calculusmaster.pokecord.game.player.PlayerResearchTasks;
+import com.calculusmaster.pokecord.game.player.components.PlayerResearchTasks;
 import com.calculusmaster.pokecord.game.world.PokeWorldResearchBoard;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import net.dv8tion.jda.api.EmbedBuilder;

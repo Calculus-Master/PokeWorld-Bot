@@ -130,7 +130,7 @@ public class WildDuel extends Duel
     @Override
     public void setPlayers(String player1ID, String player2ID, int size)
     {
-        PlayerDataQuery p = PlayerDataQuery.ofNonNull(player1ID);
+        PlayerDataQuery p = PlayerDataQuery.build(player1ID);
 
         this.players = new Player[]{new UserPlayer(p, p.getSelectedPokemon()), null};
     }

@@ -1,9 +1,10 @@
-package com.calculusmaster.pokecord.game.player;
+package com.calculusmaster.pokecord.game.player.components;
 
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
@@ -33,6 +34,8 @@ public class PlayerInventory
 
     //Owned
     private final EnumSet<PokemonAugment> augments;
+    private final EnumSet<PokemonEntity> megas;
+    private final EnumSet<PokemonEntity> forms;
 
     public PlayerInventory(PlayerDataQuery playerData)
     {
@@ -45,6 +48,8 @@ public class PlayerInventory
         this.equippedZCrystal = null;
 
         this.augments = EnumSet.noneOf(PokemonAugment.class);
+        this.megas = EnumSet.noneOf(PokemonEntity.class);
+        this.forms = EnumSet.noneOf(PokemonEntity.class);
     }
 
     public PlayerInventory(PlayerDataQuery playerData, Document data)
@@ -58,6 +63,8 @@ public class PlayerInventory
         this.equippedZCrystal = data.getString("equipped_zcrystal").isEmpty() ? null : ZCrystal.valueOf(data.getString("equipped_zcrystal"));
 
         data.getList("augments", String.class).forEach(a -> this.augments.add(PokemonAugment.valueOf(a)));
+        data.getList("megas", String.class).forEach(m -> this.megas.add(PokemonEntity.valueOf(m)));
+        data.getList("forms", String.class).forEach(f -> this.forms.add(PokemonEntity.valueOf(f)));
     }
 
     public Document serialize()
@@ -77,6 +84,8 @@ public class PlayerInventory
         data.append("equipped_zcrystal", this.equippedZCrystal == null ? "" : this.equippedZCrystal.toString());
 
         data.append("augments", this.augments.stream().map(Enum::toString).toList());
+        data.append("megas", this.megas.stream().map(Enum::toString).toList());
+        data.append("forms", this.forms.stream().map(Enum::toString).toList());
 
         return data;
     }
@@ -162,6 +171,20 @@ public class PlayerInventory
         UPDATER.submit(() -> Mongo.PlayerData.updateOne(this.playerData.getQuery(), Updates.pushEach("inventory.augments", augments.stream().map(Enum::toString).toList())));
     }
 
+    public void addMega(PokemonEntity mega)
+    {
+        this.megas.add(mega);
+
+        UPDATER.submit(() -> Mongo.PlayerData.updateOne(this.playerData.getQuery(), Updates.push("inventory.megas", mega.toString())));
+    }
+
+    public void addForm(PokemonEntity form)
+    {
+        this.forms.add(form);
+
+        UPDATER.submit(() -> Mongo.PlayerData.updateOne(this.playerData.getQuery(), Updates.push("inventory.forms", form.toString())));
+    }
+
     //Accessors
     public Map<Item, Integer> getItems()
     {
@@ -216,5 +239,25 @@ public class PlayerInventory
     public EnumSet<PokemonAugment> getOwnedAugments()
     {
         return this.augments;
+    }
+
+    public boolean hasMega(PokemonEntity mega)
+    {
+        return this.megas.contains(mega);
+    }
+
+    public EnumSet<PokemonEntity> getOwnedMegas()
+    {
+        return this.megas;
+    }
+
+    public boolean hasForm(PokemonEntity form)
+    {
+        return this.forms.contains(form);
+    }
+
+    public EnumSet<PokemonEntity> getOwnedForms()
+    {
+        return this.forms;
     }
 }

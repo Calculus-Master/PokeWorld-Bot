@@ -7,80 +7,74 @@ import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievement;
 import com.calculusmaster.pokecord.game.objectives.ObjectiveType;
 import com.calculusmaster.pokecord.game.objectives.types.AbstractObjective;
-import com.calculusmaster.pokecord.game.player.*;
+import com.calculusmaster.pokecord.game.player.components.*;
 import com.calculusmaster.pokecord.game.player.leaderboard.PokeWorldLeaderboard;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
-import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.PokemonEgg;
-import com.calculusmaster.pokecord.util.cacheold.PlayerDataCache;
+import com.calculusmaster.pokecord.mongo.cache.CacheHandler;
 import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.FindOneAndUpdateOptions;
+import com.mongodb.client.model.ReturnDocument;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class PlayerDataQuery extends MongoQuery
 {
+    private static final ExecutorService UPDATER = Executors.newFixedThreadPool(5);
+
     private Optional<PlayerSettingsQuery> settings = Optional.empty();
 
-    private final Random random;
+    private final Random random = new Random();
+
+    private final Bson query;
+    private Document document;
+
     private PlayerPokedex pokedex;
     private PlayerInventory inventory;
     private PlayerTeam team;
     private PlayerStatisticsRecord statistics;
     private PlayerResearchTasks tasks;
 
-    public PlayerDataQuery(String playerID)
+    private PlayerDataQuery(Document data)
     {
-        super("playerID", playerID, Mongo.PlayerData);
-
-        this.random = new Random();
+        super("playerID", data.getString("playerID"), Mongo.PlayerData);
+        this.query = Filters.eq("playerID", data.getString("playerID"));
+        this.document = data;
     }
 
-    //Cache
-    public static PlayerDataQuery of(String playerID)
+    public static PlayerDataQuery build(String playerID)
     {
-        if(PlayerDataCache.CACHE.containsKey(playerID)) return PlayerDataCache.CACHE.get(playerID).data();
-        else
+        return CacheHandler.PLAYER_DATA.get(playerID, id ->
         {
-            try { LoggerHelper.info(PlayerDataQuery.class, "Cache does not contain " + playerID + "! Searching for: " + Objects.requireNonNull(Mongo.PlayerData.find(Filters.eq("playerID", playerID)).first())); }
-            catch(NullPointerException e) { return null; }
+            LoggerHelper.info(PlayerDataQuery.class, "Loading new PlayerData into Cache for ID: " + id + ".");
+            Document data = Mongo.PlayerData.find(Filters.eq("playerID", playerID)).first();
 
-            PlayerDataCache.addCache(playerID);
-            return PlayerDataQuery.of(playerID);
-        }
+            return new PlayerDataQuery(Objects.requireNonNull(data, "Null PlayerData for ID: " + playerID));
+        });
     }
 
-    @NotNull
-    public static PlayerDataQuery ofNonNull(String playerID)
+    private synchronized void updateDocument(Document document)
     {
-        return Objects.requireNonNull(PlayerDataQuery.of(playerID));
-    }
-
-    public Bson getQuery()
-    {
-        return Filters.eq("playerID", this.getID());
+        this.document = document;
     }
 
     //Registered
-
-    public static boolean isRegistered(String id)
-    {
-        return PlayerDataCache.CACHE.containsKey(id);
-    }
 
     public static void register(User player)
     {
@@ -96,9 +90,7 @@ public class PlayerDataQuery extends MongoQuery
                 .append("pokemon", new ArrayList<>())
                 .append("favorites", new ArrayList<>())
                 .append("achievements", new ArrayList<>())
-                .append("owned_forms", new ArrayList<>())
-                .append("owned_megas", new ArrayList<>())
-                .append("owned_eggs", new ArrayList<>())
+                .append("eggs", new ArrayList<>())
                 .append("active_egg", "")
                 .append("defeated_trainers", new ArrayList<>())
                 .append("pokedex", new PlayerPokedex().serialize())
@@ -115,15 +107,32 @@ public class PlayerDataQuery extends MongoQuery
 
         PlayerSettingsQuery.register(player.getId());
 
-        PlayerDataCache.addCache(player.getId());
+        PlayerDataQuery playerData = new PlayerDataQuery(data);
+
+        CacheHandler.PLAYER_DATA.put(player.getId(), playerData);
+    }
+
+    public static boolean isRegistered(String playerID)
+    {
+        PlayerDataQuery data = CacheHandler.PLAYER_DATA.getIfPresent(playerID);
+
+        return data != null || Mongo.PlayerData.find(Filters.eq("playerID", playerID)).first() != null;
+    }
+
+    public Bson getQuery()
+    {
+        return this.query;
     }
 
     @Override
     protected void update(Bson update)
     {
-        super.update(update);
-
-        PokeWorldLeaderboard.addUpdatedPlayer(this.getID());
+        UPDATER.submit(() -> {
+            Document d = this.database.findOneAndUpdate(this.query, update, new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER));
+            this.updateDocument(d);
+            LoggerHelper.logDatabaseUpdate(this.getClass(), this.query, update);
+            PokeWorldLeaderboard.addUpdatedPlayer(this.getID());
+        });
     }
 
     public void directMessage(String msg)
@@ -403,32 +412,10 @@ public class PlayerDataQuery extends MongoQuery
         return this.getAchievements().contains(a);
     }
 
-    //key: "owned_forms"
-    public List<PokemonEntity> getOwnedForms()
-    {
-        return this.document.getList("owned_forms", String.class).stream().map(PokemonEntity::cast).toList();
-    }
-
-    public void addOwnedForm(PokemonEntity form)
-    {
-        this.update(Updates.push("owned_forms", form.toString()));
-    }
-
-    //key: "owned_megas"
-    public List<PokemonEntity> getOwnedMegas()
-    {
-        return this.document.getList("owned_megas", String.class).stream().map(PokemonEntity::cast).toList();
-    }
-
-    public void addOwnedMegas(PokemonEntity mega)
-    {
-        this.update(Updates.push("owned_megas", mega.toString()));
-    }
-
     //key: "owned_eggs"
     public List<String> getOwnedEggIDs()
     {
-        return this.document.getList("owned_eggs", String.class);
+        return this.document.getList("eggs", String.class);
     }
 
     public List<PokemonEgg> getOwnedEggs()
@@ -443,12 +430,12 @@ public class PlayerDataQuery extends MongoQuery
 
     public void addEgg(String eggID)
     {
-        this.update(Updates.push("owned_eggs", eggID));
+        this.update(Updates.push("eggs", eggID));
     }
 
     public void removeEgg(String eggID)
     {
-        this.update(Updates.pull("owned_eggs", eggID));
+        this.update(Updates.pull("eggs", eggID));
     }
 
     //key: "active_egg"

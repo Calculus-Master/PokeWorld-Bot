@@ -38,7 +38,7 @@ public class CommandAchievements extends PokeWorldCommand
         if(userOption != null)
         {
             String targetID = userOption.getAsUser().getId();
-            if(PlayerDataQuery.isRegistered(targetID)) target = PlayerDataQuery.of(targetID);
+            if(PlayerDataQuery.isRegistered(targetID)) target = PlayerDataQuery.build(targetID);
             else return this.error("This user has not started their %s journey!".formatted(Pokeworld.NAME));
         }
 

@@ -47,7 +47,7 @@ public class PokeWorldLeaderboard
         return CURRENT;
     }
 
-    public static void addUpdatedPlayer(String playerID)
+    public static synchronized void addUpdatedPlayer(String playerID)
     {
         PLAYERS_UPDATED.add(playerID);
     }
