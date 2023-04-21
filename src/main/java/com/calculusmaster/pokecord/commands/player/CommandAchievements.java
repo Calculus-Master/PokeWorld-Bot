@@ -5,7 +5,7 @@ import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.functional.Achievement;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -34,11 +34,11 @@ public class CommandAchievements extends PokeWorldCommand
     {
         OptionMapping userOption = event.getOption("user");
 
-        PlayerDataQuery target = this.playerData;
+        PlayerData target = this.playerData;
         if(userOption != null)
         {
             String targetID = userOption.getAsUser().getId();
-            if(PlayerDataQuery.isRegistered(targetID)) target = PlayerDataQuery.build(targetID);
+            if(PlayerData.isRegistered(targetID)) target = PlayerData.build(targetID);
             else return this.error("This user has not started their %s journey!".formatted(Pokeworld.NAME));
         }
 

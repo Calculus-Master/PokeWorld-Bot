@@ -13,7 +13,7 @@ import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.objectives.ObjectiveType;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -130,7 +130,7 @@ public class WildDuel extends Duel
     @Override
     public void setPlayers(String player1ID, String player2ID, int size)
     {
-        PlayerDataQuery p = PlayerDataQuery.build(player1ID);
+        PlayerData p = PlayerData.build(player1ID);
 
         this.players = new Player[]{new UserPlayer(p, p.getSelectedPokemon()), null};
     }

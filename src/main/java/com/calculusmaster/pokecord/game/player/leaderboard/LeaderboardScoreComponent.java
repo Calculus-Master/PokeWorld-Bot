@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.game.player.leaderboard;
 
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 
 import java.util.function.Function;
@@ -8,7 +8,7 @@ import java.util.function.Function;
 public enum LeaderboardScoreComponent
 {
     POKEDEX_REGISTERED("Pokemon Registered", 0.75F, p -> p.getPokedex().getSize()),
-    MASTERY_LEVEL("Pokemon Mastery Level", 0.5F, PlayerDataQuery::getLevel),
+    MASTERY_LEVEL("Pokemon Mastery Level", 0.5F, PlayerData::getLevel),
     ACHIEVEMENTS("Achievements", 0.8F, p -> p.getAchievements().size()),
     CREDITS_EARNED("Credits Earned", 0.05F, p -> p.getStatistics().get(StatisticType.CREDITS_EARNED)),
     FORMS_OWNED("Forms Collected", 0.4F, p -> p.getInventory().getOwnedForms().size()),
@@ -21,9 +21,9 @@ public enum LeaderboardScoreComponent
 
     private final String componentName;
     private final float weight;
-    private final Function<PlayerDataQuery, Integer> calculator;
+    private final Function<PlayerData, Integer> calculator;
 
-    LeaderboardScoreComponent(String name, float weight, Function<PlayerDataQuery, Integer> calculator)
+    LeaderboardScoreComponent(String name, float weight, Function<PlayerData, Integer> calculator)
     {
         this.componentName = name;
         this.weight = weight;
@@ -40,7 +40,7 @@ public enum LeaderboardScoreComponent
         return this.weight;
     }
 
-    public float compute(PlayerDataQuery player)
+    public float compute(PlayerData player)
     {
         return this.weight * this.calculator.apply(player);
     }

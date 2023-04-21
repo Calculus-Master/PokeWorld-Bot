@@ -4,7 +4,7 @@ import com.calculusmaster.pokecord.game.objectives.ObjectiveType;
 import com.calculusmaster.pokecord.game.objectives.ResearchTask;
 import com.calculusmaster.pokecord.game.objectives.types.AbstractObjective;
 import com.calculusmaster.pokecord.mongo.Mongo;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 
@@ -21,18 +21,18 @@ public class PlayerResearchTasks
     private static final ExecutorService UPDATER = Executors.newFixedThreadPool(5);
     public static int MAX_TASKS = 6;
 
-    private final PlayerDataQuery playerData;
+    private final PlayerData playerData;
     private final List<ResearchTask> researchTasks;
     private final Map<ObjectiveType, Integer> objectiveTypes;
 
-    public PlayerResearchTasks(PlayerDataQuery playerData)
+    public PlayerResearchTasks(PlayerData playerData)
     {
         this.playerData = playerData;
         this.researchTasks = new ArrayList<>();
         this.objectiveTypes = new HashMap<>();
     }
 
-    public PlayerResearchTasks(PlayerDataQuery playerData, List<Document> data)
+    public PlayerResearchTasks(PlayerData playerData, List<Document> data)
     {
         this(playerData);
 

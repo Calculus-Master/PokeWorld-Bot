@@ -7,7 +7,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.functional.Achievement;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
@@ -39,7 +39,7 @@ public class CommandStart extends PokeWorldCommand
     @Override
     protected boolean slashCommandLogic(SlashCommandInteractionEvent event)
     {
-        if(PlayerDataQuery.isRegistered(this.player.getId())) return this.error("You have already started your journey.");
+        if(PlayerData.isRegistered(this.player.getId())) return this.error("You have already started your journey.");
 
         OptionMapping starterOption = event.getOption("starter");
 
@@ -92,10 +92,10 @@ public class CommandStart extends PokeWorldCommand
             else
             {
                 //Registering Player
-                PlayerDataQuery.register(this.player);
+                PlayerData.register(this.player);
                 DataHelper.addServerPlayer(this.server, this.player);
 
-                this.playerData = PlayerDataQuery.build(this.player.getId());
+                this.playerData = PlayerData.build(this.player.getId());
 
                 //Creating the Starter
                 Pokemon starter = Pokemon.create(starterEntity);

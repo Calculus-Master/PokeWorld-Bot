@@ -1,8 +1,8 @@
 package com.calculusmaster.pokecord.util.interfaces;
 
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 
 public interface IScoreComponent
 {
-    int get(PlayerDataQuery p);
+    int get(PlayerData p);
 }

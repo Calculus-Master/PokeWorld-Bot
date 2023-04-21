@@ -10,7 +10,7 @@ import com.calculusmaster.pokecord.commands.move.CommandTM;
 import com.calculusmaster.pokecord.commands.player.*;
 import com.calculusmaster.pokecord.commands.pokemon.*;
 import com.calculusmaster.pokecord.game.pokemon.evolution.CommandForm;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -141,7 +141,7 @@ public class CommandHandler extends ListenerAdapter
             LoggerHelper.warn(CommandHandler.class, "Attempted use of Slash Command (%s) used in non-TextChannel (%s, Type: %s)".formatted(event.getName(), event.getChannel().getName(), event.getChannel().getType()));
             event.reply("Slash Command usage outside of standard Text Channels is not currently supported.").setEphemeral(true).queue();
         }
-        else if(!data.getCommandName().equals("start") && !PlayerDataQuery.isRegistered(event.getUser().getId()))
+        else if(!data.getCommandName().equals("start") && !PlayerData.isRegistered(event.getUser().getId()))
             event.reply("You have not started your journey with " + Pokeworld.NAME + " yet! Use the `/start` command to begin.").setEphemeral(true).queue();
         else
         {

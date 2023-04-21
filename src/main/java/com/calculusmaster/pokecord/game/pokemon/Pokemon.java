@@ -19,7 +19,7 @@ import com.calculusmaster.pokecord.game.pokemon.evolution.GigantamaxRegistry;
 import com.calculusmaster.pokecord.game.pokemon.evolution.MegaChargeManager;
 import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
 import com.calculusmaster.pokecord.mongo.Mongo;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
@@ -659,7 +659,7 @@ public class Pokemon
     }
 
     //Endpoint that involves database calls - specifically for Evolution
-    public void evolve(EvolutionData data, PlayerDataQuery playerData)
+    public void evolve(EvolutionData data, PlayerData playerData)
     {
         this.changePokemon(data.getTarget());
         this.updateEntity();
@@ -687,7 +687,7 @@ public class Pokemon
     }
 
     //Endpoint that involves database calls - specifically for Form changes
-    public void changeForm(PokemonEntity target, PlayerDataQuery playerData)
+    public void changeForm(PokemonEntity target, PlayerData playerData)
     {
         this.changePokemon(target);
 
@@ -707,7 +707,7 @@ public class Pokemon
     }
 
     //Endpoint that involves database calls - specifically for Mega-Evolutions
-    public void megaEvolve(PokemonEntity target, PlayerDataQuery playerData)
+    public void megaEvolve(PokemonEntity target, PlayerData playerData)
     {
         this.changePokemon(target);
         this.updateEntity();

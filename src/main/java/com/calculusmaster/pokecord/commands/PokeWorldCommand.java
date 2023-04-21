@@ -3,7 +3,7 @@ package com.calculusmaster.pokecord.commands;
 import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -35,7 +35,7 @@ public abstract class PokeWorldCommand
     protected Guild server;
     protected TextChannel channel;
 
-    protected PlayerDataQuery playerData;
+    protected PlayerData playerData;
     protected ServerDataQuery serverData;
 
     protected boolean ephemeral;
@@ -106,7 +106,7 @@ public abstract class PokeWorldCommand
     protected void setPlayer(User player)
     {
         this.player = player;
-        this.playerData = PlayerDataQuery.build(player.getId());
+        this.playerData = PlayerData.build(player.getId());
     }
 
     protected void setServer(Guild server)

@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.game.duel.extension;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.duel.component.DuelStatus;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
@@ -71,7 +71,7 @@ public class CasualMatchmadeDuel extends Duel
             Duel d = CasualMatchmadeDuel.create(p1.ID, p2.ID, size, List.of(p1.textChannel, p2.textChannel));
 
             Stream.of(p1, p2).forEach(p -> {
-                PlayerDataQuery.build(p.ID).directMessage("Matchmaking success! Your duel will start shortly in the channel: " + p.textChannel.getName() + ", in the server: " + p.textChannel.getGuild().getName() + ".");
+                PlayerData.build(p.ID).directMessage("Matchmaking success! Your duel will start shortly in the channel: " + p.textChannel.getName() + ", in the server: " + p.textChannel.getGuild().getName() + ".");
                 p.textChannel.sendMessage(Objects.requireNonNull(p.textChannel.getGuild().getMemberById(p.ID)).getAsMention()).delay(2, TimeUnit.SECONDS).flatMap(m -> m.delete().delay(5, TimeUnit.SECONDS)).queue();
             });
 

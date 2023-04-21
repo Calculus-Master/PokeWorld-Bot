@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.game.player.level.pmltasks;
 
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 
 public class ExperiencePMLTask extends AbstractPMLTask
 {
@@ -13,13 +13,13 @@ public class ExperiencePMLTask extends AbstractPMLTask
     }
 
     @Override
-    public boolean isCompleted(PlayerDataQuery p)
+    public boolean isCompleted(PlayerData p)
     {
         return p.getExp() >= this.exp;
     }
 
     @Override
-    public String getProgressOverview(PlayerDataQuery p)
+    public String getProgressOverview(PlayerData p)
     {
         return p.getExp() + " / " + this.exp + " XP";
     }

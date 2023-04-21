@@ -3,7 +3,7 @@ package com.calculusmaster.pokecord.commands.economy;
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -31,12 +31,12 @@ public class CommandBalance extends PokeWorldCommand
 
         String targetID = userOption == null ? this.player.getId() : userOption.getAsUser().getId();
 
-        PlayerDataQuery p;
+        PlayerData p;
         if(userOption != null && !targetID.equals(this.player.getId()))
         {
-            if(!PlayerDataQuery.isRegistered(targetID))
+            if(!PlayerData.isRegistered(targetID))
                 return this.error("That user has not joined the world of Pokemon!");
-            else p = PlayerDataQuery.build(userOption.getAsUser().getId());
+            else p = PlayerData.build(userOption.getAsUser().getId());
         }
         else p = this.playerData;
 

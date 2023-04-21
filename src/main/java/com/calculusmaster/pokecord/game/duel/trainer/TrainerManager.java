@@ -6,7 +6,7 @@ import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.mongo.Mongo;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
 
@@ -119,7 +119,7 @@ public class TrainerManager
         return Collections.max(REGULAR_TRAINERS.stream().map(TrainerData::getTrainerClass).toList());
     }
 
-    public static int getPlayerMaxClass(PlayerDataQuery data)
+    public static int getPlayerMaxClass(PlayerData data)
     {
         int clazz = 1;
         for(int i = 1; i < TrainerManager.getMax(); i++)

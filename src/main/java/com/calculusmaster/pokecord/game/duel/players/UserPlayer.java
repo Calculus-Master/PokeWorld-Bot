@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.game.duel.players;
 
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,9 +9,9 @@ import java.util.List;
 
 public class UserPlayer extends Player
 {
-    public PlayerDataQuery data;
+    public PlayerData data;
 
-    public UserPlayer(PlayerDataQuery playerData, int maxTeamSize)
+    public UserPlayer(PlayerData playerData, int maxTeamSize)
     {
         super(playerData.getID());
 
@@ -26,7 +26,7 @@ public class UserPlayer extends Player
         this.setTeam(Collections.unmodifiableList(team));
     }
 
-    public UserPlayer(PlayerDataQuery playerData, Pokemon active)
+    public UserPlayer(PlayerData playerData, Pokemon active)
     {
         super(playerData.getID());
 

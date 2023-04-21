@@ -26,7 +26,7 @@ import com.calculusmaster.pokecord.game.pokemon.evolution.MegaChargeManager;
 import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
 import com.calculusmaster.pokecord.game.world.PokeWorldResearchBoard;
 import com.calculusmaster.pokecord.game.world.RegionManager;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -3142,8 +3142,8 @@ public class Duel
 
     public void setPlayers(String player1ID, String player2ID, int size)
     {
-        PlayerDataQuery a = PlayerDataQuery.build(player1ID);
-        PlayerDataQuery b = PlayerDataQuery.build(player2ID);
+        PlayerData a = PlayerData.build(player1ID);
+        PlayerData b = PlayerData.build(player2ID);
 
         if(size == 1) this.players = new Player[]{new UserPlayer(a, a.getSelectedPokemon()), new UserPlayer(b, b.getSelectedPokemon())};
         else this.players = new Player[]{new UserPlayer(a, size), new UserPlayer(b, size)};

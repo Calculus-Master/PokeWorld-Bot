@@ -11,7 +11,7 @@ import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
 import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestrictionRegistry;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.player.components.PlayerTeam;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -61,7 +61,7 @@ public class CommandDuel extends PokeWorldCommand
             if(size < 1 || size > PlayerTeam.MAX_TEAM_SIZE) return this.error("Invalid size. The largest size you can select is " + PlayerTeam.MAX_TEAM_SIZE + ".");
 
             User user = playerOption.getAsUser();
-            if(!PlayerDataQuery.isRegistered(user.getId())) return this.error(user.getName() + " has not started their journey in " + Pokeworld.NAME + "!");
+            if(!PlayerData.isRegistered(user.getId())) return this.error(user.getName() + " has not started their journey in " + Pokeworld.NAME + "!");
             else if(this.player.getId().equals(user.getId())) return this.error("You cannot duel yourself.");
 
             if(DuelHelper.isInDuel(this.player.getId())) return this.error("You are in a Duel already.");
@@ -74,7 +74,7 @@ public class CommandDuel extends PokeWorldCommand
             List<String> warnings = new ArrayList<>();
             if(size != 1)
             {
-                if(PlayerDataQuery.build(user.getId()).getTeam().isEmpty()) return this.error(user.getName() + " has not created a Pokemon team.");
+                if(PlayerData.build(user.getId()).getTeam().isEmpty()) return this.error(user.getName() + " has not created a Pokemon team.");
 
                 PlayerTeam team = this.playerData.getTeam();
 
@@ -83,7 +83,7 @@ public class CommandDuel extends PokeWorldCommand
 
                 if(standard && !TeamRestrictionRegistry.STANDARD.validate(team.getActiveTeamPokemon()))
                     return this.error("Your team does not meet the standard team requirements. If you'd like to disable this for the Duel, set the `standard-restriction` option to `false`.");
-                else if(standard && !TeamRestrictionRegistry.STANDARD.validate(PlayerDataQuery.build(user.getId()).getTeam().getActiveTeamPokemon()))
+                else if(standard && !TeamRestrictionRegistry.STANDARD.validate(PlayerData.build(user.getId()).getTeam().getActiveTeamPokemon()))
                     return this.error(user.getName() + "'s team does not meet the standard team requirements. If you'd like to disable this for the Duel, set the `standard-restriction` option to `false`.");
             }
 

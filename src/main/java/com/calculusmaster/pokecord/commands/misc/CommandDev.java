@@ -10,7 +10,7 @@ import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.mongo.DatabaseCollection;
 import com.calculusmaster.pokecord.mongo.Mongo;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.mongo.cache.CacheHandler;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import com.mongodb.client.model.Filters;
@@ -66,7 +66,7 @@ public class CommandDev extends PokeWorldCommand
             }
             case "reset" ->
             {
-                PlayerDataQuery target = command.length > 1 ? PlayerDataQuery.build(command[1]) : this.playerData;
+                PlayerData target = command.length > 1 ? PlayerData.build(command[1]) : this.playerData;
                 if(!target.getOwnedEggIDs().isEmpty())
                     target.getOwnedEggs().forEach(e -> Mongo.deleteOne("CommandDev - Reset Player (Delete Eggs)", DatabaseCollection.EGG, Filters.eq("eggID", e.getEggID())));
                 if(!target.getPokemonList().isEmpty()) target.getPokemon().forEach(Pokemon::delete);

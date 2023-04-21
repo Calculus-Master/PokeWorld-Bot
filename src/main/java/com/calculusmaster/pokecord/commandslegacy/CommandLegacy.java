@@ -3,7 +3,7 @@ package com.calculusmaster.pokecord.commandslegacy;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -28,7 +28,7 @@ public abstract class CommandLegacy
     protected Guild server;
 
     protected ServerDataQuery serverData;
-    protected PlayerDataQuery playerData;
+    protected PlayerData playerData;
 
     protected EmbedBuilder embed;
     protected String response;
@@ -44,7 +44,7 @@ public abstract class CommandLegacy
         this.server = event.getGuild();
 
         this.serverData = serverData ? new ServerDataQuery(this.server.getId()) : null;
-        this.playerData = PlayerDataQuery.build(this.player.getId());
+        this.playerData = PlayerData.build(this.player.getId());
 
         this.embed = new EmbedBuilder();
         this.response = "";

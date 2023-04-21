@@ -3,7 +3,7 @@ package com.calculusmaster.pokecord.game.trade;
 import com.calculusmaster.pokecord.game.enums.items.Item;
 import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,7 +33,7 @@ public class TradeOffer
         this.tms = new HashMap<>();
     }
 
-    public boolean isValid(PlayerDataQuery playerData)
+    public boolean isValid(PlayerData playerData)
     {
         if(this.hasCredits())
             if(playerData.getCredits() < this.credits) return false;
@@ -53,7 +53,7 @@ public class TradeOffer
         return true;
     }
 
-    public void transfer(PlayerDataQuery source, PlayerDataQuery target)
+    public void transfer(PlayerData source, PlayerData target)
     {
         if(this.credits > 0)
         {

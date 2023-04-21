@@ -5,7 +5,7 @@ import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.player.components.PlayerStatisticsRecord;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -35,12 +35,12 @@ public class CommandProfile extends PokeWorldCommand
     {
         OptionMapping playerOption = event.getOption("player");
 
-        PlayerDataQuery target = this.playerData;
+        PlayerData target = this.playerData;
         if(playerOption != null)
         {
             String targetID = playerOption.getAsUser().getId();
-            if(!PlayerDataQuery.isRegistered(targetID)) return this.error("This player has not begun their journey with " + Pokeworld.NAME + "!");
-            else target = Objects.requireNonNull(PlayerDataQuery.build(targetID));
+            if(!PlayerData.isRegistered(targetID)) return this.error("This player has not begun their journey with " + Pokeworld.NAME + "!");
+            else target = Objects.requireNonNull(PlayerData.build(targetID));
         }
 
         Member targetMember = Objects.requireNonNull(event.getGuild()).retrieveMemberById(target.getID()).complete();

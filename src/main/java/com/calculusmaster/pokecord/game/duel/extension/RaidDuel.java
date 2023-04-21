@@ -15,7 +15,7 @@ import com.calculusmaster.pokecord.game.player.level.PMLExperience;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
@@ -396,7 +396,7 @@ public class RaidDuel extends WildDuel
 
         for(int i = 0; i < this.waiting.size(); i++)
         {
-            PlayerDataQuery p = PlayerDataQuery.build(this.waiting.get(i));
+            PlayerData p = PlayerData.build(this.waiting.get(i));
             this.players[i] = new UserPlayer(p, p.getSelectedPokemon());
         }
 

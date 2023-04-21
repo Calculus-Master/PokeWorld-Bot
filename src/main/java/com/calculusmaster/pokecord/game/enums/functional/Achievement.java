@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.game.enums.functional;
 
 import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.game.player.level.PMLExperience;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.helpers.CacheHelper;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -57,10 +57,10 @@ public enum Achievement
     //Grant Achievements
     public void grant(String playerID, Supplier<Boolean> validator, TextChannel channel)
     {
-        this.grant(PlayerDataQuery.build(playerID), validator, channel);
+        this.grant(PlayerData.build(playerID), validator, channel);
     }
 
-    public void grant(PlayerDataQuery playerData, Supplier<Boolean> validator, TextChannel channel)
+    public void grant(PlayerData playerData, Supplier<Boolean> validator, TextChannel channel)
     {
         ThreadPoolHandler.ACHIEVEMENT.submit(() -> {
 

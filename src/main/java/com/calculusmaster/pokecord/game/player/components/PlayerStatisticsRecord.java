@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.game.player.components;
 
 import com.calculusmaster.pokecord.mongo.Mongo;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
@@ -16,16 +16,16 @@ public class PlayerStatisticsRecord
 {
     private static final ExecutorService UPDATER = Executors.newFixedThreadPool(5);
 
-    private final PlayerDataQuery playerData;
+    private final PlayerData playerData;
     private final Map<StatisticType, Integer> statistics;
 
-    public PlayerStatisticsRecord(PlayerDataQuery playerData)
+    public PlayerStatisticsRecord(PlayerData playerData)
     {
         this.playerData = playerData;
         this.statistics = new HashMap<>();
     }
 
-    public PlayerStatisticsRecord(PlayerDataQuery playerData, Document data)
+    public PlayerStatisticsRecord(PlayerData playerData, Document data)
     {
         this(playerData);
 

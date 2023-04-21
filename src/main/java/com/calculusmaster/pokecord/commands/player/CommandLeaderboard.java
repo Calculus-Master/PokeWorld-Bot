@@ -7,7 +7,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.player.leaderboard.LeaderboardScoreComponent;
 import com.calculusmaster.pokecord.game.player.leaderboard.PlayerScoreData;
 import com.calculusmaster.pokecord.game.player.leaderboard.PokeWorldLeaderboard;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import kotlin.Pair;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -68,7 +68,7 @@ public class CommandLeaderboard extends PokeWorldCommand
 
             String id = userOption == null ? this.player.getId() : userOption.getAsUser().getId();
 
-            if(!PlayerDataQuery.isRegistered(id)) return this.error("That player has not started their journey with " + Pokeworld.NAME + ".");
+            if(!PlayerData.isRegistered(id)) return this.error("That player has not started their journey with " + Pokeworld.NAME + ".");
 
             PokeWorldLeaderboard current = PokeWorldLeaderboard.getCurrent();
             int ranking = current.getRanking(id);

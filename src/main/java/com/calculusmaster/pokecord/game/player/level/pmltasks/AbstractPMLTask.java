@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.game.player.level.pmltasks;
 
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 
 public abstract class AbstractPMLTask
 {
@@ -11,9 +11,9 @@ public abstract class AbstractPMLTask
         this.type = type;
     }
 
-    public abstract boolean isCompleted(PlayerDataQuery p);
+    public abstract boolean isCompleted(PlayerData p);
 
-    public abstract String getProgressOverview(PlayerDataQuery p);
+    public abstract String getProgressOverview(PlayerData p);
 
     public String getDesc()
     {

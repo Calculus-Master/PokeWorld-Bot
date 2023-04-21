@@ -6,7 +6,7 @@ import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.mongo.Mongo;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
@@ -22,7 +22,7 @@ public class PlayerInventory
 {
     private static final ExecutorService UPDATER = Executors.newFixedThreadPool(5);
 
-    private final PlayerDataQuery playerData;
+    private final PlayerData playerData;
 
     //Items
     private final Map<Item, Integer> items;
@@ -37,7 +37,7 @@ public class PlayerInventory
     private final EnumSet<PokemonEntity> megas;
     private final EnumSet<PokemonEntity> forms;
 
-    public PlayerInventory(PlayerDataQuery playerData)
+    public PlayerInventory(PlayerData playerData)
     {
         this.playerData = playerData;
 
@@ -52,7 +52,7 @@ public class PlayerInventory
         this.forms = EnumSet.noneOf(PokemonEntity.class);
     }
 
-    public PlayerInventory(PlayerDataQuery playerData, Document data)
+    public PlayerInventory(PlayerData playerData, Document data)
     {
         this(playerData);
 

@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.game.player.level;
 
 import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.game.player.level.pmltasks.*;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.enums.Prices;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -497,7 +497,7 @@ public class MasteryLevelManager
                 .register();
     }
 
-    public static boolean isMax(PlayerDataQuery p)
+    public static boolean isMax(PlayerData p)
     {
         return p.getLevel() == MASTERY_LEVELS.get(MASTERY_LEVELS.size() - 1).getLevel();
     }

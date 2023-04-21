@@ -1,18 +1,18 @@
 package com.calculusmaster.pokecord.game.trade;
 
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 
 public class TradePlayer
 {
     private final String ID;
-    private final PlayerDataQuery playerData;
+    private final PlayerData playerData;
     private final TradeOffer offer;
     private boolean confirmed;
 
     public TradePlayer(String ID)
     {
         this.ID = ID;
-        this.playerData = PlayerDataQuery.build(ID);
+        this.playerData = PlayerData.build(ID);
         this.offer = new TradeOffer();
         this.confirmed = false;
     }
@@ -37,7 +37,7 @@ public class TradePlayer
         return this.ID;
     }
 
-    public PlayerDataQuery getPlayerData()
+    public PlayerData getPlayerData()
     {
         return this.playerData;
     }

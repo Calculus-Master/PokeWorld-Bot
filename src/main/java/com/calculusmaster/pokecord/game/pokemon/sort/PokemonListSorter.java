@@ -9,7 +9,7 @@ import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
 import com.calculusmaster.pokecord.game.world.PokeWorldMarket;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import kotlin.Pair;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -37,7 +37,7 @@ public class PokemonListSorter
     private Pair<PokemonListOrderType, Boolean> sortType;
     private boolean hasNicknameQuery;
 
-    private PlayerDataQuery playerData;
+    private PlayerData playerData;
 
     public PokemonListSorter(boolean market, List<Pokemon> originalList, List<String> query)
     {
@@ -53,7 +53,7 @@ public class PokemonListSorter
         this.playerData = null;
     }
 
-    public PokemonListSorter withPlayerData(PlayerDataQuery playerData)
+    public PokemonListSorter withPlayerData(PlayerData playerData)
     {
         this.playerData = playerData;
         return this;

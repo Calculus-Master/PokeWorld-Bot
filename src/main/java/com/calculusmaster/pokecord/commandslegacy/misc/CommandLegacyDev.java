@@ -14,7 +14,7 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.mongo.Mongo;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.mongo.cache.CacheHandler;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
@@ -119,7 +119,7 @@ public class CommandLegacyDev extends CommandLegacy
                 CacheHandler.PLAYER_DATA.invalidateAll();
             }
             case "addpokemon" -> {
-                PlayerDataQuery target = this.mentions.size() > 0 ? PlayerDataQuery.build(this.mentions.get(0).getId()) : this.playerData;
+                PlayerData target = this.mentions.size() > 0 ? PlayerData.build(this.mentions.get(0).getId()) : this.playerData;
                 List<String> msg = new ArrayList<>(List.of(this.msg));
                 msg.removeIf(s -> s.contains("@"));
 

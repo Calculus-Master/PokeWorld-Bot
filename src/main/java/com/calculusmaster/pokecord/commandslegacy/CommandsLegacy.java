@@ -4,7 +4,7 @@ import com.calculusmaster.pokecord.commandslegacy.duel.CommandLegacyRaidDuel;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyDev;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacySettings;
 import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyBreed;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.interfaces.CommandSupplier;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -37,7 +37,7 @@ public class CommandsLegacy
 
     public static void execute(String input, MessageReceivedEvent event, String[] msg)
     {
-        if(!PlayerDataQuery.isRegistered(event.getAuthor().getId()) && !(input.equals("start") && msg.length == 2))
+        if(!PlayerData.isRegistered(event.getAuthor().getId()) && !(input.equals("start") && msg.length == 2))
         {
             input = "start";
             msg = new String[]{"start"};

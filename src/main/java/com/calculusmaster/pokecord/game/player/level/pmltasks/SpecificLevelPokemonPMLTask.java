@@ -1,6 +1,6 @@
 package com.calculusmaster.pokecord.game.player.level.pmltasks;
 
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 
 public class SpecificLevelPokemonPMLTask extends AbstractPMLTask
 {
@@ -15,13 +15,13 @@ public class SpecificLevelPokemonPMLTask extends AbstractPMLTask
     }
 
     @Override
-    public boolean isCompleted(PlayerDataQuery p)
+    public boolean isCompleted(PlayerData p)
     {
         return p.getPokemon().stream().filter(pokemon -> pokemon.getLevel() >= this.level).count() >= this.amount;
     }
 
     @Override
-    public String getProgressOverview(PlayerDataQuery p)
+    public String getProgressOverview(PlayerData p)
     {
         return p.getPokemon().stream().filter(pokemon -> pokemon.getLevel() >= this.level).count() + " / " + this.amount + " Level %s Pokemon".formatted(this.level);
     }

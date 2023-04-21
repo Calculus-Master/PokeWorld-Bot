@@ -34,7 +34,7 @@ import java.util.concurrent.Executors;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class PlayerDataQuery extends MongoQuery
+public class PlayerData extends MongoQuery
 {
     private static final ExecutorService UPDATER = Executors.newFixedThreadPool(5);
 
@@ -51,21 +51,21 @@ public class PlayerDataQuery extends MongoQuery
     private PlayerStatisticsRecord statistics;
     private PlayerResearchTasks tasks;
 
-    private PlayerDataQuery(Document data)
+    private PlayerData(Document data)
     {
         super("playerID", data.getString("playerID"), Mongo.PlayerData);
         this.query = Filters.eq("playerID", data.getString("playerID"));
         this.document = data;
     }
 
-    public static PlayerDataQuery build(String playerID)
+    public static PlayerData build(String playerID)
     {
         return CacheHandler.PLAYER_DATA.get(playerID, id ->
         {
-            LoggerHelper.info(PlayerDataQuery.class, "Loading new PlayerData into Cache for ID: " + id + ".");
+            LoggerHelper.info(PlayerData.class, "Loading new PlayerData into Cache for ID: " + id + ".");
             Document data = Mongo.PlayerData.find(Filters.eq("playerID", playerID)).first();
 
-            return new PlayerDataQuery(Objects.requireNonNull(data, "Null PlayerData for ID: " + playerID));
+            return new PlayerData(Objects.requireNonNull(data, "Null PlayerData for ID: " + playerID));
         });
     }
 
@@ -101,20 +101,20 @@ public class PlayerDataQuery extends MongoQuery
 
                 ;
 
-        LoggerHelper.logDatabaseInsert(PlayerDataQuery.class, data);
+        LoggerHelper.logDatabaseInsert(PlayerData.class, data);
 
         Mongo.PlayerData.insertOne(data);
 
         PlayerSettingsQuery.register(player.getId());
 
-        PlayerDataQuery playerData = new PlayerDataQuery(data);
+        PlayerData playerData = new PlayerData(data);
 
         CacheHandler.PLAYER_DATA.put(player.getId(), playerData);
     }
 
     public static boolean isRegistered(String playerID)
     {
-        PlayerDataQuery data = CacheHandler.PLAYER_DATA.getIfPresent(playerID);
+        PlayerData data = CacheHandler.PLAYER_DATA.getIfPresent(playerID);
 
         return data != null || Mongo.PlayerData.find(Filters.eq("playerID", playerID)).first() != null;
     }
@@ -143,7 +143,7 @@ public class PlayerDataQuery extends MongoQuery
         }
         catch (Exception e)
         {
-            LoggerHelper.reportError(PlayerDataQuery.class, "Failed to DM " + this.getUsername() + " (ID: " + this.getID() + ")!", e);
+            LoggerHelper.reportError(PlayerData.class, "Failed to DM " + this.getUsername() + " (ID: " + this.getID() + ")!", e);
         }
     }
 
@@ -155,7 +155,7 @@ public class PlayerDataQuery extends MongoQuery
         }
         catch (Exception e)
         {
-            LoggerHelper.reportError(PlayerDataQuery.class, "Failed to DM " + this.getUsername() + " (ID: " + this.getID() + ")!", e);
+            LoggerHelper.reportError(PlayerData.class, "Failed to DM " + this.getUsername() + " (ID: " + this.getID() + ")!", e);
         }
     }
 

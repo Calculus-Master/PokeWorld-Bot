@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.util.listener;
 
 import com.calculusmaster.pokecord.mongo.Mongo;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
@@ -39,13 +39,13 @@ public class MiscListener extends ListenerAdapter
     @Override
     public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event)
     {
-        if(PlayerDataQuery.isRegistered(event.getMember().getId())) DataHelper.updateServerPlayers(event.getGuild());
+        if(PlayerData.isRegistered(event.getMember().getId())) DataHelper.updateServerPlayers(event.getGuild());
     }
 
     @Override
     public void onGuildMemberRemove(@NotNull GuildMemberRemoveEvent event)
     {
-        if(PlayerDataQuery.isRegistered(event.getUser().getId())) DataHelper.updateServerPlayers(event.getGuild());
+        if(PlayerData.isRegistered(event.getUser().getId())) DataHelper.updateServerPlayers(event.getGuild());
     }
 
     @Override
@@ -72,7 +72,7 @@ public class MiscListener extends ListenerAdapter
     @Override
     public void onUserUpdateName(@NotNull UserUpdateNameEvent event)
     {
-        if(PlayerDataQuery.isRegistered(event.getUser().getId()))
+        if(PlayerData.isRegistered(event.getUser().getId()))
         {
             Mongo.PlayerData.updateOne(Filters.eq("playerID", event.getUser().getId()), Updates.set("username", event.getNewName()));
         }

@@ -9,7 +9,7 @@ import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.triggers.*;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +22,7 @@ public class EvolutionRegistry
 {
     private static final Map<PokemonEntity, List<EvolutionData>> EVOLUTION_DATA = new HashMap<>();
 
-    public static void checkAutomaticEvolution(Pokemon p, PlayerDataQuery playerData, String serverID)
+    public static void checkAutomaticEvolution(Pokemon p, PlayerData playerData, String serverID)
     {
         if(playerData != null & !serverID.isEmpty() && !p.hasItem(Item.EVERSTONE) && EvolutionRegistry.hasEvolutionData(p.getEntity()))
         {

@@ -7,7 +7,7 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionData;
 import com.calculusmaster.pokecord.game.pokemon.evolution.EvolutionRegistry;
 import com.calculusmaster.pokecord.game.pokemon.evolution.PokemonEgg;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.mongo.ServerDataQuery;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
@@ -20,7 +20,7 @@ public class MessageEventHandler
 {
     private Random random;
     private MessageReceivedEvent event;
-    private PlayerDataQuery data;
+    private PlayerData data;
     private boolean canSendMessage;
 
     public MessageEventHandler()
@@ -34,7 +34,7 @@ public class MessageEventHandler
         if(this.random.nextInt(5) < 1) this.random = new Random(System.currentTimeMillis());
 
         this.event = event;
-        if(PlayerDataQuery.isRegistered(event.getAuthor().getId())) this.data = PlayerDataQuery.build(event.getAuthor().getId());
+        if(PlayerData.isRegistered(event.getAuthor().getId())) this.data = PlayerData.build(event.getAuthor().getId());
         this.canSendMessage = new ServerDataQuery(event.getGuild().getId()).isAbleToSendMessages(event.getChannel().getId());
     }
 

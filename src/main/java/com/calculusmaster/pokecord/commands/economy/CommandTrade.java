@@ -9,7 +9,7 @@ import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.trade.Trade;
 import com.calculusmaster.pokecord.game.trade.TradeOffer;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -98,7 +98,7 @@ public class CommandTrade extends PokeWorldCommand
                 if(player.getId().equals(this.player.getId())) return this.error("You cannot trade with yourself.");
                 else if(Trade.isInTrade(this.player.getId())) return this.error("You are already in a trade. Complete your current trade to start another.");
                 else if(Trade.isInTrade(player.getId())) return this.error(player.getName() + " is already in a trade.");
-                else if(!PlayerDataQuery.isRegistered(player.getId())) return this.error(player.getName() + " has not started their journey with " + Pokeworld.NAME + ".");
+                else if(!PlayerData.isRegistered(player.getId())) return this.error(player.getName() + " has not started their journey with " + Pokeworld.NAME + ".");
 
                 Trade.create(this.player.getId(), player.getId(), event.getChannel().asTextChannel());
 

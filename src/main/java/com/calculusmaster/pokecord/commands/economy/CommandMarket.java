@@ -12,7 +12,7 @@ import com.calculusmaster.pokecord.game.pokemon.sort.PokemonListOrderType;
 import com.calculusmaster.pokecord.game.pokemon.sort.PokemonListSorter;
 import com.calculusmaster.pokecord.game.world.MarketEntry;
 import com.calculusmaster.pokecord.game.world.PokeWorldMarket;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import kotlin.Pair;
@@ -236,7 +236,7 @@ public class CommandMarket extends PokeWorldCommand
                 this.playerData.addPokemon(entry.getPokemonID());
 
                 this.playerData.getStatistics().increase(StatisticType.POKEMON_BOUGHT_MARKET);
-                PlayerDataQuery.build(entry.getSellerID()).getStatistics().increase(StatisticType.POKEMON_SOLD_MARKET);
+                PlayerData.build(entry.getSellerID()).getStatistics().increase(StatisticType.POKEMON_SOLD_MARKET);
 
                 PokeWorldMarket.deleteMarketEntry(entry.getMarketID());
 

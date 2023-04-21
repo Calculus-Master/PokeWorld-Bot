@@ -3,7 +3,7 @@ package com.calculusmaster.pokecord.game.player.level;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.player.level.pmltasks.AbstractPMLTask;
 import com.calculusmaster.pokecord.game.player.level.pmltasks.ExperiencePMLTask;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.time.Instant;
@@ -44,7 +44,7 @@ public class PokemonMasteryLevel
         MasteryLevelManager.MASTERY_LEVELS.add(this);
     }
 
-    public boolean canLevelUp(PlayerDataQuery p)
+    public boolean canLevelUp(PlayerData p)
     {
         return this.requirements.stream().allMatch(task -> task.isCompleted(p));
     }

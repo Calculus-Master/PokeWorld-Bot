@@ -13,7 +13,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.objectives.ObjectiveType;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -203,7 +203,7 @@ public class TrainerDuel extends Duel
     @Override
     public void setPlayers(String player1ID, String player2ID, int size)
     {
-        this.players = new Player[]{new UserPlayer(PlayerDataQuery.build(player1ID), size), null};
+        this.players = new Player[]{new UserPlayer(PlayerData.build(player1ID), size), null};
         this.size = size;
     }
 

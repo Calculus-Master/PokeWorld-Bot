@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.util.helpers;
 
 import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
-import com.calculusmaster.pokecord.mongo.PlayerDataQuery;
+import com.calculusmaster.pokecord.mongo.PlayerData;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
@@ -20,7 +20,7 @@ public class DataHelper
     {
         SERVER_PLAYERS.put(g.getId(), new ArrayList<>());
 
-        for(Member m : g.loadMembers().get()) if(PlayerDataQuery.isRegistered(m.getId())) SERVER_PLAYERS.get(g.getId()).add(m.getId());
+        for(Member m : g.loadMembers().get()) if(PlayerData.isRegistered(m.getId())) SERVER_PLAYERS.get(g.getId()).add(m.getId());
     }
 
     public static void addServerPlayer(Guild g, User u)
