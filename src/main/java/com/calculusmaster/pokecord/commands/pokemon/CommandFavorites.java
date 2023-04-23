@@ -47,9 +47,9 @@ public class CommandFavorites extends PokeWorldCommand
 
             Pokemon p = Objects.requireNonNull(Pokemon.build(this.playerData.getPokemonList().get(num - 1), num));
 
-            if(this.playerData.getFavorites().contains(p.getUUID())) return this.error(p.getName() + " is already in your favorites.");
+            if(this.playerData.isFavorite(p.getUUID())) return this.error(p.getName() + " is already in your favorites.");
 
-            this.playerData.addPokemonToFavorites(p.getUUID());
+            this.playerData.addFavorite(p.getUUID());
 
             this.response = p.getName() + " was added to your favorites!";
         }
@@ -62,9 +62,9 @@ public class CommandFavorites extends PokeWorldCommand
 
             Pokemon p = Objects.requireNonNull(Pokemon.build(this.playerData.getPokemonList().get(num - 1), num));
 
-            if(!this.playerData.getFavorites().contains(p.getUUID())) return this.error(p.getName() + " is not in your favorites.");
+            if(!this.playerData.isFavorite(p.getUUID())) return this.error(p.getName() + " is not in your favorites.");
 
-            this.playerData.removePokemonFromFavorites(p.getUUID());
+            this.playerData.removeFavorite(p.getUUID());
 
             this.response = p.getName() + " was removed from your favorites!";
         }

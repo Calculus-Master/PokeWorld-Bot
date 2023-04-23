@@ -2,7 +2,7 @@ package com.calculusmaster.pokecord.game.pokemon.evolution;
 
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.mongo.Mongo;
-import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
+import com.calculusmaster.pokecord.mongo.cache.CacheHandler;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
@@ -65,7 +65,7 @@ public class MegaChargeManager
                         .getString("entity")
         );
 
-        PokemonDataCache.updateCache(event.getUUID());
+        CacheHandler.POKEMON_DATA.invalidate(event.getUUID());
 
         //Remove from DB
         Mongo.MegaChargeData.deleteOne(Filters.eq("chargeID", event.getChargeID()));

@@ -15,7 +15,6 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.game.pokemon.evolution.PokemonEgg;
 import com.calculusmaster.pokecord.mongo.cache.CacheHandler;
-import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
@@ -356,8 +355,17 @@ public class PlayerData extends MongoQuery
     public List<Pokemon> getPokemon()
     {
         List<String> in = this.getPokemonList();
-        List<Pokemon> out = new ArrayList<>();
-        for(int i = 0; i < in.size(); i++) out.add(Pokemon.build(in.get(i), i + 1));
+        List<Pokemon> out = Collections.synchronizedList(new ArrayList<>());
+
+        try(ExecutorService es = Executors.newFixedThreadPool(5 + in.size() / 250))
+        {
+            for(int i = 0; i < in.size(); i++)
+            {
+                final int number = i + 1;
+                es.submit(() -> out.add(Pokemon.build(in.get(number - 1), number)));
+            }
+        }
+
         return out;
     }
 
@@ -369,10 +377,9 @@ public class PlayerData extends MongoQuery
     public void removePokemon(String UUID)
     {
         this.update(Updates.pull("pokemon", UUID));
-        PokemonDataCache.removeCache(UUID);
 
         if(this.getTeam().contains(UUID)) this.getTeam().remove(UUID);
-        if(this.getFavorites().contains(UUID)) this.removePokemonFromFavorites(UUID);
+        if(this.getFavorites().contains(UUID)) this.removeFavorite(UUID);
     }
 
     //key: "favorites"
@@ -381,12 +388,17 @@ public class PlayerData extends MongoQuery
         return this.document.getList("favorites", String.class);
     }
 
-    public void addPokemonToFavorites(String UUID)
+    public boolean isFavorite(String UUID)
+    {
+        return this.getFavorites().contains(UUID);
+    }
+
+    public void addFavorite(String UUID)
     {
         this.update(Updates.push("favorites", UUID));
     }
 
-    public void removePokemonFromFavorites(String UUID)
+    public void removeFavorite(String UUID)
     {
         this.update(Updates.pull("favorites", UUID));
     }

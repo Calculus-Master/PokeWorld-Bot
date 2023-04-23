@@ -17,7 +17,6 @@ import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.mongo.cache.CacheHandler;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 import com.calculusmaster.pokecord.util.helpers.ConfigHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
@@ -75,7 +74,7 @@ public class CommandLegacyDev extends CommandLegacy
             }
             case "allmoves" -> {
                 List<StringBuilder> sbs = new ArrayList<>();
-                List<List<MoveEntity>> chunked = ListUtils.partition(new ArrayList<MoveEntity>(Move.INCOMPLETE_MOVES), 40);
+                List<List<MoveEntity>> chunked = ListUtils.partition(new ArrayList<>(Move.INCOMPLETE_MOVES), 40);
 
                 for(List<MoveEntity> list : chunked)
                 {
@@ -128,10 +127,6 @@ public class CommandLegacyDev extends CommandLegacy
                 p.setLevel(100);
                 target.addPokemon(p.getUUID());
                 p.upload();
-            }
-            case "updatepokemoncache" -> {
-                PokemonDataCache.CACHE.clear();
-                PokemonDataCache.init();
             }
             case "viewcasualqueues" -> {
                 String msg = String.join("\n", List.of(CasualMatchmadeDuel.QUEUE_1v1.stream().map(mp -> "(ID: %s, Channel: %s)".formatted(mp.getID(), mp.getTextChannel().getName())).collect(Collectors.joining(", "))));

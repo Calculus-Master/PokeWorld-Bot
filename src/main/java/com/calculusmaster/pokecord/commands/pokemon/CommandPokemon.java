@@ -69,6 +69,8 @@ public class CommandPokemon extends PokeWorldCommand
     @Override
     protected boolean slashCommandLogic(SlashCommandInteractionEvent event)
     {
+        event.deferReply().queue();
+
         OptionMapping customOption = event.getOption("custom");
 
         List<Pokemon> pokemonList = this.playerData.getPokemon();

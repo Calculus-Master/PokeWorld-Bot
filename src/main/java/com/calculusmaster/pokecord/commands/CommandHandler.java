@@ -145,8 +145,12 @@ public class CommandHandler extends ListenerAdapter
             event.reply("You have not started your journey with " + Pokeworld.NAME + " yet! Use the `/start` command to begin.").setEphemeral(true).queue();
         else
         {
-            LoggerHelper.info(CommandHandler.class, "Parsing Slash Command: /" + event.getFullCommandName() + " " + event.getOptions().stream().map(o -> o.getName() + ": " + o.getAsString()).collect(Collectors.joining(" ")));
+            String command = "/" + event.getFullCommandName() + " " + event.getOptions().stream().map(o -> o.getName() + ": " + o.getAsString()).collect(Collectors.joining(" ")).trim();
+            LoggerHelper.info(CommandHandler.class, "Parsing Slash Command: " + command);
+
+            long timeI = System.currentTimeMillis();
             data.getInstance().parseSlashCommand(event);
+            LoggerHelper.info(CommandHandler.class, "Slash Command Logic {" + command + "} | Time: " + (System.currentTimeMillis() - timeI) + "ms.");
         }
     }
 

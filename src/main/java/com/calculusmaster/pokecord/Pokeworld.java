@@ -19,7 +19,6 @@ import com.calculusmaster.pokecord.game.pokemon.evolution.*;
 import com.calculusmaster.pokecord.game.world.*;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.util.PrivateInfo;
-import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
 import com.calculusmaster.pokecord.util.helpers.*;
 import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
@@ -104,7 +103,6 @@ public class Pokeworld
         LoggerHelper.init("Pokemon Mastery Level", MasteryLevelManager::init);
         LoggerHelper.init("Achievement Cache", CacheHelper::initAchievementCache);
 
-        LoggerHelper.init("Pokemon Data Cache", PokemonDataCache::init);
         LoggerHelper.init("Global Leaderboard", PokeWorldLeaderboard::init);
         LoggerHelper.init("PokeWorld Research Board", PokeWorldResearchBoard::init);
         LoggerHelper.init("PokeWorld Market", PokeWorldMarket::init, true);

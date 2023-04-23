@@ -20,12 +20,14 @@ import com.calculusmaster.pokecord.game.pokemon.evolution.MegaChargeManager;
 import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.mongo.PlayerData;
+import com.calculusmaster.pokecord.mongo.cache.CacheHandler;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.cacheold.PokemonDataCache;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.FindOneAndUpdateOptions;
+import com.mongodb.client.model.ReturnDocument;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -78,14 +80,10 @@ public class Pokemon
     private boolean statChangesIgnored;
 
     //Misc
-    private final Random random;
+    private final Random random = new Random();
 
     //Private Constructor
     private Pokemon() {}
-
-    {
-        this.random = new Random();
-    }
 
     //Factory Creator and Builder
     public static Pokemon create(PokemonEntity entity)
@@ -133,8 +131,8 @@ public class Pokemon
         p.setGender(Gender.valueOf(data.getString("gender")));
         p.setNature(Nature.valueOf(data.getString("nature")));
         p.setLevel(data.getInteger("level"));
-        p.setDynamaxLevel(data.getInteger("dynamaxLevel"));
-        p.setPrestigeLevel(data.getInteger("prestigeLevel"));
+        p.setDynamaxLevel(data.getInteger("dynamax_level"));
+        p.setPrestigeLevel(data.getInteger("prestige_level"));
         p.setExp(data.getInteger("exp"));
         p.setIVs(data.get("ivs", Document.class));
         p.setEVs(data.get("evs", Document.class));
@@ -143,7 +141,7 @@ public class Pokemon
         p.setItem(Item.valueOf(data.getString("item")));
         p.setTM(data.getString("tm").isEmpty() ? null : TM.valueOf(data.getString("tm")));
         p.setAugments(data.getList("augments", String.class));
-        p.setMegaCharges(data.getInteger("megacharges"));
+        p.setMegaCharges(data.getInteger("mega_charges"));
         p.setCustomData(data.get("custom", Document.class));
 
         p.setupMisc();
@@ -178,23 +176,22 @@ public class Pokemon
 
     public static Pokemon build(String UUID, int number)
     {
-        Document cache = PokemonDataCache.getCache(UUID);
+        Document cache = CacheHandler.POKEMON_DATA.get(UUID, uuid -> {
+            LoggerHelper.info(PlayerData.class, "Loading new PokemonData into Cache for ID: " + uuid + ".");
 
-        //This usually means that the data wasn't cached on bot initialization
+            return Mongo.PokemonData.find(Filters.eq("UUID", uuid)).first();
+        });
+
         if(cache == null)
         {
-            cache = Mongo.PokemonData.find(Filters.eq("UUID", UUID)).first();
-            PokemonDataCache.addCacheData(UUID, cache);
-
-            //This most likely means the UUID isn't in the database
-            if(cache == null) LoggerHelper.error(com.calculusmaster.pokecord.game.pokemon.Pokemon.class, "UUID {%s} not found in Database!".formatted(UUID));
+            LoggerHelper.error(Pokemon.class, "Null Pokemon Data for UUID: " + UUID + ".");
+            return null;
         }
-
-        return cache == null ? null : Pokemon.build(PokemonDataCache.getCache(UUID), number);
+        else return Pokemon.build(cache, number);
     }
 
     //Database
-    private Document buildDatabaseDocument()
+    private Document serialize()
     {
         return new Document()
                 .append("UUID", this.UUID)
@@ -205,8 +202,8 @@ public class Pokemon
                 .append("nature", this.nature.toString())
                 .append("level", this.level)
                 .append("exp", this.exp)
-                .append("dynamaxLevel", this.dynamaxLevel)
-                .append("prestigeLevel", this.prestigeLevel)
+                .append("dynamax_level", this.dynamaxLevel)
+                .append("prestige_level", this.prestigeLevel)
                 .append("ivs", this.ivs.serialized())
                 .append("evs", this.evs.serialized())
                 .append("moves", this.moves.stream().map(Enum::toString).toList())
@@ -214,40 +211,35 @@ public class Pokemon
                 .append("item", this.item.toString())
                 .append("tm", this.tm == null ? "" : this.tm.toString())
                 .append("augments", this.augments.stream().map(Enum::toString).toList())
-                .append("megacharges", this.megaCharges)
+                .append("mega_charges", this.megaCharges)
                 .append("custom", this.customData.serialize());
     }
 
     public void upload()
     {
-        Document data = this.buildDatabaseDocument();
+        Document data = this.serialize();
 
         LoggerHelper.logDatabaseInsert(Pokemon.class, data);
 
         Mongo.PokemonData.insertOne(data);
 
-        PokemonDataCache.addCacheData(this.getUUID(), data);
+        CacheHandler.POKEMON_DATA.put(this.getUUID(), data);
     }
 
     public void delete()
     {
         Mongo.PokemonData.deleteOne(this.query());
-    }
 
-    public void completeUpdate()
-    {
-        Mongo.PokemonData.replaceOne(this.query(), this.buildDatabaseDocument());
-
-        PokemonDataCache.updateCache(this.getUUID());
+        CacheHandler.POKEMON_DATA.invalidate(this.getUUID());
     }
 
     private void update(Bson... updates)
     {
         LoggerHelper.logDatabaseUpdate(Pokemon.class, updates);
 
-        Mongo.PokemonData.updateOne(this.query(), List.of(updates));
+        Document updated = Mongo.PokemonData.findOneAndUpdate(this.query(), List.of(updates), new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER));
 
-        PokemonDataCache.updateCache(this.getUUID());
+        CacheHandler.POKEMON_DATA.put(this.getUUID(), updated);
     }
 
     public void updateEntity()
@@ -272,12 +264,12 @@ public class Pokemon
 
     public void updateDynamaxLevel()
     {
-        this.update(Updates.set("dynamaxLevel", this.dynamaxLevel));
+        this.update(Updates.set("dynamax_level", this.dynamaxLevel));
     }
 
     public void updatePrestigeLevel()
     {
-        this.update(Updates.set("prestigeLevel", this.prestigeLevel));
+        this.update(Updates.set("prestige_level", this.prestigeLevel));
     }
 
     public void updateEVs()
@@ -325,7 +317,7 @@ public class Pokemon
 
     public void updateMegaCharges()
     {
-        this.update(Updates.set("megacharges", this.megaCharges));
+        this.update(Updates.set("mega_charges", this.megaCharges));
     }
 
     //Mastery
@@ -488,7 +480,7 @@ public class Pokemon
         if(this.hasAbility(Ability.SWIFT_SWIM))
         {
             Duel d = DuelHelper.findDuel(this);
-            if(List.of(Weather.RAIN, Weather.HEAVY_RAIN).contains(d.weather.get())) commonBoosts *= 2.0;
+            if(d != null && List.of(Weather.RAIN, Weather.HEAVY_RAIN).contains(d.weather.get())) commonBoosts *= 2.0;
         }
 
         if(s.equals(Stat.HP))

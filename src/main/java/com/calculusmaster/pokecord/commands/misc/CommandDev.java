@@ -12,6 +12,7 @@ import com.calculusmaster.pokecord.mongo.DatabaseCollection;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.mongo.cache.CacheHandler;
+import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -58,11 +59,26 @@ public class CommandDev extends PokeWorldCommand
             }
             case "addpokemon" ->
             {
-                PokemonEntity e = command.length > 1 ? PokemonEntity.cast(command[1]) : PokemonEntity.getRandom();
-                Pokemon p = Pokemon.create(e);
-                p.upload();
-                this.playerData.addPokemon(p.getUUID());
-                this.response = "Added a new **" + p.getName() + "** to your Pokemon.";
+                if(command.length > 1 && command[1].chars().allMatch(Character::isDigit))
+                {
+                    event.deferReply().queue();
+                    for(int i = 0; i < Integer.parseInt(command[1]); i++)
+                    {
+                        Pokemon p = Pokemon.create(PokemonEntity.getRandom());
+                        this.playerData.addPokemon(p.getUUID());
+                        p.upload();
+                    }
+
+                    this.response = "Added " + command[1] + " new Pokemon.";
+                }
+                else
+                {
+                    PokemonEntity e = command.length > 1 ? PokemonEntity.cast(command[1]) : PokemonEntity.getRandom();
+                    Pokemon p = Pokemon.create(e);
+                    p.upload();
+                    this.playerData.addPokemon(p.getUUID());
+                    this.response = "Added a new **" + p.getName() + "** to your Pokemon.";
+                }
             }
             case "reset" ->
             {
@@ -110,6 +126,23 @@ public class CommandDev extends PokeWorldCommand
                     tasks.add(ResearchTask.create());
                     this.response = "Added new task.";
                 }
+            }
+            case "cachestats" ->
+            {
+                LoggerHelper.info(CacheHandler.class, "Cache Stats | Pokemon Data | " + CacheHandler.POKEMON_DATA.stats());
+                LoggerHelper.info(CacheHandler.class, "Cache Stats | Player Data | " + CacheHandler.PLAYER_DATA.stats());
+
+                this.response = "Printed.";
+            }
+            case "resetpokemondatacache" ->
+            {
+                CacheHandler.POKEMON_DATA.invalidateAll();
+                this.response = "Pokemon Data Cache reset.";
+            }
+            case "resetplayerdatacache" ->
+            {
+                CacheHandler.PLAYER_DATA.invalidateAll();
+                this.response = "Player Data Cache reset.";
             }
             default -> {
                 return this.error("Invalid dev command: " + Arrays.toString(command));
