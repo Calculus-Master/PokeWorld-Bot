@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.component.PokemonStats;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.mongo.Mongo;
+import com.calculusmaster.pokecord.mongo.cache.CacheHandler;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
@@ -47,29 +48,43 @@ public class PokemonEgg
         return egg;
     }
 
-    public static PokemonEgg fromDB(String eggID)
+    public static PokemonEgg build(Document data)
     {
-        Document d = Mongo.EggData.find(Filters.eq("eggID", eggID)).first();
-
         PokemonEgg egg = new PokemonEgg();
 
-        egg.setEggID(d.getString("eggID"));
-        egg.setTarget(PokemonEntity.cast(d.getString("target")));
-        egg.setExp(d.getInteger("exp"));
-        egg.setMaxExp(d.getInteger("max"));
-        egg.setIVs(d.getString("ivs"));
+        egg.setEggID(data.getString("eggID"));
+        egg.setTarget(PokemonEntity.cast(data.getString("target")));
+        egg.setExp(data.getInteger("exp"));
+        egg.setMaxExp(data.getInteger("max"));
+        egg.setIVs(data.getString("ivs"));
 
         return egg;
     }
 
-    public static void toDB(PokemonEgg egg)
+    public static PokemonEgg build(String eggID)
+    {
+        Document cache = CacheHandler.EGG_DATA.get(eggID, id -> {
+            LoggerHelper.info(PokemonEgg.class, "Loading new EggData into Cache for ID: " + id + ".");
+
+            return Mongo.EggData.find(Filters.eq("eggID", id)).first();
+        });
+
+        if(cache == null)
+        {
+            LoggerHelper.error(PokemonEgg.class, "Null Egg Data for EggID: " + eggID + ".");
+            return null;
+        }
+        else return PokemonEgg.build(cache);
+    }
+
+    public void upload()
     {
         Document eggData = new Document()
-                .append("eggID", egg.getEggID())
-                .append("target", egg.getTarget().toString())
-                .append("exp", egg.getExp())
-                .append("max", egg.getMaxExp())
-                .append("ivs", egg.getIVs());
+                .append("eggID", this.getEggID())
+                .append("target", this.getTarget().toString())
+                .append("exp", this.getExp())
+                .append("max", this.getMaxExp())
+                .append("ivs", this.getIVs());
 
         LoggerHelper.logDatabaseInsert(PokemonEgg.class, eggData);
 

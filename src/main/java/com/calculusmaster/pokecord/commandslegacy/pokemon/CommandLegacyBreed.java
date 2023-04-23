@@ -63,7 +63,7 @@ public class CommandLegacyBreed extends CommandLegacy
                 else
                 {
                     PokemonEgg egg = PokemonEgg.create(parent1, parent2);
-                    PokemonEgg.toDB(egg);
+                    egg.upload();
 
                     this.playerData.addEgg(egg.getEggID());
 

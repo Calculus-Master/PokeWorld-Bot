@@ -31,7 +31,6 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class PlayerData extends MongoQuery
 {
@@ -432,7 +431,7 @@ public class PlayerData extends MongoQuery
 
     public List<PokemonEgg> getOwnedEggs()
     {
-        return this.getOwnedEggIDs().stream().map(PokemonEgg::fromDB).collect(Collectors.toList());
+        return this.getOwnedEggIDs().stream().map(PokemonEgg::build).toList();
     }
 
     public boolean hasEggs()
@@ -458,7 +457,7 @@ public class PlayerData extends MongoQuery
 
     public PokemonEgg getActiveEgg()
     {
-        return PokemonEgg.fromDB(this.getActiveEggID());
+        return PokemonEgg.build(this.getActiveEggID());
     }
 
     public boolean hasActiveEgg()

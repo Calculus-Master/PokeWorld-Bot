@@ -177,7 +177,7 @@ public class Pokemon
     public static Pokemon build(String UUID, int number)
     {
         Document cache = CacheHandler.POKEMON_DATA.get(UUID, uuid -> {
-            LoggerHelper.info(PlayerData.class, "Loading new PokemonData into Cache for ID: " + uuid + ".");
+            LoggerHelper.info(Pokemon.class, "Loading new PokemonData into Cache for ID: " + uuid + ".");
 
             return Mongo.PokemonData.find(Filters.eq("UUID", uuid)).first();
         });
