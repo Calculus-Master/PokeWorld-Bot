@@ -67,9 +67,14 @@ public class ThreadPoolHandler
         return es;
     }
 
-    public static void close()
+    public static void close() throws InterruptedException
     {
-        for(ExecutorService es : THREAD_POOLS) es.shutdownNow();
+        for(ExecutorService es : THREAD_POOLS)
+        {
+            es.shutdownNow();
+            es.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
+        }
+
         THREAD_POOLS.clear();
     }
 

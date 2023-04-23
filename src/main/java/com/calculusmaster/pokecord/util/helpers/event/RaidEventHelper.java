@@ -1,104 +1,58 @@
 package com.calculusmaster.pokecord.util.helpers.event;
 
-import com.calculusmaster.pokecord.game.duel.component.DuelFlag;
-import com.calculusmaster.pokecord.game.duel.extension.RaidDuel;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
+import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
+import com.calculusmaster.pokecord.game.world.RaidEvent;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
-import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.Random;
+
+import static com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity.Rarity.*;
 
 public class RaidEventHelper
 {
-    private static final Map<String, RaidDuel> SERVER_RAIDS = new HashMap<>();
-    private static final Map<String, ScheduledFuture<?>> SCHEDULERS = new HashMap<>();
+    private static final Map<String, RaidEvent> RAID_EVENTS = new HashMap<>();
 
     public static void start(Guild g, TextChannel channel)
     {
-        createRaid(g, channel);
+        LoggerHelper.info(RaidEventHelper.class, "Creating new Raid in " + g.getName() + " (" + g.getId() + ").");
 
-        ScheduledFuture<?> raidEvent = ThreadPoolHandler.RAID.schedule(() -> startRaid(g, channel), 1, TimeUnit.MINUTES);
+        PokemonEntity raidPokemon;
+        if(new Random().nextFloat() < 0.05F) raidPokemon = PokemonEntity.ETERNATUS_ETERNAMAX;
+        else raidPokemon = PokemonRarity.getPokemon(false, DIAMOND, PLATINUM, MYTHICAL, ULTRA_BEAST, LEGENDARY);
 
-        SCHEDULERS.put(g.getId(), raidEvent);
+        RaidEvent event = new RaidEvent(raidPokemon, channel);
+
+        channel.sendMessageEmbeds(event.createEmbed().build()).queue(m -> event.setMessageID(m.getId()));
+
+        event.queueStart();
+
+        RAID_EVENTS.put(g.getId(), event);
     }
 
-    public static void createRaid(Guild g, TextChannel channel)
+    public static boolean hasRaid(String serverID)
     {
-        RaidDuel raid = RaidDuel.create(); raid.addFlags(DuelFlag.SWAP_BANNED);
-        raid.addChannel(channel);
-        SERVER_RAIDS.put(g.getId(), raid);
-
-        LoggerHelper.info(RaidEventHelper.class, "Creating new Raid in " + g.getName() + " (" + g.getId() + ")");
-
-        EmbedBuilder embed = new EmbedBuilder()
-                .setTitle("A Raid Has Started!")
-                .setDescription("Join the Raid with `p!raid join`! The battle will begin after a little bit!");
-
-        channel.sendMessageEmbeds(embed.build()).queue();
+        return RAID_EVENTS.containsKey(serverID);
     }
 
-    public static RaidDuel getRaid(String id)
+    public static RaidEvent getRaidEvent(String serverID)
     {
-        return SERVER_RAIDS.get(id);
+        return RAID_EVENTS.get(serverID);
     }
 
-    public static boolean hasRaid(String id)
+    public static void removeEvent(String serverID)
     {
-        return SERVER_RAIDS.containsKey(id) && SCHEDULERS.containsKey(id) && (!SCHEDULERS.get(id).isCancelled() || !SCHEDULERS.get(id).isDone());
-    }
-
-    public static boolean isPlayerReady(String serverID, String playerID)
-    {
-        return getRaid(serverID).isPlayerWaiting(playerID);
-    }
-
-    public static void forceRaid(Guild g, TextChannel channel)
-    {
-        if(hasRaid(g.getId())) removeServer(g.getId());
-
-        start(g, channel);
-    }
-
-    public static void startRaid(Guild g, TextChannel channel)
-    {
-        RaidDuel raid = SERVER_RAIDS.get(g.getId());
-
-        if(raid.getWaitingPlayers().isEmpty())
-        {
-            SERVER_RAIDS.remove(g.getId());
-            RaidDuel.delete(raid.getDuelID());
-
-            EmbedBuilder embed = new EmbedBuilder()
-                    .setTitle("Raid Cancelled")
-                    .setDescription("No players joined the Raid! The Raid Pokemon disappears...");
-
-            channel.sendMessageEmbeds(embed.build()).queue();
-            return;
-        }
-
-        channel.sendMessage("Raid Starting! " + raid.getWaitingPlayers().stream().map(s -> "<@" + s + ">").toList()).queue();
-
-        raid.start();
-
-        LoggerHelper.info(SpawnEventHelper.class, "New Raid Event – " + g.getName() + " (" + g.getId() + ")!");
-    }
-
-    public static void removeServer(String serverID)
-    {
-        SCHEDULERS.get(serverID).cancel(true);
-        SCHEDULERS.remove(serverID);
-        SERVER_RAIDS.remove(serverID);
+        RAID_EVENTS.remove(serverID);
     }
 
     public static void close()
     {
-        SERVER_RAIDS.clear();
-        SCHEDULERS.values().forEach(future -> future.cancel(true));
-        SCHEDULERS.clear();
+        RAID_EVENTS.values().forEach(e -> e.getEvent().cancel(true));
+        RAID_EVENTS.clear();
     }
+
 }

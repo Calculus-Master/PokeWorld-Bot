@@ -38,8 +38,7 @@ import javax.security.auth.login.LoginException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.Scanner;
 
 public class Pokeworld
 {
@@ -151,19 +150,31 @@ public class Pokeworld
                 Mongo.ServerData.deleteOne(Filters.eq("serverID", d.getString("serverID")));
             }
         });
+
+        Runtime.getRuntime().addShutdownHook(new Thread(Pokeworld::close));
+
+        String command = new Scanner(System.in).nextLine();
+        if(command.equalsIgnoreCase("shutdown")) Pokeworld.close();
     }
 
     public static void close()
     {
-        SpawnEventHelper.close();
-        RaidEventHelper.close();
-        CommandLegacyBreed.close();
-        ThreadPoolHandler.close();
+        LoggerHelper.info(Pokeworld.class, "Initiating shutdown sequence.");
 
-        Executors.newScheduledThreadPool(1).schedule(() -> {
-            BOT_JDA.shutdownNow();
+        BOT_JDA.shutdown();
 
-            LoggerHelper.info(Pokeworld.class, "Bot has shutdown successfully!");
-        }, 15, TimeUnit.SECONDS);
+        try
+        {
+            BOT_JDA.awaitShutdown();
+
+            SpawnEventHelper.close();
+            RaidEventHelper.close();
+            CommandLegacyBreed.close();
+
+            ThreadPoolHandler.close();
+        }
+        catch (InterruptedException e ) { LoggerHelper.reportError(Pokeworld.class, "Bot shutdown was interrupted!", e); }
+
+        LoggerHelper.info(Pokeworld.class, "Bot has shutdown successfully!");
     }
 }

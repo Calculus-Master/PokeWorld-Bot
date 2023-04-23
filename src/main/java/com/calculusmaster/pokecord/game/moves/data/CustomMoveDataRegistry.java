@@ -115,7 +115,7 @@ public class CustomMoveDataRegistry
         RegisterMaxMove.register(MAX_AIRSTREAM, "Airstream", Type.FLYING);
         RegisterMaxMove.register(MAX_PHANTASM, "Phantasm", Type.GHOST);
         RegisterMaxMove.register(MAX_OVERGROWTH, "Overgrowth", Type.GRASS);
-        RegisterMaxMove.register(MAX_QUAKE, "Quake", Type.ROCK);
+        RegisterMaxMove.register(MAX_QUAKE, "Quake", Type.GROUND);
         RegisterMaxMove.register(MAX_HAILSTORM, "Hailstorm", Type.ICE);
         RegisterMaxMove.register(MAX_STRIKE, "Strike", Type.NORMAL);
         RegisterMaxMove.register(MAX_OOZE, "Ooze", Type.POISON);

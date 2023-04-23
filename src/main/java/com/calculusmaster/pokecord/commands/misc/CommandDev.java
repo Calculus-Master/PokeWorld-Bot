@@ -13,6 +13,7 @@ import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.mongo.cache.CacheHandler;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
+import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -144,11 +145,16 @@ public class CommandDev extends PokeWorldCommand
                 CacheHandler.PLAYER_DATA.invalidateAll();
                 this.response = "Player Data Cache reset.";
             }
+            case "forceraid" ->
+            {
+                RaidEventHelper.start(this.server, event.getChannel().asTextChannel());
+                this.response = "Raid started.";
+            }
             default -> {
                 return this.error("Invalid dev command: " + Arrays.toString(command));
             }
         }
 
-        return true;
+        return this.ephemeral = true;
     }
 }

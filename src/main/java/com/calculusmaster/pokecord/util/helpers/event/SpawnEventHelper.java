@@ -18,8 +18,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ScheduledFuture;
@@ -121,20 +120,20 @@ public class SpawnEventHelper
         //Check if spawn channels are available
         if(channels.isEmpty())
         {
-            LoggerHelper.info(SpawnEventHelper.class, "Skipped Spawn Event! Reason: No Spawn Channels | Server: %s (%s)".formatted(g.getName(), g.getId()));
+            LoggerHelper.info(SpawnEventHelper.class, "Spawn Event | Skipped (Reason: No Spawn Channels) | Server: %s (%s)".formatted(g.getName(), g.getId()));
             return;
         }
         //No spawns during Raids
         else if(RaidEventHelper.hasRaid(g.getId()))
         {
-            LoggerHelper.info(SpawnEventHelper.class, "Skipped Spawn Event! Reason: Active Raid | Server: %s (%s)".formatted(g.getName(), g.getId()));
+            LoggerHelper.info(SpawnEventHelper.class, "Spawn Event | Skipped (Reason: Active Raid) | Server: %s (%s)".formatted(g.getName(), g.getId()));
             return;
         }
         //Random chance to convert this spawn into a Raid Event
         else if(random.nextInt(100) < RAID_CHANCE)
         {
             RaidEventHelper.start(g, channels.get(0));
-            LoggerHelper.info(SpawnEventHelper.class, "New Raid Event! Server: %s (%s)".formatted(g.getName(), g.getId()));
+            LoggerHelper.info(SpawnEventHelper.class, "Raid Event | Initiating | Server: %s (%s)".formatted(g.getName(), g.getId()));
             return;
         }
 
@@ -157,22 +156,21 @@ public class SpawnEventHelper
         try
         {
             String subpath = Pokemon.getImage(spawn, shiny, null, null);
-            URI resourcesURI = SpawnEventHelper.class.getResource(subpath).toURI();
+            URL image = Objects.requireNonNull(SpawnEventHelper.class.getResource(subpath));
 
-            BufferedImage img = ImageIO.read(resourcesURI.toURL()); //.getScaledInstance(300, 300, hint)
+            BufferedImage img = ImageIO.read(image);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             ImageIO.write(img, "png", out);
-
             byte[] bytes = out.toByteArray();
 
             for(TextChannel c : channels) c.sendFiles(FileUpload.fromData(bytes, "pkmn.png")).setEmbeds(embed.build()).queue();
         }
-        catch (IOException | URISyntaxException | NullPointerException e)
+        catch(IOException | NullPointerException e)
         {
-            LoggerHelper.reportError(SpawnEventHelper.class, "Spawn Event failed in " + g.getName() + " (" + g.getId() + ") trying to spawn " + spawn + "!", e);
+            LoggerHelper.reportError(SpawnEventHelper.class, "Spawn Event | Failed | Spawn: %s | Server: %s (%s)".formatted(spawn.getName(), g.getName(), g.getId()), e);
         }
 
-        LoggerHelper.info(SpawnEventHelper.class, "New Spawn Event – " + g.getName() + " (" + g.getId() + ") - " + spawn + " (Shiny? " + shiny + ")!");
+        LoggerHelper.info(SpawnEventHelper.class, "Spawn Event | New! | Spawn: %s (Shiny: %s) | Server: %s (%s)".formatted(spawn.getName(), shiny, g.getName(), g.getId()));
         SERVER_SPAWNS.put(g.getId(), new SpawnData(spawn, shiny, customData));
     }
 

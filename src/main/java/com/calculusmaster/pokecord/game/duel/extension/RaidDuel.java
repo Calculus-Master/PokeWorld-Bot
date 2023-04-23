@@ -37,7 +37,6 @@ import static com.calculusmaster.pokecord.game.duel.core.DuelHelper.*;
 public class RaidDuel extends WildDuel
 {
     private String duelID;
-    private List<String> waiting;
 
     public static RaidDuel create()
     {
@@ -45,20 +44,8 @@ public class RaidDuel extends WildDuel
 
         duel.setStatus(DuelStatus.WAITING);
         duel.setID();
-        duel.setDefaults();
 
         return duel;
-    }
-
-    public static RaidDuel instance(String duelID)
-    {
-        return DUELS.values().stream().filter(d -> d instanceof RaidDuel).map(d -> (RaidDuel)d).filter(raid -> raid.getDuelID().equals(duelID)).toList().get(0);
-    }
-
-    public static void delete(String duelID)
-    {
-        RaidDuel instance = instance(duelID);
-        Arrays.stream(instance.getPlayers()).forEach(p -> DuelHelper.delete(p.ID));
     }
 
     @Override
@@ -202,7 +189,7 @@ public class RaidDuel extends WildDuel
         this.sendEmbed(embed.build());
 
         DuelHelper.delete(this.players[0].ID);
-        RaidEventHelper.removeServer(this.channels.get(0).getGuild().getId());
+        RaidEventHelper.removeEvent(this.channels.get(0).getGuild().getId());
     }
 
     private static void testImageGeneration() throws IOException
@@ -390,19 +377,22 @@ public class RaidDuel extends WildDuel
         return this.players[this.players.length - 1].active.isFainted() || Arrays.stream(this.getUserPlayers()).allMatch(p -> p.active.isFainted());
     }
 
-    public void start()
+    public void start(PokemonEntity pokemon, List<String> players)
     {
-        this.players = new Player[this.waiting.size() + 1];
+        this.players = new Player[players.size() + 1];
 
-        for(int i = 0; i < this.waiting.size(); i++)
+        for(int i = 0; i < players.size(); i++)
         {
-            PlayerData p = PlayerData.build(this.waiting.get(i));
+            PlayerData p = PlayerData.build(players.get(i));
             this.players[i] = new UserPlayer(p, p.getSelectedPokemon());
+            DUELS.put(p.getID(), this);
         }
 
-        this.setWildPokemon(null);
+        this.setWildPokemon(pokemon);
 
-        double baseMultiplierHP = switch(this.getRaidBoss().active.getRarity()) {
+        Player boss = this.getRaidBoss();
+
+        double baseMultiplierHP = switch(boss.active.getRarity()) {
             case COPPER -> 1.5;
             case SILVER -> 1.6;
             case GOLD -> 1.7;
@@ -413,7 +403,7 @@ public class RaidDuel extends WildDuel
             case LEGENDARY -> 2.0;
         };
 
-        double baseMultiplierStat = switch(this.getRaidBoss().active.getRarity()) {
+        double baseMultiplierStat = switch(boss.active.getRarity()) {
             case COPPER -> 1.8;
             case SILVER -> 1.9;
             case GOLD -> 2.0;
@@ -424,10 +414,11 @@ public class RaidDuel extends WildDuel
             case LEGENDARY -> 2.7;
         };
 
-        this.players[this.players.length - 1].active.getBoosts().setHealthBoost(baseMultiplierHP + (this.waiting.size() - 1));
-        this.players[this.players.length - 1].active.getBoosts().setStatBoost(baseMultiplierStat + (0.3 * (this.waiting.size() - 1)));
+        boss.active.getBoosts().setHealthBoost(baseMultiplierHP + (players.size() - 1));
+        boss.active.getBoosts().setStatBoost(baseMultiplierStat + (0.3 * (players.size() - 1)));
 
         for(Player p : this.players) p.active.setHealth(p.active.getStat(Stat.HP));
+        this.setDefaults();
 
         for(int i = 0; i < this.players.length; i++) this.setDuelPokemonObjects(i);
 
@@ -474,9 +465,6 @@ public class RaidDuel extends WildDuel
     @Override
     public void setDefaults()
     {
-        this.waiting = new ArrayList<>();
-        this.players = new Player[0];
-
         super.setDefaults();
 
         this.entryHazards = new EntryHazardHandler[this.players.length];
@@ -509,28 +497,6 @@ public class RaidDuel extends WildDuel
     public Player getOpponent(String ID)
     {
         return this.getRaidBoss();
-    }
-
-    public void addPlayer(String ID)
-    {
-        if(!this.waiting.contains(ID)) this.waiting.add(ID);
-        DUELS.put(ID, this);
-    }
-
-    public void removePlayer(String ID)
-    {
-        this.waiting.remove(ID);
-        DUELS.remove(ID);
-    }
-
-    public boolean isPlayerWaiting(String ID)
-    {
-        return this.waiting.stream().anyMatch(s -> s.equals(ID));
-    }
-
-    public List<String> getWaitingPlayers()
-    {
-        return this.waiting;
     }
 
     private void setID()

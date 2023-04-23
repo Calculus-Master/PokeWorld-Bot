@@ -1,6 +1,5 @@
 package com.calculusmaster.pokecord.commandslegacy;
 
-import com.calculusmaster.pokecord.commandslegacy.duel.CommandLegacyRaidDuel;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyDev;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacySettings;
 import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyBreed;
@@ -21,10 +20,6 @@ public class CommandsLegacy
         register("settings", "config")
                 .setCommand(CommandLegacySettings::new)
                 .setCategory(Category.MISC);
-
-        register("raidduel", "raid")
-                .setCommand(CommandLegacyRaidDuel::new)
-                .setCategory(Category.DUEL);
 
         register("breed")
                 .setCommand(CommandLegacyBreed::new)

@@ -20,7 +20,6 @@ import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 import com.calculusmaster.pokecord.util.helpers.ConfigHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
-import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import com.mongodb.client.model.Filters;
 import net.dv8tion.jda.api.entities.Guild;
@@ -91,7 +90,6 @@ public class CommandLegacyDev extends CommandLegacy
             case "clearduels" -> DuelHelper.DUELS.clear();
             case "close" -> Pokeworld.close();
             case "reloadconfig" -> ConfigHelper.init();
-            case "forceraid" -> RaidEventHelper.forceRaid(this.server, this.event.getChannel().asTextChannel());
             case "restartspawns" -> {
                 for(Guild g : Pokeworld.BOT_JDA.getGuilds())
                 {
