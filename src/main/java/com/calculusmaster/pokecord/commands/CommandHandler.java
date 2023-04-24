@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -48,6 +50,8 @@ public class CommandHandler extends ListenerAdapter
     //HashMap used for Slash Commands for optimization, other Interaction Entities use the List since it needs to be iterated through
     public static final List<CommandData> COMMANDS = new ArrayList<>();
     public static final Map<String, CommandData> COMMAND_DATA = new HashMap<>();
+
+    public static final ExecutorService EXECUTOR = Executors.newThreadPerTaskExecutor(Thread.ofVirtual().name("CommandHandler-", 0).factory());
 
     public static void init()
     {
@@ -149,9 +153,12 @@ public class CommandHandler extends ListenerAdapter
             String command = "/" + event.getFullCommandName() + " " + event.getOptions().stream().map(o -> o.getName() + ": " + o.getAsString()).collect(Collectors.joining(" ")).trim();
             LoggerHelper.info(CommandHandler.class, "Parsing Slash Command: " + command);
 
-            long timeI = System.currentTimeMillis();
-            data.getInstance().parseSlashCommand(event);
-            LoggerHelper.info(CommandHandler.class, "Slash Command Logic {" + command + "} | Time: " + (System.currentTimeMillis() - timeI) + "ms.");
+            EXECUTOR.submit(() ->
+            {
+                long timeI = System.currentTimeMillis();
+                data.getInstance().parseSlashCommand(event);
+                LoggerHelper.info(CommandHandler.class, "Slash Command Logic {" + command + "} | Time: " + (System.currentTimeMillis() - timeI) + "ms.");
+            });
         }
     }
 
@@ -161,7 +168,7 @@ public class CommandHandler extends ListenerAdapter
         CommandData data = COMMAND_DATA.get(event.getName());
 
         if(data == null) LoggerHelper.error(CommandHandler.class, "Autocomplete Slash Command not found: " + event.getName());
-        else data.getInstance().parseAutocomplete(event);
+        else EXECUTOR.submit(() -> data.getInstance().parseAutocomplete(event));
     }
 
     @Override

@@ -14,7 +14,7 @@ import java.util.concurrent.Executors;
 
 public class PlayerStatisticsRecord
 {
-    private static final ExecutorService UPDATER = Executors.newFixedThreadPool(5);
+    private static final ExecutorService UPDATER = Executors.newThreadPerTaskExecutor(Thread.ofVirtual().name("PlayerData-StatisticsUpdates-", 0).factory());
 
     private final PlayerData playerData;
     private final Map<StatisticType, Integer> statistics;

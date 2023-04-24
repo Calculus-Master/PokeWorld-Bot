@@ -20,7 +20,7 @@ import java.util.concurrent.Executors;
 
 public class PlayerInventory
 {
-    private static final ExecutorService UPDATER = Executors.newFixedThreadPool(5);
+    private static final ExecutorService UPDATER = Executors.newThreadPerTaskExecutor(Thread.ofVirtual().name("PlayerData-InventoryUpdates-", 0).factory());
 
     private final PlayerData playerData;
 

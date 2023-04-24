@@ -10,6 +10,8 @@ import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 
 import java.util.*;
 
+import static com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity.Rarity.*;
+
 public class PokemonAugmentRegistry
 {
     //Augment Slots
@@ -19,9 +21,9 @@ public class PokemonAugmentRegistry
             PokemonRarity.Rarity.GOLD,          List.of(10, 30, 40, 50, 60, 70, 80, 90),
             PokemonRarity.Rarity.DIAMOND,       List.of(10, 25, 35, 45, 55, 75, 90),
             PokemonRarity.Rarity.PLATINUM,      List.of(10, 25, 40, 50, 80, 90),
-            PokemonRarity.Rarity.MYTHICAL,      List.of(10, 30, 60, 90),
-            PokemonRarity.Rarity.ULTRA_BEAST,   List.of(10, 35, 65, 95),
-            PokemonRarity.Rarity.LEGENDARY,     List.of(10, 50, 90)
+            MYTHICAL,      List.of(10, 30, 60, 90),
+            ULTRA_BEAST,   List.of(10, 35, 65, 95),
+            LEGENDARY,     List.of(10, 50, 90)
     );
 
     public static final int MAX_AUGMENTS = 10;
@@ -115,7 +117,7 @@ public class PokemonAugmentRegistry
             if(data.getLevelUpMoves().keySet().stream().anyMatch(Move.PUNCH_MOVES::contains))
                 augmentData.registerAugment(25, PokemonAugment.WEIGHTED_PUNCH);
 
-            if(!List.of(PokemonRarity.Rarity.MYTHICAL, PokemonRarity.Rarity.ULTRA_BEAST, PokemonRarity.Rarity.LEGENDARY).contains(rarity))
+            if(!List.of(MYTHICAL, ULTRA_BEAST, LEGENDARY).contains(rarity))
                 augmentData.registerAugment(100, PokemonAugment.Z_AFFINITY);
 
             if(data.getLevelUpMoves().containsKey(MoveEntity.HAIL))
@@ -128,7 +130,7 @@ public class PokemonAugmentRegistry
                 augmentData.registerAugment(50, PokemonAugment.METEOR_SHOWER);
 
             //Typed Augments
-            if(List.of(PokemonRarity.Rarity.LEGENDARY, PokemonRarity.Rarity.ULTRA_BEAST, PokemonRarity.Rarity.MYTHICAL).contains(rarity))
+            if(!EnumSet.of(LEGENDARY, ULTRA_BEAST, MYTHICAL).contains(rarity))
             {
                 augmentData.registerAugment(24, switch(data.getTypes().get(0)) {
                     case NORMAL -> PokemonAugment.STANDARDIZATION;
@@ -154,7 +156,7 @@ public class PokemonAugmentRegistry
 
             //Misc
 
-            if(List.of(PokemonRarity.Rarity.COPPER, PokemonRarity.Rarity.SILVER, PokemonRarity.Rarity.GOLD, PokemonRarity.Rarity.DIAMOND, PokemonRarity.Rarity.PLATINUM).contains(rarity))
+            if(List.of(COPPER, SILVER, GOLD, DIAMOND, PLATINUM).contains(rarity))
             {
                 int sumATK = data.getBaseStats().get(Stat.ATK) + data.getBaseStats().get(Stat.SPATK);
                 int sumDEF = data.getBaseStats().get(Stat.DEF) + data.getBaseStats().get(Stat.SPDEF);

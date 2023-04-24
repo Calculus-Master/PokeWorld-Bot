@@ -18,7 +18,7 @@ import java.util.function.Predicate;
 
 public class PlayerResearchTasks
 {
-    private static final ExecutorService UPDATER = Executors.newFixedThreadPool(5);
+    private static final ExecutorService UPDATER = Executors.newThreadPerTaskExecutor(Thread.ofVirtual().name("PlayerData-TaskUpdates-", 0).factory());
     public static int MAX_TASKS = 6;
 
     private final PlayerData playerData;

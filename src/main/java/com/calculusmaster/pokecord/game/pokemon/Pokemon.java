@@ -36,6 +36,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.time.Month;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -215,31 +217,37 @@ public class Pokemon
                 .append("custom", this.customData.serialize());
     }
 
+    public static final ExecutorService UPDATER = Executors.newThreadPerTaskExecutor(Thread.ofVirtual().name("PokemonUpdates-", 0).factory());
+
     public void upload()
     {
         Document data = this.serialize();
 
-        LoggerHelper.logDatabaseInsert(Pokemon.class, data);
+        UPDATER.submit(() -> {
+            LoggerHelper.logDatabaseInsert(Pokemon.class, data);
 
-        Mongo.PokemonData.insertOne(data);
+            Mongo.PokemonData.insertOne(data);
 
-        CacheHandler.POKEMON_DATA.put(this.getUUID(), data);
+            CacheHandler.POKEMON_DATA.put(this.getUUID(), data);
+        });
     }
 
     public void delete()
     {
-        Mongo.PokemonData.deleteOne(this.query());
+        UPDATER.submit(() -> Mongo.PokemonData.deleteOne(this.query()));
 
         CacheHandler.POKEMON_DATA.invalidate(this.getUUID());
     }
 
     private void update(Bson... updates)
     {
-        LoggerHelper.logDatabaseUpdate(Pokemon.class, updates);
+        UPDATER.submit(() -> {
+            LoggerHelper.logDatabaseUpdate(Pokemon.class, updates);
 
-        Document updated = Mongo.PokemonData.findOneAndUpdate(this.query(), List.of(updates), new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER));
+            Document updated = Mongo.PokemonData.findOneAndUpdate(this.query(), List.of(updates), new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER));
 
-        CacheHandler.POKEMON_DATA.put(this.getUUID(), updated);
+            CacheHandler.POKEMON_DATA.put(this.getUUID(), updated);
+        });
     }
 
     public void updateEntity()
