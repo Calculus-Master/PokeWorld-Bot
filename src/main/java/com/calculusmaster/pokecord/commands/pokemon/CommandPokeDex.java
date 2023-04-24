@@ -80,7 +80,7 @@ public class CommandPokeDex extends PokeWorldCommand
             String evYield = data.getEVYield().get().entrySet().stream().filter(e -> e.getValue() > 0).map(e -> e.getValue() + " " + e.getKey().toString()).collect(Collectors.joining(", "));
 
             String eggGroups = data.getEggGroups().stream().map(eg -> Global.normalize(eg.toString().replaceAll("_", " "))).collect(Collectors.joining(", "));
-            String genderRate = data.getGenderRate() == -1 ? "N/A" : String.format("%.2f", 100 * data.getGenderRate() / 8.) + "% Male | " + String.format("%.2f", 100 * (8 - data.getGenderRate()) / 8.) + "% Female";
+            String genderRate = data.getGenderRate() == -1 ? "N/A" : String.format("%.2f", 100 * data.getGenderRate() / 8.) + "% Female | " + String.format("%.2f", 100 * (8 - data.getGenderRate()) / 8.) + "% Male";
             String eggMoves = data.getEggMoves().isEmpty() ? "None" : data.getEggMoves().stream().map(e -> e.data().getName()).collect(Collectors.joining(", "));
 
             String mainAbilities = data.getMainAbilities().stream().map(Ability::getName).collect(Collectors.joining(", "));
