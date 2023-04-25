@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.pokemon;
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
+import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -36,7 +37,8 @@ public class CommandSelect extends PokeWorldCommand
         else if(RaidEventHelper.hasRaid(this.server.getId()) && RaidEventHelper.getRaidEvent(this.server.getId()).hasPlayer(this.player.getId())) return this.error("You cannot change your active Pokemon currently because you are participating in an active Raid.");
 
         this.playerData.setSelected(num);
-        this.response = "**" + this.playerData.getSelectedPokemon().getName() + "** is now your Active Pokemon!";
+        Pokemon newActive = Pokemon.build(this.playerData.getPokemonList().get(num - 1));
+        this.response = "**" + newActive.getName() + "** is now your Active Pokemon!";
 
         return true;
     }

@@ -984,7 +984,7 @@ public class Pokemon
 
     public int getMaxTMs()
     {
-        return 5 + this.getPrestigeLevel() * 2;
+        return Math.min(this.data.getTMs().size(), 5 + this.getPrestigeLevel() * 2);
     }
 
     public void addTM(TM tm)
