@@ -1155,7 +1155,7 @@ public class Pokemon
     public void setIVs()
     {
         this.ivs = new PokemonStats();
-        Arrays.stream(Stat.values()).forEach(s -> this.ivs.set(s, new SplittableRandom().nextInt(31) + 1));
+        Arrays.stream(Stat.values()).forEach(s -> this.ivs.set(s, this.random.nextInt(31) + 1));
     }
 
     public void setIVs(Map<Stat, Integer> ivs)
@@ -1414,7 +1414,7 @@ public class Pokemon
     //Nature
     public void setNature()
     {
-        this.setNature(Nature.values()[new SplittableRandom().nextInt(Nature.values().length)]);
+        this.setNature(Nature.values()[this.random.nextInt(Nature.values().length)]);
     }
 
     public void setNature(Nature nature)
@@ -1430,7 +1430,7 @@ public class Pokemon
     //Gender
     public void setGender()
     {
-        this.setGender(this.data.getGenderRate() == -1 ? Gender.UNKNOWN : (new SplittableRandom().nextInt(8) < this.data.getGenderRate() ? Gender.FEMALE : Gender.MALE));
+        this.setGender(this.data.getGenderRate() == -1 ? Gender.UNKNOWN : (this.random.nextInt(8) < this.data.getGenderRate() ? Gender.FEMALE : Gender.MALE));
     }
 
     public void setGender(Gender gender)
@@ -1451,7 +1451,7 @@ public class Pokemon
     //Shiny
     public void setShiny()
     {
-        this.setShiny(new SplittableRandom().nextInt(4096) < 1);
+        this.setShiny(this.random.nextInt(4096) < 1);
     }
 
     public void setShiny(boolean shiny)
