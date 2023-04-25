@@ -337,6 +337,7 @@ public class Pokemon
                 && this.getDynamaxLevel() == 10 //Dynamax Level must be 10
                 && this.getPrestigeLevel() == this.getMaxPrestigeLevel() //Prestige Level must be at its maximum
                 && this.getTMs().size() == this.getMaxTMs() //Must have as many TMs as possible
+                && this.getAvailableAugmentSlots() <= 2 //Must have enough Augments where only a few slots are available
                 ;
     }
 
