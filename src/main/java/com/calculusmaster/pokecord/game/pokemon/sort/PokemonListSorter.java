@@ -328,7 +328,7 @@ public class PokemonListSorter
                         }
                         else tm = TM.cast(split[1]);
 
-                        if(tm != null) predicate = p -> p.hasTM() && p.getTM().equals(tm);
+                        if(tm != null) predicate = p -> p.getTMs().contains(tm.getMove());
                     }
                 }
             }
@@ -393,7 +393,7 @@ public class PokemonListSorter
                 predicate = switch(type)
                 {
                     case "item" -> Pokemon::hasItem;
-                    case "tm" -> Pokemon::hasTM;
+                    case "tm" -> Pokemon::hasTMs;
                     default -> p -> false;
                 };
             }

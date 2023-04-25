@@ -64,7 +64,7 @@ public class Pokemon
     private List<MoveEntity> moves;
     private Ability ability;
     private Item item;
-    private TM tm;
+    private EnumSet<MoveEntity> tms;
     private EnumSet<PokemonAugment> augments;
     private int megaCharges;
     private CustomPokemonData customData;
@@ -109,7 +109,7 @@ public class Pokemon
         p.setMoves();
         p.setAbility();
         p.setItem(Item.NONE);
-        p.setTM();
+        p.setTMs();
         p.setAugments(List.of());
         p.setDefaultMegaCharges();
         p.setCustomData();
@@ -141,7 +141,7 @@ public class Pokemon
         p.setMoves(data.getList("moves", String.class).stream().map(MoveEntity::valueOf).toList());
         p.setAbility(Ability.valueOf(data.getString("ability")));
         p.setItem(Item.valueOf(data.getString("item")));
-        p.setTM(data.getString("tm").isEmpty() ? null : TM.valueOf(data.getString("tm")));
+        p.setTMs(data.getList("tms", String.class).stream().map(MoveEntity::valueOf).toList());
         p.setAugments(data.getList("augments", String.class));
         p.setMegaCharges(data.getInteger("mega_charges"));
         p.setCustomData(data.get("custom", Document.class));
@@ -211,7 +211,7 @@ public class Pokemon
                 .append("moves", this.moves.stream().map(Enum::toString).toList())
                 .append("ability", this.ability.toString())
                 .append("item", this.item.toString())
-                .append("tm", this.tm == null ? "" : this.tm.toString())
+                .append("tms", this.tms.stream().map(Enum::toString).toList())
                 .append("augments", this.augments.stream().map(Enum::toString).toList())
                 .append("mega_charges", this.megaCharges)
                 .append("custom", this.customData.serialize());
@@ -305,9 +305,9 @@ public class Pokemon
         this.update(Updates.set("item", this.item.toString()));
     }
 
-    public void updateTM()
+    public void updateTMs()
     {
-        this.update(Updates.set("tm", this.tm == null ? "" : this.tm.toString()));
+        this.update(Updates.set("tms", this.tms.stream().map(Enum::toString).toList()));
     }
 
     public void updateAugments()
@@ -975,26 +975,41 @@ public class Pokemon
         return this.type.contains(t);
     }
 
-    //TM & TR
+    //TM
 
-    public boolean hasTM()
+    public EnumSet<MoveEntity> getTMs()
     {
-        return this.tm != null;
+        return this.tms;
     }
 
-    public void setTM()
+    public int getMaxTMs()
     {
-        this.tm = null;
+        return 5 + this.getPrestigeLevel() * 2;
     }
 
-    public void setTM(TM tm)
+    public void addTM(TM tm)
     {
-        this.tm = tm;
+        this.tms.add(tm.getMove());
     }
 
-    public TM getTM()
+    public void removeTM(TM tm)
     {
-        return this.tm;
+        this.tms.remove(tm.getMove());
+    }
+
+    public void setTMs()
+    {
+        this.tms = EnumSet.noneOf(MoveEntity.class);
+    }
+
+    public void setTMs(List<MoveEntity> tms)
+    {
+        this.tms = tms.isEmpty() ? EnumSet.noneOf(MoveEntity.class) : EnumSet.copyOf(tms);
+    }
+
+    public boolean hasTMs()
+    {
+        return !this.tms.isEmpty();
     }
 
     //Item
@@ -1076,7 +1091,7 @@ public class Pokemon
                         .toList()
         );
 
-        if(this.hasTM()) available.add(this.tm.getMove());
+        available.addAll(this.tms);
 
         return this.withMovesOverride(available);
     }

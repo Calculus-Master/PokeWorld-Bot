@@ -288,7 +288,7 @@ public class CommandMarket extends PokeWorldCommand
 
             String ability = "*" + p.getAbility().getName() + "*";
             String item = p.hasItem() ? p.getItem().getStyledName() : "None";
-            String tm = p.hasTM() ? p.getTM().toString() + " (" + p.getTM().getMove().getName() + ")" : "None";
+            String tm = "%s / %s".formatted(p.getTMs().size(), p.getMaxTMs());
 
             this.embed
                     .setTitle(title)
@@ -310,7 +310,7 @@ public class CommandMarket extends PokeWorldCommand
 
                     .addField("Ability", ability, true)
                     .addField("Held Item", item, true)
-                    .addField("Held TM", tm, true)
+                    .addField("TMs", tm, true)
 
                     .setFooter("Buy this Pokemon with `/market buy market-id:" + entry.getMarketID() + "`!\nPokemon UUID: " + p.getUUID() + "");
 

@@ -4,6 +4,8 @@ import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.util.Global;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.calculusmaster.pokecord.game.moves.data.MoveEntity.*;
 
@@ -27,6 +29,9 @@ public enum TM
     TM015(STRUGGLE_BUG),
 
     ;
+
+    private static final Map<MoveEntity, TM> MOVE_TO_TM_MAP = new HashMap<>();
+    static { Arrays.stream(TM.values()).forEach(tm -> MOVE_TO_TM_MAP.put(tm.getMove(), tm)); }
 
     private final MoveEntity moveEntity;
     TM(MoveEntity moveEntity)
@@ -54,5 +59,10 @@ public enum TM
     public static boolean isMoveTM(MoveEntity move)
     {
         return Arrays.stream(TM.values()).anyMatch(tm -> tm.getMove().equals(move));
+    }
+
+    public static TM getTM(MoveEntity move)
+    {
+        return MOVE_TO_TM_MAP.get(move);
     }
 }

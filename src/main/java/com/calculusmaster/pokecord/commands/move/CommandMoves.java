@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.duel.players.Player;
 import com.calculusmaster.pokecord.game.duel.players.UserPlayer;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.items.Item;
+import com.calculusmaster.pokecord.game.enums.items.TM;
 import com.calculusmaster.pokecord.game.enums.items.ZCrystal;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.data.CustomMoveDataRegistry;
@@ -189,7 +190,7 @@ public class CommandMoves extends PokeWorldCommand
 
                     String source = "";
                     if(active.getData().getLevelUpMoves().containsKey(m.getEntity())) source = "Level Up";
-                    else if(active.hasTM() && active.getTM().getMove().equals(m.getEntity())) source = "TM";
+                    else if(active.getTMs().contains(m.getEntity())) source = "TM";
                     else if(active.is(PokemonEntity.ZYGARDE_50, PokemonEntity.ZYGARDE_10, PokemonEntity.ZYGARDE_COMPLETE) && active.getItem().equals(Item.ZYGARDE_CUBE) && Move.ZYGARDE_CUBE_MOVES.contains(m.getEntity())) source = "Zygarde Cube";
                     else if(MoveTutorRegistry.MOVE_TUTOR_MOVES.contains(m.getEntity())) source = "Move Tutor";
                     else if(active.getData().getEggMoves().contains(m.getEntity())) source = "Breeding";
@@ -233,7 +234,35 @@ public class CommandMoves extends PokeWorldCommand
 
                         .addField("Version", "**%s**".formatted(active.getData().getLevelUpMovesVersion()), false)
 
-                        .setFooter("A green circle indicates a move that can be learned. A yellow circle indicates a move that is currently in your moveset. A lock indicates a move that cannot be learned yet. An exclamation point signifies that the move is not implemented yet, meaning it will not work within duels.");
+                        .setFooter("""
+                                A green circle indicates a move that can be learned.
+                                A yellow circle indicates a move that is currently in your moveset.
+                                A lock indicates a move that cannot be learned yet.
+                                An exclamation point signifies that the move is not implemented yet, meaning it will not work within duels.
+                                """);
+
+                //TMs
+                if(active.hasTMs())
+                {
+                    List<String> tmMoveNames = new ArrayList<>(), tmMoveTMs = new ArrayList<>();
+                    for(MoveEntity e : active.getTMs())
+                    {
+                        String tag = active.getMoves().contains(e) ? ":yellow_circle:" : ":green_circle:";
+                        if(!Move.isImplemented(e)) tag += ":exclamation:";
+
+                        TM tm = TM.getTM(e);
+
+                        tmMoveNames.add(tag + " **" + e.data().getName() + "**");
+                        tmMoveTMs.add("**" + (tm == null ? "Unavailable" : tm) + "**");
+                    }
+
+                    this.embed
+                            .addField("Available TM Moves", String.join("\n", tmMoveNames), true)
+                            .addField("TM", String.join("\n", tmMoveTMs), true)
+                            .addBlankField(true);
+                }
+
+                //Egg Moves
             }
         }
         else if(subcommand.equals("learn"))

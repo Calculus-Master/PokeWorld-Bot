@@ -4,7 +4,6 @@ import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.enums.items.TM;
-import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -28,9 +27,8 @@ public class CommandTM extends PokeWorldCommand
                 .withCommand(Commands
                         .slash("tm", "Teach your active Pokemon a new move, from a Technical Machine!")
                         .addSubcommands(
-                                new SubcommandData("teach", "Teach your active Pokemon a move from an owned TM.")
+                                new SubcommandData("teach", "Teach your active Pokemon a move from an owned TM. Note: This will use up the TM.")
                                         .addOption(OptionType.STRING, "tm", "The TM you want to teach your active Pokemon.", true, true),
-                                new SubcommandData("remove", "Remove a TM from your active Pokemon. Note: This will also remove the corresponding move."),
                                 new SubcommandData("info", "View what move a TM teaches.")
                                         .addOption(OptionType.STRING, "tm", "The TM you want to view information about.", true, true)
                         )
@@ -53,62 +51,45 @@ public class CommandTM extends PokeWorldCommand
             TM tm = TM.cast(inputTMName);
             Pokemon active = this.playerData.getSelectedPokemon();
 
-            if(!active.getData().getTMs().contains(tm.getMove())) return this.error(active.getName() + " cannot learn " + tm + ".");
-            else
+            if(!this.playerData.getInventory().hasTM(tm)) return this.error("You do not own any " + tm + "!");
+            else if(!active.getData().getTMs().contains(tm.getMove())) return this.error(active.getName() + " cannot learn " + tm + ".");
+            else if(active.getTMs().contains(tm.getMove())) return this.error(active.getName() + " has already been taught " + tm + " (Move: " + tm.getMove().getName() + ")!");
+            else if(active.getTMs().size() == active.getMaxTMs()) return this.error(active.getName() + " has reached its maximum number of TMs (**" + active.getMaxTMs() + "**), and cannot learn any new TMs.");
             {
                 this.playerData.getInventory().removeTM(tm);
 
-                if(active.hasTM())
-                {
-                    TM oldTM = active.getTM();
-                    MoveEntity oldTMMove = oldTM.getMove();
-                    active.setTM(tm);
+                active.addTM(tm);
+                active.updateTMs();
 
-                    //Remove the old TM's moves
-                    String forgotten = "";
-                    while(active.getMoves().contains(oldTMMove))
-                    {
-                        active.getMoves().set(active.getMoves().indexOf(oldTMMove), MoveEntity.TACKLE);
-                        forgotten = "\n" + active.getName() + " has forgotten *" + oldTMMove.getName() + "*.";
-                    }
-
-                    active.updateTM();
-                    active.updateMoves();
-                    this.response = "Gave " + active.getName() + " **" + tm + "**, replacing its " + oldTM + "! *It can now learn **" + tm.getMove().getName() + "*." + forgotten;
-                }
-                else
-                {
-                    active.setTM(tm);
-                    active.updateTM();
-                    this.response = "Gave " + active.getName() + " **" + tm + "**! *It can now learn " + tm.getMove().getName() + "*.";
-                }
+                this.response = "Taught " + active.getName() + " **" + tm + "**! *It can now learn " + tm.getMove().getName() + "*.";
             }
         }
-        else if(subcommand.equals("remove"))
-        {
-            Pokemon active = this.playerData.getSelectedPokemon();
-
-            if(!active.hasTM()) return this.error(active.getName() + " is not holding a TM currently.");
-            else
-            {
-                TM tm = active.getTM();
-
-                active.setTM();
-                active.updateTM();
-
-                boolean hadMove = false;
-                while(active.getMoves().contains(tm.getMove()))
-                {
-                    hadMove = true;
-                    active.getMoves().set(active.getMoves().indexOf(tm.getMove()), MoveEntity.TACKLE);
-                }
-
-                this.playerData.getInventory().addTM(tm);
-                if(hadMove) active.updateMoves();
-
-                this.response = "**" + tm + "** has been removed from " + active.getName() + " and returned to your inventory!" + (hadMove ? "\n*" + active.getName() + " has forgotten " + tm.getMove().getName() + "*." : "");
-            }
-        }
+//        else if(subcommand.equals("remove"))
+//        {
+//            //TODO: Reimplement with another item (like a tm casing or something, to retrieve tms from a Pokemon)
+//            Pokemon active = this.playerData.getSelectedPokemon();
+//
+//            if(!active.hasTM()) return this.error(active.getName() + " is not holding a TM currently.");
+//            else
+//            {
+//                TM tm = active.getTM();
+//
+//                active.setTM();
+//                active.updateTM();
+//
+//                boolean hadMove = false;
+//                while(active.getMoves().contains(tm.getMove()))
+//                {
+//                    hadMove = true;
+//                    active.getMoves().set(active.getMoves().indexOf(tm.getMove()), MoveEntity.TACKLE);
+//                }
+//
+//                this.playerData.getInventory().addTM(tm);
+//                if(hadMove) active.updateMoves();
+//
+//                this.response = "**" + tm + "** has been removed from " + active.getName() + " and returned to your inventory!" + (hadMove ? "\n*" + active.getName() + " has forgotten " + tm.getMove().getName() + "*." : "");
+//            }
+//        }
         else if(subcommand.equals("info"))
         {
             OptionMapping tmOption = Objects.requireNonNull(event.getOption("tm"));
