@@ -333,9 +333,11 @@ public class Pokemon
     {
         return this.getLevel() == 100 //Level must be 100
                 && this.getTotalEV() == 510 //EVs must be maxed out
-                && this.moves.stream().noneMatch(m -> m.equals(MoveEntity.TACKLE)) //Must have 4 moves that aren't Tackle
+                && this.getMoves().stream().noneMatch(m -> m.equals(MoveEntity.TACKLE)) //Must have 4 moves that aren't Tackle
                 && this.getDynamaxLevel() == 10 //Dynamax Level must be 10
-                && this.getPrestigeLevel() == this.getMaxPrestigeLevel(); //Prestige Level must be at its maximum
+                && this.getPrestigeLevel() == this.getMaxPrestigeLevel() //Prestige Level must be at its maximum
+                && this.getTMs().size() == this.getMaxTMs() //Must have as many TMs as possible
+                ;
     }
 
     //Custom Data
