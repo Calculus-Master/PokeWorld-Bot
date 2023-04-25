@@ -141,7 +141,7 @@ public class SpawnEventHelper
         boolean shiny = random.nextInt(4096) < 1;
 
         //Custom data
-        CustomPokemonData customData = new CustomPokemonData().generateOnSpawn(spawn);
+        CustomPokemonData customData = new CustomPokemonData().generate(spawn);
 
         //Legendary Hour
         if(Global.timeNow().getHour() == 20 && random.nextInt(100) < 1)

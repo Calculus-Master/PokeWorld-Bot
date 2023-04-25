@@ -77,7 +77,7 @@ public class CustomPokemonData
         return data;
     }
 
-    public CustomPokemonData generateOnSpawn(PokemonEntity entity)
+    public CustomPokemonData generate(PokemonEntity entity)
     {
         if(EnumSet.of(PokemonEntity.FLABEBE, PokemonEntity.FLOETTE, PokemonEntity.FLORGES).contains(entity))
         {

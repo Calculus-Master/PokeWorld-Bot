@@ -346,7 +346,7 @@ public class Pokemon
 
     public void setCustomData()
     {
-        this.customData = new CustomPokemonData();
+        this.customData = new CustomPokemonData().generate(this.entity);
     }
 
     public void setCustomData(Document data)
