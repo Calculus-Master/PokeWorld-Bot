@@ -111,7 +111,7 @@ public class CommandMarket extends PokeWorldCommand
                 this.playerData.directMessage("*Your recent `/market view` command had some errors. The following inputs were invalid*:\n```\n" + String.join("\n", errors) + "\n```");
 
             //Sort
-            List<Pokemon> pokemon = sorter.sort(); //TODO: Settings for sorting
+            List<Pokemon> pokemon = sorter.sort();
             if(pokemon.isEmpty()) return this.error("None of the Market Pokemon matched your given filters.");
 
             OptionMapping pageOption = event.getOption("page");

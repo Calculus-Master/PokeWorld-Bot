@@ -1,14 +1,17 @@
 package com.calculusmaster.pokecord.util.listener;
 
+import com.calculusmaster.pokecord.game.settings.Settings;
+import com.calculusmaster.pokecord.game.settings.core.SingleValue;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.mongo.PlayerData;
-import com.calculusmaster.pokecord.mongo.ServerDataQuery;
+import com.calculusmaster.pokecord.mongo.ServerData;
 import com.calculusmaster.pokecord.util.helpers.DataHelper;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
@@ -18,6 +21,9 @@ import net.dv8tion.jda.api.events.user.update.UserUpdateNameEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MiscListener extends ListenerAdapter
 {
     @Override
@@ -26,12 +32,15 @@ public class MiscListener extends ListenerAdapter
         if(event.isFromType(ChannelType.TEXT))
         {
             String channelID = event.getChannel().getId();
-            ServerDataQuery serverData = new ServerDataQuery(event.getGuild().getId());
+            ServerData serverData = ServerData.build(event.getGuild().getId());
 
-            //Make sure spawn channel doesn't reference a deleted channel
-            if(serverData.getSpawnChannels().contains(channelID))
+            //Make sure channel settings don't reference a deleted channel
+            for(var s : List.of(Settings.SPAWN_CHANNEL, Settings.DUEL_CHANNEL, Settings.TRADE_CHANNEL))
             {
-                serverData.removeSpawnChannel(channelID);
+                var setting = s.getSetting(serverData);
+                List<TextChannel> channels = new ArrayList<>(setting.get());
+
+                if(channels.removeIf(t -> t.getId().equals(channelID))) s.update(serverData.getID(), new SingleValue<>(channels));
             }
         }
     }
@@ -53,7 +62,7 @@ public class MiscListener extends ListenerAdapter
     {
         Guild server = event.getGuild();
 
-        if(!ServerDataQuery.isRegistered(server)) ServerDataQuery.register(server);
+        ServerData.register(server);
 
         DataHelper.updateServerPlayers(server);
     }

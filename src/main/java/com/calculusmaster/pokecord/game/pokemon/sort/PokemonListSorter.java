@@ -8,6 +8,7 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
+import com.calculusmaster.pokecord.game.settings.Settings;
 import com.calculusmaster.pokecord.game.world.PokeWorldMarket;
 import com.calculusmaster.pokecord.game.world.PokeWorldNursery;
 import com.calculusmaster.pokecord.mongo.PlayerData;
@@ -37,6 +38,8 @@ public class PokemonListSorter
     private final List<String> query;
     private Pair<PokemonListOrderType, Boolean> sortType;
     private boolean hasNicknameQuery;
+    private boolean hasOrderTypeQuery;
+    private boolean hasOrderDirectionQuery;
 
     private PlayerData playerData;
 
@@ -50,6 +53,8 @@ public class PokemonListSorter
         this.query = query;
         this.sortType = null;
         this.hasNicknameQuery = false;
+        this.hasOrderTypeQuery = false;
+        this.hasOrderDirectionQuery = false;
 
         this.playerData = null;
     }
@@ -72,7 +77,7 @@ public class PokemonListSorter
         {
             String order = orderOption == null ? "number" : orderOption.getAsString();
             boolean descending = descendingOption != null && descendingOption.getAsBoolean();
-            query.add("order:" + order + ":" + (descending ? "descending" : "ascending"));
+            query.add("order:" + order + ":" + (descendingOption == null ? "" : descending ? "descending" : "ascending"));
         }
 
         OptionMapping shinyOption = event.getOption("shiny");
@@ -376,6 +381,9 @@ public class PokemonListSorter
                 String[] split = arg.split(":");
                 String type = split[1];
 
+                this.hasOrderTypeQuery = !split[1].isBlank();
+                this.hasOrderDirectionQuery = split.length == 3 && !split[2].isBlank();
+
                 PokemonListOrderType orderType = PokemonListOrderType.cast(type);
                 if(orderType != null)
                 {
@@ -417,10 +425,12 @@ public class PokemonListSorter
 
     public List<Pokemon> sort()
     {
-        if(this.playerData != null); //setting
-
-        if(this.sortType == null) //Default Sort Type
-            this.sortType = this.market ? new Pair<>(TIME, true) : new Pair<>(NUMBER, false);
+        if(this.playerData != null)
+        {
+            var setting = Settings.DEFAULT_SORT_ORDER.getSetting(this.playerData);
+            this.sortType = new Pair<>(this.hasOrderTypeQuery && this.sortType != null && this.sortType.getFirst() != null ? this.sortType.getFirst() : setting.get1(), this.hasOrderDirectionQuery && this.sortType != null ? this.sortType.getSecond() : setting.get2());
+        }
+        else if(this.sortType == null) this.sortType = this.market ? new Pair<>(TIME, true) : new Pair<>(NUMBER, false); //Defaults
 
         //Default is Ascending
         switch(this.sortType.getFirst())

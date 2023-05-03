@@ -101,6 +101,7 @@ public class CommandHandler extends ListenerAdapter
         CommandMarket.init();
 
         CommandWorld.init();
+        CommandSettings.init();
 
         CommandDev.init();
 

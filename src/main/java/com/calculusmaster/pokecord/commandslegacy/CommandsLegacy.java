@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord.commandslegacy;
 
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyDev;
-import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacySettings;
 import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.interfaces.CommandSupplier;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -16,9 +15,6 @@ public class CommandsLegacy
 
     public static void init()
     {
-        register("settings", "config")
-                .setCommand(CommandLegacySettings::new)
-                .setCategory(Category.MISC);
 
         register("dev")
                 .setCommand(CommandLegacyDev::new)

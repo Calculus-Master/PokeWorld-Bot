@@ -4,7 +4,7 @@ import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.mongo.PlayerData;
-import com.calculusmaster.pokecord.mongo.ServerDataQuery;
+import com.calculusmaster.pokecord.mongo.ServerData;
 import com.calculusmaster.pokecord.util.Global;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -27,7 +27,7 @@ public abstract class CommandLegacy
     protected User player;
     protected Guild server;
 
-    protected ServerDataQuery serverData;
+    protected ServerData serverData;
     protected PlayerData playerData;
 
     protected EmbedBuilder embed;
@@ -43,7 +43,7 @@ public abstract class CommandLegacy
         this.player = event.getAuthor();
         this.server = event.getGuild();
 
-        this.serverData = serverData ? new ServerDataQuery(this.server.getId()) : null;
+        this.serverData = serverData ? ServerData.build(event.getGuild().getId()) : null;
         this.playerData = PlayerData.build(this.player.getId());
 
         this.embed = new EmbedBuilder();
@@ -113,8 +113,8 @@ public abstract class CommandLegacy
 
     protected String getCommandFormatted(String command)
     {
-        if(this.serverData == null) this.serverData = new ServerDataQuery(this.server.getId());
-        return "`" + this.serverData.getPrefix() + command + "`";
+//        if(this.serverData == null) this.serverData = new ServerData(this.server.getId());
+        return command;
     }
 
     protected void deleteOriginal()

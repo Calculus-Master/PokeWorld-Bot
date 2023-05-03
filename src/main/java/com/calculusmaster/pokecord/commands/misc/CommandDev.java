@@ -88,8 +88,6 @@ public class CommandDev extends PokeWorldCommand
                     target.getOwnedEggs().forEach(e -> Mongo.deleteOne("CommandDev - Reset Player (Delete Eggs)", DatabaseCollection.EGG, Filters.eq("eggID", e.getEggID())));
                 if(!target.getPokemonList().isEmpty()) target.getPokemon().forEach(Pokemon::delete);
                 Mongo.MarketData.deleteMany(Filters.eq("sellerID", target.getID()));
-                Mongo.deleteOne("CommandDev - Reset Player (Delete Settings)", DatabaseCollection.SETTINGS, Filters.eq("playerID", target.getID()));
-                Mongo.deleteOne("CommandDev - Reset Player (Delete Statistics)", DatabaseCollection.STATISTICS, Filters.eq("playerID", target.getID()));
                 Mongo.deleteOne("CommandDev - Reset Player (Delete Player Data)", DatabaseCollection.PLAYER, Filters.eq("playerID", target.getID()));
                 CacheHandler.PLAYER_DATA.invalidate(target.getID());
                 this.response = target.getUsername() + " has been reset!";

@@ -4,7 +4,8 @@ import com.calculusmaster.pokecord.game.pokemon.Pokemon;
 import com.calculusmaster.pokecord.game.pokemon.component.CustomPokemonData;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
-import com.calculusmaster.pokecord.mongo.ServerDataQuery;
+import com.calculusmaster.pokecord.game.settings.Settings;
+import com.calculusmaster.pokecord.mongo.ServerData;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.ThreadPoolHandler;
@@ -114,7 +115,8 @@ public class SpawnEventHelper
 
     private static void spawnPokemon(Guild g, PokemonEntity spawn)
     {
-        List<TextChannel> channels = new ServerDataQuery(g.getId()).getSpawnChannels().stream().map(g::getTextChannelById).filter(Objects::nonNull).toList();
+        var settings = Settings.SPAWN_CHANNEL.getSetting(ServerData.build(g.getId()));
+        List<TextChannel> channels = new ArrayList<>(settings.get());
         final Random random = new Random();
 
         //Check if spawn channels are available

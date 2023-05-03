@@ -10,8 +10,6 @@ public enum DatabaseCollection
 
     PLAYER      ("PlayerData"),
     SERVER      ("ServerData"),
-    SETTINGS    ("SettingsData"),
-    STATISTICS  ("StatisticsData"),
 
     POKEMON     ("PokemonData"),
     MARKET      ("MarketData"),

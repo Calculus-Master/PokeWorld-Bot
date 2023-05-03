@@ -36,8 +36,6 @@ public class PlayerData extends MongoQuery
 {
     private static final ExecutorService UPDATER = Executors.newThreadPerTaskExecutor(Thread.ofVirtual().name("PlayerData Updates-", 0).factory());
 
-    private Optional<PlayerSettingsQuery> settings = Optional.empty();
-
     private final Random random = new Random();
 
     private final Bson query;
@@ -96,14 +94,13 @@ public class PlayerData extends MongoQuery
                 .append("team", new PlayerTeam().serialize())
                 .append("statistics", new PlayerStatisticsRecord(null).serialize())
                 .append("tasks", new PlayerResearchTasks(null).serialize())
+                .append("settings", new Document())
 
                 ;
 
         LoggerHelper.logDatabaseInsert(PlayerData.class, data);
 
         Mongo.PlayerData.insertOne(data);
-
-        PlayerSettingsQuery.register(player.getId());
 
         PlayerData playerData = new PlayerData(data);
 
@@ -160,13 +157,6 @@ public class PlayerData extends MongoQuery
     public void dmMasteryLevel()
     {
         this.directMessage(MasteryLevelManager.MASTERY_LEVELS.get(this.getLevel()).getEmbed().build());
-    }
-
-    //Get the SettingsHelper object
-    public PlayerSettingsQuery getSettings()
-    {
-        if(this.settings.isEmpty()) this.settings = Optional.of(new PlayerSettingsQuery(this.getID()));
-        return this.settings.get();
     }
 
     //Pokedex (key: "pokedex")
@@ -227,6 +217,12 @@ public class PlayerData extends MongoQuery
     {
         if(this.getResearchTasks().hasObjective(type))
             this.tasks.checkAndUpdateObjectives(type, checker, amount);
+    }
+
+    //Settings (key: "settings")
+    public Document getSettingsData()
+    {
+        return this.document.get("settings", Document.class);
     }
 
     //key: "playerID"

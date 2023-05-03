@@ -4,10 +4,12 @@ import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.player.level.MasteryLevelManager;
 import com.calculusmaster.pokecord.mongo.PlayerData;
-import com.calculusmaster.pokecord.mongo.ServerDataQuery;
+import com.calculusmaster.pokecord.mongo.ServerData;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -36,7 +38,7 @@ public abstract class PokeWorldCommand
     protected TextChannel channel;
 
     protected PlayerData playerData;
-    protected ServerDataQuery serverData;
+    protected ServerData serverData;
 
     protected boolean ephemeral;
     protected EmbedBuilder embed;
@@ -71,6 +73,11 @@ public abstract class PokeWorldCommand
     {
         this.response = "";
         this.embed = null;
+    }
+
+    protected boolean isPokeAdmin(Member m)
+    {
+        return m.hasPermission(Permission.ADMINISTRATOR) || m.getRoles().stream().anyMatch(r -> r.getName().toLowerCase().contains("pokeworld admin"));
     }
 
     protected List<String> getAutocompleteOptions(String currentInput, List<String> sourceList)
@@ -112,7 +119,7 @@ public abstract class PokeWorldCommand
     protected void setServer(Guild server)
     {
         this.server = server;
-        this.serverData = new ServerDataQuery(server.getId()); //TODO: Caching Server Data
+        this.serverData = ServerData.build(server.getId());
     }
 
     protected void setChannel(TextChannel channel)
