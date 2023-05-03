@@ -12,10 +12,10 @@ import static com.calculusmaster.pokecord.game.enums.items.ItemType.*;
 public enum Item
 {
     NONE(0, MISC),
-    //Functional Items (p!activate)
-//    EV_REALLOCATOR(0, FUNCTIONAL),
-//    IV_REROLLER(0, FUNCTIONAL),
-//    EV_CLEARER(0, FUNCTIONAL),
+
+    //Custom Misc
+    MACHINE_DISC(900, MISC),
+
     //Pokemon Evolution Items
     FRIENDSHIP_BAND(500, EVOLUTION),
     THUNDER_STONE(250, EVOLUTION),
@@ -57,12 +57,14 @@ public enum Item
     MALICIOUS_ARMOR(250, EVOLUTION),
     SCROLL_OF_DARKNESS(750, EVOLUTION),
     SCROLL_OF_WATERS(750, EVOLUTION),
+
     //Misc
     DESTINY_KNOT(1000, MISC),
     ZYGARDE_CUBE(6000, MISC),
     POWER_HERB(4000, MISC),
     LIGHT_CLAY(5000, MISC),
     EVERSTONE(1000, MISC),
+
     //Arceus Plates
     DRACO_PLATE(1000, PLATE),
     DREAD_PLATE(1000, PLATE),
@@ -81,6 +83,7 @@ public enum Item
     STONE_PLATE(1000, PLATE),
     TOXIC_PLATE(1000, PLATE),
     ZAP_PLATE(1000, PLATE),
+
     //Memory Discs TODO - Implement Silvally & RKS Drive
     BUG_MEMORY(1000, MEMORY),
     DARK_MEMORY(1000, MEMORY),
@@ -99,11 +102,13 @@ public enum Item
     ROCK_MEMORY(1000, MEMORY),
     STEEL_MEMORY(1000, MEMORY),
     WATER_MEMORY(1000, MEMORY),
+
     //Burn Drives TODO - Implement Genesect & Burn Drive
     BURN_DRIVE(1000, DRIVE),
     CHILL_DRIVE(1000, DRIVE),
     DOUSE_DRIVE(1000, DRIVE),
     SHOCK_DRIVE(1000, DRIVE),
+
     //Berries
     //TODO: Friendship Raising Weird Berries: Grepa, Hondew, Kelpsy, Pomeg, Qualot, Tamato
     AGUAV_BERRY(750, BERRY),
