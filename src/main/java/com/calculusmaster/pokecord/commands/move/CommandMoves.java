@@ -263,6 +263,22 @@ public class CommandMoves extends PokeWorldCommand
                 }
 
                 //Egg Moves
+                if(!active.getAvailableEggMoves().isEmpty())
+                {
+                    List<String> eggMoveNames = new ArrayList<>();
+                    for(MoveEntity e : active.getTMs())
+                    {
+                        String tag = active.getMoves().contains(e) ? ":yellow_circle:" : ":green_circle:";
+                        if(!Move.isImplemented(e)) tag += ":exclamation:";
+
+                        eggMoveNames.add(tag + " **" + e.data().getName() + "**");
+                    }
+
+                    this.embed
+                            .addField("Available Egg Moves", String.join("\n", eggMoveNames), true)
+                            .addBlankField(true)
+                            .addBlankField(true);
+                }
             }
         }
         else if(subcommand.equals("learn"))

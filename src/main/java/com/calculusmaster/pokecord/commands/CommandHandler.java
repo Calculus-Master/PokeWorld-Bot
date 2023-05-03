@@ -80,6 +80,7 @@ public class CommandHandler extends ListenerAdapter
         CommandForm.init();
         CommandEggs.init();
         CommandPokemon.init();
+        CommandBreed.init();
 
         CommandUse.init();
         CommandDuel.init();

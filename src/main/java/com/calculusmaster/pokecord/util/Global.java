@@ -11,9 +11,14 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.EnumSet;
 import java.util.SplittableRandom;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Global
 {
+    //Global thread pool for random one-shot tasks
+    public static final ExecutorService GLOBAL = Executors.newVirtualThreadPerTaskExecutor();
+
     public static final int MAX_NAME_LIMIT = 40;
     public static final EnumSet<PokemonEntity> STARTERS = EnumSet.of(PokemonEntity.BULBASAUR, PokemonEntity.CHARMANDER, PokemonEntity.SQUIRTLE, PokemonEntity.CHIKORITA, PokemonEntity.CYNDAQUIL, PokemonEntity.TOTODILE, PokemonEntity.TREECKO, PokemonEntity.TORCHIC, PokemonEntity.MUDKIP, PokemonEntity.TURTWIG, PokemonEntity.CHIMCHAR, PokemonEntity.PIPLUP, PokemonEntity.SNIVY, PokemonEntity.TEPIG, PokemonEntity.OSHAWOTT, PokemonEntity.CHESPIN, PokemonEntity.FENNEKIN, PokemonEntity.FROAKIE, PokemonEntity.ROWLET, PokemonEntity.LITTEN, PokemonEntity.POPPLIO, PokemonEntity.GROOKEY, PokemonEntity.SCORBUNNY, PokemonEntity.SOBBLE, PokemonEntity.SPRIGATITO, PokemonEntity.FUECOCO, PokemonEntity.QUAXLY);
     public static final EnumSet<PokemonEntity> DYNAMAX_BAN_LIST = EnumSet.of(PokemonEntity.ZACIAN, PokemonEntity.ZAMAZENTA, PokemonEntity.ETERNATUS, PokemonEntity.NECROZMA_ULTRA);

@@ -65,6 +65,7 @@ public class Pokemon
     private Ability ability;
     private Item item;
     private EnumSet<MoveEntity> tms;
+    private EnumSet<MoveEntity> availableEggMoves;
     private EnumSet<PokemonAugment> augments;
     private int megaCharges;
     private CustomPokemonData customData;
@@ -110,6 +111,7 @@ public class Pokemon
         p.setAbility();
         p.setItem(Item.NONE);
         p.setTMs();
+        p.setAvailableEggMoves();
         p.setAugments(List.of());
         p.setDefaultMegaCharges();
         p.setCustomData();
@@ -142,6 +144,7 @@ public class Pokemon
         p.setAbility(Ability.valueOf(data.getString("ability")));
         p.setItem(Item.valueOf(data.getString("item")));
         p.setTMs(data.getList("tms", String.class).stream().map(MoveEntity::valueOf).toList());
+        p.setAvailableEggMoves(data.getList("available_egg_moves", String.class).stream().map(MoveEntity::valueOf).toList());
         p.setAugments(data.getList("augments", String.class));
         p.setMegaCharges(data.getInteger("mega_charges"));
         p.setCustomData(data.get("custom", Document.class));
@@ -212,6 +215,7 @@ public class Pokemon
                 .append("ability", this.ability.toString())
                 .append("item", this.item.toString())
                 .append("tms", this.tms.stream().map(Enum::toString).toList())
+                .append("available_egg_moves", this.availableEggMoves.stream().map(Enum::toString).toList())
                 .append("augments", this.augments.stream().map(Enum::toString).toList())
                 .append("mega_charges", this.megaCharges)
                 .append("custom", this.customData.serialize());
@@ -978,6 +982,22 @@ public class Pokemon
         return this.type.contains(t);
     }
 
+    //Available Egg Moves
+    public EnumSet<MoveEntity> getAvailableEggMoves()
+    {
+        return this.availableEggMoves;
+    }
+
+    public void setAvailableEggMoves()
+    {
+        this.availableEggMoves = EnumSet.noneOf(MoveEntity.class);
+    }
+
+    public void setAvailableEggMoves(Collection<MoveEntity> moves)
+    {
+        this.availableEggMoves = moves.isEmpty() ? EnumSet.noneOf(MoveEntity.class) : EnumSet.copyOf(moves);
+    }
+
     //TM
 
     public EnumSet<MoveEntity> getTMs()
@@ -1095,6 +1115,8 @@ public class Pokemon
         );
 
         available.addAll(this.tms);
+
+        available.addAll(this.availableEggMoves);
 
         return this.withMovesOverride(available);
     }

@@ -652,6 +652,15 @@ public class EvolutionRegistry
         return EVOLUTION_DATA.get(entity);
     }
 
+    public static PokemonEntity getPreviousEvolution(PokemonEntity entity)
+    {
+        for(List<EvolutionData> list : EVOLUTION_DATA.values())
+            for(EvolutionData data : list)
+                if(data.getTarget().equals(entity)) return data.getSource();
+
+        return null;
+    }
+
     //Registering
     private static void register(PokemonEntity source, PokemonEntity target, EvolutionTrigger trigger1, EvolutionTrigger... triggers)
     {

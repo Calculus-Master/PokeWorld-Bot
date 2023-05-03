@@ -8,7 +8,6 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -122,6 +121,7 @@ public class Mongo
     public static final MongoCollection<Document> EggData = PokecordDB.getCollection("EggData");
     public static final MongoCollection<Document> TrainerData = PokecordDB.getCollection("TrainerData");
     public static final MongoCollection<Document> MegaChargeData = PokecordDB.getCollection("MegaChargeData");
+    public static final MongoCollection<Document> BreedingData = PokecordDB.getCollection("BreedingData");
 
     public static final MongoCollection<Document> TimeData = PokecordDB.getCollection("TimeData");
 
@@ -131,14 +131,6 @@ public class Mongo
     //For random database queries
     public static void main(String[] args)
     {
-        Mongo.BountyData.deleteMany(Filters.exists("bountyID"));
-        Mongo.CrashData.deleteMany(Filters.exists("error"));
-        Mongo.EggData.deleteMany(Filters.exists("eggID"));
-        Mongo.PlayerData.deleteMany(Filters.exists("playerID"));
-        Mongo.PokemonData.deleteMany(Filters.exists("UUID"));
-        Mongo.ServerData.deleteMany(Filters.exists("serverID"));
-        Mongo.SettingsData.deleteMany(Filters.exists("playerID"));
-        Mongo.StatisticsData.deleteMany(Filters.exists("playerID"));
-        Mongo.TrainerData.deleteMany(Filters.exists("trainerID"));
+        Mongo.PokecordDB.createCollection("BreedingData");
     }
 }

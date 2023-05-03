@@ -34,7 +34,7 @@ import java.util.function.Predicate;
 
 public class PlayerData extends MongoQuery
 {
-    private static final ExecutorService UPDATER = Executors.newFixedThreadPool(5);
+    private static final ExecutorService UPDATER = Executors.newThreadPerTaskExecutor(Thread.ofVirtual().name("PlayerData Updates-", 0).factory());
 
     private Optional<PlayerSettingsQuery> settings = Optional.empty();
 

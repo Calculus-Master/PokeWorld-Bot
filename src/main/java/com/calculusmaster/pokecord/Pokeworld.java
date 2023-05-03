@@ -2,7 +2,6 @@ package com.calculusmaster.pokecord;
 
 import com.calculusmaster.pokecord.commands.CommandHandler;
 import com.calculusmaster.pokecord.commandslegacy.CommandsLegacy;
-import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyBreed;
 import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
 import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestrictionRegistry;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
@@ -105,7 +104,6 @@ public class Pokeworld
         LoggerHelper.init("Global Leaderboard", PokeWorldLeaderboard::init);
         LoggerHelper.init("PokeWorld Research Board", PokeWorldResearchBoard::init);
         LoggerHelper.init("PokeWorld Market", PokeWorldMarket::init, true);
-        //LoggerHelper.init("CommandPokemon", CacheHelper::initPokemonLists, true);
 
         long end = System.currentTimeMillis();
 
@@ -124,6 +122,7 @@ public class Pokeworld
         LoggerHelper.init("Spawn Event Interval Updater", Listener::startSpawnIntervalUpdater);
         LoggerHelper.init("Casual Matchmade Duels", CasualMatchmadeDuel::init);
         LoggerHelper.init("Mega Charge Manager", MegaChargeManager::init);
+        LoggerHelper.init("PokeWorld Nursery", PokeWorldNursery::init, true);
 
         LoggerHelper.init("Rotation Tasks", RotationManager::init);
 
@@ -169,7 +168,6 @@ public class Pokeworld
 
             SpawnEventHelper.close();
             RaidEventHelper.close();
-            CommandLegacyBreed.close();
 
             ThreadPoolHandler.close();
         }

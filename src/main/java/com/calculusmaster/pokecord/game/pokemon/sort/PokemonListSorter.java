@@ -9,6 +9,7 @@ import com.calculusmaster.pokecord.game.pokemon.augments.PokemonAugment;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.game.pokemon.evolution.MegaEvolutionRegistry;
 import com.calculusmaster.pokecord.game.world.PokeWorldMarket;
+import com.calculusmaster.pokecord.game.world.PokeWorldNursery;
 import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import kotlin.Pair;
@@ -259,7 +260,7 @@ public class PokemonListSorter
                 }
             }
             //Basic boolean filters of the form is:option
-            else if(arg.matches("^is:(shiny|mastered|prestiged|legendary|mythical|ultrabeast|mega|mega-legendary|nicknamed)$"))
+            else if(arg.matches("^is:(shiny|mastered|prestiged|legendary|mythical|ultrabeast|mega|mega-legendary|nicknamed|canbreed)$"))
             {
                 String[] split = arg.split(":");
                 String option = split[1];
@@ -275,12 +276,13 @@ public class PokemonListSorter
                     case "mega" -> p -> MegaEvolutionRegistry.isMega(p.getEntity());
                     case "mega-legendary" -> p -> MegaEvolutionRegistry.isMegaLegendary(p.getEntity());
                     case "nicknamed" -> Pokemon::hasNickname;
+                    case "canbreed" -> p -> !PokeWorldNursery.isOnCooldown(p);
                     default -> p -> false;
                 };
             }
             //Enums: Rarity, Type, Nature, Gender
             //rarity:<rarity>
-            else if(arg.matches("^(rarity|type|maintype|nature|gender|egg-group|tm):[a-z0-9]+$"))
+            else if(arg.matches("^(rarity|type|maintype|nature|gender|egg-group|tm):[a-z0-9/]+$"))
             {
                 String[] split = arg.split(":");
                 String enumType = split[0];

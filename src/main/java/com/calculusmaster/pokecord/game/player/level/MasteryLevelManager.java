@@ -17,12 +17,22 @@ public class MasteryLevelManager
     public static final List<PokemonMasteryLevel> MASTERY_LEVELS = new ArrayList<>();
 
     //Limits
+    private static int maxLevel() { return MASTERY_LEVELS.get(MASTERY_LEVELS.size() - 1).getLevel(); }
+
     public static int getMaxMarketListings(int masteryLevel)
     {
-        if(!ACTIVE) masteryLevel = MASTERY_LEVELS.get(MASTERY_LEVELS.size() - 1).getLevel();
+        if(!ACTIVE) masteryLevel = maxLevel();
 
         if(masteryLevel < ACCESS_MARKET.getRequiredLevel()) return 0;
         else return 1 + (masteryLevel - ACCESS_MARKET.getRequiredLevel()) * 2;
+    }
+
+    public static int getMaxNurseryPairs(int masteryLevel)
+    {
+        if(!ACTIVE) masteryLevel = maxLevel();
+
+        if(masteryLevel < BREED_POKEMON.getRequiredLevel()) return 0;
+        else return (masteryLevel - BREED_POKEMON.getRequiredLevel()) / 4 + 1;
     }
 
     //TODO: Names for each Level?

@@ -2,7 +2,6 @@ package com.calculusmaster.pokecord.commandslegacy;
 
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacyDev;
 import com.calculusmaster.pokecord.commandslegacy.misc.CommandLegacySettings;
-import com.calculusmaster.pokecord.commandslegacy.pokemon.CommandLegacyBreed;
 import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.interfaces.CommandSupplier;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -20,10 +19,6 @@ public class CommandsLegacy
         register("settings", "config")
                 .setCommand(CommandLegacySettings::new)
                 .setCategory(Category.MISC);
-
-        register("breed")
-                .setCommand(CommandLegacyBreed::new)
-                .setCategory(Category.POKEMON);
 
         register("dev")
                 .setCommand(CommandLegacyDev::new)
