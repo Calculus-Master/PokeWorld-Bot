@@ -40,7 +40,6 @@ public class ZTrialDuel extends WildDuel
         ZTrialDuel duel = new ZTrialDuel();
 
         duel.setStatus(DuelStatus.WAITING);
-        duel.setTurn();
         duel.addChannel(channel);
         duel.setPlayers(playerID, "BOT", 1);
         duel.setWildPokemon(type);

@@ -11,6 +11,7 @@ public class PokemonDuelAttributes
     public int asleepTurns;
     public int boundTurns;
     public int badlyPoisonedTurns;
+    public int seededTurns;
 
     public boolean flyUsed;
     public boolean bounceUsed;
@@ -89,6 +90,7 @@ public class PokemonDuelAttributes
         this.asleepTurns = 0;
         this.boundTurns = 0;
         this.badlyPoisonedTurns = 0;
+        this.seededTurns = 0;
 
         this.flyUsed = false;
         this.bounceUsed = false;

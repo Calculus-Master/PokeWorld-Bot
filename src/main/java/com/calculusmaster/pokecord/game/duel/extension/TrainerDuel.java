@@ -31,7 +31,6 @@ public class TrainerDuel extends Duel
         TrainerDuel duel = new TrainerDuel();
 
         duel.setStatus(DuelStatus.WAITING);
-        duel.setTurn();
         duel.addChannel(channel);
         duel.setPlayers(playerID, trainer.getName(), trainer.getTeam().size());
         duel.setTrainer(trainer);

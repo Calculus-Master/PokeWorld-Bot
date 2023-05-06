@@ -87,13 +87,17 @@ public class Duel
     public FieldGMaxDoTHandler[] gmaxDoT;
     public FieldEffectsHandler[] fieldEffects;
 
+    protected Duel()
+    {
+        this.turn = 0;
+    }
+
     public static Duel create(String player1ID, String player2ID, int size, TextChannel channel)
     {
         Duel duel = new Duel();
 
         duel.setStatus(DuelStatus.WAITING);
         duel.setSize(size);
-        duel.setTurn();
         duel.addChannel(channel);
         duel.setPlayers(player1ID, player2ID, size);
         duel.setDefaults();
@@ -300,6 +304,10 @@ public class Duel
             }
         }
 
+        //Remove Leech Seed
+        if(this.players[p].active.hasStatusCondition(StatusCondition.SEEDED))
+            this.players[p].active.removeStatusCondition(StatusCondition.SEEDED);
+
         //Swap Action
         int index = this.queuedMoves.get(this.players[p].ID).swapInd() - 1;
         this.data(p).setDefaults();
@@ -430,6 +438,10 @@ public class Duel
 
             if(!this.weather.get().equals(Weather.CLEAR)) move.setPower(2.0);
         }
+
+        //Aura Wheel Dark Type for Hangry Morpeko
+        if(move.is(MoveEntity.AURA_WHEEL) && c.is(PokemonEntity.MORPEKO_HANGRY))
+            move.setType(Type.DARK);
 
         //Ability: Liquid Voice
         if(c.hasAbility(Ability.LIQUID_VOICE) && move.is(Move.SOUND_BASED_MOVES))
@@ -593,15 +605,20 @@ public class Duel
             //Abilities that Cure Status Conditions
             if(c.hasAbility(Ability.PASTEL_VEIL))
             {
+                boolean cured = c.hasStatusCondition(StatusCondition.POISONED) || c.hasStatusCondition(StatusCondition.BADLY_POISONED);
+
                 c.removeStatusCondition(StatusCondition.POISONED);
                 c.removeStatusCondition(StatusCondition.BADLY_POISONED);
 
-                this.players[this.current].team.forEach(p -> {
+                for(Pokemon p : this.players[this.current].team)
+                {
+                    if(!cured) cured = p.hasStatusCondition(StatusCondition.POISONED) || p.hasStatusCondition(StatusCondition.BADLY_POISONED);
+
                     p.removeStatusCondition(StatusCondition.POISONED);
                     p.removeStatusCondition(StatusCondition.BADLY_POISONED);
-                });
+                }
 
-                statusResults.add(Ability.PASTEL_VEIL.formatActivation(c.getName(), "%s and its team's poison was cured!".formatted(c.getName())));
+                if(cured) statusResults.add(Ability.PASTEL_VEIL.formatActivation(c.getName(), "%s and its team's poison was cured!".formatted(c.getName())));
             }
 
             if(c.hasAbility(Ability.LIMBER) && c.hasStatusCondition(StatusCondition.PARALYZED))
@@ -712,6 +729,29 @@ public class Duel
                     c.damage(statusDamage);
 
                     statusResults.add("%s is bound! The binding dealt %s damage!".formatted(c.getName(), statusDamage));
+                }
+            }
+
+            if(c.hasStatusCondition(StatusCondition.SEEDED))
+            {
+                this.data(this.current).seededTurns++;
+
+                if(this.data(this.current).seededTurns == 5)
+                {
+                    this.data(this.current).seededTurns = 0;
+
+                    c.removeStatusCondition(StatusCondition.SEEDED);
+
+                    statusResults.add("%s is no longer seeded!".formatted(c.getName()));
+                }
+                else
+                {
+                    statusDamage = c.getMaxHealth(1 / 8.);
+
+                    c.damage(statusDamage);
+                    o.heal(statusDamage);
+
+                    statusResults.add("%s is seeded! The seed dealt %s damage! %s healed for %s HP!".formatted(c.getName(), statusDamage, o.getName(), statusDamage));
                 }
             }
 
@@ -3116,12 +3156,6 @@ public class Duel
     public DuelStatus getStatus()
     {
         return this.status;
-    }
-
-    //TODO: maybe remove and just default initialize the turn var
-    public void setTurn()
-    {
-        this.turn = 0;
     }
 
     public void addChannel(TextChannel channel)

@@ -128,6 +128,7 @@ public class StatusConditionEffect extends MoveEffect
                 case BOUND -> "is now bound!";
                 case BADLY_POISONED -> "is now badly poisoned!";
                 case INFATUATED -> "is now infatuated!";
+                case SEEDED -> "is now seeded!";
             };
         }
         else return "";

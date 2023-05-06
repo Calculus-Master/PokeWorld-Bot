@@ -92,7 +92,6 @@ public class CasualMatchmadeDuel extends Duel
 
         duel.setStatus(DuelStatus.WAITING);
         duel.setSize(size);
-        duel.setTurn();
         channels.forEach(duel::addChannel);
         duel.setPlayers(player1ID, player2ID, size);
         duel.setDefaults();

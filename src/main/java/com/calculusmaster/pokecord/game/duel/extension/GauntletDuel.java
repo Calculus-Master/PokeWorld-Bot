@@ -17,7 +17,6 @@ public class GauntletDuel extends WildDuel
         GauntletDuel duel = new GauntletDuel();
 
         duel.setStatus(DuelStatus.WAITING);
-        duel.setTurn();
         duel.addChannel(event.getChannel().asTextChannel());
         duel.setPlayers(playerID, "BOT", 1);
         duel.setWildPokemon(null);

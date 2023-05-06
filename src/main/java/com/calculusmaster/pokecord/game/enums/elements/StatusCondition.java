@@ -15,7 +15,8 @@ public enum StatusCondition
     NIGHTMARE("NTM"),
     BOUND("BND"),
     BADLY_POISONED("BPSN"),
-    INFATUATED("INF");
+    INFATUATED("INF"),
+    SEEDED("SEED");
 
     private final String abbrev;
     StatusCondition(String abbrev)

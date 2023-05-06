@@ -26,13 +26,10 @@ public class GrassMoves
 
     public String LeechSeed(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        //TODO: LeechSeed sucks health each turn, right now its coded to steal max health once
-
-        if(!opponent.isType(Type.GRASS))
+        if(!opponent.isType(Type.GRASS) && !opponent.hasStatusCondition(StatusCondition.SEEDED))
         {
             return MoveEffectBuilder.make(user, opponent, duel, move)
-                    .addFixedDamageEffect(opponent.getMaxHealth() / 8)
-                    .addFractionHealEffect(1D)
+                    .addStatusEffect(StatusCondition.SEEDED)
                     .execute();
         }
         else return move.getNoEffectResult(opponent);

@@ -154,7 +154,7 @@ public class CommandMoves extends PokeWorldCommand
 
                     moveList.add((i + 1) + ": " + m.getName());
                     moveTypeEffectList.add(m.getEffectivenessOverview(opponent.active));
-                    moveUseCommandList.add("`/use move slot:" + (i + 1) + "`");
+                    moveUseCommandList.add("`/use move number:" + (i + 1) + "`");
                 }
 
                 ZCrystal crystal = this.playerData.getInventory().getEquippedZCrystal();
