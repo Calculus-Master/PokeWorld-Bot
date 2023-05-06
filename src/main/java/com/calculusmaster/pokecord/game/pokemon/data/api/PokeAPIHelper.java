@@ -143,9 +143,9 @@ public class PokeAPIHelper
 
     private static void timed(Runnable r)
     {
-        long i = System.currentTimeMillis();
+        long i = System.nanoTime();
         r.run();
-        System.out.println((System.currentTimeMillis() - i) / 1000.);
+        System.out.println((System.nanoTime() - i) / 1E9);
     }
 
     private static void checkMissingAndUnusedImageFiles()

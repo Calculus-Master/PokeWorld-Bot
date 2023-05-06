@@ -10,7 +10,6 @@ import com.calculusmaster.pokecord.game.objectives.types.AbstractObjective;
 import com.calculusmaster.pokecord.game.player.components.PlayerResearchTasks;
 import com.calculusmaster.pokecord.game.world.PokeWorldResearchBoard;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -137,8 +136,7 @@ public class CommandTasks extends PokeWorldCommand
                     .setDescription("The %s Research Team is always looking for more data on the world of Pokemon. You can help them out in various ways.".formatted(Pokeworld.NAME));
 
             //Research Tasks
-            this.embed.addField("Research Tasks Information", """
-                    You can help out the team by enlisting tasks from them.
+            this.embed.addField("Available Research Tasks", """
                     Research Tasks are quick objectives that you can complete to earn credits.
                     
                     Claim a task using `/tasks accept`, and then once you've completed its objective(s), claim its reward using `/tasks complete`.
@@ -157,12 +155,14 @@ public class CommandTasks extends PokeWorldCommand
 
             //Featured Pokemon
             this.embed.addField("Featured Pokemon", """
-                    The %s Research Team also prioritizes a couple Pokemon every time they update the tasks board.
-                    As a result, *catching* or *defeating* these Pokemon will reward you additional credits each time, while they're featured!
-                    These Pokemon will appear more often, and gain boosted stats in wild Pokemon duels.
-                    """.formatted(Pokeworld.NAME), false);
-
-            board.getFeaturedPokemon().forEach(e -> this.embed.addField(e.getName(), EmbedBuilder.ZERO_WIDTH_SPACE, true));
+                    *Catch* and *Defeat* these Pokemon to earn extra rewards!
+                    Featured Pokemon also:
+                    - Appear more often (in both spawns and duels).
+                    - Are stronger in wild Pokemon duels.
+                    
+                    __Currently Featured Pokemon:__
+                    %s
+                    """.formatted(board.getFeaturedPokemon().stream().map(e -> "**" + e.getName() + "**").collect(Collectors.joining("\n"))), false);
 
             //Missions
         }
