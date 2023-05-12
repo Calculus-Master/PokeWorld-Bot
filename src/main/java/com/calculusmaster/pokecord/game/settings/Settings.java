@@ -2,10 +2,10 @@ package com.calculusmaster.pokecord.game.settings;
 
 import com.calculusmaster.pokecord.Pokeworld;
 import com.calculusmaster.pokecord.game.pokemon.sort.PokemonListOrderType;
-import com.calculusmaster.pokecord.game.settings.core.DoubleValue;
-import com.calculusmaster.pokecord.game.settings.core.PlayerSettingHolder;
-import com.calculusmaster.pokecord.game.settings.core.ServerSettingHolder;
-import com.calculusmaster.pokecord.game.settings.core.SingleValue;
+import com.calculusmaster.pokecord.game.settings.holder.PlayerSettingHolder;
+import com.calculusmaster.pokecord.game.settings.holder.ServerSettingHolder;
+import com.calculusmaster.pokecord.game.settings.value.DoubleValue;
+import com.calculusmaster.pokecord.game.settings.value.SingleValue;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 import java.util.ArrayList;

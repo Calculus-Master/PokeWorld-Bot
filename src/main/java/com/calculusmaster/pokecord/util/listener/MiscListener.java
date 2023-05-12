@@ -1,7 +1,7 @@
 package com.calculusmaster.pokecord.util.listener;
 
 import com.calculusmaster.pokecord.game.settings.Settings;
-import com.calculusmaster.pokecord.game.settings.core.SingleValue;
+import com.calculusmaster.pokecord.game.settings.value.SingleValue;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.mongo.ServerData;

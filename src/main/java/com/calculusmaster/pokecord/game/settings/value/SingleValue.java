@@ -1,4 +1,4 @@
-package com.calculusmaster.pokecord.game.settings.core;
+package com.calculusmaster.pokecord.game.settings.value;
 
 public class SingleValue<V> implements SettingValue
 {

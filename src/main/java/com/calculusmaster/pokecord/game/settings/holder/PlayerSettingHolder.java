@@ -1,5 +1,6 @@
-package com.calculusmaster.pokecord.game.settings.core;
+package com.calculusmaster.pokecord.game.settings.holder;
 
+import com.calculusmaster.pokecord.game.settings.value.SettingValue;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.Global;

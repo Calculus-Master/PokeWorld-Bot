@@ -1,4 +1,6 @@
-package com.calculusmaster.pokecord.game.settings.core;
+package com.calculusmaster.pokecord.game.settings.holder;
+
+import com.calculusmaster.pokecord.game.settings.value.SettingValue;
 
 import java.util.Collections;
 import java.util.HashMap;
