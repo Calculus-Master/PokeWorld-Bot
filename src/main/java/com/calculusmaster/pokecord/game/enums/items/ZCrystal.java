@@ -6,8 +6,6 @@ import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.util.Global;
-import com.calculusmaster.pokecord.util.interfaces.ZCrystalValidator;
-import org.jooq.lambda.Seq;
 
 import java.util.*;
 
@@ -145,16 +143,16 @@ public enum ZCrystal
         return z.check(pokemonEntity, move);
     }
 
-    public static ZCrystal getRandomUniqueZCrystal()
-    {
-        return Seq.seq(Arrays.stream(values())).filter(z -> z.type == null).shuffle().findFirst().orElse(ZCrystal.NORMALIUM_Z);
-    }
-
     public static ZCrystal getRandomUniqueZCrystalFor(PokemonEntity entity)
     {
         List<ZCrystal> pool = Arrays.stream(values()).filter(z -> z.pokemon.contains(entity)).toList();
         if(pool.isEmpty()) return null;
 
         return pool.get(new Random().nextInt(pool.size()));
+    }
+
+    private interface ZCrystalValidator
+    {
+        boolean check(PokemonEntity pokemonEntity, Move move);
     }
 }

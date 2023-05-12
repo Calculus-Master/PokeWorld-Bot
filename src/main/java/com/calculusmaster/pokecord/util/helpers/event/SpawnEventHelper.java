@@ -96,7 +96,7 @@ public class SpawnEventHelper
             return;
         }
 
-        removeServer(g.getId());
+        SpawnEventHelper.removeServer(g.getId());
 
         double interval = SPAWN_INTERVAL;
 
@@ -108,7 +108,7 @@ public class SpawnEventHelper
         else if(messages <= 200) interval *= 0.5;
         else interval *= 0.25;
 
-        start(g, (int)interval);
+        SpawnEventHelper.start(g, (int)interval);
 
         LoggerHelper.info(SpawnEventHelper.class, "Updating Spawn Rate in " + g.getName() + "! New Interval: " + (int)(interval) + "s!");
     }

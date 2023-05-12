@@ -1,7 +1,6 @@
 package com.calculusmaster.pokecord;
 
 import com.calculusmaster.pokecord.commands.CommandHandler;
-import com.calculusmaster.pokecord.commandslegacy.CommandsLegacy;
 import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
 import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestrictionRegistry;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
@@ -97,7 +96,6 @@ public class Pokeworld
         LoggerHelper.init("Pokemon Rarity", PokemonRarity::init, true);
         LoggerHelper.init("Trainer Manager", TrainerManager::init);
         LoggerHelper.init("Pokemon Augments", PokemonAugmentRegistry::init);
-        LoggerHelper.init("Command Handler", CommandsLegacy::init);
         LoggerHelper.init("Pokemon Mastery Level", MasteryLevelManager::init);
         LoggerHelper.init("Achievement Cache", CacheHelper::initAchievementCache);
 

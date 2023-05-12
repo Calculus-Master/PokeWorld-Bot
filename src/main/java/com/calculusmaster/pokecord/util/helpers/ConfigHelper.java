@@ -1,6 +1,5 @@
 package com.calculusmaster.pokecord.util.helpers;
 
-import com.calculusmaster.pokecord.commandslegacy.CommandsLegacy;
 import com.calculusmaster.pokecord.game.objectives.ResearchTask;
 import com.calculusmaster.pokecord.game.player.components.PlayerResearchTasks;
 import com.calculusmaster.pokecord.game.player.components.PlayerTeam;
@@ -30,7 +29,6 @@ public class ConfigHelper
             PokeWorldShop.ITEM_COUNTS = new int[]{config.getList("item_counts", Integer.class).get(0), config.getList("item_counts", Integer.class).get(1)};
             PokeWorldShop.TM_COUNTS = new int[]{config.getList("tm_counts", Integer.class).get(0), config.getList("tm_counts", Integer.class).get(1)};
             PokeWorldShop.Z_CRYSTAL_COUNTS = new int[]{config.getList("zcrystal_counts", Integer.class).get(0), config.getList("zcrystal_counts", Integer.class).get(1)};
-            CommandsLegacy.COMMAND_THREAD_POOL = config.getBoolean("command_thread_pool");
             PlayerResearchTasks.MAX_TASKS = config.getInteger("bounty_max_held");
             ResearchTask.TASK_REWARD_MIN = config.getList("bounty_rewards", Integer.class).get(0);
             ResearchTask.TASK_REWARD_MAX = config.getList("bounty_rewards", Integer.class).get(1);
@@ -52,7 +50,6 @@ public class ConfigHelper
             PokeWorldShop.ITEM_COUNTS = new int[]{5, 10};
             PokeWorldShop.TM_COUNTS = new int[]{10, 12};
             PokeWorldShop.Z_CRYSTAL_COUNTS = new int[]{5, 10};
-            CommandsLegacy.COMMAND_THREAD_POOL = false;
             PlayerResearchTasks.MAX_TASKS = 6;
             ResearchTask.TASK_REWARD_MIN = 50;
             ResearchTask.TASK_REWARD_MAX = 250;

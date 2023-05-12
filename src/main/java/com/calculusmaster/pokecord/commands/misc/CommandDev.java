@@ -3,6 +3,7 @@ package com.calculusmaster.pokecord.commands.misc;
 import com.calculusmaster.pokecord.commands.CommandData;
 import com.calculusmaster.pokecord.commands.PokeWorldCommand;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
+import com.calculusmaster.pokecord.game.enums.elements.Feature;
 import com.calculusmaster.pokecord.game.objectives.ResearchTask;
 import com.calculusmaster.pokecord.game.player.components.PlayerResearchTasks;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -12,6 +13,7 @@ import com.calculusmaster.pokecord.mongo.DatabaseCollection;
 import com.calculusmaster.pokecord.mongo.Mongo;
 import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.mongo.cache.CacheHandler;
+import com.calculusmaster.pokecord.util.helpers.ConfigHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
 import com.calculusmaster.pokecord.util.helpers.event.SpawnEventHelper;
@@ -148,9 +150,31 @@ public class CommandDev extends PokeWorldCommand
                 RaidEventHelper.start(this.server, event.getChannel().asTextChannel());
                 this.response = "Raid started.";
             }
-            default -> {
-                return this.error("Invalid dev command: " + Arrays.toString(command));
+            case "togglefeature" ->
+            {
+                try
+                {
+                    Feature f = Feature.valueOf(command[1]);
+
+                    if(Feature.DISABLED.contains(f))
+                    {
+                        Feature.DISABLED.remove(f);
+                        this.response = "Feature " + f + " **enabled**.";
+                    }
+                    else
+                    {
+                        Feature.DISABLED.add(f);
+                        this.response = "Feature " + f + " **disabled**.";
+                    }
+                }
+                catch(Exception e) { return this.error("Invalid feature name " + command[1]); }
             }
+            case "reloadconfig" ->
+            {
+                ConfigHelper.init();
+                this.response = "Config Reloaded.";
+            }
+            default -> { return this.error("Invalid dev command: " + Arrays.toString(command)); }
         }
 
         return this.ephemeral = true;

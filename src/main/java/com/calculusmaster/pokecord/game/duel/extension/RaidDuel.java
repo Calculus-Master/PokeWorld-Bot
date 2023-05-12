@@ -17,7 +17,6 @@ import com.calculusmaster.pokecord.game.pokemon.data.PokemonEntity;
 import com.calculusmaster.pokecord.game.pokemon.data.PokemonRarity;
 import com.calculusmaster.pokecord.mongo.PlayerData;
 import com.calculusmaster.pokecord.util.enums.StatisticType;
-import com.calculusmaster.pokecord.util.helpers.CSVHelper;
 import com.calculusmaster.pokecord.util.helpers.IDHelper;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import com.calculusmaster.pokecord.util.helpers.event.RaidEventHelper;
@@ -194,7 +193,6 @@ public class RaidDuel extends WildDuel
 
     private static void testImageGeneration() throws IOException
     {
-        CSVHelper.init();
         PokemonEntity.init();
         MoveEntity.init();
         PokemonRarity.init();
