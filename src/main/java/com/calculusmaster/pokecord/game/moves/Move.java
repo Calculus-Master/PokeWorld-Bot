@@ -12,6 +12,7 @@ import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Stream;
 
@@ -57,7 +58,7 @@ public class Move
     public Move(MoveEntity entity)
     {
         this.entity = entity;
-        this.data = entity.data();
+        this.data = Objects.requireNonNull(entity.data(), "MoveEntity \"%s\" has no associated MoveData.".formatted(entity.toString()));
 
         this.setDefaultValues();
     }

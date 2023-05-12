@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.commands.CommandHandler;
 import com.calculusmaster.pokecord.game.duel.extension.CasualMatchmadeDuel;
 import com.calculusmaster.pokecord.game.duel.restrictions.TeamRestrictionRegistry;
 import com.calculusmaster.pokecord.game.duel.trainer.TrainerManager;
+import com.calculusmaster.pokecord.game.enums.elements.Ability;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.data.CustomMoveDataRegistry;
 import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
@@ -79,6 +80,8 @@ public class Pokeworld
         LoggerHelper.init("Move Tutor", MoveTutorRegistry::init);
 
         LoggerHelper.init("Pokemon Entities", PokemonEntity::init);
+
+        LoggerHelper.init("Abilities", Ability::init);
 
         LoggerHelper.init("Gigantamax", GigantamaxRegistry::init);
         LoggerHelper.init("Mega Evolutions", MegaEvolutionRegistry::init);

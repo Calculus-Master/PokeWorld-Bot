@@ -5,6 +5,7 @@ import com.calculusmaster.pokecord.commands.duel.*;
 import com.calculusmaster.pokecord.commands.economy.*;
 import com.calculusmaster.pokecord.commands.misc.CommandDev;
 import com.calculusmaster.pokecord.commands.misc.CommandWorld;
+import com.calculusmaster.pokecord.commands.move.CommandAbility;
 import com.calculusmaster.pokecord.commands.move.CommandMoves;
 import com.calculusmaster.pokecord.commands.move.CommandTM;
 import com.calculusmaster.pokecord.commands.player.*;
@@ -99,6 +100,7 @@ public class CommandHandler extends ListenerAdapter
         CommandTrade.init();
         CommandRedeem.init();
         CommandMarket.init();
+        CommandAbility.init();
 
         CommandWorld.init();
         CommandSettings.init();
