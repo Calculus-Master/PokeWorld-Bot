@@ -13,7 +13,7 @@ public class ElectricMoves
     public String ElectricTerrain(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.make(user, opponent, duel, move)
-                .addTerrainEffect(Terrain.ELECRIC_TERRAIN)
+                .addTerrainEffect(Terrain.ELECTRIC_TERRAIN)
                 .execute();
     }
 
@@ -233,7 +233,7 @@ public class ElectricMoves
 
     public String RisingVoltage(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(duel.terrain.get().equals(Terrain.ELECRIC_TERRAIN)) move.setPower(2.0);
+        if(duel.terrain.get().equals(Terrain.ELECTRIC_TERRAIN)) move.setPower(2.0);
 
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addDamageEffect()

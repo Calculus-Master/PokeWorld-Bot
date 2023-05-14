@@ -1,6 +1,8 @@
 package com.calculusmaster.pokecord.game.pokemon.data.api;
 
 import com.calculusmaster.pokecord.game.enums.elements.Ability;
+import com.calculusmaster.pokecord.game.moves.Move;
+import com.calculusmaster.pokecord.game.moves.data.MoveEntity;
 import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 import org.bson.Document;
@@ -43,6 +45,9 @@ public class PokeAPIHelper
 //        {
 //            w.write(String.join("\n", list));
 //        }
+
+        MoveEntity.init();
+        Arrays.stream(MoveEntity.values()).filter(e -> !e.isZMove() && !e.isMaxMove() && !Move.WIP_MOVES.contains(e) && !Move.isImplemented(e)).forEach(System.out::println);
     }
 
     private static void createAbilityJSON(Ability a) throws IOException

@@ -33,7 +33,7 @@ public class MaxMoves
     {
         return MoveEffectBuilder.make(user, opponent, duel, move)
                 .addDamageEffect()
-                .addTerrainEffect(Terrain.ELECRIC_TERRAIN)
+                .addTerrainEffect(Terrain.ELECTRIC_TERRAIN)
                 .execute();
     }
 

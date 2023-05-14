@@ -20,7 +20,7 @@ public class Move
 {
     //TODO: Keep checking the custom moves and see if they can function as close to the original as possible
     public static final EnumSet<MoveEntity> WIP_MOVES = EnumSet.of(MoveEntity.ROAR, MoveEntity.WHIRLWIND, MoveEntity.RAGE_POWDER, MoveEntity.FRUSTRATION, MoveEntity.RETURN, MoveEntity.MAGNETIC_FLUX, MoveEntity.AFTER_YOU, MoveEntity.DISABLE, MoveEntity.MIRACLE_EYE, MoveEntity.ME_FIRST, MoveEntity.GRAVITY, MoveEntity.SPITE, MoveEntity.MEAN_LOOK, MoveEntity.FORESIGHT, MoveEntity.WIDE_GUARD, MoveEntity.TELEPORT, MoveEntity.ODOR_SLEUTH, MoveEntity.HELPING_HAND, MoveEntity.STUFF_CHEEKS, MoveEntity.COPYCAT, MoveEntity.FOLLOW_ME, MoveEntity.SKY_DROP, MoveEntity.SIMPLE_BEAM, MoveEntity.FLING, MoveEntity.TELEKINESIS, MoveEntity.QUASH, MoveEntity.NO_RETREAT, MoveEntity.ENCORE, MoveEntity.SUBSTITUTE, MoveEntity.MAGIC_COAT, MoveEntity.EMBARGO, MoveEntity.ALLY_SWITCH, MoveEntity.SLEEP_TALK, MoveEntity.GEAR_UP, MoveEntity.STRUGGLE);
-    public static final EnumSet<MoveEntity> CUSTOM_MOVES = EnumSet.of(MoveEntity.LEECH_SEED, MoveEntity.RAPID_SPIN, MoveEntity.MIRROR_SHOT, MoveEntity.WORRY_SEED, MoveEntity.AROMATIC_MIST, MoveEntity.PAY_DAY, MoveEntity.POLLEN_PUFF);
+    public static final EnumSet<MoveEntity> CUSTOM_MOVES = EnumSet.of(MoveEntity.RAPID_SPIN, MoveEntity.MIRROR_SHOT, MoveEntity.WORRY_SEED, MoveEntity.AROMATIC_MIST, MoveEntity.PAY_DAY, MoveEntity.POLLEN_PUFF);
     public static EnumSet<MoveEntity> INCOMPLETE_MOVES = EnumSet.noneOf(MoveEntity.class);
 
     //Other Data Storage

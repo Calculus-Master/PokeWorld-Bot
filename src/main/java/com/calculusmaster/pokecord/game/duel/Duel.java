@@ -341,7 +341,7 @@ public class Duel
         //Ability: Electric Surge
         if(this.players[p].active.hasAbility(Ability.ELECTRIC_SURGE))
         {
-            this.terrain.setTerrain(Terrain.ELECRIC_TERRAIN);
+            this.terrain.setTerrain(Terrain.ELECTRIC_TERRAIN);
             this.results.add(Ability.ELECTRIC_SURGE.formatActivation(this.players[p].active.getName(), "An Electric Terrain was created!"));
         }
 
@@ -418,7 +418,7 @@ public class Duel
                 case NORMAL_TERRAIN -> Type.NORMAL;
                 case GRASSY_TERRAIN -> Type.GRASS;
                 case MISTY_TERRAIN -> Type.FAIRY;
-                case ELECRIC_TERRAIN -> Type.ELECTRIC;
+                case ELECTRIC_TERRAIN -> Type.ELECTRIC;
                 case PSYCHIC_TERRAIN -> Type.PSYCHIC;
             });
 
@@ -497,7 +497,7 @@ public class Duel
 
         switch(this.terrain.get())
         {
-            case ELECRIC_TERRAIN -> {
+            case ELECTRIC_TERRAIN -> {
                 if(move.getType().equals(Type.ELECTRIC)) move.setPower(1.5);
             }
             case GRASSY_TERRAIN -> {
@@ -790,12 +790,12 @@ public class Duel
 
             if(c.hasStatusCondition(StatusCondition.ASLEEP))
             {
-                if(this.data(this.current).asleepTurns == 2 || this.terrain.get().equals(Terrain.ELECRIC_TERRAIN))
+                if(this.data(this.current).asleepTurns == 2 || this.terrain.get().equals(Terrain.ELECTRIC_TERRAIN))
                 {
                     c.removeStatusCondition(StatusCondition.ASLEEP);
                     this.data(this.current).asleepTurns = 0;
 
-                    statusResults.add("%s woke up%s!".formatted(c.getName(), this.terrain.get().equals(Terrain.ELECRIC_TERRAIN) ? " due to the Electric Terrain" : ""));
+                    statusResults.add("%s woke up%s!".formatted(c.getName(), this.terrain.get().equals(Terrain.ELECTRIC_TERRAIN) ? " due to the Electric Terrain" : ""));
 
                     if(c.hasStatusCondition(StatusCondition.NIGHTMARE))
                     {
@@ -2740,7 +2740,7 @@ public class Duel
         //Ability: Electric Surge
         if(this.players[p].active.hasAbility(Ability.ELECTRIC_SURGE) && this.terrain.get().equals(Terrain.NORMAL_TERRAIN))
         {
-            this.terrain.setTerrain(Terrain.ELECRIC_TERRAIN);
+            this.terrain.setTerrain(Terrain.ELECTRIC_TERRAIN);
             this.results.add(Ability.ELECTRIC_SURGE.formatActivation(this.players[p].active.getName(), "An Electric Terrain was created!"));
         }
 
