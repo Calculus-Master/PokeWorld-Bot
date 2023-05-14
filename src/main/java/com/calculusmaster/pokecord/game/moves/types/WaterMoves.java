@@ -258,4 +258,11 @@ public class WaterMoves
     {
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
+
+    public String AquaCutter(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .execute();
+    }
 }
