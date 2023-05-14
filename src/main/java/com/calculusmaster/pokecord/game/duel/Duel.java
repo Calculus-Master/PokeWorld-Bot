@@ -482,7 +482,7 @@ public class Duel
 
                 if(move.is(MoveEntity.THUNDER, MoveEntity.HURRICANE)) move.setAccuracy(50);
             }
-            case RAIN -> {
+            case RAIN, HEAVY_RAIN -> {
                 if(move.is(Type.WATER)) move.setPower(1.5);
                 else if(move.is(Type.FIRE) || move.is(MoveEntity.SOLAR_BEAM, MoveEntity.SOLAR_BLADE)) move.setPower(0.5);
 
