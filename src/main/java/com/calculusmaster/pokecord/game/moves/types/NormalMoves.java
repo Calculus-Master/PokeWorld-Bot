@@ -1261,7 +1261,7 @@ public class NormalMoves
         {
             user.setItem(opponent.getItem());
             opponent.removeItem();
-            steal = user.getName() + " stole " + opponent.getName() + "'s " + user.getItem().getStyledName() + "! ";
+            steal = user.getName() + " stole " + opponent.getName() + "'s " + user.getItem().getName() + "! ";
         }
 
         return steal + MoveEffectBuilder.make(user, opponent, duel, move)

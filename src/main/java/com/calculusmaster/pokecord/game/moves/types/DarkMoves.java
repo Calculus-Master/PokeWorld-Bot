@@ -238,7 +238,7 @@ public class DarkMoves
             user.setItem(item);
             opponent.removeItem();
 
-            stolenItem = user.getName() + " stole " + opponent.getName() + "'s " + item.getStyledName() + "! ";
+            stolenItem = user.getName() + " stole " + opponent.getName() + "'s " + item.getName() + "! ";
         }
 
         return stolenItem + MoveEffectBuilder.defaultDamage(user, opponent, duel, move);

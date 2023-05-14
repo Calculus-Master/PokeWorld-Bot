@@ -111,7 +111,7 @@ public enum ZCrystal
         return this.type;
     }
 
-    public String getStyledName()
+    public String getName()
     {
         return this.toString().charAt(0) + this.toString().substring(1, this.toString().indexOf("_")).toLowerCase() + " Z";
     }
@@ -119,7 +119,7 @@ public enum ZCrystal
     public static ZCrystal cast(String z)
     {
         ZCrystal zc = Global.getEnumFromString(values(), z);
-        if(zc == null) zc = Arrays.stream(values()).filter(c -> c.getStyledName().equalsIgnoreCase(z) || c.getStyledName().equalsIgnoreCase(z + " Z")).findFirst().orElse(null);
+        if(zc == null) zc = Arrays.stream(values()).filter(c -> c.getName().equalsIgnoreCase(z) || c.getName().equalsIgnoreCase(z + " Z")).findFirst().orElse(null);
         return zc;
     }
 

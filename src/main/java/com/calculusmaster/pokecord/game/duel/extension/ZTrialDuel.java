@@ -64,7 +64,7 @@ public class ZTrialDuel extends WildDuel
 
             player.data.getInventory().addZCrystal(crystal);
 
-            embed.setDescription("You won! You acquired a new Z-Crystal: `%s`.".formatted(crystal.getStyledName()));
+            embed.setDescription("You won! You acquired a new Z-Crystal: `%s`.".formatted(crystal.getName()));
         }
         //Player lost
         else

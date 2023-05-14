@@ -21,6 +21,6 @@ public class ItemEvoTrigger implements EvolutionTrigger
     @Override
     public String getDescription()
     {
-        return "Holding a " + this.item.getStyledName();
+        return "Holding a " + this.item.getName();
     }
 }

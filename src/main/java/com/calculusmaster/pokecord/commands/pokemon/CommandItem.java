@@ -52,20 +52,20 @@ public class CommandItem extends PokeWorldCommand
 
             PlayerInventory inv = this.playerData.getInventory();
 
-            if(!inv.hasItem(item)) return this.error("You do not have any " + item.getStyledName() + " in your inventory.");
+            if(!inv.hasItem(item)) return this.error("You do not have any " + item.getName() + " in your inventory.");
 
             if(active.hasItem())
             {
                 Item current = active.getItem();
 
-                if(current.equals(item)) return this.error(active.getName() + " is already holding a " + item.getStyledName() + "!");
+                if(current.equals(item)) return this.error(active.getName() + " is already holding a " + item.getName() + "!");
 
                 inv.addItem(current);
                 inv.removeItem(item);
 
                 active.setItem(item);
 
-                this.response = "Replaced " + active.getName() + "'s **" + current.getStyledName() + "** with **" + item.getStyledName() + "**!";
+                this.response = "Replaced " + active.getName() + "'s **" + current.getName() + "** with **" + item.getName() + "**!";
             }
             else
             {
@@ -73,7 +73,7 @@ public class CommandItem extends PokeWorldCommand
 
                 active.setItem(item);
 
-                this.response = "Gave **" + item.getStyledName() + "** to " + active.getName() + "!";
+                this.response = "Gave **" + item.getName() + "** to " + active.getName() + "!";
             }
 
             active.updateItem();
@@ -89,7 +89,7 @@ public class CommandItem extends PokeWorldCommand
 
             this.playerData.getInventory().addItem(i);
 
-            this.response = "Removed **" + i.getStyledName() + "** from " + active.getName() + "!";
+            this.response = "Removed **" + i.getName() + "** from " + active.getName() + "!";
         }
 
         return true;
@@ -99,7 +99,7 @@ public class CommandItem extends PokeWorldCommand
     protected boolean autocompleteLogic(CommandAutoCompleteInteractionEvent event)
     {
         if(event.getFocusedOption().getName().equals("item"))
-            event.replyChoiceStrings(this.getAutocompleteOptions(event.getFocusedOption().getValue(), this.playerData.getInventory().getItems().keySet().stream().map(Item::getStyledName).toList())).queue();
+            event.replyChoiceStrings(this.getAutocompleteOptions(event.getFocusedOption().getValue(), this.playerData.getInventory().getItems().keySet().stream().map(Item::getName).toList())).queue();
 
         return true;
     }

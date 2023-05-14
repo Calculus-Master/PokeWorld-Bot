@@ -178,18 +178,13 @@ public enum Item
 
     public String getName()
     {
-        return this.toString();
-    }
-
-    public String getStyledName()
-    {
-        return Global.normalize(this.getName().replaceAll("_", " "));
+        return Global.normalize(this.toString().replaceAll("_", " "));
     }
 
     public static Item cast(String input)
     {
         Item item = Global.getEnumFromString(values(), input);
-        if(item == null) item = Arrays.stream(values()).filter(c -> c.getStyledName().equalsIgnoreCase(input)).findFirst().orElse(null);
+        if(item == null) item = Arrays.stream(values()).filter(c -> c.getName().equalsIgnoreCase(input)).findFirst().orElse(null);
         return item;
     }
 

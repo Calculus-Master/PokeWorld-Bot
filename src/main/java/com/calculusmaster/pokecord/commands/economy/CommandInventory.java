@@ -56,7 +56,7 @@ public class CommandInventory extends PokeWorldCommand
                 {
                     Item item = items.get(i);
 
-                    contents.add((i + 1) + ": **" + item.getStyledName() + "** | Count: " + inv.getItems().get(item));
+                    contents.add((i + 1) + ": **" + item.getName() + "** | Count: " + inv.getItems().get(item));
                 }
 
                 description = """
@@ -80,7 +80,7 @@ public class CommandInventory extends PokeWorldCommand
                 {
                     ZCrystal crystal = crystals.get(i);
 
-                    contents.add((i + 1) + ": **" + crystal.getStyledName() + "**");
+                    contents.add((i + 1) + ": **" + crystal.getName() + "**");
                 }
 
                 description = """

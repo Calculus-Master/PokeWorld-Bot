@@ -167,7 +167,7 @@ public class CommandPokemon extends PokeWorldCommand
             case "tm" -> Arrays.stream(TM.values()).map(TM::toString).toList();
             case "move" -> Arrays.stream(MoveEntity.values()).map(MoveEntity::getName).toList();
             case "ability" -> Arrays.stream(Ability.values()).map(Ability::getName).toList();
-            case "item" -> Arrays.stream(Item.values()).map(Item::getStyledName).toList();
+            case "item" -> Arrays.stream(Item.values()).map(Item::getName).toList();
             default -> new ArrayList<>();
         };
 

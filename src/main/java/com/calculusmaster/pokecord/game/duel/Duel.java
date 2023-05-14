@@ -2055,7 +2055,7 @@ public class Duel
                 {
                     o.addStatusCondition(StatusCondition.FLINCHED);
 
-                    turnResult.add(c.getName() + "'s " + c.getItem().getStyledName() + " activated! " + o.getName() + " flinched!");
+                    turnResult.add(c.getName() + "'s " + c.getItem().getName() + " activated! " + o.getName() + " flinched!");
                 }
             }
 

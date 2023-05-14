@@ -111,7 +111,7 @@ public class CommandTrainerDuel extends PokeWorldCommand
                     .setFooter("Trainer ID: " + data.getTrainerID())
 
                     .addField("Average Level", "Level " + data.getAveragePokemonLevel(), true)
-                    .addField("Z-Crystal", data.getZCrystal() == null ? "None" : data.getZCrystal().getStyledName(), true)
+                    .addField("Z-Crystal", data.getZCrystal() == null ? "None" : data.getZCrystal().getName(), true)
 
                     .addField("Team", IntStream.range(0, data.getTeam().size()).mapToObj(i -> (i + 1) + ": " + data.getTeam().get(i).getName()).collect(Collectors.joining("\n")), false)
 

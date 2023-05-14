@@ -112,7 +112,7 @@ public class TradeOffer
             contents.add("TMs: " + this.tms.entrySet().stream().map(e -> e.getKey() + " (" + e.getValue() + ")").collect(Collectors.joining(", ")));
 
         if(!this.items.isEmpty())
-            contents.add("Items: " + this.items.entrySet().stream().map(e -> e.getKey().getStyledName() + " (" + e.getValue() + ")").collect(Collectors.joining(", ")));
+            contents.add("Items: " + this.items.entrySet().stream().map(e -> e.getKey().getName() + " (" + e.getValue() + ")").collect(Collectors.joining(", ")));
 
         if(contents.isEmpty()) contents.add("\u200B");
 

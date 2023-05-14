@@ -256,7 +256,7 @@ public class CommandTrade extends PokeWorldCommand
                             if(add)
                             {
                                 int newAmount = amount + offer.getItems().getOrDefault(item, 0);
-                                if(this.playerData.getInventory().getItems().getOrDefault(item, 0) < newAmount) return this.error("You do not have that many %ss to offer.".formatted(item.getStyledName()));
+                                if(this.playerData.getInventory().getItems().getOrDefault(item, 0) < newAmount) return this.error("You do not have that many %ss to offer.".formatted(item.getName()));
                                 offer.addItem(item, amount);
                             }
                             else offer.removeItem(item, amount);

@@ -1231,9 +1231,8 @@ public enum PokemonEntity
         return POKEMON_ENTITY_DATA.get(this);
     }
 
-    public String getImageName(boolean shiny)
+    public String getImageName()
     {
-        //Parameter is staying just in case any shinies are not available
         return this.dex + "_" + Global.normalize(this.toString().replaceAll("_", " ")).replaceAll(" ", "_");
     }
 

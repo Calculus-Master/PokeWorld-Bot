@@ -45,12 +45,12 @@ public class CommandZCrystal extends PokeWorldCommand
 
             ZCrystal z = ZCrystal.cast(nameInput);
             if(z == null) return this.error("\"" + nameInput + "\" is not a valid Z-Crystal name!");
-            else if(!this.playerData.getInventory().getZCrystals().contains(z)) return this.error("You do not own the Z-Crystal " + z.getStyledName() + ".");
+            else if(!this.playerData.getInventory().getZCrystals().contains(z)) return this.error("You do not own the Z-Crystal " + z.getName() + ".");
             else if(DuelHelper.isInDuel(this.player.getId())) return this.error("You cannot equip Z-Crystals while in a Duel.");
 
             this.playerData.getInventory().setEquippedZCrystal(z);
 
-            this.response = "You've successfully equipped the Z-Crystal **" + z.getStyledName() + "**.";
+            this.response = "You've successfully equipped the Z-Crystal **" + z.getName() + "**.";
         }
 
         return true;
@@ -60,7 +60,7 @@ public class CommandZCrystal extends PokeWorldCommand
     protected boolean autocompleteLogic(CommandAutoCompleteInteractionEvent event)
     {
         if(event.getFocusedOption().getName().equals("name"))
-            event.replyChoiceStrings(this.getAutocompleteOptions(event.getFocusedOption().getValue(), Arrays.stream(ZCrystal.values()).map(ZCrystal::getStyledName).toList())).queue();
+            event.replyChoiceStrings(this.getAutocompleteOptions(event.getFocusedOption().getValue(), Arrays.stream(ZCrystal.values()).map(ZCrystal::getName).toList())).queue();
 
         return true;
     }

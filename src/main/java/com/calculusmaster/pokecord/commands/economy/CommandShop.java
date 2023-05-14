@@ -121,7 +121,7 @@ public class CommandShop extends PokeWorldCommand
                 List<String> itemNames = new ArrayList<>(), itemPrices = new ArrayList<>(), itemTypes = new ArrayList<>();
                 for(Item i : shop.getItems())
                 {
-                    itemNames.add(i.getStyledName());
+                    itemNames.add(i.getName());
                     itemPrices.add("**" + shop.getItemPrice(i) + "c**");
                     itemTypes.add("*" + Global.normalize(i.getType().toString()) + "*");
                 }
@@ -217,7 +217,7 @@ public class CommandShop extends PokeWorldCommand
                 for(ZCrystal zc : shop.getZCrystals())
                 {
                     boolean owned = this.playerData.getInventory().hasZCrystal(zc);
-                    zCrystalNames.add((owned ? "~~" : "") + zc.getStyledName() + (owned ? "~~" : ""));
+                    zCrystalNames.add((owned ? "~~" : "") + zc.getName() + (owned ? "~~" : ""));
                 }
 
                 this.embed.setTitle(Pokeworld.NAME + " Shop: Z-Crystals")
@@ -298,7 +298,7 @@ public class CommandShop extends PokeWorldCommand
 
                 this.playerData.getStatistics().increase(StatisticType.ITEMS_BOUGHT);
 
-                this.response = "Successfully purchased a **" + item.getStyledName() + "** for **" + shop.getItemPrice(item) + "c**!";
+                this.response = "Successfully purchased a **" + item.getName() + "** for **" + shop.getItemPrice(item) + "c**!";
             }
             else if(subcommand.equals("mega"))
             {
@@ -388,7 +388,7 @@ public class CommandShop extends PokeWorldCommand
                 this.playerData.changeCredits(-shop.getZCrystalPrice());
                 this.playerData.getInventory().addZCrystal(zCrystal);
 
-                this.response = "Successfully purchased **" + zCrystal.getStyledName() + "** for **" + shop.getZCrystalPrice() + "c**!";
+                this.response = "Successfully purchased **" + zCrystal.getName() + "** for **" + shop.getZCrystalPrice() + "c**!";
             }
         }
 
@@ -407,10 +407,10 @@ public class CommandShop extends PokeWorldCommand
         {
             case "nature" -> event.replyChoiceStrings(this.getAutocompleteOptions(currentInput, Arrays.stream(Nature.values()).map(n -> Global.normalize(n.toString())).toList())).queue();
             case "move-tutor" -> event.replyChoiceStrings(this.getAutocompleteOptions(currentInput, MoveTutorRegistry.MOVE_TUTOR_MOVES.stream().map(MoveEntity::getName).toList())).queue();
-            case "item" -> event.replyChoiceStrings(this.getAutocompleteOptions(currentInput, shop.getItems().stream().map(Item::getStyledName).toList())).queue();
+            case "item" -> event.replyChoiceStrings(this.getAutocompleteOptions(currentInput, shop.getItems().stream().map(Item::getName).toList())).queue();
             case "mega" -> event.replyChoiceStrings("X", "Y").queue();
             case "tm" -> event.replyChoiceStrings(this.getAutocompleteOptions(currentInput, shop.getTMs().stream().map(TM::toString).toList())).queue();
-            case "z-crystal" -> event.replyChoiceStrings(this.getAutocompleteOptions(currentInput, shop.getZCrystals().stream().map(ZCrystal::getStyledName).toList())).queue();
+            case "z-crystal" -> event.replyChoiceStrings(this.getAutocompleteOptions(currentInput, shop.getZCrystals().stream().map(ZCrystal::getName).toList())).queue();
         }
 
         return true;

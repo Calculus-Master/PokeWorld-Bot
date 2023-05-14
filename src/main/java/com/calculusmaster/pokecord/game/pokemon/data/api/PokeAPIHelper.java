@@ -33,6 +33,16 @@ public class PokeAPIHelper
 //        })); }
 //
 //        System.out.println("Errors: " + errors.stream().map(Ability::toString).collect(Collectors.joining("\n")));
+//
+//        List<String> list = new ArrayList<>();
+//
+//        list.add("dex,name,data");
+//        Arrays.stream(PokemonEntity.values()).forEach(e -> list.add("%s,%s,%s".formatted(e.getDex(), e.getJSONFileName().substring(e.getJSONFileName().indexOf("_") + 1), e.getImageName())));
+//
+//        try(FileWriter w = new FileWriter("pokemon.csv"))
+//        {
+//            w.write(String.join("\n", list));
+//        }
     }
 
     private static void createAbilityJSON(Ability a) throws IOException

@@ -51,7 +51,7 @@ public class CommandTrialDuel extends PokeWorldCommand
         ZCrystal z = Objects.requireNonNull(ZCrystal.getCrystalOfType(type));
 
         if(this.playerData.getInventory().hasZCrystal(z))
-            return this.error("You have already acquired **" + z.getStyledName() + "**. You can only acquire each Z-Crystal once!");
+            return this.error("You have already acquired **" + z.getName() + "**. You can only acquire each Z-Crystal once!");
         else if(!this.playerData.getSelectedPokemon().isType(type))
             return this.error("You can only challenge the **" + type.getStyledName() + "**-Type Trial with a **" + type.getStyledName() + "**-Type Pokemon!");
         else if(this.playerData.getCredits() < Prices.TRIAL_DUEL.get())

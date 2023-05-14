@@ -287,7 +287,7 @@ public class CommandMarket extends PokeWorldCommand
             String type = p.getType().stream().map(Type::getStyledName).collect(Collectors.joining("\n"));
 
             String ability = "*" + p.getAbility().getName() + "*";
-            String item = p.hasItem() ? p.getItem().getStyledName() : "None";
+            String item = p.hasItem() ? p.getItem().getName() : "None";
             String tm = "%s / %s".formatted(p.getTMs().size(), p.getMaxTMs());
 
             this.embed

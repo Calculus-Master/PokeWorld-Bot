@@ -740,7 +740,7 @@ public class Pokemon
 
         //Default
         String dir = type + "/";
-        String image = pokemonEntity.getImageName(shiny);
+        String image = pokemonEntity.getImageName();
 
         //Stuff that requires a Pokemon object
         if(pokemon != null)
@@ -753,7 +753,7 @@ public class Pokemon
             }
             else if(pokemonEntity == PokemonEntity.ARCEUS && pokemon.hasItem() && pokemon.getItem().isPlateItem())
             {
-                String plateItemName = pokemon.getItem().getStyledName();
+                String plateItemName = pokemon.getItem().getName();
                 plateItemName = plateItemName.split(" ")[0];
 
                 dir = "extra_" + type + "/arceus/";
@@ -768,7 +768,7 @@ public class Pokemon
             }
             else if(pokemonEntity == PokemonEntity.GENESECT && pokemon.hasItem() && pokemon.getItem().isDriveItem())
             {
-                String driveItemName = pokemon.getItem().getStyledName();
+                String driveItemName = pokemon.getItem().getName();
                 driveItemName = driveItemName.split(" ")[0];
 
                 dir = "extra_" + type + "/genesect/";
