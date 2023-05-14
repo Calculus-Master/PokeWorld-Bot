@@ -544,4 +544,9 @@ public class PsychicMoves
                 .addStatusEffect(StatusCondition.FLINCHED, 30)
                 .execute();
     }
+
+    public String Psyblade(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+    }
 }

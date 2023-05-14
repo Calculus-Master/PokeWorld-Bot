@@ -498,18 +498,39 @@ public class Duel
         switch(this.terrain.get())
         {
             case ELECTRIC_TERRAIN -> {
-                if(move.getType().equals(Type.ELECTRIC)) move.setPower(1.5);
+                if(move.is(Type.ELECTRIC) || move.is(MoveEntity.PSYBLADE))
+                {
+                    move.setPower(1.5);
+                    turnResult.add(move.getName() + "'s power was boosted by the Electric Terrain!");
+                }
             }
             case GRASSY_TERRAIN -> {
-                if(move.getType().equals(Type.GRASS)) move.setPower(1.5);
+                if(move.is(Type.GRASS))
+                {
+                    move.setPower(1.5);
+                    turnResult.add(move.getName() + "'s power was boosted by the Grassy Terrain!");
+                }
 
-                if(!this.data(this.current).isRaised) this.players[this.current].active.heal(c.getMaxHealth(1 / 16.));
+                if(!this.data(this.current).isRaised)
+                {
+                    int amount = c.getMaxHealth(1 / 16.);
+                    this.players[this.current].active.heal(amount);
+                    turnResult.add(c.getName() + " healed for " + amount + "HP from the Grassy Terrain!");
+                }
             }
             case MISTY_TERRAIN -> {
-                if(move.getType().equals(Type.DRAGON)) move.setDamageMultiplier(0.5);
+                if(move.is(Type.DRAGON))
+                {
+                    move.setDamageMultiplier(0.5);
+                    turnResult.add(move.getName() + "'s power was reduced by the Misty Terrain!");
+                }
             }
             case PSYCHIC_TERRAIN -> {
-                if(move.getType().equals(Type.PSYCHIC)) move.setPower(1.5);
+                if(move.is(Type.PSYCHIC))
+                {
+                    move.setPower(1.5);
+                    turnResult.add(move.getName() + "'s power was boosted by the Psychic Terrain!");
+                }
             }
         }
 
