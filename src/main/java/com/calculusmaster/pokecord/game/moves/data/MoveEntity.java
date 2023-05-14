@@ -816,11 +816,11 @@ public enum MoveEntity
     GIGATON_HAMMER("gigaton-hammer"),
     COMEUPPANCE("comeuppance"),
     AQUA_CUTTER("aqua-cutter"),
-    BLAZING_TORQUE("blazing-torque"),
-    WICKED_TORQUE("wicked-torque"),
-    NOXIOUS_TORQUE("noxious-torque"),
-    COMBAT_TORQUE("combat-torque"),
-    MAGICAL_TORQUE("magical-torque"),
+//    BLAZING_TORQUE("blazing-torque"), //Starmobile moves
+//    WICKED_TORQUE("wicked-torque"),
+//    NOXIOUS_TORQUE("noxious-torque"),
+//    COMBAT_TORQUE("combat-torque"),
+//    MAGICAL_TORQUE("magical-torque"),
     HYDRO_STEAM("hydro-steam"),
     PSYBLADE("psyblade"),
 
