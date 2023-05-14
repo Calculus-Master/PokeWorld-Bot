@@ -478,7 +478,7 @@ public class Duel
             }
             case HARSH_SUNLIGHT, EXTREME_HARSH_SUNLIGHT -> {
                 if(move.is(Type.FIRE)) move.setPower(1.5);
-                else if(move.is(Type.WATER)) move.setPower(0.5);
+                else if(move.is(Type.WATER) && !move.is(MoveEntity.HYDRO_STEAM)) move.setPower(0.5);
 
                 if(move.is(MoveEntity.THUNDER, MoveEntity.HURRICANE)) move.setAccuracy(50);
             }
@@ -1807,7 +1807,8 @@ public class Duel
             this.data(this.other).lastDamageTaken = 0;
         }
         //Damage-Dealing Water Moves fail in Extreme Harsh Sunlight
-        else if(this.weather.get().equals(Weather.EXTREME_HARSH_SUNLIGHT) && move.getType().equals(Type.WATER) && move.getPower() > 0)
+        //Exception: Hydro Steam
+        else if(this.weather.get().equals(Weather.EXTREME_HARSH_SUNLIGHT) && move.is(Type.WATER) && !move.is(MoveEntity.HYDRO_STEAM) && move.getPower() > 0)
         {
             turnResult.add(move.getName() + " failed due to the Extreme Harsh Sunlight!");
 

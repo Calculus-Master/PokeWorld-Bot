@@ -253,4 +253,9 @@ public class WaterMoves
                 .addDamageEffect()
                 .execute();
     }
+
+    public String HydroSteam(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+    }
 }
