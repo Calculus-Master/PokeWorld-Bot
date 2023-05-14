@@ -324,4 +324,17 @@ public class DarkMoves
             return user.getName() + " set up an obstruction!";
         }
     }
+
+    public String Comeuppance(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(duel.first.equals(user.getUUID())) return move.getNothingResult();
+        else
+        {
+            int damage = duel.data(user.getUUID()).lastDamageTaken;
+
+            return MoveEffectBuilder.make(user, opponent, duel, move)
+                    .addFixedDamageEffect((int)(damage * 1.5))
+                    .execute();
+        }
+    }
 }
