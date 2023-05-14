@@ -102,7 +102,7 @@ public class CommandSettings extends PokeWorldCommand
                     holder.update(this.server.getId(), new SingleValue<>(list));
 
                     String extra = list.isEmpty() ? (spawn ? "WARNING: You have no spawn channels set up. No Pokemon will spawn!" : duel ? "You have no Duel channels restricted. Duels will be allowed in any channel!" : "You have no Trade channels restricted. Trades will be allowed in any channel!") : "";
-                    this.response = "Removed " + channel.getAsMention() + " from the " + (spawn ? "Spawn" : duel ? "Duel" : "Trade") + " Channel list!" + "\n*" + extra + "*";
+                    this.response = "Removed " + channel.getAsMention() + " from the " + (spawn ? "Spawn" : duel ? "Duel" : "Trade") + " Channel list!" + (extra.isEmpty() ? "" : "\n*" + extra + "*");
                 }
                 //Add
                 else
@@ -111,7 +111,7 @@ public class CommandSettings extends PokeWorldCommand
                     holder.update(this.server.getId(), new SingleValue<>(list));
 
                     String extra = list.size() == 1 ? (duel ? "You have have now added a Duel channel. Duels will only be allowed in this channel!" : trade ? "You have have now added a Trade channel. Trades will only be allowed in this channel!" : "") : "";
-                    this.response = "Added " + channel.getAsMention() + " to the " + (spawn ? "Spawn" : duel ? "Duel" : "Trade") + " Channel list!" + "\n*" + extra + "*";
+                    this.response = "Added " + channel.getAsMention() + " to the " + (spawn ? "Spawn" : duel ? "Duel" : "Trade") + " Channel list!" + (extra.isEmpty() ? "" : "\n*" + extra + "*");
                 }
             }
         }
