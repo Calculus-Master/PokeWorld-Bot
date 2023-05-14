@@ -442,7 +442,7 @@ public class NormalMoves
         return move.getNotImplementedResult();
     }
 
-    public String ViseGrip(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    public String ViceGrip(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
