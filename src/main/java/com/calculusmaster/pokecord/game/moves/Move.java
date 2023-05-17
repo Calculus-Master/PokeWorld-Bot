@@ -279,8 +279,6 @@ public class Move
 
         if(critical > 1.0) hitCrit = true;
 
-        double extraModifier = 1.0;
-
         //Any nuances go here
 
         //Psyshock, Psystrike, Secret Sword
@@ -298,8 +296,8 @@ public class Move
         //Foul Play
         if(this.is(MoveEntity.FOUL_PLAY)) atkStat = opponent.getStat(Stat.ATK);
 
-        //Electro Drift
-        if(this.is(MoveEntity.ELECTRO_DRIFT) && type > 1.0) extraModifier *= 1.33;
+        //Electro Drift, Collision Course
+        if(this.is(MoveEntity.ELECTRO_DRIFT, MoveEntity.COLLISION_COURSE) && type > 1.0) this.damageMultiplier *= 1.33;
 
         //Ability: Adaptability
         if(stab > 1.0 && user.hasAbility(Ability.ADAPTABILITY)) stab *= 2.0;
@@ -367,7 +365,7 @@ public class Move
             else if(type > 1.0) type *= 1.5;
         }
 
-        double modifier = critical * random * stab * type * burned * extraModifier;
+        double modifier = critical * random * stab * type * burned;
         double damage = (((2 * level / 5.0 + 2) * power * (double)atkStat / (double)defStat) / 50) + 2;
         double finalDMG = damage * modifier;
 

@@ -343,4 +343,9 @@ public class FightingMoves
                 .addDamageEffect()
                 .execute();
     }
+
+    public String CollisionCourse(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+    }
 }

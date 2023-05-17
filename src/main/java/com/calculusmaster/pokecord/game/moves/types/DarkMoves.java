@@ -337,4 +337,13 @@ public class DarkMoves
                     .execute();
         }
     }
+
+    public String Ruination(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        int damage = Math.max(1, opponent.getHealth() / 2);
+
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFixedDamageEffect(damage)
+                .execute();
+    }
 }
