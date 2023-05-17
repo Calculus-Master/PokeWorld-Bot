@@ -243,6 +243,9 @@ public class Move
 
     public boolean isAccurate(Pokemon user, Pokemon opponent)
     {
+        //Moves that never miss
+        if(this.data.isBaseAccuracyNull()) return true;
+
         int combined = user.changes().getAccuracy() - opponent.changes().getEvasion();
 
         double numerator = 3.0 + combined > 0 ? combined : 0;
