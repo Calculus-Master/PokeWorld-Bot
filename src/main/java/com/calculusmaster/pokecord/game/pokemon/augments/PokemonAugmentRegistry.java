@@ -120,7 +120,7 @@ public class PokemonAugmentRegistry
             if(!List.of(MYTHICAL, ULTRA_BEAST, LEGENDARY).contains(rarity))
                 augmentData.registerAugment(100, PokemonAugment.Z_AFFINITY);
 
-            if(data.getLevelUpMoves().containsKey(MoveEntity.HAIL))
+            if(data.getLevelUpMoves().containsKey(MoveEntity.HAIL) || data.getLevelUpMoves().containsKey(MoveEntity.SNOWSCAPE))
                 augmentData.registerAugment(52, PokemonAugment.RESTORATIVE_HAIL);
 
             if(data.getLevelUpMoves().containsKey(MoveEntity.SANDSTORM))

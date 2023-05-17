@@ -158,4 +158,11 @@ public class IceMoves
                 .addConsecutiveDamageEffect(20, 40, 60)
                 .execute();
     }
+
+    public String Snowscape(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addWeatherEffect(Weather.HAIL)
+                .execute();
+    }
 }
