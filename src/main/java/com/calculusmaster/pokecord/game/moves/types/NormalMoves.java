@@ -1337,4 +1337,43 @@ public class NormalMoves
 
         return user.getName() + " is feeling drowsy!";
     }
+
+    public String FilletAway(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        if(user.getHealth() <= user.getMaxHealth(1 / 2.) || (user.changes().get(Stat.ATK) == 6 && user.changes().get(Stat.SPATK) == 6 && user.changes().get(Stat.SPD) == 6))
+            return move.getNothingResult();
+        else return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFixedSelfDamageEffect(user.getMaxHealth(1 / 2.))
+                .addStatChangeEffect(new StatChangeEffect(Stat.ATK, 2, 100, true)
+                        .add(Stat.SPATK, 2)
+                        .add(Stat.SPD, 2)
+                )
+                .execute();
+    }
+
+    public String RagingBull(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        List<String> extraEffects = new ArrayList<>();
+
+        FieldBarrierHandler h = duel.barriers[duel.playerIndexFromUUID(user.getUUID())];
+        if(h.has(FieldBarrier.AURORA_VEIL))
+        {
+            h.removeBarrier(FieldBarrier.AURORA_VEIL);
+            extraEffects.add(opponent.getName() + "'s Aurora Veil was removed!");
+        }
+
+        if(h.has(FieldBarrier.REFLECT))
+        {
+            h.removeBarrier(FieldBarrier.REFLECT);
+            extraEffects.add(opponent.getName() + "'s Reflect was removed!");
+        }
+
+        if(h.has(FieldBarrier.LIGHT_SCREEN))
+        {
+            h.removeBarrier(FieldBarrier.LIGHT_SCREEN);
+            extraEffects.add(opponent.getName() + "'s Light Screen was removed!");
+        }
+
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move) + (extraEffects.isEmpty() ? "" : " " + String.join(" ", extraEffects));
+    }
 }

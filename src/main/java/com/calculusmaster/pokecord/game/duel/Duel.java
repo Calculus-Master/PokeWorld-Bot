@@ -467,6 +467,26 @@ public class Duel
             turnResult.add(move.getName() + " is now a Ghost-type move due to the %s Augment!".formatted(PokemonAugment.SPECTRAL_SUPERCHARGE.getAugmentName()));
         }
 
+        //Raging Bull: Paldean Tauros
+        if(move.is(MoveEntity.RAGING_BULL))
+        {
+            if(c.is(PokemonEntity.TAUROS_PALDEA_COMBAT))
+            {
+                move.setType(Type.FIGHTING);
+                turnResult.add(move.getName() + " is now Fighting-type due to Tauros's breed!");
+            }
+            else if(c.is(PokemonEntity.TAUROS_PALDEA_BLAZE))
+            {
+                move.setType(Type.FIRE);
+                turnResult.add(move.getName() + " is now Fire-type due to Tauros's breed!");
+            }
+            else if(c.is(PokemonEntity.TAUROS_PALDEA_AQUA))
+            {
+                move.setType(Type.WATER);
+                turnResult.add(move.getName() + " is now Water-type due to Tauros's breed!");
+            }
+        }
+
         //Weather-based Move Changes
 
         switch(this.weather.get())
