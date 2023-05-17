@@ -265,4 +265,9 @@ public class WaterMoves
                 .addCritDamageEffect()
                 .execute();
     }
+
+    public String AquaStep(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPD, 1, 100, true);
+    }
 }

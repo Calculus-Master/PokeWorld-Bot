@@ -346,4 +346,9 @@ public class DarkMoves
                 .addFixedDamageEffect(damage)
                 .execute();
     }
+
+    public String KowtowCleave(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+    }
 }

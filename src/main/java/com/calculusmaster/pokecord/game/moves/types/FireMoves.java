@@ -276,4 +276,9 @@ public class FireMoves
                 .addDamageEffect()
                 .execute();
     }
+
+    public String TorchSong(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPATK, 1, 100, true);
+    }
 }

@@ -368,4 +368,11 @@ public class GrassMoves
 
         return user.getName() + " extends its roots!";
     }
+
+    public String FlowerTrick(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect(24)
+                .execute();
+    }
 }
