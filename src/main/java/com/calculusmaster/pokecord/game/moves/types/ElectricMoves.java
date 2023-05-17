@@ -239,4 +239,9 @@ public class ElectricMoves
                 .addDamageEffect()
                 .execute();
     }
+
+    public String ElectroDrift(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+    }
 }
