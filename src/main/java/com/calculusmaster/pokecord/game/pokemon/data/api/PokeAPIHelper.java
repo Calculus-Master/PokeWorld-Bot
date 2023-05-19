@@ -47,7 +47,12 @@ public class PokeAPIHelper
 //        }
 
         MoveEntity.init();
+
+        System.out.println("-----------------Moves-----------------");
         Arrays.stream(MoveEntity.values()).filter(e -> !e.isZMove() && !e.isMaxMove() && !Move.WIP_MOVES.contains(e) && !Move.isImplemented(e)).forEach(System.out::println);
+
+        System.out.println("-----------------Abilities-----------------");
+        Arrays.stream(Ability.values()).filter(e -> !Ability.IMPLEMENTED.contains(e)).forEach(System.out::println);
     }
 
     private static void createAbilityJSON(Ability a) throws IOException

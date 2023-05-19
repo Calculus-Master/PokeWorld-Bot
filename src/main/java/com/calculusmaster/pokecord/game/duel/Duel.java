@@ -283,6 +283,10 @@ public class Duel
         //Max Move
         if(this.players[p].active.isDynamaxed()) move = DuelHelper.getMaxMove(this.players[p].active, move);
 
+        //Ability: PranksterA
+        if(this.players[p].active.hasAbility(Ability.PRANKSTER) && move.is(Category.STATUS))
+            move.setPriority(move.getPriority() + 1);
+
         this.players[p].move = move;
     }
 
@@ -1233,7 +1237,7 @@ public class Duel
         {
             this.data(this.other).quickGuardUsed = false;
 
-            if(move.getPriority() > 0) otherImmune = !bypass;
+            if(move.getPriority() > 0 && !o.hasAbility(Ability.PRANKSTER)) otherImmune = !bypass;
         }
 
         if(this.data(this.other).craftyShieldUsed)
