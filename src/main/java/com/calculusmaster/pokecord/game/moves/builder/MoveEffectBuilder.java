@@ -270,6 +270,12 @@ public class MoveEffectBuilder
         return this;
     }
 
+    public MoveEffectBuilder addPowerBoostEffect(Supplier<Boolean> predicate, double powerMultiplier)
+    {
+        this.moveEffects.add(new PowerBoostEffect(predicate, powerMultiplier));
+        return this;
+    }
+
     public String execute()
     {
         //Initialization

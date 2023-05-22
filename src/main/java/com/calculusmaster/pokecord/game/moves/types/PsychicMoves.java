@@ -549,4 +549,20 @@ public class PsychicMoves
     {
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
+
+    public String LunarBlessing(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addFractionHealEffect(1 / 2.)
+                .addCustomEffect(() ->
+                {
+                    if(user.hasAnyStatusCondition())
+                    {
+                        user.clearStatusConditions();
+                        return user.getName() + " was healed of its Status Conditions!";
+                    }
+                    else return "";
+                })
+                .execute();
+    }
 }

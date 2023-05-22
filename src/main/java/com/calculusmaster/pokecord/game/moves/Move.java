@@ -408,6 +408,11 @@ public class Move
         this.priority = priority;
     }
 
+    public void increasePriority()
+    {
+        this.priority++;
+    }
+
     public MoveEntity getEntity()
     {
         return this.entity;

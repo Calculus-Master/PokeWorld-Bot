@@ -20,7 +20,7 @@ public class TerrainHandler
 
     public void setTerrain(Terrain terrain)
     {
-        this.terrain = Terrain.NORMAL_TERRAIN;
+        this.terrain = terrain;
         this.turns = 5;
     }
 
@@ -38,5 +38,10 @@ public class TerrainHandler
 
             if(this.turns <= 0) this.removeTerrain();
         }
+    }
+
+    public boolean is(Terrain terrain)
+    {
+        return this.terrain == terrain;
     }
 }

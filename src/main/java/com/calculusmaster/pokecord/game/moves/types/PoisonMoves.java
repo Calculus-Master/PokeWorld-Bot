@@ -22,8 +22,10 @@ public class PoisonMoves
 
     public String Venoshock(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(opponent.hasStatusCondition(StatusCondition.POISONED)) move.setDamageMultiplier(2);
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addPowerBoostEffect(() -> opponent.hasStatusCondition(StatusCondition.POISONED) || opponent.hasStatusCondition(StatusCondition.BADLY_POISONED), 2.0)
+                .addDamageEffect()
+                .execute();
     }
 
     public String PoisonPowder(Pokemon user, Pokemon opponent, Duel duel, Move move)

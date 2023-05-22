@@ -23,10 +23,11 @@ public abstract class MoveEffect
     //Lower values mean they go first
     public int getPriority()
     {
-        if(this instanceof FixedDamageEffect) return 0;
-        else if(this instanceof FixedHealEffect || this instanceof RecoilEffect) return 1;
-        else if(this instanceof StatChangeEffect) return 2;
-        else if(this instanceof StatusConditionEffect) return 3;
+        if(this instanceof PowerBoostEffect) return 0;
+        else if(this instanceof FixedDamageEffect) return 1;
+        else if(this instanceof FixedHealEffect || this instanceof RecoilEffect) return 2;
+        else if(this instanceof StatChangeEffect) return 3;
+        else if(this instanceof StatusConditionEffect) return 4;
         else return 100;
     }
 }

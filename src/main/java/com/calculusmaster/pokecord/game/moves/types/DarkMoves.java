@@ -106,13 +106,11 @@ public class DarkMoves
 
     public String KnockOff(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(opponent.hasItem())
-        {
-            move.setPower(1.5 * move.getPower());
-            opponent.removeItem();
-        }
-
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addPowerBoostEffect(() -> opponent.hasAnyStatusCondition(), 2.0)
+                .addDamageEffect()
+                .addConditionalCustomEffect(opponent.hasItem(), () -> { opponent.removeItem(); return ""; }, () -> "")
+                .execute();
     }
 
     public String HyperspaceFury(Pokemon user, Pokemon opponent, Duel duel, Move move)

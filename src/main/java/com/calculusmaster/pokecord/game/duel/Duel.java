@@ -128,8 +128,8 @@ public class Duel
             this.checkFaintSwap(0);
             this.checkFaintSwap(1);
 
-            if(this.getAction(0).equals(DuelActionType.SWAP)) this.swapAction(0);
-            if(this.getAction(1).equals(DuelActionType.SWAP)) this.swapAction(1);
+            if(this.getAction(0) == DuelActionType.SWAP) this.results.add(this.swapAction(0));
+            if(this.getAction(1) == DuelActionType.SWAP) this.results.add(this.swapAction(1));
 
             if(this.isUsingMove(0))
             {
@@ -182,7 +182,7 @@ public class Duel
     protected void checkFaintSwap(int p)
     {
         int o = p == 0 ? 1 : 0;
-        if(this.getAction(p).equals(DuelActionType.SWAP) && this.players[p].active.isFainted() && !this.players[0].active.isFainted()) this.queuedMoves.put(this.players[o].ID, new TurnAction(IDLE, -1, -1));
+        if(this.getAction(p).equals(DuelActionType.SWAP) && this.players[p].active.isFainted() && !this.players[o].active.isFainted()) this.queuedMoves.put(this.players[o].ID, new TurnAction(IDLE, -1, -1));
     }
 
     protected boolean isUsingMove(int p)
@@ -221,24 +221,33 @@ public class Duel
         int speed1 = this.players[0].active.getStat(Stat.SPD);
         int speed2 = this.players[1].active.getStat(Stat.SPD);
 
-        //Grassy Terrain & Grassy Glide Effects
-        if(this.terrain.get().equals(Terrain.GRASSY_TERRAIN) && this.players[0].move.is(MoveEntity.GRASSY_GLIDE))
-            this.players[0].move.setPriority(1);
-        if(this.terrain.get().equals(Terrain.GRASSY_TERRAIN) && this.players[1].move.is(MoveEntity.GRASSY_GLIDE))
-            this.players[1].move.setPriority(1);
+        //Move: Grassy Glide
+        Consumer<Integer> effectGrassyGlide = p -> {
+            if(this.terrain.is(Terrain.GRASSY_TERRAIN) && this.players[p].move.is(MoveEntity.GRASSY_GLIDE))
+                this.players[p].move.increasePriority();
+        };
+        effectGrassyGlide.accept(0); effectGrassyGlide.accept(1);
 
         //Ability: Gale Wings
-        if(this.players[0].active.hasAbility(Ability.GALE_WINGS) && this.players[0].move.is(Type.FLYING))
-            this.players[0].move.setPriority(this.players[0].move.getPriority() + 1);
-        if(this.players[1].active.hasAbility(Ability.GALE_WINGS) && this.players[1].move.is(Type.FLYING))
-            this.players[1].move.setPriority(this.players[1].move.getPriority() + 1);
+        Consumer<Integer> effectGaleWings = p -> {
+            if(this.players[p].active.hasAbility(Ability.GALE_WINGS) && this.players[p].move.is(Type.FLYING))
+                this.players[p].move.increasePriority();
+        };
+        effectGaleWings.accept(0); effectGaleWings.accept(1);
 
+        //Ability: Prankster
+        Consumer<Integer> effectPrankster = p -> {
+            if(this.players[p].active.hasAbility(Ability.PRANKSTER) && this.players[p].move.is(Category.STATUS))
+                this.players[p].move.increasePriority();
+        };
+        effectPrankster.accept(0); effectPrankster.accept(1);
+
+        //Move Order Logic
         if(this.players[0].move.getPriority() == this.players[1].move.getPriority())
         {
-            this.current = speed1 == speed2 ? (new Random().nextInt(100) < 50 ? 0 : 1) : (speed1 > speed2 ? 0 : 1);
+            this.current = speed1 == speed2 ? (new Random().nextBoolean() ? 0 : 1) : (speed1 > speed2 ? 0 : 1);
 
-            if(this.room.isActive(Room.TRICK_ROOM))
-                this.current = this.current == 0 ? 1 : 0;
+            if(this.room.isActive(Room.TRICK_ROOM)) this.current = this.current == 0 ? 1 : 0;
 
             if(this.players[this.other].active.hasItem(Item.CUSTAP_BERRY) && this.players[this.other].active.getHealth() < this.players[this.other].active.getMaxHealth(1 / 4.))
             {
@@ -248,10 +257,7 @@ public class Duel
                 this.current = this.other;
             }
         }
-        else
-        {
-            this.current = this.players[0].move.getPriority() > this.players[1].move.getPriority() ? 0 : 1;
-        }
+        else this.current = this.players[0].move.getPriority() > this.players[1].move.getPriority() ? 0 : 1;
 
         this.other = this.current == 0 ? 1 : 0;
 
@@ -283,26 +289,24 @@ public class Duel
         //Max Move
         if(this.players[p].active.isDynamaxed()) move = DuelHelper.getMaxMove(this.players[p].active, move);
 
-        //Ability: PranksterA
-        if(this.players[p].active.hasAbility(Ability.PRANKSTER) && move.is(Category.STATUS))
-            move.setPriority(move.getPriority() + 1);
-
         this.players[p].move = move;
     }
 
-    private void swapAction(int p)
+    private String swapAction(int p)
     {
+        List<String> swapResults = new ArrayList<>();
+
         //If current has a primal weather, the weather gets removed
         if(this.players[p].active.hasAbility(Ability.DESOLATE_LAND, Ability.PRIMORDIAL_SEA, Ability.DELTA_STREAM))
         {
             BiFunction<Ability, Weather, Boolean> check =
-                    (a, w) -> this.players[p].active.hasAbility(a) && this.weather.get().equals(w);
+                    (a, w) -> this.players[p].active.hasAbility(a) && this.weather.get() == w;
 
             if(check.apply(Ability.DESOLATE_LAND, Weather.EXTREME_HARSH_SUNLIGHT) ||
                     check.apply(Ability.PRIMORDIAL_SEA, Weather.HEAVY_RAIN) ||
                     check.apply(Ability.DELTA_STREAM, Weather.STRONG_WINDS))
             {
-                this.results.add(this.weather.get().getName() + " disappeared!\n\n");
+                swapResults.add(this.weather.get().getName() + " disappeared!\n");
 
                 this.weather.removeWeather();
             }
@@ -317,7 +321,7 @@ public class Duel
         this.data(p).setDefaults();
         this.players[p].swap(index);
 
-        this.results.add(this.players[p].getName() + " brought in " + this.players[p].active.getName() + "!\n");
+        swapResults.add(this.players[p].getName() + " brought in " + this.players[p].active.getName() + "!");
 
         //Check if the new Pokemon has a Weather-Causing Ability
         this.checkWeatherAbilities(p);
@@ -332,45 +336,47 @@ public class Duel
         if(this.players[p].active.hasAbility(Ability.DAUNTLESS_SHIELD))
         {
             this.players[p].active.changes().change(Stat.DEF, 1);
-            this.results.add(Ability.DAUNTLESS_SHIELD.formatActivation(this.players[p].active.getName(), this.players[p].active.getName() + "'s Defense rose by 1 stage!"));
+            swapResults.add(Ability.DAUNTLESS_SHIELD.formatActivation(this.players[p].active.getName(), this.players[p].active.getName() + "'s Defense rose by 1 stage!"));
         }
 
         //Ability: Intrepid Sword
         if(this.players[p].active.hasAbility(Ability.INTREPID_SWORD))
         {
             this.players[p].active.changes().change(Stat.ATK, 1);
-            this.results.add(Ability.INTREPID_SWORD.formatActivation(this.players[p].active.getName(), this.players[p].active.getName() + "'s Attack rose by 1 stage!"));
+            swapResults.add(Ability.INTREPID_SWORD.formatActivation(this.players[p].active.getName(), this.players[p].active.getName() + "'s Attack rose by 1 stage!"));
         }
 
         //Ability: Electric Surge
         if(this.players[p].active.hasAbility(Ability.ELECTRIC_SURGE))
         {
             this.terrain.setTerrain(Terrain.ELECTRIC_TERRAIN);
-            this.results.add(Ability.ELECTRIC_SURGE.formatActivation(this.players[p].active.getName(), "An Electric Terrain was created!"));
+            swapResults.add(Ability.ELECTRIC_SURGE.formatActivation(this.players[p].active.getName(), "An Electric Terrain was created!"));
         }
 
         //Ability: Psychic Surge
         if(this.players[p].active.hasAbility(Ability.PSYCHIC_SURGE))
         {
             this.terrain.setTerrain(Terrain.PSYCHIC_TERRAIN);
-            this.results.add(Ability.PSYCHIC_SURGE.formatActivation(this.players[p].active.getName(), "A Psychic Terrain was created!"));
+            swapResults.add(Ability.PSYCHIC_SURGE.formatActivation(this.players[p].active.getName(), "A Psychic Terrain was created!"));
         }
 
         //Ability: Grassy Surge
         if(this.players[p].active.hasAbility(Ability.MISTY_SURGE))
         {
             this.terrain.setTerrain(Terrain.MISTY_TERRAIN);
-            this.results.add(Ability.MISTY_SURGE.formatActivation(this.players[p].active.getName(), "A Misty Terrain was created!"));
+            swapResults.add(Ability.MISTY_SURGE.formatActivation(this.players[p].active.getName(), "A Misty Terrain was created!"));
         }
 
         //Ability: Misty Surge
         if(this.players[p].active.hasAbility(Ability.GRASSY_SURGE))
         {
             this.terrain.setTerrain(Terrain.GRASSY_TERRAIN);
-            this.results.add(Ability.GRASSY_SURGE.formatActivation(this.players[p].active.getName(), "A Grassy Terrain was created!"));
+            swapResults.add(Ability.GRASSY_SURGE.formatActivation(this.players[p].active.getName(), "A Grassy Terrain was created!"));
         }
 
         if(this.players[p] instanceof UserPlayer player) player.data.updateObjective(ObjectiveType.SWAP_POKEMON, 1);
+
+        return String.join("\n", swapResults);
     }
 
     //Always use this.current!

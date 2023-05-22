@@ -211,9 +211,10 @@ public class ElectricMoves
 
     public String BoltBeak(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(duel.first.equals(user.getUUID())) move.setPower(2.0);
-
-        return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addPowerBoostEffect(() -> duel.first.equals(user.getUUID()), 2.0)
+                .addDamageEffect()
+                .execute();
     }
 
     public String WildCharge(Pokemon user, Pokemon opponent, Duel duel, Move move)
@@ -233,9 +234,8 @@ public class ElectricMoves
 
     public String RisingVoltage(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
-        if(duel.terrain.get().equals(Terrain.ELECTRIC_TERRAIN)) move.setPower(2.0);
-
         return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addPowerBoostEffect(() -> duel.terrain.is(Terrain.ELECTRIC_TERRAIN), 2.0)
                 .addDamageEffect()
                 .execute();
     }

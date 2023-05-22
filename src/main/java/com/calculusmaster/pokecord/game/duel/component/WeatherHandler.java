@@ -47,4 +47,9 @@ public class WeatherHandler
             if(this.turns <= 0) this.removeWeather();
         }
     }
+
+    public boolean is(Weather weather)
+    {
+        return this.weather == weather;
+    }
 }

@@ -206,4 +206,12 @@ public class GhostMoves
             return opponent.getName() + " is now partially a Ghost Type!";
         }
     }
+
+    public String InfernalParade(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addPowerBoostEffect(() -> opponent.hasAnyStatusCondition(), 2.0)
+                .addDamageEffect()
+                .execute();
+    }
 }
