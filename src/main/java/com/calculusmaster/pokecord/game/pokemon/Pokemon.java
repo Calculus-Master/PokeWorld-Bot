@@ -977,6 +977,12 @@ public class Pokemon
        else this.type.add(t);
     }
 
+    //Resets type to defaults (resets changes in battle)
+    public void resetType()
+    {
+        this.setType(this.data.getTypes());
+    }
+
     public boolean isType(Type t)
     {
         return this.type.contains(t);

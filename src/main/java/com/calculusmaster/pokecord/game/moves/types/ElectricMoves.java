@@ -4,6 +4,7 @@ import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.elements.Terrain;
+import com.calculusmaster.pokecord.game.enums.elements.Type;
 import com.calculusmaster.pokecord.game.moves.Move;
 import com.calculusmaster.pokecord.game.moves.builder.MoveEffectBuilder;
 import com.calculusmaster.pokecord.game.pokemon.Pokemon;
@@ -243,5 +244,17 @@ public class ElectricMoves
     public String ElectroDrift(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+    }
+
+    public String DoubleShock(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return user.isType(Type.ELECTRIC) ? MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addCustomEffect(() ->
+                {
+                    user.removeType(Type.ELECTRIC);
+                    return user.getName() + " is no longer an Electric-Type!";
+                })
+                .execute() : move.getNothingResult();
     }
 }

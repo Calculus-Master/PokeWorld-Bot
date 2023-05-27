@@ -11,7 +11,6 @@ import com.calculusmaster.pokecord.util.Global;
 import com.calculusmaster.pokecord.util.helpers.LoggerHelper;
 
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Stream;
@@ -84,15 +83,15 @@ public class Move
         Class<?> typeClass = this.getHostClass();
 
         String results = this.getMoveUsedResult(user);
-        String moveName = this.getMethodName();
+        String moveMethodName = this.getMethodName();
 
         try
         {
-            results += (String)(typeClass.getMethod(moveName, Pokemon.class, Pokemon.class, Duel.class, Move.class).invoke(typeClass.getDeclaredConstructor().newInstance(), user, opponent, duel, this));
+            results += (String)(typeClass.getMethod(moveMethodName, Pokemon.class, Pokemon.class, Duel.class, Move.class).invoke(typeClass.getDeclaredConstructor().newInstance(), user, opponent, duel, this));
         }
         catch (Exception e)
         {
-            LoggerHelper.reportError(Move.class, "Could not find Move Method for %s (Looking for: %s)".formatted(this.entity.toString(), moveName), e);
+            LoggerHelper.reportError(Move.class, "Could not find Move Method for %s (Looking for: %s)".formatted(this.entity.toString(), moveMethodName), e);
 
             results = "An error occurred while using %s. Defaulting to Tackle...\n".formatted(this.entity.toString()) + new Move(MoveEntity.TACKLE).logic(user, opponent, duel);
         }
@@ -118,11 +117,7 @@ public class Move
 
     public String getMethodName()
     {
-        String out = Global.normalize(this.entity.toString().replaceAll("_", " ")).replaceAll(" ", "");
-
-        if(this.is(MoveEntity.TEN_MILLION_VOLT_THUNDERBOLT)) out = "TenMillionVoltThunderbolt";
-
-        return out;
+        return Global.normalize(this.entity.toString().replaceAll("_", " ")).replaceAll(" ", "");
     }
 
     public Class<?> getHostClass()
@@ -170,11 +165,11 @@ public class Move
     {
         double e = this.getTypeEffectiveness(other);
 
-        if(e == 4.0) return forBattle ? "**Extremely Effective**" : "It's **extremely** effective (4x)!";
-        else if(e == 2.0) return forBattle ? "**Super Effective**" : "It's **super** effective (2x)!";
-        else if(e == 1.0) return forBattle ? "**Effective**" : "";
-        else if(e == 0.5) return forBattle ? "**Not Very Effective**" : "It's **not very** effective (0.5x)!";
-        else if(e == 0.25) return forBattle ? "**Extremely Ineffective**" : "It's **extremely** ineffective (0.25x)!";
+        if(e >= 4.0) return forBattle ? "**Extremely Effective**" : "It's **extremely** effective!";
+        else if(e >= 2.0) return forBattle ? "**Super Effective**" : "It's **super** effective!";
+        else if(e >= 1.0) return forBattle ? "**Effective**" : "";
+        else if(e >= 0.5) return forBattle ? "**Not Very Effective**" : "It's **not very** effective!";
+        else if(e <= 0.25 && e > 0.0) return forBattle ? "**Extremely Ineffective**" : "It's **extremely** ineffective!";
         else if(e == 0.0) return forBattle ? "**No Effect**" : this.getNoEffectResult(other);
         else throw new IllegalStateException("Effectiveness multiplier is a strange value: " + e);
     }
@@ -206,19 +201,34 @@ public class Move
         return entities.contains(this.entity);
     }
 
-    public boolean is(MoveEntity... entities)
+    public boolean is(MoveEntity entity)
     {
-        return Stream.of(entities).anyMatch(e -> e == this.entity);
+        return this.entity == entity;
     }
 
-    public boolean is(Category... categories)
+    public boolean is(MoveEntity entity, MoveEntity... entities)
     {
-        return List.of(categories).contains(this.getCategory());
+        return this.is(entity) || Stream.of(entities).anyMatch(this::is);
     }
 
-    public boolean is(Type... types)
+    public boolean is(Category category)
     {
-        return List.of(types).contains(this.getType());
+        return this.category == category;
+    }
+
+    public boolean is(Category category, Category... categories)
+    {
+        return this.is(category) || Stream.of(categories).anyMatch(this::is);
+    }
+
+    public boolean is(Type type)
+    {
+        return this.type == type;
+    }
+
+    public boolean is(Type type, Type... types)
+    {
+        return this.is(type) || Stream.of(types).anyMatch(this::is);
     }
 
     public boolean isZMove()

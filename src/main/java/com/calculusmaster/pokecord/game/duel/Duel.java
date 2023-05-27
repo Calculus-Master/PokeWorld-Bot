@@ -312,6 +312,9 @@ public class Duel
             }
         }
 
+        //Reset types
+        this.players[p].active.resetType();
+
         //Remove Leech Seed
         if(this.players[p].active.hasStatusCondition(StatusCondition.SEEDED))
             this.players[p].active.removeStatusCondition(StatusCondition.SEEDED);
