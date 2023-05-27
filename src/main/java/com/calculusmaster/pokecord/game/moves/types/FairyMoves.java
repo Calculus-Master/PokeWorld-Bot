@@ -193,4 +193,12 @@ public class FairyMoves
                         .add(Stat.SPATK, 2))
                 .execute();
     }
+
+    public String SpringtideStorm(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(Stat.ATK, -1, 30, false)
+                .execute();
+    }
 }

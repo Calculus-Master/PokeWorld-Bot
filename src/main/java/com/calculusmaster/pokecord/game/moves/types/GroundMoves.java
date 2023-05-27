@@ -225,4 +225,12 @@ public class GroundMoves
                 .addStatChangeEffect(Stat.SPD, -1, 100, false)
                 .execute();
     }
+
+    public String SandsearStorm(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.BURNED, 20, false)
+                .execute();
+    }
 }

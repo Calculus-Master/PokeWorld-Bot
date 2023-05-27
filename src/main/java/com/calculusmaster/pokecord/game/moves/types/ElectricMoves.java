@@ -257,4 +257,12 @@ public class ElectricMoves
                 })
                 .execute() : move.getNothingResult();
     }
+
+    public String WildboltStorm(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.PARALYZED, 20, false)
+                .execute();
+    }
 }
