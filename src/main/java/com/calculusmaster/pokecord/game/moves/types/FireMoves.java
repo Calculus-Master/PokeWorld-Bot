@@ -281,4 +281,23 @@ public class FireMoves
     {
         return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPATK, 1, 100, true);
     }
+
+    public String BitterBlade(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addDamageHealEffect(1 / 2.)
+                .execute();
+    }
+
+    public String ArmorCannon(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(
+                        new StatChangeEffect(Stat.DEF, -1, 100, true)
+                        .add(Stat.SPDEF, -1)
+                )
+                .execute();
+    }
 }
