@@ -207,4 +207,11 @@ public class SteelMoves
     {
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
+
+    public String Shelter(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addStatChangeEffect(Stat.DEF, 2, 100, true)
+                .execute();
+    }
 }

@@ -348,4 +348,13 @@ public class FightingMoves
     {
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
     }
+
+    public String TripleArrows(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .addStatChangeEffect(Stat.DEF, -1, 50, false)
+                .addStatusEffect(StatusCondition.FLINCHED, 30, false)
+                .execute();
+    }
 }

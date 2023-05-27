@@ -2,6 +2,7 @@ package com.calculusmaster.pokecord.game.moves.types;
 
 import com.calculusmaster.pokecord.game.duel.Duel;
 import com.calculusmaster.pokecord.game.enums.elements.Ability;
+import com.calculusmaster.pokecord.game.enums.elements.EntryHazard;
 import com.calculusmaster.pokecord.game.enums.elements.Stat;
 import com.calculusmaster.pokecord.game.enums.elements.StatusCondition;
 import com.calculusmaster.pokecord.game.enums.items.Item;
@@ -348,5 +349,13 @@ public class DarkMoves
     public String KowtowCleave(Pokemon user, Pokemon opponent, Duel duel, Move move)
     {
         return MoveEffectBuilder.defaultDamage(user, opponent, duel, move);
+    }
+
+    public String CeaselessEdge(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .addEntryHazardEffect(EntryHazard.SPIKES)
+                .execute();
     }
 }
