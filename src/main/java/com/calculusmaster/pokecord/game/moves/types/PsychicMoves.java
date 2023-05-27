@@ -565,4 +565,12 @@ public class PsychicMoves
                 })
                 .execute();
     }
+
+    public String EsperWing(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addCritDamageEffect()
+                .addStatChangeEffect(Stat.SPD, 1, 100, true)
+                .execute();
+    }
 }

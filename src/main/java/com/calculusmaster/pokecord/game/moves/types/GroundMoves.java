@@ -233,4 +233,13 @@ public class GroundMoves
                 .addStatusEffect(StatusCondition.BURNED, 20, false)
                 .execute();
     }
+
+    public String HeadlongRush(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addStatChangeEffect(new StatChangeEffect(Stat.DEF, -1, 100, true)
+                        .add(Stat.SPDEF, -1))
+                .execute();
+    }
 }

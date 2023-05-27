@@ -375,4 +375,12 @@ public class GrassMoves
                 .addCritDamageEffect(24)
                 .execute();
     }
+
+    public String Chloroblast(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addFractionSelfDamageEffect(1 / 2.)
+                .execute();
+    }
 }

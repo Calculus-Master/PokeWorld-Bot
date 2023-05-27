@@ -224,4 +224,13 @@ public class PoisonMoves
                 .addStatusEffect(StatusCondition.POISONED)
                 .execute();
     }
+
+    public String BarbBarrage(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addPowerBoostEffect(() -> opponent.hasStatusCondition(StatusCondition.POISONED) || opponent.hasStatusCondition(StatusCondition.BADLY_POISONED), 2.0)
+                .addDamageEffect()
+                .addStatusEffect(StatusCondition.POISONED, 50)
+                .execute();
+    }
 }

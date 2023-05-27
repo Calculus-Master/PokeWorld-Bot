@@ -270,4 +270,12 @@ public class WaterMoves
     {
         return MoveEffectBuilder.statChangeDamage(user, opponent, duel, move, Stat.SPD, 1, 100, true);
     }
+
+    public String WaveCrash(Pokemon user, Pokemon opponent, Duel duel, Move move)
+    {
+        return MoveEffectBuilder.make(user, opponent, duel, move)
+                .addDamageEffect()
+                .addRecoilEffect(1 / 3.)
+                .execute();
+    }
 }
